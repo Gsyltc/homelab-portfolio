@@ -5,3 +5,10 @@ Sylvain Goubaud | Director of Expertise in Architecture | Montreal, QC | [Linked
 
 ---
 
+## About This Portfolio
+This portfolio documents the different steps that allowed me to set up a production-level infrastructure for my needs.
+
+This is not a tutorial. It is a real project ready for production
+
+---
+
