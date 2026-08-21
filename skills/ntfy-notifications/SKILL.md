@@ -7,7 +7,7 @@ allowed-tools: Bash(curl), Bash(multica *)
 
 # Notifications ntfy
 
-Tu peux envoyer une notification push à l'investisseur via le serveur ntfy du workspace.
+Tu peux envoyer une notification push à l'humain via le serveur ntfy du workspace.
 
 ## Paramètres fixes
 
@@ -29,7 +29,7 @@ Avant d'envoyer, vérifier que les variables sont présentes :
 [ -n "$NTFY_TOPIC" ] && echo "Topic NTFY OK" || echo "Topic NTFY manquant"
 ```
 
-Si elles manquent, le signaler dans le rapport et à l'investisseur : l'environnement secret de l'agent n'est pas configuré (voir « Configuration des identifiants » ci-dessous).
+Si elles manquent, le signaler dans le rapport et à l'humain : l'environnement secret de l'agent n'est pas configuré (voir « Configuration des identifiants » ci-dessous).
 
 ## Envoyer une notification
 
@@ -91,7 +91,7 @@ avec sur stdin :
 
 - Toujours utiliser le serveur "$NTFY_URL" et le topic "$NTFY_TOPIC" sauf demande explicite contraire.
 - Authentification obligatoire via `-u "$NTFY_USER:$NTFY_PASSWORD"` ; si les variables sont absentes, signaler que l'environnement secret n'est pas configuré.
-- Le message doit être court, clair et utile à un investisseur intermédiaire.
+- Le message doit être court, clair et utile à un humain intermédiaire.
 - Après l'envoi, vérifier que la commande curl a réussi (code HTTP 2xx).
 - Ne jamais envoyer de données sensibles (mot de passe, clé API) dans le message.
 - Ne jamais afficher ni logger le mot de passe en clair.
