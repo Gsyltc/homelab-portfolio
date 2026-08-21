@@ -1,3 +1,7 @@
+---
+name: homelab-stack-workflow
+description: "Workflow de création et modification d'une stack Homelab : analyse, vérification images Docker vs script Proxmox (community-scripts.org), arbitrage humain Docker Swarm/Proxmox, collecte des paramètres (authentification, base de données, Valkey, HashiCorp Vault), délégation aux agents spécialisés, gestion Terraform, validation humaine; flux Kestra configure_service. Utiliser pour toute création ou modification de stack."
+---
 Workflow officiel à suivre pour TOUTE demande de création ou de modification d'une stack du Homelab. Ne jamais sauter d'étape ni deviner une information manquante.
 
 ## Étape 1 — Analyser la demande
