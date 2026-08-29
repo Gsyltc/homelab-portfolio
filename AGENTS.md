@@ -34,7 +34,7 @@ This is a monorepo of [Agent Plugins](https://agent-plugins.org) maintained by S
 
 ```
 homelab-portfolio/
-├── architecture-rules/              # Workflow Documentation (mkdocs/docusaurus compatible)
+├── docs/              # Workflow Documentation (mkdocs/docusaurus compatible)
 ├── plugins/
 │   ├── architecture-assistant/      # Main plugin: Solution architecture skills and agents
 │   │   ├── plugin.json
