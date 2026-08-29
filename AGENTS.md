@@ -2,7 +2,7 @@
 alwaysApply: true
 ---
 
-This is a monorepo of [Agent Plugins](https://agent-plugins.org) maintained by Sylvain G., compliant with the Agent Plugins Specification v1.0.0. It uses Node.js with TypeScript and is managed with [go-task](https://taskfile.dev).
+This is a monorepo of [Agent Plugins](https://agent-plugins.org) maintained by Sylvain G., compliant with the Agent Plugins Specification v1.0.0.
 
 ## Key Directories
 
