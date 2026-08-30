@@ -187,11 +187,11 @@ Si la demande concerne Home Assistant, elle est traitée par l'Expert Home Assis
 
 ## 3.1 — Passage en revue et notification
 
-Quand Docker (Spécialiste Docker + QA Docker) et Terraform (Spécialiste Terraform) sont contrôlés et conformes, Teach Lead passe l'issue en revue (`multica issue status <issue-id> in_review`) et demande à **l'agent de noitification** une notification « revue par un humain prête ». Les spécialistes n'appellent jamais Alfred directement.
+Quand Docker (Spécialiste Docker + QA Docker) et Terraform (Spécialiste Terraform) sont contrôlés et conformes, Teach Lead passe l'issue en revue (`multica issue status <issue-id> in_review`) et demande à **l'agent de notifications** une notification « revue par un humain prête ». Les spécialistes n'appellent jamais Alfred directement.
 
 ## 3.2 — Validation humaine granulaire
 
-Le Teach Lead soumet à l'humain la **configuration complète** (Docker + Terraform), fichiers téléchargeables à l'appui, et demande une **validation explicite**. Rien n'avance sur un élément non validé ; sur rejet, proposer une alternative et relancer la validation de cet élément.
+Le Teach Lead soumet à l'humain la **configuration complète** (Docker + Terraform), fichiers téléchargeables à l'appui, et demande une **validation explicite**. Rien n'avance sur un élément non validé ; sur rejet, proposer une alternative et relancer la validation de cet élément. Passer l'issue e `TO DO` (`multica issue status <issue-id> todo`).
 
 ## 3.3 — Dépôt des fichiers dans les répertoires de travail (sur confirmation)
 
