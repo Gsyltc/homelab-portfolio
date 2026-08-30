@@ -187,11 +187,14 @@ Si la demande concerne Home Assistant, elle est traitée par l'Expert Home Assis
 
 ## 3.1 — Passage en revue et notification
 
-Quand Docker (Spécialiste Docker + QA Docker) et Terraform (Spécialiste Terraform) sont contrôlés et conformes, Teach Lead passe l'issue en revue (`multica issue status <issue-id> in_review`) et demande à **l'agent de notifications** une notification « revue par un humain prête ». Les spécialistes n'appellent jamais Alfred directement.
+Quand Docker (Spécialiste Docker + QA Docker) et Terraform (Spécialiste Terraform) sont contrôlés et conformes, Teach Lead passe l'issue en revue (`multica issue status <issue-id> in_review`) et demande à **l'agent de notifications** une notification « revue par un humain prête ». **`in_review` signifie « prêt à être revu par l'humain » et l'issue y demeure jusqu'à ce que l'humain statue** (validation ou demande de modifications, cf. § 3.2). Les spécialistes n'appellent jamais Alfred directement.
 
 ## 3.2 — Validation humaine granulaire
 
-Le Teach Lead soumet à l'humain la **configuration complète** (Docker + Terraform), fichiers téléchargeables à l'appui, et demande une **validation explicite**. Rien n'avance sur un élément non validé ; sur rejet, proposer une alternative et relancer la validation de cet élément. Passer l'issue e `TO DO` (`multica issue status <issue-id> todo`).
+Le Teach Lead soumet à l'humain la **configuration complète** (Docker + Terraform), fichiers téléchargeables à l'appui, et demande une **validation explicite**. **L'issue reste en `in_review`** pendant toute cette phase : `in_review` est l'état qui signale à l'humain qu'une tâche est prête à être revue, et il ne doit pas être changé tant que l'humain n'a pas statué. Rien n'avance sur un élément non validé.
+
+- **L'humain demande des modifications / ajustements** (rejet total ou partiel) → le Teach Lead repasse l'issue en **`in_progress`** (`multica issue status <issue-id> in_progress`), **poursuit le workflow** en intégrant les modifications demandées (nouvelle itération des phases 2.x concernées via les spécialistes, puis re-contrôle 2.6), et repasse l'issue en `in_review` (§ 3.1) une fois la nouvelle version prête à être revue.
+- **L'humain valide** → poursuivre en § 3.3 (dépôt des fichiers).
 
 ## 3.3 — Dépôt des fichiers dans les répertoires de travail (sur confirmation)
 
@@ -241,9 +244,15 @@ sequenceDiagram
     S->>S: in_review
     S->>AL: Demande notification revue prete
     AL-->>H: Notification ntfy
-    S->>H: Validation granulaire (Docker + Terraform)
-    H-->>S: Validation explicite
-    S->>H: Propose chemins de depot + attend confirmation
+    S->>H: Validation granulaire (Docker + Terraform) [issue: in_review]
+    alt Modifications demandees
+        H-->>S: Ajustements a apporter
+        S->>S: issue -> in_progress, reprise Phase 2.x + controle 2.6
+        S->>S: issue -> in_review (nouvelle version prete)
+    else Validation explicite
+        H-->>S: Validation explicite
+        S->>H: Propose chemins de depot + attend confirmation
+    end
     H-->>S: Confirmation depot
     S->>H: Lancer Kestra configure_service ?
     H-->>S: Oui explicite
