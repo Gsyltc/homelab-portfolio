@@ -19,6 +19,8 @@ Le workflow est **agnostique de l'outil** : il s'applique aux stacks Docker Swar
 
 Une modification simple reste efficace (traitement minimal) ; une création complète de stack ou un changement à risque reçoit le traitement complet.
 
+**L'adaptation joue sur le nombre d'étapes, jamais sur qui les exécute.** Alléger le traitement peut supprimer des étapes qui n'apportent pas de valeur, mais ne transfère **jamais** la responsabilité d'un spécialiste vers le Tech Lead : si une étape a lieu (production compose, vérification technique, hardening, config Terraform), elle est réalisée par le rôle qui en a la charge. « Petit changement » n'autorise pas le Tech Lead à produire ou vérifier lui-même à la place du Spécialiste Docker ou du QA Docker.
+
 ---
 
 ## Modèle de collaboration A2A
@@ -56,7 +58,9 @@ Après **tout** commentaire censé déclencher un agent (délégation aller ou c
 - dépôt GitHub / GitLab / autre forge (README, `docs/`, wiki, `docker-compose.yml` d'exemple) ;
 - toute autre source officielle.
 
-Si de l'information existe → s'en servir pour remonter les éléments de configuration (variables d'environnement, volumes, ports, réseaux, dépendances, versions recommandées, bonnes pratiques) et les documenter sur l'issue **avant** de poursuivre. Si rien n'est trouvé → le signaler explicitement sur l'issue et à l'humain, puis poursuivre en le précisant.
+Si de l'information existe → s'en servir pour **cadrer** la demande : confirmer que le projet est déployable (image/registry, port principal, type d'auth, dépendances majeures type base de données/cache) et documenter le **lien officiel** sur l'issue **avant** de poursuivre. Si rien n'est trouvé → le signaler explicitement sur l'issue et à l'humain, puis poursuivre en le précisant.
+
+**Limite de responsabilité :** à ce stade, le Tech Lead reste au niveau du cadrage. Le relevé **fin** des éléments de configuration (liste exhaustive des variables d'environnement, conventions de secrets comme `_FILE`, volumes précis, healthcheck, versions recommandées, hardening) n'est **pas** produit par le Tech Lead : il est réalisé par le Spécialiste Docker à partir de cette même documentation au moment de la production (§2.1). Le Tech Lead transmet le lien officiel et les paramètres de cadrage ; il ne pré-analyse pas la compatibilité applicative.
 
 Cette recherche est toujours faite **en premier**. Elle précède l'analyse, la délégation et la génération ; elle ne les remplace pas.
 
@@ -124,7 +128,7 @@ Si la demande concerne n8n (mot « n8n » dans la demande, un titre d'issue ou u
 
 1. Passer l'issue en `in_progress` et ajouter le label `Homelab`.
 2. Consigner la demande initiale (entrée brute) en commentaire.
-3. Appliquer la **règle préalable de documentation officielle** (section dédiée) et documenter le résultat.
+3. Appliquer la **règle préalable de documentation officielle** (section dédiée) au **niveau cadrage uniquement** (lien officiel + déployabilité + paramètres de cadrage), sans relevé fin des variables/conventions, et documenter le résultat.
 4. Identifier le domaine : stack Docker (Spécialiste Docker/QA Docker), Home Assistant (Expert Home Assistant), Terraform (Spécialiste Terraform) ou domaine sans agent (Ansible, logs, Kestra → Teach Lead réalise lui-même la vérification et le signale à l'humain).
 
 ## 1.3 — Vérifications préalables et arbitrage (CONDITIONNEL — création/modification de stack)
@@ -156,7 +160,7 @@ Demander aussi si la stack nécessite une **création/modification de secrets ou
 
 ## 2.1 — Création du docker-compose (Spécialiste Docker)
 
-Teach Lead délègue au **Spécialiste Docker** par commentaire (mission + mention) la création ou la modification du fichier docker-compose, cohérent avec les paramètres et la documentation officielle. Spécialiste Docker produit le fichier (skill `docker-composer`), vérifie la syntaxe YAML, dépose le livrable **téléchargeable** (`multica attachment upload`) et **mentionne Teach Lead** avec un récapitulatif.
+Teach Lead délègue au **Spécialiste Docker** par commentaire (mission + mention) la création ou la modification du fichier docker-compose, cohérent avec les paramètres et la documentation officielle. C'est le Spécialiste Docker — pas le Tech Lead — qui **exploite la documentation officielle pour établir le relevé fin** (variables d'environnement supportées, convention de secrets `_FILE` ou non, volumes, port, healthcheck, versions) et en tient compte dans le fichier produit. Spécialiste Docker produit le fichier (skill `docker-composer`), vérifie la syntaxe YAML, dépose le livrable **téléchargeable** (`multica attachment upload`) et **mentionne Teach Lead** avec un récapitulatif.
 
 ## 2.2 — Vérification du docker-compose (QA Docker)
 
@@ -176,7 +180,9 @@ Si la demande concerne Home Assistant, elle est traitée par l'Expert Home Assis
 
 ## 2.6 — Contrôle qualité central (Teach Lead — aiguillage GO / RENVOI, TOUJOURS)
 
-Le contrôle du Tech Lead est un aiguillage, pas une analyse technique de fond. Il vérifie uniquement, au niveau macro : (a) le livrable répond-il à la demande et aux paramètres collectés ? (b) est-il complet et au bon format ? (c) contient-il un secret en clair ? (d) le compte-rendu du spécialiste signale-t-il un blocage ?
+Le contrôle du Tech Lead est un aiguillage, pas une analyse technique de fond. Il vérifie uniquement, au niveau macro : (a) le livrable répond-il à la demande et aux paramètres collectés ? (b) est-il du bon type et présent (le livrable est bien un fichier compose / `.tfvars` contenant les sections attendues, et non un rapport vide ou un mauvais artefact) — **jamais** la validité syntaxique, la compatibilité applicative ou les conventions de configuration, qui relèvent du QA Docker ; (c) un secret en clair saute-t-il aux yeux ? (d) le compte-rendu du spécialiste signale-t-il un blocage ?
+
+**Ordre imposé pour un livrable compose :** le contrôle d'aiguillage (2.6) du Tech Lead sur un fichier docker-compose ne peut **jamais** précéder ni remplacer la vérification technique du QA Docker (2.2). À réception du compose du Spécialiste Docker (2.1), le Tech Lead ne « pré-contrôle » pas techniquement le fichier : il le route directement vers le QA Docker. Son aiguillage 2.6 sur le compose n'intervient **qu'après** le rapport du QA Docker. Détecter un problème de compatibilité ou de convention avant le QA, c'est jouer le rôle du QA — interdit.
 Le Tech Lead NE réalise JAMAIS lui-même : l'analyse de la compatibilité applicative (variables supportées, conventions _FILE, etc.), l'audit de sécurité/hardening, la vérification de cohérence Traefik, ni la rédaction d'un correctif. Ces analyses appartiennent au Spécialiste Docker (production/correctif) et au QA Docker (vérification technique).
 
 Doute technique sur un livrable → renvoyer au spécialiste concerné en décrivant le symptôme observé (« l'authentification risque d'échouer »), sans fournir le diagnostic ni la solution. C'est au spécialiste d'analyser et de corriger.
