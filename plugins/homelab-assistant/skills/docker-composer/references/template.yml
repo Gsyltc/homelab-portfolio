@@ -1,0 +1,109 @@
+### ${Date} ###
+### Initialisation de la stack ${input:stack} ###
+---
+################################################################################
+x-timezone:
+  environment: &timezone
+    TZ: "Canada/Eastern"
+
+x-app-secrets: &app_secrets
+  secrets:
+    - ${secrets}
+<!-- Utilise cette ancre uniquement si les services ont des donnnées secretes (mot de passe, token secrets, etc.) -->
+
+x-deploy_policy: &deploy
+  restart_policy:
+    condition: any
+    delay: 5s
+    max_attempts: 3
+    window: 5s
+  update_config:
+    order: start-first
+    delay: 10s
+    failure_action: rollback
+    max_failure_ratio: 0.25
+  rollback_config:
+    order: start-first
+    failure_action: continue
+
+x-int_network: &intnetwork int_network
+<!-- Utilise cette ancre uniquement si des services de la stack ont besoin de communiquer entre eux -->
+
+x-mail_config:
+  environment: &mail_config
+    MAIL_MAILER: "smtp"
+    MAIL_HOST: "smtp.gmail.com"
+    MAIL_PORT: "587"
+    MAIL_ENCRYPTION: "tls"
+    MAIL_FROM_ADDRESS: "${input:stack}.gaston@jeedom-gaston.ovh"
+    MAIL_USERNAME: "jeedom.cassivet@gmail.com"
+    MAIL_PASSWORD_FILE: "/run/secrets/fireflyiii_stmp_password"
+<!-- Utilise cette ancre uniquement si un ou plusieurs services ont besoin de configurer un service SMTP -->
+
+x-environment:
+  environment: &importer_config
+    ${variable_environnement}: "${variable_environnement}"
+<!-- Utilise cette ancre uniquement si plusieurs services utilisent des variable d'environnement communes -->
+
+################################################################################
+services:
+  app:
+    <<: [*app_secrets]
+    image: ${image_de_la_stack}:${version_de_la_stack}
+    networks:
+    <<: [*intnetwork]
+<!-- Défini les réseaux à utiliser -->
+      - ${reseaux}
+    environment:
+      <<: [*mail_config, *timezone]
+    volumes:
+      ${volumes}
+    deploy:
+      <<: *deploy
+      replicas: 1
+      labels:
+        - diun.enable=true
+        - structurizr.description=${description de la stack}
+        - structurizr.techno=${techno de la stack}
+        - structurizr.depedencies=${input:dependances}
+        - ${labels_traefik} <!-- Si une connexion externe Traefik est utilisée comme reverse proxy --> 
+      placement:
+        constraints:
+          - node.labels.role.prod == true
+
+#############
+## SECRETS ##
+#############
+
+secrets:
+  ${secret}:
+    external: true  
+<!-- Tous les secrets sont externes --> 
+
+#############
+## VOLUMES ##
+#############
+
+volumes:
+  ${nom_du_volume}:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=truenas,rw
+      device: ":/mnt/datas/${ENVIRONMENT}/${type_de_donnes}/${nom_de_la_stack}"
+<!-- Si un ou plusieurs services utilisent des volumes pour les données ou la configuration il doivent être stockées avec NFS (les types de données sont : services (pour la configuration du service), databases (pour les données du services} -->
+
+#############
+## RESEAUX ##
+#############
+
+networks:
+  # Réseaux Externe
+  ${nom de réseaux Traefik utilisé}:
+    external: true
+
+  int_network:
+    name: internal_${input:stack}
+    attachable: false
+    driver: overlay
+    internal: true
