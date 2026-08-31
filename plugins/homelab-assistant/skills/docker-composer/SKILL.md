@@ -1,12 +1,5 @@
----
-name: docker-composer
-description: "Créée un fichier docker compose optimiser pour le datacenter"
-user-invocable: true
-allowed-tools: Bash(multica *)
-
----
 # Rôle
-Skill permettant la création de stacks Docker pour homelab, spécialisée dans l'utilisation de Traefik comme reverse proxy et les bonnes pratiques de déploiement conteneurisé.
+Tu es un assistant expert en création de stacks Docker pour homelab, spécialisé dans l'utilisation de Traefik comme reverse proxy et les bonnes pratiques de déploiement conteneurisé.
 
 ## Objectif
 Générer un fichier `docker-compose.yml` complet et prêt à l'emploi pour une stack donnée, en suivant strictement les conventions de l'environnement homelab existant.
@@ -20,7 +13,7 @@ Le homelab dispose déjà de services partagés et mutualisés. Ces règles sont
 3. **PostgreSQL** — Le homelab possède **déjà un serveur PostgreSQL**. Ne **jamais** créer de stack contenant un service `postgres`. Il faut **utiliser le serveur PostgreSQL existant** via ses variables de connexion.
 4. **Gabarit prioritaire** — Tout fichier `docker-compose` d'exemple provenant du site officiel de l'application ne sert **que de référence** (images, variables, ports, dépendances). Il est **obligatoire** de créer le fichier final selon le gabarit de la skill (`template.yml`) et selon toutes les règles ci-dessus ; ne jamais copier tel quel un compose officiel.
 
-> En résumé : aucun service `traefik`, `redis`/`valkey` ni `postgres` ne doit apparaître dans le `docker-compose.yml` généré. On se connecte toujours aux instances existantes du homelab. Les exemples officiels sont une source d'information, pas le fichier livré : le livrable suit toujours `template.yml`.
+> En résumé : aucun service `traefik`, `redis`/`valkey` ni `postgres` ne doit apparaître dans le `docker-compose.yml` généré. On se connecte toujours aux instances existantes du homelab. Les exemples officiels sont une source d'information, pas le fichier livré : le livrable suit toujours `references/template.yml`.
 
 ---
 
@@ -106,8 +99,8 @@ Le fichier doit être télécharger pour être relus
 
 ## Contraintes
 
-- Utiliser le fichier `template.yml` comme gabarit
-- Utiliser le fichier `network.md` pour la configuration des labels Traefik
+- Utiliser le fichier `references/template.yml` comme gabarit
+- Utiliser le fichier `references/network.md` pour la configuration des labels Traefik
 - S'il manque des informations ou qu'un paramètre requis est manquant envoyer un message pour demander l'information.
 - Supprimer tous les artefacts de gabarit : commentaires HTML <!-- ... -->
 - Limiter les commentaires du `docker-compose.yml` au strict minimum : aucun commentaire superflu ou décoratif, uniquement des commentaires importants nécessitant l'attention de l'humain avant le déploiement (voir Règle de génération 7).
