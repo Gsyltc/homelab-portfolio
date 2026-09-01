@@ -102,7 +102,7 @@ La piste d'audit vit **sur l'issue Multica**, pas dans un fichier séparé. Chaq
 - Rédiger **tous les documents en français** (langue de l'humain par défaut).
 - Conserver les **commentaires `#`** des gabarits docker-compose et les commentaires utiles Terraform pour la lisibilité.
 - **Aucun secret** (mot de passe, token, clé API, secret Vault) dans les livrables, commentaires ou notifications.
-- **Ne jamais utiliser la variable `${SNI}`** dans les fichiers Terraform : écrire les domaines/URLs en clair (ex. `https://arcane.jeedom-gaston.ovh`).
+- **Ne jamais utiliser la variable `${SNI}`** dans les **fichiers Terraform livrés** : y écrire les domaines/URLs en clair (ex. `https://arcane.jeedom-gaston.ovh`). Cette interdiction ne vise **que** ce cas : elle ne concerne pas la notation des paramètres du workflow (`${stack_name}`, `${auth_type}`, etc.), qui sont des espaces réservés de ce document et restent autorisés.
 - **Jamais de supposition** : information requise manquante → demander à l'humain et attendre. Exigence ambiguë ou en conflit avec les bonnes pratiques → arbitrage humain.
 
 ---
@@ -289,5 +289,5 @@ sequenceDiagram
 - **Aucune action à impact sans validation humaine explicite** : dépôt de fichiers, flux Kestra `configure_service`.
 - **Coordination par l'issue** : chaque étape, décision et délégation documentée ; délégations A2A par mention valide (UUID résolu, jamais deviné), sens retour vers Tech Lead obligatoire.
 - **Séparation des responsabilités** : notifications via l'Agent de notifications (sur demande du Tech Lead uniquement) ; n8n via l'Expert N8n ; Home Assistant via l'Expert Home Assistant.
-- **Aucun secret** dans les livrables ; **jamais** de `${SNI}` dans le Terraform ; labels `Homelab` (+ `Docker Swarm`) posés systématiquement.
+- **Aucun secret** dans les livrables ; **jamais** de `${SNI}` dans les fichiers Terraform livrés (domaines/URLs en clair) — l'interdiction ne vise pas les paramètres `${stack_name}` etc. du workflow ; labels `Homelab` (+ `Docker Swarm`) posés systématiquement.
 - **Jamais de supposition** : information manquante ou exigence ambiguë → demander à l'humain et attendre.
