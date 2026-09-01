@@ -46,7 +46,15 @@ Un agent est déclenché par un **commentaire sur l'issue avec une mention valid
 
 Le spécialiste appelé rend **toujours** compte au Tech Lead Homelab en fin de tâche (succès, échec ou blocage) pour contrôle. **Ce compte-rendu n'est valide que s'il DÉCLENCHE effectivement le Tech Lead** : il doit contenir la mention littérale et valide de la forme `[@Label](mention://agent/<uuid>)`. **Écrire le nom du Tech Lead (ou d'un agent) en texte brut ne déclenche RIEN** — seul le lien `mention://agent/<uuid>` enfile un run ; un compte-rendu sans cette mention est réputé **non rendu** et arrête le flux. À l'inverse, tout feu vert / refus / correction que le Tech Lead Homelab donne à un spécialiste **doit** de la même façon contenir la mention valide de cet agent, publiée en réponse dans son thread (`--parent`).
 
-Après **tout** commentaire censé déclencher un agent (délégation aller ou compte-rendu retour), l'auteur **lit `trigger_outcomes` dans la réponse de la CLI** et, si le statut est `blocked` / `coalesced` / `deferred`, le signale explicitement et corrige la mention — il ne considère jamais la tâche comme terminée tant que le run visé n'a pas été enfilé.
+Après **tout** commentaire censé déclencher un agent (délégation aller ou compte-rendu retour), l'auteur **lit `trigger_outcomes` dans la réponse de la CLI** et, si le statut est `blocked` / `coalesced` / `deferred`, le signale explicitement — il ne considère jamais la tâche comme terminée tant que le run visé n'a pas été enfilé.
+
+**Reprise bornée puis escalade humaine.** Sur un `trigger_outcomes` non enfilé (`blocked` / `coalesced` / `deferred`), l'auteur **corrige la mention et retente une seule fois** (1 reprise maximum). Si cette unique reprise échoue à son tour :
+
+1. il **passe l'issue au statut `blocked`** (`multica issue status <id> blocked`) ;
+2. il **escalade explicitement à l'humain** dans un commentaire sur l'issue, en décrivant la mention visée, le statut `trigger_outcomes` observé et l'échec de la reprise ;
+3. il **n'effectue aucune nouvelle reprise automatique** — le flux reste bloqué jusqu'à intervention humaine.
+
+Cette borne (1 reprise, puis blocage + escalade) évite toute boucle de correction de mention.
 
 ---
 
