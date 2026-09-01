@@ -17,7 +17,23 @@ Le workflow est **agnostique de l'outil** : il s'applique aux stacks Docker Swar
 3. La complexité et la portée du changement (nouvelle stack vs correctif mineur).
 4. L'évaluation des risques et de l'impact (sécurité, déploiement, réseau).
 
-Une modification simple reste efficace (traitement minimal) ; une création complète de stack ou un changement à risque reçoit le traitement complet.
+La grille ci-dessous rend cette adaptation objective : une modification simple reçoit le traitement minimal, une création de stack ou un changement à risque le traitement complet.
+
+### Grille de décision : traitement allégé vs traitement complet
+
+Pour éviter toute appréciation subjective, la classification est **objective** et repose sur la nature de la demande. En cas de chevauchement, **le niveau le plus élevé l'emporte** (un déclencheur « complet » impose le traitement complet, même si d'autres aspects relèveraient de l'allégé).
+
+| Nature de la demande                                                                                              | Niveau           |
+| ----------------------------------------------------------------------------------------------------------------- | ---------------- |
+| Création d'une stack (docker-compose et/ou config Terraform d'une nouvelle stack)                                | **Complet**      |
+| Création ou modification d'un flux n8n                                                                            | **Complet**      |
+| Création ou modification d'une automatisation Home Assistant                                                     | **Complet**      |
+| Toute modification à **impact sécurité** (logicielle ou infrastructure : auth, réseau, exposition, secrets, hardening, permissions, routes Traefik) | **Complet**      |
+| Modification d'une **variable existante** (valeur d'un paramètre déjà en place, sans impact sécurité)             | **Allégé**       |
+
+**Règle de départage.** Si une demande ne correspond à **aucun** déclencheur « Complet » ci-dessus et se limite à modifier des variables existantes, elle est traitée en **allégé**. Dès qu'un seul déclencheur « Complet » s'applique — ou en cas de doute sur l'impact sécurité — le traitement **complet** s'impose. Le doute ne bascule jamais vers l'allégé.
+
+**Ce que change chaque niveau.** L'allégé réduit le **nombre d'étapes** (cadrage resserré, moins de contrôles intermédiaires) ; le complet applique l'intégralité des phases 1 à 3. Dans les deux cas, la validation humaine avant toute action à impact (PHASE 3) et la répartition des rôles restent inchangées — cf. la règle ci-dessous.
 
 **L'adaptation joue sur le nombre d'étapes, jamais sur qui les exécute.** Alléger le traitement peut supprimer des étapes qui n'apportent pas de valeur, mais ne transfère **jamais** la responsabilité d'un spécialiste vers le Tech Lead : si une étape a lieu (production compose, vérification technique, hardening, config Terraform), elle est réalisée par le rôle qui en a la charge. « Petit changement » n'autorise pas le Tech Lead à produire ou vérifier lui-même à la place du Spécialiste Docker ou du QA Docker.
 
