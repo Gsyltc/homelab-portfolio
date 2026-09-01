@@ -84,6 +84,8 @@ Cette borne (1 reprise, puis blocage + escalade) évite toute boucle de correcti
 
 Si de l'information existe → s'en servir pour **cadrer** la demande : confirmer que le projet est déployable (image/registry, port principal, type d'auth, dépendances majeures type base de données/cache) et documenter le **lien officiel** sur l'issue **avant** de poursuivre. Si rien n'est trouvé → le signaler explicitement sur l'issue et à l'humain, puis poursuivre en le précisant.
 
+**Type d'authentification.** Lorsque la documentation officielle précise les **types d'authentification disponibles**, appliquer la règle de **sélection automatique du type d'authentification** (§1.4) : choix automatique selon l'ordre de priorité `oidc → saml → ldap → forwardauth → local` (premier disponible **et gratuit**), et **en cas de doute, demander à l'humain**.
+
 **Limite de responsabilité :** à ce stade, le Tech Lead reste au niveau du cadrage. Le relevé **fin** des éléments de configuration (liste exhaustive des variables d'environnement, conventions de secrets comme `_FILE`, volumes précis, healthcheck, versions recommandées, hardening) n'est **pas** produit par le Tech Lead : il est réalisé par le Spécialiste Docker à partir de cette même documentation au moment de la production (§2.1). Le Tech Lead transmet le lien officiel et les paramètres de cadrage ; il ne pré-analyse pas la compatibilité applicative.
 
 Cette recherche est toujours faite **en premier**. Elle précède l'analyse, la délégation et la génération ; elle ne les remplace pas.
@@ -179,12 +181,24 @@ Tech Lead vérifie que tous les paramètres sont renseignés ; **il ne génère 
 | Paramètre                                     | Requis     | Valeurs                                                                     |
 | --------------------------------------------- | ---------- | --------------------------------------------------------------------------- |
 | Nom de la stack `${stack_name}`               | Oui        | Texte alphanumérique                                                        |
-| Type d'authentification `${auth_type}`        | Oui        | `none`, `local`, `forwardauth`, `oidc`                                      |
+| Type d'authentification `${auth_type}`        | Optionnel  | `none`, `local`, `forwardauth`, `ldap`, `saml`, `oidc`                      |
 | Réseau Traefik `${traefik_network}`           | Déductible | Sinon `network.md` ; défaut `traefik_frontend` **à confirmer par l'humain** |
 | Activer Valkey `${valkey_enabled}`            | Déductible | `true`, `false` ; défaut `traefik_frontend`                                 |
 | Service base de données `${database_service}` | Optionnel  | `postgres`, `mysql`, `mariadb`, `mongodb`, `none`                           |
 
 Demander aussi si la stack nécessite une **création/modification de secrets ou variables d'environnement dans HashiCorp Vault** (agent dédié à créer plus tard ; en attendant, le signaler à l'humain).
+
+### Sélection automatique du type d'authentification
+
+`${auth_type}` est **optionnel** : ce n'est plus un paramètre bloquant en §1.4. Lorsque la **documentation officielle** de la stack précise les types d'authentification possibles, le Tech Lead **choisit automatiquement** le type selon l'ordre de priorité suivant — **le premier disponible ET gratuit l'emporte** :
+
+1. **`oidc`** — si l'authentification OIDC / OAuth est disponible et gratuite ;
+2. **`saml`** — si l'authentification SAML est disponible et gratuite ;
+3. **`ldap`** — si l'authentification LDAP est disponible et gratuite ;
+4. **`forwardauth`** — si l'application possède une authentification locale qui **peut être désactivée**, ou ne possède **aucune** authentification ;
+5. **`local`** — si l'application possède une authentification locale qui **ne peut pas être désactivée**.
+
+**En cas de doute → demander à l'humain** et **attendre sa réponse** avant de figer `${auth_type}`. Le doute ne bascule **jamais** vers un choix implicite : aucune supposition sur le type d'authentification.
 
 ---
 
