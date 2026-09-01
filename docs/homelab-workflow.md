@@ -82,6 +82,8 @@ Cette recherche est toujours faite **en premier**. Elle précède l'analyse, la 
 
 **Chargement différé (à la demande)** : le contenu complet d'une skill, d'un gabarit ou d'une configuration n'est chargé qu'au moment où l'étape ou la délégation qui en a besoin est déclenchée.
 
+**EXIGENCE : descriptions d'agents auto-suffisantes pour le routage.** Le chargement léger ne tient que si la seule `description` d'un agent (renvoyée par `multica agent list`) suffit au Tech Lead pour router et déléguer avec une mission claire, **sans avoir à ouvrir ses instructions complètes**. Cette exigence porte sur la **fiche de chaque agent**, pas sur ce workflow : toute description d'agent du Homelab DOIT énoncer, de façon autonome, (a) le **domaine couvert** (ce que l'agent traite), (b) sa **frontière produit vs vérifie** quand un autre agent occupe un domaine voisin (p. ex. Spécialiste Docker *crée* / QA Docker *vérifie et corrige*), et (c) ses **interdits ou limites marquants** qui conditionnent le routage ou la sécurité (p. ex. Spécialiste Terraform n'exécute jamais `terraform apply/destroy`). Si une description est ambiguë ou incomplète au point d'obliger le Tech Lead à charger les instructions pour trancher, elle doit être corrigée sur la fiche de l'agent — c'est la fiche qui est en défaut, pas le chargement léger.
+
 **Secrets** : les valeurs de secrets/variables Vault ne sont récupérées (skill `homelab-vault-access`) que si l'étape l'exige, et **jamais** affichées, loggées, copiées ou transmises dans un commentaire, un livrable ou une notification.
 
 ---
@@ -284,7 +286,7 @@ sequenceDiagram
 - **Le Tech Lead coordonne, les spécialistes produisent** : Spécialiste Docker crée, QA Docker vérifie, Spécialiste Terraform configure Terraform ; Tech Lead contrôle tout.
 - **Vérification jamais sautée** : QA Docker vérifie systématiquement le compose de Spécialiste Docker avant Terraform.
 - **Spécialiste Terraform ne déploie jamais** : interdiction absolue de `terraform init/apply/destroy` ; il prépare les fichiers, l'humain exécute.
-- **Chargement optimisé pour le contexte** : métadonnées légères au démarrage ; contenu complet et secrets Vault chargés à la demande uniquement.
+- **Chargement optimisé pour le contexte** : métadonnées légères au démarrage ; contenu complet et secrets Vault chargés à la demande uniquement. Ce gain n'est réel que si les **descriptions d'agents sont auto-suffisantes pour le routage** (domaine couvert, frontière produit vs vérifie, interdits marquants) — exigence portée sur la fiche de chaque agent.
 - **Validation humaine granulaire** : chaque choix validé/rejeté séparément ; rien n'avance sur un élément non validé.
 - **Aucune action à impact sans validation humaine explicite** : dépôt de fichiers, flux Kestra `configure_service`.
 - **Coordination par l'issue** : chaque étape, décision et délégation documentée ; délégations A2A par mention valide (UUID résolu, jamais deviné), sens retour vers Tech Lead obligatoire.
