@@ -2,7 +2,7 @@
 
 # Lorsqu'un humain ou un agent demande la création, la modification ou l'évolution d'une stack, d'un service ou d'une configuration du Homelab, TOUJOURS suivre ce workflow EN PREMIER
 
-Ce workflow est le contrat commun d'orchestration **multi-agents (A2A)** des travaux du **Homelab**. Il est coordonné par **le Teach Lead**.
+Ce workflow est le contrat commun d'orchestration **multi-agents (A2A)** des travaux du **Homelab**. Il est coordonné par **le Tech Lead**.
 
 Le workflow est **agnostique de l'outil** : il s'applique aux stacks Docker Swarm ou Proxmox, à leur configuration Terraform et aux domaines connexes du Homelab. Il ne remplace pas les skills des agents (`homelab-stack-workflow`, `docker-composer`, `configuration-applications`, `dockerfile-validator`, `homelab-vault-access`, `traefik-manager-read`) : il en fixe la **gouvernance** et l'**ordre d'exécution** entre agents.
 
@@ -10,7 +10,7 @@ Le workflow est **agnostique de l'outil** : il s'applique aux stacks Docker Swar
 
 ## Principe fondateur : le workflow s'adapte au travail
 
-**Le workflow s'adapte au travail, et non l'inverse.** Le Teach Lead et chaque spécialiste évaluent quelles étapes apportent de la valeur, en fonction de :
+**Le workflow s'adapte au travail, et non l'inverse.** Le Tech Lead et chaque spécialiste évaluent quelles étapes apportent de la valeur, en fonction de :
 
 1. L'intention déclarée (humain ou agent appelant) et sa clarté.
 2. L'état existant de la stack (docker-compose / proxmox, config Terraform, secrets Vault, routes Traefik).
@@ -25,26 +25,26 @@ Une modification simple reste efficace (traitement minimal) ; une création comp
 
 ## Modèle de collaboration A2A
 
-Le workflow n'est **pas** exécuté par un seul agent. **Le Teach Lead est le coordinateur et le contrôleur qualité central** : il analyse la demande, applique la règle préalable de documentation officielle, collecte les paramètres, délègue aux spécialistes via des mentions sur l'issue, contrôle chaque livrable, puis demande la validation humaine. **Le Teach Lead ne produit pas lui-même les livrables** (compose, Terraform), sauf pour les domaines sans agent encore créé (Ansible, logs, Kestra) où il réalise lui-même la vérification.
+Le workflow n'est **pas** exécuté par un seul agent. **Le Tech Lead est le coordinateur et le contrôleur qualité central** : il analyse la demande, applique la règle préalable de documentation officielle, collecte les paramètres, délègue aux spécialistes via des mentions sur l'issue, contrôle chaque livrable, puis demande la validation humaine. **Le Tech Lead ne produit pas lui-même les livrables** (compose, Terraform), sauf pour les domaines sans agent encore créé (Ansible, logs, Kestra) où il réalise lui-même la vérification.
 
 ### Acteurs et responsabilités
 
 | Acteur                            | Rôle dans le workflow                                                                                                                                                                                                                                                                                                                                                              |
 | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Humain (demandeur / valideur)** | Exprime le besoin, arbitre les choix (Docker Swarm vs Proxmox, réseau Traefik, Vault), valide **chaque** décision et autorise les actions à impact (dépôt de fichiers, flux Kestra).                                                                                                                                                                                               |
-| **Teach Lead**             | **Coordinateur.** Documentation officielle, collecte des paramètres, découpage, délégation, contrôle qualité de chaque livrable, demande des validations humaines, orchestration de la revue et de la notification. Aucune issue ne passe en revue sans son contrôle.                                                                                                              |
-| **Spécialiste Docker**            | **Création / modification** des fichiers docker-compose optimisés Swarm (skill `docker-composer`). Conserve les commentaires des gabarits. Mentionne le Teach Lead en fin de travail.                                                                                                                                                                                       |
-| **QA Docker**                     | **Vérification / correction** du docker-compose : syntaxe YAML, compatibilité Swarm, hardening, cohérence Traefik (skills `docker-composer`, `dockerfile-validator`, `traefik-manager-read`). Mentionne le Teach Lead en fin de travail.                                                                                                                                    |
-| **Spécialiste Terraform**         | **Création / modification** des variables Terraform de la stack (skill `configuration-applications`). **N'exécute JAMAIS** `terraform init/apply/destroy`. Mentionne le Teach Lead en fin de travail.                                                                                                                                                                       |
-| **Expert n8n**                    | **Toute** tâche n8n (analyse, création, modification, diagnostic, optimisation) via le serveur MCP n8n. **Règle absolue** : dès que « n8n » apparaît, le Teach Lead délègue IMMÉDIATEMENT et n'exécute rien lui-même — pas même l'analyse. Propose, applique après feu vert du Teach Lead puis validation humaine, mentionne le Teach Lead en fin de travail. |
-| **Expert Home Assistant**         | **Toute** tâche Home Assistant (entités, scènes, automatisations, scripts) via le serveur MCP officiel. Propose → vérification par le Teach Lead → validation humaine explicite → seulement ensuite modification réelle. Mentionne le Teach Lead en fin de travail.                                                                                                  |
-| **Agent de notifications**        | Envoi des notifications push (ntfy, skill `ntfy-notifications`). Déclenché **uniquement par le Teach Lead** ; les spécialistes ne l'appellent jamais directement.                                                                                                                                                                                                           |
+| **Tech Lead**             | **Coordinateur.** Documentation officielle, collecte des paramètres, découpage, délégation, contrôle qualité de chaque livrable, demande des validations humaines, orchestration de la revue et de la notification. Aucune issue ne passe en revue sans son contrôle.                                                                                                              |
+| **Spécialiste Docker**            | **Création / modification** des fichiers docker-compose optimisés Swarm (skill `docker-composer`). Conserve les commentaires des gabarits. Mentionne le Tech Lead en fin de travail.                                                                                                                                                                                       |
+| **QA Docker**                     | **Vérification / correction** du docker-compose : syntaxe YAML, compatibilité Swarm, hardening, cohérence Traefik (skills `docker-composer`, `dockerfile-validator`, `traefik-manager-read`). Mentionne le Tech Lead en fin de travail.                                                                                                                                    |
+| **Spécialiste Terraform**         | **Création / modification** des variables Terraform de la stack (skill `configuration-applications`). **N'exécute JAMAIS** `terraform init/apply/destroy`. Mentionne le Tech Lead en fin de travail.                                                                                                                                                                       |
+| **Expert n8n**                    | **Toute** tâche n8n (analyse, création, modification, diagnostic, optimisation) via le serveur MCP n8n. **Règle absolue** : dès que « n8n » apparaît, le Tech Lead délègue IMMÉDIATEMENT et n'exécute rien lui-même — pas même l'analyse. Propose, applique après feu vert du Tech Lead puis validation humaine, mentionne le Tech Lead en fin de travail. |
+| **Expert Home Assistant**         | **Toute** tâche Home Assistant (entités, scènes, automatisations, scripts) via le serveur MCP officiel. Propose → vérification par le Tech Lead → validation humaine explicite → seulement ensuite modification réelle. Mentionne le Tech Lead en fin de travail.                                                                                                  |
+| **Agent de notifications**        | Envoi des notifications push (ntfy, skill `ntfy-notifications`). Déclenché **uniquement par le Tech Lead** ; les spécialistes ne l'appellent jamais directement.                                                                                                                                                                                                           |
 
 ### Règle A2A
 
 Un agent est déclenché par un **commentaire sur l'issue avec une mention valide** `[@Label](mention://agent/<uuid>)` et une **mission claire** : objectif, périmètre, critères d'acceptation. **Ne jamais deviner un UUID** : le résoudre via `multica agent list --output json` (champ `id`).
 
-Le spécialiste appelé rend **toujours** compte au Teach Lead en fin de tâche (succès, échec ou blocage) pour contrôle. **Ce compte-rendu n'est valide que s'il DÉCLENCHE effectivement le Tech Lead** : il doit contenir la mention littérale et valide de la forme `[@Label](mention://agent/<uuid>)`. **Écrire le nom du Tech Lead (ou d'un agent) en texte brut ne déclenche RIEN** — seul le lien `mention://agent/<uuid>` enfile un run ; un compte-rendu sans cette mention est réputé **non rendu** et arrête le flux. À l'inverse, tout feu vert / refus / correction que le Teach Lead donne à un spécialiste **doit** de la même façon contenir la mention valide de cet agent, publiée en réponse dans son thread (`--parent`).
+Le spécialiste appelé rend **toujours** compte au Tech Lead en fin de tâche (succès, échec ou blocage) pour contrôle. **Ce compte-rendu n'est valide que s'il DÉCLENCHE effectivement le Tech Lead** : il doit contenir la mention littérale et valide de la forme `[@Label](mention://agent/<uuid>)`. **Écrire le nom du Tech Lead (ou d'un agent) en texte brut ne déclenche RIEN** — seul le lien `mention://agent/<uuid>` enfile un run ; un compte-rendu sans cette mention est réputé **non rendu** et arrête le flux. À l'inverse, tout feu vert / refus / correction que le Tech Lead donne à un spécialiste **doit** de la même façon contenir la mention valide de cet agent, publiée en réponse dans son thread (`--parent`).
 
 Après **tout** commentaire censé déclencher un agent (délégation aller ou compte-rendu retour), l'auteur **lit `trigger_outcomes` dans la réponse de la CLI** et, si le statut est `blocked` / `coalesced` / `deferred`, le signale explicitement — il ne considère jamais la tâche comme terminée tant que le run visé n'a pas été enfilé.
 
@@ -60,7 +60,7 @@ Cette borne (1 reprise, puis blocage + escalade) évite toute boucle de correcti
 
 ## OBLIGATOIRE : règle préalable universelle — documentation officielle
 
-**Avant TOUTE tâche** (sauf n8n → délégation immédiate à Expert N8n), la première action du Teach Lead est de vérifier si la stack concernée dispose d'une documentation officielle :
+**Avant TOUTE tâche** (sauf n8n → délégation immédiate à Expert N8n), la première action du Tech Lead est de vérifier si la stack concernée dispose d'une documentation officielle :
 
 - site officiel du projet ;
 - dépôt GitHub / GitLab / autre forge (README, `docs/`, wiki, `docker-compose.yml` d'exemple) ;
@@ -76,7 +76,7 @@ Cette recherche est toujours faite **en premier**. Elle précède l'analyse, la 
 
 ## OBLIGATOIRE : chargement optimisé pour le contexte
 
-**Au démarrage (chargement léger uniquement)** : le Teach Lead ne charge que les métadonnées nécessaires au cadrage et au routage — la liste des agents disponibles et leurs **descriptions** (via `multica agent list --output json`, **pas** les instructions complètes), la liste des skills et leurs descriptions, et le contexte existant utile de la stack visée.
+**Au démarrage (chargement léger uniquement)** : le Tech Lead ne charge que les métadonnées nécessaires au cadrage et au routage — la liste des agents disponibles et leurs **descriptions** (via `multica agent list --output json`, **pas** les instructions complètes), la liste des skills et leurs descriptions, et le contexte existant utile de la stack visée.
 
 **NE PAS charger au démarrage** : les instructions détaillées d'un spécialiste, les gabarits complets, les configurations Terraform intégrales ou le contenu complet des secrets Vault.
 
@@ -115,7 +115,7 @@ flowchart TD
     B --> C[PHASE 2 - PRODUCTION ET CONTROLE]
     C --> D[PHASE 3 - VALIDATION ET DEPLOIEMENT]
     B -.->|documentation officielle + parametres requis| B
-    C -.->|controle qualite Teach Lead + coherence Traefik| C
+    C -.->|controle qualite Tech Lead + coherence Traefik| C
 ```
 
 - **PHASE 1 — CADRAGE ET PARAMÈTRES** : QUOI et POURQUOI → documentation officielle, exigences, arbitrage Docker Swarm/Proxmox, paramètres requis complets.
@@ -124,7 +124,7 @@ flowchart TD
 
 ---
 
-# PHASE 1 — CADRAGE ET PARAMÈTRES (Teach Lead)
+# PHASE 1 — CADRAGE ET PARAMÈTRES (Tech Lead)
 
 **Objectif** : cadrer la demande et réunir tout ce qu'il faut avant de générer quoi que ce soit.
 
@@ -176,7 +176,7 @@ Tech Lead délègue à **QA Docker** la vérification (mission + mention). le QA
 
 ## 2.3 — Configuration Terraform (Spécialiste Terraform)
 
-Après contrôle du travail de QA Docker, Tech Lead donne l'ordre au **Spécialiste Terraform** (mission + mention) de créer/modifier les **variables Terraform** de la stack (skill `configuration-applications`), cohérentes avec les paramètres collectés. Spécialiste Terraform prépare uniquement les fichiers `.tf`/`.tfvars` (**jamais** `terraform init/apply/destroy`), dépose le livrable téléchargeable et **mentionne le Teach Lead**.
+Après contrôle du travail de QA Docker, Tech Lead donne l'ordre au **Spécialiste Terraform** (mission + mention) de créer/modifier les **variables Terraform** de la stack (skill `configuration-applications`), cohérentes avec les paramètres collectés. Spécialiste Terraform prépare uniquement les fichiers `.tf`/`.tfvars` (**jamais** `terraform init/apply/destroy`), dépose le livrable téléchargeable et **mentionne le Tech Lead**.
 
 ## 2.4 — Branche n8n (Expert N8n)
 
