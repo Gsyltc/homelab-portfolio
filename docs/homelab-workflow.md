@@ -97,6 +97,18 @@ La piste d'audit vit **sur l'issue Multica**, pas dans un fichier séparé. Chaq
 
 ---
 
+## OBLIGATOIRE : concurrence — un seul traitement en cours par stack
+
+Deux travaux ne doivent **jamais** progresser en parallèle sur la **même stack**. La règle est portée par l'issue et arbitrée par le Tech Lead Homelab.
+
+**Un seul traitement actif par stack.** À un instant donné, une stack donnée n'a **qu'un seul traitement en cours**. Le Tech Lead ne délègue une nouvelle étape (production, vérification, configuration) sur une stack que lorsque l'étape précédente sur cette même stack est **rendue et contrôlée**. Deux demandes concurrentes visant la même stack sont **sérialisées** : la seconde attend que la première atteigne un point stable (livrable contrôlé, `in_review`, ou clôture) avant de démarrer. Le Tech Lead ne lance jamais deux spécialistes simultanément sur la même stack.
+
+**Verrou porté par l'issue (metadata).** Le Tech Lead matérialise le traitement en cours sur l'issue via une clé de metadata, par exemple `active_step` (valeur : rôle + périmètre, ex. `specialiste-docker:compose`) posée au moment de la délégation et **effacée** au retour contrôlé de ce spécialiste. Avant toute nouvelle délégation sur la stack, le Tech Lead **lit cette clé** : si un traitement est déjà actif, il ne délègue pas et attend le retour ou signale le conflit à l'humain. Une demande concurrente arrivée entre-temps est mise en file (commentaire explicite « en attente : traitement <X> en cours ») et reprise dès la libération du verrou.
+
+**En cas de conflit détecté** (deux demandes simultanées, deux mentions parallèles sur la même stack) : le Tech Lead **sérialise** — il traite la première jusqu'à un point stable, journalise le report de la seconde en commentaire, puis la reprend. Aucun livrable concurrent divergent ne doit être produit sur la même stack.
+
+---
+
 ## OBLIGATOIRE : langue, format et sécurité
 
 - Rédiger **tous les documents en français** (langue de l'humain par défaut).
@@ -294,6 +306,7 @@ sequenceDiagram
 - **Le Tech Lead ne produit ni ne vérifie techniquement** : il ne rédige pas de correctif compose/Terraform, ne fait pas d'audit de sécurité ni de contrôle Traefik lui-même. Il constate qu'un livrable est conforme ou non, et renvoie au spécialiste (Docker pour produire/corriger, QA Docker pour vérifier). Décrire un symptôme est permis ; livrer un diagnostic ou une solution ne l'est pas.
 - **Le Tech Lead coordonne, les spécialistes produisent** : Spécialiste Docker crée, QA Docker vérifie, Spécialiste Terraform configure Terraform ; Tech Lead contrôle tout.
 - **Vérification jamais sautée** : QA Docker vérifie systématiquement le compose de Spécialiste Docker avant Terraform.
+- **Un seul traitement par stack** : à un instant donné, une stack n'a qu'un traitement actif ; les demandes concurrentes sont sérialisées (verrou porté par l'issue via metadata).
 - **Spécialiste Terraform ne déploie jamais** : interdiction absolue de `terraform init/apply/destroy` ; il prépare les fichiers, l'humain exécute.
 - **Chargement optimisé pour le contexte** : métadonnées légères au démarrage ; contenu complet et secrets Vault chargés à la demande uniquement.
 - **Validation humaine granulaire** : chaque choix validé/rejeté séparément ; rien n'avance sur un élément non validé.
