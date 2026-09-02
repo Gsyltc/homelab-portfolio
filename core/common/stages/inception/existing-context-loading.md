@@ -3,8 +3,8 @@ slug: existing-context-loading
 phase: inception
 execution: CONDITIONAL
 condition: "Brownfield détecté en Initialization ET contexte insuffisant"
-lead_agent: Sylvain
-support_agents: [Manuel]
+lead_agent: Architecture Solution & Intégration
+support_agents: [Architecte de solution]
 mode: inline
 summary_confirmation: optional
 reviewer: null
@@ -16,7 +16,7 @@ requires_stage: [intake-framing]
 sensors: []
 scopes: [standard, feature, infra, security-patch, mvp, enterprise]
 inputs: "Contexte brownfield détecté"
-outputs: "Synthèse de la documentation d'architecture, ADR et diagrammes existants (ou N/A si greenfield)"
+outputs: "Synthèse de la documentation d'architecture, décisions structurantes et diagrammes existants (ou N/A si greenfield)"
 ---
 
 # Chargement du contexte existant (conditionnel)
@@ -29,7 +29,7 @@ Charger et synthétiser l'existant pertinent en contexte brownfield.
 Exécuter **SI** brownfield détecté et contexte insuffisant. **Ignorer (N/A) SI** greenfield ou contexte déjà suffisant.
 
 ### Step 2 — Charger et synthétiser
-Charger la documentation d'architecture, les ADR et diagrammes pertinents ; en produire une synthèse sur l'issue.
+Charger la documentation d'architecture, les décisions structurantes et diagrammes pertinents ; en produire une synthèse sur l'issue.
 
 ## Gate / sortie
 Synthèse du contexte existant (ou N/A consigné).

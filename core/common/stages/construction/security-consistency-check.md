@@ -3,11 +3,11 @@ slug: security-consistency-check
 phase: construction
 execution: ALWAYS
 condition: "Always executes"
-lead_agent: Sylvain
-support_agents: [Xavier]
+lead_agent: Architecture Solution & Intégration
+support_agents: [Architecte cybersécurité]
 mode: inline
 summary_confirmation: required
-reviewer: Xavier
+reviewer: Architecte cybersécurité
 review_class: granular
 human_gate: none
 produces: [controle_securite_coherence]
@@ -16,7 +16,7 @@ requires_stage: [detailed-deliverables]
 sensors: [required-sections]
 scopes: [standard, feature, infra, security-patch, mvp, enterprise]
 inputs: "Livrables détaillés"
-outputs: "Contrôle sécurité (Xavier) + cohérence documentation ↔ ADR, corrections demandées le cas échéant"
+outputs: "Contrôle sécurité + cohérence documentation ↔ décisions structurantes, corrections demandées le cas échéant"
 ---
 
 # Contrôle sécurité et cohérence
@@ -25,12 +25,12 @@ outputs: "Contrôle sécurité (Xavier) + cohérence documentation ↔ ADR, corr
 Vérifier la sécurité et la cohérence des livrables avant consolidation.
 
 ## Steps
-### Step 1 — Solliciter Xavier
-Pour tout livrable modifiant l'architecture (mêmes règles que `design-and-adr`). Plancher SG-3 : aucun gate / sensor advisory ne remplace ce contrôle.
+### Step 1 — Solliciter l'Architecte cybersécurité
+Pour tout livrable modifiant l'architecture (mêmes règles que `design-and-decisions`). Plancher SG-3 : aucun gate / sensor advisory ne remplace ce contrôle.
 
-### Step 2 — Vérifier structure, complétude, qualité, format et cohérence avec les ADR.
+### Step 2 — Vérifier structure, complétude, qualité, format et cohérence avec les décisions structurantes.
 
 ### Step 3 — Demander les corrections aux agents responsables le cas échéant.
 
 ## Gate / sortie
-Contrôle sécurité + cohérence consignés. Sensor `required-sections` sur ADR / DAS.
+Contrôle sécurité + cohérence consignés. Sensor `required-sections` sur les documents de décision / DAS.

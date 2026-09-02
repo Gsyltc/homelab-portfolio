@@ -3,8 +3,8 @@ slug: feasibility-constraints
 phase: ideation
 execution: ALWAYS
 condition: "Always executes — évaluation légère"
-lead_agent: Sylvain
-support_agents: [Manuel, Florian, Xavier]
+lead_agent: Architecture Solution & Intégration
+support_agents: [Architecte de solution, Architecte AWS, Architecte cybersécurité]
 mode: inline
 summary_confirmation: required
 reviewer: null

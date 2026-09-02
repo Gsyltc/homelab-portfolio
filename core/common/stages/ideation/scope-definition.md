@@ -3,7 +3,7 @@ slug: scope-definition
 phase: ideation
 execution: ALWAYS
 condition: "Always executes — scope auto-détecté puis confirmé"
-lead_agent: Sylvain
+lead_agent: Architecture Solution & Intégration
 support_agents: []
 mode: inline
 summary_confirmation: required

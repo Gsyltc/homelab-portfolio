@@ -3,11 +3,11 @@ slug: deployment-under-validation
 phase: operation
 execution: CONDITIONAL
 condition: "Exécuté si le travail comporte un déploiement / une administration ; sinon N/A"
-lead_agent: Admin
-support_agents: [Florian, Sylvain]
+lead_agent: Administrateur infrastructure Windows
+support_agents: [Architecte AWS, Architecture Solution & Intégration]
 mode: subagent
 summary_confirmation: required
-reviewer: Xavier
+reviewer: Architecte cybersécurité
 review_class: explicit
 human_gate: explicit
 produces: [plan_ou_configuration_valide, rollback_si_action_destructive]
@@ -28,7 +28,7 @@ Déployer ou administrer uniquement sous validation humaine explicite, avec roll
 ### Step 1 — Soumettre le plan complet à l'humain pour **validation explicite**.
 
 ### Step 2 — Plan de rollback (conditionnel)
-Pour toute action destructive ou de migration (Admin Windows), publier un **plan de rollback détaillé** et le faire **valider par l'humain avant exécution**.
+Pour toute action destructive ou de migration (Administrateur infrastructure Windows), publier un **plan de rollback détaillé** et le faire **valider par l'humain avant exécution**.
 
 ### Step 3 — Garde-fou
 **Aucune action à impact (déploiement, migration, orchestration) sans validation humaine explicite.** Jamais autonome.
