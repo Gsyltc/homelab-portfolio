@@ -102,22 +102,20 @@ homelab-portfolio/
 │   ├── rules/                             #   Mémoire de règles multi-couches (boucle d'apprentissage)
 │   ├── sensors/                           #   Manifestes des verification gates & sensors (advisory)
 │   ├── agents/                            #   Définitions d'agents
-│   ├── skills/                            #   Skills (source), regroupées par domaine
-│   │   ├── architecture-skills/           #     OpenSpec + décision d'architecture
-│   │   ├── homelab-skills/                #     docker-composer, traefik, stack, notifications
-│   │   ├── investissements-skills/        #     analyse, data provider, liste de titres
-│   │   └── medical-skills/                #     dossiers médicaux
 │   └── workflows/                         #   Workflows narratifs par domaine
 │       └── homelab/                       #     homelab-workflow.md (+ VERSION)
 ├── decisions/                             # Registre des décisions structurantes (0001…0007)
 ├── docs/                                  # Stub de redirection core-workflow + doc générale
-└── plugins/                              # Packages de plugins d'agents (spec Agent Plugins v1.0.0)
-    ├── general-purpose-assistant/         #   plugin.json + skills/
-    ├── homelab-assistant/                 #   plugin.json
-    ├── investment-assistant/              #   plugin.json
-    └── medical-assistant/                 #   plugin.json
+└── plugins/                               # Packages de plugins d'agents (spec Agent Plugins v1.0.0) — portent les skills
+    ├── architecture-assistant/            #   plugin.json + skills/ (OpenSpec + décision d'architecture)
+    ├── general-purpose-assistant/         #   plugin.json + skills/ (workflow de stack, notifications)
+    ├── homelab-assistant/                 #   plugin.json + skills/ (docker-composer, traefik)
+    ├── investment-assistant/              #   plugin.json + skills/ (analyse, data provider, liste de titres)
+    └── medical-assistant/                 #   plugin.json + skills/ (dossiers médicaux)
 ```
 
+> **Les skills sont portées par les plugins** (`plugins/<nom>/skills/<skill>/SKILL.md`),
+> conformément à la spécification Agent Plugins v1.0.0 — c'est l'emplacement canonique.
 > Les fichiers `SKILL.md` du dépôt sont une **source**. Sur Multica, une skill n'est
 > utilisable qu'une fois **importée** dans le workspace (`multica skill import`) puis
 > **assignée** à un agent (`multica agent skills add|set`) — un `SKILL.md` dans le dépôt
