@@ -200,21 +200,123 @@ La boucle capitalise les corrections humaines **sans jamais modifier l'exécutio
 5. **Écriture sur disque** — la règle admise est ajoutée au fichier de sa couche dans `core/rules/`, avec identifiant, portée, issue d'origine et date.
 6. **Application au prochain workflow** — une règle nouvellement écrite **ne s'applique jamais en cours de route** ; elle est chargée au démarrage du **prochain** workflow.
 
-**Portée par défaut** d'une règle apprise, en l'absence de précision : `project`. La promotion `project → workspace` est une décision structurante explicite (tracée en ADR si structurante) et, si elle touche la sécurité, soumise au contrôle de l'Architecte cybersécurité.
+**Portée par défaut** d'une règle apprise, en l'absence de précision : `project`. La promotion `project → workspace` est une décision structurante explicite (tracée en ADR si structurante) et **soumise dans tous les cas au contrôle sécurité systématique de l'Architecte cybersécurité** — qu'elle « touche la sécurité » ou non, au même titre qu'une écriture native en couche `workspace` (voir « Contrôle de conflit à l'admission », SEC-4). La qualification « touche la sécurité » ne conditionne jamais le déclenchement de ce contrôle.
 
 ### Contrôle de conflit à l'admission
 
-Une règle apprise **ne peut pas contredire une règle de niveau supérieur sans arbitrage humain**. Avant écriture :
+Une règle apprise **ne peut pas contredire — ni éroder — une règle de niveau supérieur ou un garde-fou sans arbitrage humain**. Avant écriture :
 
 1. **Précédence des couches** — `workspace` > `project` > `phase` > `scope`. Un candidat qui contredit une règle d'une couche supérieure n'est pas écrit tel quel : le coordinateur **remonte le conflit à l'humain** (et à l'Architecte cybersécurité si la règle touche la sécurité) ; l'arbitrage humain décide (rejet, reformulation, ou modification explicite de la règle supérieure via son canal propre — ADR si structurant). **Le coordinateur ne tranche jamais seul un conflit.**
 2. **Invariants non contournables** — aucune règle apprise, à aucune couche, ne peut affaiblir les invariants non négociables (validation humaine granulaire, ADR sur décision structurante, piste d'audit sur l'issue, contrôle sécurité minimal OWASP / STRIDE) ni les garde-fous sécurité des scopes (plancher de vérification, Depth non abaissable sur `security-patch` / `enterprise`, re-scoping tracé). Un candidat qui les contredit est **rejeté d'office**.
-3. **Contrôle sécurité systématique de la couche `workspace`** — toute règle admise en couche `workspace` (portée la plus large) passe par un **contrôle sécurité systématique** de l'Architecte cybersécurité avant écriture, qu'elle « touche la sécurité » ou non (une règle globale peut avoir des effets de bord sécuritaires non évidents).
-4. **Idempotence** — un candidat déjà couvert par une règle existante n'est pas ré-écrit (évite la dérive de `core/rules/`).
+3. **SEC-1 — Contrôle d'érosion sémantique** — le contrôle ne se limite pas à la contradiction littérale : un candidat qui **restreint la portée, ajoute une exception, ou conditionne l'application** d'un invariant non contournable ou d'un garde-fou de scope est traité comme un affaiblissement et **rejeté d'office**, même s'il n'entre pas en contradiction directe. L'idempotence n'exonère jamais de ce contrôle.
+4. **SEC-2 — Contrôle sécurité systématique, à périmètre fondé sur le risque** — le contrôle sécurité de l'Architecte cybersécurité, avant écriture, s'applique à **toute** règle de couche `workspace`, **et** à toute règle de couche `project`, `phase` ou `scope` dès lors qu'elle vise ou modifie le comportement d'un scope à garde-fous (`security-patch`, `enterprise`), d'une phase de vérification, ou d'un contrôle de sécurité existant. Le critère de déclenchement est le **risque**, pas seulement la couche.
+5. **SEC-3 — Pas d'exploitation d'un candidat dans le run courant** — un candidat-règle capturé pendant une étape **n'a aucune valeur normative tant qu'il n'est pas confirmé, contrôlé et écrit**. Il ne peut être ni appliqué, ni invoqué comme justification d'un autre choix dans le run courant. Seules les règles déjà écrites au démarrage du workflow font autorité ; l'application reste différée au **prochain** workflow, sans exception.
+6. **SEC-5 — Intégrité du canal d'écriture** — aucune règle n'est ajoutée, modifiée ou supprimée dans `core/rules/` en dehors de la boucle d'apprentissage (capture → confirmation humaine → contrôle de conflit à l'admission). Toute modification de `core/rules/` est versionnée, revue en PR et porte l'`origine` (issue) et la date ; une entrée sans provenance traçable est invalide et retirée.
+7. **Idempotence** — un candidat déjà couvert par une règle existante n'est pas ré-écrit (évite la dérive de `core/rules/`) — sans jamais court-circuiter SEC-1.
+
+> **SEC-4 — Contrôle sécurité systématique sur promotion vers `workspace`** : toute promotion d'une règle de `project` (ou couche inférieure) vers `workspace` est soumise au contrôle sécurité systématique de l'Architecte cybersécurité, qu'elle « touche la sécurité » ou non, au même titre qu'une écriture native en couche `workspace` (voir « Portée par défaut »).
 
 ### Articulation avec l'audit et OpenSpec
 
 - **Piste d'audit** : la *capture* (candidats, décision humaine, conflit éventuel) vit **sur l'issue** ; seule la **règle acceptée** est écrite dans `core/rules/`. Pas de fichier `audit.md`.
 - **OpenSpec (conditionnel)** : lorsqu'OpenSpec est activé, les règles apprises pertinentes pour l'Inception peuvent enrichir la formulation des propositions (Fabien), sans jamais imposer OpenSpec.
+
+---
+
+## Verification gates & Sensors
+
+Le workspace ajoute deux mécanismes de **fiabilisation déterministe** qui soulagent l'humain des vérifications mécaniques, **sans jamais se substituer à la validation humaine granulaire** : les **verification gates** (contrôle automatique de traçabilité aux frontières de phases) et les **sensors** (checks déterministes déclenchés à l'écriture d'un artefact). Les deux sont **advisory** : ils produisent une trace d'audit factuelle mais **ne bloquent jamais** le gate humain (voir « Caractère advisory »).
+
+> Adaptation d'AI-DLC 2.0 (`awslabs/aidlc-workflows/core` — mécanismes *verification gates* et *sensors*) au contexte du workspace : gouvernance A2A, livrables majoritairement documentaires, piste d'audit sur l'issue. Décision structurante tracée dans [ADR-0005](../decisions/0005-verification-gates-et-sensors.md). Les définitions déterministes vivent dans [`core/sensors/`](../core/sensors/README.md). Ce mécanisme **matérialise** le niveau de vérification `renforcé` de l'[ADR-0003](../decisions/0003-scopes-et-axes-depth-verification.md) et s'appuie sur la piste d'audit de l'[ADR-0004](../decisions/0004-boucle-apprentissage-et-regles-persistantes.md).
+
+### Distinction : gate automatique ≠ gate humain
+
+| | **Verification gate (automatique)** | **Validation humaine granulaire (gate humain)** |
+| --- | --- | --- |
+| Nature | Contrôle **déterministe** de traçabilité | Jugement **humain** choix par choix |
+| Objet | Présence / cohérence / liaison des artefacts | Pertinence, justesse, arbitrage des décisions |
+| Effet | **Advisory** : produit un rapport, ne bloque pas | **Contraignant** : rien n'avance sans ✅ |
+| Position | À l'entrée du gate humain, en amont | Le gate décisionnel lui-même |
+
+Le verification gate **prépare** le gate humain : il factualise l'état de traçabilité pour que l'humain valide le *contenu*, pas la *plomberie*. Il ne remplace, n'abaisse ni ne court-circuite jamais la validation humaine (invariant non négociable).
+
+### Verification gates — contrôle de traçabilité aux frontières de phases
+
+À **chaque transition de phase**, avant le point de validation humaine, le coordinateur exécute un **contrôle automatique de traçabilité** distinct de la validation humaine. Trois contrôles déterministes :
+
+1. **Présence des artefacts requis** — les artefacts attendus à la sortie de la phase existent (voir table ci-dessous).
+2. **Liaison exigence ↔ ADR ↔ livrable** — chaque exigence retenue est reliée à un ADR ou à un livrable ; chaque décision structurante est tracée en ADR.
+3. **Absence d'artefact orphelin** — aucun ADR / livrable / diagramme n'est déconnecté (sans exigence amont ni référence).
+
+**Frontières de phases et artefacts requis** (adossé à la structure Inception / Construction / Operation actuelle ; la matrice suivra l'ossature à 5 phases au stage ultérieur — voir [ADR-0003](../decisions/0003-scopes-et-axes-depth-verification.md), IMP-003) :
+
+| Frontière | Artefacts requis en sortie | Contrôles du gate |
+| --- | --- | --- |
+| **Entrée → Inception** | Demande brute consignée, répertoire projet confirmé, scope confirmé | Présence (demande, scope) |
+| **Inception → Construction** | Besoins tracés, ADR de conception, diagramme(s) principal(aux), scope + axes confirmés | Présence + liaison exigence ↔ ADR + absence d'orphelin + `diagram-validity` sur les diagrammes produits |
+| **Construction → Operation** | Livrables détaillés, ADR à jour, cohérence documentation ↔ ADR | Présence + liaison + absence d'orphelin + `required-sections` sur ADR/DAS |
+| **Operation → Fin** | Plan / configuration validé, rollback si action destructive | Présence (plan, rollback conditionnel) |
+
+**En cas d'échec** (advisory) : le coordinateur **ne bloque pas** mais **signale l'écart** dans le rapport de gate sur l'issue et **propose de revenir corriger** avant de présenter le contenu à l'humain. L'humain reste seul décideur : il peut demander la correction, ou valider en connaissance de cause en actant l'écart sur l'issue.
+
+### Sensors — checks déterministes à l'écriture d'un artefact
+
+Un **sensor** est un check **déterministe** (pas de jugement d'agent) déclenché **à l'écriture d'un artefact** d'un type donné. Trois sensors sont définis, dont **deux prioritaires** (`required-sections`, `upstream-coverage`) et un troisième pour les diagrammes générés en code (`diagram-validity`).
+
+#### Sensor 1 — `required-sections` (sections requises) — *prioritaire*
+
+- **Périmètre de déclenchement** : écriture d'un **ADR** (`decisions/NNNN-*.md`) ou d'un document d'architecture (DAS).
+- **Contrôle** : les rubriques obligatoires du gabarit sont présentes et non vides.
+  - **ADR** : `Status`, `Contexte`, `Décision`, `Conséquences` (Positives / Négatives), `Alternatives étudiées`, `Références` — en-tête méta (`auteurs`, `accepté par`, `accepté le`). *(Rubriques dérivées des ADR existants 0001–0004.)*
+  - **DAS** : titre, contexte / objectif, vues (fonctionnelle / technique), décisions liées (ADR), risques.
+- **Sortie** : liste des rubriques manquantes / vides (advisory).
+
+#### Sensor 2 — `upstream-coverage` (couverture amont) — *prioritaire*
+
+- **Périmètre de déclenchement** : écriture d'un **ADR**, d'une **DAS** ou d'un **livrable** détaillé.
+- **Contrôle** : le livrable **référence explicitement sa demande amont** — issue d'origine (`ALI-NNN` / `HOM-NNN`) et, le cas échéant, l'**ADR parent** ou la décision de cadrage dont il découle. Pour un ADR : présence d'au moins une entrée `Références` reliant à l'issue et/ou aux ADR liés.
+- **Sortie** : signalement si aucune référence amont détectée (artefact potentiellement orphelin — recoupe le contrôle 3 du gate).
+
+#### Sensor 3 — `diagram-validity` (validité de diagramme)
+
+- **Périmètre de déclenchement** : écriture d'un diagramme **généré en code** (bloc Mermaid / PlantUML dans un `.md`, fichier `.puml`, Structurizr DSL).
+- **Contrôle** : la **syntaxe** du diagramme est valide (parse sans erreur). Cohérent avec l'obligation « générer les diagrammes en code et en valider la syntaxe avant écriture ».
+- **Sortie** : erreur de parsing localisée (advisory) ; l'écriture reste possible mais l'écart est tracé.
+
+### Caractère advisory (garde-fou de gouvernance)
+
+Les gates automatiques et les sensors sont **advisory par décision** :
+
+- Ils **ne bloquent jamais** la validation humaine granulaire ni ne se substituent à elle — celle-ci reste l'unique gate décisionnel contraignant (invariant non négociable).
+- Ils **ne peuvent pas abaisser** un contrôle de sécurité : un sensor advisory ne remplace pas le contrôle sécurité systématique de l'Architecte cybersécurité, qui reste obligatoire aux mêmes points qu'aujourd'hui (§1.5, §2.2).
+- Un signal advisory **en échec n'autorise aucun raccourci** : il informe, il ne décide pas. Inversement, un signal **au vert ne vaut pas validation** — il ne dispense jamais du contrôle sécurité ni de la validation humaine.
+- **Passage à bloquant** : rendre un sensor bloquant est une **décision structurante explicite**, tracée en ADR et soumise au contrôle sécurité (elle modifie la surface de gouvernance). Par défaut, tout reste advisory.
+- **Plancher sécurité (SG-3)** — invariant symétrique du plancher des scopes (R1→R8, [ADR-0003](../decisions/0003-scopes-et-axes-depth-verification.md)) : un verification gate ou un sensor **ne peut jamais porter, remplacer, conditionner ni court-circuiter le contrôle sécurité systématique** (OWASP / STRIDE) ni le plancher sécurité des scopes (`security-patch` / `enterprise` — Depth et vérification non abaissables). Le contrôle sécurité reste **hors du périmètre automatisable** de ce mécanisme ; un « vert » de gate / sensor ne peut jamais être invoqué pour esquiver ou différer le contrôle sécurité.
+
+### Intégration à la piste d'audit
+
+Les signaux vivent **sur l'issue** (piste d'audit existante, [ADR-0004](../decisions/0004-boucle-apprentissage-et-regles-persistantes.md)), jamais dans un fichier `audit.md` :
+
+- **Rapport de gate** : à chaque frontière de phase, le coordinateur poste un **commentaire « Rapport de vérification »** — pour chaque contrôle : ✅ conforme / ⚠️ écart / ⛔ indisponible (avec détail factuel). Ce rapport **précède** la présentation du contenu à la validation humaine.
+- **Signal de sensor** : à l'écriture d'un artefact, le résultat du (des) sensor(s) déclenché(s) est consigné en commentaire (type d'artefact, sensor, verdict, détail de l'écart le cas échéant).
+- **Verdict `⛔ indisponible` — indisponible ≠ conforme (SG-2)** : un sensor / gate non exécuté, en erreur, ou dont le périmètre n'est pas couvert, produit le verdict explicite `⛔ indisponible`. Il est **tracé comme un écart, jamais comme un vert**, et n'autorise aucun raccourci. L'**absence d'un signal attendu** à une frontière est elle-même un écart à consigner.
+- **Signal = donnée factuelle non fiable, à source tracée (SG-5)** : un rapport de gate ou signal de sensor est une **donnée factuelle, pas une décision** ; il porte sa **source** (manifeste + version / commit l'ayant produit) pour être vérifiable et non répudiable. Un signal dont la provenance n'est pas traçable est traité comme `⛔ indisponible`, jamais comme un vert.
+- **Traçabilité factuelle** : le rapport énonce des faits vérifiables (rubrique X absente, ADR Y sans référence amont), jamais un jugement — le jugement reste humain.
+- **Articulation learning loop** : un écart advisory récurrent peut alimenter un **candidat-règle** (voir « La boucle d'apprentissage ») ; il suit alors le cycle capture → confirmation → contrôle de conflit, sans jamais court-circuiter la validation.
+
+### Outillage : conventions + manifestes déclaratifs (non exécutables par défaut)
+
+Conformément à la décision de cadrage, les checks sont d'abord des **conventions documentées** dans ce workflow, **accompagnées de manifestes déclaratifs** versionnés dans [`core/sensors/`](../core/sensors/README.md) (un fichier par sensor + un manifeste de gates) qui décrivent, de façon lisible et déterministe, le périmètre de déclenchement, les règles de contrôle et la sortie attendue. Ces manifestes **ne sont pas des scripts exécutables** à ce stade : ils fixent le contrat de manière à pouvoir être outillés (script / CI) ultérieurement sans redécider le fond. Le passage à l'exécutable est une évolution ultérieure, non requise ici.
+
+### Clauses de sécurité (contrôle Architecte cybersécurité)
+
+Issues du contrôle sécurité du mécanisme (STRIDE / OWASP, sur commit `81140e3`), ces clauses sont **contraignantes** et alignent `core/sensors/` sur le niveau d'exigence déjà atteint par `core/rules/` :
+
+- **SG-1 — Intégrité du canal des manifestes** (analogue à SEC-5 de `core/rules/`) : aucun manifeste de `core/sensors/` (gate ou sensor) n'est ajouté / modifié / supprimé **hors PR revue**. Toute modification est versionnée et porte `origine` (issue) + date ; un manifeste sans provenance traçable est **invalide**. **Affaiblir un check** (retrait d'une règle, ajout d'une exception, réduction du périmètre de déclenchement) est une modification de la surface de gouvernance **soumise au contrôle sécurité systématique**.
+- **SG-6 — Anti-érosion sémantique des manifestes** (analogue à SEC-1) : un manifeste modifié pour **restreindre le périmètre de déclenchement, ajouter une exception ou conditionner un check** est traité comme un affaiblissement soumis au contrôle sécurité, **même sans contradiction littérale**.
+- **SG-4 — Pré-requis sécurité de l'exécution différée** (à respecter avant tout passage en CI, ancrés dès [ADR-0005](../decisions/0005-verification-gates-et-sensors.md)) : (a) **parsing statique uniquement** — aucun rendu, aucun accès réseau, aucune exécution de code ou directive embarquée dans un artefact contrôlé (`!include` distant, `getResource`, scripts) ; (b) tout contenu d'artefact traité comme **donnée non fiable** ; (c) exécution en environnement **sans secret ni privilège** (moindre privilège, pas d'accès en écriture au repo, pas de token) ; (d) `triggers` en glob **bornés au repo**, sans remontée de chemin ; (e) échec d'un check → verdict `⛔ indisponible` (SG-2), jamais `✅`.
+
+*(Compléments dans les manifestes : verdict `⛔ indisponible` = SG-2, source tracée du signal = SG-5, plancher « jamais de gate/sensor sur un contrôle de sécurité » = SG-3 — voir « Caractère advisory » et « Intégration à la piste d'audit ».)*
 
 ---
 
@@ -463,6 +565,7 @@ Emplacement réservé : planification de déploiement, surveillance/observabilit
 - **Validation humaine granulaire** : chaque choix est validé/rejeté séparément ; rien n'avance sur un élément non validé.
 - **ADR obligatoires** : chaque décision structurante est tracée, révisée, sans conflit ; aucune décision acceptée sans validation humaine.
 - **Capitalisation des corrections (learning loop)** : les corrections humaines validées deviennent des règles persistantes multi-couches (`core/rules/`) ; l'écriture est subordonnée à une validation humaine explicite et à un contrôle de conflit à l'admission ; une règle apprise s'applique au **prochain** workflow, jamais en cours de route.
+- **Fiabilisation déterministe (verification gates & sensors)** : contrôle automatique de traçabilité aux frontières de phases + checks déterministes (`required-sections`, `upstream-coverage`, `diagram-validity`) à l'écriture des artefacts (`core/sensors/`) ; **advisory** — trace d'audit factuelle sur l'issue, ne bloque ni ne remplace jamais le contrôle sécurité ni la validation humaine granulaire.
 - **Jamais de supposition** : information requise manquante → demander à l'humain et attendre.
 - **Coordination par l'issue** : chaque étape, décision et délégation documentée en commentaire ; délégations A2A par mention valide (UUID résolu, jamais deviné) avec mission claire.
 - **Validation de contenu** : diagrammes en code, syntaxe validée ; format de diagramme confirmé par l'humain avant génération.
