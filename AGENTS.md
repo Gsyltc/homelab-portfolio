@@ -89,23 +89,36 @@ flowchart TD
 
 ```
 homelab-portfolio/
-├── docs/                                  # Documentation des workflows (mkdocs/docusaurus compatible)
-└── plugins/
-    ├── architecture-assistant/            # Plugin principal : architecture de solution (OpenSpec + ADR)
-    │   ├── plugin.json
-    │   ├── skills/                        # Skills openspec + ADR
-    │   └── ovh.jeedom-gaston/             # Extension client (namespace reverse-domain)
-    │       └── agents/                    # Définitions d'agents spécifiques au client
-    ├── homelab-assistant/                 # Plugin Homelab : docker-compose & Traefik
-    │   ├── plugin.json
-    │   └── skills/
-    ├── general-purpose-assistant/         # Skills transverses (workflow stack, notifications)
-    │   ├── plugin.json
-    │   └── skills/
-    ├── investment-assistant/              # Plugin investissement
-    │   ├── plugin.json
-    │   └── skills/
-    └── medical-assistant/                 # Plugin médical
-        ├── plugin.json
-        └── skills/
+├── AGENTS.md                              # Standards du dépôt + règle de routage entre workflows
+├── README.md
+├── CONTRIBUTING.md
+├── CODE_OF_CONDUCT.md
+├── LICENCE                                # MIT
+├── core/                                  # Workflow d'architecture de solution (A2A) + ressources partagées
+│   ├── common/                            #   conductor.md + stages/<phase>/ + protocols/
+│   │   ├── conductor.md                   #   Instructions du coordinateur (source unique du workflow)
+│   │   ├── stages/                        #   Fiches de stage des 5 phases (front-matter conforme)
+│   │   └── protocols/                     #   Protocoles transverses (stage-definition, gouvernance, reviewer…)
+│   ├── rules/                             #   Mémoire de règles multi-couches (boucle d'apprentissage)
+│   ├── sensors/                           #   Manifestes des verification gates & sensors (advisory)
+│   ├── agents/                            #   Définitions d'agents
+│   ├── skills/                            #   Skills (source), regroupées par domaine
+│   │   ├── architecture-skills/           #     OpenSpec + décision d'architecture
+│   │   ├── homelab-skills/                #     docker-composer, traefik, stack, notifications
+│   │   ├── investissements-skills/        #     analyse, data provider, liste de titres
+│   │   └── medical-skills/                #     dossiers médicaux
+│   └── workflows/                         #   Workflows narratifs par domaine
+│       └── homelab/                       #     homelab-workflow.md (+ VERSION)
+├── decisions/                             # Registre des décisions structurantes (0001…0007)
+├── docs/                                  # Stub de redirection core-workflow + doc générale
+└── plugins/                              # Packages de plugins d'agents (spec Agent Plugins v1.0.0)
+    ├── general-purpose-assistant/         #   plugin.json + skills/
+    ├── homelab-assistant/                 #   plugin.json
+    ├── investment-assistant/              #   plugin.json
+    └── medical-assistant/                 #   plugin.json
 ```
+
+> Les fichiers `SKILL.md` du dépôt sont une **source**. Sur Multica, une skill n'est
+> utilisable qu'une fois **importée** dans le workspace (`multica skill import`) puis
+> **assignée** à un agent (`multica agent skills add|set`) — un `SKILL.md` dans le dépôt
+> n'est pas découvert automatiquement à l'exécution.

@@ -1,13 +1,86 @@
 # homelab-portfolio
 
-Sylvain Goubaud | Director of Expertise in Architecture | Montreal, QC | [LinkedIn](www.linkedin.com/in/sylvain-goubaud-47891b5b)
+Sylvain Goubaud | Director of Expertise in Architecture | Montréal, QC | [LinkedIn](https://www.linkedin.com/in/sylvain-goubaud-47891b5b)
+
+Monorepo de **plugins d'agents** ([Agent Plugins](https://agent-plugins.org), spécification v1.0.0) et de **workflows d'orchestration multi-agents (A2A)** pour la conception d'architecture de solution et l'exploitation d'un homelab de niveau production.
 
 ---
 
-## About This Portfolio
-This portfolio documents the different steps that allowed me to set up a production-level infrastructure for my needs.
+## À propos
 
-This is not a tutorial. It is a real project ready for production
+Ce dépôt documente et outille une infrastructure réelle, prête pour la production — ce n'est pas un tutoriel. Il rassemble :
 
----
+- des **plugins d'agents** portables (manifestes conformes au schéma v1.0.0) ;
+- une **bibliothèque de skills** (source), regroupée par domaine sous [`core/skills/`](core/skills/) ;
+- deux **workflows A2A cloisonnés** qui pilotent la façon dont les agents collaborent, tracent leurs décisions et sollicitent une validation humaine.
 
+## Les deux workflows
+
+Le dépôt porte **deux workflows d'orchestration totalement indépendants**. Une demande relève de **l'un ou de l'autre**, jamais des deux ; il n'existe aucune passerelle entre eux (règle de routage complète dans [`AGENTS.md`](AGENTS.md)).
+
+| Workflow | Périmètre | Coordinateur | Source |
+| --- | --- | --- | --- |
+| **Architecture de solution** | Documentation d'architecture, décisions structurantes, diagrammes (C4 / Archimate / PlantUML / CALM), choix technologiques, intégration, cybersécurité, AWS, cycle spec-driven (OpenSpec) | Architecture Solution & Intégration | [`core/common/conductor.md`](core/common/conductor.md) |
+| **Homelab** | Stacks Docker Swarm / Proxmox, `docker-compose`, Terraform, flux n8n, Home Assistant, secrets Vault, routes Traefik | Tech Lead | [`core/workflows/homelab/homelab-workflow.md`](core/workflows/homelab/homelab-workflow.md) |
+
+Le workflow d'architecture est structuré selon le modèle **conductor / stages / protocols** :
+
+- [`core/common/conductor.md`](core/common/conductor.md) — instructions du coordinateur (le *comment*).
+- [`core/common/stages/`](core/common/stages/) — une fiche par stage des 5 phases (`Initialization → Ideation → Inception → Construction → Operation`), le *quoi*.
+- [`core/common/protocols/`](core/common/protocols/) — mécanismes transverses (définition de stage, protocole d'exécution, gouvernance & sécurité, revue, scopes & axes).
+- [`core/rules/`](core/rules/) — mémoire de règles multi-couches (boucle d'apprentissage).
+- [`core/sensors/`](core/sensors/) — manifestes des verification gates & sensors.
+
+## Structure du dépôt
+
+```
+homelab-portfolio/
+├── AGENTS.md                 # Standards du dépôt + règle de routage entre les deux workflows
+├── README.md
+├── CONTRIBUTING.md           # Comment contribuer
+├── CODE_OF_CONDUCT.md        # Code de conduite de la communauté
+├── LICENCE                   # MIT
+├── core/                     # Workflow d'architecture + ressources partagées
+│   ├── common/               #   conductor.md + stages/ + protocols/
+│   ├── rules/                #   Règles persistantes multi-couches
+│   ├── sensors/              #   Verification gates & sensors (advisory)
+│   ├── agents/               #   Définitions d'agents
+│   ├── skills/               #   Skills (source), regroupées par domaine
+│   └── workflows/homelab/    #   Workflow Homelab narratif (+ VERSION)
+├── decisions/                # Registre des décisions structurantes (0001…0007)
+├── docs/                     # Stub de redirection core-workflow + doc générale
+└── plugins/                  # Packages de plugins d'agents (spec v1.0.0)
+    ├── general-purpose-assistant/
+    ├── homelab-assistant/
+    ├── investment-assistant/
+    └── medical-assistant/
+```
+
+## Skills
+
+Les skills (source) vivent sous [`core/skills/`](core/skills/), regroupées par domaine (`architecture-skills`, `homelab-skills`, `investissements-skills`, `medical-skills`). Chaque skill est un répertoire contenant un `SKILL.md` avec un front-matter YAML (`name` + `description`).
+
+> **Important** — sur Multica, un `SKILL.md` présent dans le dépôt n'est **pas** utilisé automatiquement. Une skill devient utilisable après avoir été **importée** dans le workspace (`multica skill import`) puis **assignée** à un agent (`multica agent skills add|set`). Voir [`CONTRIBUTING.md`](CONTRIBUTING.md).
+
+## Plugins
+
+Chaque sous-répertoire de [`plugins/`](plugins/) est un plugin auto-contenu, avec un manifeste `plugin.json` conforme au [schéma Agent Plugins v1.0.0](https://agent-plugins.org/schemas/1.0.0/plugin.schema.json).
+
+| Plugin | Rôle |
+| --- | --- |
+| `general-purpose-assistant` | Skills transverses (workflow de stack, notifications) |
+| `homelab-assistant` | Homelab : `docker-compose`, Traefik |
+| `investment-assistant` | Domaine investissement |
+| `medical-assistant` | Domaine médical |
+
+## Décisions structurantes
+
+Les décisions d'architecture sont tracées dans [`decisions/`](decisions/) (format court, numéroté). Toute décision structurante fait l'objet d'un enregistrement, conformément aux invariants des workflows.
+
+## Contribuer
+
+Lire [`CONTRIBUTING.md`](CONTRIBUTING.md) avant d'ouvrir une *pull request*, et respecter le [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md).
+
+## Licence
+
+Distribué sous licence **MIT** — voir [`LICENCE`](LICENCE).
