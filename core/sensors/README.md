@@ -1,6 +1,6 @@
 # Verification gates & Sensors — fiabilisation déterministe
 
-Ce répertoire contient les **manifestes déclaratifs** des mécanismes de fiabilisation déterministe décrits dans [`core/common/protocols/governance-security.md`](../common/protocols/governance-security.md) et référencés par [`core/common/conductor.md`](../common/conductor.md) (source unique du workflow depuis le Stage 7 — [ADR-0007](../../decisions/0007-adaptation-modele-conductor-stages-protocols.md) ; l'ancien `docs/core-workflow.md` est désormais un stub de redirection). Décision structurante tracée dans [ADR-0005](../../decisions/0005-verification-gates-et-sensors.md).
+Ce répertoire contient les **manifestes déclaratifs** des mécanismes de fiabilisation déterministe décrits dans [`core/common/protocols/governance-security.md`](../common/protocols/governance-security.md) et référencés par [`core/common/conductor.md`](../common/conductor.md).
 
 Deux mécanismes complémentaires, **tous deux advisory** :
 
@@ -31,7 +31,7 @@ Issues du contrôle sécurité du mécanisme (STRIDE / OWASP), ces clauses sont 
 
 ## Intégration à la piste d'audit
 
-Les résultats vivent **sur l'issue** (piste d'audit existante — [ADR-0004](../../decisions/0004-boucle-apprentissage-et-regles-persistantes.md)), jamais dans un fichier `audit.md` :
+Les résultats vivent **sur l'issue** (piste d'audit existante), jamais dans un fichier `audit.md` :
 
 - **Rapport de gate** posté à chaque frontière de phase, avant la validation humaine.
 - **Signal de sensor** consigné à l'écriture d'un artefact.

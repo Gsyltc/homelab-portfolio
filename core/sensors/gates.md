@@ -1,6 +1,6 @@
 # Verification gates — contrôle de traçabilité aux frontières de phases
 
-Manifeste déclaratif des **verification gates** décrits dans [`core/common/protocols/governance-security.md`](../common/protocols/governance-security.md) et exécutés aux frontières de phases par [`core/common/conductor.md`](../common/conductor.md) (source unique du workflow depuis le Stage 7 — [ADR-0007](../../decisions/0007-adaptation-modele-conductor-stages-protocols.md) ; l'ancien `docs/core-workflow.md` est désormais un stub de redirection). **Advisory** : produit un rapport, ne bloque jamais le gate humain.
+Manifeste déclaratif des **verification gates** décrits dans [`core/common/protocols/governance-security.md`](../common/protocols/governance-security.md) et exécutés aux frontières de phases par [`core/common/conductor.md`](../common/conductor.md). **Advisory** : produit un rapport, ne bloque jamais le gate humain.
 
 À chaque **frontière de phase**, en amont de la validation humaine, trois contrôles déterministes :
 
@@ -10,7 +10,7 @@ Manifeste déclaratif des **verification gates** décrits dans [`core/common/pro
 
 ## Frontières et artefacts requis
 
-> Adossé à la structure Inception / Construction / Operation actuelle. La matrice suivra l'ossature à 5 phases au stage ultérieur (voir ADR-0003, IMP-003).
+> Adossé à la structure Inception / Construction / Operation actuelle. La matrice suivra l'ossature à 5 phases au stage ultérieur.
 
 ```yaml
 type: verification-gates
