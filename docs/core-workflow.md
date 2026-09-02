@@ -164,6 +164,60 @@ Les deux axes peuvent être ajustés à trois moments, du plus tôt au plus tard
 
 ---
 
+## Règles & boucle d'apprentissage
+
+Le workspace **capitalise les corrections humaines en règles persistantes** pour qu'un agent ne répète pas la même erreur d'un projet à l'autre. Le mécanisme combine une **mémoire de règles multi-couches** (fichiers Markdown versionnés) et une **boucle d'apprentissage** déclenchée aux points de validation humaine.
+
+> Adaptation d'AI-DLC 2.0 (`awslabs/aidlc-workflows/core/memory`) au contexte du workspace (gouvernance A2A, livrables majoritairement documentaires, piste d'audit sur l'issue). Décision structurante tracée dans [ADR-0004](../decisions/0004-boucle-apprentissage-et-regles-persistantes.md). Les règles vivent dans [`core/rules/`](../core/rules/README.md).
+
+### Système de règles en couches
+
+Quatre couches, de la plus forte à la plus faible **précédence** :
+
+| Couche | Fichier | Portée | Chargement |
+| --- | --- | --- | --- |
+| `workspace` | `core/rules/workspace.md` | Invariants et conventions valables partout | Au démarrage (toujours actif) |
+| `project` | `core/rules/projects/<projet>.md` | Spécifique à un projet | Au démarrage, uniquement le projet courant |
+| `phase` | `core/rules/phases/<phase>.md` (`inception` / `construction` / `operation`) | Par phase du workflow | À la demande, quand la phase est déclenchée |
+| `scope` | `core/rules/scopes/<scope>.md` (les 8 scopes de la section précédente) | Par scope | À la demande, quand le scope est confirmé |
+
+**Précédence** : `workspace` > `project` > `phase` > `scope`. Une règle d'une couche **ne peut pas contredire** une règle d'une couche supérieure sans arbitrage humain (voir « Contrôle de conflit à l'admission »).
+
+Chaque règle porte un identifiant stable `RULE-<COUCHE>-NNN`, sa portée, l'issue d'origine et sa date d'ajout.
+
+### Chargement des règles (paresseux)
+
+Conformément au chargement optimisé pour le contexte : au démarrage, ne charger que les couches **toujours actives** — `workspace` et le `project` courant — ainsi que l'**index (titres) des règles** des autres couches. Les règles `phase` et `scope` ne sont chargées **en intégralité qu'à la demande**, lorsque la phase ou le scope concerné est effectivement déclenché. Documenter sur l'issue les règles chargées à la demande.
+
+### La boucle d'apprentissage
+
+La boucle capitalise les corrections humaines **sans jamais modifier l'exécution en cours** :
+
+1. **Journal d'observations** *(pendant l'étape)* — chaque correction / rejet ❌ / reformulation 💬 humaine sur un choix est consignée en commentaire sur l'issue (piste d'audit existante) comme **candidat-règle** potentiel.
+2. **Remontée des candidats** *(au point de validation humaine)* — le coordinateur formule les candidats détectés en règles courtes (« à l'avenir, faire X plutôt que Y »), en proposant pour chacun une **couche** et une **portée**. La détection est systématique (déclencheur **C1**) mais ne fait qu'alimenter la proposition.
+3. **Confirmation humaine** — l'humain garde ✅ / rejette ❌ / reformule 💬 **chaque candidat séparément**. **Aucune règle n'est écrite sans validation humaine explicite** (garde-fou).
+4. **Contrôle de conflit à l'admission** — avant écriture, chaque règle confirmée passe le contrôle ci-dessous.
+5. **Écriture sur disque** — la règle admise est ajoutée au fichier de sa couche dans `core/rules/`, avec identifiant, portée, issue d'origine et date.
+6. **Application au prochain workflow** — une règle nouvellement écrite **ne s'applique jamais en cours de route** ; elle est chargée au démarrage du **prochain** workflow.
+
+**Portée par défaut** d'une règle apprise, en l'absence de précision : `project`. La promotion `project → workspace` est une décision structurante explicite (tracée en ADR si structurante) et, si elle touche la sécurité, soumise au contrôle de l'Architecte cybersécurité.
+
+### Contrôle de conflit à l'admission
+
+Une règle apprise **ne peut pas contredire une règle de niveau supérieur sans arbitrage humain**. Avant écriture :
+
+1. **Précédence des couches** — `workspace` > `project` > `phase` > `scope`. Un candidat qui contredit une règle d'une couche supérieure n'est pas écrit tel quel : le coordinateur **remonte le conflit à l'humain** (et à l'Architecte cybersécurité si la règle touche la sécurité) ; l'arbitrage humain décide (rejet, reformulation, ou modification explicite de la règle supérieure via son canal propre — ADR si structurant). **Le coordinateur ne tranche jamais seul un conflit.**
+2. **Invariants non contournables** — aucune règle apprise, à aucune couche, ne peut affaiblir les invariants non négociables (validation humaine granulaire, ADR sur décision structurante, piste d'audit sur l'issue, contrôle sécurité minimal OWASP / STRIDE) ni les garde-fous sécurité des scopes (plancher de vérification, Depth non abaissable sur `security-patch` / `enterprise`, re-scoping tracé). Un candidat qui les contredit est **rejeté d'office**.
+3. **Contrôle sécurité systématique de la couche `workspace`** — toute règle admise en couche `workspace` (portée la plus large) passe par un **contrôle sécurité systématique** de l'Architecte cybersécurité avant écriture, qu'elle « touche la sécurité » ou non (une règle globale peut avoir des effets de bord sécuritaires non évidents).
+4. **Idempotence** — un candidat déjà couvert par une règle existante n'est pas ré-écrit (évite la dérive de `core/rules/`).
+
+### Articulation avec l'audit et OpenSpec
+
+- **Piste d'audit** : la *capture* (candidats, décision humaine, conflit éventuel) vit **sur l'issue** ; seule la **règle acceptée** est écrite dans `core/rules/`. Pas de fichier `audit.md`.
+- **OpenSpec (conditionnel)** : lorsqu'OpenSpec est activé, les règles apprises pertinentes pour l'Inception peuvent enrichir la formulation des propositions (Fabien), sans jamais imposer OpenSpec.
+
+---
+
 ## Modèle de collaboration A2A
 
 Le workflow n'est pas exécuté par un seul agent. **l'Architecture Solution & Intégration est le coordinateur** : il analyse la demande, découpe en livrables, délègue aux agents spécialisés via des mentions sur les issues, contrôle les livrables, sollicite la sécurité, puis demande la validation humaine granulaire. **l'Architecture Solution & Intégration ne produit pas lui-même les livrables** (sauf vérification).
@@ -408,6 +462,7 @@ Emplacement réservé : planification de déploiement, surveillance/observabilit
 - **Sécurité systématique** : toute modification d'architecture passe par Architecte cybersécurité avant validation humaine ; normes spécifiques appliquées uniquement si explicitement demandées.
 - **Validation humaine granulaire** : chaque choix est validé/rejeté séparément ; rien n'avance sur un élément non validé.
 - **ADR obligatoires** : chaque décision structurante est tracée, révisée, sans conflit ; aucune décision acceptée sans validation humaine.
+- **Capitalisation des corrections (learning loop)** : les corrections humaines validées deviennent des règles persistantes multi-couches (`core/rules/`) ; l'écriture est subordonnée à une validation humaine explicite et à un contrôle de conflit à l'admission ; une règle apprise s'applique au **prochain** workflow, jamais en cours de route.
 - **Jamais de supposition** : information requise manquante → demander à l'humain et attendre.
 - **Coordination par l'issue** : chaque étape, décision et délégation documentée en commentaire ; délégations A2A par mention valide (UUID résolu, jamais deviné) avec mission claire.
 - **Validation de contenu** : diagrammes en code, syntaxe validée ; format de diagramme confirmé par l'humain avant génération.
