@@ -1,7 +1,6 @@
 # Règles persistantes — mémoire du workflow
 
-Ce répertoire contient la **mémoire de règles multi-couches** alimentée par la **boucle d'apprentissage** décrite dans [`core/common/protocols/governance-security.md`](../common/protocols/governance-security.md) (source unique du workflow depuis le Stage 7 — [ADR-0007](../../decisions/0007-adaptation-modele-conductor-stages-protocols.md) ; l'ancien `docs/core-workflow.md` est désormais un stub de redirection). Décision structurante tracée dans [ADR-0004](../../decisions/0004-boucle-apprentissage-et-regles-persistantes.md).
-
+Ce répertoire contient la **mémoire de règles multi-couches** alimentée par la **boucle d'apprentissage** décrite dans [`core/common/protocols/governance-security.md`](../common/protocols/governance-security.md)
 Les règles capitalisent les **corrections humaines validées** afin qu'un agent ne répète pas la même erreur d'un projet à l'autre. Elles sont des **fichiers Markdown versionnés**, lisibles au démarrage de chaque workflow (chargement paresseux — voir plus bas).
 
 ## Couches (de la plus forte à la plus faible précédence)
