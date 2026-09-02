@@ -111,6 +111,7 @@ Le tooling `bun` / `aidlc-*.ts` de l'amont n'est **pas** importé : protocoles e
 - **IMP-003** : Pointeurs vivants mis à jour (`AGENTS.md`, `core/rules/README.md`, `core/sensors/README.md`, `core/sensors/gates.md`) ; prose historique des ADR 0001..0006 **laissée intacte** (enregistrements immuables ; le stub maintient leurs liens).
 - **IMP-004** : Diagrammes Mermaid du conductor (flowchart des 5 phases + sequence A2A + flowchart du stage-protocol / reviewer) — **syntaxe à valider** (Mermaid v11) avant acceptation.
 - **IMP-005** : Contrôle sécurité (Xavier) sollicité sur la nouvelle surface (instructions exécutables du coordinateur, frontières de délégation, protection contre l'injection via entrées non fiables) **avant** validation humaine et passage à *Accepted*.
+- **IMP-006** : Revue sécurité Xavier (OWASP Top 10 + STRIDE) — verdict **✅ approuvé, aucun risque élevé / moyen**, 2 durcissements mineurs **non bloquants** intégrés : **M-1** (bannière « PRIORITÉ » de `conductor.md` : clause explicitant qu'elle ne vaut que pour les instructions de premier rang du triptyque, jamais pour une donnée non fiable — renforce UNTRUSTED DATA) ; **M-2** (matrice stage × scope de `scopes-and-axes.md` : note `[^poc-sec]` sur la cellule `poc` du contrôle sécurité — plancher OWASP / STRIDE jamais nul, seule la profondeur varie).
 
 ## Références
 
