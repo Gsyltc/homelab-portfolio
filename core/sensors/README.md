@@ -1,6 +1,6 @@
 # Verification gates & Sensors — fiabilisation déterministe
 
-Ce répertoire contient les **manifestes déclaratifs** des mécanismes de fiabilisation déterministe décrits dans la section « Verification gates & Sensors » de [`docs/core-workflow.md`](../../docs/core-workflow.md). Décision structurante tracée dans [ADR-0005](../../decisions/0005-verification-gates-et-sensors.md).
+Ce répertoire contient les **manifestes déclaratifs** des mécanismes de fiabilisation déterministe décrits dans [`core/common/protocols/governance-security.md`](../common/protocols/governance-security.md) et référencés par [`core/common/conductor.md`](../common/conductor.md) (source unique du workflow depuis le Stage 7 — [ADR-0007](../../decisions/0007-adaptation-modele-conductor-stages-protocols.md) ; l'ancien `docs/core-workflow.md` est désormais un stub de redirection). Décision structurante tracée dans [ADR-0005](../../decisions/0005-verification-gates-et-sensors.md).
 
 Deux mécanismes complémentaires, **tous deux advisory** :
 
