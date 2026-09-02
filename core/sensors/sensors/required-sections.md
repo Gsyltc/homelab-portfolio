@@ -1,0 +1,45 @@
+# Sensor `required-sections` — sections requises *(prioritaire)*
+
+Check déterministe déclenché à l'**écriture d'un ADR ou d'une DAS** : vérifie que les **rubriques obligatoires** du gabarit sont présentes et non vides. **Advisory**.
+
+```yaml
+id: required-sections
+type: sensor
+nature: advisory
+priority: prioritaire
+origine: ALI-188
+triggers:
+  - "decisions/[0-9][0-9][0-9][0-9]-*.md"     # ADR
+  - "**/*das*.md"                              # documentation d'architecture (DAS)
+checks:
+  adr:                                         # rubriques dérivées des ADR 0001–0004
+    entete_meta: [auteurs, "accepté par", "accepté le"]
+    sections:
+      - Status
+      - Contexte
+      - Décision
+      - "Conséquences"        # sous-rubriques : Positives / Négatives
+      - "Alternatives étudiées"
+      - "Références"
+    non_vide: true
+  das:
+    sections:
+      - titre
+      - "contexte / objectif"
+      - "vues (fonctionnelle / technique)"
+      - "décisions liées (ADR)"
+      - risques
+    non_vide: true
+output: "liste des rubriques manquantes ou vides (advisory)"
+```
+
+## Sortie (piste d'audit)
+
+```
+Sensor required-sections — <fichier>
+- verdict : ✅ conforme | ⚠️ rubriques manquantes/vides : <liste>
+```
+
+## Garde-fou
+
+Advisory : n'empêche pas l'écriture, ne remplace pas la validation humaine ni le contrôle sécurité. Le passage à bloquant est une décision ADR + contrôle sécurité.

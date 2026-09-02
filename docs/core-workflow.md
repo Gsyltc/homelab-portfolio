@@ -223,6 +223,90 @@ Une règle apprise **ne peut pas contredire — ni éroder — une règle de niv
 
 ---
 
+## Verification gates & Sensors
+
+Le workspace ajoute deux mécanismes de **fiabilisation déterministe** qui soulagent l'humain des vérifications mécaniques, **sans jamais se substituer à la validation humaine granulaire** : les **verification gates** (contrôle automatique de traçabilité aux frontières de phases) et les **sensors** (checks déterministes déclenchés à l'écriture d'un artefact). Les deux sont **advisory** : ils produisent une trace d'audit factuelle mais **ne bloquent jamais** le gate humain (voir « Caractère advisory »).
+
+> Adaptation d'AI-DLC 2.0 (`awslabs/aidlc-workflows/core` — mécanismes *verification gates* et *sensors*) au contexte du workspace : gouvernance A2A, livrables majoritairement documentaires, piste d'audit sur l'issue. Décision structurante tracée dans [ADR-0005](../decisions/0005-verification-gates-et-sensors.md). Les définitions déterministes vivent dans [`core/sensors/`](../core/sensors/README.md). Ce mécanisme **matérialise** le niveau de vérification `renforcé` de l'[ADR-0003](../decisions/0003-scopes-et-axes-depth-verification.md) et s'appuie sur la piste d'audit de l'[ADR-0004](../decisions/0004-boucle-apprentissage-et-regles-persistantes.md).
+
+### Distinction : gate automatique ≠ gate humain
+
+| | **Verification gate (automatique)** | **Validation humaine granulaire (gate humain)** |
+| --- | --- | --- |
+| Nature | Contrôle **déterministe** de traçabilité | Jugement **humain** choix par choix |
+| Objet | Présence / cohérence / liaison des artefacts | Pertinence, justesse, arbitrage des décisions |
+| Effet | **Advisory** : produit un rapport, ne bloque pas | **Contraignant** : rien n'avance sans ✅ |
+| Position | À l'entrée du gate humain, en amont | Le gate décisionnel lui-même |
+
+Le verification gate **prépare** le gate humain : il factualise l'état de traçabilité pour que l'humain valide le *contenu*, pas la *plomberie*. Il ne remplace, n'abaisse ni ne court-circuite jamais la validation humaine (invariant non négociable).
+
+### Verification gates — contrôle de traçabilité aux frontières de phases
+
+À **chaque transition de phase**, avant le point de validation humaine, le coordinateur exécute un **contrôle automatique de traçabilité** distinct de la validation humaine. Trois contrôles déterministes :
+
+1. **Présence des artefacts requis** — les artefacts attendus à la sortie de la phase existent (voir table ci-dessous).
+2. **Liaison exigence ↔ ADR ↔ livrable** — chaque exigence retenue est reliée à un ADR ou à un livrable ; chaque décision structurante est tracée en ADR.
+3. **Absence d'artefact orphelin** — aucun ADR / livrable / diagramme n'est déconnecté (sans exigence amont ni référence).
+
+**Frontières de phases et artefacts requis** (adossé à la structure Inception / Construction / Operation actuelle ; la matrice suivra l'ossature à 5 phases au stage ultérieur — voir [ADR-0003](../decisions/0003-scopes-et-axes-depth-verification.md), IMP-003) :
+
+| Frontière | Artefacts requis en sortie | Contrôles du gate |
+| --- | --- | --- |
+| **Entrée → Inception** | Demande brute consignée, répertoire projet confirmé, scope confirmé | Présence (demande, scope) |
+| **Inception → Construction** | Besoins tracés, ADR de conception, diagramme(s) principal(aux), scope + axes confirmés | Présence + liaison exigence ↔ ADR + absence d'orphelin + `diagram-validity` sur les diagrammes produits |
+| **Construction → Operation** | Livrables détaillés, ADR à jour, cohérence documentation ↔ ADR | Présence + liaison + absence d'orphelin + `required-sections` sur ADR/DAS |
+| **Operation → Fin** | Plan / configuration validé, rollback si action destructive | Présence (plan, rollback conditionnel) |
+
+**En cas d'échec** (advisory) : le coordinateur **ne bloque pas** mais **signale l'écart** dans le rapport de gate sur l'issue et **propose de revenir corriger** avant de présenter le contenu à l'humain. L'humain reste seul décideur : il peut demander la correction, ou valider en connaissance de cause en actant l'écart sur l'issue.
+
+### Sensors — checks déterministes à l'écriture d'un artefact
+
+Un **sensor** est un check **déterministe** (pas de jugement d'agent) déclenché **à l'écriture d'un artefact** d'un type donné. Trois sensors sont définis, dont **deux prioritaires** (`required-sections`, `upstream-coverage`) et un troisième pour les diagrammes générés en code (`diagram-validity`).
+
+#### Sensor 1 — `required-sections` (sections requises) — *prioritaire*
+
+- **Périmètre de déclenchement** : écriture d'un **ADR** (`decisions/NNNN-*.md`) ou d'un document d'architecture (DAS).
+- **Contrôle** : les rubriques obligatoires du gabarit sont présentes et non vides.
+  - **ADR** : `Status`, `Contexte`, `Décision`, `Conséquences` (Positives / Négatives), `Alternatives étudiées`, `Références` — en-tête méta (`auteurs`, `accepté par`, `accepté le`). *(Rubriques dérivées des ADR existants 0001–0004.)*
+  - **DAS** : titre, contexte / objectif, vues (fonctionnelle / technique), décisions liées (ADR), risques.
+- **Sortie** : liste des rubriques manquantes / vides (advisory).
+
+#### Sensor 2 — `upstream-coverage` (couverture amont) — *prioritaire*
+
+- **Périmètre de déclenchement** : écriture d'un **ADR**, d'une **DAS** ou d'un **livrable** détaillé.
+- **Contrôle** : le livrable **référence explicitement sa demande amont** — issue d'origine (`ALI-NNN` / `HOM-NNN`) et, le cas échéant, l'**ADR parent** ou la décision de cadrage dont il découle. Pour un ADR : présence d'au moins une entrée `Références` reliant à l'issue et/ou aux ADR liés.
+- **Sortie** : signalement si aucune référence amont détectée (artefact potentiellement orphelin — recoupe le contrôle 3 du gate).
+
+#### Sensor 3 — `diagram-validity` (validité de diagramme)
+
+- **Périmètre de déclenchement** : écriture d'un diagramme **généré en code** (bloc Mermaid / PlantUML dans un `.md`, fichier `.puml`, Structurizr DSL).
+- **Contrôle** : la **syntaxe** du diagramme est valide (parse sans erreur). Cohérent avec l'obligation « générer les diagrammes en code et en valider la syntaxe avant écriture ».
+- **Sortie** : erreur de parsing localisée (advisory) ; l'écriture reste possible mais l'écart est tracé.
+
+### Caractère advisory (garde-fou de gouvernance)
+
+Les gates automatiques et les sensors sont **advisory par décision** :
+
+- Ils **ne bloquent jamais** la validation humaine granulaire ni ne se substituent à elle — celle-ci reste l'unique gate décisionnel contraignant (invariant non négociable).
+- Ils **ne peuvent pas abaisser** un contrôle de sécurité : un sensor advisory ne remplace pas le contrôle sécurité systématique de l'Architecte cybersécurité, qui reste obligatoire aux mêmes points qu'aujourd'hui (§1.5, §2.2).
+- Un signal advisory **en échec n'autorise aucun raccourci** : il informe, il ne décide pas. Inversement, un signal **au vert ne vaut pas validation** — il ne dispense jamais du contrôle sécurité ni de la validation humaine.
+- **Passage à bloquant** : rendre un sensor bloquant est une **décision structurante explicite**, tracée en ADR et soumise au contrôle sécurité (elle modifie la surface de gouvernance). Par défaut, tout reste advisory.
+
+### Intégration à la piste d'audit
+
+Les signaux vivent **sur l'issue** (piste d'audit existante, [ADR-0004](../decisions/0004-boucle-apprentissage-et-regles-persistantes.md)), jamais dans un fichier `audit.md` :
+
+- **Rapport de gate** : à chaque frontière de phase, le coordinateur poste un **commentaire « Rapport de vérification »** — pour chaque contrôle : ✅ conforme / ⚠️ écart (avec détail factuel). Ce rapport **précède** la présentation du contenu à la validation humaine.
+- **Signal de sensor** : à l'écriture d'un artefact, le résultat du (des) sensor(s) déclenché(s) est consigné en commentaire (type d'artefact, sensor, verdict, détail de l'écart le cas échéant).
+- **Traçabilité factuelle** : le rapport énonce des faits vérifiables (rubrique X absente, ADR Y sans référence amont), jamais un jugement — le jugement reste humain.
+- **Articulation learning loop** : un écart advisory récurrent peut alimenter un **candidat-règle** (voir « La boucle d'apprentissage ») ; il suit alors le cycle capture → confirmation → contrôle de conflit, sans jamais court-circuiter la validation.
+
+### Outillage : conventions + manifestes déclaratifs (non exécutables par défaut)
+
+Conformément à la décision de cadrage, les checks sont d'abord des **conventions documentées** dans ce workflow, **accompagnées de manifestes déclaratifs** versionnés dans [`core/sensors/`](../core/sensors/README.md) (un fichier par sensor + un manifeste de gates) qui décrivent, de façon lisible et déterministe, le périmètre de déclenchement, les règles de contrôle et la sortie attendue. Ces manifestes **ne sont pas des scripts exécutables** à ce stade : ils fixent le contrat de manière à pouvoir être outillés (script / CI) ultérieurement sans redécider le fond. Le passage à l'exécutable est une évolution ultérieure, non requise ici.
+
+---
+
 ## Modèle de collaboration A2A
 
 Le workflow n'est pas exécuté par un seul agent. **l'Architecture Solution & Intégration est le coordinateur** : il analyse la demande, découpe en livrables, délègue aux agents spécialisés via des mentions sur les issues, contrôle les livrables, sollicite la sécurité, puis demande la validation humaine granulaire. **l'Architecture Solution & Intégration ne produit pas lui-même les livrables** (sauf vérification).
@@ -468,6 +552,7 @@ Emplacement réservé : planification de déploiement, surveillance/observabilit
 - **Validation humaine granulaire** : chaque choix est validé/rejeté séparément ; rien n'avance sur un élément non validé.
 - **ADR obligatoires** : chaque décision structurante est tracée, révisée, sans conflit ; aucune décision acceptée sans validation humaine.
 - **Capitalisation des corrections (learning loop)** : les corrections humaines validées deviennent des règles persistantes multi-couches (`core/rules/`) ; l'écriture est subordonnée à une validation humaine explicite et à un contrôle de conflit à l'admission ; une règle apprise s'applique au **prochain** workflow, jamais en cours de route.
+- **Fiabilisation déterministe (verification gates & sensors)** : contrôle automatique de traçabilité aux frontières de phases + checks déterministes (`required-sections`, `upstream-coverage`, `diagram-validity`) à l'écriture des artefacts (`core/sensors/`) ; **advisory** — trace d'audit factuelle sur l'issue, ne bloque ni ne remplace jamais le contrôle sécurité ni la validation humaine granulaire.
 - **Jamais de supposition** : information requise manquante → demander à l'humain et attendre.
 - **Coordination par l'issue** : chaque étape, décision et délégation documentée en commentaire ; délégations A2A par mention valide (UUID résolu, jamais deviné) avec mission claire.
 - **Validation de contenu** : diagrammes en code, syntaxe validée ; format de diagramme confirmé par l'humain avant génération.
