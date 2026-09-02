@@ -99,6 +99,7 @@ Le scope est **auto-détecté** par mots-clés dans l'intention exprimée en lan
 
 | Scope | Mots-clés FR | Mots-clés EN |
 | --- | --- | --- |
+| `standard` *(défaut)* | *(aucun mot-clé — scope retenu par défaut si aucun autre ne correspond)* | *(no keyword — default fallback)* |
 | `feature` | fonctionnalité, évolution, ajouter, nouvelle capacité | feature, capability, add |
 | `infra` | infrastructure, réseau, AWS, VM, migration, Windows, Intune, golden image | infra, network, deploy, migration, platform |
 | `security-patch` | sécurité, faille, vulnérabilité, correctif, durcissement, CVE | security, vulnerability, patch, hardening, CVE |
