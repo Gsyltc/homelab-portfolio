@@ -1,0 +1,23 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "architecture-assistant",
+  "version": "0.1.0",
+  "description": "Plugin for solution architecture tasks (OpenSpec spec-driven cycle and architecture decision records).",
+  "author": {
+    "name": "Sylvain Goubaud",
+    "url": "https://github.com/Gsyltc"
+  },
+  "repository": "https://github.com/Gsyltc/homelab-portfolio",
+  "license": "MIT",
+  "keywords": [
+    "agent-plugins",
+    "assistant",
+    "architecture",
+    "openspec"
+  ],
+  "extensions": {
+    "ovh.jeedom-gaston": {
+      "setting": true
+    }
+  }
+}

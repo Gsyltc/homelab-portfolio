@@ -26,7 +26,7 @@ Avant toute contribution, lisez également [`AGENTS.md`](AGENTS.md) (standards d
 
 ### Skills
 
-Les skills (source) vivent sous [`core/skills/<domaine>-skills/<skill>/SKILL.md`](core/skills/). Chaque skill :
+Les skills sont **portées par les plugins**, à l'emplacement canonique [`plugins/<nom>/skills/<skill>/SKILL.md`](plugins/) (spécification Agent Plugins v1.0.0). Chaque skill :
 
 - est un répertoire contenant un `SKILL.md` avec un **front-matter YAML** (`name` et `description` obligatoires) ;
 - porte un `name` en minuscules alphanumériques avec tirets (cohérent avec le nom du répertoire) ;

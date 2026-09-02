@@ -11,7 +11,7 @@ Monorepo de **plugins d'agents** ([Agent Plugins](https://agent-plugins.org), sp
 Ce dépôt documente et outille une infrastructure réelle, prête pour la production — ce n'est pas un tutoriel. Il rassemble :
 
 - des **plugins d'agents** portables (manifestes conformes au schéma v1.0.0) ;
-- une **bibliothèque de skills** (source), regroupée par domaine sous [`core/skills/`](core/skills/) ;
+- une **bibliothèque de skills** portées par les plugins, sous [`plugins/<nom>/skills/`](plugins/) ;
 - deux **workflows A2A cloisonnés** qui pilotent la façon dont les agents collaborent, tracent leurs décisions et sollicitent une validation humaine.
 
 ## Les deux workflows
@@ -45,29 +45,30 @@ homelab-portfolio/
 │   ├── rules/                #   Règles persistantes multi-couches
 │   ├── sensors/              #   Verification gates & sensors (advisory)
 │   ├── agents/               #   Définitions d'agents
-│   ├── skills/               #   Skills (source), regroupées par domaine
 │   └── workflows/homelab/    #   Workflow Homelab narratif (+ VERSION)
 ├── decisions/                # Registre des décisions structurantes (0001…0007)
 ├── docs/                     # Stub de redirection core-workflow + doc générale
-└── plugins/                  # Packages de plugins d'agents (spec v1.0.0)
-    ├── general-purpose-assistant/
-    ├── homelab-assistant/
-    ├── investment-assistant/
-    └── medical-assistant/
+└── plugins/                  # Packages de plugins d'agents (spec v1.0.0) — portent les skills
+    ├── architecture-assistant/    #   OpenSpec + décision d'architecture
+    ├── general-purpose-assistant/ #   workflow de stack, notifications
+    ├── homelab-assistant/         #   docker-composer, traefik
+    ├── investment-assistant/      #   analyse, data provider, liste de titres
+    └── medical-assistant/         #   dossiers médicaux
 ```
 
 ## Skills
 
-Les skills (source) vivent sous [`core/skills/`](core/skills/), regroupées par domaine (`architecture-skills`, `homelab-skills`, `investissements-skills`, `medical-skills`). Chaque skill est un répertoire contenant un `SKILL.md` avec un front-matter YAML (`name` + `description`).
+Les skills sont **portées par les plugins**, à l'emplacement canonique [`plugins/<nom>/skills/<skill>/SKILL.md`](plugins/) (conforme à la spécification Agent Plugins v1.0.0). Chaque skill est un répertoire contenant un `SKILL.md` avec un front-matter YAML (`name` + `description`).
 
 > **Important** — sur Multica, un `SKILL.md` présent dans le dépôt n'est **pas** utilisé automatiquement. Une skill devient utilisable après avoir été **importée** dans le workspace (`multica skill import`) puis **assignée** à un agent (`multica agent skills add|set`). Voir [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ## Plugins
 
-Chaque sous-répertoire de [`plugins/`](plugins/) est un plugin auto-contenu, avec un manifeste `plugin.json` conforme au [schéma Agent Plugins v1.0.0](https://agent-plugins.org/schemas/1.0.0/plugin.schema.json).
+Chaque sous-répertoire de [`plugins/`](plugins/) est un plugin auto-contenu, avec un manifeste `plugin.json` conforme au [schéma Agent Plugins v1.0.0](https://agent-plugins.org/schemas/1.0.0/plugin.schema.json) et ses skills sous `skills/`.
 
 | Plugin | Rôle |
 | --- | --- |
+| `architecture-assistant` | Architecture de solution : cycle OpenSpec + décision d'architecture |
 | `general-purpose-assistant` | Skills transverses (workflow de stack, notifications) |
 | `homelab-assistant` | Homelab : `docker-compose`, Traefik |
 | `investment-assistant` | Domaine investissement |
