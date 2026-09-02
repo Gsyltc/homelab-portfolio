@@ -19,6 +19,127 @@ Le workflow est **agnostique de la méthodologie**. Aucune méthode n'est impos�
 
 Une modification simple reste efficace (traitement minimal) ; une modification complexe ou à risque reçoit un traitement complet.
 
+Ce principe est **outillé** par le mécanisme de **scopes** (quelles étapes s'exécutent) et par deux **axes d'exécution indépendants** — **Depth** (détail des artefacts) et **niveau de vérification des livrables** (rigueur du contrôle) — décrits ci-dessous.
+
+---
+
+## Scopes et axes d'exécution
+
+Le routage du travail n'est plus laissé au seul jugement subjectif : il repose sur un **scope** nommé (parcours d'étapes déterministe et auditable) et sur deux **axes indépendants** qui règlent, séparément, le détail des artefacts et la rigueur de leur vérification.
+
+> Adaptation d'AI-DLC 2.0 (`awslabs/aidlc-workflows/core/scopes`) au contexte du workspace : architecture de solution, AWS, infrastructure Windows, livrables majoritairement documentaires. Décision structurante tracée dans [ADR-0003](../decisions/0003-scopes-et-axes-depth-verification.md).
+
+### Table des scopes
+
+| Scope | Intention type | Traitement |
+| --- | --- | --- |
+| `standard` *(défaut)* | Évolution ou conception d'architecture « normale » | Parcours d'architecture standard complet |
+| `feature` | Ajout / évolution fonctionnelle d'une solution | Inception ciblée + Construction, sécurité systématique |
+| `infra` | Infra / plateforme (AWS, réseau, Windows, migration) | Accent Architecte AWS / Admin Infrastructure Windows, rollback obligatoire |
+| `security-patch` | Correction / durcissement de sécurité | **Architecte cybersécurité pilote**, périmètre resserré, traçabilité renforcée |
+| `mvp` | Produit minimum viable — première version fonctionnelle à faire évoluer | Parcours ciblé sur le cœur de valeur, Depth standard, dette technique tracée |
+| `poc` | Preuve de concept / exploration jetable | Allégé, Depth minimale, pas d'exigence de complétude documentaire |
+| `express` | Petit changement clair et à faible risque | Chemin court : cadrage + décision + validation, étapes lourdes ignorées |
+| `enterprise` | Chantier structurant, fort impact / conformité | Parcours complet + Depth comprehensive + normes conditionnelles activables |
+
+Le scope par **défaut**, en l'absence de mot-clé détecté, est **`standard`** (parcours d'architecture actuel — aucune régression, compatibilité ascendante).
+
+**Invariants non négociables, quel que soit le scope** — aucun scope ne peut les désactiver, y compris `poc` et `express` :
+
+- Validation humaine granulaire (chaque choix validé / rejeté séparément).
+- ADR sur chaque décision structurante.
+- Piste d'audit sur l'issue.
+- Contrôle sécurité minimal toujours actif (OWASP / STRIDE).
+
+### Matrice stage × scope
+
+Adossée à la structure actuelle du workflow (phases Inception / Construction / Operation ; le passage structurel aux 5 phases AI-DLC est traité ultérieurement). Légende : ✅ activé · ➖ allégé / optionnel · ❌ ignoré · 🔒 renforcé · *cond.* conditionnel.
+
+| Étape | `standard` | `feature` | `infra` | `security-patch` | `mvp` | `poc` | `express` | `enterprise` |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1.1 Cadrage | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| 1.2 Contexte existant | ➖ | ✅ | ✅ | ✅ | ➖ | ❌ | ➖ | ✅ |
+| 1.3 Analyse besoins | ✅ | ✅ | ✅ | ➖ | ✅ | ➖ | ➖ | ✅ 🔒 |
+| 1.4 Découpage livrables | ✅ | ✅ | ✅ | ➖ | ✅ | ➖ | ➖ | ✅ |
+| 1.5 Conception + ADR | ✅ | ✅ | ✅ | ✅ 🔒 | ✅ | ➖ | ➖ | ✅ 🔒 |
+| Contrôle sécurité (Architecte cybersécurité) | ✅ | ✅ | ✅ | 🔒 pilote | ✅ | ➖ | ➖ | ✅ 🔒 |
+| 2.1 Livrables détaillés | ✅ | ✅ | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ |
+| 2.2 Sécurité + cohérence | ✅ | ✅ | ✅ | 🔒 | ✅ | ➖ | ➖ | ✅ 🔒 |
+| 2.3 Consolidation + mise à disposition | ✅ | ✅ | ✅ | ✅ | ✅ | ➖ | ✅ | ✅ |
+| 3.x Operation / déploiement | *cond.* | *cond.* | ✅ | *cond.* | *cond.* | ❌ | *cond.* | ✅ |
+| Validation humaine granulaire | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+
+**Affectation des agents par scope** (déclencheurs A2A) :
+
+- `feature`, `standard`, `mvp`, `enterprise` → Architecte de solution (+ Architecte AWS si cloud) ; Architecte cybersécurité systématique.
+- `infra` → Architecte AWS et/ou Admin Infrastructure Windows au premier plan ; plan de rollback validé avant toute action destructive.
+- `security-patch` → **Architecte cybersécurité pilote l'analyse** ; Architecte de solution en appui documentaire.
+- `poc`, `express` → Architecte de solution seul ; contrôle sécurité allégé mais toujours présent.
+- La mise à disposition des livrables validés est confiée au **Gestionnaire de document**.
+- OpenSpec (Fabien) reste **conditionnel** à tous les scopes, jamais imposé.
+
+### Auto-détection du scope
+
+Le scope est **auto-détecté** par mots-clés dans l'intention exprimée en langage libre (français / anglais), puis **confirmé explicitement avant démarrage** — jamais de démarrage silencieux sur un scope simplement déduit.
+
+| Scope | Mots-clés FR | Mots-clés EN |
+| --- | --- | --- |
+| `feature` | fonctionnalité, évolution, ajouter, nouvelle capacité | feature, capability, add |
+| `infra` | infrastructure, réseau, AWS, VM, migration, Windows, Intune, golden image | infra, network, deploy, migration, platform |
+| `security-patch` | sécurité, faille, vulnérabilité, correctif, durcissement, CVE | security, vulnerability, patch, hardening, CVE |
+| `mvp` | mvp, produit minimum viable, première version, version initiale, socle | mvp, minimum viable product, first version, initial release |
+| `poc` | poc, preuve de concept, prototype, explorer, maquette | poc, proof of concept, prototype, spike |
+| `express` | rapide, petit, mineur, trivial, urgent | express, quick, small, minor |
+| `enterprise` | conformité, PCI, GDPR, Loi 25, audit, critique, entreprise | enterprise, compliance, audit, critical |
+
+**Règle de désambiguïsation** — en cas de plusieurs correspondances, l'ordre de priorité est :
+
+`security-patch` > `enterprise` > `infra` > `feature` > `mvp` > `poc` > `express` > `standard`
+
+La sécurité et la conformité priment ; à défaut de tout mot-clé, le scope retenu est `standard`. En cas d'ambiguïté résiduelle ou de conflit fort, le coordinateur **propose le scope détecté et demande confirmation** plutôt que de trancher seul.
+
+### Axe 1 — Depth (détail des artefacts)
+
+Règle le niveau de détail des artefacts produits, **indépendamment** du scope et de l'axe de vérification :
+
+- `minimal` : intention documentée, décision essentielle, pas de vues exhaustives.
+- `standard` : besoins fonctionnels / non fonctionnels, ADR, diagrammes principaux.
+- `comprehensive` : traçabilité complète, alternatives détaillées, vues multiples, registre de dette technique.
+
+### Axe 2 — Niveau de vérification des livrables
+
+Règle la rigueur du contrôle des livrables, **indépendamment** de Depth. Cet axe remplace, pour un workspace produisant majoritairement de la documentation d'architecture, l'axe « test strategy » d'AI-DLC :
+
+- `advisory` : contrôle de cohérence par jugement d'agent.
+- `standard` : cohérence documentation ↔ ADR + contrôle sécurité OWASP / STRIDE + validation humaine.
+- `renforcé` : + traçabilité exigence ↔ ADR ↔ livrable, syntaxe des diagrammes validée, normes conditionnelles si demandées. *(Préfigure les Verification gates et Sensors introduits ultérieurement.)*
+- **Cas code / IaC** : dès qu'un livrable comporte du code ou de l'IaC (ex. OpenSpec activé), cet axe **inclut une stratégie de tests** — le niveau `renforcé` exige alors des tests. L'axe reste ainsi compatible avec le sens AI-DLC quand du code existe, sans l'imposer à la documentation pure.
+
+### Valeurs par défaut des axes, par scope
+
+Les valeurs ci-dessous sont les **défauts** ; elles sont overridables (voir « Points d'override »).
+
+| Scope | Depth par défaut | Vérification par défaut |
+| --- | --- | --- |
+| `standard` | standard | standard |
+| `feature` | standard | standard |
+| `infra` | standard | renforcé |
+| `security-patch` | standard | renforcé |
+| `mvp` | standard | standard |
+| `poc` | minimal | advisory |
+| `express` | minimal | standard |
+| `enterprise` | comprehensive | renforcé |
+
+### Points d'override
+
+Les deux axes peuvent être ajustés à trois moments, du plus tôt au plus tard :
+
+1. **À l'invocation** : l'humain ou l'agent appelant fixe `depth=` et `verification=` dans la demande.
+2. **À la confirmation de scope** : lors de la confirmation du scope auto-détecté, le coordinateur propose les défauts et l'humain peut les ajuster.
+3. **À un gate** : à une frontière de phase, l'humain peut **relever** le niveau (jamais l'abaisser sous les invariants).
+
+**Garde-fou sécurité** : tout niveau lié à la sécurité **ne peut jamais être abaissé** par un override. Le contrôle sécurité minimal (OWASP / STRIDE) et, pour les scopes `security-patch` et `enterprise`, le niveau de vérification `renforcé` constituent un plancher ; un override ne peut que les maintenir ou les renforcer.
+
 ---
 
 ## Modèle de collaboration A2A
