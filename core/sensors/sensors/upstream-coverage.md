@@ -24,9 +24,11 @@ output: "signalement si aucune référence amont détectée (artefact potentiell
 
 ## Sortie (piste d'audit)
 
+Verdicts : `✅` conforme · `⚠️` écart · `⛔` indisponible (SG-2, jamais lu comme conforme). Source tracée (SG-5).
+
 ```
-Sensor upstream-coverage — <fichier>
-- verdict : ✅ référence amont présente (<issue / ADR>) | ⚠️ aucune référence amont détectée
+Sensor upstream-coverage — <fichier>   (source : core/sensors/sensors/upstream-coverage.md @ <commit>)
+- verdict : ✅ référence amont présente (<issue / ADR>) | ⚠️ aucune référence amont détectée | ⛔ indisponible : <motif>
 ```
 
 ## Garde-fou

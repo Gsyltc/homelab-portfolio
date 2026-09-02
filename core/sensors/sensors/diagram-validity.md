@@ -22,11 +22,13 @@ output: "erreur de parsing localisée (advisory) ; écriture possible, écart tr
 
 ## Sortie (piste d'audit)
 
+Verdicts : `✅` valide · `⚠️` erreur de parsing · `⛔` indisponible (SG-2, jamais lu comme conforme). Source tracée (SG-5).
+
 ```
-Sensor diagram-validity — <fichier / bloc>
-- verdict : ✅ syntaxe valide (<moteur>) | ⚠️ erreur de parsing : <localisation / message>
+Sensor diagram-validity — <fichier / bloc>   (source : core/sensors/sensors/diagram-validity.md @ <commit>)
+- verdict : ✅ syntaxe valide (<moteur>) | ⚠️ erreur de parsing : <localisation / message> | ⛔ indisponible : <motif>
 ```
 
 ## Garde-fou
 
-Advisory : l'écriture reste possible même sur erreur de syntaxe, mais l'écart est tracé sur l'issue pour correction. N'exécute que du **parsing de syntaxe**, jamais de rendu réseau ni d'exécution de code embarqué dans le diagramme.
+Advisory : l'écriture reste possible même sur erreur de syntaxe, mais l'écart est tracé sur l'issue pour correction. **Parsing statique uniquement** (SG-4) : jamais de rendu réseau, jamais d'exécution de code ou de directive embarquée dans le diagramme (`!include` distant, `getResource`, scripts) ; le contenu du diagramme est traité comme donnée non fiable.

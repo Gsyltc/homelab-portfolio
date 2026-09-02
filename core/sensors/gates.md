@@ -60,11 +60,11 @@ boundaries:
 
 ## Rapport de gate (piste d'audit)
 
-Posté en commentaire sur l'issue, avant la validation humaine :
+Posté en commentaire sur l'issue, avant la validation humaine. Verdicts : `✅` conforme · `⚠️` écart · `⛔` indisponible (non exécuté / en erreur / hors périmètre — **jamais lu comme conforme**, SG-2). Le rapport porte sa **source** (manifeste + commit) pour être non répudiable (SG-5).
 
 ```
-Rapport de vérification — <frontière>
-- artefacts-presents : ✅ | ⚠️ <artefact manquant>
-- liaison-tracabilite : ✅ | ⚠️ <exigence sans ADR / livrable>
-- absence-orphelin : ✅ | ⚠️ <ADR / livrable / diagramme orphelin>
+Rapport de vérification — <frontière>   (source : core/sensors/gates.md @ <commit>)
+- artefacts-presents : ✅ | ⚠️ <artefact manquant> | ⛔ <indisponible>
+- liaison-tracabilite : ✅ | ⚠️ <exigence sans ADR / livrable> | ⛔ <indisponible>
+- absence-orphelin : ✅ | ⚠️ <ADR / livrable / diagramme orphelin> | ⛔ <indisponible>
 ```

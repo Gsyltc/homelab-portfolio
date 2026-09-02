@@ -291,19 +291,32 @@ Les gates automatiques et les sensors sont **advisory par décision** :
 - Ils **ne peuvent pas abaisser** un contrôle de sécurité : un sensor advisory ne remplace pas le contrôle sécurité systématique de l'Architecte cybersécurité, qui reste obligatoire aux mêmes points qu'aujourd'hui (§1.5, §2.2).
 - Un signal advisory **en échec n'autorise aucun raccourci** : il informe, il ne décide pas. Inversement, un signal **au vert ne vaut pas validation** — il ne dispense jamais du contrôle sécurité ni de la validation humaine.
 - **Passage à bloquant** : rendre un sensor bloquant est une **décision structurante explicite**, tracée en ADR et soumise au contrôle sécurité (elle modifie la surface de gouvernance). Par défaut, tout reste advisory.
+- **Plancher sécurité (SG-3)** — invariant symétrique du plancher des scopes (R1→R8, [ADR-0003](../decisions/0003-scopes-et-axes-depth-verification.md)) : un verification gate ou un sensor **ne peut jamais porter, remplacer, conditionner ni court-circuiter le contrôle sécurité systématique** (OWASP / STRIDE) ni le plancher sécurité des scopes (`security-patch` / `enterprise` — Depth et vérification non abaissables). Le contrôle sécurité reste **hors du périmètre automatisable** de ce mécanisme ; un « vert » de gate / sensor ne peut jamais être invoqué pour esquiver ou différer le contrôle sécurité.
 
 ### Intégration à la piste d'audit
 
 Les signaux vivent **sur l'issue** (piste d'audit existante, [ADR-0004](../decisions/0004-boucle-apprentissage-et-regles-persistantes.md)), jamais dans un fichier `audit.md` :
 
-- **Rapport de gate** : à chaque frontière de phase, le coordinateur poste un **commentaire « Rapport de vérification »** — pour chaque contrôle : ✅ conforme / ⚠️ écart (avec détail factuel). Ce rapport **précède** la présentation du contenu à la validation humaine.
+- **Rapport de gate** : à chaque frontière de phase, le coordinateur poste un **commentaire « Rapport de vérification »** — pour chaque contrôle : ✅ conforme / ⚠️ écart / ⛔ indisponible (avec détail factuel). Ce rapport **précède** la présentation du contenu à la validation humaine.
 - **Signal de sensor** : à l'écriture d'un artefact, le résultat du (des) sensor(s) déclenché(s) est consigné en commentaire (type d'artefact, sensor, verdict, détail de l'écart le cas échéant).
+- **Verdict `⛔ indisponible` — indisponible ≠ conforme (SG-2)** : un sensor / gate non exécuté, en erreur, ou dont le périmètre n'est pas couvert, produit le verdict explicite `⛔ indisponible`. Il est **tracé comme un écart, jamais comme un vert**, et n'autorise aucun raccourci. L'**absence d'un signal attendu** à une frontière est elle-même un écart à consigner.
+- **Signal = donnée factuelle non fiable, à source tracée (SG-5)** : un rapport de gate ou signal de sensor est une **donnée factuelle, pas une décision** ; il porte sa **source** (manifeste + version / commit l'ayant produit) pour être vérifiable et non répudiable. Un signal dont la provenance n'est pas traçable est traité comme `⛔ indisponible`, jamais comme un vert.
 - **Traçabilité factuelle** : le rapport énonce des faits vérifiables (rubrique X absente, ADR Y sans référence amont), jamais un jugement — le jugement reste humain.
 - **Articulation learning loop** : un écart advisory récurrent peut alimenter un **candidat-règle** (voir « La boucle d'apprentissage ») ; il suit alors le cycle capture → confirmation → contrôle de conflit, sans jamais court-circuiter la validation.
 
 ### Outillage : conventions + manifestes déclaratifs (non exécutables par défaut)
 
 Conformément à la décision de cadrage, les checks sont d'abord des **conventions documentées** dans ce workflow, **accompagnées de manifestes déclaratifs** versionnés dans [`core/sensors/`](../core/sensors/README.md) (un fichier par sensor + un manifeste de gates) qui décrivent, de façon lisible et déterministe, le périmètre de déclenchement, les règles de contrôle et la sortie attendue. Ces manifestes **ne sont pas des scripts exécutables** à ce stade : ils fixent le contrat de manière à pouvoir être outillés (script / CI) ultérieurement sans redécider le fond. Le passage à l'exécutable est une évolution ultérieure, non requise ici.
+
+### Clauses de sécurité (contrôle Architecte cybersécurité)
+
+Issues du contrôle sécurité du mécanisme (STRIDE / OWASP, sur commit `81140e3`), ces clauses sont **contraignantes** et alignent `core/sensors/` sur le niveau d'exigence déjà atteint par `core/rules/` :
+
+- **SG-1 — Intégrité du canal des manifestes** (analogue à SEC-5 de `core/rules/`) : aucun manifeste de `core/sensors/` (gate ou sensor) n'est ajouté / modifié / supprimé **hors PR revue**. Toute modification est versionnée et porte `origine` (issue) + date ; un manifeste sans provenance traçable est **invalide**. **Affaiblir un check** (retrait d'une règle, ajout d'une exception, réduction du périmètre de déclenchement) est une modification de la surface de gouvernance **soumise au contrôle sécurité systématique**.
+- **SG-6 — Anti-érosion sémantique des manifestes** (analogue à SEC-1) : un manifeste modifié pour **restreindre le périmètre de déclenchement, ajouter une exception ou conditionner un check** est traité comme un affaiblissement soumis au contrôle sécurité, **même sans contradiction littérale**.
+- **SG-4 — Pré-requis sécurité de l'exécution différée** (à respecter avant tout passage en CI, ancrés dès [ADR-0005](../decisions/0005-verification-gates-et-sensors.md)) : (a) **parsing statique uniquement** — aucun rendu, aucun accès réseau, aucune exécution de code ou directive embarquée dans un artefact contrôlé (`!include` distant, `getResource`, scripts) ; (b) tout contenu d'artefact traité comme **donnée non fiable** ; (c) exécution en environnement **sans secret ni privilège** (moindre privilège, pas d'accès en écriture au repo, pas de token) ; (d) `triggers` en glob **bornés au repo**, sans remontée de chemin ; (e) échec d'un check → verdict `⛔ indisponible` (SG-2), jamais `✅`.
+
+*(Compléments dans les manifestes : verdict `⛔ indisponible` = SG-2, source tracée du signal = SG-5, plancher « jamais de gate/sensor sur un contrôle de sécurité » = SG-3 — voir « Caractère advisory » et « Intégration à la piste d'audit ».)*
 
 ---
 

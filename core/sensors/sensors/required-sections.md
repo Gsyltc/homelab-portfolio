@@ -35,9 +35,11 @@ output: "liste des rubriques manquantes ou vides (advisory)"
 
 ## Sortie (piste d'audit)
 
+Verdicts : `✅` conforme · `⚠️` écart · `⛔` indisponible (SG-2, jamais lu comme conforme). Source tracée (SG-5).
+
 ```
-Sensor required-sections — <fichier>
-- verdict : ✅ conforme | ⚠️ rubriques manquantes/vides : <liste>
+Sensor required-sections — <fichier>   (source : core/sensors/sensors/required-sections.md @ <commit>)
+- verdict : ✅ conforme | ⚠️ rubriques manquantes/vides : <liste> | ⛔ indisponible : <motif>
 ```
 
 ## Garde-fou
