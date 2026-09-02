@@ -1,6 +1,6 @@
 # Sensor `required-sections` — sections requises *(prioritaire)*
 
-Check déterministe déclenché à l'**écriture d'un ADR ou d'une DAS** : vérifie que les **rubriques obligatoires** du gabarit sont présentes et non vides. **Advisory**.
+Check déterministe déclenché à l'**écriture d'une décision structurante ou d'une DAS** : vérifie que les **rubriques obligatoires** du gabarit sont présentes et non vides. **Advisory**.
 
 ```yaml
 id: required-sections
@@ -9,10 +9,10 @@ nature: advisory
 priority: prioritaire
 origine: ALI-188
 triggers:
-  - "decisions/[0-9][0-9][0-9][0-9]-*.md"     # ADR
+  - "decisions/[0-9][0-9][0-9][0-9]-*.md"     # décision structurante
   - "**/*das*.md"                              # documentation d'architecture (DAS)
 checks:
-  adr:                                         # rubriques dérivées des ADR 0001–0004
+  decision_structurante:                       # rubriques dérivées des décisions structurantes existantes
     entete_meta: [auteurs, "accepté par", "accepté le"]
     sections:
       - Status
@@ -27,7 +27,7 @@ checks:
       - titre
       - "contexte / objectif"
       - "vues (fonctionnelle / technique)"
-      - "décisions liées (ADR)"
+      - "décisions liées (décisions structurantes)"
       - risques
     non_vide: true
 output: "liste des rubriques manquantes ou vides (advisory)"
@@ -44,4 +44,4 @@ Sensor required-sections — <fichier>   (source : core/sensors/sensors/required
 
 ## Garde-fou
 
-Advisory : n'empêche pas l'écriture, ne remplace pas la validation humaine ni le contrôle sécurité. Le passage à bloquant est une décision ADR + contrôle sécurité.
+Advisory : n'empêche pas l'écriture, ne remplace pas la validation humaine ni le contrôle sécurité. Le passage à bloquant est une décision structurante + contrôle sécurité.

@@ -1,6 +1,6 @@
 # Règles persistantes — mémoire du workflow
 
-Ce répertoire contient la **mémoire de règles multi-couches** alimentée par la **boucle d'apprentissage** décrite dans [`core/common/protocols/governance-security.md`](../common/protocols/governance-security.md) (source unique du workflow depuis le Stage 7 — [ADR-0007](../../decisions/0007-adaptation-modele-conductor-stages-protocols.md) ; l'ancien `docs/core-workflow.md` est désormais un stub de redirection). Décision structurante tracée dans [ADR-0004](../../decisions/0004-boucle-apprentissage-et-regles-persistantes.md).
+Ce répertoire contient la **mémoire de règles multi-couches** alimentée par la **boucle d'apprentissage** décrite dans [`core/common/protocols/governance-security.md`](../common/protocols/governance-security.md) (source unique du workflow depuis le Stage 7 ; l'ancien `docs/core-workflow.md` est désormais un stub de redirection). Ce mécanisme fait l'objet d'une décision structurante dédiée.
 
 Les règles capitalisent les **corrections humaines validées** afin qu'un agent ne répète pas la même erreur d'un projet à l'autre. Elles sont des **fichiers Markdown versionnés**, lisibles au démarrage de chaque workflow (chargement paresseux — voir plus bas).
 
@@ -38,7 +38,7 @@ Chaque règle est une entrée de liste avec un identifiant stable `RULE-<COUCHE>
 Aucune règle apprise, à aucune couche, ne peut affaiblir :
 
 - la **validation humaine granulaire** ;
-- l'**ADR** sur chaque décision structurante ;
+- la **traçabilité** de chaque décision structurante ;
 - la **piste d'audit** sur l'issue ;
 - le **contrôle sécurité minimal** (OWASP / STRIDE) ;
 - les **garde-fous sécurité des scopes** (plancher de vérification, Depth non abaissable sur `security-patch` / `enterprise`, re-scoping tracé — voir « Scopes et axes d'exécution »).

@@ -1,16 +1,16 @@
 # Verification gates — contrôle de traçabilité aux frontières de phases
 
-Manifeste déclaratif des **verification gates** décrits dans [`core/common/protocols/governance-security.md`](../common/protocols/governance-security.md) et exécutés aux frontières de phases par [`core/common/conductor.md`](../common/conductor.md) (source unique du workflow depuis le Stage 7 — [ADR-0007](../../decisions/0007-adaptation-modele-conductor-stages-protocols.md) ; l'ancien `docs/core-workflow.md` est désormais un stub de redirection). **Advisory** : produit un rapport, ne bloque jamais le gate humain.
+Manifeste déclaratif des **verification gates** décrits dans [`core/common/protocols/governance-security.md`](../common/protocols/governance-security.md) et exécutés aux frontières de phases par [`core/common/conductor.md`](../common/conductor.md) (source unique du workflow depuis le Stage 7 ; l'ancien `docs/core-workflow.md` est désormais un stub de redirection). **Advisory** : produit un rapport, ne bloque jamais le gate humain.
 
 À chaque **frontière de phase**, en amont de la validation humaine, trois contrôles déterministes :
 
 1. **`artefacts-presents`** — les artefacts requis en sortie de phase existent.
-2. **`liaison-tracabilite`** — chaque exigence retenue est reliée à un ADR / livrable, et chaque décision structurante est tracée en ADR.
-3. **`absence-orphelin`** — aucun ADR / livrable / diagramme n'est déconnecté (sans exigence amont ni référence).
+2. **`liaison-tracabilite`** — chaque exigence retenue est reliée à une décision structurante / livrable, et chaque décision structurante est tracée dans le registre de décisions.
+3. **`absence-orphelin`** — aucune décision structurante / livrable / diagramme n'est déconnecté (sans exigence amont ni référence).
 
 ## Frontières et artefacts requis
 
-> Adossé à la structure Inception / Construction / Operation actuelle. La matrice suivra l'ossature à 5 phases au stage ultérieur (voir ADR-0003, IMP-003).
+> Adossé à la structure Inception / Construction / Operation actuelle. La matrice suivra l'ossature à 5 phases au stage ultérieur (voir la décision structurante correspondante, IMP-003).
 
 ```yaml
 type: verification-gates
@@ -29,7 +29,7 @@ boundaries:
     frontiere: "Inception → Construction"
     artefacts_requis:
       - besoins_traces
-      - adr_conception
+      - decision_conception
       - diagramme_principal
       - scope_et_axes_confirmes
     checks: [artefacts-presents, liaison-tracabilite, absence-orphelin]
@@ -39,8 +39,8 @@ boundaries:
     frontiere: "Construction → Operation"
     artefacts_requis:
       - livrables_detailles
-      - adr_a_jour
-      - coherence_doc_adr
+      - decision_a_jour
+      - coherence_doc_decision
     checks: [artefacts-presents, liaison-tracabilite, absence-orphelin]
     sensors: [required-sections]
 
@@ -65,6 +65,6 @@ Posté en commentaire sur l'issue, avant la validation humaine. Verdicts : `✅`
 ```
 Rapport de vérification — <frontière>   (source : core/sensors/gates.md @ <commit>)
 - artefacts-presents : ✅ | ⚠️ <artefact manquant> | ⛔ <indisponible>
-- liaison-tracabilite : ✅ | ⚠️ <exigence sans ADR / livrable> | ⛔ <indisponible>
-- absence-orphelin : ✅ | ⚠️ <ADR / livrable / diagramme orphelin> | ⛔ <indisponible>
+- liaison-tracabilite : ✅ | ⚠️ <exigence sans décision structurante / livrable> | ⛔ <indisponible>
+- absence-orphelin : ✅ | ⚠️ <décision structurante / livrable / diagramme orphelin> | ⛔ <indisponible>
 ```

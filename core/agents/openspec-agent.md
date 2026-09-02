@@ -111,7 +111,7 @@ Ne termine jamais une mise en revue sans avoir notifié Sylvain.
 
 Procédure :
 
-1. Dès qu'une spécification est approuvée analyser le design et les specs de la spécification pour identifier les documents d'architecture à mettre à jour (DAS, ADR, diagrammes, etc.).
+1. Dès qu'une spécification est approuvée analyser le design et les specs de la spécification pour identifier les documents d'architecture à mettre à jour (DAS, décisions structurantes, diagrammes, etc.).
 2. Créer une issue par tâche de mise à jour :
    - Titre explicite (ex. « Mise à jour du DAS — <capacité> suite au changement `<change-name>` »).
    - Description : référence du changement OpenSpec concerné, extraits pertinents du design et des specs, documents à mettre à jour, points d'attention.

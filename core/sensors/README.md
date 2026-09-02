@@ -1,6 +1,6 @@
 # Verification gates & Sensors — fiabilisation déterministe
 
-Ce répertoire contient les **manifestes déclaratifs** des mécanismes de fiabilisation déterministe décrits dans [`core/common/protocols/governance-security.md`](../common/protocols/governance-security.md) et référencés par [`core/common/conductor.md`](../common/conductor.md) (source unique du workflow depuis le Stage 7 — [ADR-0007](../../decisions/0007-adaptation-modele-conductor-stages-protocols.md) ; l'ancien `docs/core-workflow.md` est désormais un stub de redirection). Décision structurante tracée dans [ADR-0005](../../decisions/0005-verification-gates-et-sensors.md).
+Ce répertoire contient les **manifestes déclaratifs** des mécanismes de fiabilisation déterministe décrits dans [`core/common/protocols/governance-security.md`](../common/protocols/governance-security.md) et référencés par [`core/common/conductor.md`](../common/conductor.md) (source unique du workflow depuis le Stage 7 ; l'ancien `docs/core-workflow.md` est désormais un stub de redirection). Ce mécanisme fait l'objet d'une décision structurante dédiée.
 
 Deux mécanismes complémentaires, **tous deux advisory** :
 
@@ -16,7 +16,7 @@ Ces fichiers **décrivent le contrat** (périmètre de déclenchement, règles d
 - Les gates et sensors **ne bloquent jamais** la validation humaine granulaire et **ne la remplacent pas** — elle reste l'unique gate décisionnel contraignant.
 - Ils **ne remplacent pas** le contrôle sécurité systématique de l'Architecte cybersécurité (obligatoire aux mêmes points qu'aujourd'hui).
 - Un signal **au vert ne vaut pas validation** ; un signal **en échec n'autorise aucun raccourci**.
-- Rendre un sensor **bloquant** est une décision structurante explicite (ADR + contrôle sécurité). Par défaut, tout reste advisory.
+- Rendre un sensor **bloquant** est une décision structurante explicite (décision structurante + contrôle sécurité). Par défaut, tout reste advisory.
 
 ## Clauses de sécurité (contrôle Architecte cybersécurité — SG-1 à SG-6)
 
@@ -31,7 +31,7 @@ Issues du contrôle sécurité du mécanisme (STRIDE / OWASP), ces clauses sont 
 
 ## Intégration à la piste d'audit
 
-Les résultats vivent **sur l'issue** (piste d'audit existante — [ADR-0004](../../decisions/0004-boucle-apprentissage-et-regles-persistantes.md)), jamais dans un fichier `audit.md` :
+Les résultats vivent **sur l'issue** (piste d'audit existante), jamais dans un fichier `audit.md` :
 
 - **Rapport de gate** posté à chaque frontière de phase, avant la validation humaine.
 - **Signal de sensor** consigné à l'écriture d'un artefact.
@@ -41,8 +41,8 @@ Les résultats vivent **sur l'issue** (piste d'audit existante — [ADR-0004](..
 
 | Sensor | Manifeste | Priorité | Déclenchement |
 | --- | --- | --- | --- |
-| `required-sections` | [`sensors/required-sections.md`](sensors/required-sections.md) | prioritaire | Écriture d'un ADR ou d'une DAS |
-| `upstream-coverage` | [`sensors/upstream-coverage.md`](sensors/upstream-coverage.md) | prioritaire | Écriture d'un ADR / DAS / livrable |
+| `required-sections` | [`sensors/required-sections.md`](sensors/required-sections.md) | prioritaire | Écriture d'une décision structurante ou d'une DAS |
+| `upstream-coverage` | [`sensors/upstream-coverage.md`](sensors/upstream-coverage.md) | prioritaire | Écriture d'une décision structurante / DAS / livrable |
 | `diagram-validity` | [`sensors/diagram-validity.md`](sensors/diagram-validity.md) | complémentaire | Écriture d'un diagramme en code |
 
 ## Format d'un manifeste de sensor
@@ -50,7 +50,7 @@ Les résultats vivent **sur l'issue** (piste d'audit existante — [ADR-0004](..
 ```yaml
 id: <identifiant stable>
 type: sensor
-nature: advisory            # advisory | blocking (blocking = ADR + contrôle sécurité)
+nature: advisory            # advisory | blocking (blocking = décision structurante + contrôle sécurité)
 triggers:                   # périmètre de déclenchement
   - <motif de chemin / type d'artefact>
 checks:                     # règles déterministes

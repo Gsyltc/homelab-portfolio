@@ -6,7 +6,7 @@ Ces règles reprennent les **invariants non négociables** déjà en vigueur (el
 
 - **RULE-WS-001** — Toute modification d'architecture passe par le contrôle sécurité de l'Architecte cybersécurité avant la validation humaine.
   - _portée_ : workspace · _origine_ : core-workflow.md · _ajoutée le_ : 2026-09-02
-- **RULE-WS-002** — Chaque décision structurante est tracée dans un ADR ; aucune décision acceptée sans validation humaine.
+- **RULE-WS-002** — Chaque décision structurante est tracée dans le registre de décisions ; aucune décision acceptée sans validation humaine.
   - _portée_ : workspace · _origine_ : core-workflow.md · _ajoutée le_ : 2026-09-02
 - **RULE-WS-003** — La piste d'audit vit sur l'issue Multica ; on ajoute des commentaires, on n'écrase jamais l'historique.
   - _portée_ : workspace · _origine_ : core-workflow.md · _ajoutée le_ : 2026-09-02

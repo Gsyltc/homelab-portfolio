@@ -42,10 +42,10 @@ ils ne s'exécutent jamais conjointement sur une même issue ou un même livrabl
    - Cas prioritaire absolu : dès que « n8n » apparaît, délégation immédiate à l'Expert N8n.
 
 2. **La demande porte-t-elle sur l'architecture d'une solution / d'un système** —
-   documentation d'architecture (DAS), ADR, diagrammes C4/Archimate/PlantUML/CALM,
+   documentation d'architecture (DAS), décisions structurantes, diagrammes C4/Archimate/PlantUML/CALM,
    choix technologiques, intégration, cybersécurité, architecture AWS, cycle spec-driven
    (OpenSpec) ?
-   → Suivre **`core/common/conductor.md`** (coordinateur : **Architecture Solution & Intégration**). *(Source unique depuis le Stage 7, ADR-0007 ; `docs/core-workflow.md` est un stub de redirection.)*
+   → Suivre **`core/common/conductor.md`** (coordinateur : **Architecture Solution & Intégration**). *(Source unique du workflow ; `docs/core-workflow.md` est un stub de redirection.)*
 
 3. **En cas de doute sur la classification** : ne pas engager de workflow, ne rien
    supposer — demander à l'humain de trancher entre Homelab et architecture de solution,
@@ -77,7 +77,7 @@ lien entre eux.
 ```mermaid
 flowchart TD
     D[Demande humain ou agent] --> R{Classification}
-    R -->|Solution / système / ADR / AWS / OpenSpec| C[core-workflow<br/>Coordinateur : Architecture Solution & Intégration]
+    R -->|Solution / système / décision structurante / AWS / OpenSpec| C[core-workflow<br/>Coordinateur : Architecture Solution & Intégration]
     R -->|Stack / service / config Homelab / n8n / Home Assistant| H[homelab-workflow<br/>Coordinateur : Tech Lead]
     C -.-x H
 ```
@@ -102,22 +102,20 @@ homelab-portfolio/
 │   ├── rules/                             #   Mémoire de règles multi-couches (boucle d'apprentissage)
 │   ├── sensors/                           #   Manifestes des verification gates & sensors (advisory)
 │   ├── agents/                            #   Définitions d'agents
-│   ├── skills/                            #   Skills (source), regroupées par domaine
-│   │   ├── architecture-skills/           #     OpenSpec + décision d'architecture
-│   │   ├── homelab-skills/                #     docker-composer, traefik, stack, notifications
-│   │   ├── investissements-skills/        #     analyse, data provider, liste de titres
-│   │   └── medical-skills/                #     dossiers médicaux
 │   └── workflows/                         #   Workflows narratifs par domaine
 │       └── homelab/                       #     homelab-workflow.md (+ VERSION)
-├── decisions/                             # Registre des décisions structurantes (0001…0007)
+├── decisions/                             # Registre des décisions structurantes du projet
 ├── docs/                                  # Stub de redirection core-workflow + doc générale
-└── plugins/                              # Packages de plugins d'agents (spec Agent Plugins v1.0.0)
-    ├── general-purpose-assistant/         #   plugin.json + skills/
-    ├── homelab-assistant/                 #   plugin.json
-    ├── investment-assistant/              #   plugin.json
-    └── medical-assistant/                 #   plugin.json
+└── plugins/                               # Packages de plugins d'agents (spec Agent Plugins v1.0.0)
+    ├── architecture-assistant/            #   plugin.json + skills/ (OpenSpec + décision d'architecture)
+    ├── general-purpose-assistant/         #   plugin.json + skills/ (workflow de stack, notifications)
+    ├── homelab-assistant/                 #   plugin.json + skills/ (docker-composer, traefik)
+    ├── investment-assistant/              #   plugin.json + skills/ (analyse, data provider, liste de titres)
+    └── medical-assistant/                 #   plugin.json + skills/ (dossiers médicaux)
 ```
 
+> **Les skills sont portées par les plugins** (`plugins/<nom>/skills/<skill>/SKILL.md`),
+> conformément à la spécification Agent Plugins v1.0.0 — c'est l'emplacement canonique.
 > Les fichiers `SKILL.md` du dépôt sont une **source**. Sur Multica, une skill n'est
 > utilisable qu'une fois **importée** dans le workspace (`multica skill import`) puis
 > **assignée** à un agent (`multica agent skills add|set`) — un `SKILL.md` dans le dépôt
