@@ -44,3 +44,13 @@ Aucune règle apprise, à aucune couche, ne peut affaiblir :
 - les **garde-fous sécurité des scopes** (plancher de vérification, Depth non abaissable sur `security-patch` / `enterprise`, re-scoping tracé — voir « Scopes et axes d'exécution »).
 
 Un candidat qui contredit l'un de ces invariants est **rejeté d'office**.
+
+## Clauses de sécurité (contrôle Architecte cybersécurité)
+
+Issues du contrôle sécurité du mécanisme (STRIDE / OWASP), ces clauses sont **contraignantes** et ferment les vecteurs de dérive de gouvernance :
+
+- **SEC-1 — érosion sémantique** : un candidat qui restreint la portée, ajoute une exception ou conditionne l'application d'un invariant ou d'un garde-fou est traité comme un affaiblissement et **rejeté d'office**, même sans contradiction littérale. L'idempotence n'exonère jamais de ce contrôle.
+- **SEC-2 — périmètre fondé sur le risque** : le contrôle sécurité systématique s'applique à toute règle `workspace` **et** à toute règle `project` / `phase` / `scope` visant un scope à garde-fous (`security-patch`, `enterprise`), une phase de vérification, ou un contrôle de sécurité existant.
+- **SEC-3 — pas d'exploitation d'un candidat dans le run courant** : un candidat capturé n'a aucune valeur normative tant qu'il n'est pas confirmé, contrôlé et écrit ; il ne peut être appliqué ni invoqué dans le run courant. L'application reste différée au prochain workflow.
+- **SEC-4 — promotion vers `workspace`** : toute promotion d'une couche inférieure vers `workspace` est soumise au contrôle sécurité systématique, qu'elle « touche la sécurité » ou non.
+- **SEC-5 — intégrité du canal d'écriture** : aucune règle n'est ajoutée / modifiée / supprimée dans `core/rules/` hors de la boucle (capture → confirmation humaine → contrôle de conflit). Toute modification est versionnée, revue en PR, et porte `origine` + date ; une entrée sans provenance traçable est invalide et retirée.

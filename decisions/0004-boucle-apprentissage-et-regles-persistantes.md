@@ -43,6 +43,14 @@ Le Stage 3 (ALI-187) formalise ce mécanisme, en cohérence avec la gouvernance 
 - **Contrôle sécurité systématique de la couche `workspace`** : toute règle admise en couche `workspace` passe par un contrôle de l'Architecte cybersécurité avant écriture, qu'elle « touche la sécurité » ou non.
 - **Idempotence** : pas de ré-écriture d'un candidat déjà couvert.
 
+**Renforcements issus du contrôle sécurité (Architecte cybersécurité, contrôle réalisé sur commit `c0d8268`)** — verdict « approuvé sous réserve », 5 clauses contraignantes intégrées à la section « Contrôle de conflit à l'admission » et au README de `core/rules/` :
+
+- **SEC-1 — érosion sémantique** : un candidat qui restreint la portée, ajoute une exception ou conditionne l'application d'un invariant ou d'un garde-fou est rejeté d'office, même sans contradiction littérale.
+- **SEC-2 — périmètre fondé sur le risque** : le contrôle sécurité systématique s'étend, au-delà de la couche `workspace`, à toute règle `project` / `phase` / `scope` visant un scope à garde-fous (`security-patch`, `enterprise`), une phase de vérification ou un contrôle de sécurité existant.
+- **SEC-3 — pas d'exploitation d'un candidat dans le run courant** : un candidat capturé n'a aucune valeur normative tant qu'il n'est pas confirmé, contrôlé et écrit ; application différée au prochain workflow, sans exception.
+- **SEC-4 — promotion vers `workspace`** : soumise dans tous les cas au contrôle sécurité systématique (la qualification « touche la sécurité » ne conditionne jamais son déclenchement).
+- **SEC-5 — intégrité du canal d'écriture** : toute modification de `core/rules/` transite par la boucle, est versionnée, revue en PR, et porte `origine` + date ; une entrée sans provenance est invalide.
+
 **Articulation** (arbitrage Q-F) : capture sur l'issue / règle acceptée sur disque ; chargement paresseux des couches `phase` et `scope` ; articulation OpenSpec conditionnelle (les règles apprises peuvent enrichir les propositions OpenSpec sans jamais imposer la méthodologie).
 
 ## Conséquences
@@ -54,6 +62,7 @@ Le Stage 3 (ALI-187) formalise ce mécanisme, en cohérence avec la gouvernance 
 - **POS-003** : Couche `scope` = pont direct avec l'ADR-0003 ; une règle peut cibler un scope précis.
 - **POS-004** : Le chargement paresseux des couches `phase` / `scope` préserve la fenêtre de contexte.
 - **POS-005** : Le contrôle de conflit et les invariants non contournables empêchent une règle apprise d'affaiblir la posture de sécurité ou la gouvernance.
+- **POS-006** : Les clauses SEC-1 à SEC-5 (contrôle sécurité) ferment les vecteurs de dérive de gouvernance : érosion sémantique (Tampering), exploitation d'un candidat en cours de run (Elevation of Privilege), contournement du contrôle par la couche (SEC-2 / SEC-4) et édition hors-boucle (Repudiation).
 
 ### Négatives
 
@@ -86,7 +95,7 @@ N'enregistrer un candidat-règle que lorsque l'humain le demande explicitement.
 - **IMP-001** : Mécanisme documenté dans la section « Règles & boucle d'apprentissage » de [`docs/core-workflow.md`](../docs/core-workflow.md).
 - **IMP-002** : Structure scaffoldée dans `core/rules/` — [`README.md`](../core/rules/README.md), `workspace.md` (seedé avec les invariants existants), `projects/_template.md`, `phases/{inception,construction,operation}.md`, `scopes/_template.md`.
 - **IMP-003** : Une règle nouvellement écrite s'applique au **prochain** workflow ; l'exécution en cours n'est jamais altérée.
-- **IMP-004** : Contrôle sécurité (Architecte cybersécurité) sollicité sur le mécanisme — notamment le contrôle de conflit à l'admission, les invariants non contournables et le contrôle systématique de la couche `workspace` — avant la validation finale.
+- **IMP-004** : Contrôle sécurité (Architecte cybersécurité) réalisé sur le mécanisme (commit `c0d8268`, périmètre OWASP / STRIDE) — verdict **approuvé sous réserve**, 5 clauses **SEC-1 à SEC-5 intégrées** avant validation finale (section « Contrôle de conflit à l'admission », README `core/rules/`).
 
 ## Références
 
