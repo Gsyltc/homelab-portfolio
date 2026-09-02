@@ -47,6 +47,17 @@ Les deux axes sont indépendants du scope et l'un de l'autre ; chaque scope port
 
 **Invariants non négociables** préservés quel que soit le scope : validation humaine granulaire, ADR sur décision structurante, piste d'audit sur l'issue, contrôle sécurité minimal.
 
+**Renforcements issus du contrôle sécurité (Architecte cybersécurité, contrôle réalisé sur commit `c542f18`)** — intégrés à la section « Scopes et axes d'exécution » avant validation finale :
+
+- **R1** — `express` : l'allègement est réservé aux changements sans impact runtime / production ; dès qu'un `express` déploie ou effectue une action à impact (`3.x` ≠ ❌), l'étape `2.2` repasse à `✅` et la vérification à `standard` minimum.
+- **R2** — `security-patch` : l'étape `1.3` couvre l'analyse d'impact / non-régression du correctif (activée, non allégée).
+- **R3** — garde-fou étendu au **re-scoping** : tout changement de scope abaissant le contrôle d'un travail détecté comme sécuritaire exige une validation humaine explicite tracée.
+- **R4** — `enterprise` : point de contrôle obligatoire « applicabilité des normes » (PCI DSS / GDPR / Loi 25 / LPRPDE), décision tracée en ADR y compris « aucune norme requise ».
+- **R5** — `enterprise` : classification des données traitées en `1.3`, pré-requis d'activation des normes.
+- **R6** — `poc` : non promouvable directement ; toute reprise re-déclenche le contrôle sécurité complet du scope cible.
+- **R7** — Depth non abaissable sous `standard` sur `security-patch` / `enterprise`.
+- **R8** — auto-détection = plancher : la confirmation peut monter, jamais descendre le contrôle sans validation tracée.
+
 ## Conséquences
 
 ### Positives
@@ -87,7 +98,7 @@ Permettre l'ajustement des deux axes dans les deux sens sans restriction.
 - **IMP-001** : Le mécanisme est documenté dans la section « Scopes et axes d'exécution » de `docs/core-workflow.md`.
 - **IMP-002** : Les Verification gates et Sensors déterministes (mécanismes E / F d'AI-DLC) sont introduits à un stage ultérieur ; le niveau de vérification `renforcé` en pose le cadre advisory.
 - **IMP-003** : Le passage structurel aux 5 phases AI-DLC est traité à un stage ultérieur ; la matrice s'adossera alors à la nouvelle ossature de phases.
-- **IMP-004** : Contrôle sécurité (Architecte cybersécurité) sur l'impact des scopes touchant la sécurité (`security-patch`, `enterprise`) sollicité lors de la conception détaillée.
+- **IMP-004** : Contrôle sécurité (Architecte cybersécurité) réalisé sur les scopes touchant la sécurité (`security-patch`, `enterprise`, `poc`, `express`) — section validée sous réserve de R1→R3 (haute priorité) et R4→R8 (recommandés), tous intégrés. Analyse conduite sous OWASP / STRIDE (aucune norme spécifique demandée pour ce contrôle).
 
 ## Références
 

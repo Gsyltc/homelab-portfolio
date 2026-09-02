@@ -59,15 +59,30 @@ Adossée à la structure actuelle du workflow (phases Inception / Construction /
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1.1 Cadrage | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | 1.2 Contexte existant | ➖ | ✅ | ✅ | ✅ | ➖ | ❌ | ➖ | ✅ |
-| 1.3 Analyse besoins | ✅ | ✅ | ✅ | ➖ | ✅ | ➖ | ➖ | ✅ 🔒 |
+| 1.3 Analyse besoins | ✅ | ✅ | ✅ | ✅ 🔒 [^sp13] | ✅ | ➖ | ➖ [^ex] | ✅ 🔒 [^ent13] |
 | 1.4 Découpage livrables | ✅ | ✅ | ✅ | ➖ | ✅ | ➖ | ➖ | ✅ |
 | 1.5 Conception + ADR | ✅ | ✅ | ✅ | ✅ 🔒 | ✅ | ➖ | ➖ | ✅ 🔒 |
 | Contrôle sécurité (Architecte cybersécurité) | ✅ | ✅ | ✅ | 🔒 pilote | ✅ | ➖ | ➖ | ✅ 🔒 |
 | 2.1 Livrables détaillés | ✅ | ✅ | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ |
-| 2.2 Sécurité + cohérence | ✅ | ✅ | ✅ | 🔒 | ✅ | ➖ | ➖ | ✅ 🔒 |
+| 2.2 Sécurité + cohérence | ✅ | ✅ | ✅ | 🔒 | ✅ | ➖ | ➖ [^ex] | ✅ 🔒 |
 | 2.3 Consolidation + mise à disposition | ✅ | ✅ | ✅ | ✅ | ✅ | ➖ | ✅ | ✅ |
-| 3.x Operation / déploiement | *cond.* | *cond.* | ✅ | *cond.* | *cond.* | ❌ | *cond.* | ✅ |
+| 3.x Operation / déploiement | *cond.* | *cond.* | ✅ | *cond.* | *cond.* | ❌ | *cond.* [^ex] | ✅ |
 | Validation humaine granulaire | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+
+[^sp13]: `security-patch` — l'étape `1.3` couvre a minima l'**analyse d'impact du correctif** : surface affectée, effets de bord, non-régression de sécurité. Exigence, pas option (un correctif sans analyse d'impact peut rouvrir ou déplacer la vulnérabilité).
+[^ex]: `express` — l'allègement est réservé aux changements **sans impact runtime / production**. **Dès qu'un `express` implique un déploiement ou une action à impact** (`3.x` ≠ ❌), l'étape `2.2 Sécurité + cohérence` repasse à **✅** (non ➖) et la vérification à **`standard`** minimum.
+[^ent13]: `enterprise` — l'étape `1.3` inclut deux pré-requis obligatoires : (a) une **classification des données traitées** (publiques / internes / sensibles / réglementées), et (b) un **point de contrôle « applicabilité des normes »** (voir « Renforcements sécurité par scope »).
+
+#### Renforcements sécurité par scope
+
+Ces clauses, issues du contrôle sécurité (Architecte cybersécurité), sont **contraignantes** — elles ferment les vecteurs d'abaissement de la posture de sécurité par le routage lui-même :
+
+- **`security-patch` — analyse d'impact obligatoire** : l'étape `1.3` couvre l'impact du correctif (surface affectée, effets de bord, non-régression), même en traitement resserré. *(voir [^sp13])*
+- **`enterprise` — applicabilité des normes tracée** : point de contrôle obligatoire où l'Architecte cybersécurité et l'humain **statuent explicitement** sur l'applicabilité de chaque norme candidate (PCI DSS / GDPR / Loi 25 / LPRPDE). La décision — **y compris « aucune norme spécifique requise »** — est **tracée en ADR** (sinon la conformité repose sur un oubli possible).
+- **`enterprise` — classification des données** : pré-requis en `1.3` ; c'est elle qui conditionne l'activation des normes et le niveau `renforcé`. *(voir [^ent13])*
+- **`express` — pas d'allègement sur action à impact** : réservé au sans-impact runtime/production ; sur déploiement ou action à impact, `2.2` = ✅ et vérification ≥ `standard`. *(voir [^ex])*
+- **`poc` — non promouvable directement** : un PoC est **jetable par construction**. Il ne peut **jamais** être promu tel quel ; toute reprise en `feature` / `mvp` / `enterprise` **re-déclenche le contrôle sécurité complet du scope cible**.
+
 
 **Affectation des agents par scope** (déclencheurs A2A) :
 
@@ -138,7 +153,13 @@ Les deux axes peuvent être ajustés à trois moments, du plus tôt au plus tard
 2. **À la confirmation de scope** : lors de la confirmation du scope auto-détecté, le coordinateur propose les défauts et l'humain peut les ajuster.
 3. **À un gate** : à une frontière de phase, l'humain peut **relever** le niveau (jamais l'abaisser sous les invariants).
 
-**Garde-fou sécurité** : tout niveau lié à la sécurité **ne peut jamais être abaissé** par un override. Le contrôle sécurité minimal (OWASP / STRIDE) et, pour les scopes `security-patch` et `enterprise`, le niveau de vérification `renforcé` constituent un plancher ; un override ne peut que les maintenir ou les renforcer.
+**Garde-fou sécurité** : tout niveau lié à la sécurité **ne peut jamais être abaissé** par un override. Le plancher couvre trois leviers, pas seulement l'axe de vérification :
+
+1. **Axe de vérification** : le contrôle sécurité minimal (OWASP / STRIDE) et, pour les scopes `security-patch` et `enterprise`, le niveau de vérification `renforcé` constituent un plancher ; un override ne peut que les maintenir ou les renforcer.
+2. **Axe Depth** : sur `security-patch` et `enterprise`, la Depth **ne peut pas descendre sous `standard`** (préserve la traçabilité exigence ↔ ADR ↔ livrable, qui est un contrôle d'intégrité).
+3. **Re-scoping** : tout changement de scope qui **abaisse le niveau de contrôle** d'un travail déjà détecté comme sécuritaire (mots-clés `security-patch`, ou scope courant `security-patch` / `enterprise`) **exige une validation humaine explicite tracée** sur l'issue. La reclassification en `express` / `poc` pour esquiver les contrôles est un contournement (STRIDE : Elevation of Privilege / Tampering sur la décision de routage) et n'est jamais silencieuse.
+
+**Auto-détection = plancher, jamais plafond** : lorsqu'un scope est proposé par détection, la confirmation humaine peut le **maintenir ou monter** vers un scope à contrôle plus strict (ex. `security-patch` → `enterprise`) ; elle ne peut **descendre** vers un scope à contrôle allégé qu'avec la validation tracée du re-scoping (point 3).
 
 ---
 
