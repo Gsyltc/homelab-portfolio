@@ -122,14 +122,14 @@ Trois phases AI-DLC, réinterprétées pour la gouvernance d'architecture :
 flowchart TD
     A[Demande humain ou agent] --> B[PHASE 1 - INCEPTION]
     B --> C[PHASE 2 - CONSTRUCTION]
-    C --> D[PHASE 3 - OPERATIONS]
+    C --> D[PHASE 3 - OPERATION]
     B -.->|securite Architecte cybersécurité + validation granulaire humaine| B
     C -.->|securite Architecte cybersécurité + validation granulaire humaine| C
 ```
 
 - **INCEPTION** — Déterminer QUOI et POURQUOI → besoins, décisions d'architecture (ADR), conception cible validée.
 - **CONSTRUCTION** — Déterminer COMMENT → produire les livrables détaillés (documentation, diagrammes, IaC ou implémentation), vérifier, faire valider.
-- **OPERATIONS** — DÉPLOYER et EXPLOITER → déploiement / administration sous validation humaine explicite.
+- **OPERATION** — DÉPLOYER et EXPLOITER → déploiement / administration sous validation humaine explicite.
 
 ---
 
@@ -222,7 +222,7 @@ Chaque agent exécute son livrable (documentation détaillée, diagrammes défin
 
 ---
 
-# 🟡 PHASE 3 — OPERATIONS
+# 🟡 PHASE 3 — OPERATION
 
 **Objectif** : déployer et exploiter.
 **Focus** : COMMENT DÉPLOYER et LANCER.
@@ -297,7 +297,7 @@ sequenceDiagram
     S->>X: Controle securite
     S->>H: Validation granulaire
     S->>N: Mise a disposition des livrables valides
-    S->>H: Validation deploiement (OPERATIONS)
+    S->>H: Validation deploiement (OPERATION)
     H-->>S: Validation explicite (+ rollback si destructif)
     S->>AL: Demande notification de fin
     AL-->>H: Notification ntfy
