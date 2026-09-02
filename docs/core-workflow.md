@@ -53,34 +53,36 @@ Le scope par **défaut**, en l'absence de mot-clé détecté, est **`standard`**
 
 ### Matrice stage × scope
 
-Adossée à la structure actuelle du workflow (phases Inception / Construction / Operation ; le passage structurel aux 5 phases AI-DLC est traité ultérieurement). Légende : ✅ activé · ➖ allégé / optionnel · ❌ ignoré · 🔒 renforcé · *cond.* conditionnel.
+Adossée à la structure à **5 phases** du workflow (Initialization / Ideation / Inception / Construction / Operation — voir « Vue d'ensemble des phases »). Légende : ✅ activé · ➖ allégé / optionnel · ❌ ignoré · 🔒 renforcé · *cond.* conditionnel.
 
 | Étape | `standard` | `feature` | `infra` | `security-patch` | `mvp` | `poc` | `express` | `enterprise` |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1.1 Cadrage | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| 1.2 Contexte existant | ➖ | ✅ | ✅ | ✅ | ➖ | ❌ | ➖ | ✅ |
-| 1.3 Analyse besoins | ✅ | ✅ | ✅ | ✅ 🔒 [^sp13] | ✅ | ➖ | ➖ [^ex] | ✅ 🔒 [^ent13] |
-| 1.4 Découpage livrables | ✅ | ✅ | ✅ | ➖ | ✅ | ➖ | ➖ | ✅ |
-| 1.5 Conception + ADR | ✅ | ✅ | ✅ | ✅ 🔒 | ✅ | ➖ | ➖ | ✅ 🔒 |
+| 0.x Initialization (bootstrap) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| 1.x Ideation (intention + scope) | ✅ | ✅ | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ |
+| 2.1 Cadrage | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| 2.2 Contexte existant | ➖ | ✅ | ✅ | ✅ | ➖ | ❌ | ➖ | ✅ |
+| 2.3 Analyse besoins | ✅ | ✅ | ✅ | ✅ 🔒 [^sp13] | ✅ | ➖ | ➖ [^ex] | ✅ 🔒 [^ent13] |
+| 2.4 Découpage livrables | ✅ | ✅ | ✅ | ➖ | ✅ | ➖ | ➖ | ✅ |
+| 2.5 Conception + ADR | ✅ | ✅ | ✅ | ✅ 🔒 | ✅ | ➖ | ➖ | ✅ 🔒 |
 | Contrôle sécurité (Architecte cybersécurité) | ✅ | ✅ | ✅ | 🔒 pilote | ✅ | ➖ | ➖ | ✅ 🔒 |
-| 2.1 Livrables détaillés | ✅ | ✅ | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ |
-| 2.2 Sécurité + cohérence | ✅ | ✅ | ✅ | 🔒 | ✅ | ➖ | ➖ [^ex] | ✅ 🔒 |
-| 2.3 Consolidation + mise à disposition | ✅ | ✅ | ✅ | ✅ | ✅ | ➖ | ✅ | ✅ |
-| 3.x Operation / déploiement | *cond.* | *cond.* | ✅ | *cond.* | *cond.* | ❌ | *cond.* [^ex] | ✅ |
+| 3.1 Livrables détaillés | ✅ | ✅ | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ |
+| 3.2 Sécurité + cohérence | ✅ | ✅ | ✅ | 🔒 | ✅ | ➖ | ➖ [^ex] | ✅ 🔒 |
+| 3.3 Consolidation + mise à disposition | ✅ | ✅ | ✅ | ✅ | ✅ | ➖ | ✅ | ✅ |
+| 4.x Operation / déploiement | *cond.* | *cond.* | ✅ | *cond.* | *cond.* | ❌ | *cond.* [^ex] | ✅ |
 | Validation humaine granulaire | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 
-[^sp13]: `security-patch` — l'étape `1.3` couvre a minima l'**analyse d'impact du correctif** : surface affectée, effets de bord, non-régression de sécurité. Exigence, pas option (un correctif sans analyse d'impact peut rouvrir ou déplacer la vulnérabilité).
-[^ex]: `express` — l'allègement est réservé aux changements **sans impact runtime / production**. **Dès qu'un `express` implique un déploiement ou une action à impact** (`3.x` ≠ ❌), l'étape `2.2 Sécurité + cohérence` repasse à **✅** (non ➖) et la vérification à **`standard`** minimum.
-[^ent13]: `enterprise` — l'étape `1.3` inclut deux pré-requis obligatoires : (a) une **classification des données traitées** (publiques / internes / sensibles / réglementées), et (b) un **point de contrôle « applicabilité des normes »** (voir « Renforcements sécurité par scope »).
+[^sp13]: `security-patch` — l'étape `2.3` couvre a minima l'**analyse d'impact du correctif** : surface affectée, effets de bord, non-régression de sécurité. Exigence, pas option (un correctif sans analyse d'impact peut rouvrir ou déplacer la vulnérabilité).
+[^ex]: `express` — l'allègement est réservé aux changements **sans impact runtime / production**. **Dès qu'un `express` implique un déploiement ou une action à impact** (`4.x` ≠ ❌), l'étape `3.2 Sécurité + cohérence` repasse à **✅** (non ➖) et la vérification à **`standard`** minimum.
+[^ent13]: `enterprise` — l'étape `2.3` inclut deux pré-requis obligatoires : (a) une **classification des données traitées** (publiques / internes / sensibles / réglementées), et (b) un **point de contrôle « applicabilité des normes »** (voir « Renforcements sécurité par scope »).
 
 #### Renforcements sécurité par scope
 
 Ces clauses, issues du contrôle sécurité (Architecte cybersécurité), sont **contraignantes** — elles ferment les vecteurs d'abaissement de la posture de sécurité par le routage lui-même :
 
-- **`security-patch` — analyse d'impact obligatoire** : l'étape `1.3` couvre l'impact du correctif (surface affectée, effets de bord, non-régression), même en traitement resserré. *(voir [^sp13])*
+- **`security-patch` — analyse d'impact obligatoire** : l'étape `2.3` couvre l'impact du correctif (surface affectée, effets de bord, non-régression), même en traitement resserré. *(voir [^sp13])*
 - **`enterprise` — applicabilité des normes tracée** : point de contrôle obligatoire où l'Architecte cybersécurité et l'humain **statuent explicitement** sur l'applicabilité de chaque norme candidate (PCI DSS / GDPR / Loi 25 / LPRPDE). La décision — **y compris « aucune norme spécifique requise »** — est **tracée en ADR** (sinon la conformité repose sur un oubli possible).
-- **`enterprise` — classification des données** : pré-requis en `1.3` ; c'est elle qui conditionne l'activation des normes et le niveau `renforcé`. *(voir [^ent13])*
-- **`express` — pas d'allègement sur action à impact** : réservé au sans-impact runtime/production ; sur déploiement ou action à impact, `2.2` = ✅ et vérification ≥ `standard`. *(voir [^ex])*
+- **`enterprise` — classification des données** : pré-requis en `2.3` ; c'est elle qui conditionne l'activation des normes et le niveau `renforcé`. *(voir [^ent13])*
+- **`express` — pas d'allègement sur action à impact** : réservé au sans-impact runtime/production ; sur déploiement ou action à impact, `3.2` = ✅ et vérification ≥ `standard`. *(voir [^ex])*
 - **`poc` — non promouvable directement** : un PoC est **jetable par construction**. Il ne peut **jamais** être promu tel quel ; toute reprise en `feature` / `mvp` / `enterprise` **re-déclenche le contrôle sécurité complet du scope cible**.
 
 
@@ -248,13 +250,15 @@ Le verification gate **prépare** le gate humain : il factualise l'état de tra�
 2. **Liaison exigence ↔ ADR ↔ livrable** — chaque exigence retenue est reliée à un ADR ou à un livrable ; chaque décision structurante est tracée en ADR.
 3. **Absence d'artefact orphelin** — aucun ADR / livrable / diagramme n'est déconnecté (sans exigence amont ni référence).
 
-**Frontières de phases et artefacts requis** (adossé à la structure Inception / Construction / Operation actuelle ; la matrice suivra l'ossature à 5 phases au stage ultérieur — voir [ADR-0003](../decisions/0003-scopes-et-axes-depth-verification.md), IMP-003) :
+**Frontières de phases et artefacts requis** (alignées sur l'ossature à **5 phases** — voir « Vue d'ensemble des phases » et [ADR-0006](../decisions/0006-passage-5-phases-et-mode-autonomie-construction.md) ; ancrage initial [ADR-0003](../decisions/0003-scopes-et-axes-depth-verification.md), IMP-003) :
 
 | Frontière | Artefacts requis en sortie | Contrôles du gate |
 | --- | --- | --- |
-| **Entrée → Inception** | Demande brute consignée, répertoire projet confirmé, scope confirmé | Présence (demande, scope) |
+| **Entrée → Initialization** | Répertoire projet confirmé, brownfield / greenfield détecté, piste d'audit ouverte | Présence (répertoire, contexte détecté) — déterministe, sans gate humain |
+| **Initialization → Ideation** | Contexte détecté consigné, règles toujours actives chargées | Présence (contexte, index des règles) |
+| **Ideation → Inception** | Intention capturée (entrée brute), scope + axes confirmés, maquettes si UI (sinon N/A) | Présence (intention, scope) + approbation périmètre tracée |
 | **Inception → Construction** | Besoins tracés, ADR de conception, diagramme(s) principal(aux), scope + axes confirmés | Présence + liaison exigence ↔ ADR + absence d'orphelin + `diagram-validity` sur les diagrammes produits |
-| **Construction → Operation** | Livrables détaillés, ADR à jour, cohérence documentation ↔ ADR | Présence + liaison + absence d'orphelin + `required-sections` sur ADR/DAS |
+| **Construction → Operation** | Livrables détaillés, ADR à jour, cohérence documentation ↔ ADR, mode d'exécution consigné | Présence + liaison + absence d'orphelin + `required-sections` sur ADR/DAS |
 | **Operation → Fin** | Plan / configuration validé, rollback si action destructive | Présence (plan, rollback conditionnel) |
 
 **En cas d'échec** (advisory) : le coordinateur **ne bloque pas** mais **signale l'écart** dans le rapport de gate sur l'issue et **propose de revenir corriger** avant de présenter le contenu à l'humain. L'humain reste seul décideur : il peut demander la correction, ou valider en connaissance de cause en actant l'écart sur l'issue.
@@ -288,7 +292,7 @@ Un **sensor** est un check **déterministe** (pas de jugement d'agent) déclench
 Les gates automatiques et les sensors sont **advisory par décision** :
 
 - Ils **ne bloquent jamais** la validation humaine granulaire ni ne se substituent à elle — celle-ci reste l'unique gate décisionnel contraignant (invariant non négociable).
-- Ils **ne peuvent pas abaisser** un contrôle de sécurité : un sensor advisory ne remplace pas le contrôle sécurité systématique de l'Architecte cybersécurité, qui reste obligatoire aux mêmes points qu'aujourd'hui (§1.5, §2.2).
+- Ils **ne peuvent pas abaisser** un contrôle de sécurité : un sensor advisory ne remplace pas le contrôle sécurité systématique de l'Architecte cybersécurité, qui reste obligatoire aux mêmes points qu'aujourd'hui (§2.5, §3.2).
 - Un signal advisory **en échec n'autorise aucun raccourci** : il informe, il ne décide pas. Inversement, un signal **au vert ne vaut pas validation** — il ne dispense jamais du contrôle sécurité ni de la validation humaine.
 - **Passage à bloquant** : rendre un sensor bloquant est une **décision structurante explicite**, tracée en ADR et soumise au contrôle sécurité (elle modifie la surface de gouvernance). Par défaut, tout reste advisory.
 - **Plancher sécurité (SG-3)** — invariant symétrique du plancher des scopes (R1→R8, [ADR-0003](../decisions/0003-scopes-et-axes-depth-verification.md)) : un verification gate ou un sensor **ne peut jamais porter, remplacer, conditionner ni court-circuiter le contrôle sécurité systématique** (OWASP / STRIDE) ni le plancher sécurité des scopes (`security-patch` / `enterprise` — Depth et vérification non abaissables). Le contrôle sécurité reste **hors du périmètre automatisable** de ce mécanisme ; un « vert » de gate / sensor ne peut jamais être invoqué pour esquiver ou différer le contrôle sécurité.
@@ -347,6 +351,8 @@ Un agent est déclenché par un **commentaire sur l'issue avec une mention valid
 ## OBLIGATOIRE : Chargement du contexte au démarrage
 
 Avant toute exécution, le coordinateur :
+
+> Cette section détaille les opérations de la phase **Initialization** (§0.x, bootstrap déterministe sans gate humain) et du chargement paresseux des règles ; elle s'applique en amont de l'Ideation.
 
 1. **Vérifie le répertoire officiel du projet** : S'il n'existe pas ou en cas de doute, demander confirmation à l'humain. Ne pas lancer les travaux sans cette confirmation.
 2. **Charge le contexte existant** : documentation d'architecture, ADR, diagrammes, contraintes déjà tracées.
@@ -415,52 +421,143 @@ La piste d'audit vit **sur l'issue Multica**, pas dans un fichier `audit.md`. Ch
 
 # Vue d'ensemble des phases
 
-Trois phases AI-DLC, réinterprétées pour la gouvernance d'architecture :
+Le workflow s'aligne sur les **cinq phases d'AI-DLC 2.0** (`Initialization → Ideation → Inception → Construction → Operation`), réinterprétées pour la gouvernance d'architecture A2A du workspace. Décision structurante tracée dans [ADR-0006](../decisions/0006-passage-5-phases-et-mode-autonomie-construction.md).
+
+Deux phases sont **ajoutées en amont** de l'ancienne structure à trois phases : **Initialization** (bootstrap déterministe) et **Ideation** (cadrage amont léger). Les trois phases historiques sont **conservées à l'identique** dans leur périmètre — seule la numérotation change (voir « Tableau de correspondance » ci-dessous). Aucune référence existante n'est cassée (compatibilité ascendante, [ADR-0002](../decisions/0002-strategie-compatibilite-et-terminologie.md)).
 
 ```mermaid
 flowchart TD
-    A[Demande humain ou agent] --> B[PHASE 1 - INCEPTION]
-    B --> C[PHASE 2 - CONSTRUCTION]
-    C --> D[PHASE 3 - OPERATION]
-    B -.->|securite Architecte cybersécurité + validation granulaire humaine| B
-    C -.->|securite Architecte cybersécurité + validation granulaire humaine| C
+    A[Demande humain ou agent] --> P0[PHASE 0 - INITIALIZATION]
+    P0 --> P1[PHASE 1 - IDEATION]
+    P1 --> P2[PHASE 2 - INCEPTION]
+    P2 --> P3[PHASE 3 - CONSTRUCTION]
+    P3 --> P4[PHASE 4 - OPERATION]
+    P0 -.->|bootstrap deterministe - sans gate humain| P0
+    P1 -.->|approbation intention + perimetre| P1
+    P2 -.->|securite Architecte cybersecurite + validation granulaire humaine| P2
+    P3 -.->|walking skeleton - mode autonomie - halt-and-ask sur echec| P3
+    P3 -.->|securite Architecte cybersecurite + validation granulaire humaine| P3
+    P4 -.->|validation humaine explicite + rollback si destructif| P4
 ```
 
+- **INITIALIZATION** — Préparer le terrain → bootstrap déterministe (répertoire projet, détection brownfield / greenfield, initialisation de la piste d'audit et de l'état). **Sans gate humain.**
+- **IDEATION** — Cadrer l'intention → capture d'intention, faisabilité / contraintes, définition de périmètre (scope), maquettes si UI, **approbation** avant d'engager la conception.
 - **INCEPTION** — Déterminer QUOI et POURQUOI → besoins, décisions d'architecture (ADR), conception cible validée.
-- **CONSTRUCTION** — Déterminer COMMENT → produire les livrables détaillés (documentation, diagrammes, IaC ou implémentation), vérifier, faire valider.
+- **CONSTRUCTION** — Déterminer COMMENT → produire les livrables détaillés (documentation, diagrammes, IaC ou implémentation), vérifier, faire valider. **Mode d'autonomie** posé une fois après le « walking skeleton » (voir § dédié).
 - **OPERATION** — DÉPLOYER et EXPLOITER → déploiement / administration sous validation humaine explicite.
+
+## Tableau de correspondance des phases (alias)
+
+Conformément à [ADR-0002](../decisions/0002-strategie-compatibilite-et-terminologie.md), les libellés historiques du workspace sont conservés comme **alias** pour ne pas invalider la documentation et les références des travaux en cours.
+
+| Phase AI-DLC (nouvelle nomenclature) | N° | Libellé / alias historique | Correspondance | Gate humain |
+| --- | --- | --- | --- | --- |
+| **Initialization** | 0 | *(nouveau — n'existait pas)* | Ajoutée en amont | Non (bootstrap déterministe) |
+| **Ideation** | 1 | *(nouveau — cadrage amont)* | Ajoutée en amont | Approbation intention + périmètre |
+| **Inception** | 2 | Inception (ex-Phase 1) | Périmètre **inchangé** | Validation granulaire humaine |
+| **Construction** | 3 | Construction (ex-Phase 2) | Périmètre **inchangé** (+ mode autonomie) | Validation granulaire humaine |
+| **Operation** | 4 | Operations / Operation (ex-Phase 3) | Périmètre **inchangé** | Validation humaine explicite |
+
+> **Lecture des références existantes** : une issue ou un projet qui parle de « Phase 1 / Inception », « Phase 2 / Construction » ou « Phase 3 / Operation » reste valide — ces phases conservent leur nom et leur contenu ; seul leur numéro d'ordre est décalé par l'ajout des deux phases amont. Les couches de règles `phase` (`core/rules/phases/{inception,construction,operation}.md`) restent nommées par le nom de phase, pas par le numéro, donc inchangées.
 
 ---
 
-# PHASE 1 — INCEPTION
+# PHASE 0 — INITIALIZATION
+
+**Objectif** : préparer le terrain de façon déterministe avant tout cadrage.
+**Focus** : DANS QUEL CONTEXTE on travaille.
+**Livrable de sortie** : contexte projet confirmé, nature du travail (brownfield / greenfield) détectée, piste d'audit initialisée. **Aucun gate humain** — étape mécanique et reproductible ; l'humain n'est sollicité qu'en cas de doute bloquant (répertoire projet introuvable).
+
+**Étapes** :
+
+- Vérification du répertoire projet (CONDITIONNEL — sollicite l'humain uniquement en cas de doute)
+- Détection brownfield / greenfield
+- Initialisation de l'état et de la piste d'audit
+
+## 0.1 — Vérification du répertoire projet (déterministe)
+
+1. Vérifier l'existence du **répertoire officiel du projet** et des emplacements conventionnels (`decisions/`, documentation d'architecture, `core/rules/`, `core/sensors/`).
+2. **Seul cas de sollicitation humaine à cette phase** : répertoire introuvable ou ambigu → demander confirmation et **ne pas lancer les travaux** sans elle (reprend l'invariant « Chargement du contexte au démarrage », point 1). Ce n'est pas un gate de validation : c'est une garde déterministe.
+
+## 0.2 — Détection brownfield / greenfield (déterministe)
+
+- **Brownfield** : documentation d'architecture, ADR, diagrammes ou infrastructure **préexistants** détectés → la phase Inception activera le chargement du contexte existant (§2.2) et le contrôle d'orphelins des verification gates s'appuie sur l'existant.
+- **Greenfield** : aucun existant pertinent → chargement du contexte existant marqué **N/A**, conception partant d'une page blanche.
+- Le résultat (brownfield / greenfield) est **consigné sur l'issue** ; il n'appelle pas de validation humaine, c'est un fait détecté.
+
+## 0.3 — Initialisation de l'état et de la piste d'audit (déterministe)
+
+1. Ouvrir la **piste d'audit sur l'issue** (invariant, [ADR-0004](../decisions/0004-boucle-apprentissage-et-regles-persistantes.md)) : consigner le contexte détecté (répertoire, brownfield / greenfield).
+2. Charger les **règles toujours actives** (`core/rules/workspace.md` + `project` courant) et l'**index** des autres couches (chargement paresseux, voir « Règles & boucle d'apprentissage »).
+3. Appliquer le **chargement optimisé pour le contexte** (métadonnées légères uniquement — voir section dédiée).
+
+> **Caractère déterministe (sans gate humain)** : Initialization ne produit aucune décision d'architecture ; elle n'a donc pas de gate de validation granulaire. Elle reste néanmoins **sous les invariants** (piste d'audit, aucun secret consigné) et son verification gate d'entrée est purement documentaire (voir « Verification gates »).
+
+---
+
+# PHASE 1 — IDEATION
+
+**Objectif** : cadrer l'intention et le périmètre **avant** d'engager la conception détaillée.
+**Focus** : EST-CE PERTINENT et JUSQU'OÙ.
+**Livrable de sortie** : intention capturée, faisabilité / contraintes évaluées, **scope confirmé** et axes (Depth / vérification) proposés, **approbation humaine** de l'intention et du périmètre.
+
+**Étapes** :
+
+- Capture d'intention
+- Faisabilité et contraintes
+- Définition de périmètre (scope) et maquettes si UI
+- Approbation de l'intention et du périmètre
+
+## 1.1 — Capture d'intention
+
+Consigner la **demande brute** (entrée non résumée) sur l'issue, conformément à la piste d'audit. Reformuler l'intention en une phrase vérifiable (« ce travail vise à… »).
+
+## 1.2 — Faisabilité et contraintes
+
+Évaluer, de façon **légère**, la faisabilité et les contraintes fortes (techniques, sécurité, coût, délais) susceptibles de rendre le travail non pertinent ou de le réorienter. Objectif : éviter d'engager l'Inception sur une base non viable, pas produire une étude détaillée (celle-ci relève de l'Inception).
+
+## 1.3 — Définition de périmètre (scope) et maquettes
+
+1. **Auto-détecter le scope** depuis l'intention (voir « Auto-détection du scope ») et le **proposer à confirmation** avec ses axes par défaut (Depth / niveau de vérification). Jamais de démarrage silencieux sur un scope simplement déduit.
+2. **Maquettes / wireframes — CONDITIONNEL (UI uniquement)** : si le travail comporte une interface utilisateur, produire ou référencer des maquettes légères. **Marqué N/A** pour les travaux d'architecture / infrastructure sans UI (cas majoritaire du workspace).
+
+## 1.4 — Approbation de l'intention et du périmètre (gate humain léger)
+
+**Point de validation humaine** — l'humain approuve (ou ajuste) : l'**intention** reformulée, le **scope** proposé et ses **axes** (Depth / vérification). C'est un gate **léger** : il valide *qu'on part dans la bonne direction*, pas encore les décisions d'architecture (celles-ci sont validées en Inception, granulairement). Rien n'engage l'Inception tant que l'intention et le périmètre ne sont pas approuvés.
+
+> **Réutilisation des agents existants** : l'Ideation ne crée pas de nouveaux rôles. La capture et la reformulation sont portées par le **coordinateur (Architecture Solution & Intégration)** ; les maquettes UI éventuelles relèvent de l'**Architecte de solution**. Aucune production détaillée ni ADR à ce stade.
+
+---
+
+# PHASE 2 — INCEPTION
 
 **Objectif** : planification, collecte des besoins, décisions architecturales.
 **Focus** : QUOI et POURQUOI.
+**Entrée** : intention et périmètre (scope) approuvés en Ideation ; contexte projet initialisé en Initialization.
 **Livrable de sortie** : conception cible et décisions (ADR) **validées par l'humain** de façon granulaire, après contrôle sécurité par Architecte cybersécurité.
 
 **Étapes** :
 
 - Réception et cadrage de la demande (TOUJOURS)
-- Chargement du contexte existant (CONDITIONNEL — système existant)
+- Chargement du contexte existant (CONDITIONNEL — brownfield détecté en Initialization)
 - Analyse des besoins (TOUJOURS — profondeur adaptative)
 - Planification et découpage en livrables (TOUJOURS)
 - Conception d'architecture et ADR (TOUJOURS)
 
-## 1.1 — Réception et cadrage (TOUJOURS)
+## 2.1 — Réception et cadrage (TOUJOURS)
 
 1. Passer l'issue en `in_progress`.
-2. Consigner la demande initiale (entrée brute) en commentaire.
-3. Vérifier le répertoire du projet et l'activation éventuelle d'OpenSpec.
-4. Clarifier le besoin d'affaires : objectifs, exigences fonctionnelles et non fonctionnelles, contraintes. **Ne poser que les questions qui changent réellement la conception.** Ne jamais deviner une information manquante.
+2. Reprendre la demande initiale (entrée brute) et l'intention approuvée en Ideation ; confirmer le répertoire du projet (détecté en Initialization) et l'activation éventuelle d'OpenSpec.
+3. Clarifier le besoin d'affaires : objectifs, exigences fonctionnelles et non fonctionnelles, contraintes. **Ne poser que les questions qui changent réellement la conception.** Ne jamais deviner une information manquante.
 
-## 1.2 — Chargement du contexte existant (CONDITIONNEL)
+## 2.2 — Chargement du contexte existant (CONDITIONNEL)
 
-**Exécuter SI** : système / documentation existants et contexte insuffisant.
-**Ignorer SI** : greenfield, ou contexte déjà suffisant.
+**Exécuter SI** : Initialization a détecté un contexte **brownfield** (système / documentation existants) et le contexte est insuffisant.
+**Ignorer SI** : greenfield (détecté en Initialization), ou contexte déjà suffisant.
 
 Charger la documentation d'architecture, les ADR et diagrammes pertinents ; en produire une synthèse sur l'issue.
 
-## 1.3 — Analyse des besoins (TOUJOURS — profondeur adaptative)
+## 2.3 — Analyse des besoins (TOUJOURS — profondeur adaptative)
 
 - **Minimale** : demande simple et claire — documenter l'analyse d'intention.
 - **Standard** : recueillir besoins fonctionnels et non fonctionnels (performance, sécurité, scalabilité, portabilité, maintenabilité).
@@ -468,7 +565,7 @@ Charger la documentation d'architecture, les ADR et diagrammes pertinents ; en p
 
 Documenter les besoins retenus sur l'issue.
 
-## 1.4 — Planification et découpage en livrables (TOUJOURS)
+## 2.4 — Planification et découpage en livrables (TOUJOURS)
 
 1. Déterminer les phases et étapes à exécuter et leur profondeur.
 2. **Découper le travail en livrables** et désigner l'agent responsable de chacun :
@@ -479,7 +576,7 @@ Documenter les besoins retenus sur l'issue.
 3. Créer les issues nécessaires et déclencher chaque agent par mention avec mission claire.
 4. Produire la visualisation du workflow retenu (diagramme validé) sur l'issue.
 
-## 1.5 — Conception d'architecture, ADR et contrôle sécurité (TOUJOURS)
+## 2.5 — Conception d'architecture, ADR et contrôle sécurité (TOUJOURS)
 
 1. Les agents désignés produisent leurs livrables de conception (vues fonctionnelle/technique, choix, alternatives, risques) et **tracent chaque décision structurante dans un ADR**.
 2. **Contrôle sécurité obligatoire (Architecte cybersécurité)** : à **chaque modification d'architecture** par un agent, Sylvain lit le résumé des modifications, poste un commentaire mentionnant **Architecte cybersécurité** (`694a1a6f-9659-48ea-b45f-43ae6dc01706`) avec le contexte, **attend son analyse** et intègre ses recommandations avant toute validation. Préciser explicitement toute norme spécifique à appliquer (PCI DSS, GDPR, Loi 25, LPRPDE) — sinon seules OWASP/STRIDE (+ NIST/COBIT si documentation des risques) sont actives.
@@ -491,7 +588,7 @@ Documenter les besoins retenus sur l'issue.
 
 ---
 
-# 🟢 PHASE 2 — CONSTRUCTION
+# 🟢 PHASE 3 — CONSTRUCTION
 
 **Objectif** : conception détaillée et production des livrables.
 **Focus** : COMMENT le construire.
@@ -499,29 +596,71 @@ Documenter les besoins retenus sur l'issue.
 
 **Étapes** :
 
+- Walking skeleton et choix du mode d'exécution (mode d'autonomie — voir § dédié)
 - Production des livrables détaillés (par livrable / agent)
 - Contrôle sécurité et cohérence
 - Consolidation, validation humaine et mise à disposition
 
-## 2.1 — Production des livrables détaillés
+## 3.1 — Production des livrables détaillés
 
 Chaque agent exécute son livrable (documentation détaillée, diagrammes définitifs, estimation de coûts AWS, configuration/administration infra, ou — si OpenSpec activé — implémentation des tâches via Fabien avec tests). Chaque agent, en fin de travail, mentionne Sylvain pour vérification. Documenter sur l'issue.
 
-## 2.2 — Contrôle sécurité et cohérence (TOUJOURS)
+Le **rythme de validation** de cette production (gated à chaque livrable vs autonome jusqu'au prochain point de synchronisation) est fixé par le **mode d'exécution** choisi une fois après le walking skeleton (voir « Mode d'autonomie en Construction »).
 
-1. **Solliciter Architecte cybersécurité** pour tout livrable modifiant l'architecture (mêmes règles qu'en 1.5).
+## 3.2 — Contrôle sécurité et cohérence (TOUJOURS)
+
+1. **Solliciter Architecte cybersécurité** pour tout livrable modifiant l'architecture (mêmes règles qu'en 2.5).
 2. Vérifier structure, complétude, qualité, format des livrables, et cohérence avec les ADR.
 3. Demander les corrections aux agents responsables le cas échéant.
 
-## 2.3 — Consolidation, validation humaine et mise à disposition (TOUJOURS)
+## 3.3 — Consolidation, validation humaine et mise à disposition (TOUJOURS)
 
 1. **Validation granulaire humaine** de chaque livrable / choix restant à approuver.
 2. **Mise à disposition** : confier à **Nina** (`8f54de1e-9725-4c0a-9dc7-9bb32f160acb`) le téléversement, la visualisation, le téléchargement et l'archivage des documents validés dans le répertoire du projet ; fournir à l'humain un récapitulatif accessible.
 3. Si OpenSpec activé : Fabien archive le changement (fusion des deltas dans les specs vivantes) et passe l'issue à Done après approbation.
 
+## Mode d'autonomie en Construction
+
+AI-DLC pose, en Construction, une **question d'autonomie posée une seule fois** après le premier jalon fonctionnel (« walking skeleton »), avec **halt-and-ask systématique sur échec**. Le workspace adopte ce mécanisme **adapté à sa gouvernance A2A**, où l'humain valide déjà granulairement et où la production est déléguée aux agents spécialisés. Décision structurante tracée dans [ADR-0006](../decisions/0006-passage-5-phases-et-mode-autonomie-construction.md).
+
+### Walking skeleton — le premier jalon qui débloque la question
+
+Le **walking skeleton** est le plus petit livrable **de bout en bout** qui prouve que l'ossature de la solution tient : dans notre contexte majoritairement documentaire, c'est la **première tranche cohérente** validée par l'humain — par exemple la première vue d'architecture + son ADR de conception, ou le premier module IaC / spec OpenSpec de bout en bout. Il **passe obligatoirement par la validation granulaire humaine et le contrôle sécurité** (aucune autonomie avant lui).
+
+### La question, posée une seule fois
+
+**Après validation du walking skeleton**, le coordinateur pose à l'humain **une seule question**, pour le **reste de la Construction** : le rythme de validation des livrables suivants doit-il être
+
+- **Gated à chaque étape** *(défaut)* — chaque livrable est présenté à la validation granulaire humaine avant de poursuivre (comportement historique du workflow, inchangé) ; **ou**
+- **Autonome jusqu'au prochain point de synchronisation** — les agents spécialisés enchaînent les livrables **du même lot déjà cadré** sans re-valider chaque étape, le coordinateur regroupant la validation granulaire en **un point de synchronisation** (fin de lot). L'humain valide alors les livrables **en bloc, mais toujours choix par choix** (la granularité n'est jamais abandonnée, seul le *moment* est regroupé).
+
+La réponse est **consignée sur l'issue** et vaut pour le lot de Construction en cours ; elle ne se **présume jamais** (pas de réponse ⇒ mode gated par défaut). Un nouveau lot ou un changement de périmètre **re-pose la question**.
+
+### Halt-and-ask systématique sur échec
+
+Quel que soit le mode choisi, l'exécution **s'arrête et interroge l'humain** (halt-and-ask) dès qu'un des événements suivants survient — **le mode autonome n'y déroge jamais** :
+
+1. **Échec d'un livrable** ou impossibilité de le produire tel que cadré.
+2. **Écart de sécurité** signalé par l'Architecte cybersécurité, ou besoin d'un contrôle sécurité non encore fait sur une modification d'architecture.
+3. **Verification gate ou sensor en écart / `⛔ indisponible`** sur un artéfact du lot (le signal advisory ne bloque pas, mais en mode autonome il **redevient un point d'arrêt** — l'autonomie ne sert pas à passer outre un écart).
+4. **Décision structurante nouvelle** non couverte par le cadrage validé (elle exige un ADR et une validation granulaire).
+5. **Action à impact / destructive** (déploiement, migration) — jamais autonome (relève d'Operation, validation humaine explicite obligatoire).
+
+### Garde-fous (invariants non contournables)
+
+Le mode autonome **regroupe le moment de la validation, il ne la supprime pas**. Il reste borné par les invariants non négociables :
+
+- **Validation humaine granulaire préservée** : chaque choix reste validé / rejeté séparément, au point de synchronisation. L'autonomie ne fusionne jamais des choix en une approbation globale « tout ou rien ».
+- **Contrôle sécurité systématique préservé** : toute modification d'architecture passe par l'Architecte cybersécurité avant validation, y compris en mode autonome. L'autonomie ne court-circuite ni ne diffère le contrôle sécurité.
+- **Piste d'audit maintenue** : chaque livrable produit en autonomie est tracé sur l'issue au fil de l'eau, pas seulement au point de synchronisation.
+- **Aucune action à impact en autonomie** : le mode autonome ne s'applique qu'à la **production de livrables** en Construction, jamais au déploiement (Operation).
+- **Réversibilité** : à tout point de synchronisation, l'humain peut **repasser en mode gated** pour le reste de la Construction.
+
+> **Cohérence avec les scopes** : sur `security-patch` et `enterprise`, le mode autonome reste proposable mais le halt-and-ask sécurité (§2) et le plancher de vérification `renforcé` s'appliquent pleinement ; sur `poc` / `express`, l'autonomie est le cas courant vu le faible risque, mais bascule en halt-and-ask dès qu'une action à impact apparaît (voir note `[^ex]`).
+
 ---
 
-# 🟡 PHASE 3 — OPERATION
+# 🟡 PHASE 4 — OPERATION
 
 **Objectif** : déployer et exploiter.
 **Focus** : COMMENT DÉPLOYER et LANCER.
@@ -532,17 +671,17 @@ Chaque agent exécute son livrable (documentation détaillée, diagrammes défin
 - Notification de fin
 - Maintenance et support (extension future)
 
-## 3.1 — Déploiement / administration sous validation humaine
+## 4.1 — Déploiement / administration sous validation humaine
 
 1. Soumettre la configuration / le plan complet à l'humain pour **validation explicite**.
 2. Pour les actions d'infrastructure destructives ou de migration (Admin Windows), un **plan de rollback détaillé** doit être publié et **validé par l'humain avant exécution**.
 3. **Aucune action à impact (déploiement, migration, orchestration) sans validation humaine explicite.**
 
-## 3.2 — Notification de fin
+## 4.2 — Notification de fin
 
 Une fois la tâche réalisée et passée en revue, Sylvain demande à **l'Agent de Notifications** (`9b5a4076-7b9c-4db6-9d03-06ba49ae0f0f`) d'envoyer une notification (ntfy) : message court (« L'issue a été réalisée »), identifiant de l'issue et lien si possible.
 
-## 3.3 — Maintenance et support (extension future)
+## 4.3 — Maintenance et support (extension future)
 
 Emplacement réservé : planification de déploiement, surveillance/observabilité, réponse aux incidents, préparation à la production.
 
@@ -558,6 +697,8 @@ Emplacement réservé : planification de déploiement, surveillance/observabilit
 # Principes clés et garde-fous
 
 - **Exécution adaptative** : n'exécuter que les étapes qui apportent de la valeur.
+- **Cinq phases AI-DLC** : `Initialization → Ideation → Inception → Construction → Operation`. Initialization (bootstrap déterministe, sans gate humain) et Ideation (cadrage amont léger) précèdent les trois phases historiques, conservées à l'identique (voir « Tableau de correspondance »). Compatibilité ascendante : aucune référence existante n'est cassée.
+- **Mode d'autonomie en Construction** : après le walking skeleton, la question du rythme de validation (gated à chaque étape vs autonome jusqu'au point de synchronisation) est posée **une seule fois**, avec **halt-and-ask systématique sur échec** ; l'autonomie regroupe le *moment* de la validation, jamais sa granularité, et ne court-circuite jamais le contrôle sécurité ni les actions à impact.
 - **Méthode agnostique** : OpenSpec est conditionnel (déclaré au niveau du projet ou de l'issue) ; sinon, parcours d'architecture standard.
 - **Chargement optimisé pour le contexte** : au démarrage, ne charger que les métadonnées légères (descriptions d'agents/skills, index des ADR, sommaire de la documentation) ; différer le chargement complet (instructions d'agent, règles de méthodologie, gabarits, specs, corps des ADR) jusqu'au moment où l'étape ou la délégation en a besoin.
 - **Sylvain coordonne, les spécialistes produisent** : la production des livrables revient aux agents spécialisés.
@@ -586,6 +727,9 @@ sequenceDiagram
     participant AL as l'Agent de Notifications
 
     H->>S: Demande (issue)
+    S->>S: Bootstrap deterministe - repertoire + brownfield/greenfield (INITIALIZATION)
+    S->>H: Approbation intention + perimetre/scope (IDEATION)
+    H-->>S: Intention et scope approuves
     S->>S: Cadrage + besoins + decoupage (INCEPTION)
     S->>A: Delegue livrables (mention + mission)
     A-->>S: Livrable + ADR
@@ -593,10 +737,14 @@ sequenceDiagram
     X-->>S: Analyse + recommandations
     S->>H: Validation granulaire (choix par choix)
     H-->>S: Validation / rejet par element
-    S->>A: Production detaillee (CONSTRUCTION)
-    A-->>S: Livrables detailles
+    S->>A: Walking skeleton (premiere tranche de bout en bout)
+    A-->>S: Walking skeleton
+    S->>H: Validation granulaire + question du mode d'execution (une fois)
+    H-->>S: Mode gated (defaut) ou autonome + validation
+    S->>A: Production detaillee (CONSTRUCTION - rythme selon mode)
+    A-->>S: Livrables detailles (halt-and-ask sur echec)
     S->>X: Controle securite
-    S->>H: Validation granulaire
+    S->>H: Validation granulaire (au point de synchronisation si autonome)
     S->>N: Mise a disposition des livrables valides
     S->>H: Validation deploiement (OPERATION)
     H-->>S: Validation explicite (+ rollback si destructif)

@@ -2,8 +2,8 @@
 
 ---
 auteurs: Sylvain G.
-accepté par : ""
-accepté le : ""
+accepté par : Sylvain G. (validation humaine — multica.gaston)
+accepté le : 2026-09-02
 supersedes: ""
 superseded_by: ""
 
@@ -11,7 +11,7 @@ superseded_by: ""
 
 ## Status
 
-Proposed
+Accepted
 
 ## Contexte
 
