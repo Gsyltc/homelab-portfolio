@@ -54,11 +54,13 @@ Légende : ✅ activé · ➖ allégé / optionnel · ❌ ignoré · 🔒 renfor
 | `requirements-analysis` | ✅ | ✅ | ✅ | ✅ 🔒 | ✅ | ➖ | ➖ | ✅ 🔒 |
 | `deliverables-breakdown` | ✅ | ✅ | ✅ | ➖ | ✅ | ➖ | ➖ | ✅ |
 | `design-and-adr` | ✅ | ✅ | ✅ | ✅ 🔒 | ✅ | ➖ | ➖ | ✅ 🔒 |
-| Contrôle sécurité (Xavier) | ✅ | ✅ | ✅ | 🔒 pilote | ✅ | ➖ | ➖ | ✅ 🔒 |
+| Contrôle sécurité (Xavier) | ✅ | ✅ | ✅ | 🔒 pilote | ✅ | ➖ [^poc-sec] | ➖ | ✅ 🔒 |
 | `detailed-deliverables` | ✅ | ✅ | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ |
 | `security-consistency-check` | ✅ | ✅ | ✅ | 🔒 | ✅ | ➖ | ➖ | ✅ 🔒 |
 | `consolidation-handoff` | ✅ | ✅ | ✅ | ✅ | ✅ | ➖ | ✅ | ✅ |
 | Operation (4.x) | *cond.* | *cond.* | ✅ | *cond.* | *cond.* | ❌ | *cond.* | ✅ |
 | Validation humaine granulaire | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+
+[^poc-sec]: `poc` — `➖` ne signifie **jamais** un contrôle sécurité nul : le **plancher OWASP / STRIDE reste actif** (invariant non désactivable par aucun scope). Seules la **profondeur** de l'analyse et la **rigueur de vérification** sont allégées, cohérent avec le caractère jetable du PoC. Un PoC est **non promouvable tel quel** : toute reprise en `feature` / `mvp` / `enterprise` **re-déclenche le contrôle sécurité complet** du scope cible (voir [`governance-security.md`](governance-security.md), garde-fous des scopes).
 
 Affectation des agents par scope, renforcements sécurité (`security-patch` analyse d'impact, `enterprise` normes tracées, `express` pas d'allègement sur impact, `poc` non promouvable) : voir [`governance-security.md`](governance-security.md).
