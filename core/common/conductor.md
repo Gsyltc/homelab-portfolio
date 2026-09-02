@@ -71,7 +71,7 @@ Avant toute exécution, le coordinateur :
 3. **Applique les paramètres par défaut d'architecture** — structure de répertoire, conventions de nommage, emplacements des décisions et diagrammes.
 4. **Détermine si une méthodologie s'applique** (voir « Activation conditionnelle d'une méthodologie »).
 
-### OBLIGATOIRE : chargement optimisé pour le contexte
+### Chargement optimisé (lazy loading)
 
 Ne charger au démarrage que les éléments **légers**, et différer le chargement complet jusqu'au moment où il est réellement nécessaire — pour préserver la fenêtre de contexte.
 
