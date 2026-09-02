@@ -1,6 +1,6 @@
 # Protocole — exécution générique d'un stage
 
-Cycle standard qu'un stage suit, quel que soit sa phase. Il ne se substitue jamais aux instructions propres de la fiche de stage ; il en fixe l'ossature commune. Adapté d'AI-DLC 2.0 (`stage-protocol`) au moteur A2A Multica (mentions UUID, statut d'issue, piste d'audit sur l'issue).
+Cycle standard qu'un stage suit, quel que soit sa phase. Il ne se substitue jamais aux instructions propres de la fiche de stage ; il en fixe l'ossature commune, adaptée au moteur A2A Multica (mentions UUID, statut d'issue, piste d'audit sur l'issue).
 
 ## Cycle en 6 temps
 
@@ -24,8 +24,8 @@ flowchart LR
 - Si `mode: inline`, le coordinateur (ou l'agent porteur) exécute directement.
 
 ### 3. Production
-- L'agent `lead_agent` produit les artefacts `produces`, dans la langue de l'humain, sans secret, diagrammes en code à syntaxe validée.
-- Chaque décision structurante est tracée dans un **ADR**.
+- La fonction `lead_agent` produit les artefacts `produces`, dans la langue de l'humain, sans secret, diagrammes en code à syntaxe validée.
+- Chaque décision structurante est tracée dans le registre de décisions du projet.
 - L'agent trace son avancement sur l'issue (piste d'audit au fil de l'eau).
 
 ### 4. Sensors à l'écriture
@@ -39,7 +39,7 @@ flowchart LR
 - Boucle **Keep / Modify / Redo** par élément (voir `conductor.md`). Sur `Modify` / `Redo`, retour au temps 3 pour l'élément concerné uniquement.
 
 ## Contrôle sécurité — non contournable
-Dès qu'un stage **produit ou modifie une architecture** (ou une surface de sécurité), le coordinateur sollicite **Xavier** (`694a1a6f-9659-48ea-b45f-43ae6dc01706`) **avant** la validation humaine et intègre ses recommandations. L'autonomie (Construction) ne court-circuite ni ne diffère jamais ce contrôle. Voir [`governance-security.md`](governance-security.md) et [`reviewer.md`](reviewer.md).
+Dès qu'un stage **produit ou modifie une architecture** (ou une surface de sécurité), le coordinateur sollicite l'**Architecte cybersécurité** **avant** la validation humaine et intègre ses recommandations. L'autonomie (Construction) ne court-circuite ni ne diffère jamais ce contrôle. Voir [`governance-security.md`](governance-security.md) et [`reviewer.md`](reviewer.md).
 
 ## Halt-and-ask
 Le cycle s'arrête et interroge l'humain dès : échec / impossibilité d'un livrable ; écart ou contrôle de sécurité requis ; gate / sensor en écart ou `⛔ indisponible` ; décision structurante nouvelle non cadrée ; action à impact / destructive (jamais autonome).

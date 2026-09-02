@@ -3,7 +3,7 @@ slug: completion-notification
 phase: operation
 execution: CONDITIONAL
 condition: "Exécuté après réalisation et revue, sur demande du coordinateur"
-lead_agent: Alfred
+lead_agent: Agent de notifications
 support_agents: []
 mode: subagent
 summary_confirmation: none
@@ -25,8 +25,8 @@ outputs: "Notification ntfy de fin de tâche"
 Notifier l'humain de la fin de la tâche via ntfy.
 
 ## Steps
-### Step 1 — Solliciter Alfred
-Une fois la tâche réalisée et revue, le coordinateur demande à **Alfred** (`9b5a4076-7b9c-4db6-9d03-06ba49ae0f0f`) d'envoyer une notification : message court (« L'issue a été réalisée »), identifiant de l'issue et lien si possible. Aucun secret dans la notification.
+### Step 1 — Solliciter l'Agent de notifications
+Une fois la tâche réalisée et revue, le coordinateur demande à l'**Agent de notifications** d'envoyer une notification : message court (« L'issue a été réalisée »), identifiant de l'issue et lien si possible. Aucun secret dans la notification.
 
 ## Gate / sortie
-Notification envoyée (code HTTP 2xx confirmé par Alfred sur l'issue).
+Notification envoyée (code HTTP 2xx confirmé par l'Agent de notifications sur l'issue).

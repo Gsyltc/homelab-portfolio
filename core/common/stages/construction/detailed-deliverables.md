@@ -3,11 +3,11 @@ slug: detailed-deliverables
 phase: construction
 execution: ALWAYS
 condition: "Always executes — rythme selon le mode d'exécution choisi"
-lead_agent: Manuel
-support_agents: [Florian, Admin, Fabien]
+lead_agent: Architecte de solution
+support_agents: [Architecte AWS, Administrateur infrastructure Windows, OpenSpec Expert]
 mode: multi-agent
 summary_confirmation: required
-reviewer: Sylvain
+reviewer: Architecture Solution & Intégration
 review_class: granular
 human_gate: granular
 produces: [livrables_detailles]
@@ -26,7 +26,7 @@ Produire les livrables du lot cadré, au rythme fixé par le mode d'exécution.
 
 ## Steps
 ### Step 1 — Produire par livrable / agent
-Chaque agent exécute son livrable ; en fin de travail, mentionne Sylvain pour vérification. Documenter sur l'issue.
+Chaque agent exécute son livrable ; en fin de travail, mentionne le coordinateur pour vérification. Documenter sur l'issue.
 
 ### Step 2 — Rythme de validation
 - **Gated** *(défaut)* : chaque livrable validé granulairement avant de poursuivre.

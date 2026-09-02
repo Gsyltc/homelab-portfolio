@@ -3,11 +3,11 @@ slug: mockups
 phase: ideation
 execution: CONDITIONAL
 condition: "UI uniquement — N/A pour les travaux d'architecture / infrastructure sans UI (cas majoritaire)"
-lead_agent: Manuel
+lead_agent: Architecte de solution
 support_agents: []
 mode: subagent
 summary_confirmation: optional
-reviewer: Sylvain
+reviewer: Architecture Solution & Intégration
 review_class: advisory
 human_gate: none
 produces: [maquettes]
@@ -26,7 +26,7 @@ Produire ou référencer des maquettes légères si le travail comporte une UI.
 
 ## Steps
 ### Step 1 — Déterminer l'applicabilité
-Si le travail comporte une interface utilisateur → produire ou référencer des maquettes légères (déléguées à Manuel). Sinon → **marquer N/A** (cas majoritaire du workspace, orienté architecture / infrastructure).
+Si le travail comporte une interface utilisateur → produire ou référencer des maquettes légères (déléguées à l'Architecte de solution). Sinon → **marquer N/A** (cas majoritaire du workspace, orienté architecture / infrastructure).
 
 ## Gate / sortie
-Maquettes légères (ou N/A consigné). Aucune production détaillée ni ADR à ce stade.
+Maquettes légères (ou N/A consigné). Aucune production détaillée ni décision structurante à ce stade.

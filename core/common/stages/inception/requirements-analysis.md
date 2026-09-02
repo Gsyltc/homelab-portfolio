@@ -3,11 +3,11 @@ slug: requirements-analysis
 phase: inception
 execution: ALWAYS
 condition: "Always executes — profondeur adaptative"
-lead_agent: Manuel
-support_agents: [Florian, Xavier]
+lead_agent: Architecte de solution
+support_agents: [Architecte AWS, Architecte cybersécurité]
 mode: subagent
 summary_confirmation: required
-reviewer: Sylvain
+reviewer: Architecture Solution & Intégration
 review_class: granular
 human_gate: none
 produces: [besoins_traces]

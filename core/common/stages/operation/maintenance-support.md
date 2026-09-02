@@ -26,7 +26,7 @@ Emplacement réservé pour l'exploitation continue.
 
 ## Steps
 ### Step 1 — Non actif par défaut
-Emplacement réservé : planification de déploiement, surveillance / observabilité, réponse aux incidents, préparation à la production. À activer et détailler dans un stage ultérieur (ADR dédié requis pour toute activation structurante).
+Emplacement réservé : planification de déploiement, surveillance / observabilité, réponse aux incidents, préparation à la production. À activer et détailler dans un stage ultérieur (décision structurante dédiée requise pour toute activation).
 
 ## Gate / sortie
 N/A par défaut.

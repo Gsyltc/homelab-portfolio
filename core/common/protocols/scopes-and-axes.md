@@ -1,6 +1,6 @@
 # Protocole — scopes & axes d'exécution
 
-Table partagée référencée par le [`conductor.md`](../conductor.md) et les fiches de stage. Le routage repose sur un **scope** nommé (parcours d'étapes déterministe et auditable) et deux **axes indépendants** — **Depth** (détail des artefacts) et **niveau de vérification** (rigueur du contrôle). Décision structurante : [ADR-0003](../../../decisions/0003-scopes-et-axes-depth-verification.md).
+Table partagée référencée par le [`conductor.md`](../conductor.md) et les fiches de stage. Le routage repose sur un **scope** nommé (parcours d'étapes déterministe et auditable) et deux **axes indépendants** — **Depth** (détail des artefacts) et **niveau de vérification** (rigueur du contrôle).
 
 ## Table des scopes
 
@@ -8,14 +8,14 @@ Table partagée référencée par le [`conductor.md`](../conductor.md) et les fi
 | --- | --- | --- |
 | `standard` *(défaut)* | Conception / évolution d'architecture « normale » | Parcours standard complet |
 | `feature` | Ajout / évolution fonctionnelle | Inception ciblée + Construction, sécurité systématique |
-| `infra` | Infra / plateforme (AWS, réseau, Windows, migration) | Accent AWS / Admin Windows, rollback obligatoire |
-| `security-patch` | Correction / durcissement de sécurité | **Xavier pilote**, périmètre resserré, traçabilité renforcée |
+| `infra` | Infra / plateforme (AWS, réseau, Windows, migration) | Accent Architecte AWS / Administrateur infrastructure Windows, rollback obligatoire |
+| `security-patch` | Correction / durcissement de sécurité | **Architecte cybersécurité pilote**, périmètre resserré, traçabilité renforcée |
 | `mvp` | Produit minimum viable | Cœur de valeur, Depth standard, dette technique tracée |
 | `poc` | Preuve de concept jetable | Allégé, Depth minimale, non promouvable tel quel |
 | `express` | Petit changement clair, faible risque | Chemin court ; lourd ignoré (sauf action à impact) |
 | `enterprise` | Chantier structurant, fort impact / conformité | Complet + Depth comprehensive + normes conditionnelles |
 
-Défaut : `standard`. **Invariants non négociables quel que soit le scope** (aucun scope ne les désactive) : validation humaine granulaire, ADR sur décision structurante, piste d'audit, contrôle sécurité minimal (OWASP / STRIDE).
+Défaut : `standard`. **Invariants non négociables quel que soit le scope** (aucun scope ne les désactive) : validation humaine granulaire, décision structurante tracée, piste d'audit, contrôle sécurité minimal (OWASP / STRIDE).
 
 ## Auto-détection & désambiguïsation
 
@@ -53,8 +53,8 @@ Légende : ✅ activé · ➖ allégé / optionnel · ❌ ignoré · 🔒 renfor
 | `existing-context-loading` | ➖ | ✅ | ✅ | ✅ | ➖ | ❌ | ➖ | ✅ |
 | `requirements-analysis` | ✅ | ✅ | ✅ | ✅ 🔒 | ✅ | ➖ | ➖ | ✅ 🔒 |
 | `deliverables-breakdown` | ✅ | ✅ | ✅ | ➖ | ✅ | ➖ | ➖ | ✅ |
-| `design-and-adr` | ✅ | ✅ | ✅ | ✅ 🔒 | ✅ | ➖ | ➖ | ✅ 🔒 |
-| Contrôle sécurité (Xavier) | ✅ | ✅ | ✅ | 🔒 pilote | ✅ | ➖ [^poc-sec] | ➖ | ✅ 🔒 |
+| `design-and-decisions` | ✅ | ✅ | ✅ | ✅ 🔒 | ✅ | ➖ | ➖ | ✅ 🔒 |
+| Contrôle sécurité (Architecte cybersécurité) | ✅ | ✅ | ✅ | 🔒 pilote | ✅ | ➖ [^poc-sec] | ➖ | ✅ 🔒 |
 | `detailed-deliverables` | ✅ | ✅ | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ |
 | `security-consistency-check` | ✅ | ✅ | ✅ | 🔒 | ✅ | ➖ | ➖ | ✅ 🔒 |
 | `consolidation-handoff` | ✅ | ✅ | ✅ | ✅ | ✅ | ➖ | ✅ | ✅ |

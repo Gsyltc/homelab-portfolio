@@ -3,7 +3,7 @@ slug: intent-scope-approval
 phase: ideation
 execution: ALWAYS
 condition: "Always executes — gate humain léger"
-lead_agent: Sylvain
+lead_agent: Architecture Solution & Intégration
 support_agents: []
 mode: inline
 summary_confirmation: required

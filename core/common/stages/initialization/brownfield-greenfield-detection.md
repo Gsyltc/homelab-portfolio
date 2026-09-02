@@ -26,7 +26,7 @@ Déterminer si le travail part d'un existant (brownfield) ou d'une page blanche 
 
 ## Steps
 ### Step 1 — Détecter l'existant
-- **Brownfield** : documentation d'architecture, ADR, diagrammes ou infrastructure préexistants → l'Inception activera `existing-context-loading` et le contrôle d'orphelins s'appuie sur l'existant.
+- **Brownfield** : documentation d'architecture, décisions structurantes, diagrammes ou infrastructure préexistants → l'Inception activera `existing-context-loading` et le contrôle d'orphelins s'appuie sur l'existant.
 - **Greenfield** : aucun existant pertinent → `existing-context-loading` marqué **N/A**, conception partant d'une page blanche.
 
 ### Step 2 — Consigner
