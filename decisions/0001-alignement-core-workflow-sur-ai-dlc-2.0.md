@@ -1,9 +1,9 @@
 # Alignement de core-workflow.md sur AI-DLC 2.0
 
 ---
-auteurs: [à compléter par l'humain]
-accepté par : 
-accepté le : 
+auteurs: Sylvain G.
+accepté par : Sylvain G.
+accepté le : 2026-09-02
 supersedes: ""
 superseded_by: ""
 
@@ -11,7 +11,7 @@ superseded_by: ""
 
 ## Status
 
-Proposed
+Accepted
 
 ## Contexte
 
