@@ -58,8 +58,6 @@ flowchart TD
 | **Construction** | 3 | [`walking-skeleton`](stages/construction/walking-skeleton.md) · [`detailed-deliverables`](stages/construction/detailed-deliverables.md) · [`security-consistency-check`](stages/construction/security-consistency-check.md) · [`consolidation-handoff`](stages/construction/consolidation-handoff.md) | Validation granulaire humaine |
 | **Operation** | 4 | [`deployment-under-validation`](stages/operation/deployment-under-validation.md) · [`completion-notification`](stages/operation/completion-notification.md) · [`maintenance-support`](stages/operation/maintenance-support.md) | Validation humaine explicite |
 
-> **Compatibilité ascendante (alias)** : une issue parlant de « Phase 1 / Inception », « Phase 2 / Construction » ou « Phase 3 / Operation » reste valide — ces phases conservent leur nom et leur contenu ; seul leur numéro d'ordre est décalé par l'ajout d'Initialization (0) et Ideation (1). Les couches de règles `phase` (`core/rules/phases/{inception,construction,operation}.md`) restent nommées par le **nom** de phase, donc inchangées.
-
 ---
 
 ## OBLIGATOIRE : chargement du contexte au démarrage
