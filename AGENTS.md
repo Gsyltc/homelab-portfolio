@@ -45,7 +45,7 @@ ils ne s'exécutent jamais conjointement sur une même issue ou un même livrabl
    documentation d'architecture (DAS), ADR, diagrammes C4/Archimate/PlantUML/CALM,
    choix technologiques, intégration, cybersécurité, architecture AWS, cycle spec-driven
    (OpenSpec) ?
-   → Suivre **`docs/core-workflow.md`** (coordinateur : **Architecture Solution & Intégration**).
+   → Suivre **`core/common/conductor.md`** (coordinateur : **Architecture Solution & Intégration**). *(Source unique depuis le Stage 7, ADR-0007 ; `docs/core-workflow.md` est un stub de redirection.)*
 
 3. **En cas de doute sur la classification** : ne pas engager de workflow, ne rien
    supposer — demander à l'humain de trancher entre Homelab et architecture de solution,
