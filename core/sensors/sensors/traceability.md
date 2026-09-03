@@ -1,7 +1,7 @@
 ---
 id: traceability
 kind: deterministic
-command: "non-exécutable (advisory documentaire) — voir ADR-0010"
+command: "non-exécutable (advisory documentaire)"
 default_severity: advisory
 description: "Vérifie la traçabilité amont↔aval : chaque exigence retenue est reliée à un ADR / livrable et chaque décision structurante est tracée, sans cible orpheline."
 category: traceability

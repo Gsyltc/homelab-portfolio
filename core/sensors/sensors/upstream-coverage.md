@@ -1,7 +1,7 @@
 ---
 id: upstream-coverage
 kind: deterministic
-command: "non-exécutable (advisory documentaire) — voir ADR-0010"
+command: "non-exécutable (advisory documentaire)"
 default_severity: advisory
 description: "Vérifie que le livrable référence explicitement sa demande amont (issue d'origine, ADR parent le cas échéant)."
 category: document-shape

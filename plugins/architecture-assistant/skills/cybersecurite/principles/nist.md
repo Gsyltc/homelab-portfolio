@@ -2,14 +2,14 @@
 
 ## Vue d'ensemble
 
-Le National Institute of Standards and Technology (NIST)提供 plusieurs cadres et standards de cybersécurité. Les plus pertinents sont le NIST Cybersecurity Framework (CSF) et le NIST SP 800-53.
+Le National Institute of Standards and Technology (NIST) plusieurs cadres et standards de cybersécurité. Les plus pertinents sont le NIST Cybersecurity Framework (CSF) et le NIST SP 800-53.
 
 ## NIST Cybersecurity Framework (CSF 2.0)
 
 ### 6 Fonctions
 
 | Fonction | Description |
-|---|---|
+| --- | --- |
 | **Govern** | Établir la stratégie de cybersécurité, les politiques, les rôles et les responsabilités |
 | **Identify** | Comprendre le contexte organisationnel, les risques et les ressources |
 | **Protect** | Mettre en œuvre les mesures de sécurité pour protéger les actifs |
@@ -22,6 +22,7 @@ Le National Institute of Standards and Technology (NIST)提供 plusieurs cadres 
 Chaque fonction contient des catégories et sous-catégories détaillant les résultats attendus. Exemple :
 
 **Govern (GV) :**
+
 - GV.OC — Contexte organisationnel
 - GV.RM — Gestion des risques
 - GV.PO — Politiques
@@ -29,11 +30,13 @@ Chaque fonction contient des catégories et sous-catégories détaillant les ré
 - GV.SC — Chaîne d'approvisionnement
 
 **Identify (ID) :**
+
 - ID.AM — Gestion des actifs
 - ID.RA — Évaluation des risques
 - ID.IM — Amélioration continue
 
 **Protect (PR) :**
+
 - PR.AA — Gestion des accès et de l'authentification
 - PR.AT — Sensibilisation et formation
 - PR.DS — Sécurité des données
@@ -41,16 +44,19 @@ Chaque fonction contient des catégories et sous-catégories détaillant les ré
 - PR.IR — Résilience de l'infrastructure
 
 **Detect (DE) :**
+
 - DE.CM — Surveillance continue
 - DE.AE — Analyse adverse
 
 **Respond (RS) :**
+
 - RS.MA — Gestion des incidents
 - RS.AN — Analyse des incidents
 - RS.CO — Communications
 - RS.MI — Atténuation
 
 **Recover (RC) :**
+
 - RC.RP — Plan de récupération
 - RC.CO — Communications de récupération
 
@@ -59,7 +65,7 @@ Chaque fonction contient des catégories et sous-catégories détaillant les ré
 Le NIST SP 800-53 catalogue plus de 1000 contrôles de sécurité organisés en familles :
 
 | Famille | Description |
-|---|---|
+| --- | --- |
 | AC | Contrôle d'accès |
 | AT | Sensibilisation et formation |
 | Audit et accountability | Audit et responsabilité |

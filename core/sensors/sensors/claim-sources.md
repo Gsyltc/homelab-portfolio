@@ -1,7 +1,7 @@
 ---
 id: claim-sources
 kind: deterministic
-command: "non-exécutable (advisory documentaire) — voir ADR-0010"
+command: "non-exécutable (advisory documentaire)"
 default_severity: advisory
 description: "Vérifie que chaque affirmation retenue à la capture d'intention porte une source résoluble et que les hypothèses conservées correspondent à une confirmation humaine explicite."
 category: provenance

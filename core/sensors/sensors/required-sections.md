@@ -1,7 +1,7 @@
 ---
 id: required-sections
 kind: deterministic
-command: "non-exécutable (advisory documentaire) — voir ADR-0010"
+command: "non-exécutable (advisory documentaire)"
 default_severity: advisory
 description: "Vérifie que les rubriques obligatoires du gabarit d'ADR / DAS sont présentes et non vides."
 category: document-shape
