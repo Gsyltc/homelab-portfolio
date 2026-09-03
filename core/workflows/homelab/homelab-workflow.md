@@ -130,7 +130,7 @@ Deux travaux ne doivent **jamais** progresser en parallèle sur la **même stack
 - Rédiger **tous les documents en français** (langue de l'humain par défaut).
 - Conserver les **commentaires `#`** des gabarits docker-compose et les commentaires utiles Terraform pour la lisibilité.
 - **Aucun secret** (mot de passe, token, clé API, secret Vault) dans les livrables, commentaires ou notifications.
-- **Ne jamais utiliser la variable `${SNI}`** dans les **fichiers Terraform livrés** : y écrire les domaines/URLs en clair (ex. `https://arcane.jeedom-gaston.ovh`). Cette interdiction ne vise **que** ce cas : elle ne concerne pas la notation des paramètres du workflow (`${stack_name}`, `${auth_type}`, etc.), qui sont des espaces réservés de ce document et restent autorisés.
+- **Ne jamais utiliser la variable `${SNI}`** dans les **fichiers Terraform livrés** : y écrire les domaines/URLs en clair (ex. `https://<service>.<domaine-homelab>`, le domaine venant du contexte de la stack). Cette interdiction ne vise **que** ce cas : elle ne concerne pas la notation des paramètres du workflow (`${stack_name}`, `${auth_type}`, etc.), qui sont des espaces réservés de ce document et restent autorisés.
 - **Jamais de supposition** : information requise manquante → demander à l'humain et attendre. Exigence ambiguë ou en conflit avec les bonnes pratiques → arbitrage humain.
 
 ---
