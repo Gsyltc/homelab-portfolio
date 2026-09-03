@@ -4,7 +4,7 @@ phase: ideation
 execution: ALWAYS
 condition: "Always executes — évaluation légère"
 lead_agent: Architecture Solution & Intégration
-support_agents: [Architecte de solution, Architecte AWS, Architecte cybersécurité]
+support_agents: [Architecte de solution, Architecte AWS, Architecte Cybersécurité]
 mode: inline
 summary_confirmation: required
 reviewer: null

@@ -4,7 +4,7 @@ Gabarit de règles **spécifiques à un projet**. Copier ce fichier en `projects
 
 Précédence : sous `workspace`, au-dessus de `phase` et `scope`. Une règle projet ne peut pas contredire une règle `workspace` sans arbitrage humain.
 
-> **Convention** (alignée AI-DLC) : ranger les règles sous des **rubriques topicales** en prose (voir exemples ci-dessous — à créer / renommer selon le projet). Chaque règle garde un identifiant `RULE-PROJ-NNN`, sa portée, son origine et sa date (traçabilité, clause SEC-5). N'ouvrir une couche `project` que pour un **écart durable** de ce projet vis-à-vis des pratiques du workspace ; sinon la règle relève de `workspace`.
+> **Convention** (alignée sur le contrat amont) : ranger les règles sous des **rubriques topicales** en prose (voir exemples ci-dessous — à créer / renommer selon le projet). Chaque règle garde un identifiant `RULE-PROJ-NNN`, sa portée, son origine et sa date (traçabilité, clause SEC-5). N'ouvrir une couche `project` que pour un **écart durable** de ce projet vis-à-vis des pratiques du workspace ; sinon la règle relève de `workspace`.
 
 ## Manière de travailler
 

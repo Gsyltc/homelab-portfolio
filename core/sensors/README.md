@@ -39,7 +39,7 @@ Les résultats vivent **sur l'issue** (piste d'audit existante), jamais dans un 
 
 ## Sensors définis
 
-Cinq sensors, alignés sur le contrat AI-DLC « Sensors » (schéma de manifeste `id` / `kind` / `command` / `default_severity` / `description` + `category` / `fire_on` / `matches`). Les `id` sont importés **par id nu** dans le champ `sensors:` des fiches de stage (pull-authoring).
+Cinq sensors, alignés sur le contrat amont « Sensors » (schéma de manifeste `id` / `kind` / `command` / `default_severity` / `description` + `category` / `fire_on` / `matches`). Les `id` sont importés **par id nu** dans le champ `sensors:` des fiches de stage (pull-authoring).
 
 | Sensor | Manifeste | `category` | `fire_on` | `default_severity` | Objet |
 | --- | --- | --- | --- | --- | --- |
@@ -51,7 +51,7 @@ Cinq sensors, alignés sur le contrat AI-DLC « Sensors » (schéma de manifeste
 
 > `linter` et `type-check` (sensors AI-DLC de qualité de code) restent **N/A** tant que le dépôt ne produit ni code ni IaC ; ils seront ajoutés le jour où un livrable exécutable apparaît (repli « stratégie de tests » de l'axe de vérification.
 
-## Format d'un manifeste de sensor (contrat AI-DLC)
+## Format d'un manifeste de sensor (contrat amont)
 
 Le front-matter est un **descripteur de capacité pur** (ce qu'est le check et comment il s'invoque) ; il ne cite jamais de stage. La liaison stage ↔ sensor vit côté stage (`sensors:`), c'est le **pull-authoring**.
 
@@ -68,10 +68,3 @@ origine: ALI-<n>             # (maison, SG-1) provenance traçable — obligatoi
 ```
 
 Le corps (après le front-matter) porte le **contrat de vérification** (`checks`), la forme de la **sortie** advisory et les **garde-fous** — lisible, déterministe, non exécutable.
-
-## Divergences assumées vs AI-DLC
-
-- **DIV-command — `command` non exécutable.** Le dépôt est **doc-first** et n'embarque pas le dispatcher AI-DLC (`.ts`, `bun`, hook `PostToolUse`). Le champ obligatoire `command` porte donc un **placeholder tracé** (`non-exécutable (advisory documentaire)) : les sensors restent des **conventions documentées** advisory, le corps fixe la sémantique pour un outillage (script / CI) ultérieur sans redécision.
-- **DIV-prefix — pas de préfixe `aidlc-`.** AI-DLC exige `core/sensors/aidlc-<id>.md` (le resolver `SENSOR_FILE_REGEX` ignore les fichiers sans préfixe). Multica n'exécute pas ce resolver : les manifestes vivent sous `core/sensors/sensors/<id>.md` **sans préfixe**, en conservant l'invariant `id` = stem du fichier.
-- **DIV-advisory — advisory par défaut.** AI-DLC autorise `blocking` au gate. Ici tout reste **advisory** (décision de gouvernance A2A) : le passage d'un sensor à `blocking` est une décision structurante explicite (ADR + contrôle sécurité).
-- **DIV-champs — `input_schema` / `output_schema` / `timeout_seconds` omis.** Champs du dispatcher exécutable, non applicables tant que les sensors ne sont pas outillés. Le champ maison `origine` est conservé (exigence de provenance SG-1).

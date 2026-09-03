@@ -52,7 +52,7 @@ outputs: "<description libre des sorties>"
 
 Nomme l'artefact dont les instances pilotent une exécution **une-fois-par-instance** (ex. `for_each: unit-of-work` : une exécution par livrable / unité de travail). **Omettre le champ** ⇒ exécution unique. L'agrégation se déduit du graphe, elle n'est pas déclarée.
 
-### `review_class` — nature de la revue indépendante (vocabulaire AI-DLC)
+### `review_class` — nature de la revue indépendante (vocabulaire amont)
 
 - `adversarial` — revue **indépendante et non substituable** cherchant activement les failles : la **revue de sécurité** (Reviewer de sécurité, plancher SG-3 — OWASP / STRIDE). Ne peut être ni portée, ni remplacée, ni conditionnée par un autre contrôle.
 - `advisory` — revue **consultative** préparant le gate humain : la **revue de cohérence** (Reviewer de cohérence — documentation ↔ décisions, conflits, complétude, conventions). Ne remplace jamais la validation humaine.

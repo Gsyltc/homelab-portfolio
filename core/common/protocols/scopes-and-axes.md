@@ -2,7 +2,7 @@
 
 Table partagée référencée par le [`conductor.md`](../conductor.md) et les fiches de stage. Le routage repose sur un **scope** nommé (parcours d'étapes déterministe et auditable) et deux **axes indépendants** — **Depth** (détail des artefacts) et **niveau de vérification** (rigueur du contrôle).
 
-> **Source d'identité vs vue lisible.** L'**identité** de chaque scope (nom, `depth`, `keywords`, niveau de vérification → `review_cap`, `skeleton`) est portée en données, **un fichier par scope**, sous [`../../scopes/`](../../scopes/) (contrat AI-DLC « Scopes »). Ce document reste la **vue lisible** consolidée — table des scopes, axes, ordre de désambiguïsation, matrice stage × scope. **En cas d'écart sur l'identité d'un scope, le fichier `core/scopes/<name>.md` fait foi.** L'appartenance (quels stages tournent sous un scope) reste transposée sur le champ `scopes:` des fiches de stage.
+> **Source d'identité vs vue lisible.** L'**identité** de chaque scope (nom, `depth`, `keywords`, niveau de vérification → `review_cap`, `skeleton`) est portée en données, **un fichier par scope**, sous [`../../scopes/`](../../scopes/) (contrat amont « Scopes »). Ce document reste la **vue lisible** consolidée — table des scopes, axes, ordre de désambiguïsation, matrice stage × scope. **En cas d'écart sur l'identité d'un scope, le fichier `core/scopes/<name>.md` fait foi.** L'appartenance (quels stages tournent sous un scope) reste transposée sur le champ `scopes:` des fiches de stage.
 
 ## Table des scopes
 
@@ -29,10 +29,11 @@ Scope auto-détecté par mots-clés (FR / EN) puis **confirmé explicitement** a
 
 - **Axe 1 — Depth** : `minimal` / `standard` / `comprehensive` (détail des artefacts).
 - **Axe 2 — Vérification** : `advisory` / `standard` / `renforcé` (rigueur du contrôle ; remplace l'axe « test strategy » pour la documentation, mais **inclut une stratégie de tests dès qu'il y a du code / IaC**).
+- **Axe 2 — Vérification** : `advisory` / `standard` / `renforcé` (rigueur du contrôle ; remplace l'axe « test strategy » pour la documentation, mais **inclut une stratégie de tests dès qu'il y a du code / IaC**). Divergence assumée tracée en [ADR-0010](../../../decisions/0010-scopes-fichiers-par-scope-et-axes-review-cap.md).
 
 Les valeurs par défaut ci-dessous sont la **projection lisible** des champs `depth` / `verification` (→ `review_cap`) des fichiers de scope. **Le fichier `core/scopes/<name>.md` fait foi.**
 
-| Scope | Depth défaut | Vérification défaut | `review_cap` (AI-DLC) |
+| Scope | Depth défaut | Vérification défaut | `review_cap` (contrat amont) |
 | --- | --- | --- | --- |
 | `standard` | standard | standard | *(absent)* |
 | `feature` | standard | standard | *(absent)* |

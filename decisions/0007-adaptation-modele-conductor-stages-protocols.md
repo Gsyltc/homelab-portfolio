@@ -2,8 +2,8 @@
 
 ---
 auteurs: Mika (agent, sur validation humaine granulaire — multica.gaston)
-accepté par : (en attente de validation humaine)
-accepté le : (en attente)
+accepté par : multica.gaston
+accepté le : 2026-09-03
 supersedes: ""
 superseded_by: ""
 
@@ -11,9 +11,9 @@ superseded_by: ""
 
 ## Status
 
-Proposed
+Accepted
 
-> Statut **Proposed** tant que la validation humaine granulaire et le contrôle sécurité (Xavier) sur la nouvelle surface ne sont pas obtenus. Passera à **Accepted** après validation humaine explicite (invariant : aucun ADR accepté sans validation humaine).
+> Statut **Accepted** — validation humaine explicite obtenue (multica.gaston, 2026-09-03). Le passage à Accepted supposait la validation humaine granulaire et le contrôle sécurité (Xavier) sur la nouvelle surface ; ces conditions sont satisfaites (invariant respecté : aucun ADR accepté sans validation humaine).
 
 ## Contexte
 

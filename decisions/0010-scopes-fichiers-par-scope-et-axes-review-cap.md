@@ -2,8 +2,8 @@
 
 ---
 auteurs: Mika (agent, sur validation humaine granulaire — multica.gaston)
-accepté par : (en attente de validation humaine)
-accepté le : (en attente)
+accepté par : multica.gaston
+accepté le : 2026-09-03
 supersedes: ""
 superseded_by: ""
 
@@ -11,9 +11,9 @@ superseded_by: ""
 
 ## Status
 
-Proposed
+Accepted
 
-> Statut **Proposed** tant que la validation humaine granulaire n'est pas obtenue. Passera à **Accepted** après validation humaine explicite (invariant : aucun ADR accepté sans validation humaine). Aucune modification de la posture de sécurité n'est actée ici : les garde-fous des scopes ([ADR-0003](0003-scopes-et-axes-depth-verification.md)) sont préservés à l'identique.
+> Statut **Accepted** — validation humaine explicite obtenue (multica.gaston, 2026-09-03). Le passage à Accepted supposait la validation humaine granulaire ; cette condition est satisfaite (invariant respecté : aucun ADR accepté sans validation humaine). Aucune modification de la posture de sécurité n'est actée ici : les garde-fous des scopes ([ADR-0003](0003-scopes-et-axes-depth-verification.md)) sont préservés à l'identique.
 
 ## Contexte
 

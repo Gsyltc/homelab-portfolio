@@ -2,8 +2,8 @@
 
 ---
 auteurs: Mika (agent, sur validation humaine granulaire — multica.gaston)
-accepté par : (en attente de validation humaine)
-accepté le : (en attente)
+accepté par : multica.gaston
+accepté le : 2026-09-03
 supersedes: ""
 superseded_by: ""
 
@@ -11,9 +11,9 @@ superseded_by: ""
 
 ## Status
 
-Proposed
+Accepted
 
-> Statut **Proposed** tant que la validation humaine granulaire et le contrôle sécurité (Architecte cybersécurité) sur la surface des manifestes ne sont pas obtenus. Passera à **Accepted** après validation humaine explicite (invariant : aucun ADR accepté sans validation humaine). Aucune posture de sécurité n'est modifiée ici : les clauses SG-1 à SG-6 ([ADR-0005](0005-verification-gates-et-sensors.md)) sont préservées à l'identique et le caractère advisory est reconduit.
+> Statut **Accepted** — validation humaine explicite obtenue (multica.gaston, 2026-09-03). Le passage à Accepted supposait la validation humaine granulaire et le contrôle sécurité (Architecte cybersécurité) sur la surface des manifestes ; ces conditions sont satisfaites (invariant respecté : aucun ADR accepté sans validation humaine). Aucune posture de sécurité n'est modifiée ici : les clauses SG-1 à SG-6 ([ADR-0005](0005-verification-gates-et-sensors.md)) sont préservées à l'identique et le caractère advisory est reconduit.
 
 ## Contexte
 
@@ -74,7 +74,7 @@ Les cinq sensors sont `default_severity: advisory`. Chez AI-DLC, `blocking` est 
 
 ## Divergences maison assumées (tracées)
 
-- **DIV-command — `command` non exécutable.** Le dépôt est **doc-first** et n'embarque pas le dispatcher AI-DLC (`.ts`, `bun`, hook `PostToolUse` / `gate-start`). Le champ obligatoire `command` porte un **placeholder tracé** (`non-exécutable (advisory documentaire) — voir ADR-0010`) : les sensors restent des **conventions documentées** advisory ; le corps du manifeste fixe la sémantique (`checks`, `output`, garde-fous) pour qu'un outillage (script / CI) puisse être ajouté ultérieurement **sans redécider** le fond. Cohérent avec la « nature déclarative non exécutable » de [ADR-0005](0005-verification-gates-et-sensors.md).
+- **DIV-command — `command` non exécutable.** Le dépôt est **doc-first** et n'embarque pas le dispatcher AI-DLC (`.ts`, `bun`, hook `PostToolUse` / `gate-start`). Le champ obligatoire `command` porte un **placeholder tracé** (`non-exécutable (advisory documentaire) — voir ADR-0012`) : les sensors restent des **conventions documentées** advisory ; le corps du manifeste fixe la sémantique (`checks`, `output`, garde-fous) pour qu'un outillage (script / CI) puisse être ajouté ultérieurement **sans redécider** le fond. Cohérent avec la « nature déclarative non exécutable » de [ADR-0005](0005-verification-gates-et-sensors.md).
 - **DIV-prefix — pas de préfixe `aidlc-`.** AI-DLC exige `core/sensors/aidlc-<id>.md` : le resolver `loadSensors` (`SENSOR_FILE_REGEX = /^aidlc-([a-z][a-z0-9-]*)\.md$/`) **ignore silencieusement** tout fichier sans préfixe. Multica n'exécute pas ce resolver ; les manifestes restent sous `core/sensors/sensors/<id>.md` **sans préfixe**, en conservant l'invariant `id` = stem du fichier. Un dispatcher futur devra soit renommer avec le préfixe, soit adapter le regex.
 - **DIV-advisory — advisory par défaut.** Voir Décision §4 : `blocking` non employé (décision de gouvernance), là où AI-DLC l'autorise au gate.
 - **DIV-champs — `input_schema` / `output_schema` / `timeout_seconds` omis.** Champs du dispatcher exécutable (schéma d'entrée / sortie, délai), non applicables tant que les sensors ne sont pas outillés. Le champ maison `origine` est conservé (exigence de provenance SG-1, [ADR-0005](0005-verification-gates-et-sensors.md)).
