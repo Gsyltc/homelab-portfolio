@@ -30,6 +30,7 @@ Le workflow d'architecture est structuré selon le modèle **conductor / stages 
 - [`core/common/protocols/`](core/common/protocols/) — mécanismes transverses (définition de stage, protocole d'exécution, gouvernance & sécurité, revue, scopes & axes).
 - [`core/rules/`](core/rules/) — mémoire de règles multi-couches (boucle d'apprentissage).
 - [`core/sensors/`](core/sensors/) — manifestes des verification gates & sensors.
+- [`core/agents/`](core/agents/) — définitions versionnées des agents du workflow (coordinateur, architectes, cybersécurité, OpenSpec, archivage, notifications, vente).
 
 ## Structure du dépôt
 
@@ -44,12 +45,12 @@ homelab-portfolio/
 │   ├── common/               #   conductor.md + stages/ + protocols/
 │   ├── rules/                #   Règles persistantes multi-couches
 │   ├── sensors/              #   Verification gates & sensors (advisory)
-│   ├── agents/               #   Définitions d'agents
+│   ├── agents/               #   Définitions des agents du workflow (9 fichiers .md)
 │   └── workflows/homelab/    #   Workflow Homelab narratif (+ VERSION)
 ├── decisions/                # Registre des décisions structurantes (0001…0007)
 ├── docs/                     # Stub de redirection core-workflow + doc générale
 └── plugins/                  # Packages de plugins d'agents (spec v1.0.0) — portent les skills
-    ├── architecture-assistant/    #   OpenSpec + décision d'architecture
+    ├── architecture-assistant/    #   OpenSpec, décision, gabarits, cybersécurité, AWS, Windows, supports de vente
     ├── general-purpose-assistant/ #   workflow de stack, notifications
     ├── homelab-assistant/         #   docker-composer, traefik
     ├── investment-assistant/      #   analyse, data provider, liste de titres
@@ -68,7 +69,7 @@ Chaque sous-répertoire de [`plugins/`](plugins/) est un plugin auto-contenu, av
 
 | Plugin | Rôle |
 | --- | --- |
-| `architecture-assistant` | Architecture de solution : cycle OpenSpec + décision d'architecture |
+| `architecture-assistant` | Architecture de solution : OpenSpec, décision, gabarits DAS, cybersécurité, AWS, Windows, supports de vente |
 | `general-purpose-assistant` | Skills transverses (workflow de stack, notifications) |
 | `homelab-assistant` | Homelab : `docker-compose`, Traefik |
 | `investment-assistant` | Domaine investissement |
