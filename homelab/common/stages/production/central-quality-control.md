@@ -7,7 +7,7 @@ lead_agent: Tech Lead Homelab
 support_agents: []
 mode: inline
 summary_confirmation: required
-reviewer: null
+reviewer: Tech Lead Homelab
 review_class: advisory
 review_artifact: controle-qualite-central.md
 human_gate: granular
@@ -40,7 +40,7 @@ Tout compose passe par le QA Docker ([`docker-compose-qa.md`](docker-compose-qa.
 
 Outputs: aiguillage GO / RENVOI consigné. Frontière **Production → Validation** : gate `artefacts-presents` + `liaison-tracabilite` + `absence-orphelin` (voir [`homelab/sensors/gates.md`](../../../sensors/gates.md)).
 Imports: `traefik-coherence` (gate).
-Review artifact: `controle-qualite-central.md` porte la section `## Review` (advisory — le contrôle qualité central ne remplace jamais le contrôle sécurité ni la validation humaine, plancher SG-3).
+Review artifact: `controle-qualite-central.md` porte la section `## Review` (advisory — revue portée par le **Tech Lead** lui-même ; le contrôle qualité central ne remplace jamais le contrôle sécurité ni la validation humaine, plancher SG-3).
 
 ## Learn
 
