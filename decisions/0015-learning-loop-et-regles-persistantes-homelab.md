@@ -2,8 +2,8 @@
 
 ---
 auteurs: Mika (agent, sur validation humaine granulaire — multica.gaston)
-accepté par : (en attente de validation humaine)
-accepté le : (en attente)
+accepté par : multica.gaston
+accepté le : 2026-09-03
 supersedes: ""
 superseded_by: ""
 
@@ -11,9 +11,9 @@ superseded_by: ""
 
 ## Status
 
-Proposed
+Accepted
 
-> Statut **Proposed** — en attente de validation humaine explicite (invariant : aucun ADR accepté sans validation humaine). Passage à **Accepted** sur feu vert du demandeur.
+> Statut **Accepted** — validation humaine explicite obtenue (multica.gaston, « Ok stage 3, Go » sur ALI-203 le 2026-09-03). L'humain a par ailleurs demandé de **ne pas créer l'agent Multica** « Architecte de sécurité Homelab » : le rôle reste décrit et référencé par les artefacts (`homelab/agents/security-architect-homelab-agent.md`), sans matérialisation d'un agent Multica exécutable (cf. IMP-006).
 
 ## Contexte
 
@@ -122,7 +122,7 @@ Conserver le fonctionnement actuel sans capitalisation.
 - **IMP-003** : Une règle nouvellement écrite s'applique au **prochain** workflow ; l'exécution en cours n'est jamais altérée.
 - **IMP-004** : L'articulation `SENSOR_PROPOSED` → liaison de sensor sera articulée au Stage 4 (ALI-204 — Verification gates + Sensors).
 - **IMP-005** : La couche `phase` sera étendue de 3 à 5 fichiers au Stage 5 (ALI-205 — passage à 5 phases).
-- **IMP-006** : Nouveau rôle **Architecte de sécurité Homelab** scaffoldé (`homelab/agents/security-architect-homelab-agent.md`, périmètre sécurité de base d'un homelab, sans conformité réglementaire), contrôleur sécurité de la couche `global` et des règles sécurité (SEC-2 / SEC-4). Ajouté au roster `homelab/agents/README.md`. **La création de l'agent Multica correspondant** (`multica agent create`) et l'attribution de son UUID A2A **restent à confirmer/exécuter** avec l'humain (hors périmètre de cette PR documentaire) ; en attendant, le rôle est décrit et référencé par les artefacts.
+- **IMP-006** : Nouveau rôle **Architecte de sécurité Homelab** scaffoldé (`homelab/agents/security-architect-homelab-agent.md`, périmètre sécurité de base d'un homelab, sans conformité réglementaire), contrôleur sécurité de la couche `global` et des règles sécurité (SEC-2 / SEC-4). Ajouté au roster `homelab/agents/README.md`. **Décision humaine (ALI-203, 2026-09-03) : ne PAS créer l'agent Multica correspondant.** Le rôle vit uniquement comme **définition documentaire** (fiche + référence dans les artefacts) ; aucun agent Multica exécutable n'est instancié, aucun UUID A2A n'est attribué. Si le besoin d'un agent exécutable émerge plus tard, il fera l'objet d'une décision et d'une création explicites.
 
 ## Références
 
