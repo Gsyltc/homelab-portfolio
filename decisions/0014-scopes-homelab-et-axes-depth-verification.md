@@ -3,7 +3,7 @@
 ---
 auteurs: Mika (agent)
 accepté par : Sylvain G.
-accepté le : ""
+accepté le : 2026-09-03
 supersedes: ""
 superseded_by: ""
 
@@ -11,7 +11,7 @@ superseded_by: ""
 
 ## Status
 
-Proposed
+Accepted
 
 ## Contexte
 
@@ -102,7 +102,7 @@ Fusionner détail des artefacts et intensité du QA.
 - **IMP-002** : Les Verification gates et Sensors déterministes sont introduits au Stage 4 (ALI-204) ; le niveau `renforcé` en pose le cadre.
 - **IMP-003** : Le passage aux 5 phases est traité au Stage 5 (ALI-205) ; la matrice sera re-projetée sur la nouvelle ossature.
 - **IMP-004** : La transposition de l'appartenance sur le champ `scopes:` des fiches de stage est traitée au Stage 7 (ALI-207).
-- **IMP-005** : Décision `Proposed` — passe `Accepted` après validation humaine granulaire sur ALI-202.
+- **IMP-005** : Décision `Accepted` — validée par l'humain sur ALI-202 (2026-09-03).
 
 ## Références
 
