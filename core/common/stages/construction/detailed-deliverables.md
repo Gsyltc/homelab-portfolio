@@ -5,10 +5,12 @@ execution: ALWAYS
 condition: "Always executes — rythme selon le mode d'exécution choisi"
 lead_agent: Architecte de solution
 support_agents: [Architecte AWS, Administrateur infrastructure Windows, OpenSpec Expert]
-mode: multi-agent
+mode: mob
+for_each: unit-of-work
 summary_confirmation: required
 reviewer: Reviewer de cohérence
-review_class: granular
+review_class: advisory
+review_artifact: livrable-<unite>.md
 human_gate: granular
 produces: [livrables_detailles]
 consumes: [{artifact: walking_skeleton_valide, required: true}, {artifact: mode_execution_choisi, required: true}]
@@ -22,18 +24,27 @@ outputs: "Livrables détaillés (documentation, diagrammes définitifs, coûts A
 # Production des livrables détaillés
 
 ## Objectif
-Produire les livrables du lot cadré, au rythme fixé par le mode d'exécution.
+Produire les livrables du lot cadré, au rythme fixé par le mode d'exécution — **une exécution par unité de travail** (`for_each: unit-of-work`).
 
 ## Steps
-### Step 1 — Produire par livrable / agent
-Chaque agent exécute son livrable ; en fin de travail, mentionne le coordinateur pour vérification. Documenter sur l'issue.
+### Step 1 — Produire par livrable / agent (une fois par unité)
+Le stage s'exécute **une fois par unité de travail** (`for_each: unit-of-work`). Chaque agent exécute son livrable (les `support_agents` travaillent en `mob` contre le brouillon du lead) ; en fin de travail, mentionne le coordinateur pour vérification. Documenter sur l'issue. L'agrégation des unités se déduit du graphe.
 
 ### Step 2 — Rythme de validation
 - **Gated** *(défaut)* : chaque livrable validé granulairement avant de poursuivre.
 - **Autonome** : livrables du même lot enchaînés ; validation granulaire **regroupée** en un point de synchronisation (l'humain valide en bloc, **toujours choix par choix**).
 
-### Step 3 — Halt-and-ask systématique sur échec
+### Step 3 — Revue de cohérence (advisory)
+À réception de chaque livrable, le coordinateur sollicite le **Reviewer de cohérence** (verdict consultatif : complétude, cohérence documentation ↔ décisions, conventions) avant le gate humain.
+
+### Step 4 — Halt-and-ask systématique sur échec
 S'arrêter et interroger l'humain sur : échec / impossibilité d'un livrable ; écart ou contrôle de sécurité requis ; gate / sensor en écart ou `⛔ indisponible` ; décision structurante nouvelle non cadrée ; action à impact / destructive (jamais autonome). L'autonomie ne court-circuite jamais le contrôle sécurité ni les actions à impact.
 
-## Gate / sortie
-Livrables détaillés. Sensors `required-sections` / `upstream-coverage` / `diagram-validity` à l'écriture.
+## Sensors
+Outputs: livrables détaillés (une fois par unité).
+Imports: `required-sections`, `upstream-coverage`, `diagram-validity`.
+Upstream targets: `walking_skeleton_valide` (required), `mode_execution_choisi` (required) — couverture amont vérifiée à l'écriture de chaque livrable.
+Review artifact: chaque `livrable-<unite>.md` porte la section `## Review` ajoutée par le Reviewer de cohérence.
+
+## Learn
+Boucle d'apprentissage maison (voir [`core/rules/`](../../../rules/README.md)) : tracer sur l'issue les candidats-règles (motifs de production, corrections récurrentes par type de livrable) ; les remonter au **gate humain granulaire** (regroupé en mode autonome, jamais fusionné) ; persistance des apprentissages **confirmés** dans `core/rules/` via le cycle capture → confirmation humaine → contrôle de conflit. Divergence tracée vs le journal `memory.md` d'AI-DLC (voir [ADR-0009](../../../../decisions/0009-alignement-fiches-de-stage-sur-ai-dlc.md)).

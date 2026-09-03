@@ -31,5 +31,9 @@ Détecter le scope depuis l'intention (mots-clés FR / EN, règle de désambigu�
 ### Step 2 — Proposer scope + axes
 Proposer le scope et ses **axes par défaut** (Depth / niveau de vérification) à la confirmation humaine (au stage `intent-scope-approval`).
 
-## Gate / sortie
-Scope + axes proposés. Le garde-fou sécurité s'applique : auto-détection = plancher, jamais plafond.
+## Sensors
+Outputs: scope + axes proposés. Le garde-fou sécurité s'applique : auto-détection = plancher, jamais plafond.
+Imports: none.
+
+## Learn
+Boucle d'apprentissage maison (voir [`core/rules/`](../../../rules/README.md)) : tracer sur l'issue les candidats-règles (motifs d'auto-détection, corrections de scope) ; les remonter au **gate humain** léger d'Ideation ; persistance des apprentissages **confirmés** dans `core/rules/` (couche `scope` incluse) via le cycle capture → confirmation humaine → contrôle de conflit. Divergence tracée vs le journal `memory.md` d'AI-DLC (voir [ADR-0009](../../../../decisions/0009-alignement-fiches-de-stage-sur-ai-dlc.md)).

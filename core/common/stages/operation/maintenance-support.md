@@ -28,5 +28,9 @@ Emplacement réservé pour l'exploitation continue.
 ### Step 1 — Non actif par défaut
 Emplacement réservé : planification de déploiement, surveillance / observabilité, réponse aux incidents, préparation à la production. À activer et détailler dans un stage ultérieur (décision structurante dédiée requise pour toute activation).
 
-## Gate / sortie
-N/A par défaut.
+## Sensors
+Outputs: N/A par défaut.
+Imports: none.
+
+## Learn
+Boucle d'apprentissage maison (voir [`core/rules/`](../../../rules/README.md)) : non actif par défaut. À l'activation, ce stage tiendra le journal des candidats-règles et les remontera au gate humain explicite d'Operation, avec persistance dans `core/rules/` via le cycle capture → confirmation humaine → contrôle de conflit. Divergence tracée vs le journal `memory.md` d'AI-DLC (voir [ADR-0009](../../../../decisions/0009-alignement-fiches-de-stage-sur-ai-dlc.md)).

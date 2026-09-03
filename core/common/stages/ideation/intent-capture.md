@@ -31,5 +31,9 @@ Consigner l'**entrée non résumée** sur l'issue (piste d'audit).
 ### Step 2 — Reformuler
 Reformuler l'intention en une phrase vérifiable (« ce travail vise à… ») et la confirmer.
 
-## Gate / sortie
-Intention capturée. Le gate humain léger a lieu plus tard (`intent-scope-approval`).
+## Sensors
+Outputs: intention capturée sur l'issue. Le gate humain léger a lieu plus tard (`intent-scope-approval`).
+Imports: none.
+
+## Learn
+Boucle d'apprentissage maison (voir [`core/rules/`](../../../rules/README.md)) : tracer sur l'issue les candidats-règles issus des corrections / reformulations humaines pendant le travail ; les remonter formulés en règles courtes au **gate humain** (ici, l'approbation d'Ideation en `intent-scope-approval`) ; persistance des apprentissages **confirmés** dans `core/rules/` via le cycle capture → confirmation humaine → contrôle de conflit. Divergence tracée vs le journal `memory.md` d'AI-DLC (voir [ADR-0009](../../../../decisions/0009-alignement-fiches-de-stage-sur-ai-dlc.md)).

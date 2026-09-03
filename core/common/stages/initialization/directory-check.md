@@ -31,5 +31,9 @@ Vérifier le répertoire officiel du projet et les emplacements conventionnels (
 ### Step 2 — Garde déterministe (seul cas de sollicitation humaine à cette phase)
 Répertoire introuvable ou ambigu → demander confirmation à l'humain et **ne pas lancer les travaux** sans elle. Ce n'est **pas** un gate de validation : c'est une garde déterministe.
 
-## Gate / sortie
-Répertoire confirmé consigné sur l'issue. Aucun gate humain (bootstrap déterministe).
+## Sensors
+Outputs: répertoire confirmé consigné sur l'issue. Aucun gate humain (bootstrap déterministe).
+Imports: none.
+
+## Learn
+Boucle d'apprentissage maison (voir [`core/rules/`](../../../rules/README.md)) : tenir le journal des candidats-règles sur l'issue. Stage d'Initialization (bootstrap déterministe) → **saute** l'interaction liée au gate humain ; aucune règle n'est écrite hors du cycle capture → confirmation humaine → contrôle de conflit. Divergence tracée vs le journal `memory.md` d'AI-DLC (voir [ADR-0009](../../../../decisions/0009-alignement-fiches-de-stage-sur-ai-dlc.md)).
