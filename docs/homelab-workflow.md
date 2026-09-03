@@ -17,25 +17,69 @@ Le workflow est **agnostique de l'outil** : il s'applique aux stacks Docker Swar
 3. La complexité et la portée du changement (nouvelle stack vs correctif mineur).
 4. L'évaluation des risques et de l'impact (sécurité, déploiement, réseau).
 
-La grille ci-dessous rend cette adaptation objective : une modification simple reçoit le traitement minimal, une création de stack ou un changement à risque le traitement complet.
+Les **scopes** ci-dessous rendent cette adaptation **déterministe et auditable** : chaque demande est routée vers un scope nommé qui fixe quelles étapes s'exécutent et avec quelle intensité, à la place de l'ancienne grille binaire « allégé vs complet ».
 
-### Grille de décision : traitement allégé vs traitement complet
+## Scopes et axes d'exécution
 
-Pour éviter toute appréciation subjective, la classification est **objective** et repose sur la nature de la demande. En cas de chevauchement, **le niveau le plus élevé l'emporte** (un déclencheur « complet » impose le traitement complet, même si d'autres aspects relèveraient de l'allégé).
+Le routage repose sur un **scope** nommé (parcours d'étapes déterministe) et **deux axes indépendants** — **Depth** (détail des artefacts produits) et **Stratégie de vérification** (intensité du QA Docker). La grille binaire « allégé vs complet » historique est **remplacée** par cette matrice : `config-change` est l'héritier de l'« allégé », les autres scopes déclinent l'ancien « complet » selon la nature du travail.
 
-| Nature de la demande                                                                                                                                | Niveau      |
-| --------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| Création d'une stack (docker-compose et/ou config Terraform d'une nouvelle stack)                                                                   | **Complet** |
-| Création ou modification d'un flux n8n                                                                                                              | **Complet** |
-| Création ou modification d'une automatisation Home Assistant                                                                                        | **Complet** |
-| Toute modification à **impact sécurité** (logicielle ou infrastructure : auth, réseau, exposition, secrets, hardening, permissions, routes Traefik) | **Complet** |
-| Modification d'une **variable existante** (valeur d'un paramètre déjà en place, sans impact sécurité)                                               | **Allégé**  |
+> **Source d'identité.** L'identité de chaque scope (nom, `depth`, `verification`, `keywords`) est portée en **données**, un fichier par scope, sous [`../homelab/scopes/`](../homelab/scopes/README.md) (miroir de `core/scopes/`). Cette section est la **vue lisible** consolidée. **En cas d'écart, le fichier `homelab/scopes/<name>.md` fait foi.** L'appartenance (quels stages tournent sous un scope) sera transposée sur le champ `scopes:` des fiches de stage au Stage 7.
 
-**Règle de départage.** Si une demande ne correspond à **aucun** déclencheur « Complet » ci-dessus et se limite à modifier des variables existantes, elle est traitée en **allégé**. Dès qu'un seul déclencheur « Complet » s'applique — ou en cas de doute sur l'impact sécurité — le traitement **complet** s'impose. Le doute ne bascule jamais vers l'allégé.
+### Table des scopes
 
-**Ce que change chaque niveau.** L'allégé réduit le **nombre d'étapes** (cadrage resserré, moins de contrôles intermédiaires) ; le complet applique l'intégralité des phases 1 à 3. Dans les deux cas, la validation humaine avant toute action à impact (PHASE 3) et la répartition des rôles restent inchangées — cf. la règle ci-dessous.
+| Scope | Déclencheur type | Depth défaut | Vérification défaut |
+| --- | --- | --- | --- |
+| [`stack-update`](../homelab/scopes/stack-update.md) *(défaut)* | Modification d'une stack existante | standard | standard |
+| [`new-stack`](../homelab/scopes/new-stack.md) | Création complète d'une nouvelle stack | comprehensive | renforcé |
+| [`config-change`](../homelab/scopes/config-change.md) | Variable existante, **sans** impact sécurité (≈ ancien « allégé ») | minimal | advisory |
+| [`security-patch`](../homelab/scopes/security-patch.md) | Tout **impact sécurité** (auth, réseau, exposition, secrets, hardening, permissions, Traefik) | comprehensive | renforcé |
+| [`infra-terraform`](../homelab/scopes/infra-terraform.md) | Infra Terraform / Proxmox | standard | standard |
+| [`n8n`](../homelab/scopes/n8n.md) | Toute demande n8n — **branche autonome** | standard | standard |
+| [`home-assistant`](../homelab/scopes/home-assistant.md) | Toute demande Home Assistant — **branche autonome** | standard | standard |
 
-**L'adaptation joue sur le nombre d'étapes, jamais sur qui les exécute.** Alléger le traitement peut supprimer des étapes qui n'apportent pas de valeur, mais ne transfère **jamais** la responsabilité d'un spécialiste vers le Tech Lead : si une étape a lieu (production compose, vérification technique, hardening, config Terraform), elle est réalisée par le rôle qui en a la charge. « Petit changement » n'autorise pas le Tech Lead à produire ou vérifier lui-même à la place du Spécialiste Docker ou du QA Docker.
+Défaut : **`stack-update`** en l'absence de mot-clé détecté.
+
+### Axes indépendants
+
+- **Axe 1 — Depth** (`minimal` / `standard` / `comprehensive`) : détail des artefacts (docker-compose, config Terraform, documentation). Contrôle *combien on écrit*.
+- **Axe 2 — Stratégie de vérification** (`advisory` / `standard` / `renforcé`) : **intensité du QA Docker** et du contrôle qualité central (§2.6). Contrôle *à quel point on vérifie*. Distinct de la Depth : on peut produire peu et vérifier fort (patch de sécurité), ou produire beaucoup et vérifier en advisory (jamais sur un scope sécuritaire, cf. garde-fou).
+  - `advisory` — validité YAML + cohérence de base (syntaxe seule), signalée sans bloquer.
+  - `standard` — QA Docker complet : compatibilité Swarm (`deploy`), réseaux/volumes/secrets, hardening standard, cohérence Traefik (`traefik-manager-read`).
+  - `renforcé` — vérification `standard` **plus** audit de sécurité approfondi (secrets `_FILE`, exposition, permissions, absence de `${SNI}` en Terraform, revue durcissement).
+
+**Points d'override** : les axes se relèvent (jamais s'abaissent sans trace) à l'invocation, à la confirmation de scope, ou à un verification gate. **Garde-fou sécurité** : sur `security-patch` / `new-stack`, `depth` ≥ `standard` et `verification` ≥ `renforcé` ne sont **jamais** abaissables ; tout abaissement d'un niveau lié à la sécurité exige une **validation humaine explicite tracée**.
+
+### Auto-détection & désambiguïsation
+
+Scope auto-détecté par mots-clés (FR / EN, champ `keywords:` de chaque fichier de scope) puis **confirmé explicitement** avant démarrage — jamais de démarrage silencieux. En cas de correspondances multiples, **le niveau le plus élevé l'emporte** (héritage direct de la règle de départage historique) :
+
+`n8n` = `home-assistant` (branches autonomes, court-circuit immédiat) > `security-patch` > `new-stack` > `infra-terraform` > `stack-update` > `config-change`
+
+**Le doute ne bascule jamais vers `config-change`** : dès qu'un seul déclencheur d'un scope plus élevé s'applique — ou en cas de doute sur l'impact sécurité — le scope supérieur s'impose. L'auto-détection est un **plancher** : la confirmation humaine peut monter le contrôle, jamais le descendre sans trace.
+
+### Matrice scope × phase (vue lisible)
+
+Adossée aux **3 phases actuelles** du présent workflow (Phase 1 Cadrage / Phase 2 Production et Contrôle / Phase 3 Validation et Déploiement). Elle sera re-projetée sur les 5 phases au Stage 5. Légende : ✅ activé · ➖ allégé / au juste nécessaire · 🔒 renforcé · ❌ ignoré · ⏭ branche autonome (ne passe pas par ce flux).
+
+| Étape | `stack-update` | `new-stack` | `config-change` | `security-patch` | `infra-terraform` | `n8n` | `home-assistant` |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| §1.1 Règle absolue n8n | ✅ | ✅ | ✅ | ✅ | ✅ | 🔒 déclenche | ✅ |
+| §1.2 Réception & cadrage | ✅ | ✅ | ➖ | ✅ | ✅ | ⏭ | ⏭ |
+| §1.3 Arbitrage Swarm/Proxmox | ➖ | ✅ | ❌ | ➖ | ✅ | ⏭ | ⏭ |
+| §1.4 Collecte paramètres + auth | ✅ | ✅ | ➖ | ✅ | ➖ | ⏭ | ⏭ |
+| §2.1 Création docker-compose (Spé. Docker) | ✅ | ✅ | ➖ | ✅ | ❌ | ⏭ | ⏭ |
+| §2.2 Vérification docker-compose (QA Docker) | ✅ | ✅ 🔒 | ➖ | ✅ 🔒 | ❌ | ⏭ | ⏭ |
+| §2.3 Configuration Terraform (Spé. Terraform) | ➖ | ✅ | ❌ | ➖ | ✅ | ⏭ | ⏭ |
+| §2.4 Branche n8n (Expert N8n) | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
+| §2.5 Branche Home Assistant (Expert HA) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| §2.6 Contrôle qualité central (Tech Lead) | ✅ | ✅ 🔒 | ➖ | ✅ 🔒 | ✅ | ✅ | ✅ |
+| Phase 3 Validation humaine + déploiement | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+
+Affectation des agents : **Spécialiste Docker** et **QA Docker** sur le flux stack (§2.1–2.2, allégé/ignoré selon scope) ; **Spécialiste Terraform** sur §2.3 (accentué sous `infra-terraform` / `new-stack`) ; **Expert N8n** et **Expert Home Assistant** sur leurs branches autonomes respectives ; **Tech Lead** coordonne et assure le contrôle qualité central (§2.6) sur tous les scopes.
+
+**Ce que change chaque scope.** Un scope allégé (`config-change`) réduit le **nombre d'étapes** (cadrage resserré, moins de contrôles intermédiaires) ; les scopes complets appliquent l'intégralité des phases 1 à 3. Dans tous les cas, la validation humaine avant toute action à impact (PHASE 3) et la répartition des rôles restent inchangées.
+
+**Un scope joue sur le nombre d'étapes, jamais sur qui les exécute.** Alléger peut supprimer des étapes sans valeur, mais ne transfère **jamais** la responsabilité d'un spécialiste vers le Tech Lead : si une étape a lieu (production compose, vérification technique, hardening, config Terraform), elle est réalisée par le rôle qui en a la charge. « Petit changement » n'autorise pas le Tech Lead à produire ou vérifier lui-même à la place du Spécialiste Docker ou du QA Docker.
 
 ---
 
