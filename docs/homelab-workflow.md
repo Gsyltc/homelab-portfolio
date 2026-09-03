@@ -83,6 +83,59 @@ Affectation des agents : **Spécialiste Docker** et **QA Docker** sur le flux st
 
 ---
 
+## Règles & boucle d'apprentissage (learning loop)
+
+Les corrections humaines récurrentes sont capitalisées en **règles persistantes** dans [`homelab/rules/`](../homelab/rules/README.md) — fichiers Markdown versionnés, lus au démarrage de chaque workflow (chargement paresseux par couche). L'objectif : que le QA Docker et les spécialistes ne répètent pas la même correction d'une stack à l'autre.
+
+> Mécanisme miroir de [`core/rules/`](../core/rules/README.md) (ADR [0004](../decisions/0004-boucle-apprentissage-et-regles-persistantes.md), [0011](../decisions/0011-alignement-memoire-de-regles-sur-ai-dlc.md)), adapté au contexte Homelab — décision tracée dans [ADR-0015](../decisions/0015-learning-loop-et-regles-persistantes-homelab.md).
+
+### Couches de règles (précédence `global > stack > phase > scope`)
+
+| Couche | Fichier | Portée | Chargement |
+| --- | --- | --- | --- |
+| **`global`** | [`homelab/rules/global.md`](../homelab/rules/global.md) | Invariants Homelab valables partout | Au démarrage (toujours actif) |
+| **`stack`** | `homelab/rules/stacks/<stack>.md` | Spécifique à une stack (portainer, traefik, gitea, …) | Au démarrage, stack courante uniquement |
+| **`phase`** | `homelab/rules/phases/<phase>.md` | Par phase du workflow | À la demande, quand la phase est déclenchée |
+| **`scope`** | `homelab/rules/scopes/<scope>.md` | Par scope (les 7 scopes Homelab) | À la demande, quand le scope est confirmé |
+
+Une règle d'une couche **ne peut pas contredire** une règle d'une couche supérieure sans arbitrage humain.
+
+### Cycle de vie d'une règle
+
+1. **Capture** — Pendant une étape, chaque correction / rejet / reformulation humaine est un *candidat-règle* potentiel, tracé sur l'issue avec la balise `[candidat-règle]`.
+2. **Remontée** — Au point de validation humaine, le Tech Lead Homelab propose les candidats formulés en règles courtes, avec couche et portée proposées.
+3. **Confirmation humaine** — L'humain ✅ garde / ❌ rejette / 💬 reformule chaque candidat séparément. **Rien n'est écrit sans validation explicite.**
+4. **Contrôle de conflit à l'admission** — Vérification de la précédence des couches + invariants non contournables + contrôle sécurité systématique pour toute règle `global` (SEC-4).
+5. **Écriture** — La règle acceptée est ajoutée au fichier de sa couche (`homelab/rules/`), avec identifiant `RULE-<COUCHE>-NNN`, date et lien vers l'issue d'origine. Revue en PR.
+6. **Application au prochain workflow** — Une règle nouvellement écrite n'altère **jamais** l'exécution en cours ; elle prend effet au démarrage du **prochain** workflow.
+
+### Portée par défaut et promotion
+
+- **Portée par défaut** : `stack` (la plus étroite). La plupart des apprentissages sont spécifiques à une stack.
+- **Promotion vers `global`** : décision structurante soumise au contrôle sécurité systématique (SEC-4), qu'elle « touche la sécurité » ou non.
+
+### Invariants non contournables
+
+Aucune règle apprise ne peut affaiblir les garde-fous absolus du workflow :
+
+- Validation humaine granulaire avant toute action à impact (dépôt fichiers, Kestra)
+- Règle absolue n8n (§1.1), sélection auto d'authentification (§1.4)
+- Terraform ne déploie jamais, aucun secret en clair, jamais `${SNI}`, un seul traitement par stack
+- Garde-fous sécurité des scopes (plancher de vérification, Depth non abaissable sur `security-patch` / `new-stack`)
+- Piste d'audit sur l'issue, ADR sur les décisions structurantes
+
+Un candidat contredisant un invariant est **rejeté d'office** (SEC-1 — érosion sémantique).
+
+### Clauses de sécurité (SEC-1..5 adaptées)
+
+- **SEC-1** — Érosion sémantique : un candidat qui restreint la portée d'un invariant est rejeté d'office, même sans contradiction littérale.
+- **SEC-2** — Périmètre fondé sur le risque : contrôle sécurité étendu aux règles visant `security-patch` / `new-stack` ou une phase de vérification.
+- **SEC-3** — Pas d'exploitation d'un candidat dans le run courant : application différée, sans exception.
+- **SEC-4** — Promotion vers `global` : toujours soumise au contrôle sécurité systématique.
+- **SEC-5** — Intégrité du canal d'écriture : toute modification de `homelab/rules/` transite par la boucle, est versionnée et porte `origine` + date.
+
+---
+
 ## Modèle de collaboration A2A
 
 Le workflow n'est **pas** exécuté par un seul agent. **Le Tech Lead est le coordinateur et le contrôleur qualité central** : il analyse la demande, applique la règle préalable de documentation officielle, collecte les paramètres, délègue aux spécialistes via des mentions sur l'issue, contrôle chaque livrable, puis demande la validation humaine. **Le Tech Lead ne produit pas lui-même les livrables** (compose, Terraform), sauf pour les domaines sans agent encore créé (Ansible, logs, Kestra) où il réalise lui-même la vérification.
