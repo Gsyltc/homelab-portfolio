@@ -6,7 +6,8 @@ description: >
 skills:
   - project-defaults
   - sales-deck-generation
-allowedTools: Multica
+disallowedTools: Task
+tier: templated
 ---
 
 # Prérequis commun

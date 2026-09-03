@@ -8,7 +8,8 @@ skills:
   - create-architectural-decision-record
   - cybersecurite
   - project-defaults
-allowedTools: Multica
+disallowedTools: Task
+tier: judgment
 ---
 
 # PRIORITÉ ABSOLUE — Contrat d'orchestration (AGENTS.md)

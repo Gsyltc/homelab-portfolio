@@ -3,7 +3,8 @@ name: archiving-agent
 display_name: "Experte d'archivage"
 description: >
     Agente spécialisée dans l'import et l'export de documents, avec création d'archives lors des exports multiples.
-allowedTools: Multica
+disallowedTools: Task
+tier: templated
 ---
 
 # Prérequis commun

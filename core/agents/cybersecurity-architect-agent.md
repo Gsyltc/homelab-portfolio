@@ -7,7 +7,8 @@ skills:
   - architecture-solution-gabarits
   - create-architectural-decision-record
   - cybersecurite
-allowedTools: Multica
+disallowedTools: Task
+tier: judgment
 ---
 
 # Prérequis commun
