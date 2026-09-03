@@ -112,7 +112,7 @@ Une règle d'une couche **ne peut pas contredire** une règle d'une couche supé
 ### Portée par défaut et promotion
 
 - **Portée par défaut** : `stack` (la plus étroite). La plupart des apprentissages sont spécifiques à une stack.
-- **Promotion vers `global`** : décision structurante soumise au contrôle sécurité systématique (SEC-4), qu'elle « touche la sécurité » ou non.
+- **Promotion vers `global`** : décision structurante soumise au contrôle sécurité systématique de l'**Architecte de sécurité Homelab** (SEC-4), qu'elle « touche la sécurité » ou non.
 
 ### Invariants non contournables
 
@@ -128,10 +128,12 @@ Un candidat contredisant un invariant est **rejeté d'office** (SEC-1 — érosi
 
 ### Clauses de sécurité (SEC-1..5 adaptées)
 
+Contrôle assuré par l'**Architecte de sécurité Homelab** ([`homelab/agents/security-architect-homelab-agent.md`](../homelab/agents/security-architect-homelab-agent.md)), sur le périmètre **sécurité de base d'un homelab** (secrets, exposition réseau, permissions, durcissement Docker/Swarm, Traefik). Le Homelab n'a **aucune notion** de Loi 25, PCI DSS, GDPR/RGPD, LPRPDE — ces normes ne s'appliquent pas ici.
+
 - **SEC-1** — Érosion sémantique : un candidat qui restreint la portée d'un invariant est rejeté d'office, même sans contradiction littérale.
 - **SEC-2** — Périmètre fondé sur le risque : contrôle sécurité étendu aux règles visant `security-patch` / `new-stack` ou une phase de vérification.
 - **SEC-3** — Pas d'exploitation d'un candidat dans le run courant : application différée, sans exception.
-- **SEC-4** — Promotion vers `global` : toujours soumise au contrôle sécurité systématique.
+- **SEC-4** — Promotion vers `global` : toujours soumise au contrôle sécurité systématique de l'Architecte de sécurité Homelab.
 - **SEC-5** — Intégrité du canal d'écriture : toute modification de `homelab/rules/` transite par la boucle, est versionnée et porte `origine` + date.
 
 ---

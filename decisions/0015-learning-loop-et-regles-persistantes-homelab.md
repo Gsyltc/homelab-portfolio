@@ -50,8 +50,9 @@ Miroir de `core/rules/`, cohérent avec les autres surfaces déclaratives Homela
 
 Le cycle de vie est identique au core (ADR-0004) : capture → remontée → confirmation humaine → contrôle de conflit → écriture → application au prochain workflow. Adaptations Homelab :
 
-- **Acteurs de la capture** : QA Docker (conventions compose, hardening), Spécialiste Docker (patterns de construction), Spécialiste Terraform (conventions `.tfvars`), Expert N8n et Expert Home Assistant (conventions de branche), Tech Lead Homelab (remontée au point de validation).
-- **Contrôle sécurité de la couche `global`** : assuré par le QA Docker (pas d'Architecte cybersécurité dédié dans l'équipe Homelab ; le QA Docker a la compétence hardening et sécurité compose/Traefik).
+- **Acteurs de la capture** : QA Docker (conventions compose, hardening technique), Spécialiste Docker (patterns de construction), Spécialiste Terraform (conventions `.tfvars`), Expert N8n et Expert Home Assistant (conventions de branche), Architecte de sécurité Homelab (durcissement, revue sécurité), Tech Lead Homelab (remontée au point de validation).
+- **Contrôle sécurité de la couche `global`** : assuré par l'**Architecte de sécurité Homelab** (nouveau rôle, `homelab/agents/security-architect-homelab-agent.md`). Distinct du QA Docker : le QA Docker vérifie la conformité technique du compose (YAML, Swarm, hardening technique) ; l'Architecte de sécurité porte le **jugement sécurité** (analyse de risque, durcissement, revue des choix d'exposition/authentification) et contrôle l'admission des règles `global` et sécurité (SEC-2 / SEC-4). Décision prise sur retour humain (ALI-203, commentaire du 2026-09-03).
+- **Périmètre de sécurité — sécurité de base d'un homelab** : le contrôle porte sur le hardening et la sécurité de base (secrets, exposition réseau, permissions, durcissement Docker/Swarm, Traefik). Le Homelab n'a **aucune notion** de Loi 25, PCI DSS, GDPR/RGPD, LPRPDE ni de protection réglementée des données personnelles — ces normes ne s'appliquent pas et ne sont jamais introduites.
 - **Portée par défaut** : `stack` (la plus étroite — un apprentissage est d'abord spécifique à la stack qui l'a fait naître). Promotion vers `global` = décision structurante + contrôle sécurité systématique (SEC-4).
 - **Application différée** : identique au core — une règle apprise s'applique au **prochain** workflow, jamais en cours de route.
 
@@ -121,6 +122,7 @@ Conserver le fonctionnement actuel sans capitalisation.
 - **IMP-003** : Une règle nouvellement écrite s'applique au **prochain** workflow ; l'exécution en cours n'est jamais altérée.
 - **IMP-004** : L'articulation `SENSOR_PROPOSED` → liaison de sensor sera articulée au Stage 4 (ALI-204 — Verification gates + Sensors).
 - **IMP-005** : La couche `phase` sera étendue de 3 à 5 fichiers au Stage 5 (ALI-205 — passage à 5 phases).
+- **IMP-006** : Nouveau rôle **Architecte de sécurité Homelab** scaffoldé (`homelab/agents/security-architect-homelab-agent.md`, périmètre sécurité de base d'un homelab, sans conformité réglementaire), contrôleur sécurité de la couche `global` et des règles sécurité (SEC-2 / SEC-4). Ajouté au roster `homelab/agents/README.md`. **La création de l'agent Multica correspondant** (`multica agent create`) et l'attribution de son UUID A2A **restent à confirmer/exécuter** avec l'humain (hors périmètre de cette PR documentaire) ; en attendant, le rôle est décrit et référencé par les artefacts.
 
 ## Références
 

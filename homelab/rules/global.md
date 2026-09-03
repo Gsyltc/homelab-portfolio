@@ -1,6 +1,6 @@
 # Règles — couche `global`
 
-Règles valables pour **tout le Homelab**, chargées au démarrage de chaque workflow. Couche de plus forte précédence. Toute règle ajoutée ici passe par un **contrôle sécurité systématique** du QA Docker à l'admission (voir « Boucle d'apprentissage » dans le README).
+Règles valables pour **tout le Homelab**, chargées au démarrage de chaque workflow. Couche de plus forte précédence. Toute règle ajoutée ici passe par un **contrôle sécurité systématique** de l'**Architecte de sécurité Homelab** à l'admission (voir « Boucle d'apprentissage » dans le README).
 
 Pendant Homelab de [`../../core/rules/workspace.md`](../../core/rules/workspace.md).
 
