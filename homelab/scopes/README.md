@@ -84,7 +84,10 @@ Rappel des invariants du workflow Homelab — **aucun scope ne les désactive** 
   clair**, **jamais `${SNI}`** dans un livrable Terraform, **un seul traitement par stack**
   (verrou `active_step`) — garde-fous absolus, insensibles au scope.
 - Sur `security-patch` / `new-stack` : `depth` ≥ `standard` et `verification` ≥ `renforcé` ne
-  peuvent jamais être abaissés par override.
+  peuvent jamais être abaissés par override. Sur ces deux scopes, les sensors sécurité
+  `plaintext-secret` et `terraform-no-sni` sont **bloquants** (décision ALI-204 + contrôle
+  sécurité QA Docker — voir [`../sensors/README.md`](../sensors/README.md)) : une détection
+  arrête l'avancée jusqu'à correction ou levée humaine explicite tracée.
 - **Auto-détection = plancher** : la confirmation humaine peut *monter* le contrôle, jamais le
   *descendre* sans validation tracée.
 
