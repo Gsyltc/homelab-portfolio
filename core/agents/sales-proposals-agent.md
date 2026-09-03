@@ -1,6 +1,6 @@
 ---
 name: sales-proposals-agent
-display_name: "Michel - Vente & Appels d'Offres"
+display_name: "Vente & Appels d'Offres"
 description: >
     Synthétise les architectures de l'équipe en supports de vente et présentations clients (Word/PDF/HTML/script).
 skills:

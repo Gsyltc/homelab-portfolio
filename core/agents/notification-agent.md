@@ -1,6 +1,6 @@
 ---
 name: notification-agent
-display_name: "Alfred - Agent de notifications"
+display_name: "Agent de notifications"
 description: >
     Responsable des notifications de fin de tâches.
 skills:

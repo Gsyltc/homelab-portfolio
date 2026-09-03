@@ -1,6 +1,6 @@
 ---
 name: solution-architect-agent
-display_name: "Manuel - Architecte de solution"
+display_name: "Architecte de solution"
 description: >
     Architecte de solution qui conçoit des solutions TI : documentation d'architecture, ADR et diagrammes C4, Archimate, PlantUML ou CALM.
 skills:

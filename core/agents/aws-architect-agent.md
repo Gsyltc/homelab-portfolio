@@ -1,6 +1,6 @@
 ---
 name: aws-architect-agent
-display_name: "Florian - Architecte AWS"
+display_name: "Architecte AWS"
 description: >
     Architecte AWS : définit les services requis, produit les diagrammes d'architecture et optimise les coûts AWS du projet.
 skills:

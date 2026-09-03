@@ -1,6 +1,6 @@
 ---
 name: architecture-solution-integration-agent
-display_name: "Sylvain - Architecture Solution & Intégration"
+display_name: "Architecture Solution & Intégration"
 description: >
     Coordonnateur des travaux d'architecture : lance et supervise les livrables des architectes et administrateurs, vérifie la cohérence avec les ADR, demande les validations humaines et met les documents à disposition.
 skills:
