@@ -1,17 +1,22 @@
+---
+id: upstream-coverage
+kind: deterministic
+command: "non-exécutable (advisory documentaire) — voir ADR-0010"
+default_severity: advisory
+description: "Vérifie que le livrable référence explicitement sa demande amont (issue d'origine, ADR parent le cas échéant)."
+category: document-shape
+fire_on: gate
+matches: "{decisions/[0-9][0-9][0-9][0-9]-*.md,documentations/**/*.md,livrables/**/*.md}"
+origine: ALI-188
+---
+
 # Sensor `upstream-coverage` — couverture amont *(prioritaire)*
 
-Check déterministe déclenché à l'**écriture d'un ADR, d'une DAS ou d'un livrable** : vérifie que le livrable **référence explicitement sa demande amont** (issue d'origine et, le cas échéant, ADR parent / décision de cadrage). **Advisory**.
+Check déterministe déclenché **au gate de phase** (`fire_on: gate`) : vérifie que les livrables de l'étape (évalués **en ensemble**) **référencent explicitement leur demande amont** — issue d'origine et, le cas échéant, ADR parent / décision de cadrage. **Advisory** (`default_severity: advisory`). Recoupe le contrôle `absence-orphelin` du verification gate (`gates.md`).
+
+## Contrat de vérification (`checks`)
 
 ```yaml
-id: upstream-coverage
-type: sensor
-nature: advisory
-priority: prioritaire
-origine: ALI-188
-triggers:
-  - "decisions/[0-9][0-9][0-9][0-9]-*.md"     # ADR
-  - "documentations/*.md"                      # DAS
-  - "livrables/**/*.md"                        # livrables détaillés
 checks:
   reference_amont:
     # au moins une référence vers l'issue d'origine
@@ -19,7 +24,6 @@ checks:
     # pour un ADR : au moins une entrée Références reliant issue et/ou ADR liés
     adr_references_non_vide: true
   absence_orphelin: true                       # recoupe le contrôle 3 du verification gate
-output: "signalement si aucune référence amont détectée (artefact potentiellement orphelin)"
 ```
 
 ## Sortie (piste d'audit)
