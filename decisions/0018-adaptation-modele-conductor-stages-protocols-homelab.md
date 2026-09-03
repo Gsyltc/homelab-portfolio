@@ -1,9 +1,9 @@
 # Adaptation au modèle conductor / stages / protocols d'AI-DLC (Homelab)
 
 ---
-auteurs: Mika (agent) — en attente de validation humaine granulaire (multica.gaston)
-accepté par : (en attente)
-accepté le : (en attente)
+auteurs: Mika (agent, sur validation humaine granulaire — multica.gaston)
+accepté par : multica.gaston
+accepté le : 2026-09-03
 supersedes: ""
 superseded_by: ""
 
@@ -11,9 +11,9 @@ superseded_by: ""
 
 ## Status
 
-Proposed
+Accepted
 
-> Statut **Proposed** — en attente de la **validation humaine granulaire** et du **contrôle sécurité** (QA Docker / Architecte de sécurité Homelab) sur la nouvelle surface. Le passage à *Accepted* suppose ces deux conditions satisfaites (invariant : aucun ADR accepté sans validation humaine explicite). L'issue ALI-207 reste **non close** jusque-là.
+> Statut **Accepted** — validation humaine explicite obtenue (multica.gaston, « Accepté », 2026-09-03) sur la nouvelle surface (triptyque `homelab/common/`), après l'audit indépendant sécurité + cohérence (verdict PASS : 9 garde-fous absolus préservés). Invariant respecté : aucun ADR accepté sans validation humaine explicite.
 
 ## Contexte
 
@@ -113,8 +113,8 @@ Le tooling `bun` / `aidlc-*.ts` de l'amont n'est **pas** importé : protocoles e
 - **IMP-002** : `docs/homelab-workflow.md` converti en stub de redirection avec table de correspondance et table des phases ; bannière « PRIORITÉ » conservée.
 - **IMP-003** : Pointeurs vivants mis à jour (`AGENTS.md`, `homelab/agents/README.md`, `homelab/agents/security-architect-homelab-agent.md`, `homelab/sensors/README.md`, `homelab/sensors/gates.md`, `homelab/scopes/README.md` + 7 fichiers de scope) ; prose historique des ADR 0013..0017 **laissée intacte** (le stub maintient leurs liens).
 - **IMP-004** : `homelab/sensors/gates.md` réaligné sur les **5 phases** (frontières `entree-phase0`, `phase0-phase1`, `phase1-phase2`, `phase2-phase3`, `phase3-phase4`, `phase4-cloture` ; §1.4 → §2.4, §3.0 → §4.0, `prerequis_30` → `prerequis_40`).
-- **IMP-005** : Diagrammes Mermaid du conductor (flowchart 5 phases + sequence A2A) et des protocoles (stage-protocol, reviewer) — **syntaxe à valider** (Mermaid v11) avant acceptation.
-- **IMP-006** : Contrôle sécurité (QA Docker / Architecte de sécurité Homelab) à solliciter sur la nouvelle surface (instructions exécutables du coordinateur, frontières de délégation, protection contre l'injection) **avant** validation humaine et passage à *Accepted*.
+- **IMP-005** : Diagrammes Mermaid du conductor (flowchart 5 phases + sequence A2A) et des protocoles (stage-protocol, reviewer) — **syntaxe validée** (mermaid-cli 11.17.0 : parse + rendu sans erreur des 4 diagrammes).
+- **IMP-006** : Contrôle sécurité + cohérence sur la nouvelle surface (instructions exécutables du coordinateur, frontières de délégation, protection contre l'injection) — **effectué** via un audit indépendant, verdict **PASS** (9 garde-fous absolus préservés, aucun risque élevé/moyen). Validation humaine explicite obtenue avant passage à *Accepted*.
 
 ## Références
 
