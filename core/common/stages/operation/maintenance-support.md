@@ -33,4 +33,4 @@ Outputs: N/A par défaut.
 Imports: none.
 
 ## Learn
-Boucle d'apprentissage maison (voir [`core/rules/`](../../../rules/README.md)) : non actif par défaut. À l'activation, ce stage tiendra le journal des candidats-règles et les remontera au gate humain explicite d'Operation, avec persistance dans `core/rules/` via le cycle capture → confirmation humaine → contrôle de conflit. Divergence tracée vs le journal `memory.md` d'AI-DLC (voir [ADR-0009](../../../../decisions/0009-alignement-fiches-de-stage-sur-ai-dlc.md)).
+Boucle d'apprentissage maison (voir [`core/rules/`](../../../rules/README.md)) : non actif par défaut. À l'activation, ce stage tiendra le journal des candidats-règles et les remontera au gate humain explicite d'Operation, avec persistance dans `core/rules/` via le cycle capture → confirmation humaine → contrôle de conflit. Divergence tracée vs un journal `memory.md` externe (voir [ADR-0009](../../../../decisions/0009-alignement-fiches-de-stage-sur-ai-dlc.md)).

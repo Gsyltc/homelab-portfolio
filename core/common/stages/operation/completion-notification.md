@@ -33,4 +33,4 @@ Outputs: notification envoyée (code HTTP 2xx confirmé par l'Agent de notificat
 Imports: none.
 
 ## Learn
-Boucle d'apprentissage maison (voir [`core/rules/`](../../../rules/README.md)) : tracer sur l'issue tout candidat-règle (canal de notification, format récurrent) ; remontée et persistance des apprentissages **confirmés** dans `core/rules/` via le cycle capture → confirmation humaine → contrôle de conflit (au gate d'Operation). Divergence tracée vs le journal `memory.md` d'AI-DLC (voir [ADR-0009](../../../../decisions/0009-alignement-fiches-de-stage-sur-ai-dlc.md)).
+Boucle d'apprentissage maison (voir [`core/rules/`](../../../rules/README.md)) : tracer sur l'issue tout candidat-règle (canal de notification, format récurrent) ; remontée et persistance des apprentissages **confirmés** dans `core/rules/` via le cycle capture → confirmation humaine → contrôle de conflit (au gate d'Operation). Divergence tracée vs un journal `memory.md` externe (voir [ADR-0009](../../../../decisions/0009-alignement-fiches-de-stage-sur-ai-dlc.md)).

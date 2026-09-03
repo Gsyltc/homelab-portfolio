@@ -3,28 +3,28 @@
 Ce répertoire contient la **mémoire de règles multi-couches** alimentée par la **boucle d'apprentissage** décrite dans [`core/common/protocols/governance-security.md`](../common/protocols/governance-security.md)
 Les règles capitalisent les **corrections humaines validées** afin qu'un agent ne répète pas la même erreur d'un projet à l'autre. Elles sont des **fichiers Markdown versionnés**, lisibles au démarrage de chaque workflow (chargement paresseux — voir plus bas).
 
-## Alignement AI-DLC (« Rules and the Learning Loop »)
+## Alignement sur le contrat amont (« Rules and the Learning Loop »)
 
-Cette mémoire de règles est alignée sur le contrat AI-DLC **« Rules and the Learning Loop »** (*Harness Engineer Guide*), avec des **divergences assumées et tracées** dans [`decisions/0011`](../../decisions/0011-alignement-memoire-de-regles-sur-ai-dlc.md) (voir aussi [`decisions/0004`](../../decisions/0004-boucle-apprentissage-et-regles-persistantes.md)) :
+Cette mémoire de règles est alignée sur le contrat amont **« Rules and the Learning Loop »** (*Harness Engineer Guide*), avec des **divergences assumées et tracées** dans [`decisions/0011`](../../decisions/0011-alignement-memoire-de-regles-sur-ai-dlc.md) (voir aussi [`decisions/0004`](../../decisions/0004-boucle-apprentissage-et-regles-persistantes.md)) :
 
 - **Chaîne à 5 couches amont `org → team → project → phase → stage`** → ici **4 couches** `workspace > project > phase > scope` :
   - `org` + `team` sont **fusionnés dans `workspace`** (le workspace Multica *est* l'organisation et l'équipe — pas de frontière distincte à modéliser).
-  - La couche **`stage`** amont (`aidlc-stage-<slug>.md`) est **réservée pour une future version** chez l'amont (non écrivable) : nous **restons alignés** et **ne la créons pas** (différée).
-  - La couche **`scope`** est une **couche maison** (pont avec le mécanisme de scopes, [`decisions/0003`](../../decisions/0003-scopes-et-axes-depth-verification.md)) absente d'AI-DLC — conservée et documentée.
+  - La couche **`stage`** amont (règles par stage) est **réservée pour une future version** chez l'amont (non écrivable) : nous **restons alignés** et **ne la créons pas** (différée).
+  - La couche **`scope`** est une **couche maison** (pont avec le mécanisme de scopes, [`decisions/0003`](../../decisions/0003-scopes-et-axes-depth-verification.md)) absente du contrat amont — conservée et documentée.
 - **Emplacement** : l'amont place les règles sous `core/memory/` ; nous conservons **`core/rules/`** (cohérent avec `core/sensors/` / `core/common/`, agnostique de méthodologie). La **portée reste dérivable du chemin** (répertoire + nom de fichier), dans l'esprit amont « pas de champ `scope:` ».
 - **Phases** : comme l'amont, la couche `phase` a **quatre fichiers** (`ideation`, `inception`, `construction`, `operation`) ; l'`initialization` est bootstrap-only et **ne porte pas** de fichier de règles.
 - **Précédence explicite vs strict-additif** : l'amont est *strict-additif* (toutes les règles coexistent, rien n'écrase au runtime, conflit réglé **à l'admission**). Nous énonçons en plus une **précédence de couches** *et* appliquons le **contrôle de conflit à l'admission** : les deux modèles convergent — **le conflit se règle à l'écriture, jamais silencieusement au runtime** — et notre précédence explicite est un **sur-ensemble conservateur** du strict-additif.
 
 ## Couches (de la plus forte à la plus faible précédence)
 
-| Couche | Fichier | Portée | Chargement | Correspondance AI-DLC |
+| Couche | Fichier | Portée | Chargement | Correspondance amont |
 | --- | --- | --- | --- | --- |
 | `workspace` | [`workspace.md`](workspace.md) | Invariants et conventions valables partout | Au démarrage (toujours actif) | `org` + `team` fusionnés |
 | `project` | `projects/<projet>.md` | Spécifique à un projet | Au démarrage, uniquement le projet courant | `project` |
 | `phase` | `phases/<phase>.md` (`ideation`, `inception`, `construction`, `operation`) | Par phase du workflow | À la demande, quand la phase est déclenchée | `phase` (4 fichiers ; `initialization` sans règles) |
-| `scope` | `scopes/<scope>.md` (`standard`, `feature`, `infra`, `security-patch`, `mvp`, `poc`, `express`, `enterprise`) | Par scope (voir « Scopes et axes d'exécution ») | À la demande, quand le scope est confirmé | couche maison (absente d'AI-DLC) |
+| `scope` | `scopes/<scope>.md` (`standard`, `feature`, `infra`, `security-patch`, `mvp`, `poc`, `express`, `enterprise`) | Par scope (voir « Scopes et axes d'exécution ») | À la demande, quand le scope est confirmé | couche maison (absente du contrat amont) |
 
-> **Couche `stage` différée** : AI-DLC réserve une cinquième couche « règles par stage » pour une version future (non écrivable aujourd'hui). Nous restons alignés en ne la créant pas ; la granularité fine reste couverte par la couche `scope` et par les fiches de stage (comportement). Réévaluable si l'amont ouvre la couche `stage` ou si un besoin réel émerge ([`decisions/0011`](../../decisions/0011-alignement-memoire-de-regles-sur-ai-dlc.md)).
+> **Couche `stage` différée** : l'amont réserve une cinquième couche « règles par stage » pour une version future (non écrivable aujourd'hui). Nous restons alignés en ne la créant pas ; la granularité fine reste couverte par la couche `scope` et par les fiches de stage (comportement). Réévaluable si l'amont ouvre la couche `stage` ou si un besoin réel émerge ([`decisions/0011`](../../decisions/0011-alignement-memoire-de-regles-sur-ai-dlc.md)).
 
 **Précédence** : `workspace` > `project` > `phase` > `scope`. Une règle d'une couche **ne peut pas contredire** une règle d'une couche supérieure sans arbitrage humain (contrôle de conflit à l'admission — voir le workflow). Cette précédence explicite **préserve et renforce** l'invariant amont « conflit réglé à l'écriture, jamais au runtime » (elle n'est pas une résolution silencieuse au runtime : aucune couche n'écrase une autre sans arbitrage).
 
@@ -46,7 +46,7 @@ Chaque règle est une entrée de liste avec un identifiant stable `RULE-<COUCHE>
   - _portée_ : workspace · _origine_ : ALI-000 · _ajoutée le_ : AAAA-MM-JJ
 ```
 
-**Rubriques topicales** (convention alignée sur AI-DLC) : dans un fichier de couche, les règles se rangent sous des **rubriques topicales** en prose — par ex. `## Manière de travailler`, `## Posture de vérification`, `## Déploiement`, `## Style / conventions`, `## Sécurité` — une règle = une puce sous la rubrique idoine. Les rubriques sont **indicatives** (à créer selon le besoin) ; l'identifiant `RULE-*`, la portée, l'origine et la date restent **obligatoires** (traçabilité, clause SEC-5). Voir les gabarits [`projects/_template.md`](projects/_template.md) et [`scopes/_template.md`](scopes/_template.md).
+**Rubriques topicales** (convention alignée sur le contrat amont) : dans un fichier de couche, les règles se rangent sous des **rubriques topicales** en prose — par ex. `## Manière de travailler`, `## Posture de vérification`, `## Déploiement`, `## Style / conventions`, `## Sécurité` — une règle = une puce sous la rubrique idoine. Les rubriques sont **indicatives** (à créer selon le besoin) ; l'identifiant `RULE-*`, la portée, l'origine et la date restent **obligatoires** (traçabilité, clause SEC-5). Voir les gabarits [`projects/_template.md`](projects/_template.md) et [`scopes/_template.md`](scopes/_template.md).
 
 ## Invariants non contournables
 

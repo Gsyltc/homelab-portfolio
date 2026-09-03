@@ -16,7 +16,7 @@ contrôle sécurité complet** du scope cible (R6 de
 [ADR-0003](../../decisions/0003-scopes-et-axes-depth-verification.md)).
 
 Axes par défaut : Depth `minimal`, vérification `advisory` → **`review_cap: advisory`** (plafond de
-classe de revue conforme AI-DLC). **Le plancher OWASP / STRIDE reste actif** : `➖` ne signifie
+classe de revue conforme au contrat amont). **Le plancher OWASP / STRIDE reste actif** : `➖` ne signifie
 jamais un contrôle sécurité nul, seules la profondeur et la rigueur sont allégées.
 
 Appartenance : voir le champ `scopes:` de chaque fiche de stage et la matrice de

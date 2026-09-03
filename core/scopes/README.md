@@ -1,13 +1,12 @@
 ---
 title: Scopes — un fichier par scope (source d'identité)
-contract: AI-DLC « Scopes » (Harness Engineer Guide)
+contract: Contrat amont « Scopes » (Harness Engineer Guide)
 ---
 
 # Scopes — un fichier de données par scope
 
 Cette couche porte l'**identité** de chaque scope, en données déclaratives, alignée sur
-le contrat AI-DLC « Scopes » (*Harness Engineer Guide*,
-<https://awslabs.github.io/aidlc-workflows/harness-engineering/04-scopes/>).
+le contrat amont « Scopes » (*Harness Engineer Guide*).
 
 ## Le contrat en deux moitiés
 
@@ -47,25 +46,25 @@ skeleton: on|off              # optionnel — cérémonie walking-skeleton en Co
 Le corps Markdown qui suit le front-matter porte l'**intention en prose** : pourquoi ces stages,
 pourquoi ceux-là sont allégés ou ignorés.
 
-## Divergence assumée : axe « vérification » vs `testStrategy` d'AI-DLC
+## Divergence assumée : axe « vérification » vs `testStrategy` amont
 
-AI-DLC sépare deux axes indépendants du scope : **Depth** (détail des artefacts) et
+Le contrat amont sépare deux axes indépendants du scope : **Depth** (détail des artefacts) et
 **Test strategy** (volume de tests). Ce workspace produit **majoritairement de la documentation
 d'architecture** (DAS, ADR, diagrammes) plutôt que du code applicatif. L'axe « test strategy »
-d'AI-DLC y est donc peu pertinent tel quel.
+amont y est donc peu pertinent tel quel.
 
 Décision (tracée en [ADR-0003](../../decisions/0003-scopes-et-axes-depth-verification.md), affinée
 en [ADR-0010](../../decisions/0010-scopes-fichiers-par-scope-et-axes-review-cap.md)) :
 
 - Champ maison **`verification`** — `advisory` / `standard` / `renforcé` (rigueur du contrôle des
-  livrables) — **remplace** le `testStrategy` d'AI-DLC pour la documentation, **avec repli sur une
+  livrables) — **remplace** le `testStrategy` amont pour la documentation, **avec repli sur une
   stratégie de tests dès qu'un livrable comporte du code ou de l'IaC**.
-- **Mapping vers `review_cap`** (champ du contrat AI-DLC — plafond de classe de revue,
+- **Mapping vers `review_cap`** (champ du contrat amont — plafond de classe de revue,
   `adversarial` / `advisory` / `none`) : un scope à vérification **allégée** porte un `review_cap`
-  pour matérialiser le plafond de revue en donnée conforme AI-DLC. Absence de `review_cap` =
+  pour matérialiser le plafond de revue en donnée conforme au contrat. Absence de `review_cap` =
   aucun abaissement au niveau du scope.
 
-  | `verification` (maison) | `review_cap` (AI-DLC) |
+  | `verification` (maison) | `review_cap` (contrat amont) |
   | --- | --- |
   | `advisory` | `advisory` |
   | `standard` | *(absent — pas d'abaissement)* |
@@ -85,10 +84,10 @@ Rappel des invariants (détail : [`../common/protocols/governance-security.md`](
 - Auto-détection = **plancher** : la confirmation humaine peut monter le contrôle, jamais le
   descendre sans validation tracée.
 
-## Non applicable ici (tooling AI-DLC)
+## Non applicable ici (tooling amont)
 
 Pas de compilation `scope-grid.json`, pas de moteur TypeScript, pas de champs `runner` /
-`freeform_default` : l'exécution passe par **Multica**, pas par le harness AI-DLC. On adopte la
+`freeform_default` : l'exécution passe par **Multica**, pas par le harness amont. On adopte la
 **forme déclarative** (un fichier par scope, front-matter, appartenance transposée) sans importer
 le tooling non applicable (cadrage : [ADR-0001](../../decisions/0001-alignement-core-workflow-sur-ai-dlc-2.0.md)).
 

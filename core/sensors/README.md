@@ -39,7 +39,7 @@ Les résultats vivent **sur l'issue** (piste d'audit existante), jamais dans un 
 
 ## Sensors définis
 
-Cinq sensors, alignés sur le contrat AI-DLC « Sensors » (schéma de manifeste `id` / `kind` / `command` / `default_severity` / `description` + `category` / `fire_on` / `matches`). Les `id` sont importés **par id nu** dans le champ `sensors:` des fiches de stage (pull-authoring).
+Cinq sensors, alignés sur le contrat amont « Sensors » (schéma de manifeste `id` / `kind` / `command` / `default_severity` / `description` + `category` / `fire_on` / `matches`). Les `id` sont importés **par id nu** dans le champ `sensors:` des fiches de stage (pull-authoring).
 
 | Sensor | Manifeste | `category` | `fire_on` | `default_severity` | Objet |
 | --- | --- | --- | --- | --- | --- |
@@ -49,9 +49,9 @@ Cinq sensors, alignés sur le contrat AI-DLC « Sensors » (schéma de manifeste
 | `claim-sources` | [`sensors/claim-sources.md`](sensors/claim-sources.md) | provenance | gate | advisory | Chaque affirmation retenue porte une source résoluble ; hypothèses = confirmation humaine explicite |
 | `traceability` | [`sensors/traceability.md`](sensors/traceability.md) | traceability | gate | advisory | Chaîne exigence → ADR → livrable cohérente, sans orphelin dérivé |
 
-> `linter` et `type-check` (sensors AI-DLC de qualité de code) restent **N/A** tant que le dépôt ne produit ni code ni IaC ; ils seront ajoutés le jour où un livrable exécutable apparaît (repli « stratégie de tests » de l'axe de vérification, [ADR-0003](../../decisions/0003-scopes-et-axes-depth-verification.md)).
+> `linter` et `type-check` (sensors amont de qualité de code) restent **N/A** tant que le dépôt ne produit ni code ni IaC ; ils seront ajoutés le jour où un livrable exécutable apparaît (repli « stratégie de tests » de l'axe de vérification, [ADR-0003](../../decisions/0003-scopes-et-axes-depth-verification.md)).
 
-## Format d'un manifeste de sensor (contrat AI-DLC)
+## Format d'un manifeste de sensor (contrat amont)
 
 Le front-matter est un **descripteur de capacité pur** (ce qu'est le check et comment il s'invoque) ; il ne cite jamais de stage. La liaison stage ↔ sensor vit côté stage (`sensors:`), c'est le **pull-authoring**.
 
@@ -69,9 +69,9 @@ origine: ALI-<n>             # (maison, SG-1) provenance traçable — obligatoi
 
 Le corps (après le front-matter) porte le **contrat de vérification** (`checks`), la forme de la **sortie** advisory et les **garde-fous** — lisible, déterministe, non exécutable.
 
-## Divergences assumées vs AI-DLC (tracées — [ADR-0012](../../decisions/0012-alignement-sensors-sur-ai-dlc.md))
+## Divergences assumées vs le contrat amont (tracées — [ADR-0012](../../decisions/0012-alignement-sensors-sur-ai-dlc.md))
 
-- **DIV-command — `command` non exécutable.** Le dépôt est **doc-first** et n'embarque pas le dispatcher AI-DLC (`.ts`, `bun`, hook `PostToolUse`). Le champ obligatoire `command` porte donc un **placeholder tracé** (`non-exécutable (advisory documentaire) — voir ADR-0010`) : les sensors restent des **conventions documentées** advisory, le corps fixe la sémantique pour un outillage (script / CI) ultérieur sans redécision.
-- **DIV-prefix — pas de préfixe `aidlc-`.** AI-DLC exige `core/sensors/aidlc-<id>.md` (le resolver `SENSOR_FILE_REGEX` ignore les fichiers sans préfixe). Multica n'exécute pas ce resolver : les manifestes vivent sous `core/sensors/sensors/<id>.md` **sans préfixe**, en conservant l'invariant `id` = stem du fichier.
-- **DIV-advisory — advisory par défaut.** AI-DLC autorise `blocking` au gate. Ici tout reste **advisory** (décision de gouvernance A2A, [ADR-0005](../../decisions/0005-verification-gates-et-sensors.md)) : le passage d'un sensor à `blocking` est une décision structurante explicite (ADR + contrôle sécurité).
+- **DIV-command — `command` non exécutable.** Le dépôt est **doc-first** et n'embarque pas le dispatcher amont (`.ts`, `bun`, hook `PostToolUse`). Le champ obligatoire `command` porte donc un **placeholder tracé** (`non-exécutable (advisory documentaire) — voir ADR-0012`) : les sensors restent des **conventions documentées** advisory, le corps fixe la sémantique pour un outillage (script / CI) ultérieur sans redécision.
+- **DIV-prefix — pas de préfixe de fichier imposé.** Le harness amont exige un préfixe de nom de fichier sur les manifestes (`core/sensors/<préfixe>-<id>.md` ; son resolver `SENSOR_FILE_REGEX` ignore les fichiers sans préfixe). Multica n'exécute pas ce resolver : les manifestes vivent sous `core/sensors/sensors/<id>.md` **sans préfixe**, en conservant l'invariant `id` = stem du fichier.
+- **DIV-advisory — advisory par défaut.** Le harness amont autorise `blocking` au gate. Ici tout reste **advisory** (décision de gouvernance A2A, [ADR-0005](../../decisions/0005-verification-gates-et-sensors.md)) : le passage d'un sensor à `blocking` est une décision structurante explicite (ADR + contrôle sécurité).
 - **DIV-champs — `input_schema` / `output_schema` / `timeout_seconds` omis.** Champs du dispatcher exécutable, non applicables tant que les sensors ne sont pas outillés. Le champ maison `origine` est conservé (exigence de provenance SG-1).

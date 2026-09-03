@@ -42,7 +42,7 @@ En cas de doute, le coordinateur **vous demande de trancher** avant d'engager qu
 
 ## 4. Les 5 phases
 
-Le cycle est structuré en cinq phases (nomenclature AI-DLC adaptée au workspace) :
+Le cycle est structuré en cinq phases (nomenclature du contrat amont adaptée au workspace) :
 
 | # | Phase | Ce qui s'y passe | Gate humain |
 | --- | --- | --- | --- |

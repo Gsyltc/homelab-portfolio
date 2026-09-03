@@ -14,7 +14,7 @@ origine: ALI-198
 
 Check déterministe déclenché **au gate de phase** (`fire_on: gate`) : vérifie que **chaque affirmation retenue** dans l'intention capturée et la documentation d'architecture **porte une source résoluble** (issue d'origine, entrée humaine, ADR, demande brute consignée), et que les **hypothèses conservées** correspondent exactement à une **confirmation humaine explicite** tracée sur l'issue. **Advisory** (`default_severity: advisory`).
 
-Adaptation doc-first du sensor AI-DLC `aidlc-claim-sources` (Intent Capture) : là où AI-DLC valide des *claims* horodatés dans un enregistrement d'intention, ce dépôt valide la **traçabilité des affirmations** de la DAS / des ADR vers la piste d'audit de l'issue et la demande brute consignée (voir la boucle de gouvernance A2A, `conductor.md`).
+Adaptation doc-first du sensor amont `claim-sources` (Intent Capture) : là où le harness amont valide des *claims* horodatés dans un enregistrement d'intention, ce dépôt valide la **traçabilité des affirmations** de la DAS / des ADR vers la piste d'audit de l'issue et la demande brute consignée (voir la boucle de gouvernance A2A, `conductor.md`).
 
 ## Contrat de vérification (`checks`)
 

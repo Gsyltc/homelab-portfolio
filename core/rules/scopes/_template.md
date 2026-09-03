@@ -4,7 +4,7 @@ Gabarit de règles **rattachées à un scope** (voir « Scopes et axes d'exécut
 
 Précédence : couche la plus faible. Une règle `scope` ne peut pas contredire une règle `workspace` / `project` / `phase` sans arbitrage humain.
 
-> **Convention** (alignée AI-DLC) : ranger les règles sous des **rubriques topicales** en prose (voir exemples ci-dessous — à créer / renommer selon le scope). Chaque règle garde un identifiant `RULE-SC-NNN`, sa portée, son origine et sa date (traçabilité, clause SEC-5). Une règle visant un scope à garde-fous (`security-patch`, `enterprise`) ou une phase de vérification passe par le **contrôle sécurité systématique** (clause SEC-2) ; elle ne peut jamais abaisser un garde-fou de scope (plancher de vérification, Depth non abaissable).
+> **Convention** (alignée sur le contrat amont) : ranger les règles sous des **rubriques topicales** en prose (voir exemples ci-dessous — à créer / renommer selon le scope). Chaque règle garde un identifiant `RULE-SC-NNN`, sa portée, son origine et sa date (traçabilité, clause SEC-5). Une règle visant un scope à garde-fous (`security-patch`, `enterprise`) ou une phase de vérification passe par le **contrôle sécurité systématique** (clause SEC-2) ; elle ne peut jamais abaisser un garde-fou de scope (plancher de vérification, Depth non abaissable).
 
 ## Posture de vérification
 

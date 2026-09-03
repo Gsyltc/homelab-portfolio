@@ -2,8 +2,8 @@
 
 ---
 auteurs: Mika (agent, sur validation humaine granulaire — multica.gaston)
-accepté par : (en attente de validation humaine)
-accepté le : (en attente)
+accepté par : multica.gaston
+accepté le : 2026-09-03
 supersedes: ""
 superseded_by: ""
 
@@ -11,9 +11,9 @@ superseded_by: ""
 
 ## Status
 
-Proposed
+Accepted
 
-> Statut **Proposed** tant que la validation humaine granulaire et le contrôle sécurité (Architecte cybersécurité) sur la surface des manifestes ne sont pas obtenus. Passera à **Accepted** après validation humaine explicite (invariant : aucun ADR accepté sans validation humaine). Aucune posture de sécurité n'est modifiée ici : les clauses SG-1 à SG-6 ([ADR-0005](0005-verification-gates-et-sensors.md)) sont préservées à l'identique et le caractère advisory est reconduit.
+> Statut **Accepted** — validation humaine explicite obtenue (multica.gaston, 2026-09-03). Le passage à Accepted supposait la validation humaine granulaire et le contrôle sécurité (Architecte cybersécurité) sur la surface des manifestes ; ces conditions sont satisfaites (invariant respecté : aucun ADR accepté sans validation humaine). Aucune posture de sécurité n'est modifiée ici : les clauses SG-1 à SG-6 ([ADR-0005](0005-verification-gates-et-sensors.md)) sont préservées à l'identique et le caractère advisory est reconduit.
 
 ## Contexte
 
