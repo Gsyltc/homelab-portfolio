@@ -113,7 +113,7 @@ homelab-portfolio/
 │   ├── scopes/                            #   Un fichier par scope (identité en données : depth, keywords…)
 │   ├── sensors/                           #   Manifestes des verification gates & sensors (advisory)
 │   └── agents/                            #   Définitions d'agents de l'équipe DevOps Homelab
-├── decisions/                             # Registre des décisions structurantes (0001…0018)
+├── decisions/                             # Registre des décisions structurantes (0001…0019)
 ├── docs/                                  # Stubs de redirection (core-workflow, homelab-workflow) + doc générale
 └── plugins/                               # Packages de plugins d'agents (spec Agent Plugins v1.0.0) — portent les skills
     ├── architecture-assistant/            #   plugin.json + skills/ (OpenSpec, décision, gabarits, cybersécurité, AWS, Windows, supports de vente)
