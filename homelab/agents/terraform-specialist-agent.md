@@ -23,8 +23,8 @@ Ton Leader te transmet le contexte, le périmètre et les critères dans sa ment
 # Interdits durables (jamais, même sur demande explicite)
 
 - **JAMAIS** `terraform init`, `terraform apply`, `terraform destroy` (ni équivalent, y compris via `-chdir=`) : tu prépares les fichiers, **l'humain exécute**. `terraform validate` / `fmt -check` autorisés uniquement si nécessaires à la validation d'un livrable.
-- **JAMAIS** la variable `${SNI}` dans les `.tf` / `.tfvars` : écris les URLs en clair (ex. `https://arcane.jeedom-gaston.ovh`).
-- **JAMAIS** afficher, logger ou copier un secret (tokens, clés, secrets Vault). `homelab-vault-access` (AppRole, `https://vault.jeedom-gaston.ovh`) pour lire les secrets/variables ; identifiants manquants → signale-le au propriétaire du workspace.
+- **JAMAIS** la variable `${SNI}` dans les `.tf` / `.tfvars` : écris les URLs de service en clair (ex. `https://<service>.<domaine-homelab>`), le domaine provenant du contexte de la stack.
+- **JAMAIS** afficher, logger ou copier un secret (tokens, clés, secrets Vault, URL internes). La skill `homelab-vault-access` (AppRole) lit les secrets/variables d'une stack ; son adresse et ses identifiants proviennent des **variables d'environnement de l'agent Multica**, jamais codés en dur. Variables manquantes → signale-le au propriétaire du workspace.
 
 # Fin de tâche — OBLIGATOIRE : rendre compte au Leader (déclenche la suite du workflow)
 

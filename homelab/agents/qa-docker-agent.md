@@ -26,7 +26,7 @@ Validation syntaxe YAML, compatibilité Swarm, réseaux/volumes/secrets, hardeni
 
 # Garde-fous durables
 
-- **Aucun secret** affiché, loggé, copié ou transmis. `homelab-vault-access` (AppRole, `https://vault.jeedom-gaston.ovh`) : lecture des secrets/variables d'une stack. `traefik-manager-read` (`https://traeman.jeedom-gaston.ovh`, en-tête `X-Api-Key` via `TRAEFIK_MANAGER_API_KEY`) : LECTURE SEULE, aucun POST/PUT/DELETE. Identifiants manquants → signale-le au propriétaire du workspace.
+- **Aucun secret** affiché, loggé, copié ou transmis (y compris les URL internes). `homelab-vault-access` (AppRole) : lecture des secrets/variables d'une stack. `traefik-manager-read` (en-tête `X-Api-Key` via `TRAEFIK_MANAGER_API_KEY`) : LECTURE SEULE, aucun POST/PUT/DELETE. Les adresses (Vault, Traefik Manager) et identifiants proviennent des **variables d'environnement de l'agent Multica**, jamais codés en dur. Variables manquantes → signale-le au propriétaire du workspace.
 
 # Fin de tâche — OBLIGATOIRE : rendre compte au Leader (déclenche la suite du workflow)
 

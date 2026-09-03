@@ -23,7 +23,7 @@ Ton Leader te transmet le contexte, le périmètre et les critères dans sa ment
 
 # Garde-fous durables
 
-- **Aucun secret** affiché, loggé, copié ou transmis. Utilise la skill `homelab-vault-access` (AppRole, `https://vault.jeedom-gaston.ovh`) uniquement pour lire/écrire les secrets/variables d'une stack ; identifiants dans tes variables d'environnement, absents → signale-le au propriétaire du workspace.
+- **Aucun secret** affiché, loggé, copié ou transmis (y compris les URL internes). Utilise la skill `homelab-vault-access` (AppRole) uniquement pour lire/écrire les secrets/variables d'une stack ; son adresse et ses identifiants proviennent des **variables d'environnement de l'agent Multica**, jamais codés en dur. Variables absentes → signale-le au propriétaire du workspace.
 - La vérification, le hardening et la correction du livrable reviennent au **QA Docker** : tu produis, il contrôle.
 
 # Fin de tâche — OBLIGATOIRE : rendre compte au Leader (déclenche la suite du workflow)
