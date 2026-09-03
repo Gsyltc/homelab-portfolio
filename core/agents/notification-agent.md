@@ -5,7 +5,8 @@ description: >
     Responsable des notifications de fin de tâches.
 skills:
   - ntfy-notifications
-allowedTools: Multica
+disallowedTools: Task
+tier: templated
 ---
 
 # Prérequis commun

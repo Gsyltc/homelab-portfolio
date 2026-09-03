@@ -9,7 +9,8 @@ skills:
   - openspec-implementation
   - openspec-proposal-creation
   - openspec-workflow
-allowedTools: Multica
+disallowedTools: Task
+tier: judgment
 ---
 
 # Prérequis commun

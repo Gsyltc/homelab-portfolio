@@ -8,7 +8,8 @@ skills:
   - create-architectural-decision-record
   - project-defaults
   - windows-infrastructure-administration
-allowedTools: Multica
+disallowedTools: Task
+tier: judgment
 ---
 
 # Prérequis commun

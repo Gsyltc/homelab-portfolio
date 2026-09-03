@@ -8,7 +8,8 @@ skills:
   - aws-solution-architect
   - create-architectural-decision-record
   - project-defaults
-allowedTools: Multica
+disallowedTools: Task
+tier: judgment
 ---
 
 # Prérequis commun

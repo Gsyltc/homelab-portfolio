@@ -104,7 +104,7 @@ homelab-portfolio/
 │   ├── agents/                            #   Définitions d'agents du workflow (9 fichiers .md exportés)
 │   └── workflows/                         #   Workflows narratifs par domaine
 │       └── homelab/                       #     homelab-workflow.md (+ VERSION)
-├── decisions/                             # Registre des décisions structurantes (0001…0007)
+├── decisions/                             # Registre des décisions structurantes (0001…0008)
 ├── docs/                                  # Stub de redirection core-workflow + doc générale
 └── plugins/                               # Packages de plugins d'agents (spec Agent Plugins v1.0.0) — portent les skills
     ├── architecture-assistant/            #   plugin.json + skills/ (OpenSpec, décision, gabarits, cybersécurité, AWS, Windows, supports de vente)
