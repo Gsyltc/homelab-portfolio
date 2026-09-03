@@ -1,6 +1,6 @@
 ---
 name: archiving-agent
-display_name: "Nina - Experte d'archivage"
+display_name: "Experte d'archivage"
 description: >
     Agente spécialisée dans l'import et l'export de documents, avec création d'archives lors des exports multiples.
 allowedTools: Multica

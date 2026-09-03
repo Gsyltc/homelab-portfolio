@@ -1,6 +1,6 @@
 ---
 name: openspec-agent
-display_name: "Fabien - OpenSpec Expert"
+display_name: "OpenSpec Expert"
 description: >
     Agent expert de la méthode OpenSpec (SDD) : initialise, propose, applique et archive les spécifications dans les projets.
 skills:

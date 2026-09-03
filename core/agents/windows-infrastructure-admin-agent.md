@@ -1,6 +1,6 @@
 ---
 name: windows-infrastructure-admin-agent
-display_name: "Admin - Infrastructure Windows"
+display_name: "Infrastructure Windows"
 description: >
     Administrateur infrastructure Windows : migration Win10 vers Win11, Intune, machines virtuelles, golden image, Autopilot, SCCM.
 skills:
