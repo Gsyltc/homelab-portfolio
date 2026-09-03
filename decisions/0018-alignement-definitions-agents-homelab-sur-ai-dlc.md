@@ -2,8 +2,8 @@
 
 ---
 auteurs: Mika (agent)
-accepté par : ""
-accepté le : ""
+accepté par : multica.gaston
+accepté le : 2026-09-03
 supersedes: ""
 superseded_by: ""
 
@@ -11,9 +11,9 @@ superseded_by: ""
 
 ## Status
 
-Proposed
+Accepted
 
-> Statut **Proposed** — en attente de **validation humaine granulaire** (multica.gaston). Conformément aux invariants des deux workflows, aucun ADR ne passe à *Accepted* sans validation humaine explicite tracée. Cet ADR ne modifie **aucune posture de sécurité** ni **aucune surface d'exécution** : les définitions d'agents Homelab portaient déjà le front-matter conforme (voir § Contexte) ; il **trace** l'alignement, les divergences assumées et la distinction domaine / review.
+> Statut **Accepted** — validation humaine explicite obtenue (multica.gaston, 2026-09-03, issue ALI-209) : les trois points soumis ont été confirmés — (1) non-création de personas review-only dédiés côté Homelab (QA Docker reviewer technique correcteur + Architecte de sécurité), (2) classement des `tier`, (3) acceptation de l'ADR. L'invariant est respecté (aucun ADR accepté sans validation humaine granulaire). Cet ADR ne modifie **aucune posture de sécurité** ni **aucune surface d'exécution** : les définitions d'agents Homelab portaient déjà le front-matter conforme (voir § Contexte) ; il **trace** l'alignement, les divergences assumées et la distinction domaine / review.
 
 ## Contexte
 
