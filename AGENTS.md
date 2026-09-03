@@ -38,7 +38,7 @@ ils ne s'exécutent jamais conjointement sur une même issue ou un même livrabl
 1. **La demande porte-t-elle sur le Homelab** — une stack Docker Swarm / Proxmox, un
    `docker-compose`, une config Terraform de stack, un flux n8n, une automatisation
    Home Assistant, des secrets Vault, des routes Traefik ?
-   → Suivre **`docs/homelab-workflow.md`** (coordinateur : **Tech Lead**).
+   → Suivre **`homelab/common/conductor.md`** (coordinateur : **Tech Lead Homelab** ; source unique — stages sous `homelab/common/stages/`, protocoles sous `homelab/common/protocols/` ; stub historique `docs/homelab-workflow.md`).
    - Cas prioritaire absolu : dès que « n8n » apparaît, délégation immédiate à l'Expert N8n.
 
 2. **La demande porte-t-elle sur l'architecture d'une solution / d'un système** —
@@ -103,10 +103,18 @@ homelab-portfolio/
 │   ├── scopes/                            #   Un fichier par scope (identité en données : depth, keywords…)
 │   ├── sensors/                           #   Manifestes des verification gates & sensors (advisory)
 │   ├── agents/                            #   Définitions d'agents du workflow (11 fichiers .md exportés)
-│   └── workflows/                         #   Workflows narratifs par domaine
-│       └── homelab/                       #     homelab-workflow.md (+ VERSION)
-├── decisions/                             # Registre des décisions structurantes (0001…0018)
-├── docs/                                  # Stub de redirection core-workflow + doc générale
+│   └── common/ (ci-dessus)                #   (le workflow d'architecture vit sous core/common/)
+├── homelab/                               # Workflow Homelab (A2A) — modèle conductor / stages / protocols
+│   ├── common/                            #   conductor.md + stages/<phase>/ + protocols/ (source unique)
+│   │   ├── conductor.md                   #   Instructions du Tech Lead Homelab (source unique du workflow)
+│   │   ├── stages/                        #   26 fiches de stage sur 5 phases (front-matter conforme)
+│   │   └── protocols/                     #   Protocoles transverses (stage-definition, gouvernance, reviewer…)
+│   ├── rules/                             #   Mémoire de règles multi-couches (boucle d'apprentissage)
+│   ├── scopes/                            #   Un fichier par scope (identité en données : depth, keywords…)
+│   ├── sensors/                           #   Manifestes des verification gates & sensors (advisory)
+│   └── agents/                            #   Définitions d'agents de l'équipe DevOps Homelab
+├── decisions/                             # Registre des décisions structurantes (0001…0019)
+├── docs/                                  # Stubs de redirection (core-workflow, homelab-workflow) + doc générale
 └── plugins/                               # Packages de plugins d'agents (spec Agent Plugins v1.0.0) — portent les skills
     ├── architecture-assistant/            #   plugin.json + skills/ (OpenSpec, décision, gabarits, cybersécurité, AWS, Windows, supports de vente)
     ├── general-purpose-assistant/         #   plugin.json + skills/ (workflow de stack, notifications)

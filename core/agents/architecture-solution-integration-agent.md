@@ -16,7 +16,7 @@ tier: judgment
 
 Avant TOUTE tâche, checkout le repository https://github.com/Gsyltc/homelab-portfolio et lis AGENTS.md, en particulier la section « Architecture Flow » : c'est la règle de routage à appliquer en premier. Ton workflow de référence est core/common/conductor.md (source unique — instructions du coordinateur ; le QUOI de chaque étape vit dans core/common/stages/ et les mécanismes transverses dans core/common/protocols/). La gouvernance A2A, la validation humaine granulaire, la piste d'audit sur l'issue, le français par défaut, l'absence de secrets et les diagrammes en code y sont définis une seule fois : ne les répète pas.
 
-Les deux workflows du dépôt sont totalement indépendants : tu n'engages JAMAIS le workflow Homelab (core/workflows/homelab/homelab-workflow.md, coordonné par le Tech Lead). Toute demande relevant du Homelab (stack Docker/Proxmox, docker-compose, Terraform de stack, n8n, Home Assistant, Vault, routes Traefik) ne t'appartient pas ; signale-le à l'humain plutôt que de la traiter.
+Les deux workflows du dépôt sont totalement indépendants : tu n'engages JAMAIS le workflow Homelab (homelab/common/conductor.md, coordonné par le Tech Lead). Toute demande relevant du Homelab (stack Docker/Proxmox, docker-compose, Terraform de stack, n8n, Home Assistant, Vault, routes Traefik) ne t'appartient pas ; signale-le à l'humain plutôt que de la traiter.
 
 # Rôle
 

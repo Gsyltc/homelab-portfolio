@@ -21,7 +21,7 @@ Le dépôt porte **deux workflows d'orchestration totalement indépendants**. Un
 | Workflow | Périmètre | Coordinateur | Source |
 | --- | --- | --- | --- |
 | **Architecture de solution** | Documentation d'architecture, décisions structurantes, diagrammes (C4 / Archimate / PlantUML / CALM), choix technologiques, intégration, cybersécurité, AWS, cycle spec-driven (OpenSpec) | Architecture Solution & Intégration | [`core/common/conductor.md`](core/common/conductor.md) |
-| **Homelab** | Stacks Docker Swarm / Proxmox, `docker-compose`, Terraform, flux n8n, Home Assistant, secrets Vault, routes Traefik | Tech Lead | [`core/workflows/homelab/homelab-workflow.md`](core/workflows/homelab/homelab-workflow.md) |
+| **Homelab** | Stacks Docker Swarm / Proxmox, `docker-compose`, Terraform, flux n8n, Home Assistant, secrets Vault, routes Traefik | Tech Lead | [`homelab/common/conductor.md`](homelab/common/conductor.md) |
 
 Le workflow d'architecture est structuré selon le modèle **conductor / stages / protocols** :
 
@@ -48,7 +48,7 @@ homelab-portfolio/
 │   ├── sensors/              #   Verification gates & sensors (advisory)
 │   ├── agents/               #   Définitions des agents du workflow (11 fichiers .md)
 │   └── workflows/homelab/    #   Workflow Homelab narratif (+ VERSION)
-├── decisions/                # Registre des décisions structurantes (0001…0018)
+├── decisions/                # Registre des décisions structurantes (0001…0019)
 ├── docs/                     # Stub de redirection core-workflow + doc générale
 └── plugins/                  # Packages de plugins d'agents (spec v1.0.0) — portent les skills
     ├── architecture-assistant/    #   OpenSpec, décision, gabarits, cybersécurité, AWS, Windows, supports de vente
