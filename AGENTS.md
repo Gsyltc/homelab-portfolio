@@ -101,7 +101,7 @@ homelab-portfolio/
 │   │   └── protocols/                     #   Protocoles transverses (stage-definition, gouvernance, reviewer…)
 │   ├── rules/                             #   Mémoire de règles multi-couches (boucle d'apprentissage)
 │   ├── sensors/                           #   Manifestes des verification gates & sensors (advisory)
-│   ├── agents/                            #   Définitions d'agents du workflow (9 fichiers .md exportés)
+│   ├── agents/                            #   Définitions d'agents du workflow (11 fichiers .md exportés)
 │   └── workflows/                         #   Workflows narratifs par domaine
 │       └── homelab/                       #     homelab-workflow.md (+ VERSION)
 ├── decisions/                             # Registre des décisions structurantes (0001…0008)

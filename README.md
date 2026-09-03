@@ -30,7 +30,7 @@ Le workflow d'architecture est structuré selon le modèle **conductor / stages 
 - [`core/common/protocols/`](core/common/protocols/) — mécanismes transverses (définition de stage, protocole d'exécution, gouvernance & sécurité, revue, scopes & axes).
 - [`core/rules/`](core/rules/) — mémoire de règles multi-couches (boucle d'apprentissage).
 - [`core/sensors/`](core/sensors/) — manifestes des verification gates & sensors.
-- [`core/agents/`](core/agents/) — définitions versionnées des agents du workflow (coordinateur, architectes, cybersécurité, OpenSpec, archivage, notifications, vente).
+- [`core/agents/`](core/agents/) — définitions versionnées des agents du workflow (coordinateur, architectes, cybersécurité, reviewers de cohérence et de sécurité, OpenSpec, archivage, notifications, vente).
 
 ## Structure du dépôt
 
@@ -45,7 +45,7 @@ homelab-portfolio/
 │   ├── common/               #   conductor.md + stages/ + protocols/
 │   ├── rules/                #   Règles persistantes multi-couches
 │   ├── sensors/              #   Verification gates & sensors (advisory)
-│   ├── agents/               #   Définitions des agents du workflow (9 fichiers .md)
+│   ├── agents/               #   Définitions des agents du workflow (11 fichiers .md)
 │   └── workflows/homelab/    #   Workflow Homelab narratif (+ VERSION)
 ├── decisions/                # Registre des décisions structurantes (0001…0008)
 ├── docs/                     # Stub de redirection core-workflow + doc générale

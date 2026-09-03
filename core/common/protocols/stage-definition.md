@@ -13,7 +13,7 @@ lead_agent: <fonction|null>            # fonction responsable ou null (coordinat
 support_agents: [<fonction>, ...]      # fonctions en appui (peut être vide)
 mode: <inline|subagent|multi-agent>    # exécution directe, déléguée, ou multi-agents
 summary_confirmation: <required|optional|none>   # résumé confirmé avant d'avancer
-reviewer: <fonction|null>              # fonction de revue (cybersécurité pour la sécurité, coordinateur pour la cohérence)
+reviewer: <fonction|null>              # fonction de revue (Reviewer de sécurité pour la sécurité, Reviewer de cohérence pour la cohérence)
 review_class: <advisory|granular|explicit|none>  # classe de revue attendue
 human_gate: <none|light|granular|explicit>       # gate humain applicable au stage
 produces: [<artefact>, ...]            # artefacts produits en sortie
@@ -33,7 +33,7 @@ outputs: "<description libre des sorties>"
 | `mode`, `summary_confirmation` | mode d'exécution et confirmation de résumé |
 | `produces`, `consumes`, `requires_stage` | flux d'artefacts et dépendances |
 | `sensors`, `scopes`, `inputs`, `outputs` | sensors déclenchés, scopes actifs, entrées / sorties |
-| `lead_agent`, `support_agents`, `reviewer` | **fonctions** du workspace : Architecture Solution & Intégration (coordinateur), Architecte de solution, Architecte AWS, Administrateur infrastructure Windows, Architecte cybersécurité, OpenSpec Expert, Experte d'archivage, Agent de notifications |
+| `lead_agent`, `support_agents`, `reviewer` | **fonctions** du workspace : Architecture Solution & Intégration (coordinateur), Architecte de solution, Architecte AWS, Administrateur infrastructure Windows, Architecte cybersécurité, Reviewer de cohérence, Reviewer de sécurité, OpenSpec Expert, Experte d'archivage, Agent de notifications |
 | `review_class` | `advisory` / `granular` / `explicit` / `none` |
 | `human_gate` | matérialise les gates du workspace : `none` (Initialization), `light` (Ideation), `granular` (Inception / Construction), `explicit` (Operation) |
 
@@ -42,7 +42,7 @@ outputs: "<description libre des sorties>"
 - `execution: CONDITIONAL` ⇒ `condition` non vide et testable.
 - `human_gate` cohérent avec la phase (voir table ci-dessus) ; un stage ne peut pas relever un gate au-dessus de sa phase sans décision structurante validée.
 - `requires_stage` ne référence que des slugs existants (pas de dépendance orpheline — recoupe le contrôle `absence-orphelin` des gates).
-- `reviewer: Architecte cybersécurité` obligatoire dès que le stage produit ou modifie une **surface de sécurité** (instructions exécutables, frontières de délégation, contrôle de sécurité) — plancher SG-3.
+- `reviewer: Reviewer de sécurité` obligatoire dès que le stage produit ou modifie une **surface de sécurité** (instructions exécutables, frontières de délégation, contrôle de sécurité) — plancher SG-3.
 
 ## Corps de la fiche
 

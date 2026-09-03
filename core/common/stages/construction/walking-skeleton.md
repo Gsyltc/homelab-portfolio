@@ -7,7 +7,7 @@ lead_agent: Architecte de solution
 support_agents: [Architecte AWS, Administrateur infrastructure Windows, OpenSpec Expert]
 mode: multi-agent
 summary_confirmation: required
-reviewer: Architecte cybersécurité
+reviewer: Reviewer de sécurité
 review_class: granular
 human_gate: granular
 produces: [walking_skeleton_valide, mode_execution_choisi]

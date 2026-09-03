@@ -7,7 +7,7 @@ lead_agent: Architecte de solution
 support_agents: [Architecte AWS, Administrateur infrastructure Windows, OpenSpec Expert]
 mode: multi-agent
 summary_confirmation: required
-reviewer: Architecte cybersécurité
+reviewer: Reviewer de sécurité
 review_class: granular
 human_gate: granular
 produces: [decision_conception, diagramme_principal, conception_cible_validee]
@@ -29,7 +29,7 @@ Produire la conception cible et les décisions structurantes, contrôlées en s�
 Les agents désignés produisent leurs livrables (vues fonctionnelle / technique, choix, alternatives, risques) et **tracent chaque décision structurante** dans le registre de décisions du projet.
 
 ### Step 2 — Contrôle sécurité obligatoire (Architecte cybersécurité)
-À chaque modification d'architecture, le coordinateur sollicite l'**Architecte cybersécurité**, **attend son analyse**, intègre ses recommandations avant toute validation. Normes spécifiques uniquement si explicitement demandées. Voir [`../../protocols/reviewer.md`](../../protocols/reviewer.md).
+À chaque modification d'architecture, le coordinateur sollicite le **Reviewer de sécurité**, **attend son analyse**, intègre ses recommandations avant toute validation. Normes spécifiques uniquement si explicitement demandées. Voir [`../../protocols/reviewer.md`](../../protocols/reviewer.md).
 
 ### Step 3 — Contrôle de cohérence
 Vérifier la correspondance documentation ↔ décisions structurantes, l'absence de conflits ; demander les corrections aux agents responsables.

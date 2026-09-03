@@ -7,7 +7,7 @@ lead_agent: Administrateur infrastructure Windows
 support_agents: [Architecte AWS, Architecture Solution & Intégration]
 mode: subagent
 summary_confirmation: required
-reviewer: Architecte cybersécurité
+reviewer: Reviewer de sécurité
 review_class: explicit
 human_gate: explicit
 produces: [plan_ou_configuration_valide, rollback_si_action_destructive]

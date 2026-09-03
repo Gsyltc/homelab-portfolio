@@ -9,9 +9,11 @@ Les acteurs sont désignés par leur **fonction**. La délégation A2A résout l
 | Fonction | Rôle |
 | --- | --- |
 | **Humain (demandeur / valideur)** | Exprime le besoin, arbitre, valide **chaque** décision (granulaire), autorise les actions à impact. |
-| **Architecture Solution & Intégration (coordinateur)** | Lance, supervise, contrôle la cohérence des décisions structurantes, sollicite la fonction cybersécurité, demande les validations, orchestre la livraison. Ne produit pas les livrables. |
+| **Architecture Solution & Intégration (coordinateur)** | Lance, supervise, **sollicite les reviewers** (cohérence et sécurité), demande les validations, orchestre la livraison. Ne produit pas les livrables et **ne porte plus lui-même la revue de cohérence** (déléguée au Reviewer de cohérence). |
+| **Reviewer de cohérence** | Fonction **review-only** : juge la cohérence documentation ↔ décisions, l'absence de conflit / d'artefact orphelin, la complétude et les conventions. Ne produit aucun livrable. Voir [`reviewer.md`](reviewer.md). |
+| **Reviewer de sécurité** | Fonction **review-only** : analyse des risques OWASP / STRIDE (+ NIST / COBIT si docs risques ; PCI DSS / GDPR / Loi 25 / LPRPDE sur demande explicite). **Revue obligatoire, non substituable** dès qu'une surface de sécurité est produite ou modifiée (plancher SG-3). Voir [`reviewer.md`](reviewer.md). |
 | **Architecte de solution** | DAS, décisions structurantes, diagrammes C4 / Archimate / PlantUML / CALM. Ne traite pas la cybersécurité. |
-| **Architecte cybersécurité** | OWASP / STRIDE (+ NIST / COBIT si docs risques ; PCI DSS / GDPR / Loi 25 / LPRPDE sur demande explicite). **Sollicité à chaque modification d'architecture.** |
+| **Architecte cybersécurité** | Fonction **d'analyse** cybersécurité (production) : OWASP / STRIDE (+ NIST / COBIT si docs risques ; normes sur demande explicite). Sollicité pour concevoir / renforcer une posture de sécurité ; distinct du **Reviewer de sécurité** qui, lui, rend le verdict de revue. |
 | **Architecte AWS** | Services AWS, diagrammes, coûts sourcés. Intervient si AWS requis. |
 | **Administrateur infrastructure Windows** | Windows, Intune, VM, golden image, Autopilot, SCCM. Rollback validé avant action destructive. |
 | **OpenSpec Expert** | Cycle spec-driven. **Sollicité uniquement si OpenSpec activé.** |
@@ -22,9 +24,9 @@ Les acteurs sont désignés par leur **fonction**. La délégation A2A résout l
 
 Un agent est déclenché par un **commentaire sur l'issue avec une mention valide** `[@Label](mention://agent/<uuid>)` et une **mission claire** (objectif, périmètre, critères d'acceptation). **Ne jamais deviner un UUID** : le résoudre via `multica agent list --output json` avant chaque mention. L'agent appelé, en fin de tâche, mentionne en retour l'agent assigneur pour la vérification. Le coordinateur contrôle chaque livrable avant validation humaine.
 
-## Contrôle sécurité systématique (Architecte cybersécurité)
+## Contrôle sécurité systématique (Reviewer de sécurité)
 
-À **chaque modification d'architecture**, le coordinateur : lit le résumé des modifications, poste un commentaire mentionnant l'Architecte cybersécurité avec le contexte, **attend son analyse**, intègre ses recommandations **avant toute validation**. Préciser explicitement toute norme spécifique (PCI DSS / GDPR / Loi 25 / LPRPDE) — sinon seules OWASP / STRIDE (+ NIST / COBIT si documentation des risques) sont actives. Ce contrôle est **hors du périmètre automatisable** (SG-3) : aucun gate / sensor advisory ne peut le porter, le remplacer, le conditionner ni le court-circuiter.
+À **chaque modification d'architecture**, le coordinateur : lit le résumé des modifications, poste un commentaire mentionnant le **Reviewer de sécurité** avec le contexte, **attend son analyse**, intègre ses recommandations **avant toute validation**. Préciser explicitement toute norme spécifique (PCI DSS / GDPR / Loi 25 / LPRPDE) — sinon seules OWASP / STRIDE (+ NIST / COBIT si documentation des risques) sont actives. Ce contrôle est **hors du périmètre automatisable** (SG-3) : aucun gate / sensor advisory ne peut le porter, le remplacer, le conditionner ni le court-circuiter.
 
 ## Invariants non contournables
 
