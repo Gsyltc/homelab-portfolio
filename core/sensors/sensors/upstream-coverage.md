@@ -10,7 +10,7 @@ priority: prioritaire
 origine: ALI-188
 triggers:
   - "decisions/[0-9][0-9][0-9][0-9]-*.md"     # ADR
-  - "**/*das*.md"                              # DAS
+  - "documentations/*.md"                      # DAS
   - "livrables/**/*.md"                        # livrables détaillés
 checks:
   reference_amont:
