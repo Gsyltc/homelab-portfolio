@@ -91,7 +91,7 @@ Le tooling `bun` / `aidlc-*.ts` de l'amont n'est **pas** importé : protocoles e
 
 - **NEG-001** : Fragmentation en 32 fichiers (conductor + 5 protocols + 26 stages) — la vue narrative disparaît au profit d'une navigation par liens ; atténué par la table de stages du conductor et le stub de correspondance.
 - **NEG-002** : Surface d'instructions exécutables plus étalée ⇒ surface d'injection potentielle ; atténué par la clause « UNTRUSTED DATA » de `protocols/governance-security.md`, soumis au contrôle sécurité.
-- **NEG-003** : Une **copie parallèle** subsiste sous `core/workflows/homelab/homelab-workflow.md` (~35 ko, version antérieure), référencée par `README.md`, `CONTRIBUTING.md` et l'agent `core/agents/architecture-solution-integration-agent.md`. **Hors périmètre de ce stage** (qui vise `docs/homelab-workflow.md`) ; divergence signalée à l'humain pour arbitrage (aligner sur le stub / le triptyque, ou retirer la copie).
+- **NEG-003** *(résolu)* : Une **copie parallèle** subsistait sous `core/workflows/homelab/homelab-workflow.md` (~35 ko, version antérieure), référencée par `README.md`, `CONTRIBUTING.md` et l'agent `core/agents/architecture-solution-integration-agent.md`. Sur **arbitrage humain (multica.gaston, « Retire l'ancien fichier »)**, cette copie et son sidecar `VERSION` ont été **supprimés** (répertoire `core/workflows/` retiré) ; les trois références ont été repointées vers la source canonique `homelab/common/conductor.md`. Plus de divergence.
 
 ## Alternatives étudiées
 

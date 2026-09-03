@@ -103,10 +103,18 @@ homelab-portfolio/
 │   ├── scopes/                            #   Un fichier par scope (identité en données : depth, keywords…)
 │   ├── sensors/                           #   Manifestes des verification gates & sensors (advisory)
 │   ├── agents/                            #   Définitions d'agents du workflow (11 fichiers .md exportés)
-│   └── workflows/                         #   Workflows narratifs par domaine
-│       └── homelab/                       #     homelab-workflow.md (+ VERSION)
-├── decisions/                             # Registre des décisions structurantes (0001…0012)
-├── docs/                                  # Stub de redirection core-workflow + doc générale
+│   └── common/ (ci-dessus)                #   (le workflow d'architecture vit sous core/common/)
+├── homelab/                               # Workflow Homelab (A2A) — modèle conductor / stages / protocols
+│   ├── common/                            #   conductor.md + stages/<phase>/ + protocols/ (source unique)
+│   │   ├── conductor.md                   #   Instructions du Tech Lead Homelab (source unique du workflow)
+│   │   ├── stages/                        #   26 fiches de stage sur 5 phases (front-matter conforme)
+│   │   └── protocols/                     #   Protocoles transverses (stage-definition, gouvernance, reviewer…)
+│   ├── rules/                             #   Mémoire de règles multi-couches (boucle d'apprentissage)
+│   ├── scopes/                            #   Un fichier par scope (identité en données : depth, keywords…)
+│   ├── sensors/                           #   Manifestes des verification gates & sensors (advisory)
+│   └── agents/                            #   Définitions d'agents de l'équipe DevOps Homelab
+├── decisions/                             # Registre des décisions structurantes (0001…0018)
+├── docs/                                  # Stubs de redirection (core-workflow, homelab-workflow) + doc générale
 └── plugins/                               # Packages de plugins d'agents (spec Agent Plugins v1.0.0) — portent les skills
     ├── architecture-assistant/            #   plugin.json + skills/ (OpenSpec, décision, gabarits, cybersécurité, AWS, Windows, supports de vente)
     ├── general-purpose-assistant/         #   plugin.json + skills/ (workflow de stack, notifications)

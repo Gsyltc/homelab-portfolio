@@ -56,7 +56,7 @@ Les skills sont **portées par les plugins**, à l'emplacement canonique [`plugi
 Le dépôt porte **deux workflows cloisonnés** (voir la règle de routage dans [`AGENTS.md`](AGENTS.md)) :
 
 - **Architecture de solution** → [`core/common/conductor.md`](core/common/conductor.md) + [`core/common/stages/`](core/common/stages/) + [`core/common/protocols/`](core/common/protocols/).
-- **Homelab** → [`core/workflows/homelab/homelab-workflow.md`](core/workflows/homelab/homelab-workflow.md).
+- **Homelab** → [`homelab/common/conductor.md`](homelab/common/conductor.md) + [`homelab/common/stages/`](homelab/common/stages/) + [`homelab/common/protocols/`](homelab/common/protocols/).
 
 Toute évolution d'un workflow doit :
 
