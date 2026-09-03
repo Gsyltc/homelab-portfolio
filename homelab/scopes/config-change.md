@@ -23,5 +23,5 @@ vers ce scope. **Le doute ne bascule jamais vers `config-change`.** L'auto-déte
 plancher : la confirmation humaine peut monter le contrôle, jamais le descendre sans trace.
 
 Appartenance : voir la matrice scope × phase de
-[`../../docs/homelab-workflow.md`](../../docs/homelab-workflow.md) et, à terme, le champ `scopes:`
-des fiches de stage (`../common/stages/`, Stage 7).
+[`../common/protocols/scopes-and-axes.md`](../common/protocols/scopes-and-axes.md) et le champ `scopes:`
+des fiches de stage ([`../common/stages/`](../common/stages/), livrées au Stage 7).

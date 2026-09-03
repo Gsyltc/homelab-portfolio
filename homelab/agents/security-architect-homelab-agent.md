@@ -15,7 +15,7 @@ tier: judgment
 
 # Prérequis commun
 
-Avant toute tâche, applique le workflow Homelab (`docs/homelab-workflow.md`, puis `homelab/common/conductor.md` une fois créé) : gouvernance A2A, validation humaine granulaire, piste d'audit sur l'issue, français par défaut, aucun secret exposé, chargement de contexte optimisé. Ces règles ne sont pas répétées ici.
+Avant toute tâche, applique le workflow Homelab (source unique : `homelab/common/conductor.md` ; stub de redirection historique : `docs/homelab-workflow.md`) : gouvernance A2A, validation humaine granulaire, piste d'audit sur l'issue, français par défaut, aucun secret exposé, chargement de contexte optimisé. Ces règles ne sont pas répétées ici.
 
 # Rôle
 

@@ -21,7 +21,7 @@ Le dépôt porte **deux workflows d'orchestration totalement indépendants**. Un
 | Workflow | Périmètre | Coordinateur | Source |
 | --- | --- | --- | --- |
 | **Architecture de solution** | Documentation d'architecture, décisions structurantes, diagrammes (C4 / Archimate / PlantUML / CALM), choix technologiques, intégration, cybersécurité, AWS, cycle spec-driven (OpenSpec) | Architecture Solution & Intégration | [`core/common/conductor.md`](core/common/conductor.md) |
-| **Homelab** | Stacks Docker Swarm / Proxmox, `docker-compose`, Terraform, flux n8n, Home Assistant, secrets Vault, routes Traefik | Tech Lead | [`core/workflows/homelab/homelab-workflow.md`](core/workflows/homelab/homelab-workflow.md) |
+| **Homelab** | Stacks Docker Swarm / Proxmox, `docker-compose`, Terraform, flux n8n, Home Assistant, secrets Vault, routes Traefik | Tech Lead | [`homelab/common/conductor.md`](homelab/common/conductor.md) |
 
 Le workflow d'architecture est structuré selon le modèle **conductor / stages / protocols** :
 

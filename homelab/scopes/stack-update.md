@@ -23,5 +23,5 @@ réseaux/volumes/secrets, hardening standard, cohérence Traefik). Overridable �
 confirmation de scope.
 
 Appartenance : voir la matrice scope × phase de
-[`../../docs/homelab-workflow.md`](../../docs/homelab-workflow.md) et, à terme, le champ `scopes:`
-des fiches de stage (`../common/stages/`, Stage 7).
+[`../common/protocols/scopes-and-axes.md`](../common/protocols/scopes-and-axes.md) et le champ `scopes:`
+des fiches de stage ([`../common/stages/`](../common/stages/), livrées au Stage 7).

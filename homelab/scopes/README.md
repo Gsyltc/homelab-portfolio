@@ -27,14 +27,16 @@ Un scope se déclare en **deux endroits**, et cette séparation est l'idée maî
 La liaison entre les deux est le **nom du scope**. L'appartenance est ainsi déclarée **une seule
 fois, sur le stage**, jamais redéclarée dans sept blocs de scope séparés.
 
-> **Ordre de livraison.** Les fiches de stage `homelab/common/stages/` sont créées au **Stage 7**
-> (modèle conductor / stages / protocols). En attendant, la **vue lisible** — matrice scope × phase
-> ci-dessous — porte l'appartenance de façon consolidée et lisible, adossée aux **3 phases
-> actuelles** de `docs/homelab-workflow.md` ; elle sera re-projetée sur les 5 phases au Stage 5,
-> puis transposée sur le champ `scopes:` des fiches de stage au Stage 7.
+> **Ordre de livraison.** Les fiches de stage [`homelab/common/stages/`](../common/stages/) sont
+> **livrées** (Stage 7 — modèle conductor / stages / protocols). L'appartenance (quels stages
+> tournent sous un scope) est désormais **transposée sur le champ `scopes:`** de chaque fiche de
+> stage ; la **vue lisible** — matrice scope × phase — est portée par
+> [`../common/protocols/scopes-and-axes.md`](../common/protocols/scopes-and-axes.md) (adossée aux
+> **5 phases**). La table ci-dessous reste une vue d'aide consolidée.
 
 > **Source d'identité.** Ces fichiers sont la **source d'identité** des scopes. La matrice
-> ci-dessous et la section « Scopes » de [`../../docs/homelab-workflow.md`](../../docs/homelab-workflow.md)
+> ci-dessous et la vue lisible de [`../common/protocols/scopes-and-axes.md`](../common/protocols/scopes-and-axes.md)
+> (ainsi que le stub [`../../docs/homelab-workflow.md`](../../docs/homelab-workflow.md))
 > restent des **vues lisibles** ; en cas d'écart sur l'identité d'un scope (nom, depth, mots-clés,
 > vérification), **le fichier de scope fait foi**.
 
@@ -128,5 +130,6 @@ déclarative** (un fichier par scope, front-matter, appartenance transposée) sa
 | [`n8n`](n8n.md) | Toute demande n8n — branche autonome, délégation immédiate | standard | standard |
 | [`home-assistant`](home-assistant.md) | Toute demande Home Assistant — branche autonome | standard | standard |
 
-Voir la **matrice scope × phase** dans [`../../docs/homelab-workflow.md`](../../docs/homelab-workflow.md)
-(section « Scopes et axes d'exécution ») pour l'activation étape par étape et l'affectation des agents.
+Voir la **matrice scope × phase** dans [`../common/protocols/scopes-and-axes.md`](../common/protocols/scopes-and-axes.md)
+pour l'activation étape par étape et l'affectation des agents (transposée sur le champ `scopes:` des
+fiches de stage [`../common/stages/`](../common/stages/)).
