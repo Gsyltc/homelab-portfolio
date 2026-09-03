@@ -1,6 +1,6 @@
 # Protocole — définition d'un stage (schéma de front-matter)
 
-Ce protocole fixe le **contrat** d'une fiche de stage (`stages/<phase>/<stage>.md`), aligné sur le contrat AI-DLC « Anatomy of a Stage » (voir [ADR-0009](../../../decisions/0009-alignement-fiches-de-stage-sur-ai-dlc.md)). Chaque fiche a **deux lecteurs qui ne se recouvrent jamais** : le **parseur** ne lit que le **front-matter YAML** (nœud de graphe : agents, mode, arêtes `consumes` / `produces`), l'**agent exécutant** ne lit que le **corps** (les trois compartiments `## Steps` / `## Sensors` / `## Learn`). Les agents y sont désignés par leur **fonction** (labels du workspace) ; aucun tooling exécutable n'est requis (conventions Markdown uniquement — pas de compilation `stage-graph.json`, non applicable Multica ; le graphe reste conceptuel via `consumes` / `produces` / `requires_stage`).
+Ce protocole fixe le **contrat** d'une fiche de stage (`stages/<phase>/<stage>.md`). Chaque fiche a **deux lecteurs qui ne se recouvrent jamais** : le **parseur** ne lit que le **front-matter YAML** (nœud de graphe : agents, mode, arêtes `consumes` / `produces`), l'**agent exécutant** ne lit que le **corps** (les trois compartiments `## Steps` / `## Sensors` / `## Learn`). Les agents y sont désignés par leur **fonction** (labels du workspace) ; aucun tooling exécutable n'est requis (conventions Markdown uniquement — pas de compilation `stage-graph.json`, non applicable Multica ; le graphe reste conceptuel via `consumes` / `produces` / `requires_stage`).
 
 ## Schéma du front-matter
 
@@ -58,8 +58,6 @@ Nomme l'artefact dont les instances pilotent une exécution **une-fois-par-insta
 - `advisory` — revue **consultative** préparant le gate humain : la **revue de cohérence** (Reviewer de cohérence — documentation ↔ décisions, conflits, complétude, conventions). Ne remplace jamais la validation humaine.
 - `none` — aucune revue indépendante déclarée.
 
-> **Divergence maison tracée ([ADR-0009](../../../decisions/0009-alignement-fiches-de-stage-sur-ai-dlc.md))** : `review_class` porte désormais la **nature** de la revue (comme AI-DLC), et non plus sa force de gate. La **force du gate humain** reste sur l'axe **`human_gate`** (`none` / `light` / `granular` / `explicit`) — extension maison conservée, cohérente avec la gouvernance A2A (validation humaine granulaire). Les anciennes valeurs `granular` / `explicit` de `review_class` conflaient ces deux axes et sont retirées.
-
 ## Règles de cohérence (advisory)
 
 - `execution: CONDITIONAL` ⇒ `condition` non vide et testable.
@@ -98,7 +96,5 @@ Upstream targets: <miroir de `consumes:` — présent uniquement si `upstream-co
 - **`## Steps`** — prose impérative : le travail métier du stage. Compartiment le plus édité quand on change *ce que fait* le stage sans toucher au graphe.
 - **`## Sensors`** — résumé local compact : où atterrissent les sorties, `Imports:` qui **reflète** le front-matter `sensors:`, et `Upstream targets:` qui **reflète** `consumes:` **quand** `upstream-coverage` est importé. Le comportement partagé des sensors vit dans [`stage-protocol.md`](stage-protocol.md) (temps 4) ; ne consigner ici que les exceptions propres au stage.
 - **`## Learn`** — pointe vers le **contrat de boucle d'apprentissage** du workspace : journal des candidats-règles sur l'issue pendant le travail, puis remontée et persistance des apprentissages **confirmés** au gate humain, dans [`core/rules/`](../../rules/README.md) (cycle capture → confirmation humaine → contrôle de conflit → écriture). Les stages d'Initialization tiennent le journal mais **sautent** l'interaction liée au gate (bootstrap déterministe).
-
-> **Divergence maison tracée ([ADR-0009](../../../decisions/0009-alignement-fiches-de-stage-sur-ai-dlc.md))** : le compartiment `## Learn` pointe vers la boucle d'apprentissage **maison** (journal candidats-règles sur l'issue → gate → persistance versionnée dans `core/rules/`, voir [ADR-0004](../../../decisions/0004-boucle-apprentissage-et-regles-persistantes.md)), et **non** vers le journal `memory.md` d'AI-DLC (non importé — cohérent avec le choix « conventions Markdown, moteur A2A Multica »).
 
 Le corps est un **artefact de framework, immuable en forme** : la structure `## Steps` / `## Sensors` / `## Learn` n'est jamais réécrite par un workflow. La seule édition sanctionnée en cours de workflow est l'ajout d'un id de sensor à la liste `sensors:` du front-matter par la boucle d'apprentissage.

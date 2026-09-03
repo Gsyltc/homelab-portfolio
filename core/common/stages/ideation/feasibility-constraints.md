@@ -22,18 +22,24 @@ outputs: "Faisabilité et contraintes fortes (techniques, sécurité, coût, dé
 # Faisabilité et contraintes
 
 ## Objectif
+
 Éviter d'engager l'Inception sur une base non viable, sans produire d'étude détaillée.
 
 ## Steps
+
 ### Step 1 — Évaluation légère
+
 Évaluer la faisabilité et les contraintes fortes (techniques, sécurité, coût, délais) susceptibles de rendre le travail non pertinent ou de le réorienter. Les `support_agents` (Architecte de solution, Architecte AWS, Architecte cybersécurité) sont des **voix adoptées** en `inline`, pas une revue indépendante.
 
 ### Step 2 — Réorientation éventuelle
+
 Si une contrainte forte remet en cause l'intention, la signaler à l'humain avant d'avancer. L'étude détaillée relève de l'Inception, pas de ce stage.
 
 ## Sensors
+
 Outputs: faisabilité / contraintes consignées sur l'issue. Allégé (➖) sur `poc` / `express`.
 Imports: none.
 
 ## Learn
-Boucle d'apprentissage maison (voir [`core/rules/`](../../../rules/README.md)) : tracer sur l'issue les candidats-règles (contraintes récurrentes, motifs de réorientation) ; les remonter au **gate humain** léger d'Ideation ; persistance des apprentissages **confirmés** dans `core/rules/` via le cycle capture → confirmation humaine → contrôle de conflit. Divergence tracée vs le journal `memory.md` d'AI-DLC (voir [ADR-0009](../../../../decisions/0009-alignement-fiches-de-stage-sur-ai-dlc.md)).
+
+Boucle d'apprentissage maison (voir [`core/rules/`](../../../rules/README.md)) : tracer sur l'issue les candidats-règles (contraintes récurrentes, motifs de réorientation) ; les remonter au **gate humain** léger d'Ideation ; persistance des apprentissages **confirmés** dans `core/rules/` via le cycle capture → confirmation humaine → contrôle de conflit.

@@ -14,8 +14,7 @@ Petit changement clair et à faible risque : **chemin court**, les stages lourds
 
 **Garde-fou R1** : l'allègement est réservé aux changements **sans impact runtime / production**.
 Dès qu'un `express` déploie ou effectue une action à impact (Operation ≠ ignorée), le stage
-`deliverables-breakdown` repasse à activé et la vérification remonte à `standard` minimum
-([ADR-0003](../../decisions/0003-scopes-et-axes-depth-verification.md)).
+`deliverables-breakdown` repasse à activé et la vérification remonte à `standard` minimum.
 
 Axes par défaut : Depth `minimal`, vérification `standard` (le contrôle reste au niveau standard).
 `review_cap: advisory` matérialise le plafond de revue allégé du chemin court sur les stages

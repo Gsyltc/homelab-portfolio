@@ -12,8 +12,7 @@ skeleton: off
 
 Preuve de concept **jetable**. Parcours allégé, Depth minimale, vérification `advisory`. Un PoC est
 **non promouvable tel quel** : toute reprise en `feature` / `mvp` / `enterprise` **re-déclenche le
-contrôle sécurité complet** du scope cible (R6 de
-[ADR-0003](../../decisions/0003-scopes-et-axes-depth-verification.md)).
+contrôle sécurité complet** du scope cible.
 
 Axes par défaut : Depth `minimal`, vérification `advisory` → **`review_cap: advisory`** (plafond de
 classe de revue conforme AI-DLC). **Le plancher OWASP / STRIDE reste actif** : `➖` ne signifie
