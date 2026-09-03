@@ -4,7 +4,7 @@ phase: construction
 execution: ALWAYS
 condition: "Always executes"
 lead_agent: Architecture Solution & Intégration
-support_agents: [Architecte cybersécurité]
+support_agents: [Architecte Cybersécurité]
 mode: inline
 summary_confirmation: required
 reviewer: Reviewer de sécurité
@@ -27,7 +27,7 @@ Vérifier la sécurité et la cohérence des livrables avant consolidation.
 
 ## Steps
 ### Step 1 — Solliciter le Reviewer de sécurité (revue adversariale)
-Pour tout livrable modifiant l'architecture (mêmes règles que `design-and-decisions`), le coordinateur sollicite le **Reviewer de sécurité** ; l'Architecte cybersécurité (voix adoptée `inline`) pilote l'analyse de posture. Plancher SG-3 : aucun gate / sensor advisory, aucune revue de cohérence ne remplace ce contrôle adversarial.
+Pour tout livrable modifiant l'architecture (mêmes règles que `design-and-decisions`), le coordinateur sollicite le **Reviewer de sécurité** ; l'Architecte Cybersécurité (voix adoptée `inline`) pilote l'analyse de posture. Plancher SG-3 : aucun gate / sensor advisory, aucune revue de cohérence ne remplace ce contrôle adversarial.
 
 ### Step 2 — Vérifier structure, complétude, qualité, format et cohérence avec les décisions structurantes.
 

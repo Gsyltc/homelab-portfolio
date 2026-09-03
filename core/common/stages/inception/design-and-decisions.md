@@ -4,7 +4,7 @@ phase: inception
 execution: ALWAYS
 condition: "Always executes"
 lead_agent: Architecte de solution
-support_agents: [Architecte AWS, Administrateur infrastructure Windows, OpenSpec Expert]
+support_agents: [Architecte AWS, Infrastructure Windows, OpenSpec Expert]
 mode: mob
 summary_confirmation: required
 reviewer: Reviewer de sécurité

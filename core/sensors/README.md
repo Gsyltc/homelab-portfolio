@@ -69,7 +69,7 @@ origine: ALI-<n>             # (maison, SG-1) provenance traçable — obligatoi
 
 Le corps (après le front-matter) porte le **contrat de vérification** (`checks`), la forme de la **sortie** advisory et les **garde-fous** — lisible, déterministe, non exécutable.
 
-## Divergences assumées vs AI-DLC (tracées — [ADR-0010](../../decisions/0010-alignement-sensors-sur-ai-dlc.md))
+## Divergences assumées vs AI-DLC (tracées — [ADR-0012](../../decisions/0012-alignement-sensors-sur-ai-dlc.md))
 
 - **DIV-command — `command` non exécutable.** Le dépôt est **doc-first** et n'embarque pas le dispatcher AI-DLC (`.ts`, `bun`, hook `PostToolUse`). Le champ obligatoire `command` porte donc un **placeholder tracé** (`non-exécutable (advisory documentaire) — voir ADR-0010`) : les sensors restent des **conventions documentées** advisory, le corps fixe la sémantique pour un outillage (script / CI) ultérieur sans redécision.
 - **DIV-prefix — pas de préfixe `aidlc-`.** AI-DLC exige `core/sensors/aidlc-<id>.md` (le resolver `SENSOR_FILE_REGEX` ignore les fichiers sans préfixe). Multica n'exécute pas ce resolver : les manifestes vivent sous `core/sensors/sensors/<id>.md` **sans préfixe**, en conservant l'invariant `id` = stem du fichier.

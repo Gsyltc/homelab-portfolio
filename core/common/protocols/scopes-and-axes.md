@@ -28,7 +28,7 @@ Scope auto-détecté par mots-clés (FR / EN) puis **confirmé explicitement** a
 ## Axes
 
 - **Axe 1 — Depth** : `minimal` / `standard` / `comprehensive` (détail des artefacts).
-- **Axe 2 — Vérification** : `advisory` / `standard` / `renforcé` (rigueur du contrôle ; remplace l'axe « test strategy » pour la documentation, mais **inclut une stratégie de tests dès qu'il y a du code / IaC**). Divergence assumée tracée en [ADR-0009](../../../decisions/0009-scopes-fichiers-par-scope-et-axes-review-cap.md).
+- **Axe 2 — Vérification** : `advisory` / `standard` / `renforcé` (rigueur du contrôle ; remplace l'axe « test strategy » pour la documentation, mais **inclut une stratégie de tests dès qu'il y a du code / IaC**). Divergence assumée tracée en [ADR-0010](../../../decisions/0010-scopes-fichiers-par-scope-et-axes-review-cap.md).
 
 Les valeurs par défaut ci-dessous sont la **projection lisible** des champs `depth` / `verification` (→ `review_cap`) des fichiers de scope. **Le fichier `core/scopes/<name>.md` fait foi.**
 

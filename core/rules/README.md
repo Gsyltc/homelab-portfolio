@@ -5,7 +5,7 @@ Les règles capitalisent les **corrections humaines validées** afin qu'un agent
 
 ## Alignement AI-DLC (« Rules and the Learning Loop »)
 
-Cette mémoire de règles est alignée sur le contrat AI-DLC **« Rules and the Learning Loop »** (*Harness Engineer Guide*), avec des **divergences assumées et tracées** dans [`decisions/0010`](../../decisions/0010-alignement-memoire-de-regles-sur-ai-dlc.md) (voir aussi [`decisions/0004`](../../decisions/0004-boucle-apprentissage-et-regles-persistantes.md)) :
+Cette mémoire de règles est alignée sur le contrat AI-DLC **« Rules and the Learning Loop »** (*Harness Engineer Guide*), avec des **divergences assumées et tracées** dans [`decisions/0011`](../../decisions/0011-alignement-memoire-de-regles-sur-ai-dlc.md) (voir aussi [`decisions/0004`](../../decisions/0004-boucle-apprentissage-et-regles-persistantes.md)) :
 
 - **Chaîne à 5 couches amont `org → team → project → phase → stage`** → ici **4 couches** `workspace > project > phase > scope` :
   - `org` + `team` sont **fusionnés dans `workspace`** (le workspace Multica *est* l'organisation et l'équipe — pas de frontière distincte à modéliser).
@@ -24,7 +24,7 @@ Cette mémoire de règles est alignée sur le contrat AI-DLC **« Rules and the 
 | `phase` | `phases/<phase>.md` (`ideation`, `inception`, `construction`, `operation`) | Par phase du workflow | À la demande, quand la phase est déclenchée | `phase` (4 fichiers ; `initialization` sans règles) |
 | `scope` | `scopes/<scope>.md` (`standard`, `feature`, `infra`, `security-patch`, `mvp`, `poc`, `express`, `enterprise`) | Par scope (voir « Scopes et axes d'exécution ») | À la demande, quand le scope est confirmé | couche maison (absente d'AI-DLC) |
 
-> **Couche `stage` différée** : AI-DLC réserve une cinquième couche « règles par stage » pour une version future (non écrivable aujourd'hui). Nous restons alignés en ne la créant pas ; la granularité fine reste couverte par la couche `scope` et par les fiches de stage (comportement). Réévaluable si l'amont ouvre la couche `stage` ou si un besoin réel émerge ([`decisions/0010`](../../decisions/0010-alignement-memoire-de-regles-sur-ai-dlc.md)).
+> **Couche `stage` différée** : AI-DLC réserve une cinquième couche « règles par stage » pour une version future (non écrivable aujourd'hui). Nous restons alignés en ne la créant pas ; la granularité fine reste couverte par la couche `scope` et par les fiches de stage (comportement). Réévaluable si l'amont ouvre la couche `stage` ou si un besoin réel émerge ([`decisions/0011`](../../decisions/0011-alignement-memoire-de-regles-sur-ai-dlc.md)).
 
 **Précédence** : `workspace` > `project` > `phase` > `scope`. Une règle d'une couche **ne peut pas contredire** une règle d'une couche supérieure sans arbitrage humain (contrôle de conflit à l'admission — voir le workflow). Cette précédence explicite **préserve et renforce** l'invariant amont « conflit réglé à l'écriture, jamais au runtime » (elle n'est pas une résolution silencieuse au runtime : aucune couche n'écrase une autre sans arbitrage).
 

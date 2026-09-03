@@ -3,7 +3,7 @@ slug: deployment-under-validation
 phase: operation
 execution: CONDITIONAL
 condition: "Exécuté si le travail comporte un déploiement / une administration ; sinon N/A"
-lead_agent: Administrateur infrastructure Windows
+lead_agent: Infrastructure Windows
 support_agents: [Architecte AWS, Architecture Solution & Intégration]
 mode: subagent
 summary_confirmation: required
@@ -32,7 +32,7 @@ Déployer ou administrer uniquement sous validation humaine explicite, avec roll
 Le coordinateur sollicite le **Reviewer de sécurité** sur le plan de déploiement / administration (surface à impact) ; revue **adversariale, non substituable** (plancher SG-3), intégrée **avant** la validation humaine explicite.
 
 ### Step 3 — Plan de rollback (conditionnel)
-Pour toute action destructive ou de migration (Administrateur infrastructure Windows), publier un **plan de rollback détaillé** et le faire **valider par l'humain avant exécution**.
+Pour toute action destructive ou de migration (Infrastructure Windows), publier un **plan de rollback détaillé** et le faire **valider par l'humain avant exécution**.
 
 ### Step 4 — Garde-fou
 **Aucune action à impact (déploiement, migration, orchestration) sans validation humaine explicite.** Jamais autonome.

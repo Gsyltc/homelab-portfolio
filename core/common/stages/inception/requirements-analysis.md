@@ -4,7 +4,7 @@ phase: inception
 execution: ALWAYS
 condition: "Always executes — profondeur adaptative"
 lead_agent: Architecte de solution
-support_agents: [Architecte AWS, Architecte cybersécurité]
+support_agents: [Architecte AWS, Architecte Cybersécurité]
 mode: subagent
 summary_confirmation: required
 reviewer: Reviewer de cohérence

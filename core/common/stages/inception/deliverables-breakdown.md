@@ -30,7 +30,7 @@ Découper le travail en livrables et désigner l'agent responsable de chacun.
 ### Step 2 — Découper et désigner l'agent responsable
 - Documentation d'architecture / décisions structurantes / diagrammes → **Architecte de solution**.
 - Choix AWS, diagrammes AWS, coûts → **Architecte AWS** (si AWS requis).
-- Administration / infrastructure Windows → **Administrateur infrastructure Windows** (si concerné).
+- Administration / infrastructure Windows → **Infrastructure Windows** (si concerné).
 - Cycle spec-driven → **OpenSpec Expert** (uniquement si OpenSpec activé).
 
 ### Step 3 — Déclencher les agents

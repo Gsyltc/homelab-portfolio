@@ -55,7 +55,7 @@ d'architecture** (DAS, ADR, diagrammes) plutôt que du code applicatif. L'axe «
 d'AI-DLC y est donc peu pertinent tel quel.
 
 Décision (tracée en [ADR-0003](../../decisions/0003-scopes-et-axes-depth-verification.md), affinée
-en [ADR-0009](../../decisions/0009-scopes-fichiers-par-scope-et-axes-review-cap.md)) :
+en [ADR-0010](../../decisions/0010-scopes-fichiers-par-scope-et-axes-review-cap.md)) :
 
 - Champ maison **`verification`** — `advisory` / `standard` / `renforcé` (rigueur du contrôle des
   livrables) — **remplace** le `testStrategy` d'AI-DLC pour la documentation, **avec repli sur une

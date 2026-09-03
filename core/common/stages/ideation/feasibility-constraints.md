@@ -4,7 +4,7 @@ phase: ideation
 execution: ALWAYS
 condition: "Always executes — évaluation légère"
 lead_agent: Architecture Solution & Intégration
-support_agents: [Architecte de solution, Architecte AWS, Architecte cybersécurité]
+support_agents: [Architecte de solution, Architecte AWS, Architecte Cybersécurité]
 mode: inline
 summary_confirmation: required
 reviewer: null
@@ -26,7 +26,7 @@ outputs: "Faisabilité et contraintes fortes (techniques, sécurité, coût, dé
 
 ## Steps
 ### Step 1 — Évaluation légère
-Évaluer la faisabilité et les contraintes fortes (techniques, sécurité, coût, délais) susceptibles de rendre le travail non pertinent ou de le réorienter. Les `support_agents` (Architecte de solution, Architecte AWS, Architecte cybersécurité) sont des **voix adoptées** en `inline`, pas une revue indépendante.
+Évaluer la faisabilité et les contraintes fortes (techniques, sécurité, coût, délais) susceptibles de rendre le travail non pertinent ou de le réorienter. Les `support_agents` (Architecte de solution, Architecte AWS, Architecte Cybersécurité) sont des **voix adoptées** en `inline`, pas une revue indépendante.
 
 ### Step 2 — Réorientation éventuelle
 Si une contrainte forte remet en cause l'intention, la signaler à l'humain avant d'avancer. L'étude détaillée relève de l'Inception, pas de ce stage.
