@@ -8,7 +8,7 @@ support_agents: [Architecte de solution, Architecte AWS, Architecte cybersécuri
 mode: inline
 summary_confirmation: required
 reviewer: null
-review_class: advisory
+review_class: none
 human_gate: none
 produces: [faisabilite_contraintes_evaluees]
 consumes: [{artifact: intention_capturee, required: true}]
@@ -26,10 +26,14 @@ outputs: "Faisabilité et contraintes fortes (techniques, sécurité, coût, dé
 
 ## Steps
 ### Step 1 — Évaluation légère
-Évaluer la faisabilité et les contraintes fortes (techniques, sécurité, coût, délais) susceptibles de rendre le travail non pertinent ou de le réorienter.
+Évaluer la faisabilité et les contraintes fortes (techniques, sécurité, coût, délais) susceptibles de rendre le travail non pertinent ou de le réorienter. Les `support_agents` (Architecte de solution, Architecte AWS, Architecte cybersécurité) sont des **voix adoptées** en `inline`, pas une revue indépendante.
 
 ### Step 2 — Réorientation éventuelle
 Si une contrainte forte remet en cause l'intention, la signaler à l'humain avant d'avancer. L'étude détaillée relève de l'Inception, pas de ce stage.
 
-## Gate / sortie
-Faisabilité / contraintes consignées sur l'issue. Allégé (➖) sur `poc` / `express`.
+## Sensors
+Outputs: faisabilité / contraintes consignées sur l'issue. Allégé (➖) sur `poc` / `express`.
+Imports: none.
+
+## Learn
+Boucle d'apprentissage maison (voir [`core/rules/`](../../../rules/README.md)) : tracer sur l'issue les candidats-règles (contraintes récurrentes, motifs de réorientation) ; les remonter au **gate humain** léger d'Ideation ; persistance des apprentissages **confirmés** dans `core/rules/` via le cycle capture → confirmation humaine → contrôle de conflit. Divergence tracée vs le journal `memory.md` d'AI-DLC (voir [ADR-0009](../../../../decisions/0009-alignement-fiches-de-stage-sur-ai-dlc.md)).

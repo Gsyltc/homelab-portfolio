@@ -32,5 +32,9 @@ Déterminer si le travail part d'un existant (brownfield) ou d'une page blanche 
 ### Step 2 — Consigner
 Le résultat est **consigné sur l'issue** ; il n'appelle pas de validation humaine (fait détecté).
 
-## Gate / sortie
-Contexte brownfield / greenfield consigné. Aucun gate humain.
+## Sensors
+Outputs: contexte brownfield / greenfield consigné. Aucun gate humain.
+Imports: none.
+
+## Learn
+Boucle d'apprentissage maison (voir [`core/rules/`](../../../rules/README.md)) : tenir le journal des candidats-règles sur l'issue. Stage d'Initialization (bootstrap déterministe) → **saute** l'interaction liée au gate humain ; aucune règle écrite hors du cycle capture → confirmation humaine → contrôle de conflit. Divergence tracée vs le journal `memory.md` d'AI-DLC (voir [ADR-0009](../../../../decisions/0009-alignement-fiches-de-stage-sur-ai-dlc.md)).
