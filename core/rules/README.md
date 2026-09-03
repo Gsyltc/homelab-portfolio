@@ -9,7 +9,7 @@ Cette mémoire de règles est alignée sur le contrat AI-DLC **« Rules and the 
 
 - **Chaîne à 5 couches amont `org → team → project → phase → stage`** → ici **4 couches** `workspace > project > phase > scope` :
   - `org` + `team` sont **fusionnés dans `workspace`** (le workspace Multica *est* l'organisation et l'équipe — pas de frontière distincte à modéliser).
-  - La couche **`stage`** amont (`aidlc-stage-<slug>.md`) est **réservée pour une future version** chez l'amont (non écrivable) : nous **restons alignés** et **ne la créons pas** (différée).
+  - La couche **`stage`** amont (`stage-<slug>.md`) est **réservée pour une future version** chez l'amont (non écrivable) : nous **restons alignés** et **ne la créons pas** (différée).
   - La couche **`scope`** est une **couche maison** (pont avec le mécanisme de scopes, [`decisions/0003`](../../decisions/0003-scopes-et-axes-depth-verification.md)) absente d'AI-DLC — conservée et documentée.
 - **Emplacement** : l'amont place les règles sous `core/memory/` ; nous conservons **`core/rules/`** (cohérent avec `core/sensors/` / `core/common/`, agnostique de méthodologie). La **portée reste dérivable du chemin** (répertoire + nom de fichier), dans l'esprit amont « pas de champ `scope:` ».
 - **Phases** : comme l'amont, la couche `phase` a **quatre fichiers** (`ideation`, `inception`, `construction`, `operation`) ; l'`initialization` est bootstrap-only et **ne porte pas** de fichier de règles.

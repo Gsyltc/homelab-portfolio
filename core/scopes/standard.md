@@ -11,7 +11,7 @@ skeleton: off
 
 Parcours d'architecture complet pour une conception ou une évolution « normale ». C'est le
 **scope par défaut** en l'absence de mot-clé détecté — aucune régression par rapport au parcours
-d'architecture historique (compatibilité ascendante, [ADR-0002](../../decisions/0002-strategie-compatibilite-et-terminologie.md)).
+d'architecture historique.
 
 Tous les stages d'Ideation, Inception et Construction s'exécutent ; l'Operation est conditionnelle
 (présente uniquement s'il y a une action à impact / un déploiement). Axes par défaut : Depth

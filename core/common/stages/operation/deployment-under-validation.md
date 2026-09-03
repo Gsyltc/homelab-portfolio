@@ -23,24 +23,31 @@ outputs: "Plan / configuration validé explicitement par l'humain ; plan de roll
 # Déploiement / administration sous validation humaine
 
 ## Objectif
+
 Déployer ou administrer uniquement sous validation humaine explicite, avec rollback si destructif.
 
 ## Steps
-### Step 1 — Soumettre le plan complet à l'humain pour **validation explicite**.
+
+### Step 1 — Soumettre le plan complet à l'humain pour **validation explicite**
 
 ### Step 2 — Contrôle sécurité adversarial
+
 Le coordinateur sollicite le **Reviewer de sécurité** sur le plan de déploiement / administration (surface à impact) ; revue **adversariale, non substituable** (plancher SG-3), intégrée **avant** la validation humaine explicite.
 
 ### Step 3 — Plan de rollback (conditionnel)
+
 Pour toute action destructive ou de migration (Administrateur infrastructure Windows), publier un **plan de rollback détaillé** et le faire **valider par l'humain avant exécution**.
 
 ### Step 4 — Garde-fou
+
 **Aucune action à impact (déploiement, migration, orchestration) sans validation humaine explicite.** Jamais autonome.
 
 ## Sensors
+
 Outputs: plan / configuration validé (+ rollback conditionnel). Frontière **Operation → Fin** : gate `artefacts-presents` (plan, rollback conditionnel).
 Imports: none.
 Review artifact: `plan-deploiement.md` porte la section `## Review` ajoutée par le Reviewer de sécurité.
 
 ## Learn
-Boucle d'apprentissage maison (voir [`core/rules/`](../../../rules/README.md)) : tracer sur l'issue les candidats-règles (motifs de déploiement, patterns de rollback récurrents) ; les remonter au **gate humain explicite** d'Operation ; persistance des apprentissages **confirmés** dans `core/rules/` via le cycle capture → confirmation humaine → contrôle de conflit. Divergence tracée vs le journal `memory.md` d'AI-DLC (voir [ADR-0009](../../../../decisions/0009-alignement-fiches-de-stage-sur-ai-dlc.md)).
+
+Boucle d'apprentissage maison (voir [`core/rules/`](../../../rules/README.md)) : tracer sur l'issue les candidats-règles (motifs de déploiement, patterns de rollback récurrents) ; les remonter au **gate humain explicite** d'Operation ; persistance des apprentissages **confirmés** dans `core/rules/` via le cycle capture → confirmation humaine → contrôle de conflit.

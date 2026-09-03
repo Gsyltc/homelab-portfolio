@@ -11,7 +11,7 @@ skeleton: off
 
 Correction ou durcissement de sécurité. L'**Architecte cybersécurité pilote** le travail ;
 périmètre resserré, traçabilité renforcée, analyse d'impact / non-régression du correctif produite
-avant toute recommandation (R2 de [ADR-0003](../../decisions/0003-scopes-et-axes-depth-verification.md)).
+avant toute recommandation.
 
 Axes par défaut : Depth `standard`, vérification **`renforcé`**. **Garde-fou non abaissable** :
 `depth` ≥ `standard` et `verification` ≥ `renforcé` ne peuvent jamais être abaissés par override ;

@@ -12,9 +12,6 @@ skeleton: on
 Chantier structurant à fort impact ou à enjeu de conformité. Parcours **complet**, Depth
 `comprehensive`, vérification **`renforcé`**.
 
-Renforcements dédiés (R4 / R5 de
-[ADR-0003](../../decisions/0003-scopes-et-axes-depth-verification.md)) :
-
 - Point de contrôle obligatoire « **applicabilité des normes** » (PCI DSS / GDPR / Loi 25 /
   LPRPDE), décision tracée en ADR — y compris « aucune norme requise ».
 - **Classification des données** traitées, pré-requis d'activation des normes.
