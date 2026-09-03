@@ -8,7 +8,8 @@ Définitions conformes (front-matter YAML + corps Markdown, même format que [`c
 |---|---|---|
 | Tech Lead Homelab | [tech-lead-homelab-agent.md](tech-lead-homelab-agent.md) | Coordinateur + contrôleur qualité central ; délègue aux spécialistes, applique le verrou par stack, demande la validation humaine. |
 | Spécialiste Docker | [docker-specialist-agent.md](docker-specialist-agent.md) | Crée/modifie les docker-compose optimisés Swarm. Produit le livrable. |
-| QA Docker | [qa-docker-agent.md](qa-docker-agent.md) | Vérifie et corrige les docker-compose (YAML, Swarm, hardening, Traefik). Intervient après création. |
+| QA Docker | [qa-docker-agent.md](qa-docker-agent.md) | Vérifie et corrige les docker-compose (YAML, Swarm, hardening technique, Traefik). Intervient après création. |
+| Architecte de sécurité Homelab | [security-architect-homelab-agent.md](security-architect-homelab-agent.md) | **Jugement sécurité** : hardening et sécurité de base des stacks (secrets, exposition, permissions, durcissement, Traefik). Contrôleur sécurité de la couche `global` de la mémoire de règles. Périmètre limité à la sécurité de base d'un homelab (pas de conformité réglementaire). |
 | Spécialiste Terraform | [terraform-specialist-agent.md](terraform-specialist-agent.md) | Écrit/modifie les `.tf`/`.tfvars`. **N'exécute jamais** init/apply/destroy ; pas de `${SNI}`. |
 | Expert n8n | [n8n-expert-agent.md](n8n-expert-agent.md) | Crée/modifie/diagnostique les flux n8n via MCP. Branche autonome (règle absolue n8n). |
 | Expert Home Assistant | [home-assistant-expert-agent.md](home-assistant-expert-agent.md) | Pilote Home Assistant via MCP officiel. Double validation avant toute action réelle. |

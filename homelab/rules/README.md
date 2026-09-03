@@ -40,7 +40,7 @@ Cette mémoire de règles est alignée sur :
 1. **Capture** : pendant une étape, chaque correction / rejet / reformulation humaine sur un choix est un *candidat-règle* potentiel (tracé sur l'issue). Le QA Docker, les spécialistes et le Tech Lead Homelab génèrent des candidats quand ils corrigent une convention récurrente (ex. `_FILE` pour secrets, placement d'un healthcheck, réseau Traefik par défaut, `.tfvars` oublié).
 2. **Remontée** : au point de validation humaine, le Tech Lead Homelab propose les candidats formulés en règles courtes, avec couche et portée proposées.
 3. **Confirmation humaine** : l'humain garde ✅ / rejette ❌ / reformule 💬 chaque candidat séparément. Rien n'est écrit sans validation explicite.
-4. **Contrôle de conflit à l'admission** : précédence des couches + invariants non contournables + (pour toute règle `global`) contrôle sécurité systématique par le QA Docker.
+4. **Contrôle de conflit à l'admission** : précédence des couches + invariants non contournables + (pour toute règle `global`) contrôle sécurité systématique par l'**Architecte de sécurité Homelab**.
 5. **Écriture** : la règle acceptée est ajoutée au fichier de sa couche, avec un identifiant, la date et le lien vers l'issue d'origine.
 6. **Application au prochain workflow** : une règle nouvellement écrite n'altère jamais l'exécution en cours ; elle prend effet au démarrage du **prochain** workflow.
 
@@ -51,6 +51,7 @@ La capture est **systématique** : à chaque validation granulaire, le Tech Lead
 Déclencheurs principaux :
 
 - **Correction QA Docker** : le QA Docker corrige une convention → candidat (`_FILE` pour secrets, section `deploy` manquante, healthcheck mal placé, réseau Traefik par défaut).
+- **Revue de l'Architecte de sécurité Homelab** : un durcissement ou une correction de sécurité récurrente (exposition, permissions, secrets, TLS Traefik) → candidat de portée sécurité.
 - **Arbitrage humain** : l'humain tranche un point récurrent → candidat (ex. choix Swarm vs Proxmox pour un type de service, convention `.tfvars` pour un type de variable).
 - **Correction Spécialiste** : un spécialiste (Docker, Terraform) corrige un pattern récurrent → candidat.
 - **Échec de sensor** (Stage 4) : un check déterministe échoue de manière récurrente sur le même type d'erreur → candidat de liaison sensor (`SENSOR_PROPOSED`, articulé au Stage 4).
@@ -93,12 +94,14 @@ Un candidat qui contredit l'un de ces invariants est **rejeté d'office**.
 
 ## Clauses de sécurité (adaptées de SEC-1..5 du core)
 
-Ces clauses sont **contraignantes** et ferment les vecteurs de dérive de gouvernance :
+Ces clauses sont **contraignantes** et ferment les vecteurs de dérive de gouvernance. Le contrôle sécurité est assuré par l'**Architecte de sécurité Homelab** (voir [`../agents/security-architect-homelab-agent.md`](../agents/security-architect-homelab-agent.md)).
+
+> **Périmètre de sécurité — sécurité de base d'un homelab.** Le contrôle porte sur le **hardening et la sécurité de base** (secrets, exposition réseau, permissions, durcissement Docker/Swarm, cohérence Traefik). Le Homelab n'a **aucune notion** de Loi 25, PCI DSS, GDPR/RGPD, LPRPDE ni de protection réglementée des données personnelles — ces normes ne s'appliquent pas ici et ne sont jamais introduites.
 
 - **SEC-1 — érosion sémantique** : un candidat qui restreint la portée, ajoute une exception ou conditionne l'application d'un invariant ou d'un garde-fou est traité comme un affaiblissement et **rejeté d'office**, même sans contradiction littérale.
-- **SEC-2 — périmètre fondé sur le risque** : le contrôle sécurité systématique s'applique à toute règle `global` **et** à toute règle `stack` / `phase` / `scope` visant un scope à garde-fous (`security-patch`, `new-stack`), une phase de vérification, ou un contrôle de sécurité existant.
+- **SEC-2 — périmètre fondé sur le risque** : le contrôle sécurité systématique (Architecte de sécurité Homelab) s'applique à toute règle `global` **et** à toute règle `stack` / `phase` / `scope` visant un scope à garde-fous (`security-patch`, `new-stack`), une phase de vérification, ou un contrôle de sécurité existant.
 - **SEC-3 — pas d'exploitation d'un candidat dans le run courant** : un candidat capturé n'a aucune valeur normative tant qu'il n'est pas confirmé, contrôlé et écrit ; application différée au prochain workflow, sans exception.
-- **SEC-4 — promotion vers `global`** : soumise dans tous les cas au contrôle sécurité systématique, qu'elle « touche la sécurité » ou non.
+- **SEC-4 — promotion vers `global`** : soumise dans tous les cas au contrôle sécurité systématique de l'Architecte de sécurité Homelab, qu'elle « touche la sécurité » ou non.
 - **SEC-5 — intégrité du canal d'écriture** : aucune règle n'est ajoutée / modifiée / supprimée dans `homelab/rules/` hors de la boucle (capture → confirmation humaine → contrôle de conflit). Toute modification est versionnée, revue en PR, et porte `origine` + date ; une entrée sans provenance traçable est invalide et retirée.
 
 ## Articulation avec la piste d'audit
