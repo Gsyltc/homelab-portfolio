@@ -101,13 +101,13 @@ homelab-portfolio/
 │   │   └── protocols/                     #   Protocoles transverses (stage-definition, gouvernance, reviewer…)
 │   ├── rules/                             #   Mémoire de règles multi-couches (boucle d'apprentissage)
 │   ├── sensors/                           #   Manifestes des verification gates & sensors (advisory)
-│   ├── agents/                            #   Définitions d'agents
+│   ├── agents/                            #   Définitions d'agents du workflow (9 fichiers .md exportés)
 │   └── workflows/                         #   Workflows narratifs par domaine
 │       └── homelab/                       #     homelab-workflow.md (+ VERSION)
 ├── decisions/                             # Registre des décisions structurantes (0001…0007)
 ├── docs/                                  # Stub de redirection core-workflow + doc générale
 └── plugins/                               # Packages de plugins d'agents (spec Agent Plugins v1.0.0) — portent les skills
-    ├── architecture-assistant/            #   plugin.json + skills/ (OpenSpec + décision d'architecture)
+    ├── architecture-assistant/            #   plugin.json + skills/ (OpenSpec, décision, gabarits, cybersécurité, AWS, Windows, supports de vente)
     ├── general-purpose-assistant/         #   plugin.json + skills/ (workflow de stack, notifications)
     ├── homelab-assistant/                 #   plugin.json + skills/ (docker-composer, traefik)
     ├── investment-assistant/              #   plugin.json + skills/ (analyse, data provider, liste de titres)
