@@ -42,7 +42,7 @@ Défaut : **`stack-update`** en l'absence de mot-clé détecté.
 ### Axes indépendants
 
 - **Axe 1 — Depth** (`minimal` / `standard` / `comprehensive`) : détail des artefacts (docker-compose, config Terraform, documentation). Contrôle *combien on écrit*.
-- **Axe 2 — Stratégie de vérification** (`advisory` / `standard` / `renforcé`) : **intensité du QA Docker** et du contrôle qualité central (§2.6). Contrôle *à quel point on vérifie*. Distinct de la Depth : on peut produire peu et vérifier fort (patch de sécurité), ou produire beaucoup et vérifier en advisory (jamais sur un scope sécuritaire, cf. garde-fou).
+- **Axe 2 — Stratégie de vérification** (`advisory` / `standard` / `renforcé`) : **intensité du QA Docker** et du contrôle qualité central (§3.6). Contrôle *à quel point on vérifie*. Distinct de la Depth : on peut produire peu et vérifier fort (patch de sécurité), ou produire beaucoup et vérifier en advisory (jamais sur un scope sécuritaire, cf. garde-fou).
   - `advisory` — validité YAML + cohérence de base (syntaxe seule), signalée sans bloquer.
   - `standard` — QA Docker complet : compatibilité Swarm (`deploy`), réseaux/volumes/secrets, hardening standard, cohérence Traefik (`traefik-manager-read`).
   - `renforcé` — vérification `standard` **plus** audit de sécurité approfondi (secrets `_FILE`, exposition, permissions, absence de `${SNI}` en Terraform, revue durcissement).
@@ -59,25 +59,27 @@ Scope auto-détecté par mots-clés (FR / EN, champ `keywords:` de chaque fichie
 
 ### Matrice scope × phase (vue lisible)
 
-Adossée aux **3 phases actuelles** du présent workflow (Phase 1 Cadrage / Phase 2 Production et Contrôle / Phase 3 Validation et Déploiement). Elle sera re-projetée sur les 5 phases au Stage 5. Légende : ✅ activé · ➖ allégé / au juste nécessaire · 🔒 renforcé · ❌ ignoré · ⏭ branche autonome (ne passe pas par ce flux).
+Adossée aux **5 phases** du présent workflow (Phase 0 Initialisation / Phase 1 Idéation / Phase 2 Cadrage et Paramètres / Phase 3 Production et Contrôle / Phase 4 Validation et Déploiement). Légende : ✅ activé · ➖ allégé / au juste nécessaire · 🔒 renforcé · ❌ ignoré · ⏭ branche autonome (ne passe pas par ce flux).
 
 | Étape | `stack-update` | `new-stack` | `config-change` | `security-patch` | `infra-terraform` | `n8n` | `home-assistant` |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| §1.1 Règle absolue n8n | ✅ | ✅ | ✅ | ✅ | ✅ | 🔒 déclenche | ✅ |
-| §1.2 Réception & cadrage | ✅ | ✅ | ➖ | ✅ | ✅ | ⏭ | ⏭ |
-| §1.3 Arbitrage Swarm/Proxmox | ➖ | ✅ | ❌ | ➖ | ✅ | ⏭ | ⏭ |
-| §1.4 Collecte paramètres + auth | ✅ | ✅ | ➖ | ✅ | ➖ | ⏭ | ⏭ |
-| §2.1 Création docker-compose (Spé. Docker) | ✅ | ✅ | ➖ | ✅ | ❌ | ⏭ | ⏭ |
-| §2.2 Vérification docker-compose (QA Docker) | ✅ | ✅ 🔒 | ➖ | ✅ 🔒 | ❌ | ⏭ | ⏭ |
-| §2.3 Configuration Terraform (Spé. Terraform) | ➖ | ✅ | ❌ | ➖ | ✅ | ⏭ | ⏭ |
-| §2.4 Branche n8n (Expert N8n) | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
-| §2.5 Branche Home Assistant (Expert HA) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| §2.6 Contrôle qualité central (Tech Lead) | ✅ | ✅ 🔒 | ➖ | ✅ 🔒 | ✅ | ✅ | ✅ |
-| Phase 3 Validation humaine + déploiement | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| §0.x Initialisation (bootstrap déterministe) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| §1.x Idéation (intention + gate léger) | ✅ | ✅ | ➖ | ✅ | ✅ | ⏭ | ⏭ |
+| §2.1 Règle absolue n8n | ✅ | ✅ | ✅ | ✅ | ✅ | 🔒 déclenche | ✅ |
+| §2.2 Réception & cadrage | ✅ | ✅ | ➖ | ✅ | ✅ | ⏭ | ⏭ |
+| §2.3 Arbitrage Swarm/Proxmox | ➖ | ✅ | ❌ | ➖ | ✅ | ⏭ | ⏭ |
+| §2.4 Collecte paramètres + auth | ✅ | ✅ | ➖ | ✅ | ➖ | ⏭ | ⏭ |
+| §3.1 Création docker-compose (Spé. Docker) | ✅ | ✅ | ➖ | ✅ | ❌ | ⏭ | ⏭ |
+| §3.2 Vérification docker-compose (QA Docker) | ✅ | ✅ 🔒 | ➖ | ✅ 🔒 | ❌ | ⏭ | ⏭ |
+| §3.3 Configuration Terraform (Spé. Terraform) | ➖ | ✅ | ❌ | ➖ | ✅ | ⏭ | ⏭ |
+| §3.4 Branche n8n (Expert N8n) | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
+| §3.5 Branche Home Assistant (Expert HA) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| §3.6 Contrôle qualité central (Tech Lead) | ✅ | ✅ 🔒 | ➖ | ✅ 🔒 | ✅ | ✅ | ✅ |
+| Phase 4 Validation humaine + déploiement | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 
-Affectation des agents : **Spécialiste Docker** et **QA Docker** sur le flux stack (§2.1–2.2, allégé/ignoré selon scope) ; **Spécialiste Terraform** sur §2.3 (accentué sous `infra-terraform` / `new-stack`) ; **Expert N8n** et **Expert Home Assistant** sur leurs branches autonomes respectives ; **Tech Lead** coordonne et assure le contrôle qualité central (§2.6) sur tous les scopes.
+Affectation des agents : **Spécialiste Docker** et **QA Docker** sur le flux stack (§3.1–3.2, allégé/ignoré selon scope) ; **Spécialiste Terraform** sur §3.3 (accentué sous `infra-terraform` / `new-stack`) ; **Expert N8n** et **Expert Home Assistant** sur leurs branches autonomes respectives ; **Tech Lead** coordonne, assure le bootstrap (§0.x), le cadrage amont (§1.x) et le contrôle qualité central (§3.6) sur tous les scopes.
 
-**Ce que change chaque scope.** Un scope allégé (`config-change`) réduit le **nombre d'étapes** (cadrage resserré, moins de contrôles intermédiaires) ; les scopes complets appliquent l'intégralité des phases 1 à 3. Dans tous les cas, la validation humaine avant toute action à impact (PHASE 3) et la répartition des rôles restent inchangées.
+**Ce que change chaque scope.** Un scope allégé (`config-change`) réduit le **nombre d'étapes** (Idéation resserrée, cadrage resserré, moins de contrôles intermédiaires) ; les scopes complets appliquent l'intégralité des phases 0 à 4. Dans tous les cas, la validation humaine avant toute action à impact (PHASE 4) et la répartition des rôles restent inchangées.
 
 **Un scope joue sur le nombre d'étapes, jamais sur qui les exécute.** Alléger peut supprimer des étapes sans valeur, mais ne transfère **jamais** la responsabilité d'un spécialiste vers le Tech Lead : si une étape a lieu (production compose, vérification technique, hardening, config Terraform), elle est réalisée par le rôle qui en a la charge. « Petit changement » n'autorise pas le Tech Lead à produire ou vérifier lui-même à la place du Spécialiste Docker ou du QA Docker.
 
@@ -119,7 +121,7 @@ Une règle d'une couche **ne peut pas contredire** une règle d'une couche supé
 Aucune règle apprise ne peut affaiblir les garde-fous absolus du workflow :
 
 - Validation humaine granulaire avant toute action à impact (dépôt fichiers, Kestra)
-- Règle absolue n8n (§1.1), sélection auto d'authentification (§1.4)
+- Règle absolue n8n (§2.1), sélection auto d'authentification (§2.4)
 - Terraform ne déploie jamais, aucun secret en clair, jamais `${SNI}`, un seul traitement par stack
 - Garde-fous sécurité des scopes (plancher de vérification, Depth non abaissable sur `security-patch` / `new-stack`)
 - Piste d'audit sur l'issue, ADR sur les décisions structurantes
@@ -142,20 +144,22 @@ Contrôle assuré par l'**Architecte de sécurité Homelab** ([`homelab/agents/s
 
 Deux mécanismes de **fiabilisation déterministe**, **tous deux advisory**, soulagent le QA Docker et le Tech Lead des vérifications mécaniques et rendent les contrôles reproductibles. Leurs manifestes déclaratifs vivent dans [`homelab/sensors/`](../homelab/sensors/README.md) (miroir de [`core/sensors/`](../core/sensors/README.md)) — décision tracée dans [ADR-0016](../decisions/0016-verification-gates-et-sensors-homelab.md).
 
-> **Advisory par défaut, bloquant conditionnel (sécurité).** Gates et sensors **ne bloquent pas** par défaut et laissent une **trace d'audit factuelle** sur l'issue. **Exception confirmée (ALI-204)** : `plaintext-secret` et `terraform-no-sni` sont **bloquants sur les scopes `security-patch` / `new-stack`** — une détection y **arrête l'avancée** jusqu'à correction ou levée humaine explicite tracée. Même bloquant, un sensor **ne remplace ni le QA Docker systématique (§2.2), ni le contrôle qualité central (§2.6), ni la validation humaine granulaire (PHASE 3)** : il force la correction, il ne décide pas à la place de l'humain. Un signal au vert **ne vaut pas validation** ; un signal en échec **n'autorise aucun raccourci**. Toute évolution de sévérité est une décision ADR + contrôle sécurité (QA Docker).
+> **Advisory par défaut, bloquant conditionnel (sécurité).** Gates et sensors **ne bloquent pas** par défaut et laissent une **trace d'audit factuelle** sur l'issue. **Exception confirmée (ALI-204)** : `plaintext-secret` et `terraform-no-sni` sont **bloquants sur les scopes `security-patch` / `new-stack`** — une détection y **arrête l'avancée** jusqu'à correction ou levée humaine explicite tracée. Même bloquant, un sensor **ne remplace ni le QA Docker systématique (§3.2), ni le contrôle qualité central (§3.6), ni la validation humaine granulaire (PHASE 4)** : il force la correction, il ne décide pas à la place de l'humain. Un signal au vert **ne vaut pas validation** ; un signal en échec **n'autorise aucun raccourci**. Toute évolution de sévérité est une décision ADR + contrôle sécurité (QA Docker).
 
 ### Verification gates — traçabilité aux frontières de phases
 
-À chaque **frontière de phase**, en amont de la validation humaine, le Tech Lead Homelab exécute un contrôle déterministe de traçabilité ([`homelab/sensors/gates.md`](../homelab/sensors/gates.md)) en trois points : (1) **artefacts présents** en sortie de phase, (2) **liaison de traçabilité** (chaque paramètre / décision relié à la demande, aux paramètres §1.4 ou à un ADR), (3) **absence d'orphelin** (aucun livrable ni décision déconnecté).
+À chaque **frontière de phase**, en amont de la validation humaine, le Tech Lead Homelab exécute un contrôle déterministe de traçabilité ([`homelab/sensors/gates.md`](../homelab/sensors/gates.md)) en trois points : (1) **artefacts présents** en sortie de phase, (2) **liaison de traçabilité** (chaque paramètre / décision relié à la demande, aux paramètres §2.4 ou à un ADR), (3) **absence d'orphelin** (aucun livrable ni décision déconnecté).
 
 | Frontière | Artefacts requis contrôlés | Sensors associés |
 | --- | --- | --- |
-| Demande → Phase 1 | demande brute consignée, label `Homelab`, scope confirmé | — |
-| **Phase 1 → Phase 2** | **lien de documentation officielle**, **tous les paramètres requis §1.4** (`${stack_name}`, `${traefik_network}`, …), arbitrage Swarm/Proxmox (§1.3), `${auth_type}` figé ou reporté | — |
-| **Phase 2 → Phase 3** | livrable compose (§2.1), `.tfvars` (§2.3, selon scope), **QA Docker passé** (§2.2), GO du contrôle qualité central (§2.6), **prérequis §3.0** (`[répertoire de travail]`, Kestra) | `yaml-validity`, `swarm-deploy-section`, `plaintext-secret`, `terraform-no-sni`, `traefik-coherence` |
-| Phase 3 → Clôture | validation humaine explicite (§3.2), dépôt confirmé (§3.3), déploiement Kestra si demandé (§3.4) | `vault-secret-exists` |
+| Demande → Phase 0 (Initialisation) | demande brute consignée, label `Homelab` posé, détection « stack existante vs nouvelle » consignée, verrou de concurrence lu | — |
+| Phase 0 → Phase 1 (Idéation) | intention capturée, scope auto-détecté | — |
+| **Phase 1 → Phase 2** (Idéation → Cadrage) | scope **confirmé**, intention + périmètre approuvés (gate léger §1.2), faisabilité / arbitrage Swarm-Proxmox amorcé | — |
+| **Phase 2 → Phase 3** (Cadrage → Production) | **lien de documentation officielle**, **tous les paramètres requis §2.4** (`${stack_name}`, `${traefik_network}`, …), arbitrage Swarm/Proxmox (§2.3), `${auth_type}` figé ou reporté | — |
+| **Phase 3 → Phase 4** (Production → Validation) | livrable compose (§3.1), `.tfvars` (§3.3, selon scope), **QA Docker passé** (§3.2), GO du contrôle qualité central (§3.6), **prérequis §4.0** (`[répertoire de travail]`, Kestra) | `yaml-validity`, `swarm-deploy-section`, `plaintext-secret`, `terraform-no-sni`, `traefik-coherence` |
+| Phase 4 → Clôture | validation humaine explicite (§4.2), dépôt confirmé (§4.3), déploiement Kestra si demandé (§4.4) | `vault-secret-exists` |
 
-La frontière **Phase 2 → Phase 3** **anticipe** les prérequis de déploiement du **§3.0** (`[répertoire de travail]` défini et non vide, flux Kestra `configure_service` accessible) : le gate les vérifie **avant** l'entrée en PHASE 3, pour éviter qu'un prérequis manquant ne fasse échouer silencieusement le dépôt (§3.3) ou ne bloque le §3.4. Le §3.0 reste par ailleurs le contrôle **bloquant** de référence exécuté par le Tech Lead en entrée de PHASE 3 — le gate n'est que son pendant advisory anticipé.
+La frontière **Phase 3 → Phase 4** **anticipe** les prérequis de déploiement du **§4.0** (`[répertoire de travail]` défini et non vide, flux Kestra `configure_service` accessible) : le gate les vérifie **avant** l'entrée en PHASE 4, pour éviter qu'un prérequis manquant ne fasse échouer silencieusement le dépôt (§4.3) ou ne bloque le §4.4. Le §4.0 reste par ailleurs le contrôle **bloquant** de référence exécuté par le Tech Lead en entrée de PHASE 4 — le gate n'est que son pendant advisory anticipé.
 
 **En cas d'écart** : le Tech Lead **ne bloque pas**, il **signale l'écart** dans un « Rapport de vérification » sur l'issue et **propose de revenir corriger** avant de présenter le contenu à l'humain. L'humain reste seul décideur (corriger, ou valider en actant l'écart).
 
@@ -176,10 +180,10 @@ Six sensors déclaratifs (répertoire [`homelab/sensors/sensors/`](../homelab/se
 
 **Aucun secret exposé.** `plaintext-secret` signale l'**emplacement** et le **type** de motif (jamais la valeur) ; `vault-secret-exists` vérifie l'**existence** via `homelab-vault-access` en **lecture de présence uniquement**. Aucun sensor ne lit, ne recopie, ni ne transmet une valeur de secret (garde-fou « secrets » du chargement optimisé).
 
-### Articulation avec le contrôle qualité central (§2.6) et la piste d'audit
+### Articulation avec le contrôle qualité central (§3.6) et la piste d'audit
 
 - Les signaux vivent **sur l'issue** (piste d'audit existante) : **Rapport de vérification** à chaque frontière (avant la validation humaine), **signal de sensor** à l'écriture d'un artefact. Faits vérifiables uniquement ; le jugement reste humain.
-- Le **contrôle qualité central (§2.6)** reste un aiguillage GO / RENVOI du Tech Lead : les sensors lui fournissent des **faits** (YAML valide, `deploy` présent, pas de secret en clair) mais ne se substituent **jamais** à l'analyse technique du QA Docker ni à l'aiguillage du Tech Lead.
+- Le **contrôle qualité central (§3.6)** reste un aiguillage GO / RENVOI du Tech Lead : les sensors lui fournissent des **faits** (YAML valide, `deploy` présent, pas de secret en clair) mais ne se substituent **jamais** à l'analyse technique du QA Docker ni à l'aiguillage du Tech Lead.
 - Un écart advisory **récurrent** peut alimenter un **candidat-règle** de la boucle d'apprentissage (`SENSOR_PROPOSED`, [`homelab/rules/`](../homelab/rules/README.md)), sans court-circuiter la validation.
 
 ### Clauses de sécurité (SG-1 à SG-6)
@@ -240,9 +244,9 @@ Cette borne (1 reprise, puis blocage + escalade) évite toute boucle de correcti
 
 Si de l'information existe → s'en servir pour **cadrer** la demande : confirmer que le projet est déployable (image/registry, port principal, type d'auth, dépendances majeures type base de données/cache) et documenter le **lien officiel** sur l'issue **avant** de poursuivre. Si rien n'est trouvé → le signaler explicitement sur l'issue et à l'humain, puis poursuivre en le précisant.
 
-**Type d'authentification.** Lorsque la documentation officielle précise les **types d'authentification disponibles**, appliquer la règle de **sélection automatique du type d'authentification** (§1.4) : choix automatique selon l'ordre de priorité `oidc → saml → ldap → forwardauth → local` (premier disponible **et gratuit**), et **en cas de doute, demander à l'humain**.
+**Type d'authentification.** Lorsque la documentation officielle précise les **types d'authentification disponibles**, appliquer la règle de **sélection automatique du type d'authentification** (§2.4) : choix automatique selon l'ordre de priorité `oidc → saml → ldap → forwardauth → local` (premier disponible **et gratuit**), et **en cas de doute, demander à l'humain**.
 
-**Limite de responsabilité :** à ce stade, le Tech Lead reste au niveau du cadrage. Le relevé **fin** des éléments de configuration (liste exhaustive des variables d'environnement, conventions de secrets comme `_FILE`, volumes précis, healthcheck, versions recommandées, hardening) n'est **pas** produit par le Tech Lead : il est réalisé par le Spécialiste Docker à partir de cette même documentation au moment de la production (§2.1). Le Tech Lead transmet le lien officiel et les paramètres de cadrage ; il ne pré-analyse pas la compatibilité applicative.
+**Limite de responsabilité :** à ce stade, le Tech Lead reste au niveau du cadrage. Le relevé **fin** des éléments de configuration (liste exhaustive des variables d'environnement, conventions de secrets comme `_FILE`, volumes précis, healthcheck, versions recommandées, hardening) n'est **pas** produit par le Tech Lead : il est réalisé par le Spécialiste Docker à partir de cette même documentation au moment de la production (§3.1). Le Tech Lead transmet le lien officiel et les paramètres de cadrage ; il ne pré-analyse pas la compatibilité applicative.
 
 Cette recherche est toujours faite **en premier**. Elle précède l'analyse, la délégation et la génération ; elle ne les remplace pas.
 
@@ -295,42 +299,105 @@ Deux travaux ne doivent **jamais** progresser en parallèle sur la **même stack
 
 # Vue d'ensemble des phases
 
+Le workflow suit désormais les **5 phases d'AI-DLC 2.0**, avec une **nomenclature métier Homelab** (décision de cadrage [ADR-0013](../decisions/0013-cadrage-refonte-homelab-workflow-sur-ai-dlc.md), figée au Stage 5 — [ADR-0017](../decisions/0017-passage-5-phases-et-mode-autonomie-homelab.md)). Les deux phases amont — **Initialisation** (bootstrap déterministe, **sans gate humain**) et **Idéation** (cadrage amont léger + gate humain léger) — s'ajoutent devant les trois phases historiques, dont le **périmètre reste inchangé** : seule la numérotation est décalée.
+
+## Tableau de correspondance des phases
+
+| Phase AI-DLC | Nom Homelab | N° | Origine dans l'ancien workflow |
+| --- | --- | --- | --- |
+| Initialization | **Initialisation** | Phase 0 | nouveau (bootstrap : détection stack, verrou, prérequis anticipés, labels) |
+| Ideation | **Idéation** | Phase 1 | nouveau (intention, faisabilité, arbitrage Swarm/Proxmox, auto-sélection auth) |
+| Inception | **Cadrage et Paramètres** | Phase 2 | ancienne Phase 1 (§1.x → §2.x) |
+| Construction | **Production et Contrôle** | Phase 3 | ancienne Phase 2 (§2.x → §3.x) |
+| Operation | **Validation et Déploiement** | Phase 4 | ancienne Phase 3 (§3.x → §4.x) |
+
+> **Compatibilité ascendante.** Les libellés Homelab historiques (`Cadrage et Paramètres`, `Production et Contrôle`, `Validation et Déploiement`) restent valides comme alias. Les couches de règles `phase` ([`homelab/rules/phases/<phase>.md`](../homelab/rules/README.md)) sont nommées par le **nom** de phase (pas le numéro) et restent inchangées.
+
 ```mermaid
 flowchart TD
-    A[Demande humain ou agent] --> B[PHASE 1 - CADRAGE ET PARAMETRES]
-    B --> C[PHASE 2 - PRODUCTION ET CONTROLE]
-    C --> D[PHASE 3 - VALIDATION ET DEPLOIEMENT]
+    A[Demande humain ou agent] --> Z[PHASE 0 - INITIALISATION]
+    Z --> Y[PHASE 1 - IDEATION]
+    Y --> B[PHASE 2 - CADRAGE ET PARAMETRES]
+    B --> C[PHASE 3 - PRODUCTION ET CONTROLE]
+    C --> D[PHASE 4 - VALIDATION ET DEPLOIEMENT]
+    Z -.->|bootstrap deterministe: detection stack + verrou + labels, sans gate| Z
+    Y -.->|gate humain leger: intention + perimetre + scope confirme| Y
     B -.->|gate advisory: doc officielle + parametres requis| B
-    C -.->|gate advisory: sensors + prerequis 3.0 + coherence Traefik| C
+    C -.->|gate advisory: sensors + prerequis 4.0 + coherence Traefik| C
+    C -.->|walking skeleton valide: question autonomie posee une seule fois| C
 ```
 
-- **PHASE 1 — CADRAGE ET PARAMÈTRES** : QUOI et POURQUOI → documentation officielle, exigences, arbitrage Docker Swarm/Proxmox, paramètres requis complets.
-- **PHASE 2 — PRODUCTION ET CONTRÔLE** : COMMENT → Le Spécialiste Docker produit le compose, le QA Docker le vérifie, Le Spécialiste Terraform produit la config Terraform ; Expert N8n traite n8n et Expert Home Assistant traite les tâches Home Assistant selon leur branche dédiée ; Le tech Lead Homelab contrôle chaque livrable.
-- **PHASE 3 — VALIDATION ET DÉPLOIEMENT** : validation humaine granulaire, dépôt des fichiers, flux Kestra `configure_service`, notification.
+- **PHASE 0 — INITIALISATION** : bootstrap **déterministe, sans gate humain** → détection « stack existante vs nouvelle », lecture du verrou de concurrence, vérification anticipée des prérequis §4.0, pose des labels `Homelab` / `Docker Swarm`, chargement paresseux des règles toujours actives.
+- **PHASE 1 — IDÉATION** : cadrage amont **léger** → capture d'intention, faisabilité, arbitrage Docker Swarm/Proxmox, auto-détection + confirmation du scope, pré-sélection du type d'authentification, puis **gate humain léger** (intention + périmètre).
+- **PHASE 2 — CADRAGE ET PARAMÈTRES** : QUOI et POURQUOI → documentation officielle, exigences, arbitrage Docker Swarm/Proxmox affiné, paramètres requis complets.
+- **PHASE 3 — PRODUCTION ET CONTRÔLE** : COMMENT → Le Spécialiste Docker produit le compose, le QA Docker le vérifie, Le Spécialiste Terraform produit la config Terraform ; Expert N8n traite n8n et Expert Home Assistant traite les tâches Home Assistant selon leur branche dédiée ; Le Tech Lead Homelab contrôle chaque livrable. **Mode d'autonomie** disponible après le premier jalon validé (§3.0).
+- **PHASE 4 — VALIDATION ET DÉPLOIEMENT** : validation humaine granulaire, dépôt des fichiers, flux Kestra `configure_service`, notification.
 
 ---
 
-# PHASE 1 — CADRAGE ET PARAMÈTRES (Tech Lead)
+# PHASE 0 — INITIALISATION (Tech Lead — bootstrap déterministe, sans gate humain)
+
+**Objectif** : préparer le terrain de façon **déterministe** avant tout cadrage. Cette phase **ne comporte aucun gate humain** : elle consigne des faits et prépare l'état ; la seule sollicitation humaine possible est un **garde-fou déterministe** (ex. prérequis manifestement absent), pas une validation.
+
+## 0.1 — Détection « stack existante vs nouvelle »
+
+Déterminer si la demande vise une **stack existante** (modification, correctif, mise à jour) ou une **nouvelle stack** (création). Le fait est **consigné** en commentaire (piste d'audit), **non validé** : il oriente l'auto-détection du scope en Idéation (`stack-update` / `config-change` / `security-patch` vs `new-stack`) sans figer la décision.
+
+## 0.2 — Lecture du verrou de concurrence par stack
+
+Lire la clé de metadata `active_step` de la stack visée (règle « un seul traitement par stack »). Si un traitement est **déjà actif** sur cette stack, ne pas démarrer un second flux : mettre la demande en file (commentaire « en attente : traitement `<X>` en cours ») et reprendre à la libération du verrou. Cette lecture est déterministe et **précède** tout cadrage.
+
+## 0.3 — Vérification anticipée des prérequis de déploiement
+
+Rappel **advisory anticipé** des prérequis §4.0 : présence de la variable `[répertoire de travail]` et accessibilité du flux Kestra `configure_service`. Un prérequis manquant est **signalé tôt** (pour ne pas engager un cadrage qui échouera au dépôt), mais **n'est pas** ici le contrôle bloquant : le §4.0 reste le contrôle bloquant de référence, exécuté en entrée de PHASE 4.
+
+## 0.4 — Labels et initialisation de la piste d'audit
+
+Poser systématiquement le label **`Homelab`** (et **`Docker Swarm`** pour un livrable compose), initialiser la piste d'audit sur l'issue (entrée brute de la demande) et **charger paresseusement** les règles toujours actives (couche `global`, cf. learning loop). Aucune instruction complète de spécialiste ni secret n'est chargé à ce stade (chargement optimisé).
+
+---
+
+# PHASE 1 — IDÉATION (Tech Lead — cadrage amont léger + gate humain léger)
+
+**Objectif** : cadrer l'intention et le périmètre **avant** la conception détaillée, pour ne pas engager la stack sur une base non viable. Phase **légère** : aucune production détaillée, aucun ADR à ce stade. Elle **réutilise les rôles existants** (Tech Lead pour la capture et le cadrage) — aucun nouveau rôle.
+
+## 1.1 — Capture d'intention
+
+Consigner l'**intention déclarée** (entrée brute humain/agent) et sa clarté. Aucune supposition : une intention ambiguë est clarifiée avec l'humain avant d'avancer.
+
+## 1.2 — Faisabilité, arbitrage et auto-détection du scope
+
+1. **Faisabilité / contraintes** : la stack est-elle déployable dans le Homelab (existence d'images Docker, alternative Proxmox sur `https://community-scripts.org/`) ? Arbitrage **Docker Swarm vs Proxmox** amorcé ici — si les deux existent, la question est posée à l'humain (affinée en §2.3).
+2. **Auto-détection + confirmation du scope** : le scope est auto-détecté par mots-clés (cf. § Scopes) puis **confirmé explicitement** — jamais de démarrage silencieux. Rappel : `n8n` / `home-assistant` court-circuitent immédiatement vers leur branche autonome (la règle absolue n8n §2.1 s'applique dès qu'un déclencheur n8n est présent).
+3. **Pré-sélection du type d'authentification** : si la documentation officielle est déjà connue, appliquer la règle d'auto-sélection `${auth_type}` (§2.4) comme **valeur de cadrage** (figée en Phase 2).
+
+## 1.3 — Gate humain léger (intention + périmètre)
+
+Un **gate humain léger** approuve **l'intention et le périmètre** (scope confirmé) avant d'engager le Cadrage. C'est le seul gate de l'amont : il valide *quoi* et *jusqu'où*, pas *comment*. Sur les scopes légers (`config-change`), ce gate reste **resserré** mais n'est jamais supprimé. Rien n'avance en Phase 2 sans cette approbation.
+
+---
+
+# PHASE 2 — CADRAGE ET PARAMÈTRES (Tech Lead)
 
 **Objectif** : cadrer la demande et réunir tout ce qu'il faut avant de générer quoi que ce soit.
 
-## 1.1 — Règle absolue n8n (TOUJOURS EN PREMIER)
+## 2.1 — Règle absolue n8n (TOUJOURS EN PREMIER)
 
 Si la demande concerne n8n (mot « n8n » dans la demande, un titre d'issue ou une référence de flux) → **déléguer IMMÉDIATEMENT à l'Expert N8n** par mention valide, avec mission claire, et **arrêter** ce flux. Aucune exception, pas même l'analyse.
 
-## 1.2 — Réception et cadrage (TOUJOURS)
+## 2.2 — Réception et cadrage (TOUJOURS)
 
-1. Passer l'issue en `in_progress` et ajouter le label `Homelab`.
-2. Consigner la demande initiale (entrée brute) en commentaire.
+1. Confirmer que l'issue est en `in_progress` et que le label `Homelab` est posé (posé en Phase 0).
+2. Consigner la demande initiale (entrée brute) en commentaire si ce n'est pas déjà fait en amont.
 3. Appliquer la **règle préalable de documentation officielle** (section dédiée) au **niveau cadrage uniquement** (lien officiel + déployabilité + paramètres de cadrage), sans relevé fin des variables/conventions, et documenter le résultat.
 4. Identifier le domaine : stack Docker (Spécialiste Docker/QA Docker), Home Assistant (Expert Home Assistant), Terraform (Spécialiste Terraform) ou domaine sans agent (Ansible, logs, Kestra → Tech Lead réalise lui-même la vérification et le signale à l'humain).
 
-## 1.3 — Vérifications préalables et arbitrage (CONDITIONNEL — création/modification de stack)
+## 2.3 — Vérifications préalables et arbitrage (CONDITIONNEL — création/modification de stack)
 
 1. Confirmer que les images Docker nécessaires existent **et** chercher une alternative Proxmox sur `https://community-scripts.org/`.
 2. Si les **deux** existent → demander à l'humain de choisir **Docker Swarm** ou **Proxmox** et **attendre** sa réponse avant toute suite.
 
-## 1.4 — Collecte des paramètres requis (TOUJOURS pour une stack — via `homelab-stack-workflow`)
+## 2.4 — Collecte des paramètres requis (TOUJOURS pour une stack — via `homelab-stack-workflow`)
 
 Tech Lead vérifie que tous les paramètres sont renseignés ; **il ne génère rien tant qu'un paramètre requis est manquant** :
 
@@ -346,7 +413,7 @@ Demander aussi si la stack nécessite une **création/modification de secrets ou
 
 ### Sélection automatique du type d'authentification
 
-`${auth_type}` est **optionnel** : ce n'est plus un paramètre bloquant en §1.4. Lorsque la **documentation officielle** de la stack précise les types d'authentification possibles, le Tech Lead **choisit automatiquement** le type selon l'ordre de priorité suivant — **le premier disponible ET gratuit l'emporte** :
+`${auth_type}` est **optionnel** : ce n'est plus un paramètre bloquant en §2.4. Lorsque la **documentation officielle** de la stack précise les types d'authentification possibles, le Tech Lead **choisit automatiquement** le type selon l'ordre de priorité suivant — **le premier disponible ET gratuit l'emporte** :
 
 1. **`oidc`** — si l'authentification OIDC / OAuth est disponible et gratuite ;
 2. **`saml`** — si l'authentification SAML est disponible et gratuite ;
@@ -358,37 +425,46 @@ Demander aussi si la stack nécessite une **création/modification de secrets ou
 
 ---
 
-# PHASE 2 — PRODUCTION ET CONTRÔLE
+# PHASE 3 — PRODUCTION ET CONTRÔLE
 
 **Objectif** : produire les livrables détaillés et les contrôler avant toute validation humaine.
 
-> **Deux familles de flux, un même contrôle.** Les sections 2.1 à 2.3 forment le flux **stack** (docker-compose puis Terraform), enchaîné dans cet ordre. Les sections 2.4 (n8n) et 2.5 (Home Assistant) sont des **branches autonomes** : une demande n8n ou Home Assistant ne passe **pas** par le Spécialiste Docker/QA Docker/Spécialiste Terraform. Dans tous les cas, chaque livrable revient à Tech Lead pour le contrôle qualité (2.6) avant la PHASE 3.
+> **Deux familles de flux, un même contrôle.** Les sections 3.1 à 3.3 forment le flux **stack** (docker-compose puis Terraform), enchaîné dans cet ordre. Les sections 3.4 (n8n) et 3.5 (Home Assistant) sont des **branches autonomes** : une demande n8n ou Home Assistant ne passe **pas** par le Spécialiste Docker/QA Docker/Spécialiste Terraform. Dans tous les cas, chaque livrable revient à Tech Lead pour le contrôle qualité (3.6) avant la PHASE 4.
 
-## 2.1 — Création du docker-compose (Spécialiste Docker)
+## 3.0 — Mode d'autonomie (walking skeleton, puis question posée une seule fois)
+
+AI-DLC pose, après le **premier jalon fonctionnel** de Construction, un choix d'autonomie pour le reste du lot. Adapté au Homelab, ce mode **regroupe le *moment* de la validation, jamais sa granularité**, et **ne touche jamais aux invariants** (contrôle sécurité, validation humaine avant action à impact).
+
+- **Walking skeleton — le premier jalon validé.** La plus petite tranche cohérente du lot (ex. squelette du docker-compose vérifié par le QA Docker, ou premier `.tfvars` de la stack) passe **obligatoirement** par le QA Docker (§3.2), le contrôle qualité central (§3.6) et la validation granulaire. **Aucune autonomie avant ce jalon.**
+- **La question, posée une seule fois.** Après validation du walking skeleton, le Tech Lead demande, pour le **reste du lot déjà cadré** : rythme **gated à chaque étape** *(défaut)* ou **autonome jusqu'au prochain point de synchronisation**. En mode autonome, les livrables du **même lot** s'enchaînent sans re-valider chaque étape intermédiaire ; la validation granulaire est **regroupée** en un point de synchronisation (fin de lot), où l'humain valide **en bloc mais toujours choix par choix**. La réponse est **consignée sur l'issue**, **ne se présume jamais** (pas de réponse ⇒ gated), et **un nouveau lot re-pose la question**.
+- **Halt-and-ask systématique sur échec.** Quel que soit le mode, l'exécution **s'arrête et interroge l'humain** dès : (1) échec / impossibilité d'un livrable ; (2) écart ou contrôle de sécurité requis (Architecte de sécurité Homelab) ; (3) verification gate ou sensor en écart, bloquant, ou `⛔ indisponible` ; (4) décision structurante nouvelle non cadrée ; (5) toute **action à impact / destructive** (dépôt de fichiers, flux Kestra) — **jamais autonome**, elle relève de la PHASE 4 sous validation explicite.
+- **Réversibilité.** Le retour en mode gated est possible **à tout point de synchronisation**. Cohérence scopes : sur `security-patch` / `new-stack`, le plancher de vérification `renforcé` et le halt-and-ask sécurité restent **pleins** ; le mode autonome n'abaisse jamais un niveau lié à la sécurité.
+
+## 3.1 — Création du docker-compose (Spécialiste Docker)
 
 Tech Lead délègue au **Spécialiste Docker** par commentaire (mission + mention) la création ou la modification du fichier docker-compose, cohérent avec les paramètres et la documentation officielle. C'est le Spécialiste Docker — pas le Tech Lead — qui **exploite la documentation officielle pour établir le relevé fin** (variables d'environnement supportées, convention de secrets `_FILE` ou non, volumes, port, healthcheck, versions) et en tient compte dans le fichier produit. Spécialiste Docker produit le fichier (skill `docker-composer`), vérifie la syntaxe YAML, dépose le livrable **téléchargeable** (`multica attachment upload`) et **mentionne Tech Lead** avec un récapitulatif.
 
-## 2.2 — Vérification du docker-compose (QA Docker)
+## 3.2 — Vérification du docker-compose (QA Docker)
 
 Tech Lead délègue à **QA Docker** la vérification (mission + mention). le QA Docker analyse syntaxe, compatibilité Swarm, réseaux/volumes/secrets, hardening (skills `docker-composer`, `dockerfile-validator`), classe les problèmes (critical / warning / info), applique/propose les corrections, et vérifie via **`traefik-manager-read`** que les services, middlewares et entrypoints sont cohérents (aucune `configErrors`). QA Docker présente les éléments modifiés/corrigés et la conformité, puis **mentionne Tech Lead**.
 
-## 2.3 — Configuration Terraform (Spécialiste Terraform)
+## 3.3 — Configuration Terraform (Spécialiste Terraform)
 
 Après contrôle du travail de QA Docker, Tech Lead donne l'ordre au **Spécialiste Terraform** (mission + mention) de créer/modifier les **variables Terraform** de la stack (skill `configuration-applications`), cohérentes avec les paramètres collectés. Spécialiste Terraform prépare uniquement les fichiers `.tf`/`.tfvars` (**jamais** `terraform init/apply/destroy`), dépose le livrable téléchargeable et **mentionne le Tech Lead**.
 
-## 2.4 — Branche n8n (Expert N8n)
+## 3.4 — Branche n8n (Expert N8n)
 
-Si la demande concerne n8n, elle est **entièrement** traitée par l'Expert N8n (aucune tâche n8n exécutée par le Tech Lead, voir 1.1). L'Expert N8n détermine le mode (le flux existe → analyse limitée à ce flux ; sinon → création), **propose** la conception ou les changements, les fait **valider par le Tech Lead** (mention), n'applique rien via le MCP avant ce feu vert, applique après **validation humaine explicite**, vérifie l'état du flux, puis **mentionne le Tech Lead** avec le récapitulatif. Publication d'un flux : confirmation humaine explicite obligatoire.
+Si la demande concerne n8n, elle est **entièrement** traitée par l'Expert N8n (aucune tâche n8n exécutée par le Tech Lead, voir 2.1). L'Expert N8n détermine le mode (le flux existe → analyse limitée à ce flux ; sinon → création), **propose** la conception ou les changements, les fait **valider par le Tech Lead** (mention), n'applique rien via le MCP avant ce feu vert, applique après **validation humaine explicite**, vérifie l'état du flux, puis **mentionne le Tech Lead** avec le récapitulatif. Publication d'un flux : confirmation humaine explicite obligatoire.
 
-## 2.5 — Branche Home Assistant (Expert Home Assistant)
+## 3.5 — Branche Home Assistant (Expert Home Assistant)
 
 Si la demande concerne Home Assistant, elle est traitée par l'Expert Home Assistant via le serveur MCP officiel. Séquence obligatoire, jamais dans un autre ordre : **propositions** (mode modification limité à l'élément visé, ou mode création) → **vérification par le Tech Lead** (mention) → **validation humaine explicite** → seulement ensuite **modification réelle** via le MCP → relire l'état des entités pour confirmer l'effet réel → **mentionner le Tech Lead** avec le récapitulatif.
 
-## 2.6 — Contrôle qualité central (Tech Lead — aiguillage GO / RENVOI, TOUJOURS)
+## 3.6 — Contrôle qualité central (Tech Lead — aiguillage GO / RENVOI, TOUJOURS)
 
 Le contrôle du Tech Lead est un aiguillage, pas une analyse technique de fond. Il vérifie uniquement, au niveau macro : (a) le livrable répond-il à la demande et aux paramètres collectés ? (b) est-il du bon type et présent (le livrable est bien un fichier compose / `.tfvars` contenant les sections attendues, et non un rapport vide ou un mauvais artefact) — **jamais** la validité syntaxique, la compatibilité applicative ou les conventions de configuration, qui relèvent du QA Docker ; (c) un secret en clair saute-t-il aux yeux ? (d) le compte-rendu du spécialiste signale-t-il un blocage ?
 
-**Ordre imposé pour un livrable compose :** tout compose passe par le QA Docker (2.2) avant l'aiguillage 2.6 du Tech Lead ; le Tech Lead route sans juger la technique.
+**Ordre imposé pour un livrable compose :** tout compose passe par le QA Docker (3.2) avant l'aiguillage 3.6 du Tech Lead ; le Tech Lead route sans juger la technique.
 Le Tech Lead NE réalise JAMAIS lui-même : l'analyse de la compatibilité applicative (variables supportées, conventions _FILE, etc.), l'audit de sécurité/hardening, la vérification de cohérence Traefik, ni la rédaction d'un correctif. Ces analyses appartiennent au Spécialiste Docker (production/correctif) et au QA Docker (vérification technique).
 
 Doute technique sur un livrable → renvoyer au spécialiste concerné en décrivant le symptôme observé (« l'authentification risque d'échouer »), sans fournir le diagnostic ni la solution. C'est au spécialiste d'analyser et de corriger.
@@ -396,31 +472,31 @@ Livrable manifestement incomplet ou hors-sujet (paramètre manquant, mauvais for
 
 ---
 
-# PHASE 3 — VALIDATION ET DÉPLOIEMENT (validation humaine explicite)
+# PHASE 4 — VALIDATION ET DÉPLOIEMENT (validation humaine explicite)
 
-## 3.0 — Vérification des prérequis de déploiement (TOUJOURS, avant toute action de PHASE 3)
+## 4.0 — Vérification des prérequis de déploiement (TOUJOURS, avant toute action de PHASE 4)
 
-Avant d'entrer en PHASE 3, le Tech Lead **vérifie les prérequis de dépôt et de déploiement** et **arrête** la phase 3 si l'un manque, avec un message explicite à l'humain. Aucune action de § 3.1 à § 3.5 ne démarre tant que ce contrôle n'est pas passé.
+Avant d'entrer en PHASE 4, le Tech Lead **vérifie les prérequis de dépôt et de déploiement** et **arrête** la phase 4 si l'un manque, avec un message explicite à l'humain. Aucune action de § 4.1 à § 4.5 ne démarre tant que ce contrôle n'est pas passé.
 
-1. **Variable de dépôt** : confirmer que la variable d'environnement `[répertoire de travail]` du Tech Lead est **définie et non vide**. Si elle est absente → **ne pas** tenter le § 3.3, passer l'issue en `blocked` et signaler à l'humain : « Variable d'environnement du répertoire de travail non définie : impossible de calculer les chemins de dépôt (§ 3.3). Merci de la renseigner avant déploiement. »
-2. **Accessibilité du flux Kestra** : confirmer que le flux Kestra `configure_service` est **accessible** avant d'envisager le § 3.4. S'il est injoignable → le signaler explicitement à l'humain et ne pas promettre de déploiement automatique ; proposer le dépôt manuel des fichiers comme repli.
+1. **Variable de dépôt** : confirmer que la variable d'environnement `[répertoire de travail]` du Tech Lead est **définie et non vide**. Si elle est absente → **ne pas** tenter le § 4.3, passer l'issue en `blocked` et signaler à l'humain : « Variable d'environnement du répertoire de travail non définie : impossible de calculer les chemins de dépôt (§ 4.3). Merci de la renseigner avant déploiement. »
+2. **Accessibilité du flux Kestra** : confirmer que le flux Kestra `configure_service` est **accessible** avant d'envisager le § 4.4. S'il est injoignable → le signaler explicitement à l'humain et ne pas promettre de déploiement automatique ; proposer le dépôt manuel des fichiers comme repli.
 
-> Ce contrôle est un **garde-fou** : il évite qu'un `[répertoire de travail]` non défini fasse échouer silencieusement le § 3.3, et qu'un flux Kestra indisponible bloque le § 3.4 sans explication.
+> Ce contrôle est un **garde-fou** : il évite qu'un `[répertoire de travail]` non défini fasse échouer silencieusement le § 4.3, et qu'un flux Kestra indisponible bloque le § 4.4 sans explication. Il est **anticipé** dès la PHASE 0 (§0.3) en advisory, mais reste ici le contrôle **bloquant** de référence.
 
-## 3.1 — Passage en revue et notification
+## 4.1 — Passage en revue et notification
 
-Quand Docker (Spécialiste Docker + QA Docker) et Terraform (Spécialiste Terraform) sont contrôlés et conformes, Tech Lead passe l'issue en revue (`multica issue status <issue-id> in_review`) et demande à **l'agent de notifications** une notification « revue par un humain prête ». **`in_review` signifie « prêt à être revu par l'humain » et l'issue y demeure jusqu'à ce que l'humain statue** (validation ou demande de modifications, cf. § 3.2). Les spécialistes n'appellent jamais agent de notifications directement.
+Quand Docker (Spécialiste Docker + QA Docker) et Terraform (Spécialiste Terraform) sont contrôlés et conformes, Tech Lead passe l'issue en revue (`multica issue status <issue-id> in_review`) et demande à **l'agent de notifications** une notification « revue par un humain prête ». **`in_review` signifie « prêt à être revu par l'humain » et l'issue y demeure jusqu'à ce que l'humain statue** (validation ou demande de modifications, cf. § 4.2). Les spécialistes n'appellent jamais agent de notifications directement.
 
-## 3.2 — Validation humaine granulaire
+## 4.2 — Validation humaine granulaire
 
 Le Tech Lead soumet à l'humain la **configuration complète** (Docker + Terraform), fichiers téléchargeables à l'appui, et demande une **validation explicite**. **L'issue reste en `in_review`** pendant toute cette phase : `in_review` est l'état qui signale à l'humain qu'une tâche est prête à être revue, et il ne doit pas être changé tant que l'humain n'a pas statué. Rien n'avance sur un élément non validé.
 
-- **L'humain demande des modifications / ajustements** (rejet total ou partiel) → le Tech Lead repasse l'issue en **`in_progress`** (`multica issue status <issue-id> in_progress`), **poursuit le workflow** en intégrant les modifications demandées (nouvelle itération des phases 2.x concernées via les spécialistes, puis re-contrôle 2.6), et repasse l'issue en `in_review` (§ 3.1) une fois la nouvelle version prête à être revue.
-- **L'humain valide** → poursuivre en § 3.3 (dépôt des fichiers).
+- **L'humain demande des modifications / ajustements** (rejet total ou partiel) → le Tech Lead repasse l'issue en **`in_progress`** (`multica issue status <issue-id> in_progress`), **poursuit le workflow** en intégrant les modifications demandées (nouvelle itération des phases 3.x concernées via les spécialistes, puis re-contrôle 3.6), et repasse l'issue en `in_review` (§ 4.1) une fois la nouvelle version prête à être revue.
+- **L'humain valide** → poursuivre en § 4.3 (dépôt des fichiers).
 
-## 3.3 — Dépôt des fichiers dans les répertoires de travail (sur confirmation)
+## 4.3 — Dépôt des fichiers dans les répertoires de travail (sur confirmation)
 
-> Prérequis : la variable `[répertoire de travail]` a été vérifiée au § 3.0. Si ce n'est pas le cas, revenir au § 3.0 avant tout dépôt.
+> Prérequis : la variable `[répertoire de travail]` a été vérifiée au § 4.0. Si ce n'est pas le cas, revenir au § 4.0 avant tout dépôt.
 
 Après validation, Le Tech Lead **propose** les chemins de dépôt en les affichant, et **attend la confirmation explicite** de l'humain avant tout dépôt :
 
@@ -429,12 +505,12 @@ Après validation, Le Tech Lead **propose** les chemins de dépôt en les affich
 
 Après dépôt, vérifier les fichiers copiés (contenu conforme, parse YAML pour le compose).
 
-## 3.4 — Déploiement Kestra (sur validation explicite uniquement)
+## 4.4 — Déploiement Kestra (sur validation explicite uniquement)
 
 Le Tech Lead demande si l'humain souhaite lancer le déploiement via **Kestra**. **Uniquement après un « oui » explicite** : lancer le flux Kestra `configure_service`. Les fichiers doivent rester téléchargeables pour vérification.
 **Aucun lancement du flux `configure_service` sans validation humaine explicite de la configuration complète.**
 
-## 3.5 — Clôture
+## 4.5 — Clôture
 
 Passer l'issue à **Done** uniquement après la validation humaine, avec le récapitulatif des livrables et leur emplacement.
 
@@ -453,25 +529,30 @@ sequenceDiagram
     participant Hu as Expert Home Assistant (Home Assistant)
     participant AL as agent de notifications
     H->>S: Demande (issue)
-    S->>S: Doc officielle + arbitrage + parametres (PHASE 1)
+    S->>S: Bootstrap deterministe: detection stack + verrou + labels (PHASE 0)
+    S->>H: Gate leger: intention + perimetre + scope confirme (PHASE 1)
+    H-->>S: Approbation intention + perimetre
+    S->>S: Doc officielle + arbitrage + parametres (PHASE 2)
     S->>B: Delegue creation docker-compose (mention + mission)
     B-->>S: Compose + recapitulatif
     S->>K: Delegue verification compose (mention + mission)
     K-->>S: Rapport + coherence Traefik
+    S->>S: Walking skeleton valide -> question autonomie (une seule fois)
+    Note over S,H: Mode gated (defaut) ou autonome jusqu au prochain point de synchro. Halt-and-ask sur echec
     S->>An: Delegue variables Terraform (mention + mission)
     An-->>S: Config Terraform (jamais apply)
     S->>M: Branche n8n si demande n8n (delegation immediate)
     M-->>S: Proposition / flux applique apres validation
     S->>Hu: Branche Home Assistant si demande HA
     Hu-->>S: Proposition / modif apres validation
-    S->>S: Controle qualite de chaque livrable (PHASE 2)
+    S->>S: Controle qualite de chaque livrable (PHASE 3)
     S->>S: in_review
     S->>AL: Demande notification revue prete
     AL-->>H: Notification ntfy
     S->>H: Validation granulaire (Docker + Terraform) [issue: in_review]
     alt Modifications demandees
         H-->>S: Ajustements a apporter
-        S->>S: issue -> in_progress, reprise Phase 2.x + controle 2.6
+        S->>S: issue -> in_progress, reprise Phase 3.x + controle 3.6
         S->>S: issue -> in_review (nouvelle version prete)
     else Validation explicite
         H-->>S: Validation explicite
@@ -489,14 +570,18 @@ sequenceDiagram
 
 - **n8n → L'Expert N8n, priorité absolue** : dès que « n8n » apparaît, délégation immédiate, aucune exception, pas même l'analyse.
 - **Documentation officielle d'abord** : toujours la première tâche (sauf n8n) ; résultat documenté sur l'issue.
+- **5 phases, compatibilité ascendante** : `Initialisation → Idéation → Cadrage et Paramètres → Production et Contrôle → Validation et Déploiement`. Les deux phases amont s'ajoutent devant les trois historiques (périmètre inchangé) ; libellés historiques valides comme alias (tableau de correspondance).
+- **Initialisation sans gate humain** : bootstrap déterministe (détection stack, lecture du verrou, prérequis anticipés, labels) — consigne des faits, ne valide rien.
+- **Idéation avec gate humain léger** : intention + périmètre + scope confirmé approuvés avant le Cadrage ; resserré sur `config-change`, jamais supprimé.
 - **Le Tech Lead ne produit ni ne vérifie techniquement** : il ne rédige pas de correctif compose/Terraform, ne fait pas d'audit de sécurité ni de contrôle Traefik lui-même. Il constate qu'un livrable est conforme ou non, et renvoie au spécialiste (Docker pour produire/corriger, QA Docker pour vérifier). Décrire un symptôme est permis ; livrer un diagnostic ou une solution ne l'est pas.
 - **Le Tech Lead coordonne, les spécialistes produisent** : Spécialiste Docker crée, QA Docker vérifie, Spécialiste Terraform configure Terraform ; Tech Lead contrôle tout.
 - **Vérification jamais sautée** : QA Docker vérifie systématiquement le compose de Spécialiste Docker avant Terraform.
-- **Un seul traitement par stack** : à un instant donné, une stack n'a qu'un traitement actif ; les demandes concurrentes sont sérialisées (verrou porté par l'issue via metadata).
+- **Un seul traitement par stack** : à un instant donné, une stack n'a qu'un traitement actif ; les demandes concurrentes sont sérialisées (verrou porté par l'issue via metadata `active_step`, lu dès §0.2).
+- **Mode d'autonomie (Production et Contrôle)** : après le walking skeleton validé, une **question posée une seule fois** (gated par défaut / autonome jusqu'au prochain point de synchro) **regroupe** le moment de la validation, jamais sa granularité. **Halt-and-ask systématique** sur échec, contrôle sécurité, gate/sensor en écart, décision nouvelle ou action à impact ; **aucune action à impact en autonomie** ; retour en gated possible à tout point de synchronisation ; plancher sécurité `renforcé` intact sur `security-patch` / `new-stack`.
 - **Spécialiste Terraform ne déploie jamais** : interdiction absolue de `terraform init/apply/destroy` ; il prépare les fichiers, l'humain exécute.
 - **Chargement optimisé pour le contexte** : métadonnées légères au démarrage ; contenu complet et secrets Vault chargés à la demande uniquement.
 - **Validation humaine granulaire** : chaque choix validé/rejeté séparément ; rien n'avance sur un élément non validé.
-- **Verification gates & Sensors** : contrôles déterministes de traçabilité aux frontières de phases et checks à l'écriture (YAML, `deploy` Swarm, secret en clair, `${SNI}`, Traefik, existence Vault). **Advisory par défaut** (trace d'audit factuelle, sans blocage) ; **`plaintext-secret` et `terraform-no-sni` sont bloquants sur `security-patch` / `new-stack`** (décision ALI-204). Même bloquants, ils **ne remplacent ni le QA Docker (§2.2), ni le contrôle qualité central (§2.6), ni la validation humaine**. Manifestes dans `homelab/sensors/`.
+- **Verification gates & Sensors** : contrôles déterministes de traçabilité aux frontières de phases et checks à l'écriture (YAML, `deploy` Swarm, secret en clair, `${SNI}`, Traefik, existence Vault). **Advisory par défaut** (trace d'audit factuelle, sans blocage) ; **`plaintext-secret` et `terraform-no-sni` sont bloquants sur `security-patch` / `new-stack`** (décision ALI-204). Même bloquants, ils **ne remplacent ni le QA Docker (§3.2), ni le contrôle qualité central (§3.6), ni la validation humaine**. Manifestes dans `homelab/sensors/`.
 - **Aucune action à impact sans validation humaine explicite** : dépôt de fichiers, flux Kestra `configure_service`.
 - **Coordination par l'issue** : chaque étape, décision et délégation documentée ; délégations A2A par mention valide (UUID résolu, jamais deviné), sens retour vers Tech Lead obligatoire.
 - **Séparation des responsabilités** : notifications via l'Agent de notifications (sur demande du Tech Lead uniquement) ; n8n via l'Expert N8n ; Home Assistant via l'Expert Home Assistant.
