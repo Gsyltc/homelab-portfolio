@@ -10,16 +10,17 @@ priority: prioritaire
 origine: ALI-188
 triggers:
   - "decisions/[0-9][0-9][0-9][0-9]-*.md"     # ADR
-  - "**/*das*.md"                              # documentation d'architecture (DAS)
+  - "documentations/*.md"                      # documentation d'architecture (DAS)
 checks:
-  adr:                                         # rubriques dérivées des ADR 0001–0004
-    entete_meta: [auteurs, "accepté par", "accepté le"]
+  adr:                                         # rubriques dérivées du gabarit de la skill create-architecture-decision-record
+    entete_meta: [auteurs, "accepté par", "accepté le", supersedes, superseded_by]
     sections:
-      - Status
+      - Status                 # titre en anglais (compat Structurizr), statut unique retenu
       - Contexte
       - Décision
-      - "Conséquences"        # sous-rubriques : Positives / Négatives
+      - "Conséquences"        # sous-rubriques obligatoires : Positives / Négatives
       - "Alternatives étudiées"
+      - "Notes d'implémentation"
       - "Références"
     non_vide: true
   das:
