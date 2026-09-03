@@ -58,7 +58,7 @@ boundaries:
       - depot_fichiers_confirme            # §3.3 — chemins confirmés + fichiers vérifiés
       - deploiement_kestra_si_demande      # §3.4 — conditionnel, sur « oui » explicite
     checks: [artefacts-presents]
-    sensors: [vault-secret-exists]         # optionnel, existence seule, si autorisé par l'humain
+    sensors: [vault-secret-exists]         # actif (ALI-204), existence seule, jamais la valeur
 ```
 
 ## Articulation avec les prérequis §3.0

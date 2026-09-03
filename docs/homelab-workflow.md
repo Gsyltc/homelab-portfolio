@@ -140,7 +140,7 @@ Un candidat contredisant un invariant est **rejeté d'office** (SEC-1 — érosi
 
 Deux mécanismes de **fiabilisation déterministe**, **tous deux advisory**, soulagent le QA Docker et le Tech Lead des vérifications mécaniques et rendent les contrôles reproductibles. Leurs manifestes déclaratifs vivent dans [`homelab/sensors/`](../homelab/sensors/README.md) (miroir de [`core/sensors/`](../core/sensors/README.md)) — décision tracée dans [ADR-0016](../decisions/0016-verification-gates-et-sensors-homelab.md).
 
-> **Advisory par décision.** Gates et sensors **ne bloquent jamais** et **ne remplacent ni le QA Docker systématique (§2.2), ni le contrôle qualité central (§2.6), ni la validation humaine granulaire (PHASE 3)**. Ils laissent une **trace d'audit factuelle** sur l'issue. Un signal au vert **ne vaut pas validation** ; un signal en échec **n'autorise aucun raccourci**. Rendre un check **bloquant** est une décision structurante explicite (ADR + contrôle sécurité).
+> **Advisory par défaut, bloquant conditionnel (sécurité).** Gates et sensors **ne bloquent pas** par défaut et laissent une **trace d'audit factuelle** sur l'issue. **Exception confirmée (ALI-204)** : `plaintext-secret` et `terraform-no-sni` sont **bloquants sur les scopes `security-patch` / `new-stack`** — une détection y **arrête l'avancée** jusqu'à correction ou levée humaine explicite tracée. Même bloquant, un sensor **ne remplace ni le QA Docker systématique (§2.2), ni le contrôle qualité central (§2.6), ni la validation humaine granulaire (PHASE 3)** : il force la correction, il ne décide pas à la place de l'humain. Un signal au vert **ne vaut pas validation** ; un signal en échec **n'autorise aucun raccourci**. Toute évolution de sévérité est une décision ADR + contrôle sécurité (QA Docker).
 
 ### Verification gates — traçabilité aux frontières de phases
 
@@ -151,7 +151,7 @@ Deux mécanismes de **fiabilisation déterministe**, **tous deux advisory**, sou
 | Demande → Phase 1 | demande brute consignée, label `Homelab`, scope confirmé | — |
 | **Phase 1 → Phase 2** | **lien de documentation officielle**, **tous les paramètres requis §1.4** (`${stack_name}`, `${traefik_network}`, …), arbitrage Swarm/Proxmox (§1.3), `${auth_type}` figé ou reporté | — |
 | **Phase 2 → Phase 3** | livrable compose (§2.1), `.tfvars` (§2.3, selon scope), **QA Docker passé** (§2.2), GO du contrôle qualité central (§2.6), **prérequis §3.0** (`[répertoire de travail]`, Kestra) | `yaml-validity`, `swarm-deploy-section`, `plaintext-secret`, `terraform-no-sni`, `traefik-coherence` |
-| Phase 3 → Clôture | validation humaine explicite (§3.2), dépôt confirmé (§3.3), déploiement Kestra si demandé (§3.4) | `vault-secret-exists` *(optionnel)* |
+| Phase 3 → Clôture | validation humaine explicite (§3.2), dépôt confirmé (§3.3), déploiement Kestra si demandé (§3.4) | `vault-secret-exists` |
 
 La frontière **Phase 2 → Phase 3** **anticipe** les prérequis de déploiement du **§3.0** (`[répertoire de travail]` défini et non vide, flux Kestra `configure_service` accessible) : le gate les vérifie **avant** l'entrée en PHASE 3, pour éviter qu'un prérequis manquant ne fasse échouer silencieusement le dépôt (§3.3) ou ne bloque le §3.4. Le §3.0 reste par ailleurs le contrôle **bloquant** de référence exécuté par le Tech Lead en entrée de PHASE 3 — le gate n'est que son pendant advisory anticipé.
 
@@ -161,14 +161,14 @@ La frontière **Phase 2 → Phase 3** **anticipe** les prérequis de déploiemen
 
 Six sensors déclaratifs (répertoire [`homelab/sensors/sensors/`](../homelab/sensors/README.md#sensors-définis)), déclenchés soit **à l'écriture d'un artefact** (`fire_on: write`), soit **au gate de phase** (`fire_on: gate`) :
 
-| Sensor | `fire_on` | Objet | Priorité |
+| Sensor | `fire_on` | Objet | Priorité / sévérité |
 | --- | --- | --- | --- |
-| [`yaml-validity`](../homelab/sensors/sensors/yaml-validity.md) | write | Validité **YAML** du docker-compose | prioritaire |
-| [`swarm-deploy-section`](../homelab/sensors/sensors/swarm-deploy-section.md) | gate | Présence d'une section **`deploy`** compatible Swarm | prioritaire |
-| [`plaintext-secret`](../homelab/sensors/sensors/plaintext-secret.md) | write | Détection de **secret en clair** (emplacement, **jamais** la valeur) | prioritaire |
-| [`terraform-no-sni`](../homelab/sensors/sensors/terraform-no-sni.md) | write | Absence de **`${SNI}`** dans les fichiers Terraform livrés | prioritaire |
-| [`traefik-coherence`](../homelab/sensors/sensors/traefik-coherence.md) | gate | Cohérence **Traefik** (référence le check **`traefik-manager-read`** existant) | complémentaire |
-| [`vault-secret-exists`](../homelab/sensors/sensors/vault-secret-exists.md) | gate | **Existence** des secrets **Vault** référencés (jamais la valeur) | optionnel |
+| [`yaml-validity`](../homelab/sensors/sensors/yaml-validity.md) | write | Validité **YAML** du docker-compose | prioritaire · advisory |
+| [`swarm-deploy-section`](../homelab/sensors/sensors/swarm-deploy-section.md) | gate | Présence d'une section **`deploy`** compatible Swarm | prioritaire · advisory |
+| [`plaintext-secret`](../homelab/sensors/sensors/plaintext-secret.md) | write | Détection de **secret en clair** (emplacement, **jamais** la valeur) | prioritaire · **bloquant sur `security-patch` / `new-stack`** |
+| [`terraform-no-sni`](../homelab/sensors/sensors/terraform-no-sni.md) | write | Absence de **`${SNI}`** dans les fichiers Terraform livrés | prioritaire · **bloquant sur `security-patch` / `new-stack`** |
+| [`traefik-coherence`](../homelab/sensors/sensors/traefik-coherence.md) | gate | Cohérence **Traefik** (référence le check **`traefik-manager-read`** existant) | complémentaire · advisory |
+| [`vault-secret-exists`](../homelab/sensors/sensors/vault-secret-exists.md) | gate | **Existence** des secrets **Vault** référencés (jamais la valeur) | actif · advisory |
 
 **Articulation avec l'axe de vérification (§ Scopes).** Les sensors matérialisent le niveau `advisory` de l'axe de vérification (validité YAML + cohérence de base) ; le niveau `standard` s'appuie sur `swarm-deploy-section` + `traefik-coherence` (relayés par le QA Docker) ; le niveau `renforcé` ajoute le poids sécurité de `plaintext-secret` + `terraform-no-sni` + `vault-secret-exists`. Les sensors **ne remplacent pas** l'intensité de vérification du QA Docker : ils la **tracent**.
 
@@ -494,7 +494,7 @@ sequenceDiagram
 - **Spécialiste Terraform ne déploie jamais** : interdiction absolue de `terraform init/apply/destroy` ; il prépare les fichiers, l'humain exécute.
 - **Chargement optimisé pour le contexte** : métadonnées légères au démarrage ; contenu complet et secrets Vault chargés à la demande uniquement.
 - **Validation humaine granulaire** : chaque choix validé/rejeté séparément ; rien n'avance sur un élément non validé.
-- **Verification gates & Sensors advisory** : contrôles déterministes de traçabilité aux frontières de phases et checks à l'écriture (YAML, `deploy` Swarm, secret en clair, `${SNI}`, Traefik, existence Vault). **Advisory** : ils laissent une trace d'audit factuelle mais ne bloquent jamais et **ne remplacent ni le QA Docker (§2.2), ni le contrôle qualité central (§2.6), ni la validation humaine**. Manifestes dans `homelab/sensors/`.
+- **Verification gates & Sensors** : contrôles déterministes de traçabilité aux frontières de phases et checks à l'écriture (YAML, `deploy` Swarm, secret en clair, `${SNI}`, Traefik, existence Vault). **Advisory par défaut** (trace d'audit factuelle, sans blocage) ; **`plaintext-secret` et `terraform-no-sni` sont bloquants sur `security-patch` / `new-stack`** (décision ALI-204). Même bloquants, ils **ne remplacent ni le QA Docker (§2.2), ni le contrôle qualité central (§2.6), ni la validation humaine**. Manifestes dans `homelab/sensors/`.
 - **Aucune action à impact sans validation humaine explicite** : dépôt de fichiers, flux Kestra `configure_service`.
 - **Coordination par l'issue** : chaque étape, décision et délégation documentée ; délégations A2A par mention valide (UUID résolu, jamais deviné), sens retour vers Tech Lead obligatoire.
 - **Séparation des responsabilités** : notifications via l'Agent de notifications (sur demande du Tech Lead uniquement) ; n8n via l'Expert N8n ; Home Assistant via l'Expert Home Assistant.

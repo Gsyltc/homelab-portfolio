@@ -3,6 +3,10 @@ id: plaintext-secret
 kind: deterministic
 command: "non-exécutable (advisory documentaire)"
 default_severity: advisory
+severity_overrides:
+  # décision humaine (ALI-204, arbitrage 2 « Oui ») + contrôle sécurité QA Docker : bloquant sur les scopes sécuritaires
+  - scopes: [security-patch, new-stack]
+    severity: blocking
 description: "Détecte des motifs de secret en clair (mot de passe / token / clé API) dans les livrables compose et Terraform."
 category: security
 fire_on: write
@@ -12,7 +16,7 @@ origine: ALI-204
 
 # Sensor `plaintext-secret` — détection de secret en clair *(prioritaire, sécurité)*
 
-Check déterministe déclenché **à l'écriture** (`fire_on: write`) : détecte des **motifs de secret en clair** (mot de passe, token, clé API) dans un livrable compose ou Terraform. **Advisory** (`default_severity: advisory` — voir la question d'arbitrage « advisory vs bloquant » de l'ADR ; le passage à `blocking` est une décision structurante explicite, cf. SG-1). Recoupe le garde-fou absolu « aucun secret en clair » du workflow (§ langue, format et sécurité) et le contrôle macro « un secret en clair saute-t-il aux yeux ? » du Tech Lead (§2.6).
+Check déterministe déclenché **à l'écriture** (`fire_on: write`) : détecte des **motifs de secret en clair** (mot de passe, token, clé API) dans un livrable compose ou Terraform. **Advisory par défaut**, **bloquant sur `security-patch` / `new-stack`** (décision humaine ALI-204, arbitrage 2 « Oui » + contrôle sécurité du QA Docker, cf. `severity_overrides` ; SG-1). Recoupe le garde-fou absolu « aucun secret en clair » du workflow (§ langue, format et sécurité) et le contrôle macro « un secret en clair saute-t-il aux yeux ? » du Tech Lead (§2.6).
 
 ## Contrat de vérification (`checks`)
 
@@ -45,4 +49,4 @@ Sensor plaintext-secret — <fichier>   (source : homelab/sensors/sensors/plaint
 
 ## Garde-fou
 
-Advisory par défaut : signale un motif suspect **sans jamais divulguer la valeur**, ne bloque pas. **Ne remplace pas** l'audit de sécurité du QA Docker (niveau `renforcé`) ni la validation humaine (SG-3). **Parsing statique uniquement** (SG-4) : détection par motif, jamais de résolution / lecture de secret Vault. Rendre ce sensor **bloquant** (recommandé comme arbitrage sur les scopes `security-patch` / `new-stack`) est une décision structurante explicite (ADR + contrôle sécurité, SG-1).
+Advisory par défaut : signale un motif suspect **sans jamais divulguer la valeur**, ne bloque pas hors scope sécuritaire. **Bloquant sur `security-patch` / `new-stack`** (décision humaine ALI-204 + contrôle sécurité QA Docker) : sur ces scopes, un motif détecté **arrête l'avancée** jusqu'à correction ou levée humaine explicite tracée. Même bloquant, le sensor **ne remplace pas** l'audit de sécurité du QA Docker (niveau `renforcé`) ni la validation humaine (SG-3). **Parsing statique uniquement** (SG-4) : détection par motif, jamais de résolution / lecture de secret Vault. La bascule en bloquant est actée par l'[ADR-0016](../../../decisions/0016-verification-gates-et-sensors-homelab.md) (SG-1).

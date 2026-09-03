@@ -10,9 +10,9 @@ matches: "{**/*.yml,**/*.yaml,**/*.tf,**/*.tfvars}"
 origine: ALI-204
 ---
 
-# Sensor `vault-secret-exists` — existence des secrets Vault référencés *(optionnel, sécurité)*
+# Sensor `vault-secret-exists` — existence des secrets Vault référencés *(actif, sécurité)*
 
-Check déterministe déclenché **au gate de phase** (`fire_on: gate`) : pour chaque **référence de secret Vault** présente dans le livrable, vérifie que le secret **existe** dans Vault. **Il ne lit, ne recopie et n'affiche JAMAIS la valeur du secret** — uniquement sa **présence** (chemin résolu ou non). **Advisory** (`default_severity: advisory`). Optionnel : n'est actif que si l'humain autorise cette vérification d'existence (question d'arbitrage de l'ADR).
+Check déterministe déclenché **au gate de phase** (`fire_on: gate`) : pour chaque **référence de secret Vault** présente dans le livrable, vérifie que le secret **existe** dans Vault. **Il ne lit, ne recopie et n'affiche JAMAIS la valeur du secret** — uniquement sa **présence** (chemin résolu ou non). **Advisory** (`default_severity: advisory`). **Activé** par décision humaine (ALI-204, arbitrage 4 « oui »), en **lecture de présence uniquement**.
 
 ## Contrat de vérification (`checks`)
 
@@ -39,4 +39,4 @@ Sensor vault-secret-exists — <fichier>   (source : homelab/sensors/sensors/vau
 
 ## Garde-fou
 
-Advisory et **existence seule** : signale un chemin de secret référencé mais absent, **sans jamais lire la valeur**, ne bloque pas. **Ne remplace pas** la validation humaine ni le contrôle sécurité (SG-3). **Parsing statique + lecture de présence uniquement** (SG-4) : environnement sans privilège d'exfiltration, jamais de récupération de valeur. Activation soumise à l'autorisation humaine explicite tracée sur l'issue.
+Advisory et **existence seule** : signale un chemin de secret référencé mais absent, **sans jamais lire la valeur**, ne bloque pas. **Ne remplace pas** la validation humaine ni le contrôle sécurité (SG-3). **Parsing statique + lecture de présence uniquement** (SG-4) : environnement sans privilège d'exfiltration, jamais de récupération de valeur. **Activé** par décision humaine explicite tracée (ALI-204, [ADR-0016](../../../decisions/0016-verification-gates-et-sensors-homelab.md)) ; l'invariant « existence seule, jamais la valeur » reste non négociable.

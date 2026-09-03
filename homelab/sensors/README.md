@@ -13,12 +13,13 @@ Deux mécanismes complémentaires, **tous deux advisory** :
 
 Ces fichiers **décrivent le contrat** (périmètre de déclenchement, règles de contrôle, sortie attendue) de façon lisible et déterministe. Ce **ne sont pas des scripts exécutables** : ils fixent le fond pour qu'un outillage (script / CI) puisse être ajouté ultérieurement **sans redécider** la sémantique. Pas de harness TypeScript (`bun` / `aidlc-*.ts`), cohérent avec le cadrage ([ADR-0013](../../decisions/0013-cadrage-refonte-homelab-workflow-sur-ai-dlc.md)) : on garde la **forme déclarative** sans importer le moteur. Le passage à l'exécutable est une évolution future, hors périmètre du stage d'introduction.
 
-## Garde-fou : advisory par décision
+## Garde-fou : advisory par défaut, bloquant conditionnel (sécurité)
 
-- Les gates et sensors **ne bloquent jamais** la validation humaine granulaire et **ne la remplacent pas** — elle reste l'unique gate décisionnel contraignant.
-- Ils **ne remplacent pas** le **QA Docker systématique** (§2.2) ni le contrôle qualité central du Tech Lead (§2.6) : ils laissent une **trace d'audit factuelle** sur l'issue, sans se substituer au jugement technique ou humain.
+- La grande majorité des gates et sensors **ne bloquent jamais** : ils laissent une trace d'audit factuelle sans arrêter le flux.
+- **Exception sécurité confirmée (ALI-204, arbitrage 2)** : `plaintext-secret` et `terraform-no-sni` sont **bloquants sur les scopes `security-patch` / `new-stack`** (`severity_overrides`) — une détection **arrête l'avancée du workflow** jusqu'à correction ou levée humaine explicite tracée. Partout ailleurs, ils restent advisory.
+- Même bloquant, un sensor **ne remplace jamais** la **validation humaine granulaire** (unique gate décisionnel de fond), ni le **QA Docker systématique** (§2.2), ni le contrôle qualité central du Tech Lead (§2.6) : bloquer, c'est forcer la correction ou une levée humaine tracée, pas décider à la place de l'humain.
 - Un signal **au vert ne vaut pas validation** ; un signal **en échec n'autorise aucun raccourci**.
-- Rendre un sensor **bloquant** (p. ex. `plaintext-secret` ou `terraform-no-sni` sur les scopes `security-patch` / `new-stack`) est une décision structurante explicite (ADR + contrôle sécurité). Par défaut, tout reste advisory.
+- Toute évolution de la sévérité d'un sensor (bascule bloquant/advisory, périmètre de scopes) est une décision structurante explicite (ADR + contrôle sécurité QA Docker, SG-1).
 
 ## Clauses de sécurité (contrôle QA Docker — SG-1 à SG-6)
 
@@ -58,9 +59,11 @@ Six sensors, alignés sur le contrat amont « Sensors » (schéma de manifeste `
 | `plaintext-secret` | [`sensors/plaintext-secret.md`](sensors/plaintext-secret.md) | security | write | advisory | Détection de secret en clair (emplacement, jamais la valeur) |
 | `terraform-no-sni` | [`sensors/terraform-no-sni.md`](sensors/terraform-no-sni.md) | security | write | advisory | Absence de `${SNI}` dans les fichiers Terraform livrés |
 | `traefik-coherence` | [`sensors/traefik-coherence.md`](sensors/traefik-coherence.md) | traefik | gate | advisory | Cohérence Traefik (référence `traefik-manager-read`) |
-| `vault-secret-exists` | [`sensors/vault-secret-exists.md`](sensors/vault-secret-exists.md) | security | gate | advisory | Existence des secrets Vault référencés (jamais la valeur) — **optionnel** |
+| `vault-secret-exists` | [`sensors/vault-secret-exists.md`](sensors/vault-secret-exists.md) | security | gate | advisory | Existence des secrets Vault référencés (jamais la valeur) — **actif** |
 
-> **Sensors prioritaires** (recommandés en premier) : `yaml-validity`, `swarm-deploy-section`, `plaintext-secret`, `terraform-no-sni`. **Complémentaire** : `traefik-coherence`. **Optionnel** (soumis à autorisation humaine) : `vault-secret-exists`. Cette priorisation est une **valeur par défaut proposée**, à confirmer par l'humain (voir ADR-0016).
+> **Sensors prioritaires** (confirmés ALI-204, arbitrage 1) : `yaml-validity`, `swarm-deploy-section`, `plaintext-secret`, `terraform-no-sni`. **Complémentaire** : `traefik-coherence`. `vault-secret-exists` est **actif** (arbitrage 4), en existence seule.
+>
+> **Sévérité — advisory par défaut, bloquant conditionnel** (confirmé ALI-204, arbitrage 2) : `plaintext-secret` et `terraform-no-sni` sont **bloquants sur les scopes `security-patch` / `new-stack`** (front-matter `severity_overrides`), advisory partout ailleurs. Sur ces scopes, une détection **arrête l'avancée** jusqu'à correction ou levée humaine explicite tracée. Contrôle sécurité assuré par le QA Docker (ADR-0016, SG-1). Tous les autres sensors restent advisory.
 
 ## Format d'un manifeste de sensor (contrat amont)
 
@@ -70,7 +73,10 @@ Le front-matter est un **descripteur de capacité pur** (ce qu'est le check et c
 id: <identifiant>            # kebab-case, = stem du fichier (obligatoire)
 kind: deterministic          # seule valeur acceptée aujourd'hui (obligatoire)
 command: <préfixe d'invocation>   # (obligatoire) — non-exécutable à ce stade
-default_severity: advisory   # advisory | blocking (obligatoire) — blocking = ADR + contrôle sécurité
+default_severity: advisory   # advisory | blocking (obligatoire) — blocking global = ADR + contrôle sécurité
+severity_overrides:          # (optionnel) sévérité conditionnelle par scope (ADR + contrôle sécurité)
+  - scopes: [security-patch, new-stack]
+    severity: blocking
 description: <une ligne>     # description humaine (obligatoire)
 category: <label libre>      # (optionnel) — compose-shape | security | traefik
 fire_on: gate                # (optionnel) write | gate — défaut : write
