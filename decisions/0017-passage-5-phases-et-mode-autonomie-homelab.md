@@ -2,8 +2,8 @@
 
 ---
 auteurs: Mika (agent, sur validation humaine granulaire — multica.gaston)
-accepté par : multica.gaston (validation humaine — ALI-205)
-accepté le : ""
+accepté par : multica.gaston (validation humaine — ALI-205, 2026-09-03)
+accepté le : 2026-09-03
 supersedes: ""
 superseded_by: ""
 
@@ -11,9 +11,9 @@ superseded_by: ""
 
 ## Status
 
-Proposed
+Accepted
 
-> En attente de validation humaine granulaire sur l'issue ALI-205. Passe `Accepted` sur le feu vert de `multica.gaston` (nomenclature déjà validée au Stage 1, cf. ADR-0013 §3).
+> Validé par l'humain (multica.gaston) sur l'issue ALI-205 (« Acceptée », 2026-09-03) : nomenclature 5 phases, contenu de l'Idéation et mode d'autonomie confirmés (validation humaine avant action à impact jamais levée). Nomenclature déjà figée au Stage 1 (cf. ADR-0013 §3).
 
 ## Contexte
 
