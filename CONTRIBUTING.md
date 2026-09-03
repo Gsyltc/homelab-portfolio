@@ -67,7 +67,7 @@ Toute évolution d'un workflow doit :
 
 ### Décisions structurantes
 
-Toute décision d'architecture significative est tracée dans [`decisions/`](decisions/) sous forme d'un enregistrement court et numéroté (`NNNN-titre-court.md`), en cohérence avec les enregistrements existants (`0001`…`0007`). Ne modifiez pas rétroactivement un enregistrement accepté : ajoutez-en un nouveau qui le supersède si besoin.
+Toute décision d'architecture significative est tracée dans [`decisions/`](decisions/) sous forme d'un enregistrement court et numéroté (`NNNN-titre-court.md`), en cohérence avec les enregistrements existants (`0001`…`0010`). Ne modifiez pas rétroactivement un enregistrement accepté : ajoutez-en un nouveau qui le supersède si besoin.
 
 ### Documentation
 
