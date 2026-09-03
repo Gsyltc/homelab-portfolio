@@ -38,7 +38,7 @@ ils ne s'exécutent jamais conjointement sur une même issue ou un même livrabl
 1. **La demande porte-t-elle sur le Homelab** — une stack Docker Swarm / Proxmox, un
    `docker-compose`, une config Terraform de stack, un flux n8n, une automatisation
    Home Assistant, des secrets Vault, des routes Traefik ?
-   → Suivre **`docs/homelab-workflow.md`** (coordinateur : **Tech Lead**).
+   → Suivre **`homelab/common/conductor.md`** (coordinateur : **Tech Lead Homelab** ; source unique — stages sous `homelab/common/stages/`, protocoles sous `homelab/common/protocols/` ; stub historique `docs/homelab-workflow.md`).
    - Cas prioritaire absolu : dès que « n8n » apparaît, délégation immédiate à l'Expert N8n.
 
 2. **La demande porte-t-elle sur l'architecture d'une solution / d'un système** —

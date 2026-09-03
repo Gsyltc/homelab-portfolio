@@ -1,6 +1,6 @@
 # Agents — équipe DevOps Homelab
 
-Définitions conformes (front-matter YAML + corps Markdown, même format que [`core/agents/`](../../core/agents/)) des agents de l'équipe DevOps Homelab, coordonnée par le **Tech Lead Homelab**. Le workflow de référence est [`../common/conductor.md`](../common/conductor.md) (une fois créé au stage dédié) ; en attendant, `docs/homelab-workflow.md`.
+Définitions conformes (front-matter YAML + corps Markdown, même format que [`core/agents/`](../../core/agents/)) des agents de l'équipe DevOps Homelab, coordonnée par le **Tech Lead Homelab**. Le workflow de référence est [`../common/conductor.md`](../common/conductor.md) (source unique — instructions du coordinateur ; le QUOI de chaque étape vit dans [`../common/stages/`](../common/stages/) et les mécanismes transverses dans [`../common/protocols/`](../common/protocols/)). Vue narrative historique (stub de redirection) : [`docs/homelab-workflow.md`](../../docs/homelab-workflow.md).
 
 ## Rôles génériques → fichiers
 

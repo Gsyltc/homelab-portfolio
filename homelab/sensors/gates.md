@@ -1,69 +1,85 @@
 # Verification gates Homelab — contrôle de traçabilité aux frontières de phases
 
-Manifeste déclaratif des **verification gates** du workflow Homelab, référencés par [`docs/homelab-workflow.md`](../../docs/homelab-workflow.md) (section « Verification gates & Sensors ») et exécutés aux **frontières de phases** par le **Tech Lead Homelab**. **Advisory** : produit un « Rapport de vérification » sur l'issue, **ne bloque jamais** la validation humaine granulaire.
+Manifeste déclaratif des **verification gates** du workflow Homelab, référencés par le triptyque [`homelab/common/`](../common/conductor.md) (source unique — voir [`conductor.md`](../common/conductor.md), « Verification gates aux frontières de phases ») et exécutés aux **frontières de phases** par le **Tech Lead Homelab**. **Advisory** : produit un « Rapport de vérification » sur l'issue, **ne bloque jamais** la validation humaine granulaire. Vue narrative historique (stub) : [`docs/homelab-workflow.md`](../../docs/homelab-workflow.md).
 
-Pendant Homelab de [`../../core/sensors/gates.md`](../../core/sensors/gates.md) : même forme déclarative, **frontières et artefacts spécifiques au Homelab** (documentation officielle, paramètres requis §1.4, livrables compose + `.tfvars`, QA Docker, prérequis de déploiement §3.0).
+Pendant Homelab de [`../../core/sensors/gates.md`](../../core/sensors/gates.md) : même forme déclarative, **frontières et artefacts spécifiques au Homelab** (documentation officielle, paramètres requis §2.4, livrables compose + `.tfvars`, QA Docker, prérequis de déploiement §4.0).
 
 À chaque **frontière de phase**, en amont de la validation humaine, trois contrôles déterministes :
 
 1. **`artefacts-presents`** — les artefacts requis en sortie de phase existent.
-2. **`liaison-tracabilite`** — chaque paramètre / décision retenu est relié à la demande, aux paramètres collectés (§1.4) ou à un ADR ; chaque décision structurante est tracée en ADR.
+2. **`liaison-tracabilite`** — chaque paramètre / décision retenu est relié à la demande, aux paramètres collectés (§2.4) ou à un ADR ; chaque décision structurante est tracée en ADR.
 3. **`absence-orphelin`** — aucun livrable (compose, `.tfvars`) ni décision n'est déconnecté (sans paramètre amont ni référence).
 
 ## Frontières et artefacts requis
 
-> Adossé aux **3 phases actuelles** du workflow Homelab (Phase 1 Cadrage et Paramètres / Phase 2 Production et Contrôle / Phase 3 Validation et Déploiement). La matrice suivra l'ossature à **5 phases** au Stage 5 (ajout `Initialisation` + `Idéation`, voir [ADR-0013](../../decisions/0013-cadrage-refonte-homelab-workflow-sur-ai-dlc.md)).
+> Adossé aux **5 phases** du workflow Homelab (Phase 0 Initialisation / Phase 1 Idéation / Phase 2 Cadrage et Paramètres / Phase 3 Production et Contrôle / Phase 4 Validation et Déploiement — [ADR-0017](../../decisions/0017-passage-5-phases-et-mode-autonomie-homelab.md), triptyque [`homelab/common/`](../common/conductor.md) au Stage 7). Le prérequis de déploiement **§3.0 devient §4.0** ; le rappel advisory anticipé est en §0.3.
 
 ```yaml
 type: verification-gates
 nature: advisory
 origine: ALI-204
 boundaries:
-  - id: entree-phase1
-    frontiere: "Demande → Phase 1 (Cadrage et Paramètres)"
+  - id: entree-phase0
+    frontiere: "Demande → Phase 0 (Initialisation)"
     artefacts_requis:
-      - demande_brute_consignee            # entrée brute sur l'issue (§1.2)
+      - demande_brute_consignee            # entrée brute sur l'issue (§0.4)
       - label_homelab_pose                 # label Homelab (+ Docker Swarm si compose)
-      - scope_confirme                     # scope auto-détecté puis confirmé (homelab/scopes/)
+      - detection_stack                    # stack existante vs nouvelle consignée (§0.1)
+      - verrou_concurrence_lu              # active_step lu (§0.2)
+    checks: [artefacts-presents]
+
+  - id: phase0-phase1
+    frontiere: "Phase 0 → Phase 1 (Initialisation → Idéation)"
+    artefacts_requis:
+      - intention_capturee                 # intention consignée (§1.1)
+      - scope_propose                      # scope auto-détecté (§1.2, homelab/scopes/)
     checks: [artefacts-presents]
 
   - id: phase1-phase2
-    frontiere: "Phase 1 → Phase 2 (Cadrage → Production)"
+    frontiere: "Phase 1 → Phase 2 (Idéation → Cadrage)"
     artefacts_requis:
-      - lien_documentation_officielle      # règle préalable de documentation officielle
-      - parametres_requis_complets         # tous les paramètres §1.4 renseignés (${stack_name}, ${traefik_network}, …)
-      - arbitrage_swarm_proxmox            # conditionnel : si les deux existent (§1.3)
-      - auth_type_fige_ou_reporte          # §1.4 : choisi automatiquement ou arbitré par l'humain
+      - scope_confirme                     # scope confirmé au gate léger (§1.3)
+      - intention_perimetre_approuves      # gate humain léger (§1.3)
+      - arbitrage_swarm_proxmox_amorce     # conditionnel : arbitrage amorcé (§1.2)
+    checks: [artefacts-presents]
+
+  - id: phase2-phase3
+    frontiere: "Phase 2 → Phase 3 (Cadrage → Production)"
+    artefacts_requis:
+      - lien_documentation_officielle      # règle préalable de documentation officielle (§2.2)
+      - parametres_requis_complets         # tous les paramètres §2.4 renseignés (${stack_name}, ${traefik_network}, …)
+      - arbitrage_swarm_proxmox            # conditionnel : si les deux existent (§2.3)
+      - auth_type_fige_ou_reporte          # §2.4 : choisi automatiquement ou arbitré par l'humain
     checks: [artefacts-presents, liaison-tracabilite]
     # note : le lien de documentation officielle est un artefact requis PROPRE au Homelab
 
-  - id: phase2-phase3
-    frontiere: "Phase 2 → Phase 3 (Production → Validation)"
+  - id: phase3-phase4
+    frontiere: "Phase 3 → Phase 4 (Production → Validation)"
     artefacts_requis:
-      - livrable_compose_present           # docker-compose téléchargeable (§2.1)
-      - livrable_tfvars_present            # config Terraform .tfvars (§2.3) — conditionnel selon scope
-      - qa_docker_passe                    # vérification QA Docker rendue et contrôlée (§2.2)
-      - controle_qualite_central_go        # aiguillage GO du Tech Lead (§2.6)
+      - livrable_compose_present           # docker-compose téléchargeable (§3.1)
+      - livrable_tfvars_present            # config Terraform .tfvars (§3.3) — conditionnel selon scope
+      - qa_docker_passe                    # vérification QA Docker rendue et contrôlée (§3.2)
+      - controle_qualite_central_go        # aiguillage GO du Tech Lead (§3.6)
     checks: [artefacts-presents, liaison-tracabilite, absence-orphelin]
     sensors: [yaml-validity, swarm-deploy-section, plaintext-secret, terraform-no-sni, traefik-coherence]
-    prerequis_30:                          # prérequis de déploiement anticipés (§3.0)
+    prerequis_40:                          # prérequis de déploiement anticipés (§4.0)
       - repertoire_travail_defini          # variable [répertoire de travail] définie et non vide
       - flux_kestra_accessible             # flux Kestra configure_service accessible
-    # en cas de prérequis §3.0 manquant : signaler, ne pas promettre le déploiement automatique
+    # en cas de prérequis §4.0 manquant : signaler, ne pas promettre le déploiement automatique
 
-  - id: phase3-cloture
-    frontiere: "Phase 3 → Clôture (Validation → Done)"
+  - id: phase4-cloture
+    frontiere: "Phase 4 → Clôture (Validation → Done)"
     artefacts_requis:
-      - validation_humaine_explicite       # §3.2 — chaque élément validé séparément
-      - depot_fichiers_confirme            # §3.3 — chemins confirmés + fichiers vérifiés
-      - deploiement_kestra_si_demande      # §3.4 — conditionnel, sur « oui » explicite
+      - validation_humaine_explicite       # §4.2 — chaque élément validé séparément
+      - depot_fichiers_confirme            # §4.3 — chemins confirmés + fichiers vérifiés
+      - deploiement_kestra_si_demande      # §4.4 — conditionnel, sur « oui » explicite
     checks: [artefacts-presents]
     sensors: [vault-secret-exists]         # actif (ALI-204), existence seule, jamais la valeur
 ```
 
-## Articulation avec les prérequis §3.0
+## Articulation avec les prérequis §4.0
 
-Le contrôle `phase2-phase3` **anticipe** les prérequis de déploiement du §3.0 (`[répertoire de travail]` défini, flux Kestra `configure_service` accessible) : il les vérifie **avant** d'entrer en Phase 3, pour éviter qu'un prérequis manquant ne fasse échouer silencieusement le dépôt (§3.3) ou ne bloque le §3.4 sans explication. C'est le pendant automatisé et anticipé du garde-fou §3.0, qui reste par ailleurs le contrôle bloquant de référence exécuté par le Tech Lead en entrée de Phase 3.
+Le contrôle `phase3-phase4` **anticipe** les prérequis de déploiement du §4.0 (`[répertoire de travail]` défini, flux Kestra `configure_service` accessible) : il les vérifie **avant** d'entrer en Phase 4, pour éviter qu'un prérequis manquant ne fasse échouer silencieusement le dépôt (§4.3) ou ne bloque le §4.4 sans explication. C'est le pendant automatisé et anticipé du garde-fou §4.0, qui reste par ailleurs le contrôle bloquant de référence exécuté par le Tech Lead en entrée de Phase 4.
 
 ## En cas d'écart (advisory)
 
@@ -81,5 +97,5 @@ Rapport de vérification — <frontière>   (source : homelab/sensors/gates.md @
 - artefacts-presents : ✅ | ⚠️ <artefact manquant> | ⛔ <indisponible>
 - liaison-tracabilite : ✅ | ⚠️ <paramètre / décision sans amont ni ADR> | ⛔ <indisponible>
 - absence-orphelin : ✅ | ⚠️ <livrable / décision orphelin> | ⛔ <indisponible>
-- prérequis §3.0 (frontière Phase 2 → Phase 3) : ✅ | ⚠️ <[répertoire de travail] / Kestra> | ⛔ <indisponible>
+- prérequis §4.0 (frontière Phase 3 → Phase 4) : ✅ | ⚠️ <[répertoire de travail] / Kestra> | ⛔ <indisponible>
 ```

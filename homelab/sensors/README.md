@@ -1,6 +1,6 @@
 # Verification gates & Sensors Homelab — fiabilisation déterministe
 
-Ce répertoire contient les **manifestes déclaratifs** des mécanismes de fiabilisation déterministe du workflow Homelab, décrits dans [`docs/homelab-workflow.md`](../../docs/homelab-workflow.md) (section « Verification gates & Sensors ») et coordonnés par le **Tech Lead Homelab**.
+Ce répertoire contient les **manifestes déclaratifs** des mécanismes de fiabilisation déterministe du workflow Homelab, référencés par le triptyque [`homelab/common/`](../common/conductor.md) (source unique — voir [`protocols/governance-security.md`](../common/protocols/governance-security.md), clauses SG-1..6) et coordonnés par le **Tech Lead Homelab**. Vue narrative historique (stub de redirection) : [`docs/homelab-workflow.md`](../../docs/homelab-workflow.md).
 
 Pendant Homelab de [`../../core/sensors/`](../../core/sensors/README.md) : même forme déclarative, mêmes clauses de sécurité (SG-1 à SG-6), **gates, sensors et périmètres spécifiques au Homelab** (Docker Swarm / Proxmox / Terraform / Traefik / Vault). Décision tracée dans [ADR-0016](../../decisions/0016-verification-gates-et-sensors-homelab.md).
 
