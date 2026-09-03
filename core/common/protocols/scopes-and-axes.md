@@ -54,7 +54,7 @@ Légende : ✅ activé · ➖ allégé / optionnel · ❌ ignoré · 🔒 renfor
 | `requirements-analysis` | ✅ | ✅ | ✅ | ✅ 🔒 | ✅ | ➖ | ➖ | ✅ 🔒 |
 | `deliverables-breakdown` | ✅ | ✅ | ✅ | ➖ | ✅ | ➖ | ➖ | ✅ |
 | `design-and-decisions` | ✅ | ✅ | ✅ | ✅ 🔒 | ✅ | ➖ | ➖ | ✅ 🔒 |
-| Contrôle sécurité (Architecte cybersécurité) | ✅ | ✅ | ✅ | 🔒 pilote | ✅ | ➖ [^poc-sec] | ➖ | ✅ 🔒 |
+| Revue de sécurité (Reviewer de sécurité) | ✅ | ✅ | ✅ | 🔒 pilote | ✅ | ➖ [^poc-sec] | ➖ | ✅ 🔒 |
 | `detailed-deliverables` | ✅ | ✅ | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ |
 | `security-consistency-check` | ✅ | ✅ | ✅ | 🔒 | ✅ | ➖ | ➖ | ✅ 🔒 |
 | `consolidation-handoff` | ✅ | ✅ | ✅ | ✅ | ✅ | ➖ | ✅ | ✅ |

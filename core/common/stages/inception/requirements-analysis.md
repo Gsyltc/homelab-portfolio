@@ -7,7 +7,7 @@ lead_agent: Architecte de solution
 support_agents: [Architecte AWS, Architecte cybersécurité]
 mode: subagent
 summary_confirmation: required
-reviewer: Architecture Solution & Intégration
+reviewer: Reviewer de cohérence
 review_class: granular
 human_gate: none
 produces: [besoins_traces]

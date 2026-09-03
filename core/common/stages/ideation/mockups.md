@@ -7,7 +7,7 @@ lead_agent: Architecte de solution
 support_agents: []
 mode: subagent
 summary_confirmation: optional
-reviewer: Architecture Solution & Intégration
+reviewer: Reviewer de cohérence
 review_class: advisory
 human_gate: none
 produces: [maquettes]

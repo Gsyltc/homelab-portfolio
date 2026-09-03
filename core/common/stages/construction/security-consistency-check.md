@@ -7,7 +7,7 @@ lead_agent: Architecture Solution & Intégration
 support_agents: [Architecte cybersécurité]
 mode: inline
 summary_confirmation: required
-reviewer: Architecte cybersécurité
+reviewer: Reviewer de sécurité
 review_class: granular
 human_gate: none
 produces: [controle_securite_coherence]

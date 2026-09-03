@@ -32,7 +32,7 @@ Point clé du contrat : **`allowedTools` ne fait pas partie du schéma AI-DLC**.
 Trois écarts étaient à traiter (issue ALI-194) :
 
 1. **Front-matter** : remplacer `allowedTools: Multica` par `disallowedTools: Task` (obligatoire) + `tier` par agent.
-2. **Reviewers** : décider si l'on modélise des personas « review-only » distincts (comme les 2 reviewers AI-DLC) ou si l'on conserve le champ `reviewer` sur les stages.
+2. **Reviewers** : décider si l'on modélise des personas « review-only » distincts (comme les 2 reviewers AI-DLC) ou si l'on conserve le champ `reviewer` sur les stages. → **Arbitrage humain** (ALI-194, « Créer des reviewers distinct ») : deux personas review-only distincts (voir § Décision 3).
 3. **Connaissances par agent** : overlay de connaissances par persona (`knowledge/<agent>/`) ou documentation de la raison pour laquelle les skills Multica en tiennent lieu.
 
 Contrainte de cadrage (ALI-193) : adapter au moteur A2A **Multica**, sans importer le tooling amont non applicable (`bun`, hooks `.ts`, `dist/<harness>/`) ; toute divergence assumée est tracée ; aucune régression sur l'exécution A2A.
@@ -63,17 +63,30 @@ Pour les 9 fichiers `core/agents/*.md` :
 | `archiving-agent` | `templated` | Procédure déterministe (import / export / archive) encodée dans la skill ; sortie majoritairement suivant un patron. |
 | `notification-agent` | `templated` | Envoi ntfy paramétré (skill `ntfy-notifications`) ; sortie suivant un patron. |
 | `sales-proposals-agent` | `templated` | Synthèse de livrables **déjà validés** en supports commerciaux ; méthodologie encodée dans la skill `sales-deck-generation` ; ne réinvente pas le contenu technique. |
+| `consistency-reviewer-agent` | `balanced` | Persona **review-only** : juge un livrable contre des critères de cohérence explicites (entrée nouvelle, critères fixes). |
+| `security-reviewer-agent` | `balanced` | Persona **review-only** : juge une surface de sécurité contre OWASP / STRIDE ; sortie sécurité-critique mais cadrée par des critères explicites de revue. |
 
-Aucun agent n'est classé `balanced` : la seule fonction « review-shaped » du workspace (revue de sécurité) est portée par l'Architecte cybersécurité, classé `judgment` car sa sortie est sécurité-critique et cascade sur la validation humaine (voir § 3 des reviewers). `balanced` / `templated` projettent aujourd'hui à l'identique sur les harness où le tier ne change rien (Kiro/Cursor/Copilot héritent du modèle et de l'effort de session) ; le tier reste néanmoins **sémantiquement correct** et exploitable par un harness qui l'honore.
+Les deux personas **review-only** (Reviewer de cohérence, Reviewer de sécurité) sont classés `balanced` — profil « reviewer-shaped » du contrat AI-DLC (juger une entrée nouvelle contre des critères explicites). L'**Architecte cybersécurité** reste `judgment` : il conçoit et pilote la posture de sécurité (sortie sécurité-critique qui cascade), rôle distinct de la **revue** portée par le Reviewer de sécurité. `balanced` / `templated` projettent aujourd'hui à l'identique sur les harness où le tier ne change rien (Kiro/Cursor/Copilot héritent du modèle et de l'effort de session) ; le tier reste néanmoins **sémantiquement correct** et exploitable par un harness qui l'honore.
 
-### 3. Reviewers — conservation du champ `reviewer` sur les stages (pas de persona review-only)
+### 3. Reviewers — création de deux personas « review-only » distincts
 
-L'amont AI-DLC livre **2 personas « review-only »** distincts. Ce workspace **ne crée pas** de tels personas et **conserve** la modélisation déjà actée en [ADR-0007](0007-adaptation-modele-conductor-stages-protocols.md) : la revue est un **attribut du stage** (`reviewer:` + `review_class:` dans le front-matter de stage, [`stage-definition.md`](../core/common/protocols/stage-definition.md)), et le protocole [`reviewer.md`](../core/common/protocols/reviewer.md) définit **deux natures de revue non substituables** portées par des fonctions **existantes** :
+Sur **directive humaine explicite** (« Créer des reviewers distinct », issue ALI-194), ce workspace **crée deux personas review-only distincts**, en miroir du modèle AI-DLC (2 reviewers), plutôt que de conserver la revue comme simple attribut porté par des fonctions productrices existantes :
 
-- **revue de cohérence** → **coordinateur** (Architecture Solution & Intégration) ;
-- **revue de sécurité** (obligatoire, plancher SG-3) → **Architecte cybersécurité**.
+- **`consistency-reviewer-agent`** — display_name **« Reviewer de cohérence »** ; porte la **revue de cohérence** (documentation ↔ décisions, absence de conflit / d'artefact orphelin, complétude, conventions).
+- **`security-reviewer-agent`** — display_name **« Reviewer de sécurité »** ; porte la **revue de sécurité** (OWASP / STRIDE toujours actifs ; NIST / COBIT si docs risques ; normes réglementaires sur demande explicite), **obligatoire et non substituable** (plancher SG-3).
 
-**Raison** : dans le moteur A2A Multica, un « reviewer » est une **fonction sollicitée par mention** à un temps du stage, pas un exécutable chargé dans un stage. Créer deux agents review-only dupliquerait des rôles déjà tenus, sans gain d'exécution, et brouillerait le routage (deux entrées de plus dans `multica agent list`). La séparation cohérence / sécurité est déjà garantie par le protocole et le plancher SG-3.
+Les deux sont **review-only** : `disallowedTools: Task`, tier `balanced` (personas de revue qui jugent une entrée nouvelle contre des critères explicites), **ne produisent aucun livrable** et ne prennent aucune décision structurante.
+
+**Rewiring** — le champ `reviewer:` des fiches de stage pointe désormais vers ces personas (fonctions) :
+
+| Nature | Ancien `reviewer:` | Nouveau `reviewer:` | Stages |
+| --- | --- | --- | --- |
+| cohérence | Architecture Solution & Intégration | **Reviewer de cohérence** | `requirements-analysis`, `detailed-deliverables`, `mockups` |
+| sécurité | Architecte cybersécurité | **Reviewer de sécurité** | `design-and-decisions`, `security-consistency-check`, `walking-skeleton`, `deployment-under-validation` |
+
+**Séparation des rôles préservée** : le **coordinateur** *sollicite* désormais les reviewers (il ne porte plus lui-même la revue de cohérence). L'**Architecte cybersécurité** reste la fonction **d'analyse / production** de posture de sécurité (conception, durcissement, pilotage du scope `security-patch`), **distincte** du Reviewer de sécurité qui rend le **verdict de revue**. Les protocoles [`reviewer.md`](../core/common/protocols/reviewer.md), [`governance-security.md`](../core/common/protocols/governance-security.md), [`stage-definition.md`](../core/common/protocols/stage-definition.md), [`stage-protocol.md`](../core/common/protocols/stage-protocol.md) et [`scopes-and-axes.md`](../core/common/protocols/scopes-and-axes.md) sont mis à jour en conséquence. Les **invariants** (validation humaine granulaire, plancher SG-3 : la revue de sécurité ne peut être ni portée, ni remplacée, ni conditionnée par la revue de cohérence ou un gate advisory) restent intacts.
+
+> **Supersession** : cette décision **révise** l'orientation initialement proposée (conservation du champ `reviewer:` sans persona dédié) à la suite de l'arbitrage humain. Elle reste cohérente avec [ADR-0007](0007-adaptation-modele-conductor-stages-protocols.md) (la revue demeure un attribut de stage `reviewer:` + `review_class:`) : seule la **fonction** cible du champ change, vers des personas dédiés.
 
 ### 4. Connaissances par agent — les skills Multica tiennent lieu d'overlay
 
@@ -92,13 +105,15 @@ L'overlay d'équipe (standards maison par persona) reste possible ultérieuremen
 - **POS-001** : Front-matter d'agent conforme au contrat AI-DLC (`name`=stem, `display_name`, `description`, `disallowedTools: Task`, `tier`) ; alignement structurel sans importer le tooling amont.
 - **POS-002** : Frontière « pas d'auto-délégation » **explicite dans la source**, cohérente avec la gouvernance A2A par mention.
 - **POS-003** : `tier` rend lisible la nature du travail par agent et ouvre la voie à une projection modèle/effort par un harness qui l'honore, sans redécision.
-- **POS-004** : Pas de duplication de rôles (reviewers) ni de sources de connaissance concurrentes (knowledge) — cohérence avec ADR-0007 et le modèle skills-Multica.
+- **POS-004** : Deux personas **review-only** distincts (cohérence / sécurité) alignés sur le modèle AI-DLC (2 reviewers) et sur la directive humaine ; séparation nette entre *sollicitation* (coordinateur), *analyse / production* (Architecte cybersécurité) et *verdict de revue* (Reviewers). Pas de source de connaissance concurrente (knowledge) — cohérence avec le modèle skills-Multica.
+- **POS-005** : `reviewer:` des stages résout désormais vers une fonction dédiée et lisible dans `multica agent list` ; le routage A2A de la revue devient explicite.
 
 ### Négatives
 
 - **NEG-001** : `disallowedTools: Task` est **inerte à l'exécution sur Multica** (pas d'outil `Task`) : valeur documentaire ; atténué par le fait qu'il matérialise une intention et satisfait le contrat pour tout futur portage de harness.
 - **NEG-002** : La classification `tier` n'a **aucun effet** sur les harness qui héritent du modèle/effort de session (Kiro/Cursor/Copilot) ; elle reste néanmoins sémantiquement utile et sans coût.
 - **NEG-003** : L'absence d'overlay `core/knowledge/<agent>/` impose de passer par l'import/assignation de skills pour enrichir un persona ; c'est le mécanisme Multica attendu, mais il diffère de l'amont (documenté ici).
+- **NEG-004** : Deux fonctions de plus à provisionner sur Multica (import + assignation des agents « Reviewer de cohérence » / « Reviewer de sécurité », résolution d'UUID au moment de la mention) ; atténué par l'alignement au modèle AI-DLC et par la clarté du routage. **Changement de surface de sécurité** : la fonction qui rend le verdict de revue de sécurité passe de l'Architecte cybersécurité à un Reviewer de sécurité dédié — à soumettre au contrôle sécurité avant *Accepted* (voir IMP-005).
 
 ## Alternatives étudiées
 
@@ -110,9 +125,9 @@ L'overlay d'équipe (standards maison par persona) reste possible ultérieuremen
 
 **Raison du rejet** : sur Multica les capacités sont conférées par **assignation de skills**, pas par une *allowlist* d'outils de session. Une `tools:` restrictive n'aurait pas de correspondance runtime et risquerait de sur-contraindre à tort. Laisser hériter le toolset de session (recommandation amont : « most personas are best left to inherit everything »).
 
-### ALT-003 — Créer deux personas « review-only » (miroir de l'amont)
+### ALT-003 — Conserver le champ `reviewer:` sans persona dédié (revue portée par le coordinateur + Architecte cybersécurité)
 
-**Raison du rejet** : dans le moteur A2A, la revue est une fonction sollicitée par mention, déjà tenue par le coordinateur (cohérence) et l'Architecte cybersécurité (sécurité) — voir [ADR-0007](0007-adaptation-modele-conductor-stages-protocols.md) et [`reviewer.md`](../core/common/protocols/reviewer.md). Deux agents supplémentaires dupliqueraient des rôles existants.
+**Raison du rejet** : d'abord proposée (la revue comme fonction sollicitée par mention, tenue par des fonctions existantes), cette option a été **écartée sur arbitrage humain explicite** (« Créer des reviewers distinct », ALI-194) au profit de deux personas review-only, en miroir du modèle AI-DLC (2 reviewers). L'arbitrage humain prime.
 
 ### ALT-004 — Créer une arborescence `core/knowledge/<agent>/`
 
@@ -120,11 +135,11 @@ L'overlay d'équipe (standards maison par persona) reste possible ultérieuremen
 
 ## Notes d'implémentation
 
-- **IMP-001** : 9 fichiers `core/agents/*.md` modifiés — `allowedTools: Multica` retiré ; `disallowedTools: Task` + `tier` ajoutés. Validité YAML du front-matter vérifiée sur les 9 (name=stem, `display_name` présent, `disallowedTools: Task`, `tier` ∈ {judgment, templated}).
-- **IMP-002** : Reviewers — **aucun fichier agent créé** ; la modélisation `reviewer:` sur stages + [`reviewer.md`](../core/common/protocols/reviewer.md) est conservée (ADR-0007).
+- **IMP-001** : 9 fichiers `core/agents/*.md` existants modifiés — `allowedTools: Multica` retiré ; `disallowedTools: Task` + `tier` ajoutés. **2 fichiers créés** (`consistency-reviewer-agent.md`, `security-reviewer-agent.md`), portant le total à **11 agents**. Validité YAML du front-matter vérifiée sur les 11 (name=stem, `display_name` présent, `disallowedTools: Task`, `tier` ∈ {judgment, balanced, templated}).
+- **IMP-002** : Reviewers — **2 personas review-only créés** (tier `balanced`) ; le champ `reviewer:` de 7 fiches de stage rewiré (3 cohérence, 4 sécurité) ; protocoles mis à jour ([`reviewer.md`](../core/common/protocols/reviewer.md) §1/§2 + mermaid, [`governance-security.md`](../core/common/protocols/governance-security.md) table des acteurs + section contrôle sécurité, [`stage-definition.md`](../core/common/protocols/stage-definition.md) schéma + liste des fonctions + règle SG-3, [`stage-protocol.md`](../core/common/protocols/stage-protocol.md), [`scopes-and-axes.md`](../core/common/protocols/scopes-and-axes.md) ligne matrice, `stages/inception/design-and-decisions.md`).
 - **IMP-003** : Connaissances — **aucune arborescence `core/knowledge/`** créée ; les skills Multica (import + assignation) tiennent lieu d'overlay, conformément à [`README.md`](../README.md) / [`CONTRIBUTING.md`](../CONTRIBUTING.md).
 - **IMP-004** : Pointeurs — `README.md` et `AGENTS.md` mentionnent `decisions/ (0001…0007)` ; mis à jour vers `0001…0008`.
-- **IMP-005** : Contrôle sécurité — les modifications sont **déclaratives** (front-matter) et **ne modifient pas** la surface d'exécution ni la posture de sécurité (aucune instruction exécutable, aucune frontière de délégation nouvelle : `disallowedTools: Task` **renforce** la frontière existante). La sollicitation systématique de l'Architecte cybersécurité reste requise dès qu'un stage ultérieur touche une surface de sécurité ([`reviewer.md`](../core/common/protocols/reviewer.md), plancher SG-3).
+- **IMP-005** : Contrôle sécurité — le front-matter est **déclaratif**, mais la **création d'un Reviewer de sécurité dédié** et le rewiring du `reviewer:` de sécurité **modifient une surface de gouvernance** (la fonction qui rend le verdict de revue de sécurité). Les **invariants sont préservés** : plancher SG-3 intact (la revue de sécurité reste obligatoire, non substituable, précède la validation humaine ; l'Architecte cybersécurité reste l'analyste/pilote). Cette modification de surface est **soumise au contrôle sécurité** (mention du Reviewer de sécurité / Architecte cybersécurité par le coordinateur) **avant** validation humaine et passage à *Accepted*, conformément à [`reviewer.md`](../core/common/protocols/reviewer.md) et [`governance-security.md`](../core/common/protocols/governance-security.md).
 
 ## Références
 
