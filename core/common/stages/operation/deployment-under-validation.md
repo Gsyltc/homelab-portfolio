@@ -3,7 +3,7 @@ slug: deployment-under-validation
 phase: operation
 execution: CONDITIONAL
 condition: "Exécuté si le travail comporte un déploiement / une administration ; sinon N/A"
-lead_agent: Administrateur infrastructure Windows
+lead_agent: Infrastructure Windows
 support_agents: [Architecte AWS, Architecture Solution & Intégration]
 mode: subagent
 summary_confirmation: required

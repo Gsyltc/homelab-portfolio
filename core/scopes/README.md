@@ -1,6 +1,6 @@
 ---
 title: Scopes — un fichier par scope (source d'identité)
-contract: AI-DLC « Scopes » (Harness Engineer Guide)
+contract: Contrat amont « Scopes » (Harness Engineer Guide)
 ---
 
 # Scopes — un fichier de données par scope
@@ -56,7 +56,7 @@ Rappel des invariants (détail : [`../common/protocols/governance-security.md`](
 - Auto-détection = **plancher** : la confirmation humaine peut monter le contrôle, jamais le
   descendre sans validation tracée.
 
-## Non applicable ici (tooling AI-DLC)
+## Non applicable ici (tooling amont)
 
 Pas de compilation `scope-grid.json`, pas de moteur TypeScript, pas de champs `runner` /
 `freeform_default` : l'exécution passe par **Multica**, pas par le harness AI-DLC. On adopte la

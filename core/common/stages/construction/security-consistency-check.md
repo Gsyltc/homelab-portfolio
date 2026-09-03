@@ -4,7 +4,7 @@ phase: construction
 execution: ALWAYS
 condition: "Always executes"
 lead_agent: Architecture Solution & Intégration
-support_agents: [Architecte cybersécurité]
+support_agents: [Architecte Cybersécurité]
 mode: inline
 summary_confirmation: required
 reviewer: Reviewer de sécurité

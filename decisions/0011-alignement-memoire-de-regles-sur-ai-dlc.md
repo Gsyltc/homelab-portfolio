@@ -2,8 +2,13 @@
 
 ---
 auteurs: Mika (agent, sur validation humaine granulaire — multica.gaston)
+<<<<<<< HEAD:decisions/0010-alignement-memoire-de-regles-sur-ai-dlc.md
 accepté par : Sylvain G. (validation humaine — multica.gaston)
 accepté le : 2026-09-02
+=======
+accepté par : multica.gaston
+accepté le : 2026-09-03
+>>>>>>> origin/agent/mika/aed29dd44d2d:decisions/0011-alignement-memoire-de-regles-sur-ai-dlc.md
 supersedes: ""
 superseded_by: ""
 
@@ -13,7 +18,11 @@ superseded_by: ""
 
 Accepted
 
+<<<<<<< HEAD:decisions/0010-alignement-memoire-de-regles-sur-ai-dlc.md
 > Validé par l'humain (multica.gaston, « Accepté » sur ALI-197 le 2026-09-02) — passage **Proposed → Accepted** (invariant : aucun ADR accepté sans validation humaine explicite). Aucune règle n'est ajoutée / modifiée dans `core/rules/` par cet ADR : il **décide et trace la structure** de la mémoire de règles ; il ne passe pas par la boucle d'apprentissage (capture → confirmation → contrôle de conflit), réservée à l'**écriture de règles** (invariant SEC-5). Aucune posture de sécurité ni garde-fou de gouvernance n'est modifié.
+=======
+> Statut **Accepted** — validation humaine explicite obtenue (multica.gaston, 2026-09-03). Le passage à Accepted supposait la validation humaine granulaire ; cette condition est satisfaite (invariant respecté : aucun ADR accepté sans validation humaine). Aucune règle n'est ajoutée / modifiée dans `core/rules/` par cet ADR : il **décide et trace la structure** de la mémoire de règles ; il ne passe pas par la boucle d'apprentissage (capture → confirmation → contrôle de conflit), réservée à l'**écriture de règles** (invariant SEC-5). Aucune posture de sécurité ni garde-fou de gouvernance n'est modifié.
+>>>>>>> origin/agent/mika/aed29dd44d2d:decisions/0011-alignement-memoire-de-regles-sur-ai-dlc.md
 
 ## Contexte
 
@@ -122,7 +131,7 @@ Remplacer la précédence `workspace > project > phase > scope` par une simple c
 - **IMP-001** : `core/rules/README.md` mis à jour — note d'alignement AI-DLC (contrat « Rules and the Learning Loop ») ; tableau des couches enrichi (différé `stage`, fusion `org`/`team` → `workspace`, divergence `scope`, divergence emplacement `core/rules/` vs `core/memory/`) ; ajout de la phase `ideation` (couche `phase` = 4 fichiers) ; note « précédence explicite ⊇ strict-additif, conflit réglé à l'admission ».
 - **IMP-002** : Fichier `core/rules/phases/ideation.md` **créé** (couche `phase`, chargement à la demande, format `RULE-PH-NNN`), pour cohérence avec l'[ADR-0006](0006-passage-5-phases-et-mode-autonomie-construction.md). Aucun fichier `initialization` (bootstrap-only, aligné amont).
 - **IMP-003** : Templates `projects/_template.md` et `scopes/_template.md` mis à jour — rubriques topicales indicatives ; IDs `RULE-*`, note de précédence et exemple conservés. **Pas** de `stages/_template.md` (couche `stage` différée).
-- **IMP-004** : Pointeurs — `README.md`, `AGENTS.md`, `CONTRIBUTING.md` : plage `decisions/` mise à jour pour inclure le présent ADR. **Coordination de numérotation** : le Stage 3 (ALI-196, PR séparée) introduit un `ADR-0009` ; le présent ADR prend donc le numéro **0010** pour éviter la collision au merge. La plage exacte des pointeurs sera `0001…0010` une fois les deux PR fusionnées.
+- **IMP-004** : Pointeurs — `README.md`, `AGENTS.md`, `CONTRIBUTING.md` : plage `decisions/` mise à jour pour inclure le présent ADR. **Coordination de numérotation** : les Stages 2 à 5 ayant été rédigés en parallèle sur des branches séparées, deux collisions (`0009`, `0010`) ont été détectées au Stage 6 (ALI-199) puis résolues par renumérotation validée par l'humain : fiches de stage `0009`, scopes `0010`, **règles `0011` (présent ADR)**, sensors `0012`. La plage des pointeurs est `0001…0012`.
 - **IMP-005** : Aucune règle écrite dans `core/rules/` par cet ADR (structure uniquement) ; la boucle d'apprentissage (capture → confirmation → contrôle de conflit) et les clauses SEC-1..5 restent inchangées. L'articulation `SENSOR_PROPOSED` → liaison de sensor est déférée au **Stage 5 (ALI-198)**.
 - **IMP-006** : Aucune modification de la posture de sécurité ni d'un garde-fou de gouvernance. Le renforcement de la promotion `project → workspace` (contrôle sécurité systématique, SEC-4) était déjà en vigueur ; il est seulement **explicité** dans le contexte de la fusion `org`+`team`.
 

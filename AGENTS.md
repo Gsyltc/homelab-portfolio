@@ -100,11 +100,12 @@ homelab-portfolio/
 │   │   ├── stages/                        #   Fiches de stage des 5 phases (front-matter conforme)
 │   │   └── protocols/                     #   Protocoles transverses (stage-definition, gouvernance, reviewer…)
 │   ├── rules/                             #   Mémoire de règles multi-couches (boucle d'apprentissage)
+│   ├── scopes/                            #   Un fichier par scope (identité en données : depth, keywords…)
 │   ├── sensors/                           #   Manifestes des verification gates & sensors (advisory)
 │   ├── agents/                            #   Définitions d'agents du workflow (11 fichiers .md exportés)
 │   └── workflows/                         #   Workflows narratifs par domaine
 │       └── homelab/                       #     homelab-workflow.md (+ VERSION)
-├── decisions/                             # Registre des décisions structurantes (0001…0010)
+├── decisions/                             # Registre des décisions structurantes (0001…0012)
 ├── docs/                                  # Stub de redirection core-workflow + doc générale
 └── plugins/                               # Packages de plugins d'agents (spec Agent Plugins v1.0.0) — portent les skills
     ├── architecture-assistant/            #   plugin.json + skills/ (OpenSpec, décision, gabarits, cybersécurité, AWS, Windows, supports de vente)

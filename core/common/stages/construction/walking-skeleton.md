@@ -4,7 +4,7 @@ phase: construction
 execution: ALWAYS
 condition: "Always executes — premier jalon de bout en bout, avant toute autonomie"
 lead_agent: Architecte de solution
-support_agents: [Architecte AWS, Administrateur infrastructure Windows, OpenSpec Expert]
+support_agents: [Architecte AWS, Infrastructure Windows, OpenSpec Expert]
 mode: mob
 summary_confirmation: required
 reviewer: Reviewer de sécurité
@@ -44,4 +44,4 @@ Review artifact: `walking-skeleton.md` porte la section `## Review` ajoutée par
 
 ## Learn
 
-Boucle d'apprentissage maison (voir [`core/rules/`](../../../rules/README.md)) : tracer sur l'issue les candidats-règles (motifs d'ossature, choix de mode d'exécution récurrents, recommandations de sécurité) ; les remonter au **gate humain granulaire** ; persistance des apprentissages **confirmés** dans `core/rules/` via le cycle capture → confirmation humaine → contrôle de conflit.
+Boucle d'apprentissage maison (voir [`core/rules/`](../../../rules/README.md)) : tracer sur l'issue les candidats-règles (motifs d'ossature, choix de mode d'exécution récurrents, recommandations de sécurité) ; les remonter au **gate humain granulaire** ; persistance des apprentissages **confirmés** dans `core/rules/` via le cycle capture → confirmation humaine → contrôle de conflit. Divergence tracée vs le journal `memory.md` d'AI-DLC (voir [ADR-0009](../../../../decisions/0009-alignement-fiches-de-stage-sur-ai-dlc.md)).

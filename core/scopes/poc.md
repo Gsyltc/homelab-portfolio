@@ -15,7 +15,7 @@ Preuve de concept **jetable**. Parcours allégé, Depth minimale, vérification 
 contrôle sécurité complet** du scope cible.
 
 Axes par défaut : Depth `minimal`, vérification `advisory` → **`review_cap: advisory`** (plafond de
-classe de revue conforme AI-DLC). **Le plancher OWASP / STRIDE reste actif** : `➖` ne signifie
+classe de revue conforme au contrat amont). **Le plancher OWASP / STRIDE reste actif** : `➖` ne signifie
 jamais un contrôle sécurité nul, seules la profondeur et la rigueur sont allégées.
 
 Appartenance : voir le champ `scopes:` de chaque fiche de stage et la matrice de
