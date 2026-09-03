@@ -1,16 +1,22 @@
+---
+id: required-sections
+kind: deterministic
+command: "non-exécutable (advisory documentaire) — voir ADR-0010"
+default_severity: advisory
+description: "Vérifie que les rubriques obligatoires du gabarit d'ADR / DAS sont présentes et non vides."
+category: document-shape
+fire_on: gate
+matches: "{decisions/[0-9][0-9][0-9][0-9]-*.md,documentations/**/*.md}"
+origine: ALI-188
+---
+
 # Sensor `required-sections` — sections requises *(prioritaire)*
 
-Check déterministe déclenché à l'**écriture d'un ADR ou d'une DAS** : vérifie que les **rubriques obligatoires** du gabarit sont présentes et non vides. **Advisory**.
+Check déterministe déclenché **au gate de phase** (`fire_on: gate`) : vérifie que les **rubriques obligatoires** du gabarit sont présentes et non vides sur chaque **ADR** ou **DAS** livré. **Advisory** (`default_severity: advisory`).
+
+## Contrat de vérification (`checks`)
 
 ```yaml
-id: required-sections
-type: sensor
-nature: advisory
-priority: prioritaire
-origine: ALI-188
-triggers:
-  - "decisions/[0-9][0-9][0-9][0-9]-*.md"     # ADR
-  - "documentations/*.md"                      # documentation d'architecture (DAS)
 checks:
   adr:                                         # rubriques dérivées du gabarit de la skill create-architecture-decision-record
     entete_meta: [auteurs, "accepté par", "accepté le", supersedes, superseded_by]
@@ -31,7 +37,6 @@ checks:
       - "décisions liées (ADR)"
       - risques
     non_vide: true
-output: "liste des rubriques manquantes ou vides (advisory)"
 ```
 
 ## Sortie (piste d'audit)
@@ -45,4 +50,4 @@ Sensor required-sections — <fichier>   (source : core/sensors/sensors/required
 
 ## Garde-fou
 
-Advisory : n'empêche pas l'écriture, ne remplace pas la validation humaine ni le contrôle sécurité. Le passage à bloquant est une décision ADR + contrôle sécurité.
+Advisory : n'empêche pas l'écriture, ne remplace pas la validation humaine ni le contrôle sécurité. Le passage à bloquant est une décision ADR + contrôle sécurité (Architecte cybersécurité).

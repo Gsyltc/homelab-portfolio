@@ -1,23 +1,27 @@
+---
+id: diagram-validity
+kind: deterministic
+command: "non-exécutable (advisory documentaire) — voir ADR-0010"
+default_severity: advisory
+description: "Vérifie que la syntaxe d'un diagramme généré en code (Mermaid / PlantUML / Structurizr) parse sans erreur."
+category: document-shape
+fire_on: write
+matches: "{**/*.md,**/*.puml,**/*.dsl}"
+origine: ALI-188
+---
+
 # Sensor `diagram-validity` — validité de diagramme *(complémentaire)*
 
-Check déterministe déclenché à l'**écriture d'un diagramme généré en code** : vérifie que la **syntaxe** parse sans erreur. Cohérent avec l'obligation « générer les diagrammes en code et en valider la syntaxe avant écriture ». **Advisory**.
+Check déterministe déclenché **à l'écriture** (`fire_on: write`) d'un diagramme généré en code : vérifie que la **syntaxe** parse sans erreur (feedback incrémental rapide). Cohérent avec l'obligation « générer les diagrammes en code et en valider la syntaxe avant écriture ». **Advisory** (`default_severity: advisory`). Le glob `**/*.md` couvre les blocs ` ```mermaid ` / ` ```plantuml ` intégrés ; `.puml` / `.dsl` couvrent les fichiers dédiés.
+
+## Contrat de vérification (`checks`)
 
 ```yaml
-id: diagram-validity
-type: sensor
-nature: advisory
-priority: complementaire
-origine: ALI-188
-triggers:
-  - "**/*.md"          # blocs ```mermaid``` / ```plantuml``` intégrés
-  - "**/*.puml"        # PlantUML
-  - "**/*.dsl"         # Structurizr DSL
 checks:
   syntaxe:
     mermaid: "parse sans erreur (mermaid)"
     plantuml: "parse sans erreur (plantuml)"
     structurizr: "parse sans erreur (structurizr dsl)"
-output: "erreur de parsing localisée (advisory) ; écriture possible, écart tracé"
 ```
 
 ## Sortie (piste d'audit)
