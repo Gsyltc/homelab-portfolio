@@ -2,8 +2,8 @@
 
 ---
 auteurs: Mika (agent)
-accepté par : ""
-accepté le : ""
+accepté par : multica.gaston
+accepté le : 2026-09-03
 supersedes: ""
 superseded_by: ""
 
@@ -11,15 +11,17 @@ superseded_by: ""
 
 ## Status
 
-Proposed
+Accepted
 
-> Statut **Proposed** — en attente de validation humaine granulaire (invariant : aucun ADR
-> accepté sans validation humaine). Cet ADR **ne modifie aucune posture de sécurité** ni
-> **aucune surface d'exécution** : les 7 fichiers de scope Homelab et le champ `scopes:` des 26
-> fiches de stage portaient déjà, dès leur production (ALI-202 → ADR-0014 pour l'identité des
-> scopes, ALI-207 → ADR-0018 pour la transposition sur les stages), la forme déclarative visée.
-> Ce stage **vérifie** la conformité de façon outillée, **ne corrige aucune incohérence** (aucune
-> trouvée) et **trace** les divergences assumées.
+> Statut **Accepted** — validation humaine explicite obtenue (multica.gaston, 2026-09-03, issue
+> ALI-211) : les deux points soumis ont été confirmés — (1) inputs (keywords définitifs tels
+> qu'en données, scope par défaut `stack-update`) **OK**, (2) **acceptation de l'ADR**. L'invariant
+> est respecté (aucun ADR accepté sans validation humaine granulaire). Cet ADR **ne modifie aucune
+> posture de sécurité** ni **aucune surface d'exécution** : les 7 fichiers de scope Homelab et le
+> champ `scopes:` des 26 fiches de stage portaient déjà, dès leur production (ALI-202 → ADR-0014
+> pour l'identité des scopes, ALI-207 → ADR-0018 pour la transposition sur les stages), la forme
+> déclarative visée. Ce stage **vérifie** la conformité de façon outillée, **ne corrige aucune
+> incohérence** (aucune trouvée) et **trace** les divergences assumées.
 
 ## Contexte
 
