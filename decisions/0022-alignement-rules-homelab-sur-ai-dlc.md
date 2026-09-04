@@ -2,8 +2,8 @@
 
 ---
 auteurs: Mika (agent, sur validation humaine granulaire — multica.gaston)
-accepté par : ""
-accepté le : ""
+accepté par : multica.gaston
+accepté le : 2026-09-03
 supersedes: ""
 superseded_by: ""
 
@@ -11,9 +11,9 @@ superseded_by: ""
 
 ## Status
 
-Proposed
+Accepted
 
-> Statut **Proposed** — en attente de validation humaine granulaire (invariant : aucun ADR accepté sans validation humaine explicite). Aucune règle n'est ajoutée / modifiée dans `homelab/rules/` par cet ADR : il **vérifie et trace** la conformité de la chaîne de couches déjà scaffoldée en [ADR-0015](0015-learning-loop-et-regles-persistantes-homelab.md), et ne procède qu'à **une correction de cohérence structurelle** (ajout du fichier de phase `ideation.md`). Il ne passe pas par la boucle d'apprentissage (capture → confirmation → contrôle de conflit), réservée à l'**écriture de règles** (invariant SEC-5). Aucune posture de sécurité ni garde-fou de gouvernance n'est modifié.
+> Statut **Accepted** — validation humaine explicite obtenue (multica.gaston, « 1. Ok / 2. Accepté / Go pour merge et clôture » sur ALI-212 le 2026-09-03). Le passage à Accepted supposait la validation humaine granulaire ; cette condition est satisfaite (invariant respecté : aucun ADR accepté sans validation humaine). Aucune règle n'est ajoutée / modifiée dans `homelab/rules/` par cet ADR : il **vérifie et trace** la conformité de la chaîne de couches déjà scaffoldée en [ADR-0015](0015-learning-loop-et-regles-persistantes-homelab.md), et ne procède qu'à **une correction de cohérence structurelle** (ajout du fichier de phase `ideation.md`). Il ne passe pas par la boucle d'apprentissage (capture → confirmation → contrôle de conflit), réservée à l'**écriture de règles** (invariant SEC-5). Aucune posture de sécurité ni garde-fou de gouvernance n'est modifié.
 
 ## Contexte
 
