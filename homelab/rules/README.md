@@ -12,14 +12,14 @@ Cette mémoire de règles est alignée sur :
 - Le contrat amont **« Rules and the Learning Loop »** (*Harness Engineer Guide*, `awslabs/aidlc-workflows`).
 - La mémoire de règles `core/rules/` (ADR [`decisions/0004`](../../decisions/0004-boucle-apprentissage-et-regles-persistantes.md), [`decisions/0011`](../../decisions/0011-alignement-memoire-de-regles-sur-ai-dlc.md)).
 
-**Divergences assumées et tracées** dans [`decisions/0015`](../../decisions/0015-learning-loop-et-regles-persistantes-homelab.md) :
+**Divergences assumées et tracées** dans [`decisions/0015`](../../decisions/0015-learning-loop-et-regles-persistantes-homelab.md) et [`decisions/0022`](../../decisions/0022-alignement-rules-homelab-sur-ai-dlc.md) (alignement sur le contrat « Rules and the Learning Loop », miroir Homelab d'[ADR-0011](../../decisions/0011-alignement-memoire-de-regles-sur-ai-dlc.md)) :
 
 - **Chaîne à 4 couches core** `workspace > project > phase > scope` → ici **4 couches Homelab** `global > stack > phase > scope` :
   - `workspace` → **`global`** : renommé pour refléter la portée Homelab (invariants et conventions valables pour tout le Homelab, pas le workspace Multica entier).
   - `project` → **`stack`** : dans le Homelab, l'unité de travail est la **stack** (portainer, traefik, gitea, …), pas un « projet » abstrait. Même rôle, nommage métier.
   - `phase` et `scope` : conservés à l'identique (cohérence structurelle avec `core/rules/`).
 - **Emplacement** : `homelab/rules/` (miroir de `core/rules/`, cohérent avec `homelab/scopes/`, `homelab/agents/`).
-- **Phases** : comme le core, la couche `phase` a **trois fichiers** (`cadrage`, `production`, `validation`) correspondant aux 3 phases actuelles du workflow Homelab. Sera étendue à 5 fichiers au Stage 5 (passage à 5 phases). L'`initialisation` est bootstrap-only et **ne porte pas** de fichier de règles.
+- **Phases** : comme le core, la couche `phase` a **quatre fichiers** (`ideation`, `cadrage`, `production`, `validation`), alignés sur les 5 phases du workflow Homelab ([ADR-0017](../../decisions/0017-passage-5-phases-et-mode-autonomie-homelab.md)) et sur le partitionnement amont (4 fichiers de phase). L'`initialisation` (Phase 0) est **bootstrap-only, sans gate humain** et **ne porte donc pas** de fichier de règles — exactement le partitionnement amont (pas de `initialization.md`) et le miroir de `core/rules/` ([ADR-0011](../../decisions/0011-alignement-memoire-de-regles-sur-ai-dlc.md) IMP-002). Le fichier `phases/ideation.md` est ajouté par [ADR-0022](../../decisions/0022-alignement-rules-homelab-sur-ai-dlc.md) pour rétablir la cohérence 5 phases.
 - **Scopes** : les 7 scopes Homelab de [`homelab/scopes/`](../scopes/README.md) (`stack-update`, `new-stack`, `config-change`, `security-patch`, `infra-terraform`, `n8n`, `home-assistant`).
 
 ## Couches (de la plus forte à la plus faible précédence)
@@ -28,7 +28,7 @@ Cette mémoire de règles est alignée sur :
 | --- | --- | --- | --- | --- |
 | `global` | [`global.md`](global.md) | Invariants et conventions Homelab valables partout | Au démarrage (toujours actif) | `workspace` |
 | `stack` | `stacks/<stack>.md` | Spécifique à une stack (portainer, traefik, gitea, …) | Au démarrage, uniquement la stack courante | `project` |
-| `phase` | `phases/<phase>.md` (`cadrage`, `production`, `validation`) | Par phase du workflow | À la demande, quand la phase est déclenchée | `phase` |
+| `phase` | `phases/<phase>.md` (`ideation`, `cadrage`, `production`, `validation`) | Par phase du workflow | À la demande, quand la phase est déclenchée | `phase` |
 | `scope` | `scopes/<scope>.md` (les 7 scopes Homelab) | Par scope | À la demande, quand le scope est confirmé | `scope` |
 
 **Précédence** : `global` > `stack` > `phase` > `scope`. Une règle d'une couche **ne peut pas contredire** une règle d'une couche supérieure sans arbitrage humain (contrôle de conflit à l'admission). Cette précédence explicite **préserve et renforce** l'invariant amont « conflit réglé à l'écriture, jamais au runtime ».
