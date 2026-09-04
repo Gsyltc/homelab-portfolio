@@ -2,7 +2,7 @@
 
 Ce répertoire contient les **manifestes déclaratifs** des mécanismes de fiabilisation déterministe du workflow Homelab, référencés par le triptyque [`homelab/common/`](../common/conductor.md) (source unique — voir [`protocols/governance-security.md`](../common/protocols/governance-security.md), clauses SG-1..6) et coordonnés par le **Tech Lead Homelab**. Vue narrative historique (stub de redirection) : [`docs/homelab-workflow.md`](../../docs/homelab-workflow.md).
 
-Pendant Homelab de [`../../core/sensors/`](../../core/sensors/README.md) : même forme déclarative, mêmes clauses de sécurité (SG-1 à SG-6), **gates, sensors et périmètres spécifiques au Homelab** (Docker Swarm / Proxmox / Terraform / Traefik / Vault). Décision tracée dans [ADR-0016](../../decisions/0016-verification-gates-et-sensors-homelab.md).
+Pendant Homelab de [`../../core/sensors/`](../../core/sensors/README.md) : même forme déclarative, mêmes clauses de sécurité (SG-1 à SG-6), **gates, sensors et périmètres spécifiques au Homelab** (Docker Swarm / Proxmox / Terraform / Traefik / Vault). Décision tracée dans [ADR-0016](../../decisions/0016-verification-gates-et-sensors-homelab.md) ; conformité des manifestes au schéma amont « Sensors » vérifiée et tracée dans [ADR-0023](../../decisions/0023-alignement-sensors-homelab-sur-ai-dlc.md) (miroir Homelab d'[ADR-0012](../../decisions/0012-alignement-sensors-sur-ai-dlc.md)).
 
 Deux mécanismes complémentaires, **tous deux advisory** :
 
