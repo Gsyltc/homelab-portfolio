@@ -24,7 +24,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/) ; versionnage
 - **A2** — Retrait de **SAML** et **LDAP** de la sélection d'authentification
   (skill `configuration-applications` : `SKILL.md`, `references/authentification.md`,
   `references/template-stack.md`). Ordre ramené à `oidc → forwardauth → local`.
-  Décision et actions de ré-intégration tracées dans `decisions/0020-…`.
+  Décision et actions de ré-intégration tracées dans `decisions/0024-…`.
 - **A4** — Note ajoutée à `docker-composer/references/network.md` : `${SNI}`
   autorisée dans les labels compose, **interdite** dans les livrables Terraform.
 - **A5 / A6** — La skill `docker-composer` est déclarée **source unique** de la

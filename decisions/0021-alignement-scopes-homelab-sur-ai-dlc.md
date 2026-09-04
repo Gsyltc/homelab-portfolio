@@ -191,10 +191,12 @@ déclarative (cohérent avec ADR-0013 et ADR-0014).
   stage ne produit qu'une trace de décision (le présent ADR) et la mise à jour des pointeurs
   d'index. Aucune régression.
 - **IMP-005** : Numérotation — le présent ADR est **0021** (suivant le dernier numéro utilisé,
-  `0020`, attribué à deux ADR déjà fusionnés sur `main` :
+  `0020`, attribué à deux ADR au moment de la rédaction :
   `0020-alignement-fiches-de-stage-homelab-sur-ai-dlc.md` (ALI-210) et
-  `0020-retrait-temporaire-saml-ldap-authentification.md`. Cette **collision 0020 pré-existante**
-  n'est pas traitée ici — à consolider à la vérification globale ALI-214). Pointeurs `README.md`
+  `0020-retrait-temporaire-saml-ldap-authentification.md` (HOM-147). Cette **collision 0020
+  pré-existante** a été **résolue à la vérification globale ALI-214** : l'ADR SAML/LDAP a été
+  renuméroté **0024** — l'ADR de fiches de stage conserve **0020** (antérieur et référencé dans
+  la chaîne 0019→0023)). Pointeurs `README.md`
   et `AGENTS.md` mis à jour vers `0001…0021`.
 - **IMP-006** : Contrôle sécurité — cet ADR **ne déplace aucune fonction de verdict** ni surface
   d'exécution : plancher sécurité `new-stack` / `security-patch` inchangé, sensors sécurité
