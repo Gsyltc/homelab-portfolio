@@ -48,7 +48,7 @@ homelab-portfolio/
 │   ├── sensors/              #   Verification gates & sensors (advisory)
 │   ├── agents/               #   Définitions des agents du workflow (11 fichiers .md)
 │   └── workflows/homelab/    #   Workflow Homelab narratif (+ VERSION)
-├── decisions/                # Registre des décisions structurantes (0001…0022)
+├── decisions/                # Registre des décisions structurantes (0001…0023)
 ├── docs/                     # Stub de redirection core-workflow + doc générale
 └── plugins/                  # Packages de plugins d'agents (spec v1.0.0) — portent les skills
     ├── architecture-assistant/    #   OpenSpec, décision, gabarits, cybersécurité, AWS, Windows, supports de vente
