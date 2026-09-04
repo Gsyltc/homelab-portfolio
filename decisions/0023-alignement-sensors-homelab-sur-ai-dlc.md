@@ -1,9 +1,9 @@
 # Alignement des sensors Homelab sur le schéma de manifeste AI-DLC « Sensors »
 
 ---
-auteurs: Mika (agent, en attente de validation humaine granulaire — multica.gaston)
-accepté par : ""
-accepté le : ""
+auteurs: Mika (agent, sur validation humaine granulaire — multica.gaston)
+accepté par : multica.gaston (validation humaine — ALI-213, 2026-09-03)
+accepté le : 2026-09-03
 supersedes: ""
 superseded_by: ""
 
@@ -11,9 +11,9 @@ superseded_by: ""
 
 ## Status
 
-Proposed
+Accepted
 
-> Statut **Proposed** — en attente de validation humaine explicite (multica.gaston) sur l'issue ALI-213. Le passage à *Accepted* suppose la validation humaine granulaire (invariant : aucun ADR accepté sans validation humaine). Aucun sensor n'est ajouté, modifié ni supprimé dans `homelab/sensors/` par cet ADR : il **vérifie et trace** la conformité des six manifestes déjà scaffoldés en [ADR-0016](0016-verification-gates-et-sensors-homelab.md) au contrat amont « Sensors » du *Harness Engineer Guide*. La vérification n'a trouvé **aucune non-conformité** ; aucune correction n'est nécessaire. Aucune posture de sécurité ni garde-fou de gouvernance n'est modifié (les bascules `blocking` de `plaintext-secret` / `terraform-no-sni` et l'activation de `vault-secret-exists` restent celles actées par l'ADR-0016 sur validation ALI-204).
+> Statut **Accepted** — validation humaine explicite obtenue (multica.gaston, « ADR Acceptée. Merge, passage a Done » sur ALI-213 le 2026-09-03). Le passage à Accepted supposait la validation humaine granulaire ; cette condition est satisfaite (invariant respecté : aucun ADR accepté sans validation humaine). Aucun sensor n'est ajouté, modifié ni supprimé dans `homelab/sensors/` par cet ADR : il **vérifie et trace** la conformité des six manifestes déjà scaffoldés en [ADR-0016](0016-verification-gates-et-sensors-homelab.md) au contrat amont « Sensors » du *Harness Engineer Guide*. La vérification n'a trouvé **aucune non-conformité** ; aucune correction n'est nécessaire. Aucune posture de sécurité ni garde-fou de gouvernance n'est modifié (les bascules `blocking` de `plaintext-secret` / `terraform-no-sni` et l'activation de `vault-secret-exists` restent celles actées par l'ADR-0016 sur validation ALI-204).
 
 ## Contexte
 
