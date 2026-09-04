@@ -6,7 +6,7 @@
 
 Ce fichier est la **source unique** des instructions du **coordinateur** du workflow Homelab A2A. Il décrit *comment le coordinateur exécute* le workflow ; le *quoi* de chaque étape vit dans [`stages/`](stages/) et les mécanismes transverses dans [`protocols/`](protocols/).
 
-Le workflow est **agnostique de l'outil** : il s'applique aux stacks Docker Swarm ou Proxmox, à leur configuration Terraform et aux domaines connexes du Homelab (n8n, Home Assistant). Il ne remplace pas les skills des agents (`homelab-stack-workflow`, `docker-composer`, `configuration-applications`, `dockerfile-validator`, `homelab-vault-access`, `traefik-manager-read`) : il en fixe la **gouvernance** et l'**ordre d'exécution** entre agents.
+Le workflow est **agnostique de l'outil** : il s'applique aux stacks Docker Swarm ou Proxmox, à leur configuration Terraform et aux domaines connexes du Homelab (n8n, Home Assistant). Il ne remplace pas les skills des agents (`docker-composer`, `configuration-applications`, `dockerfile-validator`, `homelab-vault-access`, `traefik-manager-read`) : il en fixe la **gouvernance** et l'**ordre d'exécution** entre agents. Ce triptyque `homelab/common/` **est** le workflow Homelab (il n'existe pas de skill « workflow » séparée : le workflow est porté par ce document, pas par une skill).
 
 > **Forme** : ce triptyque `conductor.md` / `stages/` / `protocols/` est la source unique du workflow ; le document narratif historique `docs/homelab-workflow.md` est conservé comme **stub de redirection** (compatibilité ascendante — aucune référence existante cassée). Aucune dynamique du workflow n'est perdue ; seule la forme change (narrative → conductor + fiches de stage + protocoles). Miroir Homelab du triptyque `core/common/` (ADR [0007](../../decisions/0007-adaptation-modele-conductor-stages-protocols.md)), décision tracée dans [ADR-0018](../../decisions/0018-adaptation-modele-conductor-stages-protocols-homelab.md).
 
@@ -69,7 +69,7 @@ flowchart TD
 
 - Si de l'information existe → s'en servir pour **cadrer** la demande (déployabilité : image/registry, port principal, type d'auth, dépendances majeures) et documenter le **lien officiel** sur l'issue **avant** de poursuivre.
 - Si rien n'est trouvé → le signaler explicitement sur l'issue et à l'humain, puis poursuivre en le précisant.
-- **Type d'authentification** : lorsque la documentation précise les types disponibles, appliquer la règle de **sélection automatique** (voir [`stages/ideation/auth-preselection.md`](stages/ideation/auth-preselection.md) et [`stages/cadrage/required-parameters-collection.md`](stages/cadrage/required-parameters-collection.md)) selon l'ordre `oidc → saml → ldap → forwardauth → local` (premier disponible **et gratuit**) ; **en cas de doute, demander à l'humain**.
+- **Type d'authentification** : lorsque la documentation précise les types disponibles, appliquer la règle de **sélection automatique** (voir [`stages/ideation/auth-preselection.md`](stages/ideation/auth-preselection.md) et [`stages/cadrage/required-parameters-collection.md`](stages/cadrage/required-parameters-collection.md)) selon l'ordre `oidc → forwardauth → local` (premier disponible **et gratuit**) ; **en cas de doute, demander à l'humain**.
 
 **Limite de responsabilité :** à ce stade, le Tech Lead reste au niveau du **cadrage**. Le relevé fin des éléments de configuration (variables d'environnement, conventions `_FILE`, volumes, healthcheck, versions, hardening) n'est **pas** produit par le Tech Lead : il est réalisé par le Spécialiste Docker au moment de la production (voir [`stages/production/docker-compose-creation.md`](stages/production/docker-compose-creation.md)).
 
@@ -147,7 +147,7 @@ Deux travaux ne progressent **jamais** en parallèle sur la **même stack**. Le 
 Aucun scope, aucune règle apprise, aucun gate/sensor advisory ne peut désactiver :
 
 - **Règle absolue n8n** — dès que « n8n » apparaît, délégation immédiate à l'Expert n8n, pas même l'analyse (voir [`stages/cadrage/n8n-absolute-rule.md`](stages/cadrage/n8n-absolute-rule.md)).
-- **Sélection automatique du type d'authentification** (`oidc → saml → ldap → forwardauth → local`) préservée ; en cas de doute → humain.
+- **Sélection automatique du type d'authentification** (`oidc → forwardauth → local`) préservée ; en cas de doute → humain.
 - **Terraform ne déploie JAMAIS** (`terraform init/apply/destroy` interdits) ; **aucun secret en clair** ; **jamais `${SNI}`** dans un livrable Terraform ; **un seul traitement par stack**.
 - **Validation humaine granulaire** (chaque choix validé / rejeté séparément).
 - **Aucune action à impact** (dépôt de fichiers, flux Kestra, application n8n / Home Assistant) sans validation humaine explicite.

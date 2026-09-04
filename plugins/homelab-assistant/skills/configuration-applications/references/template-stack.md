@@ -35,7 +35,7 @@ kuma_delai              = "1m"         # optionnel : delai d'attente apres deplo
 
 ## Authentik - configuration commune   <-- section incluse uniquement si au moins un service utilise Authentik
 main_group              = "Canada"     # groupe de securite Authentik
-publisher               = ["Publisher de l'application"]   # tableau indiquant, pour chaque application OAuth/SAML, le nom de la societe qui a publie le logiciel
+publisher               = ["Publisher de l'application"]   # tableau indiquant, pour chaque application OAuth, le nom de la societe qui a publie le logiciel
 
 ## Authentik - OAuth   <-- section incluse uniquement si au moins un service utilise OAuth
 oauth                   = ["nom des services"]   # tableau contenant les services de la stack necessitant une authentification OAuth
@@ -49,11 +49,6 @@ allowed_redirect_uris   = [
 ]
 oauth_email_verified    = true
 oauth_additionnal_mapping = "Groupes de securite additionnels Authentik"
-
-## Authentik - SAML   <-- section incluse uniquement si au moins un service utilise SAML
-saml                    = ["nom des services"]   # tableau contenant les services de la stack necessitant une authentification SAML
-saml_description        = [ "Controlleur Reseaux Omada" ]   # tableau contenant les descriptions des services necessitant une authentification SAML
-acs_url                 = ["url de configuration SAML"]
 
 ## Authentik - ForwardAuth   <-- section incluse uniquement si au moins un service utilise ForwardAuth
 forwardauth             = ["nom des services"]   # tableau contenant les services de la stack necessitant une authentification ForwardAuth
@@ -103,7 +98,7 @@ Section écrite uniquement si au moins un service de la stack utilise l'un des t
 | Variable | Type | Rôle | Exemple |
 |---|---|---|---|
 | `main_group` | `string` (scalaire) | Groupe de sécurité Authentik principal associé à la stack. | `"Canada"` |
-| `publisher` | `string[]` (tableau) | Nom de la société qui a publié le logiciel ; **une entrée par application Authentik créée dans les modes OAuth et SAML** — le playbook ne consomme `publisher` que dans ces deux boucles (`meta_publisher`). Sans application OAuth/SAML, la variable reste sans effet : conserver une entrée par application concernée uniquement. | `["Portainer.io"]` |
+| `publisher` | `string[]` (tableau) | Nom de la société qui a publié le logiciel ; **une entrée par application Authentik créée en mode OAuth** — le playbook consomme `publisher` dans la boucle OAuth (`meta_publisher`). Sans application OAuth, la variable reste sans effet : conserver une entrée par application concernée uniquement. | `["Portainer.io"]` |
 
 ### Authentik — mode OAuth
 
@@ -116,15 +111,9 @@ Section écrite uniquement si au moins un service de la stack utilise OAuth.
 | `oauth_email_verified` | `bool` (scalaire) | Exige que l'e-mail de l'utilisateur soit vérifié par Authentik. | `true` |
 | `oauth_additionnal_mapping` | `string` (scalaire) | Groupes de sécurité Authentik additionnels attribués via le mapping. Orthographe historique « additionnal » à conserver telle quelle (compatibilité avec le code existant). | `"Groupes de sécurité additionnels Authentik"` |
 
-### Authentik — mode SAML
+### Authentik — mode SAML *(retiré)*
 
-Section écrite uniquement si au moins un service de la stack utilise SAML.
-
-| Variable | Type | Rôle | Exemple |
-|---|---|---|---|
-| `saml` | `string[]` (tableau) | Noms des services de la stack nécessitant une authentification SAML. | `["omada-controller"]` |
-| `saml_description` | `string[]` (tableau) | Descriptions des services nécessitant une authentification SAML ; une entrée par service de `saml` (même ordre). | `[ "Contrôleur Réseaux Omada" ]` |
-| `acs_url` | `string[]` (tableau) | URL de configuration SAML (Assertion Consumer Service) de chaque service SAML ; même ordre que `saml`. | `["https://omada.mondomaine.tld:8043/saml"]` |
+> **SAML / LDAP retirés (non supportés).** Le mode SAML — et le type LDAP — ont été retirés du workflow et de ce template (voir ADR-0020). Les variables `saml`, `saml_description`, `acs_url` ne sont plus écrites. Un service requérant SAML ou LDAP est remonté à l'humain ; la réintégration (variables, middleware `@file`, boucle `meta_publisher` SAML côté playbook Authentik) est tracée dans l'ADR-0020.
 
 ### Authentik — mode ForwardAuth
 

@@ -86,7 +86,7 @@ Aucune règle apprise, à aucune couche, ne peut affaiblir :
 - l'**ADR** sur chaque décision structurante ;
 - la **piste d'audit** sur l'issue ;
 - la **règle absolue n8n** (§1.1 — délégation immédiate, pas même l'analyse) ;
-- la **sélection automatique du type d'authentification** (§1.4, `oidc → saml → ldap → forwardauth → local`) ;
+- la **sélection automatique du type d'authentification** (§1.4, `oidc → forwardauth → local`) ;
 - les **garde-fous absolus** : Terraform ne déploie jamais, aucun secret en clair, jamais `${SNI}` en Terraform livré, un seul traitement par stack (verrou `active_step`) ;
 - les **garde-fous sécurité des scopes** (plancher de vérification, Depth non abaissable sur `security-patch` / `new-stack`, auto-détection = plancher, re-scoping abaissant tracé — voir `homelab/scopes/README.md`).
 

@@ -29,7 +29,7 @@ Amorcer le choix du type d'authentification comme valeur de cadrage, sans le fig
 
 ### Step 1 — Appliquer la règle d'auto-sélection
 
-Si la documentation officielle est déjà connue, appliquer la règle d'auto-sélection `${auth_type}` selon l'ordre de priorité — **le premier disponible ET gratuit l'emporte** : `oidc → saml → ldap → forwardauth → local` (détail dans [`../cadrage/required-parameters-collection.md`](../cadrage/required-parameters-collection.md)).
+Si la documentation officielle est déjà connue, appliquer la règle d'auto-sélection `${auth_type}` selon l'ordre de priorité — **le premier disponible ET gratuit l'emporte** : `oidc → forwardauth → local` (détail dans [`../cadrage/required-parameters-collection.md`](../cadrage/required-parameters-collection.md)).
 
 ### Step 2 — En cas de doute
 

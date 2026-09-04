@@ -2,7 +2,7 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "homelab-assistant",
   "version": "1.0.0",
-  "description": "Plugin homelab regroupant les skills DevOps/Homelab : configuration de stacks Terraform, génération de docker-compose, validation de Dockerfile, accès Vault, notifications ntfy et lecture Traefik Manager.",
+  "description": "Plugin homelab regroupant les skills DevOps/Homelab : configuration de stacks Terraform, génération de docker-compose, validation de Dockerfile, accès Vault et lecture Traefik Manager.",
   "author": {
     "name": "Sylvain Goubaud",
     "url": "https://github.com/Gsyltc"

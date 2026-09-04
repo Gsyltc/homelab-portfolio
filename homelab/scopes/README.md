@@ -80,7 +80,7 @@ Rappel des invariants du workflow Homelab — **aucun scope ne les désactive** 
   NON négociable, quel que soit le scope ou les axes.
 - **Règle absolue n8n** (§1.1) : toute demande n8n déclenche le scope `n8n` et une délégation
   immédiate à l'Expert N8n — pas même l'analyse par le Tech Lead. Un scope ne peut pas la lever.
-- **Sélection automatique du type d'authentification** (§1.4, `oidc → saml → ldap → forwardauth →
+- **Sélection automatique du type d'authentification** (§1.4, `oidc → forwardauth →
   local`) préservée telle quelle ; en cas de doute → humain.
 - **Terraform ne déploie JAMAIS** (`terraform init/apply/destroy` interdits), **aucun secret en
   clair**, **jamais `${SNI}`** dans un livrable Terraform, **un seul traitement par stack**

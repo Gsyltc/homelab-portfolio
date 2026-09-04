@@ -3,8 +3,12 @@
 Plugin conforme à **Agent Plugins v1.0.0** regroupant les skills DevOps/Homelab
 de l'espace de travail. Il permet à un agent d'accompagner les tâches courantes
 du homelab : configuration de stacks (Terraform), génération de
-`docker-compose.yml`, validation de Dockerfile, accès aux secrets Vault, envoi
-de notifications ntfy et lecture de l'état Traefik.
+`docker-compose.yml`, validation de Dockerfile (stacks *build-from-source*),
+accès aux secrets Vault et lecture de l'état Traefik.
+
+La skill de notifications `ntfy-notifications` est **mutualisée** et n'appartient
+pas à ce plugin : elle est conservée dans le plugin `general-purpose-assistant`
+(voir CHANGELOG).
 
 ## Structure (Agent Plugins v1.0.0)
 
@@ -19,7 +23,6 @@ plugins/homelab-assistant/
     ├── docker-composer/              # SKILL.md + references/
     ├── dockerfile-validator/         # SKILL.md + scripts/ + references/ + examples/ + tests/
     ├── homelab-vault-access/         # SKILL.md
-    ├── ntfy-notifications/           # SKILL.md
     └── traefik-manager-read/         # SKILL.md
 ```
 
@@ -30,14 +33,17 @@ correspond au nom du dossier.
 
 ## Skills exportés (mapping)
 
-| Skill | Rôle / équipe d'origine | Contenu annexe |
+| Skill | Fonction (rôle utilisateur) | Contenu annexe |
 |---|---|---|
-| `configuration-applications` | André (Spécialiste Terraform) — configuration des stacks | `references/` (authentification, criticités Kuma, domaines, template) |
-| `docker-composer` | Bob / Kevin — génération de `docker-compose.yml` | `references/` (network, template) |
-| `dockerfile-validator` | Kevin (QA) — lint/audit/scan de Dockerfile | `scripts/`, `references/`, `examples/`, `tests/` |
-| `homelab-vault-access` | Bob / Kevin / André — accès Vault (AppRole) | — |
-| `ntfy-notifications` | Alfred — notifications push ntfy | — |
-| `traefik-manager-read` | Bob / Kevin — lecture Traefik Manager | — |
+| `configuration-applications` | Spécialiste Terraform — configuration des stacks (`.tf`/`.tfvars`) | `references/` (authentification, criticités Kuma, domaines, template) |
+| `docker-composer` | Spécialiste Docker / QA Docker — génération de `docker-compose.yml` | `references/` (network, template) |
+| `dockerfile-validator` | QA Docker — lint/audit/scan de Dockerfile (stacks *build-from-source* uniquement) | `scripts/`, `references/`, `examples/`, `tests/` |
+| `homelab-vault-access` | Spécialiste Docker / QA Docker / Spécialiste Terraform — accès Vault (AppRole) | — |
+| `traefik-manager-read` | Spécialiste Docker / QA Docker / Architecte sécurité — lecture Traefik Manager | — |
+
+La skill de notifications (`ntfy-notifications`) est **mutualisée** : son porteur
+est l'Agent de notifications, dont la définition est partagée (`core/`). Elle
+reste dans le plugin `general-purpose-assistant` et n'est **pas** dupliquée ici.
 
 Les skills non-homelab de l'espace de travail (les 4 skills `investissement-*`
 de l'équipe finance et les skills `kestra-*` externes) sont **exclus** de ce
@@ -50,8 +56,8 @@ plugin ; les skills `investissement-*` disposent de leur propre plugin
 selon la spec v1.0.0 (§7.2.1). Aucun serveur MCP spécifique au homelab n'a pu
 être confirmé au moment de l'export :
 
-- Les agents Homelab (Stuart — Tech Lead, Hugo — Home Assistant, Marilyne — n8n)
-  ont un `mcp_config` `null` et aucun serveur MCP d'espace de travail assigné
+- Les agents Homelab (Tech Lead, Expert Home Assistant, Expert n8n) ont un
+  `mcp_config` `null` et aucun serveur MCP d'espace de travail assigné
   (`multica agent mcp list <id>` renvoie une liste vide).
 - Aucune configuration MCP non-redacted n'était donc disponible à traduire.
 
@@ -66,8 +72,6 @@ la spec l'interdit — §7.2.1 / §9.2).
   via des variables d'environnement documentées, jamais leurs valeurs :
   - `homelab-vault-access` : `VAULT_ADDR`, `VAULT_APPROLE_ROLE_ID`,
     `VAULT_APPROLE_SECRET_ID` (jamais de `role_id`/`secret_id` en clair).
-  - `ntfy-notifications` : `NTFY_URL`, `NTFY_CHANNEL`, `NTFY_USER`,
-    `NTFY_PASSWORD` (mot de passe jamais affiché ni committé).
   - `traefik-manager-read` : `TRAEFIK_MANAGER_URL`, `TRAEFIK_MANAGER_API_KEY`.
 - Les occurrences de `password` / `secret` présentes dans
   `dockerfile-validator` sont des **exemples pédagogiques** (Dockerfiles

@@ -1,6 +1,6 @@
 ---
 name: configuration-applications
-description: "Configuration des applications (stacks) du Homelab pour André - Spécialiste Terraform : processus à suivre, déduction automatique des 4 informations obligatoires d'une stack depuis le docker compose (type d'authentification via middlewares Traefik, cloudflare_dns_nb, domaine, criticité Kuma), et template obligatoire du fichier de configuration (Général, Cloudflare, Uptime Kuma, Authentik OAuth/SAML/ForwardAuth). Le template est le format de sortie officiel d'une configuration de stack."
+description: "Configuration des applications (stacks) du Homelab pour André - Spécialiste Terraform : processus à suivre, déduction automatique des 4 informations obligatoires d'une stack depuis le docker compose (type d'authentification via middlewares Traefik, cloudflare_dns_nb, domaine, criticité Kuma), et template obligatoire du fichier de configuration (Général, Cloudflare, Uptime Kuma, Authentik OAuth/ForwardAuth). Le template est le format de sortie officiel d'une configuration de stack."
 ---
 Skill « Configuration des applications » pour André (Spécialiste Terraform). Elle définit le processus à suivre et le format de sortie obligatoire du fichier de configuration d'une stack du Homelab.
 
@@ -22,12 +22,12 @@ Permettre à André de configurer les services d'une stack Docker Swarm côté T
 
 1. Lire la demande sur l'issue et le docker compose de l'application concernée.
 2. Déterminer les informations obligatoires (règles de déduction détaillées : voir la section « Déduction des informations obligatoires » ci-dessous) :
-   - **Type d'authentification** (aucune / ForwardAuth / SAML / OAuth) : déduit des middlewares Traefik configurés pour le service dans le docker compose ; règles détaillées dans [references/authentification.md](references/authentification.md).
+   - **Type d'authentification** (aucune / ForwardAuth / OAuth) : déduit des middlewares Traefik configurés pour le service dans le docker compose ; règles détaillées dans [references/authentification.md](references/authentification.md).
    - **Nombre de services DNS à exposer** (= `cloudflare_dns_nb`) : déduit des labels Traefik configurés pour les services dans le docker compose.
    - **Domaine de la stack** : déduit de l'application principale ; valeur à choisir dans le fichier de référence [references/domaines-stack.md](references/domaines-stack.md). En cas d'ambiguïté, demander à l'humain.
    - **Criticité de la stack** (`FATAL` / `ERROR` / `WARN` / `INFO`) : pilote directement les valeurs `kuma_*` via le fichier de référence [references/criticites-kuma.md](references/criticites-kuma.md). En cas de doute, demander systématiquement à l'humain.
-3. Rassembler les autres valeurs (nom, descriptions, URLs, icône, éditeur, groupe Authentik, URIs OAuth/SAML…) depuis le docker compose et la demande ; toute donnée manquante se demande à l'humain — ne jamais inventer une valeur.
-4. Rédiger le fichier de configuration en respectant strictement le template défini dans [references/template-stack.md](references/template-stack.md) : toutes les variables des blocs Général, Cloudflare et Kuma sont présentes ; les sections d'authentification (commune, OAuth, SAML, ForwardAuth) ne sont écrites que si au moins un service utilise le mode concerné — jamais de bloc vide pour un mode non utilisé.
+3. Rassembler les autres valeurs (nom, descriptions, URLs, icône, éditeur, groupe Authentik, URIs OAuth…) depuis le docker compose et la demande ; toute donnée manquante se demande à l'humain — ne jamais inventer une valeur.
+4. Rédiger le fichier de configuration en respectant strictement le template défini dans [references/template-stack.md](references/template-stack.md) : toutes les variables des blocs Général, Cloudflare et Kuma sont présentes ; les sections d'authentification (commune, OAuth, ForwardAuth) ne sont écrites que si au moins un service utilise le mode concerné — jamais de bloc vide pour un mode non utilisé.
 5. Relire : une entrée de tableau par service concerné (longueurs cohérentes), domaine conforme au fichier des domaines, valeurs `kuma_*` conformes au niveau de criticité choisi, aucune section d'authentification vide (blocs non utilisés omis), aucun secret en clair.
 6. Soumettre le fichier sur l'issue pour validation (Stuart puis validation humaine explicite) avant toute application Terraform.
 
@@ -39,7 +39,7 @@ Pour chacune des 4 informations obligatoires : règle de décision, indices conc
 
 ### 1. Type d'authentification
 
-Déduit des middlewares Traefik configurés pour le service. La table de décision entre les quatre cas (« Pas d'authentification » / ForwardAuth / SAML / OAuth), avec la correspondance officielle des middlewares nommés du Homelab, les indices Traefik concrets, les exemples et les cas limites sont détaillés dans le fichier de référence [references/authentification.md](references/authentification.md).
+Déduit des middlewares Traefik configurés pour le service. La table de décision entre les trois cas (« Pas d'authentification » / ForwardAuth / OAuth), avec la correspondance officielle des middlewares nommés du Homelab, les indices Traefik concrets, les exemples et les cas limites sont détaillés dans le fichier de référence [references/authentification.md](references/authentification.md).
 
 ### 2. Nombre de services DNS à exposer (`cloudflare_dns_nb`)
 
@@ -84,13 +84,13 @@ Cas limites :
 | Fichier | Contenu |
 |---|---|
 | [references/template-stack.md](references/template-stack.md) | Template de configuration d'une stack (format de sortie officiel) + documentation de chaque variable (type, tableau vs scalaire, rôle, exemple). Inclut la règle des blocs d'authentification non vides. |
-| [references/authentification.md](references/authentification.md) | Type d'authentification : table de décision (aucune / ForwardAuth / SAML / OAuth) depuis les middlewares Traefik, avec la colonne de correspondance des middlewares nommés du Homelab, exemples, cas limites, correspondance avec les sections du template. |
+| [references/authentification.md](references/authentification.md) | Type d'authentification : table de décision (aucune / ForwardAuth / OAuth) depuis les middlewares Traefik, avec la colonne de correspondance des middlewares nommés du Homelab, exemples, cas limites, correspondance avec les sections du template. |
 | [references/domaines-stack.md](references/domaines-stack.md) | Domaines de stack autorisés pour `domain`. |
 | [references/criticites-kuma.md](references/criticites-kuma.md) | Criticités Uptime Kuma (`FATAL`/`ERROR`/`WARN`/`INFO`) et paramètres `kuma_*` exacts associés. |
 
 ## Règles transverses
 
-- Les trois modes d'authentification (OAuth, SAML, ForwardAuth) sont des sections distinctes du template : un service n'apparaît que dans la section correspondant à son mode d'authentification déterminé lors de l'analyse du docker compose (voir [references/authentification.md](references/authentification.md)). Les sections d'un mode non utilisé par aucun service sont omises du fichier de sortie (blocs non vides uniquement).
+- Les deux modes d'authentification Authentik (OAuth, ForwardAuth) sont des sections distinctes du template : un service n'apparaît que dans la section correspondant à son mode d'authentification déterminé lors de l'analyse du docker compose (voir [references/authentification.md](references/authentification.md)). Les sections d'un mode non utilisé par aucun service sont omises du fichier de sortie (blocs non vides uniquement). SAML et LDAP ne sont **pas** supportés actuellement (retirés — voir ADR-0020) : une stack les requérant est remontée à l'humain.
 - Conserver les noms de variables exactement tels qu'ils figurent dans le template (y compris `oauth_additionnal_mapping`) : ils correspondent aux variables attendues par les playbooks Terraform existants.
 - Aucune donnée sensible (token, mot de passe, secret Vault, URL interne sensible) dans le fichier de configuration ni dans les commentaires : `secrets = true` signale leur existence, jamais leur contenu.
 - Toute information non déductible avec certitude se demande à l'humain ; on ne devine jamais une valeur.

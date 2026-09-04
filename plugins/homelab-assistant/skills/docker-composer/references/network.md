@@ -39,3 +39,9 @@ Si requis, détermine le type d'authentification grace à ${auth_type}
 ## Service
 - traefik.http.services.${input:stack}-service.loadbalancer.server.port=${port_number}
 ```
+
+## Note — variable `${SNI}` : autorisée ici, interdite en Terraform
+
+La variable `${SNI}` est **autorisée dans les labels du `docker-compose`** (règle `Host(...)` ci-dessus) : le compose est un livrable où les espaces réservés du workflow restent des variables.
+
+En revanche, `${SNI}` est **strictement interdite dans les livrables Terraform** (`.tf` / `.tfvars`) : c'est un **invariant absolu** du workflow (garde-fou SEC-1, voir [`homelab/common/stages/production/terraform-configuration.md`](../../../../homelab/common/stages/production/terraform-configuration.md) et [`homelab/common/conductor.md`](../../../../homelab/common/conductor.md)). Côté Terraform, les domaines / URLs sont écrits **en clair**, jamais via `${SNI}`.

@@ -12,9 +12,9 @@ Indices concrets permettant de trancher :
 
 | Cas | Middleware(s) du Homelab | Indices dans le docker compose |
 |---|---|---|
-| **Pas d'authentification** | `securedNoAuth`, `securedNoSSO`, `securedLocalAuth` | Aucun middleware d'authentification sur le routeur Traefik du service, et aucune trace SAML / OAuth / ForwardAuth dans les variables d'environnement ou fichiers de config montés. Seuls des labels Traefik « standards » sont présents (`rule`, `entrypoints`, `tls.certresolver`, `service.port`). |
+| **Pas d'authentification** | `securedNoAuth`, `securedNoSSO`, `securedLocalAuth` | Aucun middleware d'authentification sur le routeur Traefik du service, et aucune trace OAuth / ForwardAuth dans les variables d'environnement ou fichiers de config montés. Seuls des labels Traefik « standards » sont présents (`rule`, `entrypoints`, `tls.certresolver`, `service.port`). |
 | **ForwardAuth** | `securedWithForwardAuth` | Un middleware `forwardAuth` est appliqué au routeur du service. Deux formes possibles : référence à un middleware Authentik existant (`traefik.http.routers.<r>.middlewares=<app>-outpost@authentik` ou `authentik@file`), ou définition locale (`traefik.http.middlewares.<m>.forwardauth.address=http://…/outpost.goauthentik.io/…`). Souvent accompagné d'un routeur dédié à l'outpost : `traefik.http.routers.<r>-outpost.rule=Path(`/outpost.goauthentik.io/`)`. → renseigner `forwardauth[]` (et `skip_path_regex[]` si nécessaire). |
-| **SAML** | — (aucun à ce jour) | Pas de middleware `forwardAuth` ; l'application est elle-même fournisseur de service SAML : variables d'environnement ou fichiers de config contenant `SAML` (`SAML_METADATA_URL`, `SAML_ENTITY_ID`, chemin ACS…), URLs Authentik de la forme `/application/saml/<slug>/…`. → renseigner `saml[]`, `saml_description[]`, `acs_url[]`. |
+| **SAML** | *(retiré — non supporté, voir ADR-0020)* | SAML et LDAP ne sont plus pris en charge par le workflow ni ce template ; une stack requérant SAML est remontée à l'humain (réintégration tracée dans l'ADR-0020). |
 | **OAuth** | `securedWithOIDC` | Pas de middleware `forwardAuth` ; l'application est cliente OAuth2/OIDC : variables contenant `OAUTH` ou `OIDC` (`OAUTH_CLIENT_ID`, `OAUTH_CLIENT_SECRET`, `OIDC_ISSUER`…), URI de callback de type `/oauth2/callback` ou `/authorization-code/callback`, URLs Authentik de la forme `/application/o/<slug>/authorize` ou `/token`. → renseigner `oauth[]`, `allowed_redirect_uris[][]`. |
 
 La colonne « Middleware(s) du Homelab » donne la correspondance officielle entre les middlewares nommés du provider fichier (`<nom>@file`) et le type d'authentification : c'est l'indice prioritaire dès qu'un middleware de cette liste est référencé sur le routeur du service.
@@ -39,9 +39,9 @@ environment:
 
 Cas limites :
 
-- Service non exposé par Traefik (aucun label Traefik) : il n'a pas d'intégration Authentik → cas « Pas d'authentification », même si l'application possède son propre login interne (un login applicatif natif n'est pas une intégration Authentik et ne remplit aucune section OAuth/SAML/ForwardAuth).
+- Service non exposé par Traefik (aucun label Traefik) : il n'a pas d'intégration Authentik → cas « Pas d'authentification », même si l'application possède son propre login interne (un login applicatif natif n'est pas une intégration Authentik et ne remplit aucune section OAuth/ForwardAuth).
 - Middleware référencé mais défini hors du compose (provider fichier ou dynamique) : se baser sur la colonne « Middleware(s) du Homelab » de la table ci-dessus ; si le nom n'y figure pas et que sa nature reste incertaine → demander à l'humain.
-- Un même service présentant à la fois un middleware `forwardAuth` ET des variables OAuth/SAML : ambiguïté → demander à l'humain.
+- Un même service présentant à la fois un middleware `forwardAuth` ET des variables OAuth : ambiguïté → demander à l'humain.
 - Stack multi-services avec des modes différents : classer chaque service indépendamment ; un service n'apparaît que dans la section du template correspondant à son propre mode.
 
 ## Correspondance avec le template
@@ -50,9 +50,10 @@ Un service n'apparaît que dans la section du template correspondant à son prop
 
 | Cas | Section / variables du template à remplir |
 |---|---|
-| **Pas d'authentification** | Aucune section Authentik pour ce service. Si aucun service de la stack n'utilise Authentik : aucune section Authentik du tout (ni commune, ni OAuth/SAML/ForwardAuth). |
+| **Pas d'authentification** | Aucune section Authentik pour ce service. Si aucun service de la stack n'utilise Authentik : aucune section Authentik du tout (ni commune, ni OAuth/ForwardAuth). |
 | **ForwardAuth** | « Authentik - ForwardAuth » : `forwardauth[]` (+ `skip_path_regex[]` si nécessaire). |
-| **SAML** | « Authentik - SAML » : `saml[]`, `saml_description[]`, `acs_url[]`. |
 | **OAuth** | « Authentik - OAuth » : `oauth[]`, `allowed_redirect_uris[][]`, plus les scalaires `oauth_email_verified` et `oauth_additionnal_mapping`. |
 
-La section « Authentik - configuration commune » (`main_group`, `publisher[]`) accompagne toute utilisation de l'un des trois modes Authentik.
+La section « Authentik - configuration commune » (`main_group`, `publisher[]`) accompagne toute utilisation de l'un des deux modes Authentik.
+
+> **SAML / LDAP non supportés.** Ces types d'authentification ont été retirés du workflow et de ce template (voir ADR-0020). Un service requérant SAML ou LDAP est remonté à l'humain ; leur réintégration (bloc `saml[]`/`saml_description[]`/`acs_url[]`, middleware `@file` dédié, playbook Authentik) fera l'objet des actions tracées dans l'ADR-0020.

@@ -7,6 +7,8 @@ description: Validate, lint, audit, or scan a Dockerfile for security and best p
 
 Validate Dockerfiles with deterministic stages, clear severity reporting, and explicit fallbacks when tools or network access are constrained.
 
+> **Périmètre Homelab (A7).** Dans le workflow Homelab, cette skill s'applique **uniquement aux stacks *build-from-source*** — celles qui construisent une image localement (`build:` dans le `docker-compose`, présence d'un `Dockerfile`). Pour une stack qui tire une **image déjà publiée** (registry public/privé, pas de `Dockerfile` à construire), `dockerfile-validator` **ne s'applique pas** ; le durcissement passe alors par la skill `docker-composer` et la revue du QA Docker.
+
 ## Trigger Phrases
 
 Use this skill when the user asks for tasks like:

@@ -34,7 +34,7 @@ Le Tech Lead délègue au **QA Docker** (mission + mention valide). Ordre impos�
 
 ### Step 2 — Analyser et corriger (revue adversariale — plancher SG-3)
 
-Analyser syntaxe, compatibilité Swarm, réseaux / volumes / secrets, hardening (skills `docker-composer`, `dockerfile-validator`), classer les problèmes (critical / warning / info), appliquer / proposer les corrections. Le QA Docker porte le **contrôle sécurité technique** (revue adversariale) : sur `security-patch` / `new-stack`, vérification `renforcé` non abaissable.
+Analyser syntaxe, compatibilité Swarm, réseaux / volumes / secrets, hardening (skill `docker-composer`), classer les problèmes (critical / warning / info), appliquer / proposer les corrections. **La skill `dockerfile-validator` s'applique uniquement aux stacks *build-from-source*** (celles qui fournissent un `Dockerfile` construit localement, `build:` dans le compose) : elle valide alors le `Dockerfile`. Pour une stack tirant des **images publiées** (pas de `Dockerfile` à construire), `dockerfile-validator` ne s'applique pas. Le QA Docker porte le **contrôle sécurité technique** (revue adversariale) : sur `security-patch` / `new-stack`, vérification `renforcé` non abaissable.
 
 ### Step 3 — Cohérence Traefik
 
