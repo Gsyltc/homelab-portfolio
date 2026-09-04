@@ -2,13 +2,8 @@
 
 ---
 auteurs: Mika (agent, sur validation humaine granulaire — multica.gaston)
-<<<<<<< HEAD:decisions/0010-alignement-memoire-de-regles-sur-ai-dlc.md
-accepté par : Sylvain G. (validation humaine — multica.gaston)
-accepté le : 2026-09-02
-=======
 accepté par : multica.gaston
 accepté le : 2026-09-03
->>>>>>> origin/agent/mika/aed29dd44d2d:decisions/0011-alignement-memoire-de-regles-sur-ai-dlc.md
 supersedes: ""
 superseded_by: ""
 
@@ -18,11 +13,7 @@ superseded_by: ""
 
 Accepted
 
-<<<<<<< HEAD:decisions/0010-alignement-memoire-de-regles-sur-ai-dlc.md
-> Validé par l'humain (multica.gaston, « Accepté » sur ALI-197 le 2026-09-02) — passage **Proposed → Accepted** (invariant : aucun ADR accepté sans validation humaine explicite). Aucune règle n'est ajoutée / modifiée dans `core/rules/` par cet ADR : il **décide et trace la structure** de la mémoire de règles ; il ne passe pas par la boucle d'apprentissage (capture → confirmation → contrôle de conflit), réservée à l'**écriture de règles** (invariant SEC-5). Aucune posture de sécurité ni garde-fou de gouvernance n'est modifié.
-=======
 > Statut **Accepted** — validation humaine explicite obtenue (multica.gaston, 2026-09-03). Le passage à Accepted supposait la validation humaine granulaire ; cette condition est satisfaite (invariant respecté : aucun ADR accepté sans validation humaine). Aucune règle n'est ajoutée / modifiée dans `core/rules/` par cet ADR : il **décide et trace la structure** de la mémoire de règles ; il ne passe pas par la boucle d'apprentissage (capture → confirmation → contrôle de conflit), réservée à l'**écriture de règles** (invariant SEC-5). Aucune posture de sécurité ni garde-fou de gouvernance n'est modifié.
->>>>>>> origin/agent/mika/aed29dd44d2d:decisions/0011-alignement-memoire-de-regles-sur-ai-dlc.md
 
 ## Contexte
 

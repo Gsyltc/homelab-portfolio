@@ -51,7 +51,7 @@ Demander aussi si la stack nécessite une création / modification de secrets ou
 
 **En cas de doute → demander à l'humain** et attendre. Le doute ne bascule **jamais** vers un choix implicite.
 
-> **SAML / LDAP non encore supportés.** Ces deux types étaient historiquement listés dans l'ordre de sélection mais ne sont pas implémentés côté middlewares Traefik ni côté template Terraform. Ils ont été **retirés** de la règle de sélection (voir [ADR-0020](../../../../decisions/0020-retrait-temporaire-saml-ldap-authentification.md)). Si une stack requiert SAML ou LDAP → **demander à l'humain** ; leur ré-intégration fera l'objet des actions tracées dans l'ADR-0020.
+> **SAML / LDAP non encore supportés.** Ces deux types étaient historiquement listés dans l'ordre de sélection mais ne sont pas implémentés côté middlewares Traefik ni côté template Terraform. Ils ont été **retirés** de la règle de sélection (voir [ADR-0024](../../../../decisions/0024-retrait-temporaire-saml-ldap-authentification.md)). Si une stack requiert SAML ou LDAP → **demander à l'humain** ; leur ré-intégration fera l'objet des actions tracées dans l'ADR-0024.
 
 ## Sensors
 

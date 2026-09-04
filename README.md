@@ -32,6 +32,16 @@ Le workflow d'architecture est structuré selon le modèle **conductor / stages 
 - [`core/sensors/`](core/sensors/) — manifestes des verification gates & sensors.
 - [`core/agents/`](core/agents/) — définitions versionnées des agents du workflow (coordinateur, architectes, cybersécurité, reviewers de cohérence et de sécurité, OpenSpec, archivage, notifications, vente).
 
+Le workflow **Homelab** suit le **même modèle déclaratif** (aligné sur les contrats AI-DLC *Harness Engineer Guide*, décisions [ADR-0018](decisions/0018-adaptation-modele-conductor-stages-protocols-homelab.md)…[ADR-0023](decisions/0023-alignement-sensors-homelab-sur-ai-dlc.md)) sous [`homelab/`](homelab/) :
+
+- [`homelab/common/conductor.md`](homelab/common/conductor.md) — instructions du coordinateur (Tech Lead Homelab), la *source unique*.
+- [`homelab/common/stages/`](homelab/common/stages/) — 26 fiches de stage sur les 5 phases (`Initialisation → Idéation → Cadrage → Production → Validation`), corps en 3 compartiments (`## Steps` / `## Sensors` / `## Learn`) et front-matter normalisé (`mode`, `review_class`, `human_gate`, `sensors:`, `scopes:`, `produces`/`consumes`/`requires_stage`).
+- [`homelab/common/protocols/`](homelab/common/protocols/) — mécanismes transverses (définition de stage, exécution, gouvernance & sécurité, reviewer, scopes & axes).
+- [`homelab/rules/`](homelab/rules/) — mémoire de règles multi-couches (`global > stack > phase > scope`) + boucle d'apprentissage, garde-fous absolus **non surchargeables**.
+- [`homelab/scopes/`](homelab/scopes/) — un fichier par scope (7 scopes : `name`, `depth`, `verification`, `keywords`).
+- [`homelab/sensors/`](homelab/sensors/) — manifestes des sensors (`id`/`kind`/`command`/`default_severity`/`fire_on`/`matches`).
+- [`homelab/agents/`](homelab/agents/) — définitions des agents DevOps Homelab (front-matter `disallowedTools: Task`, `tier`, skills).
+
 ## Structure du dépôt
 
 ```
@@ -48,7 +58,13 @@ homelab-portfolio/
 │   ├── sensors/              #   Verification gates & sensors (advisory)
 │   ├── agents/               #   Définitions des agents du workflow (11 fichiers .md)
 │   └── workflows/homelab/    #   Workflow Homelab narratif (+ VERSION)
-├── decisions/                # Registre des décisions structurantes (0001…0023)
+├── homelab/                  # Workflow Homelab (A2A) — forme déclarative AI-DLC (un fichier par élément, front-matter)
+│   ├── common/               #   conductor.md + stages/<phase>/ + protocols/ (source unique — 26 fiches de stage)
+│   ├── rules/                #   Mémoire de règles multi-couches (global > stack > phase > scope) + learning loop
+│   ├── scopes/               #   Un fichier par scope (7 scopes : name, depth, verification, keywords)
+│   ├── sensors/              #   Manifestes des sensors (id/kind/command/default_severity/fire_on/matches)
+│   └── agents/               #   Définitions d'agents DevOps Homelab (front-matter disallowedTools: Task, tier)
+├── decisions/                # Registre des décisions structurantes (0001…0024)
 ├── docs/                     # Stub de redirection core-workflow + doc générale
 └── plugins/                  # Packages de plugins d'agents (spec v1.0.0) — portent les skills
     ├── architecture-assistant/    #   OpenSpec, décision, gabarits, cybersécurité, AWS, Windows, supports de vente
