@@ -2,8 +2,8 @@
 
 ---
 auteurs: Mika (agent)
-accepté par : ""
-accepté le : ""
+accepté par : multica.gaston
+accepté le : 2026-09-03
 supersedes: ""
 superseded_by: ""
 
@@ -11,9 +11,9 @@ superseded_by: ""
 
 ## Status
 
-Proposed
+Accepted
 
-> Statut **Proposed** — en attente de la **validation humaine granulaire** (issue ALI-210). Invariant : aucun ADR accepté sans validation humaine explicite. Cet ADR **ne modifie aucune posture de sécurité** ni **aucune surface d'exécution** : les 26 fiches de stage Homelab portaient déjà, dès leur production en ALI-207 (Stage 7 d'ALI-200), le corps en trois compartiments et le vocabulaire de front-matter normalisé. Ce stage **vérifie** la conformité, **corrige une seule incohérence** (`central-quality-control`, voir § Décision 5) et **trace** les divergences assumées.
+> Statut **Accepted** — validation humaine explicite obtenue (multica.gaston, 2026-09-03, issue ALI-210) : les trois points soumis ont été confirmés — (1) **conserver la revue advisory** de `central-quality-control` (fix `reviewer: Tech Lead Homelab`, `review_class: advisory` inchangé), (2) ne pas utiliser `for_each` pour le verrou de concurrence (verrou inter-runs via `concurrency-lock-read`), (3) acceptation de l'ADR. L'invariant est respecté (aucun ADR accepté sans validation humaine granulaire). Cet ADR **ne modifie aucune posture de sécurité** ni **aucune surface d'exécution** : les 26 fiches de stage Homelab portaient déjà, dès leur production en ALI-207 (Stage 7 d'ALI-200), le corps en trois compartiments et le vocabulaire de front-matter normalisé. Ce stage **vérifie** la conformité, **corrige une seule incohérence** (`central-quality-control`, voir § Décision 5) et **trace** les divergences assumées.
 
 ## Contexte
 
