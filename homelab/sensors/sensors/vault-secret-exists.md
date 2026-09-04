@@ -39,4 +39,4 @@ Sensor vault-secret-exists — <fichier>   (source : homelab/sensors/sensors/vau
 
 ## Garde-fou
 
-Advisory et **existence seule** : signale un chemin de secret référencé mais absent, **sans jamais lire la valeur**, ne bloque pas. **Ne remplace pas** la validation humaine ni le contrôle sécurité (SG-3). **Parsing statique + lecture de présence uniquement** (SG-4) : environnement sans privilège d'exfiltration, jamais de récupération de valeur. **Activé** par décision humaine explicite tracée (ALI-204, [ADR-0016](../../../decisions/0016-verification-gates-et-sensors-homelab.md)) ; l'invariant « existence seule, jamais la valeur » reste non négociable.
+Advisory et **existence seule** : signale un chemin de secret référencé mais absent, **sans jamais lire la valeur**, ne bloque pas. **Ne remplace pas** la validation humaine ni le contrôle sécurité (SG-3). **Parsing statique + lecture de présence uniquement** (SG-4) : environnement sans privilège d'exfiltration, jamais de récupération de valeur. L'invariant « existence seule, jamais la valeur » reste non négociable.

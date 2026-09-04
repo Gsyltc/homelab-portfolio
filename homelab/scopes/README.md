@@ -1,21 +1,18 @@
 ---
 title: Scopes Homelab — un fichier par scope (source d'identité)
-contract: Contrat amont « Scopes » (miroir de core/scopes/, adapté au Homelab)
+contract: Contrat amont « Scopes »
 ---
 
 # Scopes Homelab — un fichier de données par scope
 
 Cette couche porte l'**identité** de chaque scope du workflow Homelab, en données déclaratives.
-Elle est le pendant Homelab de [`../../core/scopes/`](../../core/scopes/README.md) : même forme
-déclarative, vocabulaire et scopes **spécifiques au Homelab** (Docker Swarm / Proxmox / Terraform /
-n8n / Home Assistant).
 
 ## Le contrat en deux moitiés
 
 Un scope se déclare en **deux endroits**, et cette séparation est l'idée maîtresse :
 
 1. **L'identité** vit dans son propre fichier — `homelab/scopes/<name>.md` (un fichier par scope,
-   à l'image de `homelab/sensors/` et de `core/scopes/`). Il porte le nom du scope, ses
+   à l'image de `homelab/sensors/`). Il porte le nom du scope, ses
    métadonnées de routage (`keywords`) et ses **valeurs par défaut** d'axes (`depth`,
    niveau de vérification → `verification`).
 2. **L'appartenance** (quels stages s'exécutent sous ce scope) vit **transposée sur les
@@ -110,13 +107,6 @@ multiples, **le niveau le plus élevé l'emporte** ; ordre de priorité :
 Les axes se relèvent (jamais s'abaissent sans trace) à trois moments : à l'invocation, à la
 confirmation de scope, ou à un verification gate (Stage 4). Tout abaissement d'un niveau lié à la
 sécurité exige une **validation humaine explicite tracée** sur l'issue.
-
-## Non applicable ici (tooling amont)
-
-Pas de compilation `scope-grid.json`, pas de moteur TypeScript, pas de champs `runner` /
-`freeform_default` : l'exécution passe par **Multica** (mentions UUID, `trigger_outcomes`, statut
-d'issue, verrou metadata, piste d'audit), pas par le harness AI-DLC. On adopte la **forme
-déclarative** (un fichier par scope, front-matter, appartenance transposée) sans importer le moteur.
 
 ## Table des scopes
 

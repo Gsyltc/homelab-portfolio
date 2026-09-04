@@ -2,8 +2,6 @@
 
 Ce répertoire contient les **manifestes déclaratifs** des mécanismes de fiabilisation déterministe du workflow Homelab, référencés par le triptyque [`homelab/common/`](../common/conductor.md) (source unique — voir [`protocols/governance-security.md`](../common/protocols/governance-security.md), clauses SG-1..6) et coordonnés par le **Tech Lead Homelab**. Vue narrative historique (stub de redirection) : [`docs/homelab-workflow.md`](../../docs/homelab-workflow.md).
 
-Pendant Homelab de [`../../core/sensors/`](../../core/sensors/README.md) : même forme déclarative, mêmes clauses de sécurité (SG-1 à SG-6), **gates, sensors et périmètres spécifiques au Homelab** (Docker Swarm / Proxmox / Terraform / Traefik / Vault). Décision tracée dans [ADR-0016](../../decisions/0016-verification-gates-et-sensors-homelab.md) ; conformité des manifestes au schéma amont « Sensors » vérifiée et tracée dans [ADR-0023](../../decisions/0023-alignement-sensors-homelab-sur-ai-dlc.md) (miroir Homelab d'[ADR-0012](../../decisions/0012-alignement-sensors-sur-ai-dlc.md)).
-
 Deux mécanismes complémentaires, **tous deux advisory** :
 
 - **Verification gates** — contrôle automatique de **traçabilité** aux **frontières de phases**, en amont du gate humain ([`gates.md`](gates.md)).
@@ -11,7 +9,7 @@ Deux mécanismes complémentaires, **tous deux advisory** :
 
 ## Nature déclarative (non exécutable à ce stade)
 
-Ces fichiers **décrivent le contrat** (périmètre de déclenchement, règles de contrôle, sortie attendue) de façon lisible et déterministe. Ce **ne sont pas des scripts exécutables** : ils fixent le fond pour qu'un outillage (script / CI) puisse être ajouté ultérieurement **sans redécider** la sémantique. Pas de harness TypeScript (`bun` / `aidlc-*.ts`), cohérent avec le cadrage ([ADR-0013](../../decisions/0013-cadrage-refonte-homelab-workflow-sur-ai-dlc.md)) : on garde la **forme déclarative** sans importer le moteur. Le passage à l'exécutable est une évolution future, hors périmètre du stage d'introduction.
+Ces fichiers **décrivent le contrat** (périmètre de déclenchement, règles de contrôle, sortie attendue) de façon lisible et déterministe. Ce **ne sont pas des scripts exécutables** : ils fixent le fond pour qu'un outillage (script / CI) puisse être ajouté ultérieurement **sans redécider** la sémantique. On garde la **forme déclarative** sans importer le moteur. Le passage à l'exécutable est une évolution future, hors périmètre du stage d'introduction.
 
 ## Garde-fou : advisory par défaut, bloquant conditionnel (sécurité)
 
@@ -23,7 +21,7 @@ Ces fichiers **décrivent le contrat** (périmètre de déclenchement, règles d
 
 ## Clauses de sécurité (contrôle QA Docker — SG-1 à SG-6)
 
-Adaptées du core (`core/sensors/README.md`), ces clauses sont **contraignantes** et alignent `homelab/sensors/` sur le niveau d'exigence de `homelab/rules/`. Le contrôle sécurité du mécanisme est assuré par le **QA Docker** (compétence hardening / sécurité compose / Traefik ; pas d'Architecte cybersécurité dédié dans l'équipe Homelab — même choix que l'[ADR-0015](../../decisions/0015-learning-loop-et-regles-persistantes-homelab.md)) :
+Ces clauses sont **contraignantes** et alignent `homelab/sensors/` sur le niveau d'exigence de `homelab/rules/`. Le contrôle sécurité du mécanisme est assuré par le **QA Docker** (compétence hardening / sécurité compose / Traefik ; pas d'Architecte cybersécurité dédié dans l'équipe Homelab) :
 
 - **SG-1 — Intégrité du canal des manifestes** (analogue SEC-5) : aucun manifeste (gate ou sensor) n'est ajouté / modifié / supprimé **hors PR revue** ; toute modification est versionnée et porte `origine` (issue) + date ; un manifeste sans provenance traçable est **invalide**. **Affaiblir un check** (retrait d'une règle, ajout d'une exception, réduction du périmètre de déclenchement) est une modification de la surface de gouvernance **soumise au contrôle sécurité**.
 - **SG-2 — Indisponible ≠ conforme** : un sensor / gate non exécuté, en erreur, ou hors périmètre produit le verdict explicite `⛔ indisponible`, tracé comme un **écart**, jamais comme un vert. L'absence d'un signal attendu est elle-même un écart.
@@ -63,7 +61,7 @@ Six sensors, alignés sur le contrat amont « Sensors » (schéma de manifeste `
 
 > **Sensors prioritaires** (confirmés ALI-204, arbitrage 1) : `yaml-validity`, `swarm-deploy-section`, `plaintext-secret`, `terraform-no-sni`. **Complémentaire** : `traefik-coherence`. `vault-secret-exists` est **actif** (arbitrage 4), en existence seule.
 >
-> **Sévérité — advisory par défaut, bloquant conditionnel** (confirmé ALI-204, arbitrage 2) : `plaintext-secret` et `terraform-no-sni` sont **bloquants sur les scopes `security-patch` / `new-stack`** (front-matter `severity_overrides`), advisory partout ailleurs. Sur ces scopes, une détection **arrête l'avancée** jusqu'à correction ou levée humaine explicite tracée. Contrôle sécurité assuré par le QA Docker (ADR-0016, SG-1). Tous les autres sensors restent advisory.
+> **Sévérité — advisory par défaut, bloquant conditionnel** (confirmé ALI-204, arbitrage 2) : `plaintext-secret` et `terraform-no-sni` sont **bloquants sur les scopes `security-patch` / `new-stack`** (front-matter `severity_overrides`), advisory partout ailleurs. Sur ces scopes, une détection **arrête l'avancée** jusqu'à correction ou levée humaine explicite tracée. Contrôle sécurité assuré par le QA Docker (SG-1). Tous les autres sensors restent advisory.
 
 ## Format d'un manifeste de sensor (contrat amont)
 
