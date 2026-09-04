@@ -11,6 +11,8 @@ Générer un fichier `docker-compose.yml` complet et prêt à l'emploi pour une 
 
 ## Règles obligatoires du homelab (NON NÉGOCIABLES)
 
+> **Source unique (A5/A6).** Cette skill est l'**autorité** pour la règle des **services mutualisés** (ci-dessous) et pour la **liste des réseaux Traefik + réseau par défaut** ([`references/network.md`](references/network.md)). Le workflow Homelab (`homelab/common/`) ne réénonce pas ces règles : il les **référence** et collecte seulement les paramètres associés (`${traefik_network}`, `${valkey_enabled}`, `${database_service}`).
+
 Le homelab dispose déjà de services partagés et mutualisés. Ces règles sont **impératives** et priment sur toute autre instruction :
 
 1. **Traefik** — Le homelab possède **déjà une stack Traefik**. Ne **jamais** créer de stack contenant un service `traefik`. Il faut **utiliser la stack Traefik existante** en connectant les services au réseau Traefik existant (voir `network.md`) et en ajoutant les labels Traefik appropriés.

@@ -37,7 +37,7 @@ Ces règles reprennent les **invariants non négociables** du workflow Homelab �
 
 - **RULE-GL-010** — Règle absolue n8n (§1.1) : toute demande n8n déclenche le scope `n8n` et une délégation immédiate à l'Expert N8n — pas même l'analyse par le Tech Lead.
   - _portée_ : global · _origine_ : homelab-workflow.md §1.1 · _ajoutée le_ : 2026-09-03
-- **RULE-GL-011** — Sélection automatique du type d'authentification : `oidc → saml → ldap → forwardauth → local` (§1.4) ; en cas de doute → humain.
+- **RULE-GL-011** — Sélection automatique du type d'authentification : `oidc → forwardauth → local` (§1.4) ; en cas de doute → humain.
   - _portée_ : global · _origine_ : homelab-workflow.md §1.4 · _ajoutée le_ : 2026-09-03
 - **RULE-GL-012** — Règle préalable universelle de documentation officielle : avant toute modification, la documentation officielle du composant est consultée et le lien est consigné sur l'issue.
   - _portée_ : global · _origine_ : homelab-workflow.md · _ajoutée le_ : 2026-09-03

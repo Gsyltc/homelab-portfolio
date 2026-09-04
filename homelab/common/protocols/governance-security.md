@@ -44,7 +44,7 @@ Ce contrôle est **hors du périmètre automatisable** (SG-3) : aucun gate / sen
 Aucun scope, aucune règle apprise, aucun gate / sensor advisory ne peut affaiblir :
 
 1. **Règle absolue n8n** — toute demande n8n déclenche la délégation immédiate à l'Expert n8n.
-2. **Sélection automatique du type d'authentification** (`oidc → saml → ldap → forwardauth → local`) ; en cas de doute → humain.
+2. **Sélection automatique du type d'authentification** (`oidc → forwardauth → local`) ; en cas de doute → humain.
 3. **Validation humaine granulaire** — chaque choix validé / rejeté séparément.
 4. **Aucune action à impact** (dépôt de fichiers, flux Kestra, application n8n / Home Assistant) sans validation humaine explicite.
 5. **Terraform ne déploie JAMAIS** ; **aucun secret en clair** ; **jamais `${SNI}`** en Terraform livré ; **un seul traitement par stack**.
