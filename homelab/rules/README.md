@@ -3,33 +3,14 @@
 Ce répertoire contient la **mémoire de règles multi-couches** alimentée par la **boucle d'apprentissage** du workflow Homelab.
 Les règles capitalisent les **corrections humaines validées** afin qu'un agent (QA Docker, Spécialiste Docker, Spécialiste Terraform, Expert N8n, Expert Home Assistant) ne répète pas la même erreur d'une stack à l'autre. Elles sont des **fichiers Markdown versionnés**, lisibles au démarrage de chaque workflow (chargement paresseux — voir plus bas).
 
-Pendant Homelab de [`../../core/rules/`](../../core/rules/README.md) : même forme déclarative, identifiants stables, rubriques topicales — **couches et conventions spécifiques au Homelab** (Docker Swarm / Proxmox / Terraform / Traefik / n8n / Home Assistant).
-
-## Alignement sur le contrat amont et le modèle core
-
-Cette mémoire de règles est alignée sur :
-
-- Le contrat amont **« Rules and the Learning Loop »** (*Harness Engineer Guide*, `awslabs/aidlc-workflows`).
-- La mémoire de règles `core/rules/` (ADR [`decisions/0004`](../../decisions/0004-boucle-apprentissage-et-regles-persistantes.md), [`decisions/0011`](../../decisions/0011-alignement-memoire-de-regles-sur-ai-dlc.md)).
-
-**Divergences assumées et tracées** dans [`decisions/0015`](../../decisions/0015-learning-loop-et-regles-persistantes-homelab.md) et [`decisions/0022`](../../decisions/0022-alignement-rules-homelab-sur-ai-dlc.md) (alignement sur le contrat « Rules and the Learning Loop », miroir Homelab d'[ADR-0011](../../decisions/0011-alignement-memoire-de-regles-sur-ai-dlc.md)) :
-
-- **Chaîne à 4 couches core** `workspace > project > phase > scope` → ici **4 couches Homelab** `global > stack > phase > scope` :
-  - `workspace` → **`global`** : renommé pour refléter la portée Homelab (invariants et conventions valables pour tout le Homelab, pas le workspace Multica entier).
-  - `project` → **`stack`** : dans le Homelab, l'unité de travail est la **stack** (portainer, traefik, gitea, …), pas un « projet » abstrait. Même rôle, nommage métier.
-  - `phase` et `scope` : conservés à l'identique (cohérence structurelle avec `core/rules/`).
-- **Emplacement** : `homelab/rules/` (miroir de `core/rules/`, cohérent avec `homelab/scopes/`, `homelab/agents/`).
-- **Phases** : comme le core, la couche `phase` a **quatre fichiers** (`ideation`, `cadrage`, `production`, `validation`), alignés sur les 5 phases du workflow Homelab ([ADR-0017](../../decisions/0017-passage-5-phases-et-mode-autonomie-homelab.md)) et sur le partitionnement amont (4 fichiers de phase). L'`initialisation` (Phase 0) est **bootstrap-only, sans gate humain** et **ne porte donc pas** de fichier de règles — exactement le partitionnement amont (pas de `initialization.md`) et le miroir de `core/rules/` ([ADR-0011](../../decisions/0011-alignement-memoire-de-regles-sur-ai-dlc.md) IMP-002). Le fichier `phases/ideation.md` est ajouté par [ADR-0022](../../decisions/0022-alignement-rules-homelab-sur-ai-dlc.md) pour rétablir la cohérence 5 phases.
-- **Scopes** : les 7 scopes Homelab de [`homelab/scopes/`](../scopes/README.md) (`stack-update`, `new-stack`, `config-change`, `security-patch`, `infra-terraform`, `n8n`, `home-assistant`).
-
 ## Couches (de la plus forte à la plus faible précédence)
 
-| Couche | Fichier | Portée | Chargement | Correspondance core |
-| --- | --- | --- | --- | --- |
-| `global` | [`global.md`](global.md) | Invariants et conventions Homelab valables partout | Au démarrage (toujours actif) | `workspace` |
-| `stack` | `stacks/<stack>.md` | Spécifique à une stack (portainer, traefik, gitea, …) | Au démarrage, uniquement la stack courante | `project` |
-| `phase` | `phases/<phase>.md` (`ideation`, `cadrage`, `production`, `validation`) | Par phase du workflow | À la demande, quand la phase est déclenchée | `phase` |
-| `scope` | `scopes/<scope>.md` (les 7 scopes Homelab) | Par scope | À la demande, quand le scope est confirmé | `scope` |
+| Couche   | Fichier                                                                 | Portée                                                | Chargement                                  |
+| -------- | ----------------------------------------------------------------------- | ----------------------------------------------------- | ------------------------------------------- |
+| `global` | [`global.md`](global.md)                                                | Invariants et conventions Homelab valables partout    | Au démarrage (toujours actif)               |
+| `stack`  | `stacks/<stack>.md`                                                     | Spécifique à une stack (portainer, traefik, gitea, …) | Au démarrage, uniquement la stack courante  |
+| `phase`  | `phases/<phase>.md` (`ideation`, `cadrage`, `production`, `validation`) | Par phase du workflow                                 | À la demande, quand la phase est déclenchée |
+| `scope`  | `scopes/<scope>.md` (les 7 scopes Homelab)                              | Par scope                                             | À la demande, quand le scope est confirmé   |
 
 **Précédence** : `global` > `stack` > `phase` > `scope`. Une règle d'une couche **ne peut pas contredire** une règle d'une couche supérieure sans arbitrage humain (contrôle de conflit à l'admission). Cette précédence explicite **préserve et renforce** l'invariant amont « conflit réglé à l'écriture, jamais au runtime ».
 
@@ -64,19 +45,19 @@ Déclencheurs principaux :
 
 Chaque règle est une entrée de liste avec un identifiant stable :
 
-| Couche | Préfixe | Exemple |
-| --- | --- | --- |
+| Couche   | Préfixe       | Exemple       |
+| -------- | ------------- | ------------- |
 | `global` | `RULE-GL-NNN` | `RULE-GL-001` |
-| `stack` | `RULE-ST-NNN` | `RULE-ST-001` |
-| `phase` | `RULE-PH-NNN` | `RULE-PH-001` |
-| `scope` | `RULE-SC-NNN` | `RULE-SC-001` |
+| `stack`  | `RULE-ST-NNN` | `RULE-ST-001` |
+| `phase`  | `RULE-PH-NNN` | `RULE-PH-001` |
+| `scope`  | `RULE-SC-NNN` | `RULE-SC-001` |
 
 ```md
 - **RULE-GL-001** — Tout docker-compose Swarm doit inclure une section `deploy` avec contraintes de placement.
   - _portée_ : global · _origine_ : ALI-000 · _ajoutée le_ : AAAA-MM-JJ
 ```
 
-**Rubriques topicales** (convention alignée sur le contrat amont et sur `core/rules/`) : dans un fichier de couche, les règles se rangent sous des **rubriques topicales** en prose — par ex. `## Conventions Docker/Swarm`, `## Conventions Terraform`, `## Sécurité / Hardening`, `## Conventions Traefik`, `## Manière de travailler` — une règle = une puce sous la rubrique idoine. Les rubriques sont **indicatives** (à créer selon le besoin) ; l'identifiant `RULE-*`, la portée, l'origine et la date restent **obligatoires** (traçabilité, clause SEC-5 adaptée). Voir les gabarits [`stacks/_template.md`](stacks/_template.md) et [`scopes/_template.md`](scopes/_template.md).
+**Rubriques topicales** : dans un fichier de couche, les règles se rangent sous des **rubriques topicales** en prose — par ex. `## Conventions Docker/Swarm`, `## Conventions Terraform`, `## Sécurité / Hardening`, `## Conventions Traefik`, `## Manière de travailler` — une règle = une puce sous la rubrique idoine. Les rubriques sont **indicatives** (à créer selon le besoin) ; l'identifiant `RULE-*`, la portée, l'origine et la date restent **obligatoires** (traçabilité, clause SEC-5 adaptée). Voir les gabarits [`stacks/_template.md`](stacks/_template.md) et [`scopes/_template.md`](scopes/_template.md).
 
 ## Invariants non contournables
 
@@ -92,7 +73,7 @@ Aucune règle apprise, à aucune couche, ne peut affaiblir :
 
 Un candidat qui contredit l'un de ces invariants est **rejeté d'office**.
 
-## Clauses de sécurité (adaptées de SEC-1..5 du core)
+## Clauses de sécurité
 
 Ces clauses sont **contraignantes** et ferment les vecteurs de dérive de gouvernance. Le contrôle sécurité est assuré par l'**Architecte de sécurité Homelab** (voir [`../agents/security-architect-homelab-agent.md`](../agents/security-architect-homelab-agent.md)).
 

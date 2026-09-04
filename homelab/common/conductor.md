@@ -8,7 +8,7 @@ Ce fichier est la **source unique** des instructions du **coordinateur** du work
 
 Le workflow est **agnostique de l'outil** : il s'applique aux stacks Docker Swarm ou Proxmox, à leur configuration Terraform et aux domaines connexes du Homelab (n8n, Home Assistant). Il ne remplace pas les skills des agents (`docker-composer`, `configuration-applications`, `dockerfile-validator`, `homelab-vault-access`, `traefik-manager-read`) : il en fixe la **gouvernance** et l'**ordre d'exécution** entre agents. Ce triptyque `homelab/common/` **est** le workflow Homelab (il n'existe pas de skill « workflow » séparée : le workflow est porté par ce document, pas par une skill).
 
-> **Forme** : ce triptyque `conductor.md` / `stages/` / `protocols/` est la source unique du workflow ; le document narratif historique `docs/homelab-workflow.md` est conservé comme **stub de redirection** (compatibilité ascendante — aucune référence existante cassée). Aucune dynamique du workflow n'est perdue ; seule la forme change (narrative → conductor + fiches de stage + protocoles). Miroir Homelab du triptyque `core/common/` (ADR [0007](../../decisions/0007-adaptation-modele-conductor-stages-protocols.md)), décision tracée dans [ADR-0018](../../decisions/0018-adaptation-modele-conductor-stages-protocols-homelab.md).
+> **Forme** : ce triptyque `conductor.md` / `stages/` / `protocols/` est la source unique du workflow ; le document narratif historique `docs/homelab-workflow.md` est conservé comme **stub de redirection** (compatibilité ascendante — aucune référence existante cassée). Aucune dynamique du workflow n'est perdue ; seule la forme change (narrative → conductor + fiches de stage + protocoles).
 
 ---
 
@@ -35,7 +35,7 @@ Ce principe est **outillé** par le mécanisme de **scopes** (quelles étapes s'
 
 ## Les 5 phases et leurs stages
 
-Le workflow structure le cycle en **cinq phases** (`Initialisation → Idéation → Cadrage et Paramètres → Production et Contrôle → Validation et Déploiement`), nomenclature métier Homelab alignée sur les 5 phases d'AI-DLC 2.0 ([ADR-0013](../../decisions/0013-cadrage-refonte-homelab-workflow-sur-ai-dlc.md), figée au Stage 5 — [ADR-0017](../../decisions/0017-passage-5-phases-et-mode-autonomie-homelab.md)). Chaque phase se décompose en **stages** — une fiche par stage sous [`stages/<phase>/`](stages/), portant un front-matter conforme à [`protocols/stage-definition.md`](protocols/stage-definition.md).
+Le workflow structure le cycle en **cinq phases** (`Initialisation → Idéation → Cadrage et Paramètres → Production et Contrôle → Validation et Déploiement`). Chaque phase se décompose en **stages** — une fiche par stage sous [`stages/<phase>/`](stages/), portant un front-matter conforme à [`protocols/stage-definition.md`](protocols/stage-definition.md).
 
 ```mermaid
 flowchart TD
