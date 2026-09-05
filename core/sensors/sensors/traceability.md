@@ -6,7 +6,7 @@ default_severity: advisory
 description: "Vérifie la traçabilité amont↔aval : chaque exigence retenue est reliée à un ADR / livrable et chaque décision structurante est tracée, sans cible orpheline."
 category: traceability
 fire_on: gate
-matches: "{documentations/**/*.md,decisions/[0-9][0-9][0-9][0-9]-*.md,livrables/**/*.md}"
+matches: "{documentation/*.md,decisions/[0-9][0-9][0-9][0-9]-*.md,livrables/**/*.md}"
 origine: ALI-198
 ---
 
@@ -14,7 +14,7 @@ origine: ALI-198
 
 Check déterministe déclenché **au gate de phase** (`fire_on: gate`) : valide la **chaîne de traçabilité** entre exigences, décisions (ADR) et livrables — identifiants amont stables, cibles déterministes reliées, et **absence d'orphelin dérivé** (une décision structurante sans exigence amont, une exigence sans ADR / livrable). **Advisory** (`default_severity: advisory`).
 
-Adaptation doc-first du sensor amont `traceability` (qui valide un `traceability.json`) : ce dépôt n'a pas de fichier de matrice compilé (pas de moteur exécutable — exécution via Multica). La traçabilité est portée par les **références croisées** entre `documentations/`, `decisions/` et `livrables/` (issue d'origine, ADR liés, exigences), et recoupe le contrôle `liaison-tracabilite` du verification gate (`gates.md`). Complémentaire de `upstream-coverage` : là où ce dernier vérifie qu'un livrable **cite** son amont, `traceability` vérifie la **cohérence de la chaîne complète** exigence → décision → livrable.
+Adaptation doc-first du sensor amont `traceability` (qui valide un `traceability.json`) : ce dépôt n'a pas de fichier de matrice compilé (pas de moteur exécutable — exécution via Multica). La traçabilité est portée par les **références croisées** entre `documentation/`, `decisions/` et `livrables/` (issue d'origine, ADR liés, exigences), et recoupe le contrôle `liaison-tracabilite` du verification gate (`gates.md`). Complémentaire de `upstream-coverage` : là où ce dernier vérifie qu'un livrable **cite** son amont, `traceability` vérifie la **cohérence de la chaîne complète** exigence → décision → livrable.
 
 ## Contrat de vérification (`checks`)
 

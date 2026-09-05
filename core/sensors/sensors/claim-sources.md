@@ -6,7 +6,7 @@ default_severity: advisory
 description: "Vérifie que chaque affirmation retenue à la capture d'intention porte une source résoluble et que les hypothèses conservées correspondent à une confirmation humaine explicite."
 category: provenance
 fire_on: gate
-matches: "{documentations/**/*.md,decisions/[0-9][0-9][0-9][0-9]-*.md}"
+matches: "{documentation/*.md,decisions/[0-9][0-9][0-9][0-9]-*.md}"
 origine: ALI-198
 ---
 

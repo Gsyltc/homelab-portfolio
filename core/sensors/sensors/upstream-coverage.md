@@ -6,7 +6,7 @@ default_severity: advisory
 description: "Vérifie que le livrable référence explicitement sa demande amont (issue d'origine, ADR parent le cas échéant)."
 category: document-shape
 fire_on: gate
-matches: "{decisions/[0-9][0-9][0-9][0-9]-*.md,documentations/**/*.md,livrables/**/*.md}"
+matches: "{decisions/[0-9][0-9][0-9][0-9]-*.md,documentation/*.md,livrables/**/*.md}"
 origine: ALI-188
 ---
 
