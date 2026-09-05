@@ -32,7 +32,7 @@ Dans les deux cas, **les gabarits restent dans la skill** : la décision ne port
 
 **Retenir l'Option A** (choix humain, multica.gaston, ALI-218) : le manifeste `required-sections` porte **en propre** la liste des fichiers et sections DAS mandatory, sans couplage `core → plugin`, dans la continuité de la trajectoire d'[ADR-0012](0012-alignement-sensors-sur-ai-dlc.md).
 
-**Ensemble mandatory retenu** — au gate, chacun de ces **7 fichiers** doit être **présent** dans `documentations/<projet>/` et **non vide** (contenu propre ; commentaires HTML et cellules d'exemple ne comptent pas comme contenu) :
+**Ensemble mandatory retenu** — au gate, chacun de ces **7 fichiers** doit être **présent** dans le répertoire `documentation/` du projet (les fichiers `.md` y sont déposés directement) et **non vide** (contenu propre ; commentaires HTML et cellules d'exemple ne comptent pas comme contenu) :
 
 | Fichier | Thème |
 | --- | --- |
@@ -89,7 +89,8 @@ Enforcer la présence des 7 fichiers au gate.
 
 - **IMP-001** : [`core/sensors/sensors/required-sections.md`](../core/sensors/sensors/required-sections.md) — bloc `das:` réécrit (`fichiers_mandatory` : 7 fichiers + sections, `non_vide: true`) ; corps enrichi (tableau des fichiers mandatory + justification, règle de cohérence gabarit ↔ manifeste) ; `description` et `origine` du front-matter mis à jour (`ALI-188 (durcissement volet DAS : ALI-218)`) ; section Sortie complétée (fichier mandatory absent = écart, SG-2).
 - **IMP-002** : [`core/sensors/README.md`](../core/sensors/README.md) — ligne `required-sections` de la table « Sensors définis » précisée (fichiers/sections mandatory de la DAS, renvoi vers cet ADR).
-- **IMP-003** : Périmètre inchangé — `matches`, `fire_on: gate`, `kind`, `command` (placeholder non exécutable, DIV-command) et l'invariant `id` = stem du fichier sont préservés.
+- **IMP-003** : `matches` corrigé pour le volet DAS — les documents de la DAS vivent directement dans le répertoire `documentation/` du projet (chemin racine configuré dans Multica) ; le glob passe de `documentations/**/*.md` à `documentation/*.md` (ALI-218, commentaire multica.gaston). `fire_on: gate`, `kind`, `command` (placeholder non exécutable, DIV-command) et l'invariant `id` = stem du fichier sont préservés.
+- **IMP-006** : Cohérence de chemin à propager — les sensors frères `upstream-coverage`, `claim-sources` et `traceability` référencent encore `documentations/**/*.md`. L'harmonisation de leur glob sur `documentation/` est **hors périmètre d'ALI-218** (elle touche leur surface de gouvernance, SG-1) et fait l'objet d'un signalement séparé à l'humain.
 - **IMP-004** : Contrôle sécurité (Architecte cybersécurité / Reviewer de sécurité) sur la surface du manifeste **avant** validation humaine et passage à *Accepted* ; clauses SG-1 à SG-6 reconduites sans changement.
 - **IMP-005** : Cohérence gabarit ↔ manifeste (NEG-004) à vérifier en revue à chaque évolution d'un gabarit mandatory (`gabarits/001`, `01`, `02`, `06`, `08`, `10`, `11`).
 

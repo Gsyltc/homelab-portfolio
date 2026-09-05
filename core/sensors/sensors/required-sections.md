@@ -6,7 +6,7 @@ default_severity: advisory
 description: "Vérifie que les rubriques obligatoires de l'ADR et les fichiers/sections mandatory de la DAS sont présents et non vides."
 category: document-shape
 fire_on: gate
-matches: "{decisions/[0-9][0-9][0-9][0-9]-*.md,documentations/**/*.md}"
+matches: "{decisions/[0-9][0-9][0-9][0-9]-*.md,documentation/*.md}"
 origine: ALI-188 (durcissement volet DAS : ALI-218)
 ---
 
@@ -30,7 +30,7 @@ checks:
       - "Références"
     non_vide: true
   das:                                         # fichiers DAS mandatory portés en propre (Option A, ADR-0025) — indépendants des gabarits (ADR-0012, NEG-004)
-    fichiers_mandatory:                        # présents ET non vides dans documentations/<projet>/ au gate
+    fichiers_mandatory:                        # présents ET non vides dans le répertoire documentation/ du projet, au gate
       - fichier: "001-document-architecture-solution.md"    # page de garde
         sections:
           - "Métadonnées du document"
@@ -68,7 +68,7 @@ checks:
 
 ## Sections mandatory de la DAS (Option A — manifeste autonome)
 
-Sur le volet `das:`, le sensor vérifie qu'au gate de phase, chacun des **7 fichiers mandatory** de la documentation d'architecture de solution est **présent** dans `documentations/<projet>/` et **non vide** (contenu propre, gabarit renseigné — les commentaires HTML `<!-- … -->` et les cellules d'exemple ne comptent pas comme contenu). Fichiers et sections retenus par l'humain (multica.gaston, ALI-218) :
+Sur le volet `das:`, le sensor vérifie qu'au gate de phase, chacun des **7 fichiers mandatory** de la documentation d'architecture de solution est **présent** dans le répertoire `documentation/` du projet (les fichiers `.md` y sont déposés directement) et **non vide** (contenu propre, gabarit renseigné — les commentaires HTML `<!-- … -->` et les cellules d'exemple ne comptent pas comme contenu). Fichiers et sections retenus par l'humain (multica.gaston, ALI-218) :
 
 | Fichier | Thème | Pourquoi mandatory |
 | --- | --- | --- |
@@ -90,7 +90,7 @@ En **Option A**, la liste des fichiers et sections mandatory est portée **en pr
 
 Verdicts : `✅` conforme · `⚠️` écart · `⛔` indisponible (SG-2, jamais lu comme conforme). Source tracée (SG-5).
 
-Sur le volet DAS, un **fichier mandatory absent** du répertoire `documentations/<projet>/` est un écart au même titre qu'une section manquante ou vide (SG-2 : l'absence d'un signal attendu est elle-même un écart).
+Sur le volet DAS, un **fichier mandatory absent** du répertoire `documentation/` du projet est un écart au même titre qu'une section manquante ou vide (SG-2 : l'absence d'un signal attendu est elle-même un écart).
 
 ```
 Sensor required-sections — <fichier>   (source : core/sensors/sensors/required-sections.md @ <commit>)
