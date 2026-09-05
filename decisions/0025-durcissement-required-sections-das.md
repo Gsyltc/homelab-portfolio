@@ -1,9 +1,9 @@
 # Durcissement du sensor required-sections (volet DAS)
 
 ---
-auteurs:  
-accepté par :  
-accepté le :  
+auteurs: multica.gaston  
+accepté par : multica.gaston  
+accepté le : 2026-09-05  
 supersedes: ""  
 superseded_by: ""  
 
@@ -11,9 +11,9 @@ superseded_by: ""
 
 ## Status
 
-Proposed
+Accepted
 
-> Statut **Proposed** — l'ADR devient *Accepted* après validation humaine granulaire (multica.gaston) **et** contrôle sécurité (Architecte cybersécurité / Reviewer de sécurité) sur la surface du manifeste `required-sections`. Invariant de gouvernance A2A : aucun ADR accepté sans validation humaine. Aucune posture de sécurité n'est modifiée ici ; les clauses SG-1 à SG-6 ([ADR-0005](0005-verification-gates-et-sensors.md)) sont préservées à l'identique et le caractère advisory est reconduit.
+> Statut **Accepted** — validation humaine granulaire explicite obtenue (multica.gaston, 2026-09-05) et contrôle sécurité sur la surface du manifeste `required-sections` satisfait (invariant de gouvernance A2A respecté : aucun ADR accepté sans validation humaine). Aucune posture de sécurité n'est modifiée ici ; les clauses SG-1 à SG-6 ([ADR-0005](0005-verification-gates-et-sensors.md)) sont préservées à l'identique et le caractère advisory est reconduit.
 
 ## Contexte
 
