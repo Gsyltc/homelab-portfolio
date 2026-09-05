@@ -43,7 +43,7 @@ Cinq sensors, alignés sur le contrat amont « Sensors » (schéma de manifeste 
 
 | Sensor | Manifeste | `category` | `fire_on` | `default_severity` | Objet |
 | --- | --- | --- | --- | --- | --- |
-| `required-sections` | [`sensors/required-sections.md`](sensors/required-sections.md) | document-shape | gate | advisory | Rubriques obligatoires d'ADR / DAS présentes et non vides |
+| `required-sections` | [`sensors/required-sections.md`](sensors/required-sections.md) | document-shape | gate | advisory | Rubriques obligatoires d'ADR présentes et non vides ; fichiers/sections **mandatory** de la DAS (`001`, `01`, `02`, `06`, `08`, `10`, `11`) présents et non vides (durci ALI-218, [ADR-0025](../../decisions/0025-durcissement-required-sections-das.md)) |
 | `upstream-coverage` | [`sensors/upstream-coverage.md`](sensors/upstream-coverage.md) | document-shape | gate | advisory | Référence explicite à la demande amont (issue / ADR parent) |
 | `diagram-validity` | [`sensors/diagram-validity.md`](sensors/diagram-validity.md) | document-shape | write | advisory | Syntaxe des diagrammes en code (Mermaid / PlantUML / Structurizr) |
 | `claim-sources` | [`sensors/claim-sources.md`](sensors/claim-sources.md) | provenance | gate | advisory | Chaque affirmation retenue porte une source résoluble ; hypothèses = confirmation humaine explicite |
