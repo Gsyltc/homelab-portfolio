@@ -1,6 +1,9 @@
 # Document d'architecture de solution (DAS)
 
-> Page de garde du document d'architecture de solution. Ce fichier est le point d'entrée de la documentation d'architecture et reste stable : les contenus détaillés vivent dans les fichiers thématiques `01-` à `15-`. Conserver le découpage des fichiers et la structure des sections.
+<!--
+Page de garde du document d'architecture de solution.
+Ce fichier est le point d'entrée de la documentation d'architecture et reste stable : les contenus détaillés vivent dans les fichiers thématiques `01-` à `15-`. Conserver le découpage des fichiers et la structure des sections.
+-->
 
 ## Métadonnées du document
 
@@ -18,7 +21,7 @@
 
 ## Historique du document
 
-> Mettre à jour cet historique à **chaque** modification de la documentation. La version la plus récente figure en première ligne.
+<!-- Mettre à jour cet historique à **chaque** modification de la documentation. La version la plus récente figure en première ligne. -->
 
 | **Version** | **Date**   | **Statut** | **Description / Motif du changement** | **Auteurs**                                 | **Approbateur**            |
 | ----------- | ---------- | ---------- | ------------------------------------- | ------------------------------------------- | -------------------------- |
@@ -26,13 +29,20 @@
 
 **Tableau 2. Historique des modifications**
 
-> **Règle de versionnement** : incrément mineur (ex. V1.1) pour toute modification ; incrément majeur (ex. V2.0) pour tout changement structurel ou toute décision d'architecture majeure (tracée dans un ADR).
+<!-- 
+**Règle de versionnement** : incrément mineur (ex. V1.1) pour toute modification ; incrément majeur (ex. V2.0) pour tout changement structurel ou toute décision d'architecture majeure (tracée dans un ADR). 
+-->
 
 ## Arrimages
 
-> Répartition des responsabilités selon la matrice RACI :
-> **R** = Réalise · **A** = Approuve · **C** = Consulté · **I** = Informé.
-> L'architecte de solution intégrateur assure la cohérence globale de l'ensemble des fichiers.
+<!--
+Répartition des responsabilités selon la matrice RACI :
+  - **R** = Réalise
+  - **A** = Approuve
+  - **C** = Consulté
+  - **I** = Informé
+L'architecte de solution intégrateur assure la cohérence globale de l'ensemble des fichiers.
+-->
 
 | Rôles                              | Nom | Implication (R/A/C/I) | Documents concernés          |
 | ---------------------------------- | --- | --------------------- | ---------------------------- |
@@ -53,7 +63,10 @@
 
 ## Lexique
 
-> Le lexique est la source de vérité de la terminologie utilisée dans l'ensemble des fichiers de documentation. Toute nouvelle définition doit y être ajoutée et tout terme employé dans un fichier doit être cohérent avec cette liste.
+<!--
+Le lexique est la source de vérité de la terminologie utilisée dans l'ensemble des fichiers de documentation.
+Toute nouvelle définition doit y être ajoutée et tout terme employé dans un fichier doit être cohérent avec cette liste.
+-->
 
 | **Terme ou acronyme** | **Définitions**                                                            |
 | --------------------- | -------------------------------------------------------------------------- |
@@ -77,7 +90,10 @@
 
 ## Références documentaires
 
-> Distinguer les références **internes** (produites dans le projet) des références **externes** (gabarits, normes, standards, autres projets). Les décisions d'architecture (ADR) sont indexées séparément.
+<!--
+Distinguer les références **internes** (produites dans le projet) des références **externes** (gabarits, normes, standards, autres projets).
+Les décisions d'architecture (ADR) sont indexées séparément.
+-->
 
 | Réf    | Version | Date       | Description du document                     | Type (interne/externe) | Lien                                                                                                                                                                                                                                                                         |
 | ------ | ------- | ---------- | ------------------------------------------- | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -90,7 +106,10 @@
 
 ## Structure de la documentation
 
-> La documentation d'architecture de solution est découpée en fichiers Markdown distincts, un par thème. **Chaque thème est traité dans le même fichier** : les modifications se font toujours en lisant, analysant puis modifiant les fichiers existants, jamais en recréant ou restructurant le découpage.
+<!--
+La documentation d'architecture de solution est découpée en fichiers Markdown distincts, un par thème. 
+**Chaque thème est traité dans le même fichier** : les modifications se font toujours en lisant, analysant puis modifiant les fichiers existants, jamais en recréant ou restructurant le découpage.
+-->
 
 | Fichier                                 | Thème                                                                                                                        |
 | --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
@@ -115,7 +134,9 @@
 
 ## Liste des images et diagrammes
 
-> Index des diagrammes de la documentation avec le fichier et la section où ils se trouvent. À maintenir à chaque ajout ou modification d'un diagramme. Les diagrammes sont générés en code (PlantUML, Mermaid, Structurizr, BPMN, C4) et référencés ici.
+<!--
+Index des diagrammes de la documentation avec le fichier et la section où ils se trouvent. À maintenir à chaque ajout ou modification d'un diagramme. Les diagrammes sont générés en code (PlantUML, Mermaid, Structurizr, BPMN, C4) et référencés ici.
+-->
 
 | Fichier                        | Section                           | Diagramme                 | Description                       |
 | ------------------------------ | --------------------------------- | ------------------------- | --------------------------------- |
@@ -133,7 +154,9 @@
 
 ## Liste des tableaux du document
 
-> Index des tableaux de la documentation, groupé par fichier. **Numérotation globale et continue** : à maintenir à chaque ajout ou suppression d'un tableau.
+<!--
+Index des tableaux de la documentation, groupé par fichier. **Numérotation globale et continue** : à maintenir à chaque ajout ou suppression d'un tableau.
+-->
 
 | Fichier | Section                                           | N° tableau | Description                                       |
 | ------- | ------------------------------------------------- | ---------- | ------------------------------------------------- |
@@ -216,7 +239,9 @@
 
 ### Mappage préoccupations → vues (ISO 42010)
 
-> Cette section établit la correspondance entre les préoccupations des parties prenantes (identifiées dans `01-introduction.md`) et les **vues** et **viewpoints** de l'architecture (référencés dans les gabarits `06-architecture-solutions.md`, `11-securite.md`, etc.), permettant la traçabilité bidirectionnelle exigences ↔ vues.
+<!--
+Cette section établit la correspondance entre les préoccupations des parties prenantes (identifiées dans `01-introduction.md`) et les **vues** et **viewpoints** de l'architecture (référencés dans les gabarits `06-architecture-solutions.md`, `11-securite.md`, etc.), permettant la traçabilité bidirectionnelle exigences ↔ vues.
+-->
 
 | Préoccupation | Vue/Viewpoint | Fichier gabarit | Description |
 | ------------- | ------------- | --------------- | ----------- |
