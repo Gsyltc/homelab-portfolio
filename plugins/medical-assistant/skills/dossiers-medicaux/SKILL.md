@@ -23,6 +23,23 @@ Les dossiers médicaux sont stockés dans le répertoire parent déclarée par l
   - Exemple : `"$ROOT_DIRECTORY"/name`
 - Si le répertoire n'existe pas, le créer (y compris les répertoires parents si nécessaire) avant d'y écrire.
 
+## Dossier patient : fichiers et mises à jour — OBLIGATOIRE
+
+### Fichiers du dossier
+
+Chaque dossier patient contient deux fichiers qui doivent TOUJOURS exister et rester synchronisés :
+
+- `synthese.md` — le dossier médical pour les professionnels de la santé. **Source de vérité.**
+- `resume-patient.md` — le résumé destiné au patient, toujours dérivé de `synthese.md`.
+
+### Mise à jour et exportation du dossier — 3 étapes obligatoires
+
+Toute mise à jour ou exportation du dossier d'un patient respecte OBLIGATOIREMENT ces 3 étapes, sans exception :
+
+1. **Archiver avant modification** — avant toute mise à jour de `synthese.md`, archiver une copie du fichier actuel dans le sous-répertoire `archives/synthses` du répertoire du patient, sous le nom `<date-du-jour>-synthese.md` (date du jour au format `yyyy-MM-dd`, ex. `2026-09-05-synthese.md`).
+2. **Actualiser le résumé patient après** — après chaque modification de `synthese.md`, mettre à jour `resume-patient.md` avec les nouvelles données.
+3. **Exporter en PDF à la demande** — lorsqu'une demande d'exportation du dossier est faite, l'exportation se fait obligatoirement au format PDF. Demander d'abord si l'exportation est destinée à un professionnel de la santé. Si oui, exporter `synthese.md` (fichier pro) au format PDF et télécharger le fichier. Si non, exporter `resume-patient.md` (synthèse patient) au format PDF et télécharger le fichier.
+
 ## Triage des entrées
 
 À la réception de données médicales, identifier d'abord le format :
@@ -142,4 +159,4 @@ Pour passer des termes cliniques aux termes courants :
 | DiagnosticReport   | Imagerie, anatomopathologie |
 | Encounter          | Visites, hospitalisations   |
 | DocumentReference  | Documents scannés, PDF      |
-r
+
