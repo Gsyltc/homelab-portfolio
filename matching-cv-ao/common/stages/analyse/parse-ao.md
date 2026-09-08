@@ -27,7 +27,7 @@ Parser le PDF d'appel d'offres, en extraire les exigences fonctionnelles et tech
 
 ## Steps
 ### Step 1 — Délégation à l'Analyste RFP
-Mentionner l'Analyste RFP avec mission claire : parser le PDF d'AO, extraire exigences et profils recherchés, produire le JSON structuré, sauvegarder dans `/nfs/workspace/expertise-architecture/ao/<client>/<titre-ao>`.
+Mentionner l'Analyste RFP avec mission claire : parser le PDF d'AO, extraire exigences et profils recherchés, produire le JSON structuré, sauvegarder dans `${ROOT_DIRECTORY}/ao/<client>/<titre-ao>`.
 
 ### Step 2 — Contrôle du livrable
 Vérifier que le JSON retourné contient bien les champs : `ao` (metadata), `exigences` (liste), `profils_recherches` (liste). Signaler les écarts.

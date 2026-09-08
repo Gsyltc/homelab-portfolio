@@ -7,7 +7,7 @@
 Ce workflow A2A permet de :
 
 1. **Analyser des appels d'offres (AO)** reçus en PDF d'un client
-2. **Analyser les CV des collaborateurs** (stockés dans `/nfs/workspace/expertise-architecture/<nom-prenom>/cv`)
+2. **Analyser les CV des collaborateurs** (stockés dans `${ROOT_DIRECTORY}/<nom-prenom>/cv`)
 3. **Faire le match** entre les profils recherchés dans l'AO et les profils CV, avec un **score pondéré**
 4. **Remplir une grille d'évaluation client** (fournie par l'humain) après validation des profils
 5. **Permettre la mise à jour des CV** par le Gestionnaire CV
@@ -93,8 +93,8 @@ matching-cv-ao/
 
 | Élément | Emplacement |
 | --- | --- |
-| CV collaborateurs | `/nfs/workspace/expertise-architecture/<nom-prenom>/cv` |
-| Résumés AO | `/nfs/workspace/expertise-architecture/ao/<client>/<titre-ao>` |
+| CV collaborateurs | `${ROOT_DIRECTORY}/<nom-prenom>/cv` |
+| Résumés AO | `${ROOT_DIRECTORY}/ao/<client>/<titre-ao>` |
 | Grille d'évaluation | Fournie par l'humain — **ne jamais inventer** |
 
 ## Utilisation
