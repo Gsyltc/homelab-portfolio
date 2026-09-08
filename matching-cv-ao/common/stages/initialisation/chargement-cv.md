@@ -27,7 +27,7 @@ Vérifier l'existence et la disponibilité des CV des collaborateurs dans le ré
 
 ## Steps
 ### Step 1 — Scan du répertoire CV
-Scanner le répertoire `/nfs/workspace/expertise-architecture/` pour identifier les collaborateurs disposant d'un sous-répertoire `cv/`. Lister les chemins disponibles.
+Scanner le répertoire `${ROOT_DIRECTORY}/` pour identifier les collaborateurs disposant d'un sous-répertoire `cv/`. Lister les chemins disponibles.
 
 ### Step 2 — Vérification de complétude
 Pour chaque collaborateur trouvé, vérifier que le répertoire `cv/` contient au moins un fichier. Signaler les collaborateurs sans CV.
