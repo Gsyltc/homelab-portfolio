@@ -19,7 +19,17 @@ workflows/matching-cv-ao/
 │   ├── protocols/
 │   │   ├── stage-definition.md         # Schéma du front-matter d'une fiche de stage
 │   │   ├── stage-protocol.md           # Cycle générique d'exécution d'un stage
-│   │   └── governance-security.md      # Gouvernance A2A & sécurité
+│   │   ├── governance-security.md      # Gouvernance A2A & garde-fous
+│   │   ├── reviewer.md                 # Protocole de revue (cohérence)
+│   │   └── scopes-and-axes.md          # Scopes & axes d'exécution
+│   ├── scopes/                         # Source d'identité des scopes
+│   │   ├── README.md
+│   │   ├── standard.md                 # Scope par défaut
+│   │   ├── complex.md                  # AO multi-profils
+│   │   └── express.md                  # AO simple
+│   ├── sensors/                        # Verification gates & sensors
+│   │   ├── README.md
+│   │   └── gates.md                    # Gates aux frontières de phases
 │   └── stages/
 │       ├── initialisation/
 │       │   ├── reception-ao.md         # Réception du PDF d'AO
