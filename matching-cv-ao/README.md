@@ -18,36 +18,36 @@ Ce workflow A2A permet de :
 matching-cv-ao/
 ├── common/
 │   ├── conductor.md                    # Instructions du coordinateur (source unique)
-│   ├── protocols/
-│   │   ├── stage-definition.md         # Schéma du front-matter d'une fiche de stage
-│   │   ├── stage-protocol.md           # Cycle générique d'exécution d'un stage
-│   │   ├── governance-security.md      # Gouvernance A2A & garde-fous
-│   │   ├── reviewer.md                 # Protocole de revue (cohérence)
-│   │   └── scopes-and-axes.md          # Scopes & axes d'exécution
-│   ├── scopes/                         # Source d'identité des scopes
-│   │   ├── README.md
-│   │   ├── standard.md                 # Scope par défaut
-│   │   ├── complex.md                  # AO multi-profils
-│   │   └── express.md                  # AO simple
-│   ├── sensors/                        # Verification gates & sensors
-│   │   ├── README.md
-│   │   └── gates.md                    # Gates aux frontières de phases
-│   └── stages/
-│       ├── initialisation/
-│       │   ├── reception-ao.md         # Réception du PDF d'AO
-│       │   └── chargement-cv.md        # Vérification des CV disponibles
-│       ├── analyse/
-│       │   ├── parse-ao.md             # Analyse de l'AO (Analyste RFP)
-│       │   └── extraction-cv.md        # Extraction des CV (Gestionnaire CV)
-│       ├── matching/
-│       │   ├── croisement-profils.md   # Croisement profils ↔ exigences
-│       │   └── classement-profils.md   # Classement final
-│       ├── validation/
-│       │   ├── presentation-resultats.md # Validation granulaire des profils
-│       │   └── remplissage-grille.md   # Remplissage grille d'évaluation
-│       └── cloture/
-│           ├── livraison.md            # Livraison finale
-│           └── mise-a-jour-cv.md       # Mise à jour des CV
+│   └── protocols/
+│       ├── stage-definition.md         # Schéma du front-matter d'une fiche de stage
+│       ├── stage-protocol.md           # Cycle générique d'exécution d'un stage
+│       ├── governance-security.md      # Gouvernance A2A & garde-fous
+│       ├── reviewer.md                 # Protocole de revue (cohérence)
+│       └── scopes-and-axes.md          # Scopes & axes d'exécution
+├── scopes/                             # Source d'identité des scopes
+│   ├── README.md
+│   ├── standard.md                     # Scope par défaut
+│   ├── complex.md                      # AO multi-profils
+│   └── express.md                      # AO simple
+├── sensors/                            # Verification gates & sensors
+│   ├── README.md
+│   └── gates.md                        # Gates aux frontières de phases
+├── stages/
+│   ├── initialisation/
+│   │   ├── reception-ao.md             # Réception du PDF d'AO
+│   │   └── chargement-cv.md            # Vérification des CV disponibles
+│   ├── analyse/
+│   │   ├── parse-ao.md                 # Analyse de l'AO (Analyste RFP)
+│   │   └── extraction-cv.md            # Extraction des CV (Gestionnaire CV)
+│   ├── matching/
+│   │   ├── croisement-profils.md       # Croisement profils ↔ exigences
+│   │   └── classement-profils.md       # Classement final
+│   ├── validation/
+│   │   ├── presentation-resultats.md   # Validation granulaire des profils
+│   │   └── remplissage-grille.md       # Remplissage grille d'évaluation
+│   └── cloture/
+│       ├── livraison.md                # Livraison finale
+│       └── mise-a-jour-cv.md           # Mise à jour des CV
 ├── agents/
 │   ├── coordinateur-matching-agent.md  # Coordinateur Matching
 │   ├── analyste-rfp-agent.md           # Analyste RFP
