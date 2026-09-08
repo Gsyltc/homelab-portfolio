@@ -24,14 +24,6 @@ matching-cv-ao/
 │   │   ├── governance-security.md      # Gouvernance A2A & garde-fous
 │   │   ├── reviewer.md                 # Protocole de revue (cohérence)
 │   │   └── scopes-and-axes.md          # Scopes & axes d'exécution
-│   ├── scopes/                         # Source d'identité des scopes
-│   │   ├── README.md
-│   │   ├── standard.md                 # Scope par défaut
-│   │   ├── complex.md                  # AO multi-profils
-│   │   └── express.md                  # AO simple
-│   ├── sensors/                        # Verification gates & sensors
-│   │   ├── README.md
-│   │   └── gates.md                    # Gates aux frontières de phases
 │   └── stages/
 │       ├── initialisation/
 │       │   ├── reception-ao.md         # Réception du PDF d'AO
@@ -48,6 +40,14 @@ matching-cv-ao/
 │       └── cloture/
 │           ├── livraison.md            # Livraison finale
 │           └── mise-a-jour-cv.md       # Mise à jour des CV
+├── scopes/                             # Source d'identité des scopes
+│   ├── README.md
+│   ├── standard.md                     # Scope par défaut
+│   ├── complex.md                      # AO multi-profils
+│   └── express.md                      # AO simple
+├── sensors/                            # Verification gates & sensors
+│   ├── README.md
+│   └── gates.md                        # Gates aux frontières de phases
 ├── agents/
 │   ├── coordinateur-matching-agent.md  # Coordinateur Matching
 │   ├── analyste-rfp-agent.md           # Analyste RFP
