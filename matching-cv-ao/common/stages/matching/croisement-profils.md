@@ -29,8 +29,10 @@ Croiser les exigences de l'AO avec les profils des collaborateurs et calculer un
 ### Step 1 — Délégation au Matcher Profils
 Mentionner le Matcher Profils avec mission claire : croiser les profils CV avec les exigences AO, calculer le score pondéré (compétences 50%, expérience 35%, études 10%, disponibilité 5%), classer par score décroissant.
 
+> **Fraîcheur des compétences** : le Matcher doit **exclure du calcul de compatibilité toute compétence non utilisée depuis plus de 10 ans** (champ `derniere_utilisation`). Une exigence couverte uniquement par une compétence périmée est considérée comme **non couverte**.
+
 ### Step 2 — Contrôle du livrable
-Vérifier que le JSON contient la liste `resultats` avec les champs : `collaborateur`, `score_total`, détail par critère, `recommandation`, `justification`.
+Vérifier que le JSON contient la liste `resultats` avec les champs : `collaborateur`, `score_total`, détail par critère (dont `score_competences.competences_ignorees_peremption`), `recommandation`, `justification`.
 
 ### Step 3 — Gate advisory
 Présenter à l'humain : top 5 des profils avec scores, recommandations. L'humain peut ajuster les poids ou demander un recalcul.
