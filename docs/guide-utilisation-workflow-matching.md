@@ -1,6 +1,6 @@
 # Guide d'utilisation — Workflow Matching Appels d'Offres ↔ CV
 
-Ce guide explique **comment utiliser au quotidien** le workflow de matching entre appels d'offres (AO) et CV de collaborateurs du dépôt `homelab-portfolio`, orchestré par des agents Multica. Il s'adresse aux humains qui pilotent une demande de matching ; il ne remplace pas la source technique du workflow (`workflows/matching-cv-ao/common/conductor.md` et `workflows/matching-cv-ao/common/protocols/`), qu'il vulgarise.
+Ce guide explique **comment utiliser au quotidien** le workflow de matching entre appels d'offres (AO) et CV de collaborateurs du dépôt `homelab-portfolio`, orchestré par des agents Multica. Il s'adresse aux humains qui pilotent une demande de matching ; il ne remplace pas la source technique du workflow (`matching-cv-ao/common/conductor.md` et `matching-cv-ao/common/protocols/`), qu'il vulgarise.
 
 ---
 
@@ -12,7 +12,7 @@ Le workflow transforme un **appel d'offres (PDF)** reçu d'un client en un **cla
 - **Validation humaine granulaire** : vous validez **chaque profil séparément** — rien n'avance sans votre accord.
 - **Tout est tracé sur l'issue Multica** : analyses, décisions, délégations et validations vivent dans les commentaires de l'issue (piste d'audit unique).
 
-> Le workflow **s'adapte à la complexité de l'AO** : un AO simple reçoit un traitement léger (scope *express*), un AO multi-profils le traitement complet (*complex*) — voir `workflows/matching-cv-ao/common/protocols/scopes-and-axes.md` et `workflows/matching-cv-ao/common/scopes/`.
+> Le workflow **s'adapte à la complexité de l'AO** : un AO simple reçoit un traitement léger (scope *express*), un AO multi-profils le traitement complet (*complex*) — voir `matching-cv-ao/common/protocols/scopes-and-axes.md` et `matching-cv-ao/common/scopes/`.
 
 ---
 
@@ -127,4 +127,4 @@ Le **Matcher Profils** calcule le score pondéré (immuable — seul un changeme
 
 ---
 
-*Sources techniques : `workflows/matching-cv-ao/common/conductor.md` (instructions du coordinateur), `workflows/matching-cv-ao/common/stages/` (fiches de stage), `workflows/matching-cv-ao/common/protocols/` (gouvernance & sécurité, reviewer, scopes & axes, définition/protocole de stage), `workflows/matching-cv-ao/common/scopes/`, `workflows/matching-cv-ao/common/sensors/`, `workflows/matching-cv-ao/agents/`. Règle de routage : `AGENTS.md`.*
+*Sources techniques : `matching-cv-ao/common/conductor.md` (instructions du coordinateur), `matching-cv-ao/common/stages/` (fiches de stage), `matching-cv-ao/common/protocols/` (gouvernance & sécurité, reviewer, scopes & axes, définition/protocole de stage), `matching-cv-ao/common/scopes/`, `matching-cv-ao/common/sensors/`, `matching-cv-ao/agents/`. Règle de routage : `AGENTS.md`.*

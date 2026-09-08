@@ -50,7 +50,7 @@ ils ne s'exécutent jamais conjointement sur une même issue ou un même livrabl
 3. **La demande porte-t-elle sur le matching entre appels d'offres et CV** —
    analyse de PDF d'AO, extraction de profils, croisement profils ↔ exigences, scoring,
    remplissage de grille d'évaluation ?
-   → Suivre **`workflows/matching-cv-ao/common/conductor.md`** (coordinateur : **Coordinateur Matching**).
+   → Suivre **`matching-cv-ao/common/conductor.md`** (coordinateur : **Coordinateur Matching**).
 
 4. **En cas de doute sur la classification** : ne pas engager de workflow, ne rien
    supposer — demander à l'humain de trancher entre les trois workflows,
@@ -121,11 +121,10 @@ homelab-portfolio/
 │   ├── scopes/                            #   Un fichier par scope (identité en données : depth, keywords…)
 │   ├── sensors/                           #   Manifestes des verification gates & sensors (advisory)
 │   └── agents/                            #   Définitions d'agents de l'équipe DevOps Homelab
-├── workflows/                              # Workflows A2A supplémentaires
-│   └── matching-cv-ao/                     # Workflow Matching AO ↔ CV (A2A)
-│       ├── common/                         #   conductor.md + stages/<phase>/ + protocols/
-│       ├── agents/                         #   4 agents : Coordinateur, Analyste RFP, Gestionnaire CV, Matcher
-│       └── README.md                       #   Documentation du workflow
+├── matching-cv-ao/                        # Workflow Matching AO ↔ CV (A2A)
+│   ├── common/                            #   conductor.md + stages/<phase>/ + protocols/ + scopes/ + sensors/
+│   ├── agents/                            #   4 agents : Coordinateur, Analyste RFP, Gestionnaire CV, Matcher
+│   └── README.md                          #   Documentation du workflow
 ├── decisions/                             # Registre des décisions structurantes (0001…0024)
 ├── docs/                                  # Guides d'utilisation (architecture, matching) + stubs de redirection
 └── plugins/                               # Packages de plugins d'agents (spec Agent Plugins v1.0.0) — portent les skills
