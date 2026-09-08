@@ -32,10 +32,12 @@ Scanner le répertoire `/nfs/workspace/expertise-architecture/` pour identifier 
 ### Step 2 — Vérification de complétude
 Pour chaque collaborateur trouvé, vérifier que le répertoire `cv/` contient au moins un fichier. Signaler les collaborateurs sans CV.
 
+Lorsque le répertoire `cv/` contient **plusieurs versions**, identifier la **dernière version** (date encodée dans le nom du fichier ; à défaut, mtime la plus récente). C'est **cette seule version** qui sera analysée et croisée avec l'AO ; les versions antérieures sont ignorées.
+
 ### Step 3 — Documenter l'inventaire
 Poster un commentaire sur l'issue avec :
 - Nombre de CV trouvés
-- Liste des collaborateurs et chemins
+- Liste des collaborateurs et chemins, avec la **version retenue** (fichier + date) et le nombre de versions écartées
 - Collaborateurs manquants (le cas échéant)
 
 ## Sensors
