@@ -18,12 +18,13 @@ Le workflow transforme une **demande d'architecture** (concevoir/faire évoluer 
 
 ## 2. Choisir le bon workflow (règle de routage)
 
-Le dépôt porte **deux workflows totalement indépendants**. Avant tout, la demande est classée dans **l'un ou l'autre** — jamais les deux :
+Le dépôt porte **trois workflows totalement indépendants**. Avant tout, la demande est classée dans **l'un ou l'autre** — jamais plusieurs :
 
 | La demande porte sur… | Workflow | Coordinateur |
 | --- | --- | --- |
 | Architecture de solution : documentation (DAS), décisions, diagrammes, choix techno, intégration, cybersécurité, AWS, cycle spec-driven (OpenSpec) | **Architecture** (ce guide) | Architecture Solution & Intégration |
 | Homelab : stack Docker/Proxmox, `docker-compose`, Terraform de stack, n8n, Home Assistant, Vault, Traefik | **Homelab** | Tech Lead |
+| Matching AO ↔ CV : analyse d'un appel d'offres, croisement avec les CV, scoring, grille d'évaluation | **Matching AO ↔ CV** (guide `docs/guide-utilisation-workflow-matching.md`) | Coordinateur Matching |
 
 En cas de doute, le coordinateur **vous demande de trancher** avant d'engager quoi que ce soit.
 

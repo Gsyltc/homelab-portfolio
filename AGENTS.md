@@ -28,9 +28,9 @@ This is a monorepo of [Agent Plugins](https://agent-plugins.org) maintained by S
 
 ## Architecture Flow
 
-Ce dépôt porte **deux workflows d'orchestration multi-agents (A2A) totalement
-indépendants**. Ils ne se côtoient jamais : une demande relève de **l'un ou de l'autre**,
-jamais des deux. Il n'existe **aucune passerelle, bascule ni chevauchement** entre eux, et
+Ce dépôt porte **trois workflows d'orchestration multi-agents (A2A) totalement
+indépendants**. Ils ne se côtoient jamais : une demande relève de **l'un d'entre eux**,
+jamais de plusieurs. Il n'existe **aucune passerelle, bascule ni chevauchement** entre eux, et
 ils ne s'exécutent jamais conjointement sur une même issue ou un même livrable.
 
 ### Règle de routage (à appliquer en premier)
@@ -47,11 +47,16 @@ ils ne s'exécutent jamais conjointement sur une même issue ou un même livrabl
    (OpenSpec) ?
    → Suivre **`core/common/conductor.md`** (coordinateur : **Architecture Solution & Intégration**).
 
-3. **En cas de doute sur la classification** : ne pas engager de workflow, ne rien
-   supposer — demander à l'humain de trancher entre Homelab et architecture de solution,
-   puis router vers le workflow retenu. Ne jamais combiner les deux.
+3. **La demande porte-t-elle sur le matching entre appels d'offres et CV** —
+   analyse de PDF d'AO, extraction de profils, croisement profils ↔ exigences, scoring,
+   remplissage de grille d'évaluation ?
+   → Suivre **`matching-cv-ao/common/conductor.md`** (coordinateur : **Coordinateur Matching**).
 
-### Invariants communs aux deux workflows
+4. **En cas de doute sur la classification** : ne pas engager de workflow, ne rien
+   supposer — demander à l'humain de trancher entre les trois workflows,
+   puis router vers le workflow retenu. Ne jamais combiner plusieurs workflows.
+
+### Invariants communs aux trois workflows
 
 Ces invariants s'appliquent à chaque workflow **pris séparément** ; ils ne créent aucun
 lien entre eux.
@@ -79,10 +84,13 @@ flowchart TD
     D[Demande humain ou agent] --> R{Classification}
     R -->|Solution / système / ADR / AWS / OpenSpec| C[core-workflow<br/>Coordinateur : Architecture Solution & Intégration]
     R -->|Stack / service / config Homelab / n8n / Home Assistant| H[homelab-workflow<br/>Coordinateur : Tech Lead]
+    R -->|Matching AO ↔ CV| M[matching-cv-ao-workflow<br/>Coordinateur : Coordinateur Matching]
     C -.-x H
+    C -.-x M
+    H -.-x M
 ```
 
-> Les deux branches sont **cloisonnées** : aucune transition de l'une vers l'autre
+> Les trois branches sont **cloisonnées** : aucune transition de l'une vers l'autre
 > (représentée par `-.-x`). Une demande suit une seule branche de bout en bout.
 
 ## Repository Structure
@@ -113,8 +121,12 @@ homelab-portfolio/
 │   ├── scopes/                            #   Un fichier par scope (identité en données : depth, keywords…)
 │   ├── sensors/                           #   Manifestes des verification gates & sensors (advisory)
 │   └── agents/                            #   Définitions d'agents de l'équipe DevOps Homelab
+├── matching-cv-ao/                        # Workflow Matching AO ↔ CV (A2A)
+│   ├── common/                            #   conductor.md + stages/<phase>/ + protocols/ + scopes/ + sensors/
+│   ├── agents/                            #   4 agents : Coordinateur, Analyste RFP, Gestionnaire CV, Matcher
+│   └── README.md                          #   Documentation du workflow
 ├── decisions/                             # Registre des décisions structurantes (0001…0024)
-├── docs/                                  # Stubs de redirection (core-workflow, homelab-workflow) + doc générale
+├── docs/                                  # Guides d'utilisation (architecture, matching) + stubs de redirection
 └── plugins/                               # Packages de plugins d'agents (spec Agent Plugins v1.0.0) — portent les skills
     ├── architecture-assistant/            #   plugin.json + skills/ (OpenSpec, décision, gabarits, cybersécurité, AWS, Windows, supports de vente)
     ├── general-purpose-assistant/         #   plugin.json + skills/ (workflow de stack, notifications)
