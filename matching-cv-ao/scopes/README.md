@@ -35,3 +35,5 @@ skeleton: on|off              # optionnel
 `complex` > `express` > `standard`
 
 Défaut : **`standard`** en l'absence de mot-clé détecté.
+
+Le scope [`format-cv`](format-cv.md) est un parcours **CV seul** (chargement + extraction/formatage/archivage + mise à jour, sans AO ni matching) : il est retenu quand des mots-clés de traitement CV sont détectés sans intention d'AO / matching, sinon l'ordre ci-dessus s'applique et la confirmation humaine tranche.

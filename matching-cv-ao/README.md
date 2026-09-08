@@ -44,7 +44,8 @@ matching-cv-ao/
 │   ├── README.md
 │   ├── standard.md                     # Scope par défaut
 │   ├── complex.md                      # AO multi-profils
-│   └── express.md                      # AO simple
+│   ├── express.md                      # AO simple
+│   └── format-cv.md                    # Traitement CV seul (sans AO ni matching)
 ├── sensors/                            # Verification gates & sensors
 │   ├── README.md
 │   └── gates.md                        # Gates aux frontières de phases
