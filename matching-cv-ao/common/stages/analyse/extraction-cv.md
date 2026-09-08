@@ -15,7 +15,7 @@ produces: [cv-profils]
 consumes: [{artifact: cv-available, required: true}]
 requires_stage: [chargement-cv]
 sensors: []
-scopes: [standard]
+scopes: [standard, format-cv]
 inputs: "Inventaire des CV disponibles"
 outputs: "Profils CV structurés (JSON, dernière version) + fiches d'analyse Markdown versionnées"
 ---

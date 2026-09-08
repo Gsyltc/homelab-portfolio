@@ -15,7 +15,7 @@ produces: [cv-available]
 consumes: [{artifact: ao-pdf-received, required: true}]
 requires_stage: [reception-ao]
 sensors: []
-scopes: [standard]
+scopes: [standard, format-cv]
 inputs: "Confirmation de réception AO"
 outputs: "Liste des CV disponibles + chemins"
 ---

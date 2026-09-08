@@ -6,6 +6,27 @@ Le format s'inspire de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/).
 Les décisions structurantes sont tracées dans [`decisions/`](decisions/) (ADR numérotés) ;
 ce fichier en donne la lecture chronologique côté produit.
 
+## [Non publié]
+
+### Added
+- **Scope `format-cv`** dans le workflow **Matching CV ↔ AO** (`matching-cv-ao/`) — parcours
+  **CV seul** : chargement, extraction/formatage/archivage (fiche d'analyse Markdown versionnée)
+  et mise à jour des CV, **sans AO ni matching**.
+  - `matching-cv-ao/scopes/format-cv.md` — fichier d'identité du scope (front-matter conforme
+    au schéma : `name`, `depth: standard`, `keywords`, `description`, `skeleton`).
+  - Appartenance déclarée sur **exactement trois stages** : `chargement-cv`, `extraction-cv`,
+    `mise-a-jour-cv` (`scopes: [standard, format-cv]`).
+  - Prérequis `livraison-finale` de `mise-a-jour-cv` **assoupli pour `format-cv`** (s'appuie
+    sur `cv-profils` extraits/validés au lieu de la livraison de matching), sans régression
+    sur `standard` / `complex` / `express`.
+  - Vue lisible `common/protocols/scopes-and-axes.md` mise à jour : Table des scopes, table
+    Depth défaut (`standard`), colonne `format-cv` de la matrice stage × scope, note de
+    désambiguïsation.
+  - Documentation de structure (`matching-cv-ao/README.md`, `matching-cv-ao/scopes/README.md`)
+    mise à jour.
+  - Invariants préservés : validation humaine granulaire, piste d'audit, communication
+    JSON↔Markdown — le scope n'en désactive aucun.
+
 ## [v1.0-homelab] — 2026-09-04
 
 Jalon **Homelab** : le workflow d'orchestration Homelab passe d'une forme narrative unique

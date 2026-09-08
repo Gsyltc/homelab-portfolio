@@ -12,11 +12,11 @@ review_class: none
 review_artifact: ""
 human_gate: explicit
 produces: [cv-mis-a-jour]
-consumes: [{artifact: livraison-finale, required: true}]
+consumes: [{artifact: livraison-finale, required: false}, {artifact: cv-profils, required: false}]
 requires_stage: [livraison]
 sensors: []
-scopes: [standard]
-inputs: "Demande de mise à jour CV + livraison effectuée"
+scopes: [standard, format-cv]
+inputs: "Demande de mise à jour CV + livraison effectuée (scope standard) ou CV extraits/validés (scope format-cv)"
 outputs: "CV mis à jour"
 ---
 
@@ -24,6 +24,12 @@ outputs: "CV mis à jour"
 
 ## Objectif
 Mettre à jour les CV des collaborateurs si l'humain le demande (ajout de compétences, mise à jour d'expérience issue du matching).
+
+## Prérequis selon le scope
+- **Scope `standard`** (et `complex` / `express`) : le stage dépend de la **livraison finale** du matching (`livraison-finale`, produit par `livraison`) — comportement inchangé.
+- **Scope `format-cv`** : `livraison` est **hors périmètre**. Le prérequis `livraison-finale` est donc **neutralisé** ; la mise à jour s'appuie sur les **CV extraits/validés** (`cv-profils`, produit par `extraction-cv`). Le champ `requires_stage: [livraison]` ne s'applique **pas** sous ce scope.
+
+C'est pourquoi `consumes` déclare les deux artefacts en `required: false` : sous `standard` c'est `livraison-finale` qui alimente l'étape, sous `format-cv` c'est `cv-profils`.
 
 ## Steps
 ### Step 1 — Demande de mise à jour
