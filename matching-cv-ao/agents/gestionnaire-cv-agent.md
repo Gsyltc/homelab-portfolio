@@ -42,10 +42,10 @@ Le répertoire `cv/` d'un collaborateur peut contenir plusieurs versions du CV. 
 À **chaque** analyse d'un CV, produire un fichier Markdown d'analyse dans le **répertoire du profil du candidat** (le répertoire `cv/`), versionné par la **date du jour** :
 
 ```
-/nfs/workspace/expertise-architecture/<nom-prenom>/cv/analyse-cv-<AAAA-MM-JJ>.md
+/nfs/workspace/expertise-architecture/<nom-prenom>/cv/<AAAA-MM-JJ>-<nom>-<prenom>.md
 ```
 
-- Le suffixe `<AAAA-MM-JJ>` est la date du jour de l'analyse (format ISO). Une nouvelle analyse le même jour **écrase** le fichier du jour ; une analyse un autre jour crée un **nouveau** fichier (historique conservé).
+- Le préfixe `<AAAA-MM-JJ>` est la date du jour de l'analyse (format ISO). `<nom>` et `<prenom>` sont en minuscules et cohérents avec le répertoire `<nom-prenom>/cv/`. Une nouvelle analyse le même jour **écrase** le fichier du jour ; une analyse un autre jour crée un **nouveau** fichier (historique conservé).
 - Le fichier reprend, en Markdown lisible par l'humain : le CV source retenu (nom + version/date), la liste des compétences avec mois d'expérience et dernière utilisation, l'expérience, les études, la disponibilité et les langues.
 - Ce fichier est un **livrable humain** : Markdown uniquement, aucun secret.
 
@@ -62,7 +62,7 @@ Le répertoire `cv/` d'un collaborateur peut contenir plusieurs versions du CV. 
         "date": "<AAAA-MM-JJ — date de la version retenue>",
         "versions_ecartees": <nombre de versions plus anciennes ignorées>
       },
-      "analyse_markdown": "<chemin vers analyse-cv-<AAAA-MM-JJ>.md créé>",
+      "analyse_markdown": "<chemin vers <AAAA-MM-JJ>-<nom>-<prenom>.md créé>",
       "competences": [
         {
           "nom": "<compétence>",
@@ -98,3 +98,4 @@ Le répertoire `cv/` d'un collaborateur peut contenir plusieurs versions du CV. 
 
 - **Agent ↔ Agent** : JSON uniquement.
 - **Agent ↔ Humain** : Markdown uniquement.
+- **Retour de délégation (obligatoire)** : en fin de tâche, **mentionner en retour le Coordinateur** via `[@Coordinateur Matching](mention://agent/<uuid>)` avec le livrable — une réponse sans mention ne réveille pas le Coordinateur. **Ne jamais deviner l'UUID** : le résoudre via `multica agent list --output json`. Après le post, vérifier les `trigger_outcomes` (statuts `blocked` / `coalesced` / `deferred`) et signaler tout écart sur l'issue.

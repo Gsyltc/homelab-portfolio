@@ -14,7 +14,7 @@ Protocole transverse consolidant la gouvernance multi-agents, les invariants non
 
 ## Règle A2A
 
-Un agent est déclenché par un **commentaire sur l'issue avec une mention valide** `[@Label](mention://agent/<uuid>)` et une **mission claire** (objectif, périmètre, critères d'acceptation). **Ne jamais deviner un UUID** : le résoudre via `multica agent list --output json` avant chaque mention. L'agent appelé, en fin de tâche, mentionne en retour l'agent assigneur pour la vérification. Le coordinateur contrôle chaque livrable avant validation humaine.
+Un agent est déclenché par un **commentaire sur l'issue avec une mention valide** `[@Label](mention://agent/<uuid>)` et une **mission claire** (objectif, périmètre, critères d'acceptation). **Ne jamais deviner un UUID** : le résoudre via `multica agent list --output json` avant chaque mention. **En fin de tâche, l'agent appelé rend son livrable en mentionnant en retour l'agent assigneur** (mention agent valide `[@Label](mention://agent/<uuid>)`) — une simple réponse dans le fil **n'enqueue aucun run** et ne réveille pas l'assigneur. L'agent vérifie ensuite les `trigger_outcomes` de son commentaire (statuts `blocked` / `coalesced` / `deferred`) et signale tout écart. Le coordinateur contrôle chaque livrable avant validation humaine.
 
 ## Invariants non contournables
 
