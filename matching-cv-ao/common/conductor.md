@@ -176,6 +176,6 @@ sequenceDiagram
 - [`protocols/governance-security.md`](protocols/governance-security.md) — gouvernance A2A, invariants, garde-fous.
 - [`protocols/reviewer.md`](protocols/reviewer.md) — protocole de revue (cohérence).
 - [`protocols/scopes-and-axes.md`](protocols/scopes-and-axes.md) — scopes, axes Depth, matrice stage × scope.
-- [`scopes/`](scopes/) — source d'identité des scopes (standard, complex, express).
-- [`sensors/`](sensors/) — verification gates aux frontières de phases.
+- [`scopes/`](../scopes/) — source d'identité des scopes (standard, complex, express).
+- [`sensors/`](../sensors/) — verification gates aux frontières de phases.
 - [`stages/`](stages/) — fiches de stage des 5 phases.
