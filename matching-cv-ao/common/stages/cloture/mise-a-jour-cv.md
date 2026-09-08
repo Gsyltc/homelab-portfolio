@@ -36,7 +36,7 @@ C'est pourquoi `consumes` déclare les deux artefacts en `required: false` : sou
 Si l'humain a demandé une mise à jour de CV, déléguer au Gestionnaire CV.
 
 ### Step 2 — Délégation au Gestionnaire CV
-Mentionner le Gestionnaire CV avec mission claire : mettre à jour les CV concernés avec les informations validées lors du matching.
+Mentionner le Gestionnaire CV avec mission claire : mettre à jour les CV concernés avec les informations validées lors du matching. **En fin de tâche, le Gestionnaire CV rend son résultat en mentionnant en retour le Coordinateur** `[@Coordinateur Matching](mention://agent/180b421f-e783-4eba-869e-6907b59e56a6)` (mention agent valide, pas une simple réponse), puis vérifie les `trigger_outcomes`.
 
 ### Step 3 — Validation explicite
 Présenter les modifications effectuées à l'humain pour validation explicite avant finalisation.
