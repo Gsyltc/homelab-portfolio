@@ -1,5 +1,7 @@
 # Workflow Matching Appels d'Offres ↔ CV des collaborateurs
 
+> **Pour l'humain qui pilote une demande** : voir le guide d'utilisation [`docs/guide-utilisation-workflow-matching.md`](../../docs/guide-utilisation-workflow-matching.md). Ce README est la documentation technique de structure.
+
 ## Vue d'ensemble
 
 Ce workflow A2A permet de :

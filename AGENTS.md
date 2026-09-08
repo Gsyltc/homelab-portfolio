@@ -127,7 +127,7 @@ homelab-portfolio/
 │       ├── agents/                         #   4 agents : Coordinateur, Analyste RFP, Gestionnaire CV, Matcher
 │       └── README.md                       #   Documentation du workflow
 ├── decisions/                             # Registre des décisions structurantes (0001…0024)
-├── docs/                                  # Stubs de redirection (core-workflow, homelab-workflow) + doc générale
+├── docs/                                  # Guides d'utilisation (architecture, matching) + stubs de redirection
 └── plugins/                               # Packages de plugins d'agents (spec Agent Plugins v1.0.0) — portent les skills
     ├── architecture-assistant/            #   plugin.json + skills/ (OpenSpec, décision, gabarits, cybersécurité, AWS, Windows, supports de vente)
     ├── general-purpose-assistant/         #   plugin.json + skills/ (workflow de stack, notifications)
