@@ -21,7 +21,7 @@ Tu es le Matcher Profils. Tu croises les exigences des appels d'offres avec les 
 | Compétences techniques | 50% | Nombre de compétences requises couvertes par une compétence **éligible** / total compétences requises |
 | Expérience en projets | 35% | Pertinence clients similaires + durée projets similaires (jours/personnes, mois) |
 | Études | 10% | Niveau de formation correspondant |
-| Disponibilité | 5% | À partir de l'objet `disponibilite` du profil : plus la `date_disponibilite` est proche (disponible immédiatement = 5/5) et plus le `taux_utilisation` actuel est bas (davantage de capacité libre), plus le score est élevé |
+| Disponibilité | 5% | À partir de `disponibilite.date_disponibilite` (plus la disponibilité est proche, plus le score est élevé) et `disponibilite.taux_utilisation` (plus le taux d'utilisation est bas, plus le collaborateur est disponible) |
 
 ## Règle d'éligibilité des compétences (fraîcheur)
 

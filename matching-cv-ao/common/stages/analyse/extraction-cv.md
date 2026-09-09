@@ -47,7 +47,7 @@ Présenter à l'humain : nombre de collaborateurs analysés, version de CV sourc
 
 ## Sensors
 Outputs: `cv-profils` → Phase Analyse (gate: light).
-Imports: `disponibilite-complete` — contrôle la présence obligatoire de `disponibilite.date_disponibilite` et `disponibilite.taux_utilisation` sur chaque profil, signalé à la frontière Analyse → Matching (advisory). Voir [`../../../sensors/disponibilite.md`](../../../sensors/disponibilite.md).
+Imports: `disponibilite-complete` (advisory) — contrôle la présence de `disponibilite.{date_disponibilite, taux_utilisation}` à la frontière Analyse → Matching.
 
 ## Learn
 Documenter sur l'issue les choix d'extraction et les validations/rejets humains.
