@@ -85,11 +85,19 @@ La délégation se fait par **mention** sur l'issue ; l'agent sollicité répond
 
 | Élément | Emplacement |
 | --- | --- |
-| CV des collaborateurs | `/nfs/workspace/expertise-architecture/<nom-prenom>/cv` |
+| CV sources des collaborateurs (PDF, DOCX) | `/nfs/workspace/expertise-architecture/<nom-prenom>/cv/originaux/` |
+| Anciennes fiches d'analyse Markdown | `/nfs/workspace/expertise-architecture/<nom-prenom>/cv/archives/` |
+| Fiche d'analyse Markdown courante + JSON versionnés | Racine de `/nfs/workspace/expertise-architecture/<nom-prenom>/cv/` |
 | Résumés AO | `/nfs/workspace/expertise-architecture/ao/<client>/<titre-ao>/` |
 | Grille d'évaluation | Fournie par l'humain — **jamais inventée** |
 
 Ces chemins sont créés **si absents** par l'Analyste RFP, toujours au bon endroit (client = nom du client, titre-ao = slug du titre).
+
+> **Organisation stricte du répertoire `cv/`** : déposez les CV sources dans `cv/originaux/`. À chaque analyse,
+> le Gestionnaire CV produit une fiche Markdown datée **du jour** à la racine de `cv/` (les anciennes fiches sont
+> déplacées dans `cv/archives/`) et un JSON d'analyse **versionné** (`<nom>-<prenom>-<AAAA-MM-JJ>.json`). Seule la
+> **dernière version JSON** est croisée avec un AO ; le fichier retenu et les versions écartées sont journalisés
+> sur l'issue (piste d'audit).
 
 ---
 

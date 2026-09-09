@@ -8,6 +8,24 @@ ce fichier en donne la lecture chronologique côté produit.
 
 ## [Non publié]
 
+### Changed
+- **Organisation stricte du répertoire `cv/`** et **versionnage des livrables** dans le workflow
+  **Matching CV ↔ AO** (`matching-cv-ao/`) — évolution **documentaire** des fiches d'agent et de stage,
+  invariants préservés (validation humaine, piste d'audit, communication JSON↔Markdown) :
+  - **CV sources dans `cv/originaux/`** : les CV sources (PDF, DOCX) sont placés dans le sous-répertoire
+    `originaux/` ; la sélection de la « dernière version » du CV source s'y effectue désormais.
+  - **Anciennes fiches Markdown dans `cv/archives/`** : à chaque nouvelle analyse, les fiches d'analyse
+    Markdown antérieures sont **déplacées** dans `archives/` ; seule la fiche du jour reste à la racine de `cv/`.
+  - **JSON d'analyse versionnés** (`<nom>-<prenom>-<AAAA-MM-JJ>.json`, jamais écrasés) : **seule la dernière
+    version JSON** est croisée avec un AO. Règle de sélection explicite (date dans le nom, à défaut mtime) et
+    **journalisation d'audit** (fichier retenu + versions écartées) sur l'issue.
+  - **Date de dernière modification = date du jour** : la date reportée dans les livrables/analyses est
+    toujours la date du jour de l'analyse (ISO `AAAA-MM-JJ`).
+  - Fiches mises à jour : `matching-cv-ao/agents/gestionnaire-cv-agent.md` (structure, versionnage CV/JSON,
+    analyse versionnée, format de sortie JSON), `common/stages/initialisation/chargement-cv.md`,
+    `common/stages/analyse/extraction-cv.md`, `common/stages/cloture/mise-a-jour-cv.md`,
+    `scopes/format-cv.md`, `matching-cv-ao/README.md` et `docs/guide-utilisation-workflow-matching.md`.
+
 ### Added
 - **Scope `format-cv`** dans le workflow **Matching CV ↔ AO** (`matching-cv-ao/`) — parcours
   **CV seul** : chargement, extraction/formatage/archivage (fiche d'analyse Markdown versionnée)
