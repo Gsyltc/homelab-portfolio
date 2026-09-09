@@ -87,9 +87,9 @@ La délégation se fait par **mention** sur l'issue ; l'agent sollicité répond
 | Élément | Emplacement |
 | --- | --- |
 | CV sources (PDF, DOCX) | **Pièces jointes de l'issue** — analysés puis **supprimés** (non conservés) |
-| Anciennes fiches d'analyse Markdown | `/nfs/workspace/expertise-architecture/<nom-prenom>/cv/archives/` |
-| Fiche d'analyse Markdown courante + JSON versionnés | Racine de `/nfs/workspace/expertise-architecture/<nom-prenom>/cv/` |
-| Résumés AO | `/nfs/workspace/expertise-architecture/ao/<client>/<titre-ao>/` |
+| Anciennes fiches d'analyse Markdown | `/nfs/workspace/datas/expertise-architecture/collaborateurs/<nom-prenom>/cv/archives/` |
+| Fiche d'analyse Markdown courante + JSON versionnés | Racine de `/nfs/workspace/datas/expertise-architecture/collaborateurs/<nom-prenom>/cv/` |
+| Résumés AO | `/nfs/workspace/datas/expertise-architecture/ao/<client>/<titre-ao>/` |
 | Grille d'évaluation | Fournie par l'humain — **jamais inventée** |
 
 Ces chemins sont créés **si absents** par l'Analyste RFP, toujours au bon endroit (client = nom du client, titre-ao = slug du titre).
