@@ -73,6 +73,9 @@ ${ROOT_DIRECTORY}/<nom-prenom>/cv/<nom>-<prenom>-<AAAA-MM-JJ>.json
   2. à défaut (dates égales), la date de dernière modification du fichier (mtime la plus récente).
   Les versions antérieures ne sont **jamais** croisées avec un AO.
 - **Journalisation (audit)** : journaliser sur l'issue le **fichier JSON retenu** (nom + date) et la **liste des versions écartées**, pour la piste d'audit.
+- **CV utilisés par défaut dans les scopes `standard` / `complex` / `express`** : les CV pris en compte par défaut sont issus de la **dernière analyse produite** (jamais des sources supprimés) :
+  - **flux entre agents (A2A)** → la **dernière version JSON** (`<nom>-<prenom>-<AAAA-MM-JJ>.json`) est le seul artefact croisé avec un AO par le Matcher Profils ;
+  - **flux de gate avec l'humain** → la **fiche d'analyse Markdown** courante (du jour) est l'artefact présenté aux points de validation.
 
 ## Format de sortie (JSON → Agent)
 

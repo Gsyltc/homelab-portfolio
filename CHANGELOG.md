@@ -23,6 +23,12 @@ ce fichier en donne la lecture chronologique côté produit.
     **journalisation d'audit** (fichier retenu + versions écartées) sur l'issue.
   - **Date de dernière modification = date du jour** : la date reportée dans les livrables/analyses est
     toujours la date du jour de l'analyse (ISO `AAAA-MM-JJ`).
+  - **CV utilisés par défaut en `standard` / `complex` / `express`** : les CV pris en compte par défaut sont
+    issus de la **dernière analyse produite** (jamais des sources supprimés) — **dernière version JSON** pour le
+    flux entre agents (seule croisée avec un AO par le Matcher) et **fiche Markdown** courante pour le flux de
+    gate avec l'humain. Précisé dans `scopes/standard.md`, `scopes/complex.md`, `scopes/express.md`,
+    `agents/gestionnaire-cv-agent.md`, `agents/matcher-profils-agent.md` et
+    `common/stages/matching/croisement-profils.md`.
   - Fiches mises à jour : `matching-cv-ao/agents/gestionnaire-cv-agent.md` (structure, versionnage CV/JSON,
     analyse versionnée, format de sortie JSON), `common/stages/initialisation/chargement-cv.md`,
     `common/stages/analyse/extraction-cv.md`, `common/stages/cloture/mise-a-jour-cv.md`,
