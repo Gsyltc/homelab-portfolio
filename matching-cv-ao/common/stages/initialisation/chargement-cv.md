@@ -17,27 +17,32 @@ requires_stage: [reception-ao]
 sensors: []
 scopes: [standard, format-cv]
 inputs: "Confirmation de réception AO"
-outputs: "Liste des CV disponibles (chemins `cv/originaux/`)"
+outputs: "Liste des CV disponibles (sources à traiter dans `cv/originaux/` + analyses existantes)"
 ---
 
 # Chargement des CV
 
 ## Objectif
-Vérifier l'existence et la disponibilité des CV sources des collaborateurs dans le sous-répertoire `cv/originaux/` du répertoire d'expertise.
+Recenser, pour chaque collaborateur, les CV **sources à traiter** déposés dans le sous-répertoire `cv/originaux/` (dépôt temporaire, vidé après extraction) et les **analyses déjà produites** (JSON versionnés à la racine de `cv/`). Les originaux ne sont pas conservés : un collaborateur sans source dans `cv/originaux/` mais disposant d'une analyse a déjà été traité.
 
 ## Steps
 ### Step 1 — Scan du répertoire CV
-Scanner le répertoire `${ROOT_DIRECTORY}/` pour identifier les collaborateurs disposant d'un sous-répertoire `cv/`. Pour chacun, cibler le sous-répertoire **`cv/originaux/`** qui contient les CV sources (PDF, DOCX). Lister les chemins `cv/originaux/` disponibles.
+Scanner le répertoire `${ROOT_DIRECTORY}/` pour identifier les collaborateurs disposant d'un sous-répertoire `cv/`. Pour chacun, relever :
+- les **CV sources à traiter** présents dans **`cv/originaux/`** (PDF, DOCX) — dépôt temporaire ;
+- les **analyses existantes** (JSON versionnés `<nom>-<prenom>-<AAAA-MM-JJ>.json` à la racine de `cv/`).
 
 ### Step 2 — Vérification de complétude
-Pour chaque collaborateur trouvé, vérifier que le répertoire **`cv/originaux/`** contient au moins un fichier CV source. Signaler les collaborateurs sans CV source.
+Pour chaque collaborateur, déterminer l'état :
+- **source à traiter** : au moins un fichier dans `cv/originaux/` → sera lu puis **supprimé** par l'extraction ;
+- **déjà analysé** : aucun source dans `cv/originaux/` mais au moins un JSON d'analyse présent → l'original a déjà été traité et supprimé (comportement normal) ;
+- **manquant** : ni source ni analyse → signaler le collaborateur.
 
-Lorsque `cv/originaux/` contient **plusieurs versions**, identifier la **dernière version** (date encodée dans le nom du fichier ; à défaut, mtime la plus récente). C'est **cette seule version** qui sera analysée et croisée avec l'AO ; les versions antérieures sont ignorées.
+Si plusieurs fichiers sources sont présents dans `cv/originaux/`, ils sont tous traités comme sources de l'analyse à venir (aucune conservation d'historique d'originaux).
 
 ### Step 3 — Documenter l'inventaire
 Poster un commentaire sur l'issue avec :
-- Nombre de CV trouvés
-- Liste des collaborateurs et chemins, avec la **version retenue** (fichier + date) et le nombre de versions écartées
+- Nombre de collaborateurs et, pour chacun, l'état (source à traiter / déjà analysé / manquant)
+- Pour les sources à traiter : liste des fichiers présents dans `cv/originaux/` (nom + date) — trace d'audit avant suppression
 - Collaborateurs manquants (le cas échéant)
 
 ## Sensors

@@ -12,8 +12,10 @@ ce fichier en donne la lecture chronologique côté produit.
 - **Organisation stricte du répertoire `cv/`** et **versionnage des livrables** dans le workflow
   **Matching CV ↔ AO** (`matching-cv-ao/`) — évolution **documentaire** des fiches d'agent et de stage,
   invariants préservés (validation humaine, piste d'audit, communication JSON↔Markdown) :
-  - **CV sources dans `cv/originaux/`** : les CV sources (PDF, DOCX) sont placés dans le sous-répertoire
-    `originaux/` ; la sélection de la « dernière version » du CV source s'y effectue désormais.
+  - **CV sources dans `cv/originaux/` (dépôt temporaire) et supprimés après extraction** : les CV sources
+    (PDF, DOCX) sont déposés dans `cv/originaux/`, lus pour l'extraction puis **supprimés** — **les originaux
+    ne sont pas conservés**. Leur nom/date sont journalisés sur l'issue **avant suppression** (piste d'audit) ;
+    le champ JSON `source_cv` (`fichier`, `date`, `conserve: false`) en garde la trace.
   - **Anciennes fiches Markdown dans `cv/archives/`** : à chaque nouvelle analyse, les fiches d'analyse
     Markdown antérieures sont **déplacées** dans `archives/` ; seule la fiche du jour reste à la racine de `cv/`.
   - **JSON d'analyse versionnés** (`<nom>-<prenom>-<AAAA-MM-JJ>.json`, jamais écrasés) : **seule la dernière
