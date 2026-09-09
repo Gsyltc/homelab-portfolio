@@ -60,3 +60,12 @@ Rapport de vérification — <frontière>   (source : matching-cv-ao/sensors/gat
 - absence-orphelin : ✅ | ⚠️ <profil orphelin> | ⛔ <indisponible>
 - disponibilite-complete : ✅ | ⚠️ <profil sans disponibilité complète> | ⛔ <indisponible>   (frontière Analyse → Matching ; détail : matching-cv-ao/sensors/disponibilite.md)
 ```
+
+À la frontière **Analyse → Matching**, le check `disponibilite-complete` est reporté (détail dans `sensors/disponibilite.md`) :
+
+```
+Rapport de vérification — Analyse → Matching   (source : matching-cv-ao/sensors/gates.md)
+- artefacts-presents : ✅ | ⚠️ <artefact manquant> | ⛔ <indisponible>
+- liaison-tracabilite : ✅ | ⚠️ <exigence sans profil> | ⛔ <indisponible>
+- disponibilite-complete : ✅ | ⚠️ <collaborateur sans date_disponibilite / taux_utilisation> | ⛔ <indisponible>
+```
