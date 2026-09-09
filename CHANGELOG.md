@@ -12,6 +12,13 @@ ce fichier en donne la lecture chronologique côté produit.
 - **Organisation stricte du répertoire `cv/`** et **versionnage des livrables** dans le workflow
   **Matching CV ↔ AO** (`matching-cv-ao/`) — évolution **documentaire** des fiches d'agent et de stage,
   invariants préservés (validation humaine, piste d'audit, communication JSON↔Markdown) :
+  - **Règle de sélection de la source CV (explicite)** : si un CV **PDF/DOCX est fourni en pièce jointe de
+    l'issue**, il est extrait (nouvelle version) ; si une analyse nécessite un CV (matching AO/CV) et qu'**aucun
+    CV n'est fourni**, la **dernière version déjà extraite** est utilisée — **JSON** en flux entre agents (A2A),
+    **Markdown** si un fichier doit être téléchargé pour l'humain ; ni pièce jointe ni analyse → CV **manquant**.
+    Documentée dans `agents/gestionnaire-cv-agent.md` (§ Règle de sélection de la source CV) et reflétée dans
+    `common/stages/initialisation/chargement-cv.md`, `common/stages/analyse/extraction-cv.md`,
+    `common/stages/matching/croisement-profils.md`, `scopes/standard.md`, `scopes/complex.md`, `scopes/express.md`.
   - **CV sources fournis en pièces jointes de l'issue et supprimés après extraction** : les CV sources
     (PDF, DOCX) sont **fournis en pièces jointes de l'issue**, récupérés via `multica attachment` pour
     l'analyse puis **supprimés** — **les originaux ne sont pas conservés** ni stockés dans `cv/`. Leur nom est

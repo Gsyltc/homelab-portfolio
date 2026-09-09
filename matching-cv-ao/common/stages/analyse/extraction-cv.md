@@ -25,6 +25,8 @@ outputs: "Profils CV structurés (JSON versionné, dernière version) + fiches d
 ## Objectif
 Récupérer les CV sources des collaborateurs **fournis en pièces jointes de l'issue** (via `multica attachment`), en extraire les informations structurées (compétences avec ancienneté, expérience, études, disponibilité), produire les livrables versionnés dans `cv/`, puis **supprimer la copie de travail téléchargée** (les originaux ne sont **pas conservés**). La date de dernière modification reportée est **toujours la date du jour**.
 
+> **Extraction conditionnée par la fourniture d'un CV** (voir la règle de sélection de la source CV dans [`../../../agents/gestionnaire-cv-agent.md`](../../../agents/gestionnaire-cv-agent.md)) : l'extraction ne s'exécute que **pour les collaborateurs dont un CV PDF/DOCX est joint à l'issue**. Pour un collaborateur sans pièce jointe, **aucune nouvelle extraction** n'est faite : le matching réutilisera la **dernière version déjà extraite** (JSON en flux A2A, Markdown si un fichier doit être téléchargé pour l'humain).
+
 ## Steps
 ### Step 1 — Délégation au Gestionnaire CV
 Mentionner le Gestionnaire CV avec mission claire :

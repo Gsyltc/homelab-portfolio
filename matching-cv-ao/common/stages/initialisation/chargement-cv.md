@@ -30,18 +30,18 @@ Recenser les CV **sources à traiter** — fournis en **pièces jointes de l'iss
 - **Sources à traiter** : lister les **pièces jointes de l'issue** (PDF, DOCX) fournies pour analyse (via `multica attachment --help` pour la récupération ; ne jamais ouvrir une URL de ressource Multica directement).
 - **Analyses existantes** : scanner `${ROOT_DIRECTORY}/` pour identifier, par collaborateur disposant d'un répertoire `cv/`, les analyses présentes (JSON versionnés `<nom>-<prenom>-<AAAA-MM-JJ>.json` à la racine de `cv/`).
 
-### Step 2 — Vérification de complétude
-Déterminer l'état par collaborateur concerné :
-- **source à traiter** : une pièce jointe CV est fournie sur l'issue → sera récupérée, analysée, puis sa copie de travail **supprimée** ;
-- **déjà analysé** : aucune nouvelle pièce jointe mais au moins un JSON d'analyse présent → l'original a déjà été traité et supprimé (comportement normal) ;
-- **manquant** : ni pièce jointe ni analyse → signaler le collaborateur.
+### Step 2 — Vérification de complétude (règle de sélection de la source CV)
+Déterminer l'état par collaborateur concerné, selon la **règle de sélection de la source CV** (voir [`../../../agents/gestionnaire-cv-agent.md`](../../../agents/gestionnaire-cv-agent.md)) :
+- **à extraire** : une pièce jointe CV (PDF/DOCX) est fournie sur l'issue → elle **prime** ; elle sera récupérée, analysée (nouvelle version), puis sa copie de travail **supprimée** ;
+- **dernière version extraite** : aucune nouvelle pièce jointe mais au moins un JSON d'analyse présent → réutiliser la **dernière version déjà extraite** pour le matching (JSON pour le flux A2A ; Markdown si le fichier doit être téléchargé pour l'humain). Comportement normal, l'original ayant déjà été traité et supprimé ;
+- **manquant** : ni pièce jointe ni analyse antérieure → signaler le collaborateur (pas de matching possible pour lui).
 
 Si plusieurs pièces jointes sont fournies, elles sont toutes traitées comme sources de l'analyse à venir (aucune conservation d'historique d'originaux).
 
 ### Step 3 — Documenter l'inventaire
 Poster un commentaire sur l'issue avec :
-- Nombre de collaborateurs et, pour chacun, l'état (source à traiter / déjà analysé / manquant)
-- Pour les sources à traiter : liste des pièces jointes de l'issue (nom) — trace d'audit avant suppression
+- Nombre de collaborateurs et, pour chacun, l'état (à extraire / dernière version extraite / manquant)
+- Pour les CV à extraire : liste des pièces jointes de l'issue (nom) — trace d'audit avant suppression
 - Collaborateurs manquants (le cas échéant)
 
 ## Sensors
