@@ -16,16 +16,18 @@ profils, ni remplissage de grille d'évaluation**.
 
 Seuls trois stages s'exécutent sous ce scope :
 
-- **`chargement-cv`** (Initialisation) — repérage / inventaire des CV sources disponibles dans `cv/originaux/`.
-- **`extraction-cv`** (Analyse) — lecture des CV sources (`cv/originaux/`), extraction des informations
+- **`chargement-cv`** (Initialisation) — repérage / inventaire des CV sources à traiter (pièces jointes de l'issue) et des analyses existantes.
+- **`extraction-cv`** (Analyse) — récupération des CV sources depuis les **pièces jointes de l'issue**, extraction des informations
   structurées, production de la **fiche d'analyse Markdown versionnée** à la racine de `cv/` (anciennes
-  fiches déplacées dans `cv/archives/`) et du **JSON d'analyse versionné** — le tout daté du **jour**.
+  fiches déplacées dans `cv/archives/`) et du **JSON d'analyse versionné**, puis **suppression de la copie de
+  travail téléchargée** — le tout daté du **jour**.
 - **`mise-a-jour-cv`** (Clôture) — mise à jour des CV, dans la même arborescence stricte.
 
 > **Organisation stricte du répertoire `cv/`** (voir la fiche de l'agent
-> [`../agents/gestionnaire-cv-agent.md`](../agents/gestionnaire-cv-agent.md)) : `cv/originaux/`
-> (sources PDF/DOCX) · `cv/archives/` (anciennes fiches Markdown) · fiche Markdown du jour et
-> JSON versionnés à la racine. La date de dernière modification reportée est **toujours la date du jour**.
+> [`../agents/gestionnaire-cv-agent.md`](../agents/gestionnaire-cv-agent.md)) : les **sources PDF/DOCX** sont
+> **fournis en pièces jointes de l'issue** et **supprimés après extraction** (non conservés, non stockés dans
+> `cv/`) · `cv/archives/` (anciennes fiches Markdown) · fiche Markdown du jour et JSON versionnés à la racine.
+> La date de dernière modification reportée est **toujours la date du jour**.
 
 Depth par défaut : `standard`. Aucun `review_cap` — pas d'abaissement au niveau du scope.
 

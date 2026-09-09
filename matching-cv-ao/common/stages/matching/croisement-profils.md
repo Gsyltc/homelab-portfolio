@@ -16,18 +16,20 @@ consumes: [{artifact: ao-profils-recherches, required: true}, {artifact: cv-prof
 requires_stage: [parse-ao, extraction-cv]
 sensors: []
 scopes: [standard]
-inputs: "Exigences AO + profils CV"
+inputs: "Exigences AO + profils CV (dernière version JSON, `cv-profils`)"
 outputs: "Scores et classement des profils (JSON)"
 ---
 
 # Croisement profils ↔ exigences
 
 ## Objectif
-Croiser les exigences de l'AO avec les profils des collaborateurs et calculer un score pondéré pour chaque profil.
+Croiser les exigences de l'AO avec les profils des collaborateurs et calculer un score pondéré pour chaque profil. Dans les scopes `standard`, `complex` et `express`, l'artefact CV croisé est la **dernière version JSON** de chaque collaborateur (`<nom>-<prenom>-<AAAA-MM-JJ>.json`, `cv-profils`) — flux entre agents ; les versions JSON antérieures et les fichiers sources (supprimés après extraction) ne sont jamais utilisés.
+
+> **Source du CV pour le matching** : si un CV PDF/DOCX a été fourni dans l'issue pour un collaborateur, le stage `extraction-cv` en a d'abord produit une nouvelle version JSON — c'est elle qui est croisée. Si aucun CV n'a été fourni, le matching utilise directement la **dernière version JSON déjà extraite** (flux A2A). Voir la règle de sélection de la source CV dans [`../../../agents/gestionnaire-cv-agent.md`](../../../agents/gestionnaire-cv-agent.md).
 
 ## Steps
 ### Step 1 — Délégation au Matcher Profils
-Mentionner le Matcher Profils avec mission claire : croiser les profils CV avec les exigences AO, calculer le score pondéré (compétences 50%, expérience 35%, études 10%, disponibilité 5%), classer par score décroissant. **En fin de tâche, le Matcher rend son résultat en mentionnant en retour le Coordinateur** `[@Coordinateur Matching](mention://agent/<UUID-COORDINATEUR>)` (mention agent valide, pas une simple réponse), puis vérifie les `trigger_outcomes`. Ne jamais deviner ni coder en dur l'UUID : le résoudre à chaque fois via `multica agent list --output json` et l'injecter dans la mention.
+Mentionner le Matcher Profils avec mission claire : croiser **la dernière version JSON** de chaque profil CV (`cv-profils`) avec les exigences AO, calculer le score pondéré (compétences 50%, expérience 35%, études 10%, disponibilité 5%), classer par score décroissant. **En fin de tâche, le Matcher rend son résultat en mentionnant en retour le Coordinateur** `[@Coordinateur Matching](mention://agent/<UUID-COORDINATEUR>)` (mention agent valide, pas une simple réponse), puis vérifie les `trigger_outcomes`. Ne jamais deviner ni coder en dur l'UUID : le résoudre à chaque fois via `multica agent list --output json` et l'injecter dans la mention.
 
 > **Fraîcheur des compétences** : le Matcher doit **exclure du calcul de compatibilité toute compétence non utilisée depuis plus de 10 ans** (champ `derniere_utilisation`). Une exigence couverte uniquement par une compétence périmée est considérée comme **non couverte**.
 

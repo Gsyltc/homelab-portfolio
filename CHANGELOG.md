@@ -12,8 +12,18 @@ ce fichier en donne la lecture chronologique côté produit.
 - **Organisation stricte du répertoire `cv/`** et **versionnage des livrables** dans le workflow
   **Matching CV ↔ AO** (`matching-cv-ao/`) — évolution **documentaire** des fiches d'agent et de stage,
   invariants préservés (validation humaine, piste d'audit, communication JSON↔Markdown) :
-  - **CV sources dans `cv/originaux/`** : les CV sources (PDF, DOCX) sont placés dans le sous-répertoire
-    `originaux/` ; la sélection de la « dernière version » du CV source s'y effectue désormais.
+  - **Règle de sélection de la source CV (explicite)** : si un CV **PDF/DOCX est fourni en pièce jointe de
+    l'issue**, il est extrait (nouvelle version) ; si une analyse nécessite un CV (matching AO/CV) et qu'**aucun
+    CV n'est fourni**, la **dernière version déjà extraite** est utilisée — **JSON** en flux entre agents (A2A),
+    **Markdown** si un fichier doit être téléchargé pour l'humain ; ni pièce jointe ni analyse → CV **manquant**.
+    Documentée dans `agents/gestionnaire-cv-agent.md` (§ Règle de sélection de la source CV) et reflétée dans
+    `common/stages/initialisation/chargement-cv.md`, `common/stages/analyse/extraction-cv.md`,
+    `common/stages/matching/croisement-profils.md`, `scopes/standard.md`, `scopes/complex.md`, `scopes/express.md`.
+  - **CV sources fournis en pièces jointes de l'issue et supprimés après extraction** : les CV sources
+    (PDF, DOCX) sont **fournis en pièces jointes de l'issue**, récupérés via `multica attachment` pour
+    l'analyse puis **supprimés** — **les originaux ne sont pas conservés** ni stockés dans `cv/`. Leur nom est
+    journalisé sur l'issue **avant suppression** (piste d'audit) ; le champ JSON `source_cv`
+    (`fichier`, `provenance: "issue-attachment"`, `conserve: false`) en garde la trace.
   - **Anciennes fiches Markdown dans `cv/archives/`** : à chaque nouvelle analyse, les fiches d'analyse
     Markdown antérieures sont **déplacées** dans `archives/` ; seule la fiche du jour reste à la racine de `cv/`.
   - **JSON d'analyse versionnés** (`<nom>-<prenom>-<AAAA-MM-JJ>.json`, jamais écrasés) : **seule la dernière
@@ -21,6 +31,12 @@ ce fichier en donne la lecture chronologique côté produit.
     **journalisation d'audit** (fichier retenu + versions écartées) sur l'issue.
   - **Date de dernière modification = date du jour** : la date reportée dans les livrables/analyses est
     toujours la date du jour de l'analyse (ISO `AAAA-MM-JJ`).
+  - **CV utilisés par défaut en `standard` / `complex` / `express`** : les CV pris en compte par défaut sont
+    issus de la **dernière analyse produite** (jamais des sources supprimés) — **dernière version JSON** pour le
+    flux entre agents (seule croisée avec un AO par le Matcher) et **fiche Markdown** courante pour le flux de
+    gate avec l'humain. Précisé dans `scopes/standard.md`, `scopes/complex.md`, `scopes/express.md`,
+    `agents/gestionnaire-cv-agent.md`, `agents/matcher-profils-agent.md` et
+    `common/stages/matching/croisement-profils.md`.
   - Fiches mises à jour : `matching-cv-ao/agents/gestionnaire-cv-agent.md` (structure, versionnage CV/JSON,
     analyse versionnée, format de sortie JSON), `common/stages/initialisation/chargement-cv.md`,
     `common/stages/analyse/extraction-cv.md`, `common/stages/cloture/mise-a-jour-cv.md`,

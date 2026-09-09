@@ -17,27 +17,31 @@ requires_stage: [reception-ao]
 sensors: []
 scopes: [standard, format-cv]
 inputs: "Confirmation de réception AO"
-outputs: "Liste des CV disponibles (chemins `cv/originaux/`)"
+outputs: "Liste des CV disponibles (sources fournis en pièces jointes de l'issue + analyses existantes)"
 ---
 
 # Chargement des CV
 
 ## Objectif
-Vérifier l'existence et la disponibilité des CV sources des collaborateurs dans le sous-répertoire `cv/originaux/` du répertoire d'expertise.
+Recenser les CV **sources à traiter** — fournis en **pièces jointes de l'issue** — et les **analyses déjà produites** pour chaque collaborateur (JSON versionnés à la racine de `cv/`). Les originaux ne sont pas conservés : un collaborateur sans nouvelle pièce jointe mais disposant d'une analyse a déjà été traité.
 
 ## Steps
-### Step 1 — Scan du répertoire CV
-Scanner le répertoire `${ROOT_DIRECTORY}/` pour identifier les collaborateurs disposant d'un sous-répertoire `cv/`. Pour chacun, cibler le sous-répertoire **`cv/originaux/`** qui contient les CV sources (PDF, DOCX). Lister les chemins `cv/originaux/` disponibles.
+### Step 1 — Recenser les sources et les analyses existantes
+- **Sources à traiter** : lister les **pièces jointes de l'issue** (PDF, DOCX) fournies pour analyse (via `multica attachment --help` pour la récupération ; ne jamais ouvrir une URL de ressource Multica directement).
+- **Analyses existantes** : scanner `${ROOT_DIRECTORY}/` pour identifier, par collaborateur disposant d'un répertoire `cv/`, les analyses présentes (JSON versionnés `<nom>-<prenom>-<AAAA-MM-JJ>.json` à la racine de `cv/`).
 
-### Step 2 — Vérification de complétude
-Pour chaque collaborateur trouvé, vérifier que le répertoire **`cv/originaux/`** contient au moins un fichier CV source. Signaler les collaborateurs sans CV source.
+### Step 2 — Vérification de complétude (règle de sélection de la source CV)
+Déterminer l'état par collaborateur concerné, selon la **règle de sélection de la source CV** (voir [`../../../agents/gestionnaire-cv-agent.md`](../../../agents/gestionnaire-cv-agent.md)) :
+- **à extraire** : une pièce jointe CV (PDF/DOCX) est fournie sur l'issue → elle **prime** ; elle sera récupérée, analysée (nouvelle version), puis sa copie de travail **supprimée** ;
+- **dernière version extraite** : aucune nouvelle pièce jointe mais au moins un JSON d'analyse présent → réutiliser la **dernière version déjà extraite** pour le matching (JSON pour le flux A2A ; Markdown si le fichier doit être téléchargé pour l'humain). Comportement normal, l'original ayant déjà été traité et supprimé ;
+- **manquant** : ni pièce jointe ni analyse antérieure → signaler le collaborateur (pas de matching possible pour lui).
 
-Lorsque `cv/originaux/` contient **plusieurs versions**, identifier la **dernière version** (date encodée dans le nom du fichier ; à défaut, mtime la plus récente). C'est **cette seule version** qui sera analysée et croisée avec l'AO ; les versions antérieures sont ignorées.
+Si plusieurs pièces jointes sont fournies, elles sont toutes traitées comme sources de l'analyse à venir (aucune conservation d'historique d'originaux).
 
 ### Step 3 — Documenter l'inventaire
 Poster un commentaire sur l'issue avec :
-- Nombre de CV trouvés
-- Liste des collaborateurs et chemins, avec la **version retenue** (fichier + date) et le nombre de versions écartées
+- Nombre de collaborateurs et, pour chacun, l'état (à extraire / dernière version extraite / manquant)
+- Pour les CV à extraire : liste des pièces jointes de l'issue (nom) — trace d'audit avant suppression
 - Collaborateurs manquants (le cas échéant)
 
 ## Sensors
