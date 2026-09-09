@@ -7,7 +7,7 @@
 Ce workflow A2A permet de :
 
 1. **Analyser des appels d'offres (AO)** reçus en PDF d'un client
-2. **Analyser les CV des collaborateurs** (CV sources déposés temporairement dans `${ROOT_DIRECTORY}/<nom-prenom>/cv/originaux`, supprimés après extraction)
+2. **Analyser les CV des collaborateurs** (CV sources fournis en **pièces jointes de l'issue**, supprimés après extraction — non stockés)
 3. **Faire le match** entre les profils recherchés dans l'AO et les profils CV, avec un **score pondéré**
 4. **Remplir une grille d'évaluation client** (fournie par l'humain) après validation des profils
 5. **Permettre la mise à jour des CV** par le Gestionnaire CV
@@ -94,20 +94,21 @@ matching-cv-ao/
 
 | Élément | Emplacement |
 | --- | --- |
-| CV sources (PDF, DOCX) — **dépôt temporaire, supprimés après extraction** | `${ROOT_DIRECTORY}/<nom-prenom>/cv/originaux/` |
+| CV sources (PDF, DOCX) | **Pièces jointes de l'issue** — récupérés via `multica attachment`, **supprimés après extraction** (non stockés) |
 | Anciennes fiches d'analyse Markdown | `${ROOT_DIRECTORY}/<nom-prenom>/cv/archives/` |
 | Fiche d'analyse Markdown courante (du jour) | `${ROOT_DIRECTORY}/<nom-prenom>/cv/<AAAA-MM-JJ>-<nom>-<prenom>.md` |
 | Analyses JSON **versionnées** (seule la dernière sert au matching) | `${ROOT_DIRECTORY}/<nom-prenom>/cv/<nom>-<prenom>-<AAAA-MM-JJ>.json` |
 | Résumés AO | `${ROOT_DIRECTORY}/ao/<client>/<titre-ao>` |
 | Grille d'évaluation | Fournie par l'humain — **ne jamais inventer** |
 
-> **Organisation stricte du répertoire `cv/`** : les CV sources sont déposés temporairement dans `cv/originaux/`,
-> lus pour l'extraction puis **supprimés** — **les originaux ne sont pas conservés** ; leur nom/date sont
-> journalisés sur l'issue avant suppression (piste d'audit). Les anciennes fiches d'analyse Markdown sont
-> déplacées dans `cv/archives/` ; seuls la fiche Markdown du jour et les JSON versionnés restent à la racine de
-> `cv/` et constituent la mémoire persistante du CV. La date de dernière modification reportée dans les livrables
-> est **toujours la date du jour** de l'analyse. Seule la **dernière version JSON** est croisée avec un AO (règle
-> de sélection et journalisation détaillées dans [`agents/gestionnaire-cv-agent.md`](agents/gestionnaire-cv-agent.md)).
+> **Organisation stricte du répertoire `cv/`** : les CV sources sont **fournis en pièces jointes de l'issue**,
+> récupérés via `multica attachment` pour l'analyse puis **supprimés** — **les originaux ne sont pas conservés**
+> ni stockés dans `cv/` ; leur nom est journalisé sur l'issue avant suppression (piste d'audit). Les anciennes
+> fiches d'analyse Markdown sont déplacées dans `cv/archives/` ; seuls la fiche Markdown du jour et les JSON
+> versionnés restent à la racine de `cv/` et constituent la mémoire persistante du CV. La date de dernière
+> modification reportée dans les livrables est **toujours la date du jour** de l'analyse. Seule la **dernière
+> version JSON** est croisée avec un AO (règle de sélection et journalisation détaillées dans
+> [`agents/gestionnaire-cv-agent.md`](agents/gestionnaire-cv-agent.md)).
 
 ## Utilisation
 

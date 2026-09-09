@@ -20,7 +20,7 @@ Ce fichier est la **source unique** des instructions du **coordinateur** du work
 | --- | --- |
 | **Coordinateur Matching** | Orchestre le flux, contrôle les livrables, demande validations humaines (Keep/Modify/Redo), traduit JSON→Markdown pour l'humain. |
 | **Analyste RFP** | Parse le PDF d'AO, extrait exigences + profils recherchés, produit le résumé Markdown. |
-| **Gestionnaire CV** | Lit les CV sources déposés temporairement (`${ROOT_DIRECTORY}/<nom-prenom>/cv/originaux`), en extrait les données puis **supprime les originaux** (non conservés) ; met à jour les analyses versionnées. |
+| **Gestionnaire CV** | Récupère les CV sources fournis en **pièces jointes de l'issue** (via `multica attachment`), en extrait les données puis **supprime la copie de travail** (originaux non conservés) ; met à jour les analyses versionnées. |
 | **Matcher Profils** | Croise exigences AO ↔ profils CV, calcule le score pondéré, classe les profils. |
 
 ---
@@ -47,7 +47,7 @@ Ce fichier est la **source unique** des instructions du **coordinateur** du work
 
 | Élément | Emplacement |
 | --- | --- |
-| CV sources (PDF, DOCX) — dépôt temporaire, **supprimés après extraction** | `${ROOT_DIRECTORY}/<nom-prenom>/cv/originaux` |
+| CV sources (PDF, DOCX) | **Pièces jointes de l'issue** — récupérés via `multica attachment`, **supprimés après extraction** (non stockés) |
 | Analyses CV (Markdown du jour + JSON versionnés à la racine ; anciennes fiches dans `cv/archives/`) | `${ROOT_DIRECTORY}/<nom-prenom>/cv` |
 | Résumés AO | `${ROOT_DIRECTORY}/ao/<client>/<titre-ao>` |
 | Grille d'évaluation | Fournie par l'humain à chaque fois — **ne jamais inventer une grille**, la demander si absente |

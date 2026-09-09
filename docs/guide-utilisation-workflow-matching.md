@@ -33,9 +33,10 @@ En cas de doute, le coordinateur **vous demande de trancher** avant d'engager qu
 ## 3. Comment soumettre une demande
 
 1. **Créer une issue Multica** décrivant l'appel d'offres reçu (client, objet, échéance), et **attacher le PDF de l'AO** en pièce jointe.
-2. **Mentionner le Coordinateur Matching** (`[@Coordinateur Matching](mention://agent/<uuid>)`) sur l'issue — ou l'assigner à l'agent Coordinateur.
-3. **Prévoir la grille d'évaluation client** (Markdown) lorsque le workflow la demandera — elle vous sera réclamée, jamais inventée.
-4. Toute la conversation reste **sur l'issue** : c'est là que vous suivez l'avancement et rendez vos décisions.
+2. **Fournir les CV sources** (PDF, DOCX) des collaborateurs à analyser **en pièces jointes de l'issue** : c'est ainsi qu'ils sont transmis au Gestionnaire CV. Ils sont analysés puis **supprimés** (non conservés).
+3. **Mentionner le Coordinateur Matching** (`[@Coordinateur Matching](mention://agent/<uuid>)`) sur l'issue — ou l'assigner à l'agent Coordinateur.
+4. **Prévoir la grille d'évaluation client** (Markdown) lorsque le workflow la demandera — elle vous sera réclamée, jamais inventée.
+5. Toute la conversation reste **sur l'issue** : c'est là que vous suivez l'avancement et rendez vos décisions.
 
 > **Une grille d'évaluation n'est jamais inventée** : si le workflow en a besoin et qu'elle est absente, le coordinateur vous la **demande** et **attend** votre réponse (halt-and-ask).
 
@@ -47,7 +48,7 @@ En cas de doute, le coordinateur **vous demande de trancher** avant d'engager qu
 | --- | --- | --- | --- |
 | 1 | **Réception & vérification** | Vérification de la présence du PDF d'AO, de la grille, de l'accès aux CV | Non (bootstrap déterministe) |
 | 2 | **Analyse de l'AO** | L'Analyste RFP parse le PDF, extrait les exigences et les profils recherchés → **résumé Markdown** | Léger (approbation du résumé) |
-| 3 | **Chargement & extraction des CV** | Le Gestionnaire CV lit les CV et produit les profils structurés | Non |
+| 3 | **Chargement & extraction des CV** | Le Gestionnaire CV récupère les CV joints à l'issue, produit les profils structurés, puis supprime la copie de travail | Non |
 | 4 | **Matching & scoring** | Le Matcher croise profils ↔ exigences et calcule le **score pondéré** → **classement** | Advisory (commentaires) |
 | 5 | **Validation granulaire** | Présentation de **chaque profil séparément** (Keep/Modify/Redo) | **Granulaire** |
 | 6 | **Remplissage de la grille** | Remplissage de la grille d'évaluation client (fournie par l'humain, à la demande) | Granulaire |
@@ -85,7 +86,7 @@ La délégation se fait par **mention** sur l'issue ; l'agent sollicité répond
 
 | Élément | Emplacement |
 | --- | --- |
-| CV sources (PDF, DOCX) — **dépôt temporaire, supprimés après extraction** | `/nfs/workspace/expertise-architecture/<nom-prenom>/cv/originaux/` |
+| CV sources (PDF, DOCX) | **Pièces jointes de l'issue** — analysés puis **supprimés** (non conservés) |
 | Anciennes fiches d'analyse Markdown | `/nfs/workspace/expertise-architecture/<nom-prenom>/cv/archives/` |
 | Fiche d'analyse Markdown courante + JSON versionnés | Racine de `/nfs/workspace/expertise-architecture/<nom-prenom>/cv/` |
 | Résumés AO | `/nfs/workspace/expertise-architecture/ao/<client>/<titre-ao>/` |
@@ -93,12 +94,12 @@ La délégation se fait par **mention** sur l'issue ; l'agent sollicité répond
 
 Ces chemins sont créés **si absents** par l'Analyste RFP, toujours au bon endroit (client = nom du client, titre-ao = slug du titre).
 
-> **Organisation stricte du répertoire `cv/`** : déposez les CV sources dans `cv/originaux/`. À chaque analyse,
-> le Gestionnaire CV lit ces sources, produit une fiche Markdown datée **du jour** à la racine de `cv/` (les
-> anciennes fiches sont déplacées dans `cv/archives/`) et un JSON d'analyse **versionné**
-> (`<nom>-<prenom>-<AAAA-MM-JJ>.json`), **puis supprime les fichiers sources PDF/DOCX** — **les originaux ne sont
-> pas conservés** (leur nom/date sont journalisés sur l'issue avant suppression, pour l'audit). Seule la **dernière
-> version JSON** est croisée avec un AO ; le fichier retenu et les versions écartées sont journalisés sur l'issue.
+> **CV sources fournis dans l'issue** : joignez les CV des collaborateurs (PDF, DOCX) **en pièces jointes de
+> l'issue**. À chaque analyse, le Gestionnaire CV les récupère, produit une fiche Markdown datée **du jour** à la
+> racine de `cv/` (les anciennes fiches sont déplacées dans `cv/archives/`) et un JSON d'analyse **versionné**
+> (`<nom>-<prenom>-<AAAA-MM-JJ>.json`), **puis supprime la copie de travail** — **les originaux ne sont pas
+> conservés** (leur nom est journalisé sur l'issue avant suppression, pour l'audit). Seule la **dernière version
+> JSON** est croisée avec un AO ; le fichier retenu et les versions écartées sont journalisés sur l'issue.
 
 ---
 
