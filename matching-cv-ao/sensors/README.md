@@ -16,3 +16,4 @@ Ces fichiers **décrivent le contrat** (périmètre de déclenchement, règles d
 | Gate | Fichier | Objet |
 | --- | --- | --- |
 | Verification gates | [`gates.md`](gates.md) | Contrôle de traçabilité aux frontières de phases |
+| Sensor `disponibilite-complete` | [`disponibilite.md`](disponibilite.md) | Disponibilité collaborateur obligatoire (`date_disponibilite` + `taux_utilisation`) à la frontière Analyse → Matching |

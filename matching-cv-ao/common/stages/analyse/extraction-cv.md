@@ -14,7 +14,7 @@ human_gate: light
 produces: [cv-profils]
 consumes: [{artifact: cv-available, required: true}]
 requires_stage: [chargement-cv]
-sensors: []
+sensors: [disponibilite-complete]
 scopes: [standard, format-cv]
 inputs: "Inventaire des CV disponibles"
 outputs: "Profils CV structurés (JSON, dernière version) + fiches d'analyse Markdown versionnées"
@@ -31,19 +31,20 @@ Mentionner le Gestionnaire CV avec mission claire :
 - pour chaque collaborateur, **sélectionner la dernière version** du CV (date dans le nom de fichier, à défaut mtime la plus récente) et n'analyser que celle-ci ;
 - lire cette version, extraire les informations structurées ;
 - pour **chaque compétence**, renseigner le **nombre de mois d'expérience** (`mois_experience`) et la **date de dernière utilisation** (`derniere_utilisation`) ;
+- renseigner la **disponibilité** comme objet obligatoire `disponibilite` = { `date_disponibilite` (ISO `AAAA-MM-JJ`), `taux_utilisation` (entier `0–100`) } ;
 - produire le JSON `collaborateurs` ;
 - **créer un fichier Markdown d'analyse versionné** `<AAAA-MM-JJ>-<nom>-<prenom>.md` dans le répertoire `cv/` du candidat (`<AAAA-MM-JJ>` = date du jour ISO ; `<nom>`/`<prenom>` en minuscules, cohérents avec le répertoire `<nom-prenom>/cv/`).
 - **en fin de tâche, rendre le résultat en mentionnant en retour le Coordinateur** `[@Coordinateur Matching](mention://agent/<UUID-COORDINATEUR>)` (mention agent valide), pas seulement en répondant dans le fil — une réponse simple ne réveille pas le Coordinateur ; puis vérifier les `trigger_outcomes`. Ne jamais deviner ni coder en dur l'UUID : le résoudre à chaque fois via `multica agent list --output json` et l'injecter dans la mention.
 
 ### Step 2 — Contrôle du livrable
-Vérifier que le JSON contient bien la liste `collaborateurs` avec les champs : `nom`, `version_cv` (fichier + date retenue), `analyse_markdown` (chemin créé), `competences` (objets `{nom, mois_experience, derniere_utilisation}`), `experience`, `etudes`, `disponibilite`. Vérifier qu'un fichier `<AAAA-MM-JJ>-<nom>-<prenom>.md` a bien été créé par candidat. Signaler les écarts.
+Vérifier que le JSON contient bien la liste `collaborateurs` avec les champs : `nom`, `version_cv` (fichier + date retenue), `analyse_markdown` (chemin créé), `competences` (objets `{nom, mois_experience, derniere_utilisation}`), `experience`, `etudes`, `disponibilite` (objet obligatoire `{date_disponibilite, taux_utilisation}` — cf. sensor `disponibilite-complete`). Vérifier qu'un fichier `<AAAA-MM-JJ>-<nom>-<prenom>.md` a bien été créé par candidat. Signaler les écarts.
 
 ### Step 3 — Validation humaine légère
 Présenter à l'humain : nombre de collaborateurs analysés, version de CV retenue par candidat, chemins des fichiers d'analyse Markdown créés, synthèse des profils extraits. Demander validation.
 
 ## Sensors
 Outputs: `cv-profils` → Phase Analyse (gate: light).
-Imports: none.
+Imports: `disponibilite-complete` (advisory) — contrôle la présence de `disponibilite.{date_disponibilite, taux_utilisation}` à la frontière Analyse → Matching.
 
 ## Learn
 Documenter sur l'issue les choix d'extraction et les validations/rejets humains.

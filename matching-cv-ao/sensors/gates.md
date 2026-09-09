@@ -7,6 +7,7 @@ Manifeste déclaratif des **verification gates** du workflow Matching AO ↔ CV.
 1. **`artefacts-presents`** — les artefacts requis en sortie de phase existent.
 2. **`liaison-tracabilite`** — chaque exigence AO est reliée à un profil analysé.
 3. **`absence-orphelin`** — aucun profil n'est déconnecté (sans exigence amont).
+4. **`disponibilite-complete`** — à la frontière Analyse → Matching, chaque profil CV porte une disponibilité complète (`disponibilite.{date_disponibilite, taux_utilisation}`) ; manifeste dédié : [`disponibilite.md`](disponibilite.md).
 
 ## Frontières et artefacts requis
 
@@ -28,7 +29,7 @@ boundaries:
       - ao-exigences
       - ao-profils-recherches
       - cv-profils
-    checks: [artefacts-presents, liaison-tracabilite]
+    checks: [artefacts-presents, liaison-tracabilite, disponibilite-complete]
 
   - id: matching-validation
     frontiere: "Matching → Validation"
@@ -57,4 +58,13 @@ Rapport de vérification — <frontière>   (source : matching-cv-ao/sensors/gat
 - artefacts-presents : ✅ | ⚠️ <artefact manquant> | ⛔ <indisponible>
 - liaison-tracabilite : ✅ | ⚠️ <exigence sans profil> | ⛔ <indisponible>
 - absence-orphelin : ✅ | ⚠️ <profil orphelin> | ⛔ <indisponible>
+```
+
+À la frontière **Analyse → Matching**, le check `disponibilite-complete` est reporté (détail dans `sensors/disponibilite.md`) :
+
+```
+Rapport de vérification — Analyse → Matching   (source : matching-cv-ao/sensors/gates.md)
+- artefacts-presents : ✅ | ⚠️ <artefact manquant> | ⛔ <indisponible>
+- liaison-tracabilite : ✅ | ⚠️ <exigence sans profil> | ⛔ <indisponible>
+- disponibilite-complete : ✅ | ⚠️ <collaborateur sans date_disponibilite / taux_utilisation> | ⛔ <indisponible>
 ```
