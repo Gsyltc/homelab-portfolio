@@ -1,10 +1,17 @@
-# Sensor `disponibilite-complete` — disponibilité collaborateur obligatoire
+# Sensor `disponibilite-complete` — traçabilité de la disponibilité collaborateur
 
-Manifeste déclaratif du sensor `disponibilite-complete`. **Advisory** : produit un rapport, ne bloque jamais le gate humain.
+Manifeste déclaratif du sensor qui contrôle la présence **obligatoire** de l'information de disponibilité dans chaque profil CV structuré (`cv-profils`). **Advisory** : produit un rapport, ne bloque jamais le gate humain.
 
-Contrôle déterministe, à la **frontière Analyse → Matching**, que chaque profil CV structuré (`cv-profils`, produit par le Gestionnaire CV) porte une disponibilité **complète** : une **date de disponibilité** ISO et un **taux d'utilisation** courant.
+## Objet
 
-## Contrat
+Chaque collaborateur du JSON `cv-profils` (produit par le stage `extraction-cv`, Gestionnaire CV) **doit** porter une disponibilité complète, structurée en objet :
+
+- `disponibilite.date_disponibilite` — date ISO `AAAA-MM-JJ` à partir de laquelle le collaborateur est disponible ;
+- `disponibilite.taux_utilisation` — taux d'utilisation actuel, nombre entre `0` et `100` (en %).
+
+Ces deux champs sont **mandatory**. Un profil dont l'un des deux manque, est vide, ou hors bornes est **non conforme**.
+
+## Frontière et déclenchement
 
 ```yaml
 type: sensor
@@ -12,39 +19,28 @@ id: disponibilite-complete
 nature: advisory
 frontiere: "Analyse → Matching"
 artefact_controle: cv-profils
-rapport: issue
 regles:
   - id: date-disponibilite-presente
-    objet: "Chaque collaborateur porte disponibilite.date_disponibilite au format AAAA-MM-JJ."
+    champ: disponibilite.date_disponibilite
+    controle: "présent, non vide, date ISO AAAA-MM-JJ valide"
   - id: taux-utilisation-present
-    objet: "Chaque collaborateur porte disponibilite.taux_utilisation (entier 0–100)."
+    champ: disponibilite.taux_utilisation
+    controle: "présent, numérique, compris entre 0 et 100 inclus"
+portee: "chaque objet de la liste collaborateurs"
 ```
-
-## Champ contrôlé
-
-Le champ `disponibilite` de chaque entrée `collaborateurs` est un **objet obligatoire** :
-
-```json
-"disponibilite": {
-  "date_disponibilite": "<AAAA-MM-JJ>",
-  "taux_utilisation": <0–100>
-}
-```
-
-- `date_disponibilite` — date ISO `AAAA-MM-JJ` à partir de laquelle le collaborateur est disponible ; **obligatoire**.
-- `taux_utilisation` — taux d'utilisation actuel en pourcentage, entier `0–100` ; **obligatoire**.
 
 ## En cas d'écart (advisory)
 
-- Le coordinateur **ne bloque pas** : il **signale l'écart** dans le « Rapport de vérification » sur l'issue et **propose de revenir corriger** avant de présenter le contenu à l'humain.
-- L'humain reste seul décideur : demander la correction (compléter la disponibilité), ou valider en connaissance de cause en actant l'écart sur l'issue.
+- Le sensor **ne bloque pas** : il **signale** dans le « Rapport de disponibilité » sur l'issue chaque collaborateur dont la disponibilité est incomplète ou hors bornes, et **propose de revenir compléter** le CV avant de présenter le contenu à l'humain.
+- L'humain reste seul décideur : demander la correction, ou valider en connaissance de cause en actant l'écart sur l'issue.
 
 ## Rapport de sensor (piste d'audit)
 
-Posté en commentaire sur l'issue, avant la validation humaine. Verdicts : `✅` conforme · `⚠️` écart · `⛔` indisponible.
+Posté en commentaire sur l'issue, à la frontière Analyse → Matching, avant la validation humaine. Verdicts : `✅` conforme · `⚠️` écart · `⛔` indisponible.
 
 ```
-Rapport de vérification — disponibilite-complete   (source : matching-cv-ao/sensors/disponibilite.md)
-- date-disponibilite-presente : ✅ | ⚠️ <collaborateur sans date_disponibilite> | ⛔ <indisponible>
-- taux-utilisation-present : ✅ | ⚠️ <collaborateur sans taux_utilisation> | ⛔ <indisponible>
+Rapport de disponibilité — Analyse → Matching   (source : matching-cv-ao/sensors/disponibilite.md)
+- <collaborateur> :
+  - date-disponibilite-presente : ✅ | ⚠️ <manquante/invalide> | ⛔ <indisponible>
+  - taux-utilisation-present : ✅ | ⚠️ <manquant/hors bornes> | ⛔ <indisponible>
 ```

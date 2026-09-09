@@ -46,7 +46,7 @@ ${ROOT_DIRECTORY}/<nom-prenom>/cv/<AAAA-MM-JJ>-<nom>-<prenom>.md
 ```
 
 - Le préfixe `<AAAA-MM-JJ>` est la date du jour de l'analyse (format ISO). `<nom>` et `<prenom>` sont en minuscules et cohérents avec le répertoire `<nom-prenom>/cv/`. Une nouvelle analyse le même jour **écrase** le fichier du jour ; une analyse un autre jour crée un **nouveau** fichier (historique conservé).
-- Le fichier reprend, en Markdown lisible par l'humain : le CV source retenu (nom + version/date), la liste des compétences avec mois d'expérience et dernière utilisation, l'expérience, les études, la disponibilité (date de disponibilité + taux d'utilisation) et les langues.
+- Le fichier reprend, en Markdown lisible par l'humain : le CV source retenu (nom + version/date), la liste des compétences avec mois d'expérience et dernière utilisation, l'expérience, les études, la disponibilité (**date de disponibilité + taux d'utilisation en %**) et les langues.
 - Ce fichier est un **livrable humain** : Markdown uniquement, aucun secret.
 
 ## Format de sortie (JSON → Agent)
@@ -97,7 +97,7 @@ ${ROOT_DIRECTORY}/<nom-prenom>/cv/<AAAA-MM-JJ>-<nom>-<prenom>.md
 
 > **Champ `competences`** : chaque compétence est un objet incluant obligatoirement `mois_experience` (durée cumulée d'expérience sur la compétence, en mois) et `derniere_utilisation` (mois/année de la dernière mission où elle a été mobilisée). Ces deux champs alimentent le calcul de compatibilité côté Matcher Profils.
 
-> **Champ `disponibilite` (obligatoire)** : objet structuré incluant obligatoirement `date_disponibilite` (date ISO `AAAA-MM-JJ` à partir de laquelle le collaborateur est disponible) et `taux_utilisation` (taux d'utilisation actuel en %, entier `0–100`). Ces deux champs sont **mandatory** : leur présence est contrôlée par le sensor `disponibilite-complete` à la frontière Analyse → Matching. Ils alimentent le score de disponibilité côté Matcher Profils.
+> **Champ `disponibilite` (obligatoire)** : c'est un objet incluant **obligatoirement** `date_disponibilite` (date ISO `AAAA-MM-JJ` à partir de laquelle le collaborateur est disponible) et `taux_utilisation` (taux d'utilisation actuel, entier entre 0 et 100). Ces deux champs sont **mandatory** : un CV sans disponibilité complète est incomplet. Leur présence est contrôlée par le sensor [`disponibilite-complete`](../sensors/disponibilite.md) à la frontière Analyse → Matching (advisory).
 
 ## Communication
 
