@@ -20,7 +20,7 @@ Ce fichier est la **source unique** des instructions du **coordinateur** du work
 | --- | --- |
 | **Coordinateur Matching** | Orchestre le flux, contrôle les livrables, demande validations humaines (Keep/Modify/Redo), traduit JSON→Markdown pour l'humain. |
 | **Analyste RFP** | Parse le PDF d'AO, extrait exigences + profils recherchés, produit le résumé Markdown. |
-| **Gestionnaire CV** | Lit et met à jour les CV des collaborateurs (source : `${ROOT_DIRECTORY}/<nom-prenom>/cv`). |
+| **Gestionnaire CV** | Lit et met à jour les CV des collaborateurs (sources : `${ROOT_DIRECTORY}/<nom-prenom>/cv/originaux`). |
 | **Matcher Profils** | Croise exigences AO ↔ profils CV, calcule le score pondéré, classe les profils. |
 
 ---
@@ -47,7 +47,8 @@ Ce fichier est la **source unique** des instructions du **coordinateur** du work
 
 | Élément | Emplacement |
 | --- | --- |
-| CV collaborateurs | `${ROOT_DIRECTORY}/<nom-prenom>/cv` |
+| CV sources collaborateurs (PDF, DOCX) | `${ROOT_DIRECTORY}/<nom-prenom>/cv/originaux` |
+| Analyses CV (Markdown du jour + JSON versionnés à la racine ; anciennes fiches dans `cv/archives/`) | `${ROOT_DIRECTORY}/<nom-prenom>/cv` |
 | Résumés AO | `${ROOT_DIRECTORY}/ao/<client>/<titre-ao>` |
 | Grille d'évaluation | Fournie par l'humain à chaque fois — **ne jamais inventer une grille**, la demander si absente |
 
