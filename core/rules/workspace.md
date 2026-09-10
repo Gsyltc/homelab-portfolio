@@ -16,3 +16,10 @@ Ces règles reprennent les **invariants non négociables** déjà en vigueur (el
   - _portée_ : workspace · _origine_ : core-workflow.md · _ajoutée le_ : 2026-09-02
 
 > Les nouvelles règles apprises de portée `workspace` sont ajoutées ci-dessous, après confirmation humaine **et** contrôle sécurité.
+
+## Documentation finale
+
+- **RULE-WS-006** — **OBLIGATOIRE.** Dans toute documentation finale livrée, aucun nom d'agent, aucune mention de skill et aucun nom de fichier ne doit apparaître. En conséquence :
+  - **Liens internes** : un lien Markdown vers un autre document utilise le **titre du document** (son titre H2) comme libellé, jamais le nom de fichier. Ex. : un lien vers `11-securite.md` s'affiche `Sécurité`.
+  - **Noms de responsables** : lorsqu'un nom doit être renseigné, indiquer le **nom réel du responsable du projet** tel que défini dans les Arrimages (matrice RACI, colonne « Nom »), jamais un placeholder ni un nom d'agent.
+  - _portée_ : workspace · _origine_ : demande workspace multica.gaston (chat) · _ajoutée le_ : 2026-09-10
