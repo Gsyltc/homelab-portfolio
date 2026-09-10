@@ -33,7 +33,7 @@ boundaries:
       - diagramme_principal
       - scope_et_axes_confirmes
     checks: [artefacts-presents, liaison-tracabilite, absence-orphelin]
-    sensors: [diagram-validity, data-lifecycle]   # data-lifecycle : advisory côté coordinateur (alerte humaine, non bloquant)
+    sensors: [diagram-validity, data-lifecycle]   # data-lifecycle : advisory pour tous (assiste Manuel, alerte Sylvain — jamais bloquant)
 
   - id: construction-operation
     frontiere: "Construction → Operation"

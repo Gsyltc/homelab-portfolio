@@ -32,7 +32,7 @@ Produire la conception cible et les décisions structurantes, contrôlées en s�
 
 Les `support_agents` désignés travaillent **en parallèle contre le brouillon du lead** (Architecte de solution), en une ronde d'objection bornée (`mode: mob`) : vues fonctionnelle / technique, choix, alternatives, risques. Chaque décision structurante est **tracée** dans le registre de décisions du projet (`decisions/`).
 
-> **Données** : le lead (Manuel, Architecte de solution) **délègue à l'Architecte de données (Diego)** les tâches relatives aux données au besoin. Diego produit le document **Cycle de vie des données** (`documentation/10-cycle_vie_donnees.md`) — cycle de vie, gouvernance, classification, renseigné selon les données du projet — puis le remet à Manuel. **Manuel valide** ce livrable ; son critère d'acceptation objectif est le sensor `data-lifecycle` au vert. Tant que le sensor n'est pas `✅`, Manuel renvoie une demande de correction à Diego via le coordinateur.
+> **Données** : le lead (Manuel, Architecte de solution) **délègue à l'Architecte de données (Diego)** les tâches relatives aux données au besoin. Diego produit le document **Cycle de vie des données** (`documentation/10-cycle_vie_donnees.md`) — cycle de vie, gouvernance, classification, renseigné selon les données du projet — puis le remet à Manuel. **Manuel valide** ce livrable ; le sensor `data-lifecycle` (advisory) **assiste** cette validation en factualisant la présence et le renseignement du document, mais **ne la bloque pas** — Manuel reste seul juge et peut demander une correction à Diego sur la base d'un écart.
 
 ### Step 2 — Contrôle sécurité obligatoire (revue adversariale)
 
@@ -57,7 +57,7 @@ Présenter **chaque choix séparément** (choix, justification, alternative) ; b
 Outputs: conception + décisions validées. Frontière **Inception → Construction** : gate `artefacts-presents` + `liaison-tracabilite` + `absence-orphelin`.
 Imports: `required-sections`, `upstream-coverage`, `diagram-validity`, `data-lifecycle`.
 Upstream targets: `besoins_traces` (required), `decoupage_livrables` (required) — couverture amont vérifiée à l'écriture de la décision / conception.
-Données : `data-lifecycle` vérifie `documentation/10-cycle_vie_donnees.md` (présent + renseigné selon les données du projet). **Double régime** : critère d'acceptation de la revue **Manuel → Diego** (bloque la validation Manuel tant que non `✅`) ; côté coordinateur, **advisory non bloquant** au verification gate (alerte humaine).
+Données : `data-lifecycle` vérifie `documentation/10-cycle_vie_donnees.md` (présent + renseigné selon les données du projet). **Advisory pour tous** : il **assiste** la revue **Manuel → Diego** et **alerte** le coordinateur (Sylvain) au verification gate, **sans jamais bloquer** ni la validation de Manuel ni le gate humain.
 Review artifact: la **décision structurante** (`decisions/<NNNN>-<titre>.md`) porte la section `## Review` ajoutée par le Reviewer de sécurité.
 
 ## Learn
