@@ -12,11 +12,11 @@ origine: ALI-231
 
 # Sensor `data-lifecycle` — cycle de vie des données *(prioritaire)*
 
-Check déterministe déclenché **au gate de phase** (`fire_on: gate`) : vérifie que le document **Cycle de vie des données** (`documentation/10-cycle_vie_donnees.md`) est **présent** et **correctement renseigné** — sections obligatoires présentes et non vides, et **couverture effective des données du projet** (au moins une donnée / catégorie de données du projet classifiée et rattachée à une étape de cycle de vie). **Advisory** (`default_severity: advisory`) : il factualise l'état du document, mais **ne bloque jamais** — ni le gate humain, ni la validation de Manuel.
+Check déterministe déclenché **au gate de phase** (`fire_on: gate`) : vérifie que le document **Cycle de vie des données** (`documentation/10-cycle_vie_donnees.md`) est **présent** et **correctement renseigné** — sections obligatoires présentes et non vides, et **couverture effective des données du projet** (au moins une donnée / catégorie de données du projet classifiée et rattachée à une étape de cycle de vie). **Advisory** (`default_severity: advisory`) : il factualise l'état du document, mais **ne bloque jamais** — ni le gate humain, ni la validation de l'Architecte de solution.
 
 > **Un signal advisory, lu par deux acteurs (jamais bloquant)** :
-> - **Manuel (Architecte de solution), valideur du livrable données** — le signal `data-lifecycle` **assiste** la revue Manuel → Diego : il factualise la présence et le renseignement du document, mais **ne conditionne pas** la validation. Manuel reste seul juge — il peut demander une correction à Diego sur la base d'un `⚠️` / `⛔`, ou valider en connaissance de cause en actant l'écart sur l'issue. Le sensor n'oppose aucun blocage automatique (voir [`solution-architect-agent`](../../agents/solution-architect-agent.md) et [`data-architect-agent`](../../agents/data-architect-agent.md)).
-> - **Sylvain (coordinateur) au verification gate** — le même signal est **advisory et non bloquant** : un écart est **signalé comme alerte à l'humain** dans le « Rapport de vérification », sans jamais bloquer le gate humain.
+> - **Architecte de solution, valideur du livrable données** — le signal `data-lifecycle` **assiste** la revue Architecte de solution → Architecte de données : il factualise la présence et le renseignement du document, mais **ne conditionne pas** la validation. L'Architecte de solution reste seul juge — il peut demander une correction à l'Architecte de données sur la base d'un `⚠️` / `⛔`, ou valider en connaissance de cause en actant l'écart sur l'issue. Le sensor n'oppose aucun blocage automatique (voir [`solution-architect-agent`](../../agents/solution-architect-agent.md) et [`data-architect-agent`](../../agents/data-architect-agent.md)).
+> - **Coordinateur au verification gate** — le même signal est **advisory et non bloquant** : un écart est **signalé comme alerte à l'humain** dans le « Rapport de vérification », sans jamais bloquer le gate humain.
 
 ## Contrat de vérification (`checks`)
 
@@ -37,7 +37,7 @@ checks:
 
 ## Cohérence avec `required-sections`
 
-`required-sections` porte déjà `10-cycle_vie_donnees.md` dans ses fichiers mandatory (sections « Gouvernance de données » / « Classification des données »). `data-lifecycle` est **complémentaire** : il **spécialise** le contrôle sur ce document (ajout de la section « Cycle de vie des données » et de la **couverture effective des données du projet**), et **assiste** la revue Manuel → Diego sans jamais la bloquer. Toute évolution du gabarit `gabarits/10` doit être répercutée ici **et** dans `required-sections` dans la même PR (SG-1 / SG-6).
+`required-sections` porte déjà `10-cycle_vie_donnees.md` dans ses fichiers mandatory (sections « Gouvernance de données » / « Classification des données »). `data-lifecycle` est **complémentaire** : il **spécialise** le contrôle sur ce document (ajout de la section « Cycle de vie des données » et de la **couverture effective des données du projet**), et **assiste** la revue Architecte de solution → Architecte de données sans jamais la bloquer. Toute évolution du gabarit `gabarits/10` doit être répercutée ici **et** dans `required-sections` dans la même PR (SG-1 / SG-6).
 
 ## Sortie (piste d'audit)
 
@@ -50,4 +50,4 @@ Sensor data-lifecycle — documentation/10-cycle_vie_donnees.md   (source : core
 
 ## Garde-fou
 
-Advisory : n'empêche pas l'écriture d'un artefact et **ne bloque jamais** — ni le gate humain côté coordinateur (Sylvain), ni la validation de Manuel dans la revue A2A Manuel → Diego, où il ne fait qu'**assister** le jugement. Un signal au vert ne vaut pas validation ; un écart n'oppose aucun blocage automatique. Le passage du sensor à `blocking` resterait une décision structurante (ADR + contrôle sécurité, Architecte cybersécurité) — hors de ce manifeste.
+Advisory : n'empêche pas l'écriture d'un artefact et **ne bloque jamais** — ni le gate humain côté coordinateur, ni la validation de l'Architecte de solution dans la revue A2A Architecte de solution → Architecte de données, où il ne fait qu'**assister** le jugement. Un signal au vert ne vaut pas validation ; un écart n'oppose aucun blocage automatique. Le passage du sensor à `blocking` resterait une décision structurante (ADR + contrôle sécurité, Architecte cybersécurité) — hors de ce manifeste.
