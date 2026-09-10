@@ -127,6 +127,8 @@ Pendant un stage, chaque correction / rejet ❌ / reformulation 💬 humaine sur
 
 À **chaque transition de phase**, avant le point de validation humaine, le coordinateur exécute le **contrôle automatique de traçabilité** décrit dans le manifeste [`core/sensors/gates.md`](../sensors/gates.md) et poste un **« Rapport de vérification »** sur l'issue. Ces gates (et les sensors déclenchés à l'écriture d'un artefact) sont **advisory** : ils factualisent la traçabilité mais **ne bloquent jamais** et **ne remplacent jamais** la validation humaine ni le contrôle sécurité (garde-fous SG-1..6 — voir [`protocols/governance-security.md`](protocols/governance-security.md)).
 
+> À la frontière **Inception → Construction**, le coordinateur (Sylvain) vérifie via le sensor [`data-lifecycle`](../sensors/sensors/data-lifecycle.md) la **présence du document Cycle de vie des données** (`documentation/10-cycle_vie_donnees.md`). Côté coordinateur, ce contrôle est **advisory et non bloquant** : un écart est remonté comme **alerte à l'humain** dans le Rapport de vérification. La production de ce document relève de l'**Architecte de données (Diego)**, à qui **Manuel délègue** les tâches données et dont **Manuel valide** le travail (le sensor au vert est le critère d'acceptation de cette revue Manuel → Diego).
+
 ---
 
 ## OBLIGATOIRE : piste d'audit sur l'issue
@@ -165,6 +167,7 @@ sequenceDiagram
     participant H as Humain
     participant S as Coordinateur
     participant A as Architecte de solution / AWS / Windows (ou OpenSpec Expert)
+    participant D as Architecte de donnees (Diego)
     participant X as Architecte cybersecurite
     participant N as Experte d archivage
     participant AL as Agent de notifications
@@ -175,9 +178,13 @@ sequenceDiagram
     H-->>S: Intention et scope approuves
     S->>S: Cadrage + besoins + decoupage (INCEPTION)
     S->>A: Delegue livrables (mention + mission)
+    A->>D: Delegue les taches donnees au besoin (cycle de vie, gouvernance, classification)
+    D-->>A: Cycle de vie des donnees (10-cycle_vie_donnees.md) + modeles
+    A->>A: Valide le travail de Diego (critere : sensor data-lifecycle au vert)
     A-->>S: Livrable + decision structurante
     S->>X: Sollicite controle securite
     X-->>S: Analyse + recommandations
+    S->>S: Verification gate - data-lifecycle advisory (alerte humaine si document absent)
     S->>H: Validation granulaire (choix par choix)
     H-->>S: Validation / rejet par element
     S->>A: Walking skeleton (premiere tranche de bout en bout)

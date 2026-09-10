@@ -35,7 +35,7 @@ outputs: "<description libre des sorties>"
 | `mode`, `for_each`, `summary_confirmation` | topologie de communication, itération éventuelle, confirmation de résumé |
 | `produces`, `consumes`, `requires_stage` | flux d'artefacts et dépendances (le graphe émerge de ces déclarations) |
 | `sensors`, `scopes`, `inputs`, `outputs` | sensors importés, scopes actifs, entrées / sorties |
-| `lead_agent`, `support_agents`, `reviewer` | **fonctions** du workspace : Architecture Solution & Intégration (coordinateur), Architecte de solution, Architecte AWS, Administrateur infrastructure Windows, Architecte cybersécurité, Reviewer de cohérence, Reviewer de sécurité, OpenSpec Expert, Experte d'archivage, Agent de notifications — validées contre `core/agents/*.md` |
+| `lead_agent`, `support_agents`, `reviewer` | **fonctions** du workspace : Architecture Solution & Intégration (coordinateur), Architecte de solution, Architecte de données, Architecte AWS, Administrateur infrastructure Windows, Architecte cybersécurité, Reviewer de cohérence, Reviewer de sécurité, OpenSpec Expert, Experte d'archivage, Agent de notifications — validées contre `core/agents/*.md` |
 | `review_class`, `review_artifact` | nature de la revue et livrable qui porte sa section `## Review` |
 | `human_gate` | matérialise les gates du workspace : `none` (Initialization), `light` (Ideation), `granular` (Inception / Construction), `explicit` (Operation) |
 

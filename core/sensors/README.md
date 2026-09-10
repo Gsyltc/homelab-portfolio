@@ -39,11 +39,12 @@ Les résultats vivent **sur l'issue** (piste d'audit existante), jamais dans un 
 
 ## Sensors définis
 
-Cinq sensors, alignés sur le contrat amont « Sensors » (schéma de manifeste `id` / `kind` / `command` / `default_severity` / `description` + `category` / `fire_on` / `matches`). Les `id` sont importés **par id nu** dans le champ `sensors:` des fiches de stage (pull-authoring).
+Six sensors, alignés sur le contrat amont « Sensors » (schéma de manifeste `id` / `kind` / `command` / `default_severity` / `description` + `category` / `fire_on` / `matches`). Les `id` sont importés **par id nu** dans le champ `sensors:` des fiches de stage (pull-authoring).
 
 | Sensor | Manifeste | `category` | `fire_on` | `default_severity` | Objet |
 | --- | --- | --- | --- | --- | --- |
 | `required-sections` | [`sensors/required-sections.md`](sensors/required-sections.md) | document-shape | gate | advisory | Rubriques obligatoires d'ADR présentes et non vides ; fichiers/sections **mandatory** de la DAS (`001`, `01`, `02`, `06`, `08`, `10`, `11`) présents et non vides (durci ALI-218, [ADR-0025](../../decisions/0025-durcissement-required-sections-das.md)) |
+| `data-lifecycle` | [`sensors/data-lifecycle.md`](sensors/data-lifecycle.md) | document-shape | gate | advisory | Document **Cycle de vie des données** (`10-cycle_vie_donnees.md`) présent et renseigné (cycle de vie, gouvernance, classification) **selon les données du projet**. Critère d'acceptation de la revue **Manuel → Diego** ; côté coordinateur (Sylvain) : **alerte advisory non bloquante** (origine ALI-231) |
 | `upstream-coverage` | [`sensors/upstream-coverage.md`](sensors/upstream-coverage.md) | document-shape | gate | advisory | Référence explicite à la demande amont (issue / ADR parent) |
 | `diagram-validity` | [`sensors/diagram-validity.md`](sensors/diagram-validity.md) | document-shape | write | advisory | Syntaxe des diagrammes en code (Mermaid / PlantUML / Structurizr) |
 | `claim-sources` | [`sensors/claim-sources.md`](sensors/claim-sources.md) | provenance | gate | advisory | Chaque affirmation retenue porte une source résoluble ; hypothèses = confirmation humaine explicite |
