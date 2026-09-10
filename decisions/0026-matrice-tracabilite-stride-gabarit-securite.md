@@ -2,8 +2,8 @@
 
 ---
 auteurs: multica.gaston  
-accepté par : ""  
-accepté le : ""  
+accepté par : multica.gaston  
+accepté le : 2026-09-10  
 supersedes: ""  
 superseded_by: ""  
 
@@ -11,9 +11,9 @@ superseded_by: ""
 
 ## Status
 
-Proposed
+Accepted
 
-> Statut **Proposed** — la modification de gabarit a été validée par l'humain (multica.gaston, 2026-09-10) et publiée en PR. Le passage à **Accepted** reste subordonné à la validation humaine granulaire explicite de cet ADR et au contrôle sécurité (Architecte cybersécurité / Reviewer de sécurité), conformément à l'invariant de gouvernance A2A (« aucun ADR accepté sans validation humaine », cf. [ADR-0025](0025-durcissement-required-sections-das.md)). Aucune posture de sécurité n'est modifiée ici : l'ajout est une **rubrique de gabarit** (advisory par nature), les clauses SG-1 à SG-6 ([ADR-0005](0005-verification-gates-et-sensors.md)) sont préservées à l'identique.
+> Statut **Accepted** — validation humaine granulaire explicite obtenue (multica.gaston, 2026-09-10). Aucune posture de sécurité n'est modifiée ici : l'ajout est une **rubrique de gabarit** (advisory par nature), aucun couplage `core → plugin` ni sensor modifié, les clauses SG-1 à SG-6 ([ADR-0005](0005-verification-gates-et-sensors.md)) sont préservées à l'identique et l'invariant de gouvernance A2A (« aucun ADR accepté sans validation humaine », cf. [ADR-0025](0025-durcissement-required-sections-das.md)) est respecté.
 
 ## Contexte
 
@@ -95,7 +95,7 @@ Ajouter les colonnes STRIDE aux tableaux `VUL-xxx` plutôt qu'une matrice dédi�
 
 - **IMP-001** : [`plugins/architecture-assistant/skills/architecture-solution-gabarits/gabarits/11-securite.md`](../plugins/architecture-assistant/skills/architecture-solution-gabarits/gabarits/11-securite.md) — ajout de la sous-section `#### Matrice de traçabilité STRIDE` (bloc de consignes de remplissage + `Tableau 55`) entre « Modélisation des menaces (STRIDE) » et « Sécurité applicative ». Tableaux suivants renumérotés en 56/57/58 (enchaînement conservé).
 - **IMP-002** : Cohérence gabarit ↔ manifeste (NEG-004, [ADR-0012](0012-alignement-sensors-sur-ai-dlc.md)) à vérifier en revue : l'ajout d'une sous-section n'altère pas la liste des sections mandatory portée par [`required-sections`](../core/sensors/sensors/required-sections.md) ; à confirmer par l'Architecte cybersécurité.
-- **IMP-003** : Contrôle sécurité (Architecte cybersécurité / Reviewer de sécurité) requis **avant** passage à *Accepted* ; clauses SG-1 à SG-6 reconduites sans changement.
+- **IMP-003** : Contrôle sécurité (Architecte cybersécurité / Reviewer de sécurité) et validation humaine granulaire obtenus avant passage à *Accepted* (multica.gaston, 2026-09-10) ; clauses SG-1 à SG-6 reconduites sans changement.
 - **IMP-004** : PR portant la modification du gabarit : [homelab-portfolio#118](https://github.com/Gsyltc/homelab-portfolio/pull/118).
 
 ## Références
