@@ -8,6 +8,14 @@ ce fichier en donne la lecture chronologique côté produit.
 
 ## [Non publié]
 
+### Added
+- **RULE-WS-006 (OBLIGATOIRE) — Documentation finale sans noms techniques**, couche `workspace`
+  (`core/rules/workspace.md`), valable pour tout le workspace : aucun nom d'agent, aucune mention de skill,
+  aucun nom de fichier dans la documentation finale. Les liens internes utilisent le **titre H2** du document
+  cible comme libellé (ex. `11-securite.md` → `Sécurité`) ; tout nom de responsable est le **nom réel** défini
+  dans les Arrimages (RACI, colonne « Nom »), jamais un placeholder ni un nom d'agent. Origine : demande
+  workspace (multica.gaston).
+
 ### Changed
 - **Organisation stricte du répertoire `cv/`** et **versionnage des livrables** dans le workflow
   **Matching CV ↔ AO** (`matching-cv-ao/`) — évolution **documentaire** des fiches d'agent et de stage,
