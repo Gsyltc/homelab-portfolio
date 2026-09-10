@@ -23,14 +23,14 @@ Règles de remplissage :
   - **Statut** : aligné sur les statuts du registre des risques (`04`).
 -->
 
-| ID       | Composant / Flux (`06`) | Catégorie STRIDE | Propriété compromise | Menace identifiée | Vecteur / Scénario | Contre-mesure(s) | Vraisemblance | Niveau de risques | Lien vulnérabilité (`VUL-xxx`) | Lien registre des risques (`04`) | Statut |
-| -------- | ----------------------- | ---------------- | -------------------- | ----------------- | ------------------ | ---------------- | ------------- | ----------------- | ------------------------------ | -------------------------------- | ------ |
-| STR-001  | COMPOSANT / FLUX 1      | S (Spoofing)     | Authenticité         |                   |                    |                  |               |                   | VUL-xxx                        | RISQ-xxx                         |        |
-| STR-002  | COMPOSANT / FLUX 1      | T (Tampering)    | Intégrité            |                   |                    |                  |               |                   | VUL-xxx                        | RISQ-xxx                         |        |
-| STR-003  | COMPOSANT / FLUX 1      | R (Repudiation)  | Traçabilité          |                   |                    |                  |               |                   | VUL-xxx                        | RISQ-xxx                         |        |
-| STR-004  | COMPOSANT / FLUX 1      | I (Info. disclosure) | Confidentialité  |                   |                    |                  |               |                   | VUL-xxx                        | RISQ-xxx                         |        |
-| STR-005  | COMPOSANT / FLUX 1      | D (Denial of service) | Disponibilité   |                   |                    |                  |               |                   | VUL-xxx                        | RISQ-xxx                         |        |
-| STR-006  | COMPOSANT / FLUX 1      | E (Elev. of privilege) | Autorisation   |                   |                    |                  |               |                   | VUL-xxx                        | RISQ-xxx                         |        |
+| Catégorie STRIDE       | Composant / Flux   | Propriété compromise | Menace identifiée | Vecteur / Scénario | Contre-mesure(s) | Vraisemblance | Niveau de risques | Lien vulnérabilité (`VUL-xxx`) | Lien registre des risques (`04`) | Statut |
+| ---------------------- | ------------------ | -------------------- | ----------------- | ------------------ | ---------------- | ------------- | ----------------- | ------------------------------ | -------------------------------- | ------ |
+| S (Spoofing)           | COMPOSANT / FLUX 1 | Authenticité         |                   |                    |                  |               |                   | - VUL-xxx                      | - RISQ-xxx                       |        |
+| T (Tampering)          | COMPOSANT / FLUX 1 | Intégrité            |                   |                    |                  |               |                   | - VUL-xxx                      | - RISQ-xxx                       |        |
+| R (Repudiation)        | COMPOSANT / FLUX 1 | Traçabilité          |                   |                    |                  |               |                   | - VUL-xxx                      | - RISQ-xxx                       |        |
+| I (Info. disclosure)   | COMPOSANT / FLUX 1 | Confidentialité      |                   |                    |                  |               |                   | - VUL-xxx                      | - RISQ-xxx                       |        |
+| D (Denial of service)  | COMPOSANT / FLUX 1 | Disponibilité        |                   |                    |                  |               |                   | - VUL-xxx                      | - RISQ-xxx                       |        |
+| E (Elev. of privilege) | COMPOSANT / FLUX 1 | Autorisation         |                   |                    |                  |               |                   | - VUL-xxx                      | - RISQ-xxx                       |        |
 
 **Tableau 55. Matrice de traçabilité STRIDE**
 
