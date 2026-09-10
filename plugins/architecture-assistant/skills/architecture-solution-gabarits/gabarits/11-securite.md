@@ -8,6 +8,32 @@
 Effectuer une **modélisation des menaces (STRIDE : Spoofing, Tampering, Repudiation, Information disclosure, Denial of service, Elevation of privilege)** en **phase de conception** pour chaque composant / flux identifié dans `06-architecture-solutions.md`.
 Référencer les référentiels **OWASP** (Top 10, API Security) et **OWASP ASVS** (Application Security Verification Standard) pour les exigences de vérification. Les menaces identifiées alimentent le tableau des vulnérabilités et le registre des risques (`04`).
 -->
+
+#### Matrice de traçabilité STRIDE
+
+<!--
+La **matrice de traçabilité STRIDE** croise chaque **composant / flux** identifié dans `06-architecture-solutions.md` avec les **6 catégories STRIDE** (Spoofing, Tampering, Repudiation, Information disclosure, Denial of service, Elevation of privilege) et assure la traçabilité de bout en bout : de la menace identifiée jusqu'au contrôle de mitigation, à la vulnérabilité applicative/infrastructure (`VUL-xxx`) et au registre des risques (`RISQ-xxx` du `04-risques.md`).
+
+Règles de remplissage :
+  - **Une ligne par couple (composant/flux × menace applicable)**. Si une catégorie STRIDE n'est pas applicable à un composant, l'indiquer explicitement par `N/A` (avec justification) plutôt que de l'omettre, afin de démontrer la couverture complète.
+  - **Catégorie STRIDE** : `S` Spoofing (authenticité) · `T` Tampering (intégrité) · `R` Repudiation (traçabilité) · `I` Information disclosure (confidentialité) · `D` Denial of service (disponibilité) · `E` Elevation of privilege (autorisation).
+  - **Vraisemblance** et **Niveau de risques** : mêmes échelles que le `04-risques.md` (harmonisation obligatoire).
+  - **Lien vulnérabilité** : code `VUL-xxx` de la *Sécurité applicative* / *Sécurité Infrastructure* ci-dessous (sans duplication du détail).
+  - **Lien registre des risques** : code `RISQ-xxx` du `04-risques.md`.
+  - **Statut** : aligné sur les statuts du registre des risques (`04`).
+-->
+
+| ID       | Composant / Flux (`06`) | Catégorie STRIDE | Propriété compromise | Menace identifiée | Vecteur / Scénario | Contre-mesure(s) | Vraisemblance | Niveau de risques | Lien vulnérabilité (`VUL-xxx`) | Lien registre des risques (`04`) | Statut |
+| -------- | ----------------------- | ---------------- | -------------------- | ----------------- | ------------------ | ---------------- | ------------- | ----------------- | ------------------------------ | -------------------------------- | ------ |
+| STR-001  | COMPOSANT / FLUX 1      | S (Spoofing)     | Authenticité         |                   |                    |                  |               |                   | VUL-xxx                        | RISQ-xxx                         |        |
+| STR-002  | COMPOSANT / FLUX 1      | T (Tampering)    | Intégrité            |                   |                    |                  |               |                   | VUL-xxx                        | RISQ-xxx                         |        |
+| STR-003  | COMPOSANT / FLUX 1      | R (Repudiation)  | Traçabilité          |                   |                    |                  |               |                   | VUL-xxx                        | RISQ-xxx                         |        |
+| STR-004  | COMPOSANT / FLUX 1      | I (Info. disclosure) | Confidentialité  |                   |                    |                  |               |                   | VUL-xxx                        | RISQ-xxx                         |        |
+| STR-005  | COMPOSANT / FLUX 1      | D (Denial of service) | Disponibilité   |                   |                    |                  |               |                   | VUL-xxx                        | RISQ-xxx                         |        |
+| STR-006  | COMPOSANT / FLUX 1      | E (Elev. of privilege) | Autorisation   |                   |                    |                  |               |                   | VUL-xxx                        | RISQ-xxx                         |        |
+
+**Tableau 55. Matrice de traçabilité STRIDE**
+
 ### Sécurité applicative
 
 <!-- Vulnérabilités applicatives issues de la modélisation des menaces (STRIDE) et des scans OWASP/ASVS. Chaque vulnérabilité est liée (sans duplication) au **registre des risques** du `04-risques.md` par son code (`RISQ-xxx`). Échelles de **Vraisemblance** et **Niveau de risques** harmonisées avec le `04`. -->
