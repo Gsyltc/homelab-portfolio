@@ -33,7 +33,7 @@ boundaries:
       - diagramme_principal
       - scope_et_axes_confirmes
     checks: [artefacts-presents, liaison-tracabilite, absence-orphelin]
-    sensors: [diagram-validity]
+    sensors: [diagram-validity, data-lifecycle]   # data-lifecycle : advisory pour tous (assiste l'Architecte de solution, alerte le coordinateur — jamais bloquant)
 
   - id: construction-operation
     frontiere: "Construction → Operation"

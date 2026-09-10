@@ -4,7 +4,7 @@ phase: inception
 execution: ALWAYS
 condition: "Always executes"
 lead_agent: Architecte de solution
-support_agents: [Architecte AWS, Infrastructure Windows, OpenSpec Expert]
+support_agents: [Architecte de données, Architecte AWS, Infrastructure Windows, OpenSpec Expert]
 mode: mob
 summary_confirmation: required
 reviewer: Reviewer de sécurité
@@ -14,7 +14,7 @@ human_gate: granular
 produces: [decision_conception, diagramme_principal, conception_cible_validee]
 consumes: [{artifact: besoins_traces, required: true}, {artifact: decoupage_livrables, required: true}]
 requires_stage: [deliverables-breakdown]
-sensors: [required-sections, upstream-coverage, diagram-validity]
+sensors: [required-sections, upstream-coverage, diagram-validity, data-lifecycle]
 scopes: [standard, feature, infra, security-patch, mvp, enterprise]
 inputs: "Besoins tracés + découpage en livrables"
 outputs: "Conception cible + décisions structurantes validées granulairement par l'humain, après contrôle sécurité"
@@ -31,6 +31,8 @@ Produire la conception cible et les décisions structurantes, contrôlées en s�
 ### Step 1 — Production de la conception (mob)
 
 Les `support_agents` désignés travaillent **en parallèle contre le brouillon du lead** (Architecte de solution), en une ronde d'objection bornée (`mode: mob`) : vues fonctionnelle / technique, choix, alternatives, risques. Chaque décision structurante est **tracée** dans le registre de décisions du projet (`decisions/`).
+
+> **Données** : le lead (Architecte de solution) **délègue à l'Architecte de données** les tâches relatives aux données au besoin. L'Architecte de données produit le document **Cycle de vie des données** (`documentation/10-cycle_vie_donnees.md`) — cycle de vie, gouvernance, classification, renseigné selon les données du projet — puis le remet à l'Architecte de solution. L'**Architecte de solution valide** ce livrable ; le sensor `data-lifecycle` (advisory) **assiste** cette validation en factualisant la présence et le renseignement du document, mais **ne la bloque pas** — l'Architecte de solution reste seul juge et peut demander une correction sur la base d'un écart.
 
 ### Step 2 — Contrôle sécurité obligatoire (revue adversariale)
 
@@ -53,8 +55,9 @@ Présenter **chaque choix séparément** (choix, justification, alternative) ; b
 ## Sensors
 
 Outputs: conception + décisions validées. Frontière **Inception → Construction** : gate `artefacts-presents` + `liaison-tracabilite` + `absence-orphelin`.
-Imports: `required-sections`, `upstream-coverage`, `diagram-validity`.
+Imports: `required-sections`, `upstream-coverage`, `diagram-validity`, `data-lifecycle`.
 Upstream targets: `besoins_traces` (required), `decoupage_livrables` (required) — couverture amont vérifiée à l'écriture de la décision / conception.
+Données : `data-lifecycle` vérifie `documentation/10-cycle_vie_donnees.md` (présent + renseigné selon les données du projet). **Advisory pour tous** : il **assiste** la revue **Architecte de solution → Architecte de données** et **alerte** le coordinateur au verification gate, **sans jamais bloquer** ni la validation de l'Architecte de solution ni le gate humain.
 Review artifact: la **décision structurante** (`decisions/<NNNN>-<titre>.md`) porte la section `## Review` ajoutée par le Reviewer de sécurité.
 
 ## Learn

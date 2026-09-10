@@ -32,6 +32,7 @@ Découper le travail en livrables et désigner l'agent responsable de chacun.
 ### Step 2 — Découper et désigner l'agent responsable
 
 - Documentation d'architecture / décisions structurantes / diagrammes → **Architecte de solution**.
+- Analyse et cycle de vie des données (modélisation, gouvernance, classification, `10-cycle_vie_donnees.md`) → **Architecte de données** (délégué par l'Architecte de solution, qui valide le livrable — critère : sensor `data-lifecycle`).
 - Choix AWS, diagrammes AWS, coûts → **Architecte AWS** (si AWS requis).
 - Administration / infrastructure Windows → **Infrastructure Windows** (si concerné).
 - Cycle spec-driven → **OpenSpec Expert** (uniquement si OpenSpec activé).
