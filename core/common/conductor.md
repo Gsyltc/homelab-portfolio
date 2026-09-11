@@ -155,6 +155,7 @@ Aucun scope, aucune règle apprise, aucun gate/sensor advisory ne peut désactiv
 - **Piste d'audit** sur l'issue.
 - **Contrôle sécurité minimal** toujours actif (OWASP / STRIDE), systématique à chaque modification d'architecture.
 - **Aucune action à impact** sans validation humaine explicite ; **rollback validé** avant action destructive.
+- **Mention humaine obligatoire sur blocage** — dès qu'un blocage survient, **quel que soit l'agent** concerné, l'agent qui le rencontre **doit mentionner explicitement l'humain demandeur** (`[@Nom](mention://member/<user_id>)`) sur l'issue et passer l'issue en `blocked` ; il n'avance pas tant que l'humain n'a pas tranché. Un commentaire sans mention humaine valide ne satisfait pas ce garde-fou.
 
 Le détail des garde-fous (plancher sécurité des scopes, SEC-1..5 du learning-loop, SG-1..6 des gates/sensors, protection contre les entrées non fiables) est dans [`protocols/governance-security.md`](protocols/governance-security.md).
 
