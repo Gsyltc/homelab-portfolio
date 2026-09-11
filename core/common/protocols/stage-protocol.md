@@ -45,3 +45,5 @@ Dès qu'un stage **produit ou modifie une architecture** (ou une surface de séc
 
 ## Halt-and-ask
 Le cycle s'arrête et interroge l'humain dès : échec / impossibilité d'un livrable ; écart ou contrôle de sécurité requis ; gate / sensor en écart ou `⛔ indisponible` ; décision structurante nouvelle non cadrée ; action à impact / destructive (jamais autonome).
+
+**Mention humaine obligatoire (quel que soit l'agent)** : tout `halt-and-ask` est un **blocage**. L'agent qui le déclenche — coordinateur ou agent délégué, sans exception — **doit mentionner explicitement l'humain demandeur** sur l'issue (`[@Nom](mention://member/<user_id>)`, UUID résolu via `multica workspace member list --output json`), décrire le blocage et l'arbitrage attendu, et passer l'issue en `blocked`. Un commentaire sans mention humaine valide ne satisfait pas cette obligation. L'agent n'avance pas et ne devine pas tant que l'humain n'a pas tranché. Invariant non contournable — voir la clause « Mention humaine obligatoire en cas de blocage » de [`governance-security.md`](governance-security.md).
