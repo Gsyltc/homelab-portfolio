@@ -41,7 +41,7 @@ Appliquer la **règle préalable de documentation officielle** (voir [`../../con
 
 ### Step 4 — Identifier le domaine
 
-Stack Docker (Spécialiste Docker / QA Docker), Home Assistant (Expert Home Assistant), Terraform (Spécialiste Terraform), ou domaine sans agent (Ansible, logs, Kestra → Tech Lead réalise lui-même la vérification et le signale à l'humain).
+Stack Docker (Spécialiste Docker / QA Docker), Home Assistant (Expert Home Assistant), Terraform (Spécialiste Terraform), ou domaine sans agent (Ansible, logs, Flux Kestra → Tech Lead réalise lui-même la vérification et le signale à l'humain).
 
 ## Sensors
 
