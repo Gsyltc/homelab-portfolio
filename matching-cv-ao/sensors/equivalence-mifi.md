@@ -41,6 +41,7 @@ portee: "chaque objet de la liste collaborateurs"
 
 - Le sensor **ne bloque pas** : il **signale** dans le « Rapport d'équivalence MIFI » sur l'issue chaque collaborateur dont l'objet `mifi` est absent, incohérent (état hors énumération, `niveau_equivalent_qc` manquant alors que `equivalence_requise` = `oui`/`non_requise`), ou en état **`a_verifier`** (MIFI non tranché — réponse humaine attendue), et **propose de revenir compléter** le CV avant de présenter le contenu à l'humain.
 - Les collaborateurs en `a_verifier` sont **listés explicitement** pour que l'humain tranche (passage à `oui` avec niveau, ou `non`) — le sensor ne présume rien.
+- **Rappel de portée** : ce sensor est advisory et ne décide **pas** de l'éligibilité. La décision revient au filtre d'éligibilité (Gestionnaire CV) : une équivalence **tranchée `non`** face à un AO exigeant un niveau d'études rend l'axe **Études strict non atteint** ⇒ collaborateur `exclu` ; une équivalence **non tranchée** (`a_verifier`) laisse le collaborateur `a_verifier` (mention humaine — ne rien inventer).
 - L'humain reste seul décideur : demander la correction, ou valider en connaissance de cause en actant l'écart sur l'issue.
 
 ## Rapport de sensor (piste d'audit)
