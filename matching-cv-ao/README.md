@@ -50,7 +50,8 @@ matching-cv-ao/
 │   ├── README.md
 │   ├── gates.md                        # Gates aux frontières de phases
 │   ├── disponibilite.md                # Sensor advisory — disponibilité complète (Analyse → Matching)
-│   └── equivalence-mifi.md             # Sensor advisory — équivalence MIFI (Analyse → Matching)
+│   ├── equivalence-mifi.md             # Sensor advisory — équivalence MIFI (Analyse → Matching)
+│   └── localisation.md                 # Sensor advisory — localisation complète / ville candidat (Analyse → Matching)
 ├── agents/
 │   ├── coordinateur-matching-agent.md  # Coordinateur Matching
 │   ├── analyste-rfp-agent.md           # Analyste RFP
@@ -83,6 +84,12 @@ matching-cv-ao/
 Chaque profil CV porte un objet `mifi` (équivalence des diplômes — contexte gouvernemental Québec) à **4 états** d'`equivalence_requise` : `non_requise` (diplôme canadien), `oui` (MIFI obtenu), `non` (étranger sans équivalence), `a_verifier` (non déterminable → **mention humaine**, ne rien inventer). Voir [`agents/gestionnaire-cv-agent.md`](agents/gestionnaire-cv-agent.md).
 
 Pour un **AO gouvernemental** (`ao.client_gouvernemental = true`), le niveau d'études requis est un **critère de conformité éliminatoire** : le Matcher croise niveau requis + équivalence MIFI + politique de compensation de l'AO (`equivalence_diplomes`) et **exclut** du classement tout collaborateur **non conforme** (`recommandation = "exclu"`, motif explicite). Cette conformité **n'altère pas** les poids du scoring immuable. Les exclusions sont **reportées dans le classement et le rapport final de livraison**. Un état `a_verifier` sur un AO gouvernemental est **signalé à l'humain**, sans exclusion automatique. Voir [`agents/matcher-profils-agent.md`](agents/matcher-profils-agent.md).
+
+## Localisation géographique & proximité (≤ 70 km)
+
+Chaque AO porte un objet `localisation_travail` renseigné par l'Analyste RFP : `mode` ∈ {`teletravail`, `sur_site`, `hybride`, `non_precise`}, et — pour un travail `sur_site`/`hybride` — la `ville_site` (au minimum), l'`adresse_site` si disponible, et un `rayon_km` de proximité (**70 km par défaut**). Chaque profil CV porte un objet `localisation` avec la **ville du candidat** (`localisation.ville`), champ **obligatoire** contrôlé par le sensor [`localisation-complete`](sensors/localisation.md). Si le CV ne contient pas la ville, le Gestionnaire CV **pose une mention humaine** (ne rien inventer).
+
+Le Gestionnaire CV applique la **localisation comme 4ᵉ axe du filtre d'éligibilité** (en plus d'Études, MIFI, Expériences) : pour un AO `sur_site`/`hybride`, un collaborateur situé à **plus de `rayon_km` (70 km par défaut)** de la `ville_site` est **`exclu`** (axe `localisation`, ex. AO `Montréal` / candidat à `Québec`). Une **ville de candidat manquante** classe le collaborateur `a_verifier` (jamais `exclu` de force) avec mention humaine. En `teletravail`/`non_precise`, ce critère **ne s'applique pas**. Comme les autres exclusions d'éligibilité, cette décision est prise **en amont** du Matcher et **n'altère pas** les poids du scoring immuable ; elle est propagée au classement et au rapport final. Voir [`agents/gestionnaire-cv-agent.md`](agents/gestionnaire-cv-agent.md).
 
 ## Agents
 
