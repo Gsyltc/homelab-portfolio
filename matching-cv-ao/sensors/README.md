@@ -17,3 +17,4 @@ Ces fichiers **décrivent le contrat** (périmètre de déclenchement, règles d
 | --- | --- | --- |
 | Verification gates | [`gates.md`](gates.md) | Contrôle de traçabilité aux frontières de phases |
 | Sensor `disponibilite-complete` | [`disponibilite.md`](disponibilite.md) | Présence obligatoire de la disponibilité (date de disponibilité + taux d'utilisation en %) dans chaque profil CV, contrôlée à la frontière Analyse → Matching |
+| Sensor `equivalence-mifi` | [`equivalence-mifi.md`](equivalence-mifi.md) | Présence et cohérence de l'objet `mifi` (équivalence MIFI, 4 états d'`equivalence_requise`) dans chaque profil CV ; signale les collaborateurs en `a_verifier`, contrôlé à la frontière Analyse → Matching |

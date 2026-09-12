@@ -9,6 +9,33 @@ ce fichier en donne la lecture chronologique côté produit.
 ## [Non publié]
 
 ### Added
+- **Équivalence MIFI (contexte gouvernemental Québec) dans le workflow Matching CV ↔ AO** (`matching-cv-ao/`) —
+  évolution **documentaire** des fiches d'agent, de stage et des sensors, invariants préservés (JSON A2A /
+  Markdown humain, scoring immuable 50/35/10/5, gates advisory) :
+  - **Objet `mifi` à 4 états** (`non_requise` | `oui` | `non` | `a_verifier`) ajouté à chaque collaborateur du
+    JSON CV, produit par le stage `extraction-cv` (Gestionnaire CV). Pour tout état `a_verifier`, une **mention
+    humaine** est posée — **rien n'est inventé**. Documenté dans `agents/gestionnaire-cv-agent.md`,
+    `common/stages/analyse/extraction-cv.md`, `scopes/format-cv.md`.
+  - **Détection du client gouvernemental et de la politique d'équivalence des diplômes** par l'Analyste RFP :
+    champs `ao.client_gouvernemental` et `ao.equivalence_diplomes` (`acceptee` ∈ {`oui`, `non`, `non_precise`},
+    `mecanisme`, `compensation_annees_par_annee_manquante`, `reference_ao`) + `etudes_requises` par profil, sans
+    rien inventer (`non_precise` sinon). Documenté dans `agents/analyste-rfp-agent.md`,
+    `common/stages/analyse/parse-ao.md`.
+  - **Conformité du niveau d'études avec exclusion** (Matcher Profils) : pour un AO gouvernemental, croisement
+    niveau requis + équivalence MIFI + compensation → bloc `conformite_etudes` ; un collaborateur non conforme
+    est **exclu** du classement (`recommandation: "exclu"`, motif explicite), reporté **dans le classement et le
+    rapport final de livraison** ; un état `a_verifier` est signalé à l'humain sans exclusion automatique. La
+    conformité **n'altère pas** les poids du scoring immuable. Documenté dans `agents/matcher-profils-agent.md`,
+    `common/stages/matching/croisement-profils.md`, `common/stages/matching/classement-profils.md`,
+    `common/stages/cloture/livraison.md`.
+  - **Nouveau sensor advisory `equivalence-mifi`** (`sensors/equivalence-mifi.md`) à la frontière
+    Analyse → Matching sur l'artefact `cv-profils` : présence et cohérence de l'objet `mifi`, signalement des
+    collaborateurs en `a_verifier` — sans bloquer. Branché dans `sensors/gates.md` (check ajouté à la frontière
+    `analyse-matching` + ligne de rapport dédiée) et référencé dans `sensors/README.md`.
+  - **Documentation** mise à jour : `matching-cv-ao/README.md` (structure des sensors + section « Équivalence
+    MIFI & conformité études ») et `docs/guide-utilisation-workflow-matching.md` (section utilisateur sur le
+    statut MIFI et les exclusions gouvernementales).
+
 - **RULE-WS-006 (OBLIGATOIRE) — Documentation finale sans noms techniques**, couche `workspace`
   (`core/rules/workspace.md`), valable pour tout le workspace : aucun nom d'agent, aucune mention de skill,
   aucun nom de fichier dans la documentation finale. Les liens internes utilisent le **titre H2** du document

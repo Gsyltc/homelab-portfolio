@@ -30,6 +30,7 @@ Produire et livrer le résumé final du matching à l'humain.
 Produire un document Markdown récapitulatif contenant :
 - Résumé de l'AO analysée
 - Liste des profils retenus avec scores et justification
+- **Pour un AO gouvernemental : section « Exclus — non-conformité études »** listant explicitement les collaborateurs **exclus pour non-conformité du niveau d'études** (`recommandation = "exclu"`), avec le **motif d'exclusion** (niveau requis vs niveau du collaborateur, équivalence MIFI, compensation appliquée). Cette mention est **obligatoire** dans le rapport final.
 - Grille remplie (si disponible)
 - Recommandations
 
