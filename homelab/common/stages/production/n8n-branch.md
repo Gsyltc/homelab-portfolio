@@ -11,7 +11,7 @@ reviewer: null
 review_class: none
 human_gate: explicit
 produces: [flux_n8n_propose_ou_applique]
-consumes: [{artifact: routage_n8n_decide, required: true}]
+consumes: [{artifact: routage_n8n_decide, required: false}, {artifact: routage_domaine_decide, required: false}]
 requires_stage: [n8n-absolute-rule]
 sensors: []
 scopes: [n8n]

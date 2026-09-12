@@ -11,7 +11,7 @@ reviewer: null
 review_class: none
 human_gate: explicit
 produces: [modification_home_assistant_proposee_ou_appliquee]
-consumes: [{artifact: intention_perimetre_approuves, required: true}]
+consumes: [{artifact: intention_perimetre_approuves, required: true}, {artifact: routage_domaine_decide, required: false}]
 requires_stage: [intake-framing]
 sensors: []
 scopes: [home-assistant]

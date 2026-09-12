@@ -26,6 +26,8 @@ Scope auto-détecté par mots-clés (FR / EN) puis **confirmé explicitement** a
 
 **Le doute ne bascule jamais vers `config-change`** : dès qu'un seul déclencheur d'un scope plus élevé s'applique — ou en cas de doute sur l'impact sécurité — le scope supérieur s'impose. L'auto-détection est un **plancher** : la confirmation humaine peut monter le contrôle, jamais le descendre sans trace.
 
+**Ambiguïté `n8n` vs `home-assistant` (hors stack).** Lorsque la demande est **ambiguë** (mot « automatisation », ou nommage pouvant viser aussi bien un flux n8n qu'une automatisation Home Assistant) **et** ne concerne pas une stack Docker/Swarm ou Proxmox, le domaine n'est **pas** tranché par mots-clés : le départage `n8n` = `home-assistant` est résolu en Cadrage par le stage [`domain-triage`](../stages/cadrage/domain-triage.md), qui détermine le domaine par **recherche de correspondance** via les deux MCP (existence seulement, **aucune analyse**) puis aiguille (n8n seul → Expert n8n ; HA seul → Expert Home Assistant ; les deux → remontée humaine explicite ; nulle part → création vers le spécialiste du type demandé, ou remontée humaine si vérification/modification d'un élément inexistant). Un déclencheur n8n **explicite** conserve la règle absolue n8n ; une demande de stack conserve son routage stack.
+
 ## Axes
 
 - **Axe 1 — Depth** : `minimal` / `standard` / `comprehensive` (détail des artefacts : docker-compose, config Terraform, documentation). Contrôle *combien on écrit*.
@@ -57,6 +59,7 @@ Légende : ✅ activé · ➖ allégé / au juste nécessaire · ❌ ignoré · 
 | Initialisation (0.x)             | ✅              | ✅           | ✅               | ✅                | ✅                 | ✅           | ✅                |
 | Idéation (1.x)                   | ✅              | ✅           | ➖               | ✅                | ✅                 | ⏭           | ⏭                |
 | `n8n-absolute-rule`              | ✅              | ✅           | ✅               | ✅                | ✅                 | 🔒 déclenche | ✅                |
+| `domain-triage`                  | ❌              | ❌           | ❌               | ❌                | ❌                 | ✅ ambigu    | ✅ ambigu         |
 | `intake-framing`                 | ✅              | ✅           | ➖               | ✅                | ✅                 | ⏭           | ⏭                |
 | `swarm-proxmox-arbitration`      | ➖              | ✅           | ❌               | ➖                | ✅                 | ⏭           | ⏭                |
 | `required-parameters-collection` | ✅              | ✅           | ➖               | ✅                | ➖                 | ⏭           | ⏭                |
