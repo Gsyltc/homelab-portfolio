@@ -12,7 +12,7 @@ review_class: none
 review_artifact: ""
 human_gate: light
 produces: [classement-final]
-consumes: [{artifact: matching-resultats, required: true}]
+consumes: [{artifact: matching-resultats, required: true}, {artifact: cv-eligibilite, required: true}]
 requires_stage: [croisement-profils]
 sensors: []
 scopes: [standard]
@@ -28,6 +28,13 @@ Produire le classement final des profils et préparer la présentation pour vali
 ## Steps
 ### Step 1 — Agrégation et tri
 Agrégérer les résultats de matching, trier par score décroissant, grouper par recommandation (recommandé / possible / déconseillé). **Les profils `exclu`** (non-conformité du niveau d'études sur AO gouvernemental) **sont sortis du classement principal** et regroupés dans une section dédiée « **Exclus — non-conformité études (gouvernemental)** » indiquant, pour chacun, le `motif_exclusion` (niveau requis vs niveau du collaborateur, équivalence MIFI, compensation appliquée le cas échéant).
+
+**Section « Non retenus (Gestionnaire CV) »** : en plus de la section « Exclus — non-conformité études (Matcher) » ci-dessus, ajouter une section **distincte** listant les **non-retenus du filtre d'éligibilité amont** (Gestionnaire CV), issus de `cv-eligibilite`, **jamais scorés** par le Matcher. Cette section distingue deux sous-listes :
+
+- **Exclus (`exclu`)** — écartés définitivement vis-à-vis de l'AO, avec **raisons par axe** (`etudes | mifi | experiences | coherence | fraicheur_cv` + `detail`).
+- **À vérifier (`a_verifier`)** — en attente d'arbitrage humain (ex. MIFI non tranché), avec **raisons par axe** ; ne rien inventer.
+
+Cette section « Non retenus (Gestionnaire CV) » est **distincte** de la section « Exclus — non-conformité études » (double check du Matcher) : la première relève du filtre d'éligibilité amont, la seconde du contrôle de conformité études aval sur les retenus.
 
 ### Step 2 — Préparation de la présentation
 Pour chaque profil, préparer : nom, score total, détail par critère, recommandation, justification, et — pour un AO gouvernemental — le **statut de conformité des études** (`conformite_etudes.conforme`) et, si `conforme = "non"`, le **motif d'exclusion**. Format Markdown pour l'humain.

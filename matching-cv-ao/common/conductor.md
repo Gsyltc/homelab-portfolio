@@ -20,8 +20,8 @@ Ce fichier est la **source unique** des instructions du **coordinateur** du work
 | --- | --- |
 | **Coordinateur Matching** | Orchestre le flux, contrôle les livrables, demande validations humaines (Keep/Modify/Redo), traduit JSON→Markdown pour l'humain. |
 | **Analyste RFP** | Parse le PDF d'AO, extrait exigences + profils recherchés, produit le résumé Markdown. |
-| **Gestionnaire CV** | Récupère les CV sources fournis en **pièces jointes de l'issue** (via `multica attachment`), en extrait les données puis **supprime la copie de travail** (originaux non conservés) ; met à jour les analyses versionnées. |
-| **Matcher Profils** | Croise exigences AO ↔ profils CV, calcule le score pondéré, classe les profils. |
+| **Gestionnaire CV** | Récupère les CV sources fournis en **pièces jointes de l'issue** (via `multica attachment`), en extrait les données puis **supprime la copie de travail** (originaux non conservés) ; met à jour les analyses versionnées. **Filtre l'éligibilité vis-à-vis de l'AO** (axes Études / MIFI si nécessaire / Expériences → 3 états `possible`/`a_verifier`/`exclu`) et **ne transmet pas les CV** au coordinateur — seulement le verdict d'éligibilité (retenus + à vérifier + exclus/raisons) et la référence `analyse_json` des retenus. |
+| **Matcher Profils** | Croise exigences AO ↔ profils CV **des seuls retenus** transmis par le coordinateur, calcule le score pondéré, classe les profils ; conserve la conformité études (AO gouvernemental) en **double check** aval sur les retenus. |
 
 ---
 
@@ -151,11 +151,11 @@ sequenceDiagram
     S->>S: Bootstrap deterministe - reception AO + verification CV (INITIALISATION)
     S->>A: Delegue parsing AO (mention + mission)
     A-->>S: Resume AO + exigences + profils recherches
-    S->>G: Delegue extraction CV (mention + mission)
-    G-->>S: CV analyses + profils extraits
-    S->>H: Gate leger - validation extractions (ANALYSE)
-    H-->>S: Approbation extractions
-    S->>M: Delegue croisement profils ↔ exigences (mention + mission)
+    S->>G: Delegue extraction CV + filtre eligibilite vs AO (mention + mission)
+    G-->>S: Eligibilite (possibles + a verifier + exclus/raisons), sans les CV
+    S->>H: Gate leger - validation extractions + eligibilite (ANALYSE)
+    H-->>S: Approbation extractions + eligibilite
+    S->>M: Delegue croisement - liste des retenus uniquement (mention + mission)
     M-->>S: Scores + classement
     S->>H: Gate advisory - presentation scores (MATCHING)
     H-->>S: Commentaires / ajustements
