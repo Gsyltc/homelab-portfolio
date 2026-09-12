@@ -30,7 +30,7 @@ Vérifier la présence et l'accessibilité du PDF d'appel d'offres fourni par l'
 Vérifier que l'AO est disponible : PDF, DOCX ou contenu de l'issue. Si absent, demander à l'humain de le fournir.
 
 ### Step 2 — Création de la structure de répertoire
-Créer le répertoire de destination : `${ROOT_DIRECTORY}/ao/<client>/<titre-ao>/`. Copier le PDF dans ce répertoire.
+Créer le répertoire de destination : `${ROOT_DIRECTORY}/ao/<client>/<titre-ao>/`. Copier l'AO dans ce répertoire.
 
 ### Step 3 — Documenter la réception
 Poster un commentaire sur l'issue avec :
