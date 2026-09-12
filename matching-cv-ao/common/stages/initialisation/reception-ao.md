@@ -26,8 +26,8 @@ outputs: "Confirmation de réception + chemin du PDF"
 Vérifier la présence et l'accessibilité du PDF d'appel d'offres fourni par l'humain.
 
 ## Steps
-### Step 1 — Vérification du PDF d'AO
-Vérifier que le PDF d'AO est fourni sur l'issue (pièce jointe) ou accessible via un chemin connu. Si absent, demander à l'humain de le fournir.
+### Step 1 — Vérification de l'AO
+Vérifier que l'AO est disponible : PDF, DOCX ou contenu de l'issue. Si absent, demander à l'humain de le fournir.
 
 ### Step 2 — Création de la structure de répertoire
 Créer le répertoire de destination : `${ROOT_DIRECTORY}/ao/<client>/<titre-ao>/`. Copier le PDF dans ce répertoire.

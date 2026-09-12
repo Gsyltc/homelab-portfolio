@@ -26,8 +26,8 @@ outputs: "Grille remplie avec les profils"
 Remplir la grille d'évaluation client fournie par l'humain avec les profils validés.
 
 ## Steps
-### Step 1 — Vérification de la grille
-Vérifier que l'humain a fourni une grille d'évaluation. Si absente, la demander. **Ne jamais inventer de grille.**
+### Step 1 — Grille (après matching)
+Grille fournie → remplir. Grille absente → halt-and-ask, mention explicite de l'humain.
 
 ### Step 2 — Remplissage
 Pour chaque critère de la grille, renseigner le(s) profil(s) correspondant(s) avec les données du matching validé.
