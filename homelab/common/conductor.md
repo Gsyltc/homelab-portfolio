@@ -55,7 +55,7 @@ flowchart TD
 | --- | --- | --- | --- | --- |
 | **Initialisation** | 0 | Initialisation | [`stack-detection`](stages/initialisation/stack-detection.md) · [`concurrency-lock-read`](stages/initialisation/concurrency-lock-read.md) · [`deployment-prereqs-precheck`](stages/initialisation/deployment-prereqs-precheck.md) · [`labels-audit-init`](stages/initialisation/labels-audit-init.md) | Non (bootstrap déterministe) |
 | **Idéation** | 1 | Idéation | [`intent-capture`](stages/ideation/intent-capture.md) · [`feasibility-arbitration`](stages/ideation/feasibility-arbitration.md) · [`scope-detection`](stages/ideation/scope-detection.md) · [`auth-preselection`](stages/ideation/auth-preselection.md) · [`intent-scope-approval`](stages/ideation/intent-scope-approval.md) | Léger (intention + périmètre) |
-| **Cadrage et Paramètres** | 2 | Inception | [`n8n-absolute-rule`](stages/cadrage/n8n-absolute-rule.md) · [`intake-framing`](stages/cadrage/intake-framing.md) · [`swarm-proxmox-arbitration`](stages/cadrage/swarm-proxmox-arbitration.md) · [`required-parameters-collection`](stages/cadrage/required-parameters-collection.md) | Advisory (avant Production) |
+| **Cadrage et Paramètres** | 2 | Inception | [`n8n-absolute-rule`](stages/cadrage/n8n-absolute-rule.md) · [`domain-triage`](stages/cadrage/domain-triage.md) · [`intake-framing`](stages/cadrage/intake-framing.md) · [`swarm-proxmox-arbitration`](stages/cadrage/swarm-proxmox-arbitration.md) · [`required-parameters-collection`](stages/cadrage/required-parameters-collection.md) | Advisory (avant Production) |
 | **Production et Contrôle** | 3 | Construction | [`autonomy-mode`](stages/production/autonomy-mode.md) · [`docker-compose-creation`](stages/production/docker-compose-creation.md) · [`docker-compose-qa`](stages/production/docker-compose-qa.md) · [`terraform-configuration`](stages/production/terraform-configuration.md) · [`n8n-branch`](stages/production/n8n-branch.md) · [`home-assistant-branch`](stages/production/home-assistant-branch.md) · [`central-quality-control`](stages/production/central-quality-control.md) | Granulaire |
 | **Validation et Déploiement** | 4 | Operation | [`deployment-prereqs-check`](stages/validation/deployment-prereqs-check.md) · [`review-and-notification`](stages/validation/review-and-notification.md) · [`human-granular-validation`](stages/validation/human-granular-validation.md) · [`file-deposit`](stages/validation/file-deposit.md) · [`kestra-deployment`](stages/validation/kestra-deployment.md) · [`closure`](stages/validation/closure.md) | Explicite |
 
@@ -65,7 +65,7 @@ flowchart TD
 
 ## OBLIGATOIRE : règle préalable universelle — documentation officielle
 
-**Avant TOUTE tâche** (sauf n8n → délégation immédiate à l'Expert n8n, voir règle absolue n8n), la première action du Tech Lead est de vérifier si la stack concernée dispose d'une documentation officielle (site officiel, dépôt GitHub / GitLab / forge, autre source officielle).
+**Avant TOUTE tâche** (sauf n8n **explicite** → délégation immédiate à l'Expert n8n, voir règle absolue n8n ; une demande **ambiguë hors stack** passe d'abord par le triage de domaine, voir [`stages/cadrage/domain-triage.md`](stages/cadrage/domain-triage.md)), la première action du Tech Lead est de vérifier si la stack concernée dispose d'une documentation officielle (site officiel, dépôt GitHub / GitLab / forge, autre source officielle).
 
 - Si de l'information existe → s'en servir pour **cadrer** la demande (déployabilité : image/registry, port principal, type d'auth, dépendances majeures) et documenter le **lien officiel** sur l'issue **avant** de poursuivre.
 - Si rien n'est trouvé → le signaler explicitement sur l'issue et à l'humain, puis poursuivre en le précisant.
@@ -146,7 +146,7 @@ Deux travaux ne progressent **jamais** en parallèle sur la **même stack**. Le 
 
 Aucun scope, aucune règle apprise, aucun gate/sensor advisory ne peut désactiver :
 
-- **Règle absolue n8n** — dès que « n8n » apparaît, délégation immédiate à l'Expert n8n, pas même l'analyse (voir [`stages/cadrage/n8n-absolute-rule.md`](stages/cadrage/n8n-absolute-rule.md)).
+- **Règle absolue n8n** — dès que « n8n » apparaît **explicitement**, délégation immédiate à l'Expert n8n, pas même l'analyse (voir [`stages/cadrage/n8n-absolute-rule.md`](stages/cadrage/n8n-absolute-rule.md)). Une demande **ambiguë hors stack** (mot « automatisation », nommage indécidable) ne bascule pas d'office côté n8n : elle passe d'abord par le **triage de domaine** ([`stages/cadrage/domain-triage.md`](stages/cadrage/domain-triage.md)), qui détermine le domaine par recherche de correspondance MCP (existence seulement, aucune analyse) puis aiguille — sans jamais lever la règle absolue n8n lorsque n8n est explicite.
 - **Sélection automatique du type d'authentification** (`oidc → forwardauth → local`) préservée ; en cas de doute → humain.
 - **Terraform ne déploie JAMAIS** (`terraform init/apply/destroy` interdits) ; **aucun secret en clair** ; **jamais `${SNI}`** dans un livrable Terraform ; **un seul traitement par stack**.
 - **Validation humaine granulaire** (chaque choix validé / rejeté séparément).
