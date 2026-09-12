@@ -48,7 +48,7 @@ Ce fichier est la **source unique** des instructions du **coordinateur** du work
 | Élément | Emplacement |
 | --- | --- |
 | CV sources (PDF, DOCX) | **Pièces jointes de l'issue** — récupérés via `multica attachment`, **supprimés après extraction** (non stockés) |
-| Analyses CV (Markdown du jour + JSON versionnés à la racine ; anciennes fiches dans `cv/archives/`) | `${ROOT_DIRECTORY}/<nom-prenom>/cv` |
+| Analyses CV (Markdown du jour + JSON versionnés à la racine ; anciennes fiches dans `cv/archives/`) | `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv` |
 | Résumés AO | `${ROOT_DIRECTORY}/ao/<client>/<titre-ao>` |
 | Grille d'évaluation | Fournie par l'humain à chaque fois — **ne jamais inventer une grille**, la demander si absente |
 
@@ -84,9 +84,10 @@ flowchart TD
 
 Avant toute exécution, le coordinateur :
 
-1. **Vérifie l'existence de l'AO** — PDF reçu et accessible.
-2. **Charge le contexte existant** — CV déjà analysés, résultats de matching précédents.
-3. **Applique les paramètres par défaut** — structure de répertoire, scoring, conventions.
+1. **Vérifie l'AO** — PDF, DOCX ou contenu de l'issue, reçu et accessible.
+2. **Vérifie les CV** — `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv` rempli → poursuivre ; vide ou absent → halt-and-ask, mention explicite de l'humain.
+3. **Grille** — traitée après le matching (stage `remplissage-grille`).
+4. **Applique les paramètres par défaut** — structure de répertoire, scoring, conventions.
 
 ### Chargement optimisé (lazy loading)
 
