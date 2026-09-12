@@ -33,11 +33,13 @@ Mentionner le Matcher Profils avec mission claire : croiser **la dernière versi
 
 > **Fraîcheur des compétences** : le Matcher doit **exclure du calcul de compatibilité toute compétence non utilisée depuis plus de 10 ans** (champ `derniere_utilisation`). Une exigence couverte uniquement par une compétence périmée est considérée comme **non couverte**.
 
+> **Conformité du niveau d'études (AO gouvernemental)** : lorsque `ao.client_gouvernemental = true`, le Matcher doit **croiser le niveau d'études requis + l'équivalence MIFI (`mifi`) + la politique de compensation de l'AO** pour statuer la conformité de chaque collaborateur (bloc `conformite_etudes`). Un collaborateur **non conforme** (`conforme = "non"`) est **exclu** du classement (`recommandation = "exclu"`, `motif_exclusion` renseigné, `score_total` écarté). Un collaborateur en `conforme = "a_verifier"` (MIFI non tranché) est **signalé à l'humain**, sans exclusion automatique. Cette règle **n'altère pas** les poids du scoring immuable (voir [`../../../agents/matcher-profils-agent.md`](../../../agents/matcher-profils-agent.md)).
+
 ### Step 2 — Contrôle du livrable
-Vérifier que le JSON contient la liste `resultats` avec les champs : `collaborateur`, `score_total`, détail par critère (dont `score_competences.competences_ignorees_peremption`), `recommandation`, `justification`.
+Vérifier que le JSON contient la liste `resultats` avec les champs : `collaborateur`, `score_total`, détail par critère (dont `score_competences.competences_ignorees_peremption`), `conformite_etudes` (dont `conforme` et `motif_exclusion` si `conforme = "non"`, renseigné pour un AO gouvernemental), `recommandation` (valeur `exclu` possible), `justification`.
 
 ### Step 3 — Gate advisory
-Présenter à l'humain : top 5 des profils avec scores, recommandations. L'humain peut ajuster les poids ou demander un recalcul.
+Présenter à l'humain : top 5 des profils avec scores, recommandations. **Faire ressortir explicitement les profils exclus** (`recommandation = "exclu"` — non-conformité du niveau d'études sur AO gouvernemental, avec motif) **et ceux à vérifier** (`conformite_etudes.conforme = "a_verifier"`, MIFI non tranché). L'humain peut ajuster les poids ou demander un recalcul.
 
 ## Sensors
 Outputs: `matching-resultats` → Phase Matching (gate: advisory).

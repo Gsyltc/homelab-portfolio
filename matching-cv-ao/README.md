@@ -48,7 +48,9 @@ matching-cv-ao/
 │   └── format-cv.md                    # Traitement CV seul (sans AO ni matching)
 ├── sensors/                            # Verification gates & sensors
 │   ├── README.md
-│   └── gates.md                        # Gates aux frontières de phases
+│   ├── gates.md                        # Gates aux frontières de phases
+│   ├── disponibilite.md                # Sensor advisory — disponibilité complète (Analyse → Matching)
+│   └── equivalence-mifi.md             # Sensor advisory — équivalence MIFI (Analyse → Matching)
 ├── agents/
 │   ├── coordinateur-matching-agent.md  # Coordinateur Matching
 │   ├── analyste-rfp-agent.md           # Analyste RFP
@@ -75,6 +77,12 @@ matching-cv-ao/
 | Expérience en projets | 35% |
 | Études | 10% |
 | Disponibilité | 5% |
+
+## Équivalence MIFI & conformité études (client gouvernemental)
+
+Chaque profil CV porte un objet `mifi` (équivalence des diplômes — contexte gouvernemental Québec) à **4 états** d'`equivalence_requise` : `non_requise` (diplôme canadien), `oui` (MIFI obtenu), `non` (étranger sans équivalence), `a_verifier` (non déterminable → **mention humaine**, ne rien inventer). Voir [`agents/gestionnaire-cv-agent.md`](agents/gestionnaire-cv-agent.md).
+
+Pour un **AO gouvernemental** (`ao.client_gouvernemental = true`), le niveau d'études requis est un **critère de conformité éliminatoire** : le Matcher croise niveau requis + équivalence MIFI + politique de compensation de l'AO (`equivalence_diplomes`) et **exclut** du classement tout collaborateur **non conforme** (`recommandation = "exclu"`, motif explicite). Cette conformité **n'altère pas** les poids du scoring immuable. Les exclusions sont **reportées dans le classement et le rapport final de livraison**. Un état `a_verifier` sur un AO gouvernemental est **signalé à l'humain**, sans exclusion automatique. Voir [`agents/matcher-profils-agent.md`](agents/matcher-profils-agent.md).
 
 ## Agents
 

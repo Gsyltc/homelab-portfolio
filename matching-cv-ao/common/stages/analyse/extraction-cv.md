@@ -14,7 +14,7 @@ human_gate: light
 produces: [cv-profils]
 consumes: [{artifact: cv-available, required: true}]
 requires_stage: [chargement-cv]
-sensors: [disponibilite-complete]
+sensors: [disponibilite-complete, equivalence-mifi]
 scopes: [standard, format-cv]
 inputs: "Inventaire des CV disponibles (pièces jointes de l'issue + analyses existantes)"
 outputs: "Profils CV structurés (JSON versionné, dernière version) + fiches d'analyse Markdown versionnées (racine `cv/`, anciennes fiches archivées dans `cv/archives/`) ; copie de travail des CV sources supprimée après extraction"
@@ -33,6 +33,7 @@ Mentionner le Gestionnaire CV avec mission claire :
 - pour chaque collaborateur, **récupérer le(s) CV source(s) depuis les pièces jointes de l'issue** (via `multica attachment` ; jamais en ouvrant une URL de ressource Multica) et en extraire les informations structurées ;
 - pour **chaque compétence**, renseigner le **nombre de mois d'expérience** (`mois_experience`) et la **date de dernière utilisation** (`derniere_utilisation`) ;
 - renseigner **obligatoirement** la **disponibilité** de chaque collaborateur comme objet `disponibilite` avec `date_disponibilite` (date ISO `AAAA-MM-JJ`) et `taux_utilisation` (en %, 0–100) ;
+- renseigner l'objet **`mifi`** (équivalence MIFI) de chaque collaborateur selon les **4 états** d'`equivalence_requise` (`non_requise` | `oui` | `non` | `a_verifier`) : diplôme canadien → `non_requise` (`niveau_equivalent_qc` = niveau tel quel) ; MIFI mentionné → `oui` + `niveau_equivalent_qc` + `reference_mifi` ; études étrangères sans MIFI → `a_verifier`. **Ne rien inventer** : pour **chaque** collaborateur en `a_verifier`, **poser une mention humaine** sur l'issue demandant de trancher (le CV ne permet pas de conclure). Après réponse humaine, passer l'état à `oui` (avec niveau) ou `non` et fixer `source: "humain"` ;
 - renseigner `date_derniere_modification` avec **la date du jour** de l'analyse (ISO `AAAA-MM-JJ`), jamais la date du fichier source ;
 - renseigner `source_cv` (`fichier`, `provenance: "issue-attachment"`, `conserve: false`) pour tracer la pièce jointe traitée **avant sa suppression** ;
 - **journaliser sur l'issue**, **avant suppression**, le(s) nom(s) de la/des pièce(s) jointe(s) traitée(s) (seule trace d'audit de l'original) ;
@@ -44,14 +45,14 @@ Mentionner le Gestionnaire CV avec mission claire :
 - **en fin de tâche, rendre le résultat en mentionnant en retour le Coordinateur** `[@Coordinateur Matching](mention://agent/<UUID-COORDINATEUR>)` (mention agent valide), pas seulement en répondant dans le fil — une réponse simple ne réveille pas le Coordinateur ; puis vérifier les `trigger_outcomes`. Ne jamais deviner ni coder en dur l'UUID : le résoudre à chaque fois via `multica agent list --output json` et l'injecter dans la mention.
 
 ### Step 2 — Contrôle du livrable
-Vérifier que le JSON contient bien la liste `collaborateurs` avec les champs : `nom`, `date_derniere_modification` (= date du jour), `source_cv` (fichier + `provenance: "issue-attachment"` + `conserve: false`), `analyse_markdown` (chemin créé à la racine de `cv/`), `analyse_json` (chemin JSON versionné), `competences` (objets `{nom, mois_experience, derniere_utilisation}`), `experience`, `etudes`, `disponibilite` (objet **obligatoire** `{date_disponibilite, taux_utilisation}`). Vérifier qu'un fichier `<AAAA-MM-JJ>-<nom>-<prenom>.md` (racine de `cv/`) et un fichier `<nom>-<prenom>-<AAAA-MM-JJ>.json` versionné ont bien été créés par candidat, que les fiches Markdown antérieures ont été déplacées dans `cv/archives/`, et que la **copie de travail téléchargée a bien été supprimée** (aucun original écrit dans `cv/`) une fois les livrables produits. Signaler les écarts.
+Vérifier que le JSON contient bien la liste `collaborateurs` avec les champs : `nom`, `date_derniere_modification` (= date du jour), `source_cv` (fichier + `provenance: "issue-attachment"` + `conserve: false`), `analyse_markdown` (chemin créé à la racine de `cv/`), `analyse_json` (chemin JSON versionné), `competences` (objets `{nom, mois_experience, derniere_utilisation}`), `experience`, `etudes`, `mifi` (objet `{equivalence_requise, diplome_origine, pays_etudes, niveau_equivalent_qc, reference_mifi, source, commentaire}` avec `equivalence_requise` ∈ {`non_requise`, `oui`, `non`, `a_verifier`}), `disponibilite` (objet **obligatoire** `{date_disponibilite, taux_utilisation}`). Vérifier qu'un fichier `<AAAA-MM-JJ>-<nom>-<prenom>.md` (racine de `cv/`) et un fichier `<nom>-<prenom>-<AAAA-MM-JJ>.json` versionné ont bien été créés par candidat, que les fiches Markdown antérieures ont été déplacées dans `cv/archives/`, et que la **copie de travail téléchargée a bien été supprimée** (aucun original écrit dans `cv/`) une fois les livrables produits. Signaler les écarts.
 
 ### Step 3 — Validation humaine légère
-Présenter à l'humain : nombre de collaborateurs analysés, pièce(s) jointe(s) source(s) traitée(s) puis supprimée(s) (nom, journalisé avant suppression), chemins des fichiers d'analyse Markdown créés et des JSON versionnés, synthèse des profils extraits. Demander validation.
+Présenter à l'humain : nombre de collaborateurs analysés, pièce(s) jointe(s) source(s) traitée(s) puis supprimée(s) (nom, journalisé avant suppression), chemins des fichiers d'analyse Markdown créés et des JSON versionnés, synthèse des profils extraits. **Présenter le statut d'équivalence MIFI par collaborateur** (`equivalence_requise` + `niveau_equivalent_qc`) et **lister explicitement les collaborateurs en `a_verifier`** pour lesquels une réponse humaine est attendue (le CV ne permet pas de trancher — ne rien inventer). Demander validation.
 
 ## Sensors
 Outputs: `cv-profils` → Phase Analyse (gate: light).
-Imports: `disponibilite-complete` (advisory) — contrôle la présence de `disponibilite.{date_disponibilite, taux_utilisation}` à la frontière Analyse → Matching.
+Imports: `disponibilite-complete` (advisory) — contrôle la présence de `disponibilite.{date_disponibilite, taux_utilisation}` à la frontière Analyse → Matching ; `equivalence-mifi` (advisory) — contrôle la présence et la cohérence de l'objet `mifi` (4 états d'`equivalence_requise`) et signale les collaborateurs en `a_verifier` à la frontière Analyse → Matching.
 
 ## Learn
 Documenter sur l'issue les choix d'extraction et les validations/rejets humains.

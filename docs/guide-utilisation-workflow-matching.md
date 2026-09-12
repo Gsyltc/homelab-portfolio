@@ -126,6 +126,23 @@ Le **Matcher Profils** calcule le score pondéré (immuable — seul un changeme
 
 ---
 
+## 9 bis. Équivalence MIFI et appels d'offres gouvernementaux (Québec)
+
+Lorsqu'un collaborateur a étudié à l'étranger, son diplôme peut nécessiter une **équivalence MIFI** (Ministère de l'Immigration, de la Francisation et de l'Intégration) pour être reconnu au Québec. À chaque analyse de CV, l'équivalence est renseignée selon **4 états** :
+
+- **Non requise** — diplôme canadien : rien à faire.
+- **Oui** — le collaborateur possède déjà l'équivalence MIFI (niveau reconnu conservé).
+- **Non** — études à l'étranger sans équivalence disponible.
+- **À vérifier** — le CV ne permet pas de trancher : **on vous le demande** sur l'issue (rien n'est inventé). Vous répondez, l'état devient *Oui* (avec le niveau) ou *Non*.
+
+Le statut MIFI de chaque collaborateur apparaît dans la **fiche d'analyse Markdown** et vous est présenté à l'étape d'extraction des CV ; les cas « à vérifier » vous sont **listés explicitement**.
+
+**Pour un appel d'offres d'un client gouvernemental**, le **niveau d'études requis devient un critère éliminatoire**. Le workflow détecte le caractère gouvernemental de l'AO et la **politique d'équivalence** qu'il accepte (ex. « Baccalauréat requis — équivalence DEC + 3 ans d'expérience par année d'études manquante »), **sans jamais l'inventer** : si l'AO ne la précise pas, elle est marquée « non précisée ». Un collaborateur dont le niveau d'études (compte tenu de l'équivalence MIFI et de la compensation éventuelle) **ne satisfait pas** l'exigence est **exclu du classement**, avec un **motif** ; ces exclusions figurent **dans le classement et dans le rapport final de livraison**. Un cas « à vérifier » n'entraîne pas d'exclusion automatique : il vous est signalé pour décision.
+
+> Cette conformité gouvernementale **ne modifie pas** la pondération du scoring (50/35/10/5) : elle agit comme un filtre d'éligibilité, pas comme un poids.
+
+---
+
 ## 10. En résumé — le parcours type
 
 1. Vous **créez l'issue**, **attachez le PDF d'AO** et **mentionnez le Coordinateur Matching**.

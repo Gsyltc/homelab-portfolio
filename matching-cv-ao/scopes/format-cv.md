@@ -18,7 +18,7 @@ Seuls trois stages s'exécutent sous ce scope :
 
 - **`chargement-cv`** (Initialisation) — repérage / inventaire des CV sources à traiter (pièces jointes de l'issue) et des analyses existantes.
 - **`extraction-cv`** (Analyse) — récupération des CV sources depuis les **pièces jointes de l'issue**, extraction des informations
-  structurées, production de la **fiche d'analyse Markdown versionnée** à la racine de `cv/` (anciennes
+  structurées (dont l'**équivalence MIFI** — objet `mifi` à 4 états, avec mention humaine pour tout `a_verifier`), production de la **fiche d'analyse Markdown versionnée** à la racine de `cv/` (anciennes
   fiches déplacées dans `cv/archives/`) et du **JSON d'analyse versionné**, puis **suppression de la copie de
   travail téléchargée** — le tout daté du **jour**.
 - **`mise-a-jour-cv`** (Clôture) — mise à jour des CV, dans la même arborescence stricte.
