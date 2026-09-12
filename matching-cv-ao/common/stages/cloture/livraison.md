@@ -12,7 +12,7 @@ review_class: none
 review_artifact: ""
 human_gate: explicit
 produces: [livraison-finale]
-consumes: [{artifact: resultats-valides, required: true}]
+consumes: [{artifact: resultats-valides, required: true}, {artifact: cv-eligibilite, required: true}]
 requires_stage: [presentation-resultats]
 sensors: []
 scopes: [standard]
@@ -30,7 +30,11 @@ Produire et livrer le résumé final du matching à l'humain.
 Produire un document Markdown récapitulatif contenant :
 - Résumé de l'AO analysée
 - Liste des profils retenus avec scores et justification
-- **Pour un AO gouvernemental : section « Exclus — non-conformité études »** listant explicitement les collaborateurs **exclus pour non-conformité du niveau d'études** (`recommandation = "exclu"`), avec le **motif d'exclusion** (niveau requis vs niveau du collaborateur, équivalence MIFI, compensation appliquée). Cette mention est **obligatoire** dans le rapport final.
+- **Section obligatoire « Collaborateurs non retenus » (filtre d'éligibilité Gestionnaire CV)** : lister **chaque collaborateur écarté par le Gestionnaire CV en amont du matching** (issu de `cv-eligibilite`), avec la/les **raison(s)** (axe `etudes | mifi | experiences | coherence | fraicheur_cv` + détail), en **distinguant explicitement** deux catégories :
+  - **`exclu`** — écarté définitivement vis-à-vis de l'AO ;
+  - **`a_verifier`** — en attente d'un arbitrage humain (ex. MIFI non tranché ; ne rien inventer).
+  Cette section est **obligatoire** dans le rapport final, même si aucun collaborateur n'est concerné (indiquer alors « aucun »).
+- **Pour un AO gouvernemental : section « Exclus — non-conformité études »** listant explicitement les collaborateurs **exclus pour non-conformité du niveau d'études** (`recommandation = "exclu"`), avec le **motif d'exclusion** (niveau requis vs niveau du collaborateur, équivalence MIFI, compensation appliquée). Cette mention est **obligatoire** dans le rapport final et **distincte** de la section « Collaborateurs non retenus » (filtre d'éligibilité amont) ci-dessus.
 - Grille remplie (si disponible)
 - Recommandations
 
