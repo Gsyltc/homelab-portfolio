@@ -27,11 +27,18 @@ Déterminer de façon déterministe si la demande vise une stack existante ou un
 
 ## Steps
 
-### Step 1 — Déterminer la nature
+### Step 1 — Où chercher (localisation)
+
+Le dépôt homelab-portfolio ne contient QUE le workflow ; les fichiers de
+travail sont dans le workspace, aux emplacements définis par le workflow
+(voir [`file-deposit.md`](../validation/file-deposit.md)). Une stack
+existante se localise via ces emplacements, jamais dans le dépôt du workflow.
+
+### Step 2 — Déterminer la nature
 
 Analyser la demande : modification / correctif / mise à jour d'une stack **existante**, ou **création** d'une nouvelle stack.
 
-### Step 2 — Consigner (sans valider)
+### Step 3 — Consigner (sans valider)
 
 Consigner le fait en commentaire (piste d'audit). Il **oriente** l'auto-détection du scope en Idéation (`stack-update` / `config-change` / `security-patch` vs `new-stack`) sans figer la décision. Ce n'est **pas** un gate.
 
