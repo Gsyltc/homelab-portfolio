@@ -11,7 +11,8 @@ Définitions **conformes** (front-matter YAML + corps Markdown, même format que
 | Nestor - Analyse Technique | [nestor-analyse-technique.md](nestor-analyse-technique.md) | Expert en analyse technique : indicateurs (MM, RSI, MACD, Bollinger), tendances 1J/1S/1M, risques et avis. |
 | Victor - Analyse Fondamentale | [victor-analyse-fondamentale.md](victor-analyse-fondamentale.md) | Expert en analyse fondamentale : news, tendances marché et géopolitiques, santé de l'entreprise, risques et points positifs 1J/1S/1M. |
 | Mika | [mika.md](mika.md) | Chief of Staff du workspace : objectifs → issues, coordination des agents, construction de workflows réutilisables. |
-| Eric - Chef de la clinique Biboumed | [eric-chef-clinique-biboumed.md](eric-chef-clinique-biboumed.md) | Médecin généraliste, chef de la clinique médicale : analyse des dossiers médicaux, recherche et réponses aux patients. |
+| Chef de la clinique Biboumed | [chef-clinique-biboumed.md](chef-clinique-biboumed.md) | Médecin généraliste, chef de la clinique médicale : analyse des dossiers médicaux, recherche, réponses aux patients et validation des programmes sportifs. |
+| Coach Sportif — Clinique Biboumed | [coach-sportif-clinique-biboumed.md](coach-sportif-clinique-biboumed.md) | Coach sportif de l'équipe médicale : programmes d'entraînement adaptés à la santé, aux objectifs et au matériel des patients, versionnés et soumis à validation humaine. |
 
 ## Notes
 
