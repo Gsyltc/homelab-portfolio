@@ -28,7 +28,7 @@ sélectionné selon la **règle de sélection de la source CV** :
   - **fichier à télécharger pour l'humain** : la **fiche d'analyse Markdown** courante (du jour).
 
 Règle complète et journalisation d'audit : voir la compétence
-[`../skills/cv-analyse/SKILL.md`](../skills/cv-analyse/SKILL.md)
+[`../../plugins/rh-assistant/skills/cv-analyse/SKILL.md`](../../plugins/rh-assistant/skills/cv-analyse/SKILL.md)
 (§ Règle de sélection de la source CV, § Versionnage JSON) — détail porté par le skill, l'agent
 [`../agents/gestionnaire-cv-agent.md`](../agents/gestionnaire-cv-agent.md) le chargeant à l'exécution.
 
