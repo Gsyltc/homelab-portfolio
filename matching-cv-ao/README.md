@@ -52,29 +52,27 @@ matching-cv-ao/
 │   ├── disponibilite.md                # Sensor advisory — disponibilité complète (Analyse → Matching)
 │   ├── equivalence-mifi.md             # Sensor advisory — équivalence MIFI (Analyse → Matching)
 │   └── localisation.md                 # Sensor advisory — localisation complète / ville candidat (Analyse → Matching)
-├── skills/                             # Compétences réutilisables du workflow
-│   ├── cv-analyse/
-│   │   └── SKILL.md                    # Extraction CV + sélection d'éligibilité (Gestionnaire CV)
-│   └── cv-generation/
-│       └── SKILL.md                    # Génération / mise à jour de CV (Gestionnaire CV)
 ├── agents/
 │   ├── coordinateur-matching-agent.md  # Coordinateur Matching
 │   ├── analyste-rfp-agent.md           # Analyste RFP
-│   ├── gestionnaire-cv-agent.md        # Gestionnaire CV (instructions slim → charge les skills cv-analyse / cv-generation)
+│   ├── gestionnaire-cv-agent.md        # Gestionnaire CV (instructions slim → charge les skills cv-analyse / cv-generation du plugin rh-assistant)
 │   └── matcher-profils-agent.md        # Matcher Profils
 └── README.md
 ```
 
+> Les compétences du Gestionnaire CV vivent désormais dans le **plugin `rh-assistant`**
+> (compétences `cv-analyse` et `cv-generation` — voir la section « Compétences (skills) »).
+
 ## Compétences (skills)
 
-Le détail opératoire du **Gestionnaire CV** est porté par deux compétences réutilisables sous [`skills/`](skills/), tandis que sa fiche d'agent reste volontairement **slim** (rôle, orchestration, garde-fous) :
+Le détail opératoire du **Gestionnaire CV** est porté par deux compétences réutilisables du **plugin `rh-assistant`**, tandis que sa fiche d'agent reste volontairement **slim** (rôle, orchestration, garde-fous) :
 
 | Compétence | Rôle |
 | --- | --- |
-| [`cv-analyse`](skills/cv-analyse/SKILL.md) | Extraction d'un CV source (pièce jointe) → livrables versionnés (Markdown du jour + JSON), archivage, versionnage, MIFI, localisation, disponibilité, et **sélection d'éligibilité** (Études & Localisation STRICTS/éliminatoires) |
-| [`cv-generation`](skills/cv-generation/SKILL.md) | Production / mise à jour d'un CV ou d'une fiche à partir des données extraites, **après validation humaine** |
+| `cv-analyse` | Extraction d'un CV source (pièce jointe) → livrables versionnés (Markdown du jour + JSON), archivage, versionnage, MIFI, localisation, disponibilité, et **sélection d'éligibilité** (Études & Localisation STRICTS/éliminatoires) |
+| `cv-generation` | Production / mise à jour d'un CV ou d'une fiche à partir des données extraites, **après validation humaine** |
 
-Le **schéma JSON complet** et les conventions de nommage/versionnage vivent dans `cv-analyse` (source unique) ; `cv-generation` s'y réfère sans dupliquer.
+Le **schéma JSON complet** et les conventions de nommage/versionnage vivent dans `cv-analyse` (source unique) ; `cv-generation` s'y réfère sans dupliquer. Ces compétences sont fournies par le plugin `rh-assistant` et rattachées à l'agent Gestionnaire CV ; le workflow les référence **par leur nom**, sans dépendre de leur emplacement physique.
 
 ## Phases
 

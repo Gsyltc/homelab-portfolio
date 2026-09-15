@@ -7,7 +7,7 @@ keywords: [generation cv, mise a jour cv, fiche cv, ajout competences, mise a jo
 
 # Génération / mise à jour de CV
 
-Cette compétence porte la production et la mise à jour d'un CV ou d'une fiche collaborateur à partir des **données déjà extraites** par la compétence [`../cv-analyse/SKILL.md`](../cv-analyse/SKILL.md) (JSON versionné + fiche Markdown du jour). Elle est utilisée par l'agent [`../../agents/gestionnaire-cv-agent.md`](../../agents/gestionnaire-cv-agent.md) et alimente le stage [`../../common/stages/cloture/mise-a-jour-cv.md`](../../common/stages/cloture/mise-a-jour-cv.md).
+Cette compétence porte la production et la mise à jour d'un CV ou d'une fiche collaborateur à partir des **données déjà extraites** par la compétence [`cv-analyse`](../cv-analyse/SKILL.md) (JSON versionné + fiche Markdown du jour). Elle est chargée par l'agent **Gestionnaire CV** et alimente le stage de **mise à jour CV** (phase Clôture) du workflow Matching.
 
 Elle n'invente **jamais** de contenu et n'écrit **qu'après validation humaine explicite**.
 
