@@ -12,11 +12,13 @@ ce fichier en donne la lecture chronologique côté produit.
 - **Production du CV livrable au format DOCX à partir des gabarits fournis** (workflow `matching-cv-ao`, plugin
   `rh-assistant`) — évolution **documentaire**, invariants préservés (JSON A2A / Markdown humain, validation
   humaine granulaire, scoring immuable 50/35/10/5) :
-  - La compétence `cv-generation` (`plugins/rh-assistant/skills/cv-generation/SKILL.md`) produit désormais un
-    **CV livrable au format DOCX** rempli à partir de **gabarits fournis** — **CV long**, **CV court**,
-    **format client spécifique** — rangés dans `${ROOT_DIRECTORY}/gabarits/cv/`. Les gabarits sont **fournis par
-    l'humain et jamais inventés** (gabarit absent ⇒ halt-and-ask). Distinction explicite entre la **fiche
-    d'analyse Markdown/JSON** (mémoire interne, données) et le **CV livrable DOCX** (document présentable).
+  - La compétence `cv-generation` (`plugins/rh-assistant/skills/cv-generation/SKILL.md`) produit désormais le
+    **CV livrable au format DOCX par défaut**, rempli à partir de **gabarits fournis** — **CV long**, **CV
+    court**, **format client spécifique** — rangés dans `${ROOT_DIRECTORY}/gabarits/cv/`. Les gabarits sont
+    **fournis par l'humain et jamais inventés** (gabarit absent ⇒ halt-and-ask, pas de repli Markdown
+    automatique). Le **format Markdown reste possible uniquement sur demande explicite de l'humain**
+    (livrable `<nom>-<prenom>-cv-<AAAA-MM-JJ>.md`, distinct de la fiche d'analyse). Distinction explicite entre la
+    **fiche d'analyse Markdown/JSON** (mémoire interne, données) et le **CV livrable** (document présentable).
   - Nommage versionné du CV livrable : `<nom>-<prenom>-<type-gabarit>-<AAAA-MM-JJ>.docx` à la racine de
     `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv`, sans écraser l'historique.
   - Documenté dans `cv-generation/SKILL.md`, `cv-analyse/SKILL.md` (structure `cv/`), `plugin.json`,

@@ -50,13 +50,13 @@ Ce fichier est la **source unique** des instructions du **coordinateur** du work
 | CV sources (PDF, DOCX) | **Pièces jointes de l'issue** — récupérés via `multica attachment`, **supprimés après extraction** (non stockés) |
 | **Gabarits CV fournis** (CV long / CV court / format client spécifique) | `${ROOT_DIRECTORY}/gabarits/cv/` — **fournis par l'humain, jamais inventés** |
 | Analyses CV (Markdown du jour + JSON versionnés à la racine, mémoire ; anciennes fiches dans `cv/archives/`) | `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv` |
-| **CV livrable DOCX** (produit depuis un gabarit fourni) | `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/<nom>-<prenom>-<type-gabarit>-<AAAA-MM-JJ>.docx` |
+| **CV livrable** (DOCX par défaut depuis un gabarit ; Markdown sur demande explicite) | `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/<nom>-<prenom>-<type-gabarit>-<AAAA-MM-JJ>.docx` (ou `…-cv-<AAAA-MM-JJ>.md`) |
 | Résumés AO | `${ROOT_DIRECTORY}/ao/<client>/<titre-ao>` |
 | Grille d'évaluation | Fournie par l'humain à chaque fois — **ne jamais inventer une grille**, la demander si absente |
 
 > **Enracinement des chemins** : le répertoire de travail du workspace est `${ROOT_DIRECTORY}`. **Tous les chemins relatifs du workflow sont enracinés sur `${ROOT_DIRECTORY}`** (collaborateurs, AO, gabarits) ; ne jamais utiliser un chemin absolu hors `${ROOT_DIRECTORY}` ni un relatif non enraciné.
 
-> **CV livrable au format DOCX (gabarits fournis)** : le **CV livrable** remis à l'humain / au client est **toujours un DOCX** produit à partir d'un des **gabarits fournis** (CV long, CV court, format client spécifique) rangés dans `${ROOT_DIRECTORY}/gabarits/cv/` — **jamais inventé** (gabarit absent ⇒ halt-and-ask). La fiche d'analyse Markdown et le JSON restent la mémoire interne (données), distincts du CV livrable DOCX.
+> **Format du CV livrable — DOCX par défaut, Markdown sur demande explicite** : le **CV livrable** remis à l'humain / au client est **par défaut un DOCX** produit à partir d'un des **gabarits fournis** (CV long, CV court, format client spécifique) rangés dans `${ROOT_DIRECTORY}/gabarits/cv/` — **jamais inventé** (gabarit absent ⇒ halt-and-ask, pas de repli Markdown automatique). Le **format Markdown reste possible uniquement sur demande explicite de l'humain**. La fiche d'analyse Markdown et le JSON restent la mémoire interne (données), distincts du CV livrable.
 
 ---
 
