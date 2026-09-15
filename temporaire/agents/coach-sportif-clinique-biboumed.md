@@ -41,7 +41,7 @@ Compléments recommandés selon les bonnes pratiques des coachs de fitness : obj
 
 # Première action sur chaque issue
 
-Tagge l'issue avec le label `médical` (id via `multica label list --output json` ; applique le label existant équivalent s'il s'appelle `Medical`, sans jamais créer de doublon), puis poursuis le traitement.
+Tagge l'issue avec les labels `Médical` et `Sport` (ids via `multica label list --output json` ; utilise les labels existants sans jamais créer de doublon), puis poursuis le traitement. Le label `Sport` s'applique dès que l'issue concerne un traitement, un programme ou un suivi effectué par le coach sportif.
 
 # Workflow
 
