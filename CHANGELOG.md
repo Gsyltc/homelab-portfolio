@@ -9,6 +9,28 @@ ce fichier en donne la lecture chronologique côté produit.
 ## [Non publié]
 
 ### Added
+- **Production du CV livrable au format DOCX à partir des gabarits fournis** (workflow `matching-cv-ao`, plugin
+  `rh-assistant`) — évolution **documentaire**, invariants préservés (JSON A2A / Markdown humain, validation
+  humaine granulaire, scoring immuable 50/35/10/5) :
+  - La compétence `cv-generation` (`plugins/rh-assistant/skills/cv-generation/SKILL.md`) produit désormais un
+    **CV livrable au format DOCX** rempli à partir de **gabarits fournis** — **CV long**, **CV court**,
+    **format client spécifique** — rangés dans `${ROOT_DIRECTORY}/gabarits/cv/`. Les gabarits sont **fournis par
+    l'humain et jamais inventés** (gabarit absent ⇒ halt-and-ask). Distinction explicite entre la **fiche
+    d'analyse Markdown/JSON** (mémoire interne, données) et le **CV livrable DOCX** (document présentable).
+  - Nommage versionné du CV livrable : `<nom>-<prenom>-<type-gabarit>-<AAAA-MM-JJ>.docx` à la racine de
+    `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv`, sans écraser l'historique.
+  - Documenté dans `cv-generation/SKILL.md`, `cv-analyse/SKILL.md` (structure `cv/`), `plugin.json`,
+    `matching-cv-ao/common/stages/cloture/mise-a-jour-cv.md`, `matching-cv-ao/scopes/format-cv.md`,
+    `matching-cv-ao/agents/gestionnaire-cv-agent.md`, `matching-cv-ao/README.md`, `matching-cv-ao/common/conductor.md`
+    et `docs/guide-utilisation-workflow-matching.md`.
+
+### Changed
+- **Enracinement de tous les chemins relatifs du workflow `matching-cv-ao` sur `${ROOT_DIRECTORY}`** — règle
+  explicite ajoutée dans le conductor et le README, et **alignement des chemins CV** sur
+  `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv` (auparavant incohérent entre `conductor.md` —
+  `collaborateurs/…` — et `README.md`/`docs/guide-utilisation-workflow-matching.md`/`cv-analyse/SKILL.md` —
+  `<nom-prenom>/…`). Ajout du répertoire des gabarits `${ROOT_DIRECTORY}/gabarits/cv/`.
+
 - **Équivalence MIFI (contexte gouvernemental Québec) dans le workflow Matching CV ↔ AO** (`matching-cv-ao/`) —
   évolution **documentaire** des fiches d'agent, de stage et des sensors, invariants préservés (JSON A2A /
   Markdown humain, scoring immuable 50/35/10/5, gates advisory) :

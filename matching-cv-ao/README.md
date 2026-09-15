@@ -10,7 +10,7 @@ Ce workflow A2A permet de :
 2. **Analyser les CV des collaborateurs** (CV sources fournis en **pièces jointes de l'issue**, supprimés après extraction — non stockés)
 3. **Faire le match** entre les profils recherchés dans l'AO et les profils CV, avec un **score pondéré**
 4. **Remplir une grille d'évaluation client** (fournie par l'humain) après validation des profils
-5. **Permettre la mise à jour des CV** par le Gestionnaire CV
+5. **Permettre la mise à jour et la production des CV** par le Gestionnaire CV — **CV livrable au format DOCX produit à partir des gabarits fournis** (CV long, CV court, format client spécifique)
 
 ## Structure
 
@@ -70,7 +70,7 @@ Le détail opératoire du **Gestionnaire CV** est porté par deux compétences r
 | Compétence | Rôle |
 | --- | --- |
 | `cv-analyse` | Extraction d'un CV source (pièce jointe) → livrables versionnés (Markdown du jour + JSON), archivage, versionnage, MIFI, localisation, disponibilité, et **sélection d'éligibilité** (Études & Localisation STRICTS/éliminatoires) |
-| `cv-generation` | Production / mise à jour d'un CV ou d'une fiche à partir des données extraites, **après validation humaine** |
+| `cv-generation` | Production / mise à jour d'un **CV livrable au format DOCX** à partir des données extraites et des **gabarits fournis** (CV long / CV court / format client spécifique, dans `${ROOT_DIRECTORY}/gabarits/cv/`, jamais inventés), **après validation humaine** |
 
 Le **schéma JSON complet** et les conventions de nommage/versionnage vivent dans `cv-analyse` (source unique) ; `cv-generation` s'y réfère sans dupliquer. Ces compétences sont fournies par le plugin `rh-assistant` et rattachées à l'agent Gestionnaire CV ; le workflow les référence **par leur nom**, sans dépendre de leur emplacement physique.
 
@@ -124,17 +124,31 @@ Le Gestionnaire CV applique la **localisation comme 4ᵉ axe du filtre d'éligib
 | Élément | Emplacement |
 | --- | --- |
 | CV sources (PDF, DOCX) | **Pièces jointes de l'issue** — récupérés via `multica attachment`, **supprimés après extraction** (non stockés) |
-| Anciennes fiches d'analyse Markdown | `${ROOT_DIRECTORY}/<nom-prenom>/cv/archives/` |
-| Fiche d'analyse Markdown courante (du jour) | `${ROOT_DIRECTORY}/<nom-prenom>/cv/<AAAA-MM-JJ>-<nom>-<prenom>.md` |
-| Analyses JSON **versionnées** (seule la dernière sert au matching) | `${ROOT_DIRECTORY}/<nom-prenom>/cv/<nom>-<prenom>-<AAAA-MM-JJ>.json` |
+| **Gabarits CV fournis** (CV long / CV court / format client spécifique) | `${ROOT_DIRECTORY}/gabarits/cv/` — **fournis par l'humain, jamais inventés** |
+| Anciennes fiches d'analyse Markdown | `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/archives/` |
+| Fiche d'analyse Markdown courante (du jour, mémoire) | `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/<AAAA-MM-JJ>-<nom>-<prenom>.md` |
+| Analyses JSON **versionnées** (mémoire ; seule la dernière sert au matching) | `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/<nom>-<prenom>-<AAAA-MM-JJ>.json` |
+| **CV livrable DOCX** (produit depuis un gabarit fourni) | `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/<nom>-<prenom>-<type-gabarit>-<AAAA-MM-JJ>.docx` |
 | Résumés AO | `${ROOT_DIRECTORY}/ao/<client>/<titre-ao>` |
 | Grille d'évaluation | Fournie par l'humain — **ne jamais inventer** |
+
+> **Enracinement des chemins (`${ROOT_DIRECTORY}`)** : le répertoire de travail du workspace est
+> `${ROOT_DIRECTORY}`. **Tous les chemins relatifs du workflow sont enracinés sur `${ROOT_DIRECTORY}`**
+> (collaborateurs, AO, gabarits) ; ne jamais utiliser un chemin absolu hors `${ROOT_DIRECTORY}` ni un chemin
+> relatif non enraciné.
+
+> **CV livrable au format DOCX (gabarits fournis)** : le **CV livrable** remis à l'humain / au client est
+> **toujours un DOCX** produit à partir d'un des **gabarits fournis** (CV long, CV court, format client
+> spécifique) rangés dans `${ROOT_DIRECTORY}/gabarits/cv/` — **jamais inventé** ; gabarit absent ⇒ halt-and-ask.
+> La fiche d'analyse Markdown et le JSON restent la **mémoire interne** (données), distincts du CV livrable DOCX.
+> Voir la compétence `cv-generation`.
 
 > **Organisation stricte du répertoire `cv/`** : les CV sources sont **fournis en pièces jointes de l'issue**,
 > récupérés via `multica attachment` pour l'analyse puis **supprimés** — **les originaux ne sont pas conservés**
 > ni stockés dans `cv/` ; leur nom est journalisé sur l'issue avant suppression (piste d'audit). Les anciennes
-> fiches d'analyse Markdown sont déplacées dans `cv/archives/` ; seuls la fiche Markdown du jour et les JSON
-> versionnés restent à la racine de `cv/` et constituent la mémoire persistante du CV. La date de dernière
+> fiches d'analyse Markdown sont déplacées dans `cv/archives/` ; la fiche Markdown du jour et les JSON
+> versionnés restent à la racine de `cv/` et constituent la mémoire persistante du CV ; le **CV livrable DOCX**
+> produit depuis un gabarit fourni y est également écrit (versionné). La date de dernière
 > modification reportée dans les livrables est **toujours la date du jour** de l'analyse. Seule la **dernière
 > version JSON** est croisée avec un AO (règle de sélection et journalisation détaillées dans
 > [`agents/gestionnaire-cv-agent.md`](agents/gestionnaire-cv-agent.md)).

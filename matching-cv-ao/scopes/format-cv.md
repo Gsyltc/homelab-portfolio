@@ -21,13 +21,14 @@ Seuls trois stages s'exécutent sous ce scope :
   structurées (dont l'**équivalence MIFI** — objet `mifi` à 4 états, avec mention humaine pour tout `a_verifier`), production de la **fiche d'analyse Markdown versionnée** à la racine de `cv/` (anciennes
   fiches déplacées dans `cv/archives/`) et du **JSON d'analyse versionné**, puis **suppression de la copie de
   travail téléchargée** — le tout daté du **jour**.
-- **`mise-a-jour-cv`** (Clôture) — mise à jour des CV, dans la même arborescence stricte.
+- **`mise-a-jour-cv`** (Clôture) — mise à jour des CV et **production du CV livrable au format DOCX à partir des gabarits fournis** (CV long / CV court / format client spécifique, dans `${ROOT_DIRECTORY}/gabarits/cv/` — jamais inventés), dans la même arborescence stricte enracinée sur `${ROOT_DIRECTORY}`.
 
-> **Organisation stricte du répertoire `cv/`** (voir la fiche de l'agent
+> **Organisation stricte du répertoire `cv/`** (enracinée sur `${ROOT_DIRECTORY}` ; voir la fiche de l'agent
 > [`../agents/gestionnaire-cv-agent.md`](../agents/gestionnaire-cv-agent.md)) : les **sources PDF/DOCX** sont
 > **fournis en pièces jointes de l'issue** et **supprimés après extraction** (non conservés, non stockés dans
-> `cv/`) · `cv/archives/` (anciennes fiches Markdown) · fiche Markdown du jour et JSON versionnés à la racine.
-> La date de dernière modification reportée est **toujours la date du jour**.
+> `cv/`) · `cv/archives/` (anciennes fiches Markdown) · fiche Markdown du jour et JSON versionnés à la racine
+> (mémoire) · **CV livrable DOCX** (`<nom>-<prenom>-<type-gabarit>-<AAAA-MM-JJ>.docx`) produit depuis un gabarit
+> fourni (`${ROOT_DIRECTORY}/gabarits/cv/`). La date de dernière modification reportée est **toujours la date du jour**.
 
 Depth par défaut : `standard`. Aucun `review_cap` — pas d'abaissement au niveau du scope.
 

@@ -9,7 +9,11 @@ keywords: [analyse cv, extraction cv, eligibilite, mifi, localisation, disponibi
 
 Cette compétence porte tout le détail opératoire de l'**extraction d'un CV** et de la **sélection d'éligibilité** vis-à-vis d'un AO pour le workflow Matching. Elle est chargée par l'agent **Gestionnaire CV** et alimente le stage d'**extraction CV** (phase Analyse) du workflow Matching.
 
-Les CV sources sont **fournis en pièces jointes de l'issue**, analysés, puis leur copie de travail est **supprimée** (les originaux ne sont **jamais conservés**). Les livrables (Markdown du jour + JSON versionnés) sont écrits dans `${ROOT_DIRECTORY}/<nom-prenom>/cv`.
+Les CV sources sont **fournis en pièces jointes de l'issue**, analysés, puis leur copie de travail est **supprimée** (les originaux ne sont **jamais conservés**). Les livrables d'analyse (fiche **Markdown** du jour + **JSON** versionnés) sont écrits dans `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv`.
+
+> **Enracinement des chemins** : tous les chemins relatifs sont **enracinés sur `${ROOT_DIRECTORY}`** (répertoire de travail du workspace) ; ne jamais utiliser un chemin absolu hors `${ROOT_DIRECTORY}` ni un relatif non enraciné.
+
+> **Fiche d'analyse ≠ CV livrable** : la fiche Markdown et le JSON produits ici sont la **mémoire interne** (données structurées), **jamais** un livrable client. Le **CV livrable** présentable est produit **au format DOCX à partir d'un gabarit fourni** par la compétence [`../cv-generation/SKILL.md`](../cv-generation/SKILL.md) (gabarits dans `${ROOT_DIRECTORY}/gabarits/cv/`).
 
 ## Règle de sélection de la source CV
 
@@ -25,18 +29,21 @@ Dans cet ordre :
 
 ## Structure du répertoire `cv/`
 
-Les CV sources ne sont **pas stockés**. `cv/` ne contient que les livrables d'analyse :
+Les CV sources ne sont **pas stockés**. `cv/` ne contient que les livrables d'analyse (mémoire) et les **CV livrables DOCX** produits depuis les gabarits :
 
 ```
-${ROOT_DIRECTORY}/<nom-prenom>/cv/
-├── archives/                        # anciennes fiches Markdown d'analyse
-├── <AAAA-MM-JJ>-<nom>-<prenom>.md   # dernière analyse Markdown (courante)
-└── <nom>-<prenom>-<AAAA-MM-JJ>.json # analyses JSON versionnées
+${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/
+├── archives/                                     # anciennes fiches Markdown d'analyse
+├── <AAAA-MM-JJ>-<nom>-<prenom>.md                # dernière analyse Markdown (courante, mémoire)
+├── <nom>-<prenom>-<AAAA-MM-JJ>.json              # analyses JSON versionnées (mémoire)
+└── <nom>-<prenom>-<type-gabarit>-<AAAA-MM-JJ>.docx # CV livrable DOCX (produit par cv-generation)
 ```
+
+Les **gabarits DOCX fournis** (CV long / CV court / format client) vivent dans `${ROOT_DIRECTORY}/gabarits/cv/` — voir [`../cv-generation/SKILL.md`](../cv-generation/SKILL.md).
 
 - **Sources (PDF, DOCX)** : **non stockés**. Fournis en pièces jointes de l'issue, récupérés via `multica attachment`, puis copie de travail **supprimée**.
 - **`archives/`** : anciennes fiches d'analyse Markdown (déplacées à chaque nouvelle analyse).
-- **Racine de `cv/`** : uniquement la fiche Markdown courante (du jour) et les JSON versionnés — **seule mémoire persistante** du CV.
+- **Racine de `cv/`** : la fiche Markdown courante (du jour), les JSON versionnés (**mémoire persistante**) et les **CV livrables DOCX** produits depuis les gabarits.
 
 ## Traitement des CV sources
 
