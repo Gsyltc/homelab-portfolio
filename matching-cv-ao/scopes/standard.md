@@ -27,9 +27,10 @@ sélectionné selon la **règle de sélection de la source CV** :
     est le seul artefact croisé avec un AO par le Matcher Profils ;
   - **fichier à télécharger pour l'humain** : la **fiche d'analyse Markdown** courante (du jour).
 
-Règle complète et journalisation d'audit : voir
-[`../agents/gestionnaire-cv-agent.md`](../agents/gestionnaire-cv-agent.md)
-(§ Règle de sélection de la source CV, § Versionnage JSON).
+Règle complète et journalisation d'audit : voir la compétence
+[`../skills/cv-analyse/SKILL.md`](../skills/cv-analyse/SKILL.md)
+(§ Règle de sélection de la source CV, § Versionnage JSON) — détail porté par le skill, l'agent
+[`../agents/gestionnaire-cv-agent.md`](../agents/gestionnaire-cv-agent.md) le chargeant à l'exécution.
 
 Appartenance : voir le champ `scopes:` de chaque fiche de stage et la matrice de
 [`../common/protocols/scopes-and-axes.md`](../common/protocols/scopes-and-axes.md).
