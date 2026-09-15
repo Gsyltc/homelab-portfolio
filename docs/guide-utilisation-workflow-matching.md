@@ -36,7 +36,8 @@ En cas de doute, le coordinateur **vous demande de trancher** avant d'engager qu
 2. **Fournir les CV sources** (PDF, DOCX) des collaborateurs à analyser **en pièces jointes de l'issue** : c'est ainsi qu'ils sont transmis au Gestionnaire CV. Ils sont analysés puis **supprimés** (non conservés).
 3. **Mentionner le Coordinateur Matching** (`[@Coordinateur Matching](mention://agent/<uuid>)`) sur l'issue — ou l'assigner à l'agent Coordinateur.
 4. **Prévoir la grille d'évaluation client** (Markdown) lorsque le workflow la demandera — elle vous sera réclamée, jamais inventée.
-5. Toute la conversation reste **sur l'issue** : c'est là que vous suivez l'avancement et rendez vos décisions.
+5. **Fournir les gabarits de CV** (DOCX) si vous souhaitez une **production/mise à jour de CV livrable** : déposez les gabarits **CV long**, **CV court** et/ou **format client spécifique** dans `${ROOT_DIRECTORY}/gabarits/cv/` (ou en pièces jointes) — le CV livrable est **par défaut un DOCX** produit depuis ces gabarits, **jamais inventé**. Un **CV au format Markdown** reste possible **si vous le demandez explicitement**.
+6. Toute la conversation reste **sur l'issue** : c'est là que vous suivez l'avancement et rendez vos décisions.
 
 > **Une grille d'évaluation n'est jamais inventée** : si le workflow en a besoin et qu'elle est absente, le coordinateur vous la **demande** et **attend** votre réponse (halt-and-ask).
 
@@ -52,7 +53,7 @@ En cas de doute, le coordinateur **vous demande de trancher** avant d'engager qu
 | 4 | **Matching & scoring** | Le Matcher croise profils ↔ exigences et calcule le **score pondéré** → **classement** | Advisory (commentaires) |
 | 5 | **Validation granulaire** | Présentation de **chaque profil séparément** (Keep/Modify/Redo) | **Granulaire** |
 | 6 | **Remplissage de la grille** | Remplissage de la grille d'évaluation client (fournie par l'humain, à la demande) | Granulaire |
-| 7 | **Mise à jour des CV** *(optionnel)* | Mise à jour des CV sur votre demande | Explicite |
+| 7 | **Mise à jour / production des CV** *(optionnel)* | Mise à jour des CV sur votre demande et **production du CV livrable en DOCX (par défaut) à partir du gabarit fourni** (CV long / CV court / format client) — **Markdown sur demande explicite** | Explicite |
 | 8 | **Clôture & livraison** | Livraison finale des résultats | **Explicite** |
 
 ---
@@ -87,12 +88,21 @@ La délégation se fait par **mention** sur l'issue ; l'agent sollicité répond
 | Élément | Emplacement |
 | --- | --- |
 | CV sources (PDF, DOCX) | **Pièces jointes de l'issue** — analysés puis **supprimés** (non conservés) |
-| Anciennes fiches d'analyse Markdown | `${ROOT_DIRECTORY}/<nom-prenom>/cv/archives/` |
-| Fiche d'analyse Markdown courante + JSON versionnés | Racine de `${ROOT_DIRECTORY}/<nom-prenom>/cv/` |
+| **Gabarits CV fournis** (CV long / CV court / format client spécifique) | `${ROOT_DIRECTORY}/gabarits/cv/` — **fournis par vous, jamais inventés** |
+| Anciennes fiches d'analyse Markdown | `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/archives/` |
+| Fiche d'analyse Markdown courante + JSON versionnés (mémoire) | Racine de `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/` |
+| **CV livrable** (DOCX par défaut depuis un gabarit ; Markdown sur demande explicite) | `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/<nom>-<prenom>-<type-gabarit>-<AAAA-MM-JJ>.docx` (ou `…-cv-<AAAA-MM-JJ>.md`) |
 | Résumés AO | `${ROOT_DIRECTORY}/ao/<client>/<titre-ao>/` |
 | Grille d'évaluation | Fournie par l'humain — **jamais inventée** |
 
-Ces chemins sont créés **si absents** par l'Analyste RFP, toujours au bon endroit (client = nom du client, titre-ao = slug du titre).
+Ces chemins sont créés **si absents**, toujours au bon endroit (client = nom du client, titre-ao = slug du titre). **Tous les chemins relatifs sont enracinés sur `${ROOT_DIRECTORY}`** (le répertoire de travail du workspace).
+
+> **Format du CV livrable — DOCX par défaut, Markdown sur demande** : le **CV remis** (à vous / au client) est
+> **par défaut un DOCX** produit à partir d'un **gabarit que vous fournissez** — **CV long**, **CV court** ou
+> **format client spécifique** — déposé dans `${ROOT_DIRECTORY}/gabarits/cv/`. Aucun gabarit n'est inventé : s'il
+> manque, le Gestionnaire CV vous le **demande** et **attend** (halt-and-ask). Si vous préférez un **CV au format
+> Markdown**, il suffit de le **demander explicitement**. La fiche d'analyse Markdown reste une **mémoire
+> interne** (données), ce n'est pas le CV livré.
 
 > **CV sources fournis dans l'issue** : joignez les CV des collaborateurs (PDF, DOCX) **en pièces jointes de
 > l'issue**. À chaque analyse, le Gestionnaire CV les récupère, produit une fiche Markdown datée **du jour** à la

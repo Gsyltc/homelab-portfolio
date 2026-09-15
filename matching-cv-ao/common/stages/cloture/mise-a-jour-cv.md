@@ -23,7 +23,11 @@ outputs: "CV mis à jour"
 # Mise à jour des CV
 
 ## Objectif
-Mettre à jour les CV des collaborateurs si l'humain le demande (ajout de compétences, mise à jour d'expérience issue du matching).
+Mettre à jour les CV des collaborateurs si l'humain le demande (ajout de compétences, mise à jour d'expérience issue du matching) et **produire le CV livrable au format DOCX (par défaut) à partir des gabarits fournis** (CV long / CV court / format client spécifique) — **le format Markdown reste possible uniquement sur demande explicite de l'humain**.
+
+> **Fiche d'analyse ≠ CV livrable** : la fiche d'analyse Markdown + le JSON restent la **mémoire interne** (données) ; le **CV livrable est un DOCX par défaut** rempli depuis un **gabarit fourni** (jamais inventé), situé dans `${ROOT_DIRECTORY}/gabarits/cv/`. Le **format Markdown reste possible uniquement sur demande explicite de l'humain**. Voir la compétence `cv-generation` du plugin `rh-assistant`.
+
+> **Enracinement des chemins** : tous les chemins relatifs sont enracinés sur `${ROOT_DIRECTORY}` (répertoire de travail du workspace) — analyses et livrables dans `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv`, gabarits dans `${ROOT_DIRECTORY}/gabarits/cv/`.
 
 ## Prérequis selon le scope
 - **Scope `standard`** (et `complex` / `express`) : le stage dépend de la **livraison finale** du matching (`livraison-finale`, produit par `livraison`) — comportement inchangé.
@@ -36,10 +40,10 @@ C'est pourquoi `consumes` déclare les deux artefacts en `required: false` : sou
 Si l'humain a demandé une mise à jour de CV, déléguer au Gestionnaire CV.
 
 ### Step 2 — Délégation au Gestionnaire CV
-Mentionner le Gestionnaire CV avec mission claire : mettre à jour les CV concernés avec les informations validées lors du matching, en appliquant la compétence `cv-generation` du plugin `rh-assistant` (procédure de mise à jour / génération après validation humaine) et en respectant l'**organisation stricte du répertoire `cv/`** : CV sources **fournis en pièces jointes de l'issue** et **supprimés après extraction** (originaux non conservés, non stockés dans `cv/`), fiche d'analyse Markdown **du jour** à la racine de `cv/` (anciennes fiches déplacées dans `cv/archives/`), JSON d'analyse **versionné** à la racine (`<nom>-<prenom>-<AAAA-MM-JJ>.json`, sans écraser l'historique), et **date de dernière modification = date du jour**. **En fin de tâche, le Gestionnaire CV rend son résultat en mentionnant en retour le Coordinateur** `[@Coordinateur Matching](mention://agent/<UUID-COORDINATEUR>)` (mention agent valide, pas une simple réponse), puis vérifie les `trigger_outcomes`. Ne jamais deviner ni coder en dur l'UUID : le résoudre à chaque fois via `multica agent list --output json` et l'injecter dans la mention.
+Mentionner le Gestionnaire CV avec mission claire : mettre à jour les CV concernés avec les informations validées lors du matching **et produire le CV livrable au format DOCX (par défaut) à partir du gabarit fourni** (CV long / CV court / format client spécifique, dans `${ROOT_DIRECTORY}/gabarits/cv/` — **gabarit jamais inventé** ; si absent ⇒ halt-and-ask, **pas de repli Markdown automatique**), ou **au format Markdown si l'humain l'a explicitement demandé**, en appliquant la compétence `cv-generation` du plugin `rh-assistant` (procédure de production/mise à jour après validation humaine) et en respectant l'**organisation stricte du répertoire `cv/`** enracinée sur `${ROOT_DIRECTORY}` : CV sources **fournis en pièces jointes de l'issue** et **supprimés après extraction** (originaux non conservés, non stockés dans `cv/`), fiche d'analyse Markdown **du jour** à la racine de `cv/` (mémoire ; anciennes fiches déplacées dans `cv/archives/`), JSON d'analyse **versionné** à la racine (`<nom>-<prenom>-<AAAA-MM-JJ>.json`, sans écraser l'historique), **CV livrable versionné** (`<nom>-<prenom>-<type-gabarit>-<AAAA-MM-JJ>.docx` en DOCX, ou `<nom>-<prenom>-cv-<AAAA-MM-JJ>.md` en Markdown sur demande) à la racine de `cv/`, et **date de dernière modification = date du jour**. **En fin de tâche, le Gestionnaire CV rend son résultat en mentionnant en retour le Coordinateur** `[@Coordinateur Matching](mention://agent/<UUID-COORDINATEUR>)` (mention agent valide, pas une simple réponse), puis vérifie les `trigger_outcomes`. Ne jamais deviner ni coder en dur l'UUID : le résoudre à chaque fois via `multica agent list --output json` et l'injecter dans la mention.
 
 ### Step 3 — Validation explicite
-Présenter les modifications effectuées à l'humain pour validation explicite avant finalisation.
+Présenter les modifications effectuées (données) et le **CV livrable produit** (format : DOCX par défaut avec le type de gabarit — CV long / CV court / format client ; ou Markdown si explicitement demandé) à l'humain pour validation explicite avant finalisation.
 
 ## Sensors
 Outputs: `cv-mis-a-jour` → Phase Clôture (gate: explicit).
