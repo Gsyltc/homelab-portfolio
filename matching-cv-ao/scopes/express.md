@@ -22,7 +22,7 @@ de la source CV** : si un CV PDF/DOCX est **fourni en pièce jointe de l'issue**
 utilisée — la **dernière version JSON** (`<nom>-<prenom>-<AAAA-MM-JJ>.json`) pour le **flux
 entre agents** (seule croisée avec un AO par le Matcher), et la **fiche Markdown** courante
 pour le **fichier à télécharger pour l'humain**. Voir la compétence
-[`../skills/cv-analyse/SKILL.md`](../skills/cv-analyse/SKILL.md)
+[`../../plugins/rh-assistant/skills/cv-analyse/SKILL.md`](../../plugins/rh-assistant/skills/cv-analyse/SKILL.md)
 (§ Règle de sélection de la source CV, § Versionnage JSON) — détail porté par le skill, chargé
 par l'agent [`../agents/gestionnaire-cv-agent.md`](../agents/gestionnaire-cv-agent.md).
 

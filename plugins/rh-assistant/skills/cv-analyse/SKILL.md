@@ -7,7 +7,7 @@ keywords: [analyse cv, extraction cv, eligibilite, mifi, localisation, disponibi
 
 # Analyse de CV
 
-Cette compétence porte tout le détail opératoire de l'**extraction d'un CV** et de la **sélection d'éligibilité** vis-à-vis d'un AO pour le workflow Matching. Elle est utilisée par l'agent [`../../agents/gestionnaire-cv-agent.md`](../../agents/gestionnaire-cv-agent.md) et alimente le stage [`../../common/stages/analyse/extraction-cv.md`](../../common/stages/analyse/extraction-cv.md).
+Cette compétence porte tout le détail opératoire de l'**extraction d'un CV** et de la **sélection d'éligibilité** vis-à-vis d'un AO pour le workflow Matching. Elle est utilisée par l'agent [`../../../../matching-cv-ao/agents/gestionnaire-cv-agent.md`](../../../../matching-cv-ao/agents/gestionnaire-cv-agent.md) et alimente le stage [`../../../../matching-cv-ao/common/stages/analyse/extraction-cv.md`](../../../../matching-cv-ao/common/stages/analyse/extraction-cv.md).
 
 Les CV sources sont **fournis en pièces jointes de l'issue**, analysés, puis leur copie de travail est **supprimée** (les originaux ne sont **jamais conservés**). Les livrables (Markdown du jour + JSON versionnés) sont écrits dans `${ROOT_DIRECTORY}/<nom-prenom>/cv`.
 
@@ -21,7 +21,7 @@ Dans cet ordre :
    - fichier à télécharger pour l'humain → **fiche d'analyse Markdown** courante (du jour).
 3. **Ni pièce jointe ni analyse antérieure** → CV **manquant** : le signaler (pas de matching possible pour ce collaborateur).
 
-> Vaut pour les scopes `standard`, `complex`, `express`. Le scope [`../../scopes/format-cv.md`](../../scopes/format-cv.md) s'applique au cas 1 (extraction d'une pièce jointe fournie).
+> Vaut pour les scopes `standard`, `complex`, `express`. Le scope [`../../../../matching-cv-ao/scopes/format-cv.md`](../../../../matching-cv-ao/scopes/format-cv.md) s'applique au cas 1 (extraction d'une pièce jointe fournie).
 
 ## Structure du répertoire `cv/`
 
@@ -102,14 +102,14 @@ Fichier à la racine de `cv/` : `<nom>-<prenom>-<AAAA-MM-JJ>.json`. **Jamais éc
 
 - **`competences`** : chaque compétence porte obligatoirement `mois_experience` (durée cumulée en mois) et `derniere_utilisation` (mois/année de dernière mobilisation) — alimentent le calcul de compatibilité côté Matcher.
 - **`date_derniere_modification` / `source_cv` / `analyse_json`** : `date_derniere_modification` = toujours la date du jour. `source_cv` documente la pièce jointe (`provenance: "issue-attachment"`, `conserve: false`) — seule trace de l'entrée supprimée. `analyse_json` pointe vers le JSON versionné ; seule la dernière version est croisée avec un AO.
-- **`disponibilite`** (obligatoire) : `date_disponibilite` (ISO) + `taux_utilisation` (0–100). Un CV sans disponibilité complète est incomplet. Présence contrôlée par le sensor [`disponibilite-complete`](../../sensors/disponibilite.md) à la frontière Analyse → Matching (advisory).
-- **`localisation`** (obligatoire — ville) : `ville` requise, `region`/`pays` optionnels. **Si absente du CV, ne rien inventer** : poser une **mention humaine** demandant la ville, laisser `null` en attendant ; après réponse → renseigner `ville`, `source: "humain"`. Base du critère de proximité (70 km) pour AO `sur_site`/`hybride`. Présence contrôlée par le sensor [`localisation-complete`](../../sensors/localisation.md) (advisory).
+- **`disponibilite`** (obligatoire) : `date_disponibilite` (ISO) + `taux_utilisation` (0–100). Un CV sans disponibilité complète est incomplet. Présence contrôlée par le sensor [`disponibilite-complete`](../../../../matching-cv-ao/sensors/disponibilite.md) à la frontière Analyse → Matching (advisory).
+- **`localisation`** (obligatoire — ville) : `ville` requise, `region`/`pays` optionnels. **Si absente du CV, ne rien inventer** : poser une **mention humaine** demandant la ville, laisser `null` en attendant ; après réponse → renseigner `ville`, `source: "humain"`. Base du critère de proximité (70 km) pour AO `sur_site`/`hybride`. Présence contrôlée par le sensor [`localisation-complete`](../../../../matching-cv-ao/sensors/localisation.md) (advisory).
 - **`mifi`** (équivalence MIFI — contexte gouvernemental Québec) — 4 états d'`equivalence_requise` :
   - `non_requise` — diplôme canadien : `niveau_equivalent_qc` = niveau tel quel.
   - `oui` — MIFI possédé : conserver `niveau_equivalent_qc` reconnu + `reference_mifi` si disponible.
   - `non` — études à l'étranger **sans** MIFI : pas d'équivalence, diplôme non comparable au niveau québécois.
   - `a_verifier` — indéterminable : **mention humaine** (ne rien inventer) ; après réponse → `oui` (+ niveau) ou `non`, `source: "humain"`.
-  Règle : diplôme canadien → `non_requise` ; MIFI mentionné → `oui` + niveau ; études étrangères sans MIFI → `a_verifier` + mention humaine. Présence/cohérence contrôlées par le sensor [`equivalence-mifi`](../../sensors/equivalence-mifi.md) (advisory).
+  Règle : diplôme canadien → `non_requise` ; MIFI mentionné → `oui` + niveau ; études étrangères sans MIFI → `a_verifier` + mention humaine. Présence/cohérence contrôlées par le sensor [`equivalence-mifi`](../../../../matching-cv-ao/sensors/equivalence-mifi.md) (advisory).
 
 ## Sélection d'éligibilité (objet `eligibilite`)
 
