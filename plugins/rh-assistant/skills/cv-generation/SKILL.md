@@ -52,7 +52,7 @@ La production DOCX s'appuie **exclusivement** sur les **gabarits fournis par l'h
 ## Types d'opérations
 
 1. **Ajout / mise à jour de compétences** — enrichir `competences[]` (données) avec `mois_experience` et `derniere_utilisation`. Ne jamais fabriquer une durée ou une date : info manquante ⇒ mention humaine.
-2. **Mise à jour d'expérience** — ajouter/corriger des entrées `experience[]` (client, projet, rôle, `duree_mois`, `jours_personnes`, description).
+2. **Mise à jour d'expérience** — ajouter/corriger des entrées `experience[]` (client, rôle, `date_debut`, `date_fin`, `duree_mois`, `jours_personnes`, description) et le **détail de leurs projets** `experience[].projets[]`. Une expérience peut porter **un ou plusieurs projets** ; chaque projet porte `nom`, `date_debut`, `date_fin` (`AAAA-MM`, `present` si en cours) et `responsabilites` (liste). Les dates de l'expérience restent indépendantes de celles des projets. Ne jamais fabriquer un nom, une date ou une responsabilité de projet : info manquante ⇒ mention humaine.
 3. **Production d'un CV livrable** — **par défaut au format DOCX** à partir du **gabarit fourni** (CV long / CV court / format client) et des données du JSON courant ; **au format Markdown uniquement si l'humain le demande explicitement** (livrable humain, aucun secret).
 
 ## Procédure
