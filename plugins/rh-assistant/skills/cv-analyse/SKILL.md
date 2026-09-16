@@ -59,7 +59,7 @@ Fichier à la **racine de `cv/`**, versionné par la **date du jour** : `<AAAA-M
 - Préfixe `<AAAA-MM-JJ>` = **toujours la date du jour** de l'analyse (ISO). `<nom>`/`<prenom>` en minuscules, cohérents avec le répertoire. Même jour → écrase ; autre jour → nouveau fichier.
 - **Archivage** : avant d'écrire la fiche du jour, déplacer toute fiche antérieure de la racine vers `archives/`.
 - `date_derniere_modification` reportée = **toujours la date du jour**, jamais la date du fichier source.
-- Contenu (Markdown lisible, aucun secret) : CV source traité (nom, journalisé avant suppression), compétences avec mois d'expérience + dernière utilisation, expérience, études, équivalence MIFI (état, `niveau_equivalent_qc`, `reference_mifi`, commentaire — signaler les `a_verifier` en attente humaine), disponibilité (date + taux %), localisation (ville, région/pays — signaler ville manquante en attente humaine), langues.
+- Contenu (Markdown lisible, aucun secret) : CV source traité (nom, journalisé avant suppression), compétences avec mois d'expérience + dernière utilisation, expérience (avec `date_debut`/`date_fin`, méthodologies et technologies mobilisées par mission), **grilles d'expérience par technologie et par méthodologie** (mois d'XP calendaires + dernière utilisation, issus des agrégats collaborateur), études, équivalence MIFI (état, `niveau_equivalent_qc`, `reference_mifi`, commentaire — signaler les `a_verifier` en attente humaine), disponibilité (date + taux %), localisation (ville, région/pays — signaler ville manquante en attente humaine), langues.
 - Ce fichier est un **livrable humain** : Markdown uniquement, aucun secret.
 
 ## Versionnage JSON
@@ -83,7 +83,9 @@ Fichier à la racine de `cv/` : `<nom>-<prenom>-<AAAA-MM-JJ>.json`. **Jamais éc
       "analyse_markdown": "<chemin vers <AAAA-MM-JJ>-<nom>-<prenom>.md (racine de cv/)>",
       "analyse_json": "<chemin vers <nom>-<prenom>-<AAAA-MM-JJ>.json (racine de cv/)>",
       "competences": [ { "nom": "<compétence>", "mois_experience": 0, "derniere_utilisation": "<AAAA-MM>" } ],
-      "experience": [ { "client": "<client>", "projet": "<projet>", "role": "<rôle>", "duree_mois": 0, "jours_personnes": 0, "description": "<courte>" } ],
+      "experience": [ { "client": "<client>", "projet": "<projet>", "role": "<rôle>", "date_debut": "<AAAA-MM>", "date_fin": "<AAAA-MM | present>", "duree_mois": 0, "jours_personnes": 0, "methodologies": ["<méthodologie>"], "technologies": ["<technologie>"], "description": "<courte>" } ],
+      "technologies": [ { "nom": "<technologie>", "mois_experience": 0, "derniere_utilisation": "<AAAA-MM>" } ],
+      "methodologies": [ { "nom": "<méthodologie>", "mois_experience": 0, "derniere_utilisation": "<AAAA-MM>" } ],
       "etudes": { "niveau": "<diplôme>", "formation": "<formation>", "etablissement": "<établissement>" },
       "mifi": {
         "equivalence_requise": "non_requise | oui | non | a_verifier",
@@ -108,6 +110,12 @@ Fichier à la racine de `cv/` : `<nom>-<prenom>-<AAAA-MM-JJ>.json`. **Jamais éc
 ### Champs obligatoires et règles
 
 - **`competences`** : chaque compétence porte obligatoirement `mois_experience` (durée cumulée en mois) et `derniere_utilisation` (mois/année de dernière mobilisation) — alimentent le calcul de compatibilité côté Matcher.
+- **`experience`** : chaque expérience porte `date_debut` et `date_fin` au format `AAAA-MM` (`date_fin: "present"` si la mission est en cours), en plus de `duree_mois`. Elle porte aussi `methodologies` et `technologies` (listes des méthodologies/technologies mobilisées sur cette mission). **Ne rien inventer** : une méthodologie/technologie non mentionnée dans le CV n'est pas ajoutée ; si aucune n'est mentionnée pour l'expérience, mettre `[]`.
+- **`technologies` / `methodologies` (agrégats collaborateur)** : listes d'objets `{ nom, mois_experience, derniere_utilisation }` consolidant, au niveau du collaborateur, toutes les technologies/méthodologies apparaissant dans les `experience[]`.
+  - `mois_experience` = **union calendaire** des périodes `date_debut`→`date_fin` de **toutes les expériences** où la techno/méthodo apparaît, exprimée en **nombre de mois distincts couverts** (unité `mois_experience`, cohérente avec `competences`). **Pas de double comptage** : deux expériences simultanées (ou chevauchantes) partageant une même techno ne comptent le mois commun **qu'une seule fois** ; l'union des intervalles mensuels est calculée avant de sommer. `date_fin: "present"` = jusqu'au mois courant. Ne jamais exprimer en années décimales dans le JSON.
+  - `derniere_utilisation` = mois le plus récent (`AAAA-MM`) parmi les `date_fin` des expériences où la techno/méthodo apparaît (`present` → mois courant).
+  - `[]` si aucune techno/méthodo n'apparaît dans les expériences — **ne rien inventer**.
+  - Ces agrégats sont **informatifs** (remplissage de grilles, présentation humaine) et alimentent le Matcher pour la couverture technos/méthodos vis-à-vis de l'AO.
 - **`date_derniere_modification` / `source_cv` / `analyse_json`** : `date_derniere_modification` = toujours la date du jour. `source_cv` documente la pièce jointe (`provenance: "issue-attachment"`, `conserve: false`) — seule trace de l'entrée supprimée. `analyse_json` pointe vers le JSON versionné ; seule la dernière version est croisée avec un AO.
 - **`disponibilite`** (obligatoire) : `date_disponibilite` (ISO) + `taux_utilisation` (0–100). Un CV sans disponibilité complète est incomplet. Présence contrôlée par le sensor advisory `disponibilite-complete` à la frontière Analyse → Matching.
 - **`localisation`** (obligatoire — ville) : `ville` requise, `region`/`pays` optionnels. **Si absente du CV, ne rien inventer** : poser une **mention humaine** demandant la ville, laisser `null` en attendant ; après réponse → renseigner `ville`, `source: "humain"`. Base du critère de proximité (70 km) pour AO `sur_site`/`hybride`. Présence contrôlée par le sensor advisory `localisation-complete`.
