@@ -20,6 +20,6 @@ Tu es l'**Analyste RFP** du workflow Matching. Tu analyses les appels d'offres (
 
 Une compétence réutilisable porte tout le détail opératoire — **charge-la avant d'agir** :
 
-- **`rfp-analyse`** : parsing du document d'AO, extraction des exigences et des profils recherchés, détection du caractère gouvernemental et de la politique d'équivalence des diplômes (`client_gouvernemental` / `equivalence_diplomes`), détection du mode de travail et de la localisation du site (`localisation_travail`, rayon de proximité 70 km), schéma JSON complet de sortie, création/sauvegarde du répertoire de l'AO et garde-fous « ne jamais inventer ».
+- **`rfp-analyse`** : parsing du document d'AO, extraction des exigences et des profils recherchés, détection du caractère gouvernemental et de la politique d'équivalence des diplômes (`client_gouvernemental` / `equivalence_diplomes`), détection des **certifications requises** par profil (`certifications_requises` avec `criticite` — `obligatoire` = prérequis éliminatoire en aval), détection du mode de travail et de la localisation du site (`localisation_travail`, rayon de proximité 70 km), schéma JSON complet de sortie, création/sauvegarde du répertoire de l'AO et garde-fous « ne jamais inventer ».
 
 Ces instructions ne gardent que le rôle, l'orchestration et les garde-fous. Le détail (schéma JSON complet, règles d'équivalence des diplômes, règles de localisation, arborescence `ao/`, contrôle du livrable) vit dans la compétence.

@@ -2,14 +2,16 @@
 name: matching-scoring
 description: >
     Croisement et scoring des profils du workflow Matching : calcul du score pondéré IMMUABLE (Compétences 50 % / Expérience 35 % / Études 10 % / Disponibilité 5 %) sur les seuls collaborateurs retenus par le filtre d'éligibilité amont, règle de fraîcheur des compétences (> 10 ans ignorée), double check de conformité du niveau d'études (AO gouvernemental / équivalence MIFI / compensation), classement, schéma JSON de sortie et garde-fous. Charger avant tout croisement ou calcul de score.
-keywords: [matching, scoring pondere, ponderation immuable, fraicheur competences, conformite etudes, mifi, equivalence diplomes, classement profils, forces ecarts, exclusion gouvernemental]
+keywords: [matching, scoring pondere, ponderation immuable, fraicheur competences, conformite etudes, mifi, equivalence diplomes, classement profils, forces ecarts, exclusion gouvernemental, certifications requises, prerequis certification]
 ---
 
 # Croisement et scoring des profils
 
 Cette compétence porte tout le détail opératoire du **croisement exigences AO ↔ profils CV** et du **calcul du score pondéré** pour le workflow Matching. Elle est chargée par l'agent **Matcher Profils** et alimente les stages de **croisement-profils** et **classement-profils** (phase Matching) du workflow Matching.
 
-Le Matcher **ne score que les collaborateurs retenus** par le filtre d'éligibilité amont du Gestionnaire CV : le Coordinateur ne transmet que la **liste des retenus** (`eligibilite.collaborateurs_possibles`). Les collaborateurs `exclu` et `a_verifier` du filtre d'éligibilité **ne sont pas scorés** — ils sont propagés tels quels (avec leurs raisons) au classement et à la livraison. Cela inclut les exclusions de **localisation** (collaborateur hors du rayon de proximité — 70 km par défaut — d'un AO `sur_site`/`hybride`) et les `a_verifier` de localisation (ville du candidat manquante) : ces décisions sont prises **en amont** par le Gestionnaire CV et **n'entrent pas dans le scoring pondéré immuable**.
+Le Matcher **ne score que les collaborateurs retenus** par le filtre d'éligibilité amont du Gestionnaire CV : le Coordinateur ne transmet que la **liste des retenus** (`eligibilite.collaborateurs_possibles`). Les collaborateurs `exclu` et `a_verifier` du filtre d'éligibilité **ne sont pas scorés** — ils sont propagés tels quels (avec leurs raisons) au classement et à la livraison. Cela inclut les exclusions de **localisation** (collaborateur hors du rayon de proximité — 70 km par défaut — d'un AO `sur_site`/`hybride`), les exclusions de **certifications requises** (collaborateur ne détenant pas une certification marquée `obligatoire` dans l'AO — ex. AWS Certified Solutions Architect – Associate) et les `a_verifier` correspondants (ville manquante, détention de certification non confirmée) : ces décisions sont prises **en amont** par le Gestionnaire CV et **n'entrent pas dans le scoring pondéré immuable**.
+
+> **Certifications requises = éligibilité amont, pas scoring.** Une certification exigée par l'AO (`profils_recherches[].certifications_requises` avec `criticite: "obligatoire"`) est un **prérequis éliminatoire tranché en amont** (axe `certifications` du filtre d'éligibilité). Le Matcher **ne re-score pas** ce prérequis et **ne réintègre jamais** un collaborateur exclu pour certification manquante. À l'intérieur du scoring, les certifications (comme les certifications `souhaitee`/`nice-to-have`) alimentent uniquement la **couverture Compétences (50 %)** ; elles **n'ajoutent ni critère, ni pondération** et ne modifient pas les poids immuables 50/35/10/5.
 
 ## Entrées
 
@@ -129,7 +131,7 @@ Cette règle s'applique **uniquement** lorsque `ao.client_gouvernemental = true`
 - **Scoring IMMUABLE** — les poids 50/35/10/5 ne changent qu'avec une validation humaine explicite tracée. Ni la fraîcheur, ni la conformité des études, ni aucun scope ne modifie ces poids. Le **regroupement compétences + technologies + méthodologies se fait à l'intérieur du critère Compétences (50 %)** — **aucun nouveau critère, aucune nouvelle pondération**.
 - **Fraîcheur > 10 ans** — s'applique aux compétences **et** aux technologies/méthodologies (via `derniere_utilisation` des agrégats) : un élément périmé ne couvre aucune exigence et alimente les `ecarts` / listes `*_manquantes`.
 - **Mois d'XP techno/méthodo informatifs** — les agrégats `mois_experience` (union calendaire) servent au remplissage des grilles et à la présentation humaine ; ils ne modifient pas la règle binaire de couverture/fraîcheur.
-- **Ne scorer que les retenus** — jamais les `exclu` ni les `a_verifier` du filtre d'éligibilité amont ; les propager tels quels avec leurs raisons.
+- **Ne scorer que les retenus** — jamais les `exclu` ni les `a_verifier` du filtre d'éligibilité amont (y compris les exclusions de **localisation** et de **certifications requises `obligatoire`**) ; les propager tels quels avec leurs raisons, sans jamais réintégrer un collaborateur exclu.
 - **Lire soi-même la dernière version JSON** de chaque retenu — ne jamais croiser une version antérieure ni un source supprimé ; les CV ne circulent pas en A2A.
 - **Ne rien inventer** — une donnée manquante (MIFI non tranché, niveau d'études indéterminé) reste `a_verifier` et se signale à l'humain ; jamais d'exclusion sur donnée inconnue.
 - **Aucun secret** dans les livrables, justifications ou notifications.
