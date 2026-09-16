@@ -26,6 +26,15 @@ outputs: "Liste des CV disponibles (sources fournis en pièces jointes de l'issu
 Recenser les CV **sources à traiter** — fournis en **pièces jointes de l'issue** — et les **analyses déjà produites** pour chaque collaborateur (JSON versionnés à la racine de `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/`). Les originaux ne sont pas conservés : un collaborateur sans nouvelle pièce jointe mais disposant d'une analyse a déjà été traité.
 
 ## Steps
+### Step 0 — Résoudre et verrouiller `${ROOT_DIRECTORY}`
+Avant tout scan ou toute écriture, résoudre `${ROOT_DIRECTORY}` en **chemin absolu** depuis
+la variable d'environnement de l'agent et vérifier qu'il est **défini, absolu et existant**,
+et qu'il ne pointe **pas** dans un répertoire de run éphémère (chemin contenant `/workdir/`,
+`/task-`, ou un segment `/expe-…-<hash>/`). Si l'une de ces conditions n'est pas remplie →
+**halt-and-ask** : ne rien écrire, poser une mention humaine sur l'issue (« `${ROOT_DIRECTORY}`
+non résolu vers la racine persistante — livraison suspendue »). Journaliser sur l'issue le
+`${ROOT_DIRECTORY}` absolu retenu (trace d'audit).
+
 ### Step 1 — Recenser les sources et les analyses existantes
 - **Sources à traiter** : lister les **pièces jointes de l'issue** (PDF, DOCX) fournies pour analyse (via `multica attachment --help` pour la récupération ; ne jamais ouvrir une URL de ressource Multica directement).
 - **Analyses existantes** : scanner `${ROOT_DIRECTORY}/collaborateurs/` pour identifier, par collaborateur disposant d'un répertoire `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/`, les analyses présentes (JSON versionnés `<nom>-<prenom>-<AAAA-MM-JJ>.json` à la racine de ce répertoire `cv/`).

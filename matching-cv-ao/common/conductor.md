@@ -54,7 +54,22 @@ Ce fichier est la **source unique** des instructions du **coordinateur** du work
 | Résumés AO | `${ROOT_DIRECTORY}/ao/<client>/<titre-ao>` |
 | Grille d'évaluation | Fournie par l'humain à chaque fois — **ne jamais inventer une grille**, la demander si absente |
 
-> **Enracinement des chemins** : le répertoire de travail du workspace est `${ROOT_DIRECTORY}`. **Tous les chemins relatifs du workflow sont enracinés sur `${ROOT_DIRECTORY}`** (collaborateurs, AO, gabarits) ; ne jamais utiliser un chemin absolu hors `${ROOT_DIRECTORY}` ni un relatif non enraciné.
+> **Enracinement des chemins — `${ROOT_DIRECTORY}` (racine PERSISTANTE, obligatoire)** :
+> `${ROOT_DIRECTORY}` est le **répertoire de données persistant du workspace** (hors de
+> tout workdir de run), fourni par la variable d'environnement `ROOT_DIRECTORY` de l'agent.
+> **Tous** les chemins du workflow (collaborateurs, AO, gabarits) sont enracinés dessus.
+> Avant toute écriture, chaque agent **DOIT** :
+> 1. **Résoudre `${ROOT_DIRECTORY}` en chemin absolu** à partir de la variable
+>    d'environnement — ne jamais coder un chemin en dur, ne jamais présumer le CWD.
+> 2. **Vérifier que `${ROOT_DIRECTORY}` est défini, absolu et existant.** Si la variable
+>    est **absente, vide, relative, ou pointe dans un répertoire de run éphémère**
+>    (p. ex. un chemin contenant `/workdir/`, `/task-`, `/expe-…-<hash>/`) →
+>    **halt-and-ask** : ne rien écrire, poser une mention humaine sur l'issue et attendre.
+> 3. **Écrire les livrables UNIQUEMENT sous `${ROOT_DIRECTORY}` résolu.** Le workdir du run
+>    est **interdit** comme destination finale (les fichiers y sont perdus à la fin du run).
+> 4. **Vérifier après écriture** que chaque fichier existe bien sous le `${ROOT_DIRECTORY}`
+>    absolu attendu (et non sous le CWD du run) avant de conclure la tâche.
+> Ne jamais utiliser un chemin absolu hors `${ROOT_DIRECTORY}` ni un relatif non enraciné.
 
 > **Format du CV livrable — DOCX par défaut, Markdown sur demande explicite** : le **CV livrable** remis à l'humain / au client est **par défaut un DOCX** produit à partir d'un des **gabarits fournis** (CV long, CV court, format client spécifique) rangés dans `${ROOT_DIRECTORY}/gabarits/cv/` — **jamais inventé** (gabarit absent ⇒ halt-and-ask, pas de repli Markdown automatique). Le **format Markdown reste possible uniquement sur demande explicite de l'humain**. La fiche d'analyse Markdown et le JSON restent la mémoire interne (données), distincts du CV livrable.
 
