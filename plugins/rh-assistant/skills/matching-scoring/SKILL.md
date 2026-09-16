@@ -25,7 +25,7 @@ Le Matcher **ne score que les collaborateurs retenus** par le filtre d'éligibil
 | --- | --- | --- |
 | Compétences (compétences + technologies + méthodologies) | 50 % | **Couverture regroupée** : nombre d'éléments requis par l'AO (compétences **+ technologies + méthodologies**) couverts par le profil (compétence **éligible** / techno / méthodo présente dans les agrégats et **fraîche ≤ 10 ans**) / total des éléments requis par l'AO |
 | Expérience en projets | 35 % | Pertinence clients similaires + durée projets similaires (jours/personnes, mois) |
-| Études | 10 % | Niveau de formation correspondant |
+| Études | 10 % | Niveau de formation correspondant — **niveau le plus élevé parmi `etudes[]`** (après équivalence MIFI). Les certifications relèvent du critère Compétences, pas de celui-ci |
 | Disponibilité | 5 % | À partir de `disponibilite.date_disponibilite` (plus la disponibilité est proche, plus le score est élevé) et `disponibilite.taux_utilisation` (plus le taux d'utilisation est bas, plus le collaborateur est disponible) |
 
 `score_total` = somme pondérée des quatre critères, sur 100.
@@ -48,7 +48,7 @@ Le Matcher **ne score que les collaborateurs retenus** par le filtre d'éligibil
 
 Cette règle s'applique **uniquement** lorsque `ao.client_gouvernemental = true`, sur les collaborateurs **retenus** par le filtre d'éligibilité amont. Elle évalue la conformité du niveau d'études du collaborateur au **niveau requis** de l'AO (`profils_recherches[].etudes_requises`), en tenant compte de l'équivalence MIFI et de la politique de compensation de l'AO.
 
-1. **Niveau de référence du collaborateur** : utiliser `mifi.niveau_equivalent_qc` lorsque `mifi.equivalence_requise` = `oui` ou `non_requise`. C'est le niveau reconnu au Québec (diplôme canadien tel quel, ou équivalence MIFI obtenue).
+1. **Niveau de référence du collaborateur** : utiliser `mifi.niveau_equivalent_qc` lorsque `mifi.equivalence_requise` = `oui` ou `non_requise` — sinon le **niveau le plus élevé parmi `etudes[]`**. C'est le niveau reconnu au Québec (diplôme canadien tel quel, ou équivalence MIFI obtenue). Les **certifications** (`certifications[]`) ne sont **pas** un niveau d'études et n'entrent pas dans ce calcul.
 2. **`equivalence_requise = non`** (études à l'étranger **sans** équivalence) : le diplôme n'est **pas comparable** au niveau québécois → traiter comme un **écart de niveau** (le niveau requis n'est pas atteint), **sauf** si la compensation de l'AO s'applique et est satisfaite.
 3. **Compensation de l'AO** (si `equivalence_diplomes.acceptee = "oui"` et `compensation_annees_par_annee_manquante` défini) : calculer le nombre d'**années d'études manquantes** entre le niveau requis et le niveau du collaborateur, puis exiger `compensation_annees_par_annee_manquante × années_manquantes` **années d'expérience pertinente**. Comparer à l'expérience pertinente du collaborateur. Exemple : BAC requis, collaborateur DEC (≈ 3 ans manquants), compensation 3 ans/année → ~9 ans d'xp pertinente requis pour être conforme.
 4. **`equivalence_requise = a_verifier`** sur un AO gouvernemental : **ne pas conclure** la conformité → statut `conforme = "a_verifier"`, **signaler à l'humain** (le MIFI n'est pas tranché). **Pas d'exclusion automatique** tant que l'humain n'a pas tranché.
