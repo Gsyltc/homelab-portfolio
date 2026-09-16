@@ -2,7 +2,7 @@
 name: rfp-analyse
 description: >
     Analyse d'un appel d'offres (AO) du workflow Matching : parsing du PDF/DOCX fourni, extraction structurée des exigences (fonctionnelles, techniques, organisationnelles) et des profils recherchés, détection du caractère gouvernemental et de la politique d'équivalence des diplômes, détection du mode de travail et de la localisation du site (rayon de proximité), production du résumé versionné en JSON et sauvegarde dans le répertoire de l'AO. Charger avant toute analyse d'appel d'offres.
-keywords: [analyse ao, appel d'offres, rfp, parse ao, exigences, profils recherches, scoring implicite, equivalence diplomes, client gouvernemental, localisation travail, rayon proximite]
+keywords: [analyse ao, appel d'offres, rfp, parse ao, exigences, profils recherches, scoring implicite, equivalence diplomes, client gouvernemental, localisation travail, rayon proximite, certifications requises, certification prerequis]
 ---
 
 # Analyse d'appel d'offres (AO)
@@ -15,7 +15,7 @@ L'AO source est fourni **en pièce jointe de l'issue** (PDF/DOCX) ou dans le **c
 
 1. **Parser le document d'AO** fourni par le Coordinateur (pièce jointe récupérée via `multica attachment`, jamais en ouvrant une URL de ressource Multica ; ou contenu de l'issue).
 2. **Extraire les exigences** : fonctionnelles, techniques, organisationnelles. Identifier les **critères de scoring** explicites et implicites de l'AO.
-3. **Identifier les profils recherchés** : compétences requises, expérience souhaitée, études, disponibilité. Renseigner `etudes_requises` de chaque profil avec le **niveau requis** (ex. `Baccalauréat`).
+3. **Identifier les profils recherchés** : compétences requises, expérience souhaitée, études, **certifications requises** et disponibilité. Renseigner `etudes_requises` de chaque profil avec le **niveau requis** (ex. `Baccalauréat`) et `certifications_requises` avec les certifications exigées/souhaitées (chacune avec sa `criticite` — une certification `obligatoire` est un **prérequis éliminatoire** traité en amont par l'éligibilité).
 4. **Détecter le caractère gouvernemental** du client (`client_gouvernemental`) et, le cas échéant, la **politique d'équivalence des diplômes** acceptée par l'AO (`equivalence_diplomes`).
 5. **Détecter le mode de travail** (`localisation_travail`) et, pour un travail sur site / hybride, la **localisation du site** (rayon de proximité).
 6. **Créer les dossiers si absents** — toujours au bon chemin : `${ROOT_DIRECTORY}/ao/<client>/<titre-ao>/` (`client` = nom du client, `titre-ao` = slug du titre).
@@ -62,6 +62,14 @@ L'AO source est fourni **en pièce jointe de l'issue** (PDF/DOCX) ou dans le **c
       "competences_requises": ["<compétence>"],
       "experience_requise": "<description>",
       "etudes_requises": "<niveau/formation requis, ex. Baccalauréat>",
+      "certifications_requises": [
+        {
+          "nom": "<intitulé exact de la certification, ex. AWS Certified Solutions Architect – Associate>",
+          "organisme": "<organisme émetteur si précisé, ex. AWS, sinon null>",
+          "criticite": "obligatoire | souhaitee | nice-to-have",
+          "reference_ao": "<citation/section de l'AO — ne jamais inventer>"
+        }
+      ],
       "disponibilite": "<immédiate|<durée>>"
     }
   ],
@@ -85,6 +93,21 @@ L'AO source est fourni **en pièce jointe de l'issue** (PDF/DOCX) ou dans le **c
 - `reference_ao` : citation/section de l'AO qui fonde la politique.
 
 **Ne jamais inventer** : si l'AO ne précise pas la politique d'équivalence, renseigner `acceptee: "non_precise"` et les autres champs à `null` (une mention humaine peut être posée pour lever le doute). Renseigner `etudes_requises` de chaque `profils_recherches` avec le **niveau requis** (ex. `Baccalauréat`).
+
+## Champ `certifications_requises` (certification prérequis — critère éliminatoire)
+
+Chaque `profils_recherches[].certifications_requises` liste les **certifications professionnelles exigées ou souhaitées** par l'AO pour le profil (ex. `AWS Certified Solutions Architect – Associate`, `PMP`, `Scrum Master`). Cette liste est **distincte** de `competences_requises` et de `etudes_requises` : une certification n'est ni une compétence générique, ni un niveau d'études.
+
+Chaque entrée porte :
+
+- `nom` : intitulé **exact** de la certification tel qu'écrit dans l'AO (ne pas normaliser à outrance — conserver le libellé qui permet la correspondance côté CV) ;
+- `organisme` : organisme émetteur si l'AO le précise (ex. `AWS`, `PMI`, `Scrum.org`), sinon `null` ;
+- `criticite` : `obligatoire` (prérequis / exigé — **critère d'éligibilité éliminatoire** en aval), `souhaitee`, ou `nice-to-have` ;
+- `reference_ao` : citation/section de l'AO qui fonde l'exigence (piste d'audit — **ne jamais inventer**).
+
+> **Certification `obligatoire` = prérequis éliminatoire.** Lorsqu'une certification est marquée `criticite: "obligatoire"` (formulée dans l'AO comme « prérequis », « requis », « exigé »), elle devient un **critère d'éligibilité STRICT et éliminatoire** appliqué **en amont** du scoring par le Gestionnaire CV (axe `certifications` du filtre d'éligibilité — voir la compétence `cv-analyse` et [`gestionnaire-cv-agent.md`](../../../../matching-cv-ao/agents/gestionnaire-cv-agent.md)) : un collaborateur qui **ne détient pas** cette certification est **exclu** du matching. Une certification `souhaitee`/`nice-to-have` **n'exclut pas** : elle alimente uniquement la couverture Compétences côté Matcher.
+
+**Ne jamais inventer** : si l'AO ne cite aucune certification, mettre `certifications_requises: []`. Si l'AO cite une certification sans dire clairement si elle est exigée ou seulement souhaitée, renseigner la `criticite` la plus prudente (`souhaitee`) et poser une **mention humaine** pour lever le doute — **jamais** de `obligatoire` inféré sans base explicite (l'éliminatoire ne se déduit pas).
 
 ## Champ `localisation_travail` (proximité géographique)
 
@@ -110,7 +133,7 @@ Vérifier que le JSON produit contient bien :
 
 - `ao` (métadonnées) dont `client_gouvernemental`, `equivalence_diplomes` avec `acceptee` ∈ {`oui`, `non`, `non_precise`}, et `localisation_travail` avec `mode` ∈ {`teletravail`, `sur_site`, `hybride`, `non_precise`} et `ville_site` **non nul** si `mode` ∈ {`sur_site`, `hybride`} ;
 - `exigences` (liste) ;
-- `profils_recherches` (liste) dont `etudes_requises` renseigné pour chaque profil ;
+- `profils_recherches` (liste) dont `etudes_requises` renseigné pour chaque profil, et `certifications_requises` (liste, `[]` si aucune) dont chaque entrée porte `nom`, `criticite` ∈ {`obligatoire`, `souhaitee`, `nice-to-have`} et `reference_ao` ;
 - `scoring_implicite` (liste) le cas échéant.
 
 Signaler tout écart avant de remettre le livrable.
