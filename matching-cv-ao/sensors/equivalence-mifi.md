@@ -11,7 +11,7 @@ Chaque collaborateur du JSON `cv-profils` (produit par le stage `extraction-cv`,
 - `non` — **études à l'étranger sans MIFI** : pas d'équivalence disponible.
 - `a_verifier` — le CV **ne permet pas de trancher** : à confirmer par l'humain (**ne rien inventer**).
 
-L'objet `mifi` est **mandatory**. Un profil sans objet `mifi`, ou dont `equivalence_requise` est absent/hors énumération, est **non conforme**. Lorsque `equivalence_requise` vaut `oui` ou `non_requise`, `niveau_equivalent_qc` doit être **non vide** (le niveau reconnu au Québec est requis pour statuer la conformité au matching).
+L'objet `mifi` est **mandatory**. Un profil sans objet `mifi`, ou dont `equivalence_requise` est absent/hors énumération, est **non conforme**. Lorsque `equivalence_requise` vaut `oui` ou `non_requise`, `niveau_equivalent_qc` doit être **non vide** (le niveau reconnu au Québec est requis pour statuer la conformité au matching). L'équivalence porte sur **une étude de `etudes[]`** (`etude_concernee`) et **jamais** sur une certification (`certifications[]` est une liste distincte, hors périmètre MIFI).
 
 ## Frontière et déclenchement
 
