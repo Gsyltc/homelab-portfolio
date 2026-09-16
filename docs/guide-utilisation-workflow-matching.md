@@ -129,10 +129,12 @@ Le **Matcher Profils** calcule le score pondéré (immuable — seul un changeme
 
 | Critère | Poids |
 | --- | --- |
-| Compétences techniques | 50% |
+| Compétences (compétences + technologies + méthodologies) | 50% |
 | Expérience en projets | 35% |
 | Études | 10% |
 | Disponibilité | 5% |
+
+Le critère **Compétences (50 %)** **regroupe les compétences, les technologies et les méthodologies** : il évalue la **couverture** des compétences/technologies/méthodologies exigées par l'AO (connues vs manquantes). Ce regroupement se fait **à l'intérieur** du critère Compétences — **les poids 50/35/10/5 restent inchangés**, sans nouveau critère ni nouvelle pondération. Chaque expérience du CV porte ses **méthodologies** et **technologies**, et le profil expose des **grilles d'expérience par technologie et par méthodologie** (mois d'XP en temps calendaire, sans double comptage des périodes simultanées) — ces mois d'XP sont **informatifs** (remplissage de grilles) et ne modifient pas la règle de couverture. Un élément exigé non couvert (ou couvert uniquement par un élément périmé — dernière utilisation > 10 ans) est un **écart**.
 
 ---
 

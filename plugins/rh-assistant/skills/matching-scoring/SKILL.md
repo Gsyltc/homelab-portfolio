@@ -13,9 +13,9 @@ Le Matcher **ne score que les collaborateurs retenus** par le filtre d'éligibil
 
 ## Entrées
 
-- Les **exigences AO** (JSON produit par `parse-ao` : `exigences`, `profils_recherches`, `ao.client_gouvernemental`, `ao.equivalence_diplomes`, `ao.localisation_travail`).
+- Les **exigences AO** (JSON produit par `parse-ao` : `exigences`, `profils_recherches`, `ao.client_gouvernemental`, `ao.equivalence_diplomes`, `ao.localisation_travail`), **y compris les technologies et méthodologies exigées** par l'AO (portées par `exigences` / `profils_recherches`).
 - La **liste des retenus** transmise par le Coordinateur (`eligibilite.collaborateurs_possibles`) — pour chaque retenu, une référence `analyse_json`.
-- Pour chaque retenu, **lire soi-même** la **dernière version JSON** référencée par `analyse_json` (`cv-profils`, `<nom>-<prenom>-<AAAA-MM-JJ>.json`) — les CV ne sont **pas** transmis par le Gestionnaire CV. Les versions JSON antérieures et les sources supprimés ne sont **jamais** croisés.
+- Pour chaque retenu, **lire soi-même** la **dernière version JSON** référencée par `analyse_json` (`cv-profils`, `<nom>-<prenom>-<AAAA-MM-JJ>.json`) — les CV ne sont **pas** transmis par le Gestionnaire CV. En plus des `competences`, lire les **agrégats collaborateur `technologies` et `methodologies`** (`{ nom, mois_experience, derniere_utilisation }`, mois d'XP en union calendaire) pour évaluer la couverture des technos/méthodos exigées par l'AO et remplir les grilles. Les versions JSON antérieures et les sources supprimés ne sont **jamais** croisés.
 
 ## Scoring pondéré
 
@@ -23,22 +23,24 @@ Le Matcher **ne score que les collaborateurs retenus** par le filtre d'éligibil
 
 | Critère | Poids | Méthode de calcul |
 | --- | --- | --- |
-| Compétences techniques | 50 % | Nombre de compétences requises couvertes par une compétence **éligible** / total compétences requises |
+| Compétences (compétences + technologies + méthodologies) | 50 % | **Couverture regroupée** : nombre d'éléments requis par l'AO (compétences **+ technologies + méthodologies**) couverts par le profil (compétence **éligible** / techno / méthodo présente dans les agrégats et **fraîche ≤ 10 ans**) / total des éléments requis par l'AO |
 | Expérience en projets | 35 % | Pertinence clients similaires + durée projets similaires (jours/personnes, mois) |
 | Études | 10 % | Niveau de formation correspondant |
 | Disponibilité | 5 % | À partir de `disponibilite.date_disponibilite` (plus la disponibilité est proche, plus le score est élevé) et `disponibilite.taux_utilisation` (plus le taux d'utilisation est bas, plus le collaborateur est disponible) |
 
 `score_total` = somme pondérée des quatre critères, sur 100.
 
+> **Critère Compétences (50 %) — regroupement.** Le critère Compétences **regroupe compétences + technologies + méthodologies** dans **un seul et même critère à 50 %** — il n'y a **ni nouveau critère, ni nouvelle pondération** : le regroupement se fait **à l'intérieur** du critère Compétences. La couverture = (éléments requis par l'AO — compétences, technologies **et** méthodologies — effectivement couverts par le profil) / (total des éléments requis par l'AO). Un élément requis **non couvert**, ou couvert **uniquement** par un élément **périmé** (`derniere_utilisation` à plus de 10 ans), est traité comme **non couvert** → il alimente les `ecarts`. Les mois d'XP par techno/méthodo (agrégats `mois_experience`) sont **informatifs** (grilles) et ne modifient pas cette règle de couverture.
+
 ## Règle d'éligibilité des compétences (fraîcheur)
 
-> **Compétences périmées ignorées** — une compétence dont la **dernière utilisation remonte à plus de 10 ans** (par rapport à la date du jour) est **exclue** du calcul de compatibilité.
+> **Compétences / technologies / méthodologies périmées ignorées** — un élément (compétence, technologie **ou** méthodologie) dont la **dernière utilisation remonte à plus de 10 ans** (par rapport à la date du jour) est **exclu** du calcul de compatibilité.
 
-1. Pour chaque compétence du profil, lire `derniere_utilisation` (fournie par le Gestionnaire CV).
-2. Si `date_du_jour − derniere_utilisation > 10 ans`, la compétence est **inéligible** : elle ne compte ni comme couverture d'une exigence, ni dans les forces.
-3. Une exigence AO couverte uniquement par une compétence inéligible est traitée comme **non couverte** (elle apparaît dans les `ecarts`).
-4. Le champ `mois_experience` reste indicatif mais ne modifie pas cette règle binaire de fraîcheur.
-5. Journaliser les compétences écartées pour péremption (> 10 ans) dans la justification, pour la piste d'audit.
+1. Pour chaque compétence du profil, lire `derniere_utilisation` (fournie par le Gestionnaire CV) ; de même pour chaque technologie/méthodologie via `derniere_utilisation` des **agrégats** `technologies` / `methodologies`.
+2. Si `date_du_jour − derniere_utilisation > 10 ans`, l'élément est **inéligible** : il ne compte ni comme couverture d'une exigence, ni dans les forces.
+3. Une exigence AO (compétence, technologie ou méthodologie) couverte uniquement par un élément inéligible est traitée comme **non couverte** (elle apparaît dans les `ecarts` et dans les listes `*_manquantes`).
+4. Le champ `mois_experience` (compétences comme agrégats techno/méthodo) reste indicatif mais ne modifie pas cette règle binaire de fraîcheur.
+5. Journaliser les éléments écartés pour péremption (> 10 ans) dans la justification, pour la piste d'audit.
 
 ## Règle de conformité du niveau d'études (client gouvernemental) — double check aval
 
@@ -55,7 +57,7 @@ Cette règle s'applique **uniquement** lorsque `ao.client_gouvernemental = true`
 ## Procédure
 
 1. **Recevoir** les exigences AO (JSON) et la **liste des retenus** (`eligibilite.collaborateurs_possibles`). Pour chaque retenu, **lire soi-même** la dernière version JSON via `analyse_json`. **Ne pas scorer** les `exclu` ni `a_verifier` du filtre d'éligibilité amont — les propager tels quels au classement.
-2. **Croiser** chaque profil CV avec les exigences AO, en appliquant la règle de fraîcheur (compétences > 10 ans ignorées).
+2. **Croiser** chaque profil CV avec les exigences AO, en appliquant la règle de fraîcheur (compétences / technologies / méthodologies > 10 ans ignorées). Pour le critère **Compétences (50 %)**, évaluer la **couverture regroupée** des compétences, **technologies** et **méthodologies** exigées par l'AO (connues vs manquantes) à partir des `competences` et des agrégats `technologies` / `methodologies` du profil.
 3. **Calculer le score pondéré** (50/35/10/5) pour chaque profil.
 4. **Identifier les forces et écarts** de chaque profil par rapport aux exigences.
 5. **Appliquer le double check de conformité des études** si `ao.client_gouvernemental = true`.
@@ -73,8 +75,17 @@ Cette règle s'applique **uniquement** lorsque `ao.client_gouvernemental = true`
       "score_competences": {
         "score": <sur 100>,
         "poids": 0.50,
+        "regroupe": ["competences", "technologies", "methodologies"],
         "details": ["<compétence couverte (éligible)>"],
-        "competences_ignorees_peremption": ["<compétence exclue car > 10 ans sans utilisation>"]
+        "competences_couvertes": ["<compétence requise par l'AO et couverte (éligible ≤ 10 ans)>"],
+        "competences_manquantes": ["<compétence requise par l'AO non couverte (ou périmée > 10 ans)>"],
+        "technologies_couvertes": ["<technologie requise par l'AO et couverte (agrégat, fraîche ≤ 10 ans)>"],
+        "technologies_manquantes": ["<technologie requise par l'AO non couverte (ou périmée > 10 ans)>"],
+        "methodologies_couvertes": ["<méthodologie requise par l'AO et couverte (agrégat, fraîche ≤ 10 ans)>"],
+        "methodologies_manquantes": ["<méthodologie requise par l'AO non couverte (ou périmée > 10 ans)>"],
+        "mois_experience_technologies": [ { "nom": "<technologie>", "mois_experience": 0, "derniere_utilisation": "<AAAA-MM>" } ],
+        "mois_experience_methodologies": [ { "nom": "<méthodologie>", "mois_experience": 0, "derniere_utilisation": "<AAAA-MM>" } ],
+        "competences_ignorees_peremption": ["<compétence/techno/méthodo exclue car > 10 ans sans utilisation>"]
       },
       "score_experience": {
         "score": <sur 100>,
@@ -115,7 +126,9 @@ Cette règle s'applique **uniquement** lorsque `ao.client_gouvernemental = true`
 
 ## Garde-fous
 
-- **Scoring IMMUABLE** — les poids 50/35/10/5 ne changent qu'avec une validation humaine explicite tracée. Ni la fraîcheur, ni la conformité des études, ni aucun scope ne modifie ces poids.
+- **Scoring IMMUABLE** — les poids 50/35/10/5 ne changent qu'avec une validation humaine explicite tracée. Ni la fraîcheur, ni la conformité des études, ni aucun scope ne modifie ces poids. Le **regroupement compétences + technologies + méthodologies se fait à l'intérieur du critère Compétences (50 %)** — **aucun nouveau critère, aucune nouvelle pondération**.
+- **Fraîcheur > 10 ans** — s'applique aux compétences **et** aux technologies/méthodologies (via `derniere_utilisation` des agrégats) : un élément périmé ne couvre aucune exigence et alimente les `ecarts` / listes `*_manquantes`.
+- **Mois d'XP techno/méthodo informatifs** — les agrégats `mois_experience` (union calendaire) servent au remplissage des grilles et à la présentation humaine ; ils ne modifient pas la règle binaire de couverture/fraîcheur.
 - **Ne scorer que les retenus** — jamais les `exclu` ni les `a_verifier` du filtre d'éligibilité amont ; les propager tels quels avec leurs raisons.
 - **Lire soi-même la dernière version JSON** de chaque retenu — ne jamais croiser une version antérieure ni un source supprimé ; les CV ne circulent pas en A2A.
 - **Ne rien inventer** — une donnée manquante (MIFI non tranché, niveau d'études indéterminé) reste `a_verifier` et se signale à l'humain ; jamais d'exclusion sur donnée inconnue.
