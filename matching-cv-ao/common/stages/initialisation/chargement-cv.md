@@ -23,12 +23,12 @@ outputs: "Liste des CV disponibles (sources fournis en pièces jointes de l'issu
 # Chargement des CV
 
 ## Objectif
-Recenser les CV **sources à traiter** — fournis en **pièces jointes de l'issue** — et les **analyses déjà produites** pour chaque collaborateur (JSON versionnés à la racine de `cv/`). Les originaux ne sont pas conservés : un collaborateur sans nouvelle pièce jointe mais disposant d'une analyse a déjà été traité.
+Recenser les CV **sources à traiter** — fournis en **pièces jointes de l'issue** — et les **analyses déjà produites** pour chaque collaborateur (JSON versionnés à la racine de `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/`). Les originaux ne sont pas conservés : un collaborateur sans nouvelle pièce jointe mais disposant d'une analyse a déjà été traité.
 
 ## Steps
 ### Step 1 — Recenser les sources et les analyses existantes
 - **Sources à traiter** : lister les **pièces jointes de l'issue** (PDF, DOCX) fournies pour analyse (via `multica attachment --help` pour la récupération ; ne jamais ouvrir une URL de ressource Multica directement).
-- **Analyses existantes** : scanner `${ROOT_DIRECTORY}/` pour identifier, par collaborateur disposant d'un répertoire `cv/`, les analyses présentes (JSON versionnés `<nom>-<prenom>-<AAAA-MM-JJ>.json` à la racine de `cv/`).
+- **Analyses existantes** : scanner `${ROOT_DIRECTORY}/collaborateurs/` pour identifier, par collaborateur disposant d'un répertoire `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/`, les analyses présentes (JSON versionnés `<nom>-<prenom>-<AAAA-MM-JJ>.json` à la racine de ce répertoire `cv/`).
 
 ### Step 2 — Vérification de complétude (règle de sélection de la source CV)
 Déterminer l'état par collaborateur concerné, selon la **règle de sélection de la source CV** (voir [`../../../agents/gestionnaire-cv-agent.md`](../../../agents/gestionnaire-cv-agent.md)) :
