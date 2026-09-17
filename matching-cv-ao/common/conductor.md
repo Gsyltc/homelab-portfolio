@@ -133,6 +133,12 @@ Ne jamais avancer sur un élément non validé.
 
 ---
 
+## Retour de délégation — anti-wake parasite
+
+> **Anti-wake parasite** : le Coordinateur ne place **jamais** de lien de mention actif vers lui-même (`[@Coordinateur Matching](mention://agent/…)`) dans une consigne de délégation. Un tel lien, présent dans le commentaire du Coordinateur, déclenche un run parasite du Coordinateur (observé sur EXPE-54). L'instruction de retour est rédigée **en texte clair** : « en fin de tâche, mentionne en retour le Coordinateur Matching avec un lien de mention actif ». La **construction du lien actif revient à l'agent délégataire** — c'est ce lien, posé par l'agent qui termine, qui enqueue le run de reprise du Coordinateur. Le détail (UUID résolu via `multica agent list`, jamais copié du gabarit) vit dans le protocole `stage-protocol` (temps 3) et la « Règle A2A » de `governance-security`.
+
+---
+
 ## OBLIGATOIRE : piste d'audit sur l'issue
 
 La piste d'audit vit **sur l'issue Multica**, jamais dans un fichier séparé. Chaque agent documente chaque étape en commentaire ; capture l'**entrée brute** des demandes / arbitrages humains sans la résumer ; n'écrase jamais l'historique.

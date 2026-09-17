@@ -29,7 +29,7 @@ flowchart LR
 - **Agent ↔ Agent** : JSON uniquement. **Agent ↔ Humain** : Markdown uniquement.
 - Chaque décision structurante est tracée sur l'issue.
 - L'agent trace son avancement sur l'issue (piste d'audit au fil de l'eau).
-- **Retour de délégation (obligatoire)** : en fin de production, l'agent lead **mentionne en retour le Coordinateur** `[@Coordinateur Matching](mention://agent/<UUID-COORDINATEUR>)` dans le fil de l'issue, avec son livrable. Une réponse simple **n'enqueue aucun run** — seule une mention agent valide réveille le Coordinateur. Ne jamais deviner ni coder en dur l'UUID : le résoudre à chaque fois via `multica agent list --output json` et l'injecter dans la mention.
+- **Retour de délégation (obligatoire, à la charge de l'agent délégataire)** : en fin de production, l'agent lead **construit lui-même** le lien de mention actif `[@Coordinateur Matching](mention://agent/<uuid-coordinateur>)` dans son commentaire de livrable — UUID **résolu à chaque fois** via `multica agent list --output json`, **jamais copié depuis la consigne de délégation ni codé en dur**. C'est **ce lien, posé par l'agent qui termine, qui enqueue le run de reprise du Coordinateur**. Une mention en texte clair ou une simple réponse dans le fil **n'enqueue aucun run** et ne réveille pas le Coordinateur.
 - **Vérification `trigger_outcomes`** : après le post, l'agent lead vérifie les `trigger_outcomes` de son commentaire (statuts `blocked` / `coalesced` / `deferred`). Si la mention n'a pas déclenché le run attendu, il le signale sur l'issue (halt-and-ask) plutôt que de considérer la tâche terminée.
 
 ### 4. Sensors à l'écriture

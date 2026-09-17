@@ -8,6 +8,23 @@ ce fichier en donne la lecture chronologique côté produit.
 
 ## [Non publié]
 
+### Fixed
+- **Wake parasite A2A du workflow `matching-cv-ao`** (réf. EXPE-54) — le lien de reprise doit être posé
+  par l'agent qui termine, jamais par le Coordinateur (évolution **documentaire**, invariants préservés) :
+  - **Côté Coordinateur** : `conductor.md` (nouvelle section « Retour de délégation — anti-wake parasite ») et
+    `agents/coordinateur-matching-agent.md` interdisent explicitement l'auto-lien de mention actif
+    `[@Coordinateur Matching](mention://agent/…)` dans une consigne de délégation (un tel lien, posté par le
+    Coordinateur, déclenchait un run parasite du Coordinateur) ; l'instruction de retour est désormais rédigée
+    **en texte clair**.
+  - **Côté agent délégataire** : `protocols/stage-protocol.md` (temps 3 « Production ») et
+    `protocols/governance-security.md` (« Règle A2A ») stipulent que l'agent délégataire **construit lui-même**
+    le lien de mention actif (UUID **résolu via `multica agent list`**, jamais copié du gabarit ni codé en dur)
+    et que **c'est ce lien qui enqueue le run de reprise du Coordinateur** — une mention en texte clair
+    n'enqueuant aucun run, sa sur-correction précédente figeait le flux (reprise manuelle humaine requise).
+  - **Source unique préservée** : la règle est énoncée une fois par source ; les fiches du triptyque
+    (`analyste-rfp`, `gestionnaire-cv`, `matcher-profils`) ne portaient déjà aucun gabarit de lien actif à
+    recopier et renvoient à la règle partagée.
+
 ### Changed
 - **Optimisation & cohérence du workflow `matching-cv-ao`** (évolution **documentaire**, aucun changement de
   comportement ; invariants préservés : JSON A2A / Markdown humain, validation humaine granulaire, scoring
