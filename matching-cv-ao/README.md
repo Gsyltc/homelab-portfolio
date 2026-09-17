@@ -82,9 +82,11 @@ Le **schéma JSON complet** des analyses CV et les conventions de nommage/versio
 | --- | --- | --- | --- |
 | **Initialisation** | 0 | Réception AO + vérification CV | Non (bootstrap déterministe) |
 | **Analyse** | 1 | Parsing AO + extraction CV | Léger |
-| **Matching** | 2 | Croisement profils ↔ exigences + classement | Advisory |
+| **Matching** | 2 | Croisement profils ↔ exigences + classement | Léger (`human_gate: light`) — présentation *advisory* des scores |
 | **Validation** | 3 | Validation granulaire + remplissage grille | Granulaire (Keep/Modify/Redo) |
 | **Clôture** | 4 | Livraison + mise à jour CV si demandée | Explicite |
+
+> **`human_gate` (blocage humain) ≠ nature de la revue/sensor.** La colonne « Gate humain » reporte la valeur `human_gate` de la fiche de stage (énum `none | light | granular | explicit`). « Advisory » qualifie la **nature d'une revue ou d'un sensor** (`review_class` / sensor `nature`), pas un niveau de gate humain : au Matching, le `human_gate` est **`light`** et la présentation des scores est *advisory* (consultative, non bloquante).
 
 ## Scoring pondéré
 
@@ -97,21 +99,21 @@ Le **schéma JSON complet** des analyses CV et les conventions de nommage/versio
 
 ## Équivalence MIFI & conformité études (client gouvernemental)
 
-Chaque profil CV porte un objet `mifi` (équivalence des diplômes — contexte gouvernemental Québec) à **4 états** d'`equivalence_requise` : `non_requise` (diplôme canadien), `oui` (MIFI obtenu), `non` (étranger sans équivalence), `a_verifier` (non déterminable → **mention humaine**, ne rien inventer). Voir l'agent `Gestionnaire CV`.
+Chaque profil CV porte un objet `mifi` (équivalence des diplômes — contexte gouvernemental Québec) à **4 états** d'`equivalence_requise` : `non_requise`, `oui`, `non`, `a_verifier` (→ mention humaine, ne rien inventer). Pour un **AO gouvernemental** (`ao.client_gouvernemental = true`), le niveau d'études requis est un **critère de conformité éliminatoire** (double check aval du Matcher, sans altérer les poids du scoring immuable).
 
-Pour un **AO gouvernemental** (`ao.client_gouvernemental = true`), le niveau d'études requis est un **critère de conformité éliminatoire** : le Matcher croise niveau requis + équivalence MIFI + politique de compensation de l'AO (`equivalence_diplomes`) et **exclut** du classement tout collaborateur **non conforme** (`recommandation = "exclu"`, motif explicite). Cette conformité **n'altère pas** les poids du scoring immuable. Les exclusions sont **reportées dans le classement et le rapport final de livraison**. Un état `a_verifier` sur un AO gouvernemental est **signalé à l'humain**, sans exclusion automatique. Voir l'agent `Matcher Profils`.
+Détail opératoire — **source unique** : états et règles MIFI dans la compétence `cv-analyse` (objet `mifi`, filtre Études) ; double check de conformité études dans `matching-scoring`. Voir aussi les agents `Gestionnaire CV` et `Matcher Profils`.
 
 ## Localisation géographique & proximité (≤ 70 km)
 
-Chaque AO porte un objet `localisation_travail` renseigné par l'Analyste RFP : `mode` ∈ {`teletravail`, `sur_site`, `hybride`, `non_precise`}, et — pour un travail `sur_site`/`hybride` — la `ville_site` (au minimum), l'`adresse_site` si disponible, et un `rayon_km` de proximité (**70 km par défaut**). Chaque profil CV porte un objet `localisation` avec la **ville du candidat** (`localisation.ville`), champ **obligatoire** contrôlé par le sensor `localisation-complete`. Si le CV ne contient pas la ville, le Gestionnaire CV **pose une mention humaine** (ne rien inventer).
+Chaque AO porte un objet `localisation_travail` (`mode` ∈ {`teletravail`, `sur_site`, `hybride`, `non_precise`} ; `ville_site` + `rayon_km` — **70 km par défaut** — si `sur_site`/`hybride`) et chaque profil CV un objet `localisation` avec la **ville du candidat** (`localisation.ville`, obligatoire, contrôlé par le sensor `localisation-complete`). La localisation est un **axe strict/éliminatoire** du filtre d'éligibilité amont pour un AO `sur_site`/`hybride` (hors rayon ⇒ `exclu` ; ville manquante ⇒ `a_verifier` + mention humaine ; non applicable en `teletravail`/`non_precise`).
 
-Le Gestionnaire CV applique la **localisation comme 4ᵉ axe du filtre d'éligibilité** (en plus d'Études, MIFI, Expériences) : pour un AO `sur_site`/`hybride`, un collaborateur situé à **plus de `rayon_km` (70 km par défaut)** de la `ville_site` est **`exclu`** (axe `localisation`, ex. AO `Montréal` / candidat à `Québec`). Une **ville de candidat manquante** classe le collaborateur `a_verifier` (jamais `exclu` de force) avec mention humaine. En `teletravail`/`non_precise`, ce critère **ne s'applique pas**. Comme les autres exclusions d'éligibilité, cette décision est prise **en amont** du Matcher et **n'altère pas** les poids du scoring immuable ; elle est propagée au classement et au rapport final. Voir l'agent `Gestionnaire CV`.
+Détail opératoire — **source unique** : compétence `rfp-analyse` (détection `localisation_travail`) et `cv-analyse` (axe `localisation` du filtre d'éligibilité). Voir l'agent `Gestionnaire CV`.
 
 ## Certifications requises (prérequis éliminatoire)
 
-Chaque profil recherché de l'AO peut porter des **certifications requises** (`profils_recherches[].certifications_requises`), renseignées par l'Analyste RFP : pour chaque certification, `nom` (libellé exact, ex. `AWS Certified Solutions Architect – Associate`), `organisme` si précisé, `criticite` ∈ {`obligatoire`, `souhaitee`, `nice-to-have`} et `reference_ao`. Chaque profil CV porte, **séparément des études**, une liste `certifications[]` (`nom`, `organisme`, `annee_obtention`, `date_expiration`, `reference`).
+L'AO peut porter des **certifications requises** par profil (`profils_recherches[].certifications_requises`, avec `criticite` ∈ {`obligatoire`, `souhaitee`, `nice-to-have`}) ; chaque profil CV porte une liste `certifications[]` **distincte des études**. Une certification **`obligatoire`** est un **axe strict/éliminatoire** du filtre d'éligibilité amont (non détenue et valide ⇒ `exclu` ; détention non tranchée ⇒ `a_verifier` + mention humaine) ; `souhaitee`/`nice-to-have` **n'exclut jamais** (couverture Compétences côté Matcher).
 
-Le Gestionnaire CV applique les **certifications requises comme axe strict/éliminatoire du filtre d'éligibilité** (en plus d'Études, MIFI, Expériences, Localisation) : lorsqu'une certification de l'AO est marquée **`obligatoire`** (prérequis/exigée), tout collaborateur qui **ne détient pas** une certification correspondante **valide** (présente et non expirée ; un simple *coursework* ne compte pas) est **`exclu`** (axe `certifications`, ex. « AO exige AWS Certified Solutions Architect – Associate — non détenue »). Une certification `souhaitee`/`nice-to-have` **n'exclut jamais** (elle alimente la couverture Compétences côté Matcher). Une détention **non tranchée** (validité/expiration incertaine dans le CV) classe le collaborateur `a_verifier` (jamais `exclu` de force) avec mention humaine — **ne rien inventer**. Si l'AO n'exige aucune certification `obligatoire`, ce critère **ne s'applique pas**. Comme les autres exclusions d'éligibilité, cette décision est prise **en amont** du Matcher et **n'altère pas** les poids du scoring immuable ; elle est propagée au classement et au rapport final. Voir l'agent `Gestionnaire CV`.
+Détail opératoire — **source unique** : compétence `rfp-analyse` (détection `certifications_requises`) et `cv-analyse` (axe `certifications` du filtre d'éligibilité). Voir l'agent `Gestionnaire CV`.
 
 ## Contextes clients (sociétés) & expertise de firme
 
@@ -149,27 +151,7 @@ Le workflow capitalise le **contexte des sociétés clientes** et les **mandats 
 | **Référentiel des contextes clients** (1 fichier par client — contexte de la société + mandats réalisés) | `${ROOT_DIRECTORY}/clients/<nom-client>.json` — **maintenu par le Gestionnaire CV** (CV long avec contexte client, complété/enrichi jamais écrasé) ; **exploité par l'Analyste RFP** pour l'expertise de firme |
 | Grille d'évaluation | Fournie par l'humain — **ne jamais inventer** |
 
-> **Enracinement des chemins (`${ROOT_DIRECTORY}`)** : le répertoire de travail du workspace est
-> `${ROOT_DIRECTORY}`. **Tous les chemins relatifs du workflow sont enracinés sur `${ROOT_DIRECTORY}`**
-> (collaborateurs, AO, gabarits) ; ne jamais utiliser un chemin absolu hors `${ROOT_DIRECTORY}` ni un chemin
-> relatif non enraciné.
-
-> **Format du CV livrable — DOCX par défaut, Markdown sur demande explicite** : le **CV livrable** remis à
-> l'humain / au client est **par défaut un DOCX** produit à partir d'un des **gabarits fournis** (CV long, CV
-> court, format client spécifique) rangés dans `${ROOT_DIRECTORY}/gabarits/cv/` — **jamais inventé** ; gabarit
-> absent ⇒ halt-and-ask (pas de repli Markdown automatique). Le **format Markdown reste possible uniquement sur
-> demande explicite de l'humain**. La fiche d'analyse Markdown et le JSON restent la **mémoire interne**
-> (données), distincts du CV livrable. Voir la compétence `cv-generation`.
-
-> **Organisation stricte du répertoire `cv/`** : les CV sources sont **fournis en pièces jointes de l'issue**,
-> récupérés via `multica attachment` pour l'analyse puis **supprimés** — **les originaux ne sont pas conservés**
-> ni stockés dans `cv/` ; leur nom est journalisé sur l'issue avant suppression (piste d'audit). Les anciennes
-> fiches d'analyse Markdown sont déplacées dans `cv/archives/` ; la fiche Markdown du jour et les JSON
-> versionnés restent à la racine de `cv/` et constituent la mémoire persistante du CV ; le **CV livrable DOCX**
-> produit depuis un gabarit fourni y est également écrit (versionné). La date de dernière
-> modification reportée dans les livrables est **toujours la date du jour** de l'analyse. Seule la **dernière
-> version JSON** est croisée avec un AO (règle de sélection et journalisation détaillées dans
-> l'agent `Gestionnaire CV`).
+> **Règles d'exécution du stockage — source unique.** L'**enracinement `${ROOT_DIRECTORY}`** (chemins, halt-and-ask sur workdir éphémère) et le **format du CV livrable** (DOCX par défaut depuis un gabarit fourni ; Markdown sur demande explicite ; gabarit absent ⇒ halt-and-ask) sont définis dans `common/conductor.md` (§ Enracinement des chemins, § Format du CV livrable). L'**organisation stricte du répertoire `cv/`** (sources non conservées, archivage, versionnage, date du jour, sélection de la dernière version JSON) vit dans les compétences `cv-analyse` et `cv-generation`. Ce tableau en est la vue de structure ; ne pas y redupliquer la procédure.
 
 ## Utilisation
 

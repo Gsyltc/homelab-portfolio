@@ -91,5 +91,4 @@ Le **schéma JSON** (compétences, expérience, `etudes[]` — une ou plusieurs 
 
 ## Communication
 
-- **Agent ↔ Agent** : JSON uniquement.
-- **Agent ↔ Humain** : Markdown uniquement (diff avant/après pour la validation). Le **CV livrable** transmis à l'humain est un **DOCX** par défaut (pièce jointe / fichier), ou un **CV Markdown** si l'humain l'a explicitement demandé — dans les deux cas, distinct de la conversation Markdown.
+Invariant JSON↔Markdown défini une seule fois dans `governance-security` / le conductor (non redéfini ici). **Spécificité de cette compétence** : le **CV livrable** transmis à l'humain est un **DOCX** par défaut (pièce jointe / fichier), ou un **CV Markdown** si l'humain l'a explicitement demandé — dans les deux cas distinct de la conversation Markdown (diff avant/après pour la validation).

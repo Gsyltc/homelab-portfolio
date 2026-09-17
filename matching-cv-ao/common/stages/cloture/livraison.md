@@ -15,7 +15,7 @@ produces: [livraison-finale]
 consumes: [{artifact: resultats-valides, required: true}, {artifact: cv-eligibilite, required: true}]
 requires_stage: [presentation-resultats]
 sensors: []
-scopes: [standard]
+scopes: [standard, complex, express]
 inputs: "Profils validés"
 outputs: "Livrable final (résumé Markdown)"
 ---
@@ -30,11 +30,8 @@ Produire et livrer le résumé final du matching à l'humain.
 Produire un document Markdown récapitulatif contenant :
 - Résumé de l'AO analysée
 - Liste des profils retenus avec scores et justification
-- **Section obligatoire « Collaborateurs non retenus » (filtre d'éligibilité Gestionnaire CV)** : lister **chaque collaborateur écarté par le Gestionnaire CV en amont du matching** (issu de `cv-eligibilite`), avec la/les **raison(s)** (axe `etudes | mifi | experiences | coherence | fraicheur_cv` + détail), en **distinguant explicitement** deux catégories :
-  - **`exclu`** — écarté définitivement vis-à-vis de l'AO ;
-  - **`a_verifier`** — en attente d'un arbitrage humain (ex. MIFI non tranché ; ne rien inventer).
-  Cette section est **obligatoire** dans le rapport final, même si aucun collaborateur n'est concerné (indiquer alors « aucun »).
-- **Pour un AO gouvernemental : section « Exclus — non-conformité études »** listant explicitement les collaborateurs **exclus pour non-conformité du niveau d'études** (`recommandation = "exclu"`), avec le **motif d'exclusion** (niveau requis vs niveau du collaborateur, équivalence MIFI, compensation appliquée). Cette mention est **obligatoire** dans le rapport final et **distincte** de la section « Collaborateurs non retenus » (filtre d'éligibilité amont) ci-dessus.
+- **Section obligatoire « Collaborateurs non retenus » (filtre d'éligibilité Gestionnaire CV)** : lister **chaque collaborateur écarté en amont du matching** (issu de `cv-eligibilite`) en distinguant les deux sous-états `exclu` / `a_verifier`, chacun avec ses **raisons par axe** (`{axe, detail}`). Catégories, sous-états et axes définis une seule fois dans le protocole `governance-security` (§ Catégories décisionnelles — non-retenus & exclus). Cette section est **obligatoire** dans le rapport final, même si aucun collaborateur n'est concerné (indiquer alors « aucun »).
+- **Pour un AO gouvernemental : section « Exclus — non-conformité études »** listant les collaborateurs **exclus pour non-conformité du niveau d'études** (`recommandation = "exclu"`), avec le **motif d'exclusion**. Mention **obligatoire** et **distincte** de la section « Collaborateurs non retenus » ci-dessus (voir `governance-security`, même section).
 - Grille remplie (si disponible)
 - Recommandations
 

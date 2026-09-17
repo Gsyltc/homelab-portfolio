@@ -8,6 +8,31 @@ ce fichier en donne la lecture chronologique côté produit.
 
 ## [Non publié]
 
+### Changed
+- **Optimisation & cohérence du workflow `matching-cv-ao`** (évolution **documentaire**, aucun changement de
+  comportement ; invariants préservés : JSON A2A / Markdown humain, validation humaine granulaire, scoring
+  immuable 50/35/10/5, gates advisory non bloquants) :
+  - **Cohérence — axes de raison d'éligibilité** : `classement-profils.md` et `livraison.md` alignés sur les
+    **7 axes** (`etudes | mifi | experiences | localisation | certifications | coherence | fraicheur_cv`) —
+    `localisation` et `certifications` étaient omis dans ces deux gabarits.
+  - **Cohérence — gate de la phase Matching** : la colonne « Gate humain » de `README.md` et `conductor.md`
+    reporte désormais la valeur réelle `human_gate: light` (présentation *advisory* des scores), avec une note
+    distinguant `human_gate` (énum `none|light|granular|explicit`) de la **nature** advisory d'une revue/sensor.
+  - **Cohérence — appartenance des scopes** : les dix fiches de stage déclarent explicitement `scopes:
+    [standard, complex, express]` (+ `format-cv` pour les trois stages CV seul), conformément au modèle « un
+    stage déclare ses scopes ». `complex`/`express` partagent l'appartenance de `standard`, différenciés par
+    l'axe Depth et les allègements ➖ de la matrice — clarifié dans `protocols/scopes-and-axes.md`.
+  - **Redondances factorisées vers leurs sources uniques** (renvois, sans perte d'information) :
+    l'enracinement `${ROOT_DIRECTORY}` (source : `conductor.md`), le retour de délégation A2A + `trigger_outcomes`
+    (source : `protocols/stage-protocol.md` temps 3), la règle de sélection de la source CV (source :
+    compétence `cv-analyse`), les règles MIFI / localisation / certifications requises (sources : `cv-analyse` /
+    `rfp-analyse` / `matching-scoring`), le tableau/encadrés de stockage (source : `conductor.md` + skills) et
+    l'invariant de communication JSON↔Markdown (source : `governance-security.md`).
+  - **Nouvelle section unique** dans `protocols/governance-security.md` (« Catégories décisionnelles —
+    non-retenus & exclus ») définissant une seule fois les non-retenus d'éligibilité amont (`exclu`/`a_verifier`,
+    Gestionnaire CV) et les exclus « conformité études » aval (Matcher) ; `classement-profils.md` et
+    `livraison.md` y renvoient au lieu de re-décrire la distinction.
+
 ### Added
 - **Contextes clients (sociétés) & expertise de firme** (workflow `matching-cv-ao`, plugin `rh-assistant`) —
   évolution **documentaire**, invariants préservés (JSON A2A / Markdown humain, validation humaine granulaire,

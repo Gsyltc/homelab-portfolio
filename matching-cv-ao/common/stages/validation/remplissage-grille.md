@@ -15,7 +15,7 @@ produces: [grille-remplie]
 consumes: [{artifact: resultats-valides, required: true}, {artifact: grille-evaluation, required: true}]
 requires_stage: [presentation-resultats]
 sensors: []
-scopes: [standard]
+scopes: [standard, complex, express]
 inputs: "Profils validés + grille d'évaluation"
 outputs: "Grille remplie avec les profils"
 ---

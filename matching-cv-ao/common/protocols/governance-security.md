@@ -16,6 +16,19 @@ Protocole transverse consolidant la gouvernance multi-agents, les invariants non
 
 Un agent est déclenché par un **commentaire sur l'issue avec une mention valide** `[@Label](mention://agent/<uuid>)` et une **mission claire** (objectif, périmètre, critères d'acceptation). **Ne jamais deviner un UUID** : le résoudre via `multica agent list --output json` avant chaque mention. **En fin de tâche, l'agent appelé rend son livrable en mentionnant en retour l'agent assigneur** (mention agent valide `[@Label](mention://agent/<uuid>)`) — une simple réponse dans le fil **n'enqueue aucun run** et ne réveille pas l'assigneur. L'agent vérifie ensuite les `trigger_outcomes` de son commentaire (statuts `blocked` / `coalesced` / `deferred`) et signale tout écart. Le coordinateur contrôle chaque livrable avant validation humaine.
 
+## Catégories décisionnelles — non-retenus & exclus (source unique)
+
+Le workflow distingue **deux mécanismes d'écartement**, produits à des étapes différentes et **jamais confondus**. Les fiches de stage (`classement-profils`, `livraison`) et les compétences (`cv-analyse`, `matching-scoring`) **s'y réfèrent** au lieu de re-décrire la distinction.
+
+1. **Non-retenus d'éligibilité amont — Gestionnaire CV** (artefact `cv-eligibilite`, produit par `extraction-cv`). Filtre appliqué **avant** le scoring ; les non-retenus **ne sont jamais scorés**. Deux sous-états :
+   - **`exclu`** — écarté définitivement vis-à-vis de l'AO (inclut tout critère **strict** Études / Localisation / Certifications requises **tranché et non atteint**).
+   - **`a_verifier`** — arbitrage humain requis **uniquement** quand une donnée d'un critère strict est **non tranchée** (MIFI non tranché, ville manquante, détention de certification non confirmée). **Ne rien inventer.**
+   - **Axes de raison** : `etudes | mifi | experiences | localisation | certifications | coherence | fraicheur_cv` (`fraicheur_cv` = motif d'`exclu` uniquement). Chaque `exclu`/`a_verifier` porte au moins une raison `{axe, detail}`.
+
+2. **Exclus « conformité études » aval — Matcher Profils** (bloc `conformite_etudes`, `recommandation = "exclu"`). Double check **sur les seuls retenus**, **uniquement** pour un AO gouvernemental (`ao.client_gouvernemental = true`) : un retenu **non conforme** au niveau d'études requis (après équivalence MIFI + compensation) est **exclu du classement** avec `motif_exclusion`. Un `conforme = "a_verifier"` (MIFI non tranché) est **signalé** sans exclusion automatique.
+
+Ces deux catégories sont **reportées séparément** dans le classement et le rapport final de livraison. Le détail opératoire vit dans `cv-analyse` (filtre amont) et `matching-scoring` (double check aval).
+
 ## Invariants non contournables
 
 Aucun scope, aucune règle apprise, aucun gate/sensor advisory ne peut affaiblir :

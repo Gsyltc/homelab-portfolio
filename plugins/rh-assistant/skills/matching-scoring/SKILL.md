@@ -138,5 +138,4 @@ Cette règle s'applique **uniquement** lorsque `ao.client_gouvernemental = true`
 
 ## Communication
 
-- **Agent ↔ Agent** : JSON uniquement.
-- **Agent ↔ Humain** : Markdown uniquement.
+Invariant JSON↔Markdown (Agent↔Agent en JSON, Agent↔Humain en Markdown) — défini une seule fois dans le protocole `governance-security` et le conductor ; non redéfini ici.

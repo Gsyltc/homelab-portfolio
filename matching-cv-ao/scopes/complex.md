@@ -17,14 +17,7 @@ Tous les stages des 5 phases s'exécutent avec Depth `comprehensive`. Le stage
 
 ## CV utilisés par défaut
 
-Comme en `standard` et `express`, le CV de chaque collaborateur suit la **règle de sélection
-de la source CV** : si un CV PDF/DOCX est **fourni en pièce jointe de l'issue**, il est
-**extrait** d'abord (nouvelle version) ; sinon, la **dernière version déjà extraite** est
-utilisée — la **dernière version JSON** (`<nom>-<prenom>-<AAAA-MM-JJ>.json`) pour le **flux
-entre agents** (seule croisée avec un AO par le Matcher), et la **fiche Markdown** courante
-pour le **fichier à télécharger pour l'humain**. Voir la compétence `cv-analyse`
-(plugin `rh-assistant`, § Règle de sélection de la source CV, § Versionnage JSON) — détail porté par le skill, chargé
-par l'agent `Gestionnaire CV`.
+Comme en `standard` et `express`, ce scope suit la **règle de sélection de la source CV** (pièce jointe extraite en priorité, sinon dernière version déjà extraite : JSON pour le flux A2A, fiche Markdown du jour pour le téléchargement humain). Règle complète, versionnage et journalisation d'audit : compétence `cv-analyse` (plugin `rh-assistant`, § Règle de sélection de la source CV, § Versionnage JSON), chargée par l'agent `Gestionnaire CV`.
 
 Appartenance : voir le champ `scopes:` de chaque fiche de stage et la matrice de
 le protocole `scopes-and-axes`.

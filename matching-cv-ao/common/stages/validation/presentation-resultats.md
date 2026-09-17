@@ -15,7 +15,7 @@ produces: [resultats-valides]
 consumes: [{artifact: classement-final, required: true}]
 requires_stage: [classement-profils]
 sensors: []
-scopes: [standard]
+scopes: [standard, complex, express]
 inputs: "Classement final"
 outputs: "Profils validés par l'humain"
 ---
