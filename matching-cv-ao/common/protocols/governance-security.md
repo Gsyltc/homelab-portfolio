@@ -14,7 +14,9 @@ Protocole transverse consolidant la gouvernance multi-agents, les invariants non
 
 ## Règle A2A
 
-Un agent est déclenché par un **commentaire sur l'issue avec une mention valide** `[@Label](mention://agent/<uuid>)` et une **mission claire** (objectif, périmètre, critères d'acceptation). **Ne jamais deviner un UUID** : le résoudre via `multica agent list --output json` avant chaque mention. **En fin de tâche, l'agent appelé rend son livrable en mentionnant en retour l'agent assigneur** (mention agent valide `[@Label](mention://agent/<uuid>)`) — une simple réponse dans le fil **n'enqueue aucun run** et ne réveille pas l'assigneur. L'agent vérifie ensuite les `trigger_outcomes` de son commentaire (statuts `blocked` / `coalesced` / `deferred`) et signale tout écart. Le coordinateur contrôle chaque livrable avant validation humaine.
+Un agent est déclenché par un **commentaire sur l'issue avec une mention valide** `[@Label](mention://agent/<uuid>)` et une **mission claire** (objectif, périmètre, critères d'acceptation). **Ne jamais deviner un UUID** : le résoudre via `multica agent list --output json` avant chaque mention. **En fin de tâche, l'agent délégataire construit lui-même le lien de mention actif vers l'agent assigneur** — c'est **ce lien, posé par l'agent qui termine, qui enqueue le run de reprise** ; une mention en texte clair ou une simple réponse n'enqueue aucun run. Détail opératoire (résolution d'UUID, `trigger_outcomes`) : protocole `stage-protocol` (temps 3). Le coordinateur contrôle chaque livrable avant validation humaine.
+
+> **Anti-wake parasite (règle générale, tous agents)** : **aucun agent ne se mentionne lui-même** avec un lien de mention actif dans une consigne de délégation — un tel lien, posté dans son propre commentaire, déclenche un run parasite de cet agent (observé sur EXPE-54). L'assigneur **désigne l'agent de retour par son nom, en texte clair** (« reviens vers moi, <Nom de l'assigneur> ») ; la construction du lien de mention actif revient **toujours à l'agent délégataire**, jamais à l'assigneur.
 
 ## Catégories décisionnelles — non-retenus & exclus (source unique)
 

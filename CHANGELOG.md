@@ -8,6 +8,15 @@ ce fichier en donne la lecture chronologique côté produit.
 
 ## [Non publié]
 
+### Fixed
+- **Wake parasite A2A du workflow `matching-cv-ao`** (réf. EXPE-54) — évolution **documentaire**, invariants
+  préservés. **Règle générale (tous agents)** énoncée dans les seules règles A2A (`protocols/stage-protocol.md`
+  temps 3 et `protocols/governance-security.md` « Règle A2A ») : **aucun agent ne se mentionne lui-même** avec un
+  lien de mention actif dans une consigne de délégation (il déclencherait un run parasite de lui-même) ;
+  l'assigneur **désigne l'agent de retour par son nom, en texte clair**, et l'**agent délégataire** construit
+  lui-même le lien de mention actif (UUID résolu via `multica agent list`) qui **déclenche le run de reprise de
+  l'assigneur**. La règle n'est plus dupliquée dans `conductor.md` ni `coordinateur-matching-agent.md`.
+
 ### Changed
 - **Optimisation & cohérence du workflow `matching-cv-ao`** (évolution **documentaire**, aucun changement de
   comportement ; invariants préservés : JSON A2A / Markdown humain, validation humaine granulaire, scoring
