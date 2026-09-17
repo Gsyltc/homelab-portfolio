@@ -1,8 +1,8 @@
 ---
 name: cv-analyse
 description: >
-    Analyse d'un CV source (PDF/DOCX fourni en pièce jointe d'issue) du workflow Matching : extraction structurée vers livrables versionnés (fiche Markdown du jour + JSON), archivage, traçabilité, équivalence MIFI, localisation, disponibilité, et sélection d'éligibilité amont (Études, Localisation et Certifications requises STRICTES/éliminatoires) vis-à-vis d'un AO. Charger avant toute extraction de CV ou classement d'éligibilité.
-keywords: [analyse cv, extraction cv, eligibilite, mifi, localisation, disponibilite, versionnage cv, filtre eligibilite, certifications, certification requise, prerequis]
+    Analyse d'un CV source (PDF/DOCX fourni en pièce jointe d'issue) du workflow Matching : extraction structurée vers livrables versionnés (fiche Markdown du jour + JSON), archivage, traçabilité, équivalence MIFI, localisation, disponibilité, sélection d'éligibilité amont (Études, Localisation et Certifications requises STRICTES/éliminatoires) vis-à-vis d'un AO, et maintenance du référentiel des contextes clients (sociétés) `${ROOT_DIRECTORY}/clients/<nom-client>.json` lorsqu'un CV long en contient (contexte + mandats réalisés — complète/enrichit, jamais d'écrasement aveugle). Charger avant toute extraction de CV ou classement d'éligibilité.
+keywords: [analyse cv, extraction cv, eligibilite, mifi, localisation, disponibilite, versionnage cv, filtre eligibilite, certifications, certification requise, prerequis, contexte client, clients json, mandats, expertise firme, referentiel clients]
 ---
 
 # Analyse de CV
@@ -13,7 +13,7 @@ Les CV sources sont **fournis en pièces jointes de l'issue**, analysés, puis l
 
 > **Enracinement des chemins** : tous les chemins relatifs sont **enracinés sur `${ROOT_DIRECTORY}`** (répertoire de travail du workspace) ; ne jamais utiliser un chemin absolu hors `${ROOT_DIRECTORY}` ni un relatif non enraciné.
 
-> **Fiche d'analyse ≠ CV livrable** : la fiche Markdown et le JSON produits ici sont la **mémoire interne** (données structurées), **jamais** un livrable client. Le **CV livrable** présentable est produit **au format DOCX par défaut, à partir d'un gabarit fourni** (Markdown possible **sur demande explicite de l'humain**) par la compétence [`../cv-generation/SKILL.md`](../cv-generation/SKILL.md) (gabarits dans `${ROOT_DIRECTORY}/gabarits/cv/`).
+> **Fiche d'analyse ≠ CV livrable** : la fiche Markdown et le JSON produits ici sont la **mémoire interne** (données structurées), **jamais** un livrable client. Le **CV livrable** présentable est produit **au format DOCX par défaut, à partir d'un gabarit fourni** (Markdown possible **sur demande explicite de l'humain**) par la compétence `cv-generation` (gabarits dans `${ROOT_DIRECTORY}/gabarits/cv/`).
 
 ## Règle de sélection de la source CV
 
@@ -39,7 +39,7 @@ ${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/
 └── <nom>-<prenom>-<type-gabarit>-<AAAA-MM-JJ>.docx # CV livrable (DOCX par défaut ; Markdown …-cv-<AAAA-MM-JJ>.md sur demande) — produit par cv-generation
 ```
 
-Les **gabarits DOCX fournis** (CV long / CV court / format client) vivent dans `${ROOT_DIRECTORY}/gabarits/cv/` — voir [`../cv-generation/SKILL.md`](../cv-generation/SKILL.md). Le format **par défaut du CV livrable est le DOCX** ; le **Markdown** n'est produit que **sur demande explicite de l'humain**.
+Les **gabarits DOCX fournis** (CV long / CV court / format client) vivent dans `${ROOT_DIRECTORY}/gabarits/cv/` — voir la compétence `cv-generation`. Le format **par défaut du CV livrable est le DOCX** ; le **Markdown** n'est produit que **sur demande explicite de l'humain**.
 
 - **Sources (PDF, DOCX)** : **non stockés**. Fournis en pièces jointes de l'issue, récupérés via `multica attachment`, puis copie de travail **supprimée**.
 - **`archives/`** : anciennes fiches d'analyse Markdown (déplacées à chaque nouvelle analyse).
@@ -130,6 +130,15 @@ Fichier à la racine de `cv/` : `<nom>-<prenom>-<AAAA-MM-JJ>.json`. **Jamais éc
   - `non` — études à l'étranger **sans** MIFI : pas d'équivalence, diplôme non comparable au niveau québécois.
   - `a_verifier` — indéterminable : **mention humaine** (ne rien inventer) ; après réponse → `oui` (+ niveau) ou `non`, `source: "humain"`.
   Règle : diplôme canadien → `non_requise` ; MIFI mentionné → `oui` + niveau ; études étrangères sans MIFI → `a_verifier` + mention humaine. Présence/cohérence contrôlées par le sensor advisory `equivalence-mifi`. L'équivalence MIFI porte sur **une étude de `etudes[]`** (renseigner `etude_concernee` — le diplôme étranger visé) et **jamais** sur une certification. Lorsque plusieurs études existent, l'équivalence est évaluée sur celle qui conditionne le niveau requis par l'AO.
+
+## Référentiel des contextes clients (`${ROOT_DIRECTORY}/clients/<nom-client>.json`)
+
+Certains CV — en particulier les **CV longs** — décrivent, pour chaque mandat, le **contexte de l'organisation cliente** (la société où le collaborateur est intervenu) en plus des réalisations du collaborateur. Le Gestionnaire CV **capitalise** cette information dans le **référentiel des contextes clients** `${ROOT_DIRECTORY}/clients/<nom-client>.json` (un fichier par client : contexte de la société + mandats réalisés), pour alimenter l'analyse d'**expertise de firme** de l'Analyste RFP et le bloc « Contexte de l'organisation » du CV long.
+
+- **Quand (condition impérative)** : cette maintenance n'est **activée que si le CV analysé contient un contexte client** — c'est le **seul déclencheur**. Un CV **sans** contexte client ne déclenche **aucune** activation ni écriture dans `clients/`. Le Gestionnaire CV vérifie d'abord cette présence.
+- **Comment** : **créer/compléter** le fichier du client — **enrichir sans écraser aveuglément** le `contexte`, **ajouter/fusionner** (dédoublonner) les mandats — **ne rien inventer**.
+
+> **Source unique** — le **schéma complet** de `clients/<nom-client>.json`, les conventions de **nommage** (slug), les **règles de maintenance** (enrichissement, dédoublonnage) et le **contrat de lecture** vivent dans la compétence dédiée `contexte-client`. S'y référer et **ne pas dupliquer** ici. Cette compétence `cv-analyse` en est le **producteur** (côté Gestionnaire CV) et charge `contexte-client` avant toute écriture dans `clients/`.
 
 ## Sélection d'éligibilité (objet `eligibilite`)
 

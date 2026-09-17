@@ -7,9 +7,10 @@ Manifeste déclaratif des **verification gates** du workflow Matching AO ↔ CV.
 1. **`artefacts-presents`** — les artefacts requis en sortie de phase existent.
 2. **`liaison-tracabilite`** — chaque exigence AO est reliée à un profil analysé.
 3. **`absence-orphelin`** — aucun profil n'est déconnecté (sans exigence amont).
-4. **`disponibilite-complete`** — chaque profil CV porte une disponibilité complète (date de disponibilité + taux d'utilisation en %), champs **mandatory** — voir [`disponibilite.md`](disponibilite.md).
-5. **`equivalence-mifi`** — chaque profil CV porte un objet `mifi` cohérent (4 états d'`equivalence_requise` ; `niveau_equivalent_qc` non vide si `oui`/`non_requise`) ; les collaborateurs en `a_verifier` sont signalés (MIFI non tranché) — voir [`equivalence-mifi.md`](equivalence-mifi.md).
-6. **`localisation-complete`** — chaque profil CV porte une ville (`localisation.ville`), champ **mandatory** ; les villes manquantes sont signalées (mention humaine attendue) — voir [`localisation.md`](localisation.md).
+4. **`disponibilite-complete`** — chaque profil CV porte une disponibilité complète (date de disponibilité + taux d'utilisation en %), champs **mandatory** — voir `disponibilite.md`.
+5. **`equivalence-mifi`** — chaque profil CV porte un objet `mifi` cohérent (4 états d'`equivalence_requise` ; `niveau_equivalent_qc` non vide si `oui`/`non_requise`) ; les collaborateurs en `a_verifier` sont signalés (MIFI non tranché) — voir `equivalence-mifi.md`.
+6. **`localisation-complete`** — chaque profil CV porte une ville (`localisation.ville`), champ **mandatory** ; les villes manquantes sont signalées (mention humaine attendue) — voir `localisation.md`.
+7. **`expertise-firme`** — lorsque l'AO exige une expertise de firme, l'objet `expertise_firme` est présent et sa couverture est **appuyée sur le référentiel `${ROOT_DIRECTORY}/clients/*.json`** ; un `verdict` ≠ `conforme` est signalé et déclenche une **gate humaine légère** (non bloquante) — voir `expertise-firme.md`.
 
 ## Frontières et artefacts requis
 
@@ -31,7 +32,10 @@ boundaries:
       - ao-exigences
       - ao-profils-recherches
       - cv-profils
-    checks: [artefacts-presents, liaison-tracabilite, disponibilite-complete, equivalence-mifi, localisation-complete]
+    artefacts_optionnels:
+      - ao-expertise-firme
+      - clients-contextes
+    checks: [artefacts-presents, liaison-tracabilite, disponibilite-complete, equivalence-mifi, localisation-complete, expertise-firme]
 
   - id: matching-validation
     frontiere: "Matching → Validation"
@@ -63,9 +67,10 @@ Rapport de vérification — <frontière>   (source : matching-cv-ao/sensors/gat
 - disponibilite-complete : ✅ | ⚠️ <profil sans disponibilité complète> | ⛔ <indisponible>   (frontière Analyse → Matching ; détail : matching-cv-ao/sensors/disponibilite.md)
 - equivalence-mifi : ✅ | ⚠️ <profil sans objet mifi cohérent / en a_verifier> | ⛔ <indisponible>   (frontière Analyse → Matching ; détail : matching-cv-ao/sensors/equivalence-mifi.md)
 - localisation-complete : ✅ | ⚠️ <profil sans ville (localisation.ville)> | ⛔ <indisponible>   (frontière Analyse → Matching ; détail : matching-cv-ao/sensors/localisation.md)
+- expertise-firme : ✅ conforme / non exigée | ⚠️ minimums non atteints ou indéterminable (gate humaine légère, non bloquante) | ⛔ <indisponible>   (frontière Analyse → Matching ; détail : matching-cv-ao/sensors/expertise-firme.md)
 ```
 
-À la frontière **Analyse → Matching**, le check `disponibilite-complete` est reporté (détail dans `sensors/disponibilite.md`) :
+À la frontière **Analyse → Matching**, le check `disponibilite-complete` est reporté (détail dans le sensor `disponibilite`) :
 
 ```
 Rapport de vérification — Analyse → Matching   (source : matching-cv-ao/sensors/gates.md)
@@ -74,4 +79,5 @@ Rapport de vérification — Analyse → Matching   (source : matching-cv-ao/sen
 - disponibilite-complete : ✅ | ⚠️ <collaborateur sans date_disponibilite / taux_utilisation> | ⛔ <indisponible>
 - equivalence-mifi : ✅ | ⚠️ <collaborateur sans objet mifi cohérent / en a_verifier (MIFI non tranché)> | ⛔ <indisponible>   (détail : matching-cv-ao/sensors/equivalence-mifi.md)
 - localisation-complete : ✅ | ⚠️ <collaborateur sans ville (localisation.ville) — mention humaine attendue> | ⛔ <indisponible>   (détail : matching-cv-ao/sensors/localisation.md)
+- expertise-firme : ✅ conforme / non exigée | ⚠️ minimums non atteints ou indéterminable (gate humaine légère, non bloquante) | ⛔ <indisponible>   (détail : matching-cv-ao/sensors/expertise-firme.md)
 ```

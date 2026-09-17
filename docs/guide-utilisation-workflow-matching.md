@@ -93,6 +93,7 @@ La délégation se fait par **mention** sur l'issue ; l'agent sollicité répond
 | Fiche d'analyse Markdown courante + JSON versionnés (mémoire) | Racine de `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/` |
 | **CV livrable** (DOCX par défaut depuis un gabarit ; Markdown sur demande explicite) | `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/<nom>-<prenom>-<type-gabarit>-<AAAA-MM-JJ>.docx` (ou `…-cv-<AAAA-MM-JJ>.md`) |
 | Résumés AO | `${ROOT_DIRECTORY}/ao/<client>/<titre-ao>/` |
+| **Contextes clients (sociétés)** — 1 fichier par client : contexte de la société + mandats réalisés par la firme | `${ROOT_DIRECTORY}/clients/<nom-client>.json` — **alimenté automatiquement** par le Gestionnaire CV à partir des CV longs (complété/enrichi, jamais écrasé) ; utilisé par l'Analyste RFP pour l'expertise de firme |
 | Grille d'évaluation | Fournie par l'humain — **jamais inventée** |
 
 Ces chemins sont créés **si absents**, toujours au bon endroit (client = nom du client, titre-ao = slug du titre). **Tous les chemins relatifs sont enracinés sur `${ROOT_DIRECTORY}`** (le répertoire de travail du workspace).
@@ -110,6 +111,17 @@ Ces chemins sont créés **si absents**, toujours au bon endroit (client = nom d
 > (`<nom>-<prenom>-<AAAA-MM-JJ>.json`), **puis supprime la copie de travail** — **les originaux ne sont pas
 > conservés** (leur nom est journalisé sur l'issue avant suppression, pour l'audit). Seule la **dernière version
 > JSON** est croisée avec un AO ; le fichier retenu et les versions écartées sont journalisés sur l'issue.
+
+> **Contextes clients & expertise de firme** : lorsqu'un **CV long** décrit le **contexte des sociétés
+> clientes** et les **mandats** réalisés, le Gestionnaire CV capitalise ces informations dans
+> `${ROOT_DIRECTORY}/clients/<nom-client>.json` (un fichier par client : contexte de la société + mandats —
+> collaborateur, rôle, projet, dates, jours-personnes, contexte, tâches, technologies). Le référentiel est
+> **complété/enrichi** au fil des CV, **jamais écrasé**. Lorsqu'un **appel d'offres exige une expertise ou une
+> expérience de firme** (mandats similaires, secteur, technologies), l'Analyste RFP s'appuie sur ce référentiel
+> pour évaluer si la firme dispose de l'expérience requise. **Cette analyse ne bloque pas le workflow** : si les
+> minimums ne sont pas atteints, une **validation humaine légère** vous est simplement demandée (poursuivre, ou
+> compléter le référentiel `clients/`). Ce contexte alimente aussi le bloc « Contexte de l'organisation » du **CV
+> long**.
 
 ---
 
