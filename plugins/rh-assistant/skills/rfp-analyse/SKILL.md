@@ -1,13 +1,13 @@
 ---
 name: rfp-analyse
 description: >
-    Analyse d'un appel d'offres (AO) du workflow Matching : parsing du PDF/DOCX fourni, extraction structurée des exigences (fonctionnelles, techniques, organisationnelles) et des profils recherchés, détection du caractère gouvernemental et de la politique d'équivalence des diplômes, détection du mode de travail et de la localisation du site (rayon de proximité), production du résumé versionné en JSON et sauvegarde dans le répertoire de l'AO. Charger avant toute analyse d'appel d'offres.
-keywords: [analyse ao, appel d'offres, rfp, parse ao, exigences, profils recherches, scoring implicite, equivalence diplomes, client gouvernemental, localisation travail, rayon proximite, certifications requises, certification prerequis]
+    Analyse d'un appel d'offres (AO) du workflow Matching : parsing du PDF/DOCX fourni, extraction structurée des exigences (fonctionnelles, techniques, organisationnelles) et des profils recherchés, détection du caractère gouvernemental et de la politique d'équivalence des diplômes, détection du mode de travail et de la localisation du site (rayon de proximité), évaluation de l'expertise de firme face à une exigence d'expérience de firme (lecture du référentiel `${ROOT_DIRECTORY}/clients/<nom-client>.json` — non bloquante, gate humaine légère si les minimums ne sont pas atteints), production du résumé versionné en JSON et sauvegarde dans le répertoire de l'AO. Charger avant toute analyse d'appel d'offres.
+keywords: [analyse ao, appel d'offres, rfp, parse ao, exigences, profils recherches, scoring implicite, equivalence diplomes, client gouvernemental, localisation travail, rayon proximite, certifications requises, certification prerequis, expertise firme, experience firme, contexte client, clients json, gate humaine legere]
 ---
 
 # Analyse d'appel d'offres (AO)
 
-Cette compétence porte tout le détail opératoire de l'**analyse d'un appel d'offres** pour le workflow Matching : parsing du document, extraction des exigences et des profils recherchés, détection du contexte gouvernemental / équivalence des diplômes, détection du mode de travail / localisation, puis production du résumé structuré en JSON. Elle est chargée par l'agent **Analyste RFP** et alimente le stage [`parse-ao`](../../../../matching-cv-ao/common/stages/analyse/parse-ao.md) (phase Analyse) du workflow Matching.
+Cette compétence porte tout le détail opératoire de l'**analyse d'un appel d'offres** pour le workflow Matching : parsing du document, extraction des exigences et des profils recherchés, détection du contexte gouvernemental / équivalence des diplômes, détection du mode de travail / localisation, puis production du résumé structuré en JSON. Elle est chargée par l'agent **Analyste RFP** et alimente le stage `parse-ao` (phase Analyse) du workflow Matching.
 
 L'AO source est fourni **en pièce jointe de l'issue** (PDF/DOCX) ou dans le **contenu de l'issue**. Le livrable (résumé JSON) est écrit dans `${ROOT_DIRECTORY}/ao/<client>/<titre-ao>/`.
 
@@ -20,6 +20,7 @@ L'AO source est fourni **en pièce jointe de l'issue** (PDF/DOCX) ou dans le **c
 5. **Détecter le mode de travail** (`localisation_travail`) et, pour un travail sur site / hybride, la **localisation du site** (rayon de proximité).
 6. **Créer les dossiers si absents** — toujours au bon chemin : `${ROOT_DIRECTORY}/ao/<client>/<titre-ao>/` (`client` = nom du client, `titre-ao` = slug du titre).
 7. **Sauvegarder le résumé JSON** dans ce répertoire.
+8. **Évaluer l'expertise de firme** lorsque l'AO exige une **expérience/expertise de firme** (référence à des mandats similaires, un secteur, des technologies ou un contexte comparables) : croiser cette exigence avec le **référentiel des contextes clients** `${ROOT_DIRECTORY}/clients/<nom-client>.json` (contexte des sociétés + mandats réalisés par la firme, maintenu par le Gestionnaire CV) pour statuer si la firme dispose de l'expérience et des compétences requises. Produire l'objet `expertise_firme` (voir § dédiée). **Analyse non bloquante** : elle **n'arrête jamais** le workflow ; si les **minimums requis ne sont pas atteints**, poser une **gate humaine légère** (signalement + demande de confirmation), sans blocage automatique.
 
 > **Ne jamais inventer.** Toute donnée non présente dans l'AO reste `non_precise` / `null` avec, si utile, une mention humaine pour lever le doute. Aucune exigence, aucun profil, aucun niveau d'études, aucune localisation ne se fabrique.
 
@@ -79,13 +80,41 @@ L'AO source est fourni **en pièce jointe de l'issue** (PDF/DOCX) ou dans le **c
       "poids_implicite": "<fort|moyen|faible>",
       "justification": "<pourquoi ce poids>"
     }
-  ]
+  ],
+  "expertise_firme": {
+    "exigee": "oui | non | non_precise",
+    "reference_ao": "<citation/section de l'AO exigeant une expérience/expertise de firme — ne jamais inventer>",
+    "criteres_attendus": [
+      { "type": "secteur | technologie | contexte | mandat_similaire | volume", "attendu": "<ex. 'expérience dans le secteur de la santé au Québec'>", "minimum": "<seuil minimal si l'AO en fixe un, ex. '3 mandats similaires' / '2 ans', sinon null>" }
+    ],
+    "couverture": [
+      {
+        "critere": "<rappel du critère attendu>",
+        "statut": "couvert | partiel | non_couvert",
+        "preuves": [ { "client": "<nom du client>", "clients_json": "<chemin clients/<nom-client>.json>", "mandats": ["<projet/collaborateur/technologies pertinents>"] } ],
+        "commentaire": "<justification factuelle, issue du référentiel clients — ne rien inventer>"
+      }
+    ],
+    "verdict": "conforme | minimums_non_atteints | indeterminable",
+    "gate_humaine": "aucune | legere",
+    "detail_gate": "<si gate_humaine = legere : ce qui manque (critère non couvert / minimum non atteint) à faire confirmer par l'humain>"
+  }
 }
 ```
 
+## Objet `expertise_firme` (expertise de firme — non bloquant, gate humaine légère)
+
+Lorsqu'un AO exige une **expérience ou une expertise de firme** — c.-à-d. que le soumissionnaire (la firme) démontre avoir déjà réalisé des mandats comparables (même secteur, mêmes technologies, contexte similaire, volume) — l'Analyste RFP évalue si la firme y répond en s'appuyant sur le **référentiel des contextes clients** `${ROOT_DIRECTORY}/clients/<nom-client>.json` (contexte des sociétés + `mandats[]` réalisés par les collaborateurs de la firme). Le **schéma, le nommage et le contrat de lecture** de ce référentiel vivent dans la compétence dédiée `contexte-client` (**source unique**) — la charger avant de lire `clients/*.json`. Ce référentiel est **maintenu par le Gestionnaire CV** (producteur, via la compétence `cv-analyse`) ; l'Analyste RFP en est **consommateur en lecture seule**.
+
+- **`exigee`** : `oui` si l'AO demande une expérience/expertise de firme, `non` si elle n'en demande pas (objet renseigné à minima, `couverture: []`), `non_precise` si le doute subsiste (mention humaine possible). **Ne rien inventer** : une exigence d'expertise de firme non explicite n'est pas supposée.
+- **`criteres_attendus[]`** : décomposition de l'exigence en critères (secteur, technologie, contexte, mandat similaire, volume), avec le `minimum` fixé par l'AO le cas échéant (`null` sinon).
+- **`couverture[]`** : pour chaque critère, statut `couvert` / `partiel` / `non_couvert`, appuyé sur des **preuves factuelles** tirées du référentiel `clients/*.json` (client, chemin du fichier, mandats pertinents). **Ne rien inventer** : si le référentiel `clients/` est vide ou ne contient pas l'information, le critère est `non_couvert`/indéterminable — jamais une couverture supposée.
+- **`verdict`** : `conforme` (tous les critères couverts / minimums atteints), `minimums_non_atteints` (au moins un critère non couvert ou un minimum non atteint), `indeterminable` (référentiel insuffisant pour statuer).
+- **Non bloquant + gate humaine légère** : cette analyse **ne bloque jamais** le workflow. Si `verdict` ∈ {`minimums_non_atteints`, `indeterminable`}, positionner **`gate_humaine: "legere"`** et renseigner `detail_gate` (ce qui manque) : le Coordinateur **signale** le point à l'humain et **demande une confirmation légère** (poursuivre malgré le manque, ou compléter le référentiel `clients/`), **sans arrêt automatique**. Si `verdict = conforme`, `gate_humaine: "aucune"`. Le contrôle est doublé par le sensor advisory `expertise-firme` (voir le sensor `expertise-firme`).
+
 ## Champs `client_gouvernemental` et `equivalence_diplomes` (contexte gouvernemental Québec)
 
-`client_gouvernemental` (booléen) indique si le client est un organisme gouvernemental. Pour un AO gouvernemental, le niveau d'études requis est un **critère de conformité éliminatoire** : un collaborateur non conforme peut être **exclu** du classement par le Matcher (voir [`matcher-profils-agent.md`](../../../../matching-cv-ao/agents/matcher-profils-agent.md)). `equivalence_diplomes` documente la **politique d'équivalence** acceptée par l'AO :
+`client_gouvernemental` (booléen) indique si le client est un organisme gouvernemental. Pour un AO gouvernemental, le niveau d'études requis est un **critère de conformité éliminatoire** : un collaborateur non conforme peut être **exclu** du classement par le Matcher (voir l'agent `Matcher Profils`). `equivalence_diplomes` documente la **politique d'équivalence** acceptée par l'AO :
 
 - `acceptee` : `oui` (l'AO accepte une équivalence/compensation), `non` (niveau strict exigé), ou `non_precise` (l'AO ne dit rien) ;
 - `mecanisme` : nature de l'équivalence (ex. « compensation des études », « MIFI », « équivalence DEC ») ;
@@ -105,7 +134,7 @@ Chaque entrée porte :
 - `criticite` : `obligatoire` (prérequis / exigé — **critère d'éligibilité éliminatoire** en aval), `souhaitee`, ou `nice-to-have` ;
 - `reference_ao` : citation/section de l'AO qui fonde l'exigence (piste d'audit — **ne jamais inventer**).
 
-> **Certification `obligatoire` = prérequis éliminatoire.** Lorsqu'une certification est marquée `criticite: "obligatoire"` (formulée dans l'AO comme « prérequis », « requis », « exigé »), elle devient un **critère d'éligibilité STRICT et éliminatoire** appliqué **en amont** du scoring par le Gestionnaire CV (axe `certifications` du filtre d'éligibilité — voir la compétence `cv-analyse` et [`gestionnaire-cv-agent.md`](../../../../matching-cv-ao/agents/gestionnaire-cv-agent.md)) : un collaborateur qui **ne détient pas** cette certification est **exclu** du matching. Une certification `souhaitee`/`nice-to-have` **n'exclut pas** : elle alimente uniquement la couverture Compétences côté Matcher.
+> **Certification `obligatoire` = prérequis éliminatoire.** Lorsqu'une certification est marquée `criticite: "obligatoire"` (formulée dans l'AO comme « prérequis », « requis », « exigé »), elle devient un **critère d'éligibilité STRICT et éliminatoire** appliqué **en amont** du scoring par le Gestionnaire CV (axe `certifications` du filtre d'éligibilité — voir la compétence `cv-analyse` et l'agent `Gestionnaire CV`) : un collaborateur qui **ne détient pas** cette certification est **exclu** du matching. Une certification `souhaitee`/`nice-to-have` **n'exclut pas** : elle alimente uniquement la couverture Compétences côté Matcher.
 
 **Ne jamais inventer** : si l'AO ne cite aucune certification, mettre `certifications_requises: []`. Si l'AO cite une certification sans dire clairement si elle est exigée ou seulement souhaitée, renseigner la `criticite` la plus prudente (`souhaitee`) et poser une **mention humaine** pour lever le doute — **jamais** de `obligatoire` inféré sans base explicite (l'éliminatoire ne se déduit pas).
 
@@ -118,7 +147,7 @@ Objet renseigné pour statuer sur la contrainte de localisation du mandat. `mode
 - `hybride` — présence partielle sur site : `ville_site` **obligatoire** (la contrainte de proximité s'applique comme pour `sur_site`).
 - `non_precise` — l'AO ne précise pas le mode de travail : champs de localisation à `null` (**ne rien inventer** ; mention humaine possible).
 
-`rayon_km` est le **rayon de proximité** au-delà duquel un collaborateur est exclu (par défaut `70`, sauf rayon explicite dans l'AO). Pour un AO `sur_site`/`hybride`, la localisation du candidat (ville) devient un **critère d'éligibilité** : un collaborateur situé à **plus de `rayon_km` (70 km par défaut)** de `ville_site` est **exclu** (voir [`gestionnaire-cv-agent.md`](../../../../matching-cv-ao/agents/gestionnaire-cv-agent.md) et [`matcher-profils-agent.md`](../../../../matching-cv-ao/agents/matcher-profils-agent.md)). En `teletravail`, ce critère ne s'applique pas.
+`rayon_km` est le **rayon de proximité** au-delà duquel un collaborateur est exclu (par défaut `70`, sauf rayon explicite dans l'AO). Pour un AO `sur_site`/`hybride`, la localisation du candidat (ville) devient un **critère d'éligibilité** : un collaborateur situé à **plus de `rayon_km` (70 km par défaut)** de `ville_site` est **exclu** (voir l'agent `Gestionnaire CV` et l'agent `Matcher Profils`). En `teletravail`, ce critère ne s'applique pas.
 
 ## Stockage du livrable
 
@@ -134,7 +163,8 @@ Vérifier que le JSON produit contient bien :
 - `ao` (métadonnées) dont `client_gouvernemental`, `equivalence_diplomes` avec `acceptee` ∈ {`oui`, `non`, `non_precise`}, et `localisation_travail` avec `mode` ∈ {`teletravail`, `sur_site`, `hybride`, `non_precise`} et `ville_site` **non nul** si `mode` ∈ {`sur_site`, `hybride`} ;
 - `exigences` (liste) ;
 - `profils_recherches` (liste) dont `etudes_requises` renseigné pour chaque profil, et `certifications_requises` (liste, `[]` si aucune) dont chaque entrée porte `nom`, `criticite` ∈ {`obligatoire`, `souhaitee`, `nice-to-have`} et `reference_ao` ;
-- `scoring_implicite` (liste) le cas échéant.
+- `scoring_implicite` (liste) le cas échéant ;
+- `expertise_firme` (objet) dont `exigee` ∈ {`oui`, `non`, `non_precise`}, `criteres_attendus` (liste), `couverture` (liste, appuyée sur le référentiel `clients/*.json` — jamais inventée), `verdict` ∈ {`conforme`, `minimums_non_atteints`, `indeterminable`} et `gate_humaine` ∈ {`aucune`, `legere`} (`legere` + `detail_gate` renseigné dès que le verdict n'est pas `conforme`). L'analyse d'expertise de firme est **non bloquante**.
 
 Signaler tout écart avant de remettre le livrable.
 

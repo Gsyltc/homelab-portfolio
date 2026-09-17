@@ -13,7 +13,7 @@ Chaque collaborateur du JSON `cv-profils` (produit par le stage `extraction-cv`,
 
 Le champ `localisation.ville` est **mandatory** : le CV du candidat **doit** contenir sa ville. Un profil dont `ville` manque ou est vide est **non conforme** — le Gestionnaire CV doit alors **poser une mention humaine** pour l'obtenir (**ne rien inventer**).
 
-Cette localisation est la base du **critère de proximité géographique** : lorsque l'AO impose un travail `sur_site` ou `hybride` (`ao.localisation_travail.mode`), un collaborateur situé à **plus de `rayon_km` (70 km par défaut)** de la `ville_site` de l'AO est **exclu** au filtre d'éligibilité (voir [`../agents/gestionnaire-cv-agent.md`](../agents/gestionnaire-cv-agent.md)). Ce sensor ne calcule pas la distance : il garantit seulement que la donnée d'entrée (ville du candidat) est **présente** pour permettre ce calcul.
+Cette localisation est la base du **critère de proximité géographique** : lorsque l'AO impose un travail `sur_site` ou `hybride` (`ao.localisation_travail.mode`), un collaborateur situé à **plus de `rayon_km` (70 km par défaut)** de la `ville_site` de l'AO est **exclu** au filtre d'éligibilité (voir l'agent `Gestionnaire CV`). Ce sensor ne calcule pas la distance : il garantit seulement que la donnée d'entrée (ville du candidat) est **présente** pour permettre ce calcul.
 
 ## Frontière et déclenchement
 

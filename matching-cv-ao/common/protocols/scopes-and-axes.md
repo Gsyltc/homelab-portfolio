@@ -1,6 +1,6 @@
 # Protocole — scopes & axes d'exécution
 
-Table partagée référencée par le [`conductor.md`](../conductor.md) et les fiches de stage. Le routage repose sur un **scope** nommé (parcours d'étapes déterministe et auditable) et un **axe** — **Depth** (détail des artefacts).
+Table partagée référencée par le `conductor.md` et les fiches de stage. Le routage repose sur un **scope** nommé (parcours d'étapes déterministe et auditable) et un **axe** — **Depth** (détail des artefacts).
 
 > **Source d'identité vs vue lisible.** L'**identité** de chaque scope est portée en données, **un fichier par scope**, sous [`../../scopes/`](../../scopes/). Ce document reste la **vue lisible** consolidée.
 
@@ -8,10 +8,10 @@ Table partagée référencée par le [`conductor.md`](../conductor.md) et les fi
 
 | Scope | Intention type | Traitement |
 | --- | --- | --- |
-| [`standard`](../../scopes/standard.md) *(défaut)* | AO de complexité moyenne | Parcours standard complet |
-| [`complex`](../../scopes/complex.md) | AO multi-profils, exigences nombreuses | Parcours complet + approfondissement |
-| [`express`](../../scopes/express.md) | AO simple, 1-2 profils | Chemin court, allégé |
-| [`format-cv`](../../scopes/format-cv.md) | Traitement CV seul (sans AO ni matching) | Chargement + extraction/formatage/archivage + mise à jour CV |
+| `standard` *(défaut)* | AO de complexité moyenne | Parcours standard complet |
+| `complex` | AO multi-profils, exigences nombreuses | Parcours complet + approfondissement |
+| `express` | AO simple, 1-2 profils | Chemin court, allégé |
+| `format-cv` | Traitement CV seul (sans AO ni matching) | Chargement + extraction/formatage/archivage + mise à jour CV |
 
 Défaut : `standard`. **Invariants non négociables quel que soit le scope** : validation humaine granulaire, piste d'audit, communication JSON↔Markdown.
 

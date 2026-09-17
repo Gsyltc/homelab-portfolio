@@ -9,6 +9,41 @@ ce fichier en donne la lecture chronologique côté produit.
 ## [Non publié]
 
 ### Added
+- **Contextes clients (sociétés) & expertise de firme** (workflow `matching-cv-ao`, plugin `rh-assistant`) —
+  évolution **documentaire**, invariants préservés (JSON A2A / Markdown humain, validation humaine granulaire,
+  scoring immuable 50/35/10/5, gates advisory non bloquants) :
+  - **Nouvelle compétence dédiée `contexte-client`** (`plugins/rh-assistant/skills/contexte-client/SKILL.md`) —
+    **source unique** de la gestion du référentiel des contextes clients : schéma, stockage/nommage (slug),
+    règles de maintenance (enrichissement sans écrasement aveugle, dédoublonnage des mandats) et contrat de
+    lecture. Rattachée aux agents **Gestionnaire CV** (producteur) et **Analyste RFP** (consommateur lecture
+    seule) ; `cv-analyse`, `rfp-analyse` et `cv-generation` la **référencent par leur nom** sans dupliquer le
+    schéma.
+  - **Nouveau référentiel `${ROOT_DIRECTORY}/clients/<nom-client>.json`** — **un fichier par client** : `client`
+    (nom), `slug`, `contexte` (contexte de la société, **complété/enrichi, jamais écrasé aveuglément**),
+    `date_derniere_modification`, `sources[]`, et `mandats[]` (par mandat réalisé par un collaborateur :
+    `collaborateur`, `role`, `projet` (`null` si absent), `date_debut`/`date_fin`, `jours_personnes`,
+    `contexte_projet`, `taches[]`, `technologies[]`).
+  - **Producteur — Gestionnaire CV** : la compétence `contexte-client` (chargée par `cv-analyse`) maintient ce
+    référentiel lors de l'analyse d'un **CV long contenant un contexte client** (blocs « Contexte de
+    l'organisation »/« Contexte du projet »). Nouvel artefact `clients-contextes` produit par le stage
+    `extraction-cv`. Le contexte client alimente aussi le bloc « Contexte de l'organisation » du **CV long**
+    (lecture seule côté `cv-generation`).
+  - **Consommateur — Analyste RFP** : la compétence `rfp-analyse` produit un objet **`expertise_firme`**
+    (`exigee`, `criteres_attendus`, `couverture` appuyée sur `clients/*.json` via `contexte-client`, `verdict` ∈
+    {`conforme`, `minimums_non_atteints`, `indeterminable`}, `gate_humaine`) lorsqu'un AO exige une
+    **expertise/expérience de firme**. Nouvel artefact `ao-expertise-firme` produit par le stage `parse-ao`.
+  - **Non bloquant + gate humaine légère** : nouveau sensor advisory `expertise-firme`
+    (`matching-cv-ao/sensors/expertise-firme.md`) contrôlant l'objet `expertise_firme` au regard du référentiel
+    `clients/*.json` à la frontière Analyse → Matching ; un `verdict` ≠ `conforme` déclenche une **gate humaine
+    légère qui n'arrête jamais le workflow**.
+  - Documenté dans `plugins/rh-assistant/skills/contexte-client/SKILL.md` (source unique),
+    `plugins/rh-assistant/skills/cv-analyse/SKILL.md`, `plugins/rh-assistant/skills/rfp-analyse/SKILL.md`,
+    `plugins/rh-assistant/skills/cv-generation/SKILL.md`,
+    `matching-cv-ao/common/stages/analyse/extraction-cv.md`, `matching-cv-ao/common/stages/analyse/parse-ao.md`,
+    `matching-cv-ao/agents/gestionnaire-cv-agent.md`, `matching-cv-ao/agents/analyste-rfp-agent.md`,
+    `matching-cv-ao/sensors/expertise-firme.md`, `matching-cv-ao/sensors/gates.md`,
+    `matching-cv-ao/sensors/README.md`, `matching-cv-ao/common/conductor.md`, `matching-cv-ao/README.md`,
+    `plugins/rh-assistant/plugin.json` et `docs/guide-utilisation-workflow-matching.md`.
 - **Production du CV livrable au format DOCX à partir des gabarits fournis** (workflow `matching-cv-ao`, plugin
   `rh-assistant`) — évolution **documentaire**, invariants préservés (JSON A2A / Markdown humain, validation
   humaine granulaire, scoring immuable 50/35/10/5) :

@@ -7,7 +7,7 @@ keywords: [generation cv, mise a jour cv, cv docx, cv markdown, gabarit cv, cv l
 
 # Génération / mise à jour de CV (DOCX à partir des gabarits fournis)
 
-Cette compétence porte la production et la mise à jour d'un **CV livrable** à partir des **données déjà extraites** par la compétence [`cv-analyse`](../cv-analyse/SKILL.md) (JSON versionné + fiche d'analyse Markdown du jour). Le format **par défaut est le DOCX** (rempli depuis un **gabarit fourni** : CV long / CV court / format client spécifique) ; un **CV livrable au format Markdown** reste possible **uniquement sur demande explicite de l'humain**. Elle est chargée par l'agent **Gestionnaire CV** et alimente le stage de **mise à jour CV** (phase Clôture) du workflow Matching.
+Cette compétence porte la production et la mise à jour d'un **CV livrable** à partir des **données déjà extraites** par la compétence `cv-analyse` (JSON versionné + fiche d'analyse Markdown du jour). Le format **par défaut est le DOCX** (rempli depuis un **gabarit fourni** : CV long / CV court / format client spécifique) ; un **CV livrable au format Markdown** reste possible **uniquement sur demande explicite de l'humain**. Elle est chargée par l'agent **Gestionnaire CV** et alimente le stage de **mise à jour CV** (phase Clôture) du workflow Matching.
 
 Elle n'invente **jamais** de contenu ni de gabarit, et n'écrit **qu'après validation humaine explicite**.
 
@@ -42,6 +42,10 @@ La production DOCX s'appuie **exclusivement** sur les **gabarits fournis par l'h
 - **Choix du gabarit** : sauf indication contraire de l'humain, produire le **CV long** par défaut. Pour un livrable destiné à un client précis (ex. réponse à un AO), utiliser le **format client spécifique** si le client l'impose (`format-client-<client>.docx`) ; sinon **demander** lequel des trois types produire.
 - **Respect strict du gabarit** : n'écrire que dans les emplacements/champs prévus par le gabarit (mise en page, styles, sections, ordre). Ne pas altérer la charte du gabarit.
 
+## Contexte client dans le CV long (bloc « Contexte de l'organisation »)
+
+Le **CV long** comporte, pour chaque mandat, un bloc **« Contexte de l'organisation »** décrivant la société cliente. Ce contexte est capitalisé dans le **référentiel des contextes clients** `${ROOT_DIRECTORY}/clients/<nom-client>.json` — dont le **schéma et le contrat de lecture** sont définis dans la compétence dédiée `contexte-client` (source unique ; maintenu par le Gestionnaire CV via la compétence `cv-analyse`). Lors de la génération d'un **CV long**, renseigner le bloc « Contexte de l'organisation » de chaque mandat à partir du `contexte` du client correspondant dans `clients/<nom-client>.json` s'il est disponible ; à défaut, utiliser le contexte présent dans les données d'analyse du collaborateur. **Ne rien inventer** : contexte client indisponible ⇒ laisser le marqueur « à compléter » (jamais fabriqué). Cette réutilisation est en **lecture seule** : elle ne modifie **pas** le référentiel `clients/` ni la charte du gabarit.
+
 ## Prérequis
 
 - Une **analyse existante** du collaborateur (dernière version JSON à la racine de `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv`). Si aucune analyse n'existe, exécuter d'abord `cv-analyse` sur un CV source.
@@ -58,7 +62,7 @@ La production DOCX s'appuie **exclusivement** sur les **gabarits fournis par l'h
 
 ## Procédure
 
-1. **Charger la dernière analyse** — lire la dernière version JSON du collaborateur (règle de sélection : [`../cv-analyse/SKILL.md`](../cv-analyse/SKILL.md), § Versionnage JSON). Ne jamais partir d'une version antérieure ni d'un source supprimé.
+1. **Charger la dernière analyse** — lire la dernière version JSON du collaborateur (règle de sélection : la compétence `cv-analyse`, § Versionnage JSON). Ne jamais partir d'une version antérieure ni d'un source supprimé.
 2. **Déterminer le format et le gabarit** — **par défaut : DOCX** → sélectionner le type demandé (CV long / CV court / format client) et **charger le gabarit fourni** depuis `${ROOT_DIRECTORY}/gabarits/cv/` (**absent ⇒ halt-and-ask**, mention humaine, ne rien inventer, **pas de repli Markdown automatique**). **Si l'humain a explicitement demandé un CV Markdown** → produire le livrable Markdown depuis les données du JSON, sans gabarit DOCX.
 3. **Appliquer la modification / le remplissage** sur une copie de travail : en DOCX, injecter les données du JSON dans les emplacements prévus par le gabarit (sans altérer sa charte) ; en Markdown (sur demande), mettre en forme les données du JSON en un document présentable — sans écraser l'historique.
 4. **Présenter la production à l'humain** (Markdown pour la conversation : diff clair avant/après des données injectées + format et, en DOCX, type de gabarit utilisé) et **attendre la validation explicite**. Aucune écriture avant accord.
@@ -74,7 +78,7 @@ Tous les chemins relatifs de cette compétence sont **enracinés sur `${ROOT_DIR
 
 ## Contrat de données
 
-Le **schéma JSON** (compétences, expérience, `etudes[]` — une ou plusieurs études, `certifications[]` — liste **distincte** des études, `mifi`, `disponibilite`, `localisation`, langues), les conventions de nommage et la structure du répertoire `cv/` sont ceux définis dans [`../cv-analyse/SKILL.md`](../cv-analyse/SKILL.md) — s'y référer et ne pas diverger.
+Le **schéma JSON** (compétences, expérience, `etudes[]` — une ou plusieurs études, `certifications[]` — liste **distincte** des études, `mifi`, `disponibilite`, `localisation`, langues), les conventions de nommage et la structure du répertoire `cv/` sont ceux définis dans la compétence `cv-analyse` — s'y référer et ne pas diverger.
 
 ## Garde-fous
 
@@ -82,7 +86,7 @@ Le **schéma JSON** (compétences, expérience, `etudes[]` — une ou plusieurs 
 - **Validation humaine obligatoire** avant toute écriture d'un CV produit/mis à jour.
 - **Ne rien inventer** — une donnée absente (durée, date, ville, MIFI) se demande via mention humaine ; jamais fabriquée.
 - **Versionnage** — ne jamais écraser une version JSON antérieure, un CV livrable antérieur (DOCX ou Markdown) ni la fiche archivée ; l'historique est conservé.
-- **Non-transmission des CV** — comme pour l'analyse, ne pas faire circuler les CV complets en A2A ; seuls le verdict d'éligibilité et la référence `analyse_json` remontent au coordinateur (voir [`../cv-analyse/SKILL.md`](../cv-analyse/SKILL.md), § Garde-fou).
+- **Non-transmission des CV** — comme pour l'analyse, ne pas faire circuler les CV complets en A2A ; seuls le verdict d'éligibilité et la référence `analyse_json` remontent au coordinateur (voir la compétence `cv-analyse`, § Garde-fou).
 - **Aucun secret** dans les livrables, commentaires ou notifications.
 
 ## Communication

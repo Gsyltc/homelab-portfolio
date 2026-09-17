@@ -24,7 +24,7 @@ Seuls trois stages s'exécutent sous ce scope :
 - **`mise-a-jour-cv`** (Clôture) — mise à jour des CV et **production du CV livrable au format DOCX (par défaut) à partir des gabarits fournis** (CV long / CV court / format client spécifique, dans `${ROOT_DIRECTORY}/gabarits/cv/` — jamais inventés) — **Markdown possible sur demande explicite de l'humain** —, dans la même arborescence stricte enracinée sur `${ROOT_DIRECTORY}`.
 
 > **Organisation stricte du répertoire `cv/`** — `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/` (enraciné sur `${ROOT_DIRECTORY}` ; voir la fiche de l'agent
-> [`../agents/gestionnaire-cv-agent.md`](../agents/gestionnaire-cv-agent.md)) : les **sources PDF/DOCX** sont
+> l'agent `Gestionnaire CV`) : les **sources PDF/DOCX** sont
 > **fournis en pièces jointes de l'issue** et **supprimés après extraction** (non conservés, non stockés dans
 > ce répertoire) · `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/archives/` (anciennes fiches Markdown) · fiche Markdown du jour et JSON versionnés à la racine
 > (mémoire) · **CV livrable** (`<nom>-<prenom>-<type-gabarit>-<AAAA-MM-JJ>.docx` en DOCX par défaut depuis un
@@ -47,7 +47,7 @@ Sont **hors périmètre** de `format-cv` (stages ignorés) :
 
 Sous `format-cv`, le stage `mise-a-jour-cv` ne dépend **pas** de `livraison-finale`
 (hors périmètre) : il s'appuie sur les **CV extraits/validés** (`cv-profils`) produits par
-`extraction-cv`. Voir la fiche [`../common/stages/cloture/mise-a-jour-cv.md`](../common/stages/cloture/mise-a-jour-cv.md).
+`extraction-cv`. Voir la fiche le stage `mise-a-jour-cv`.
 
 ## Garde-fous
 
@@ -55,4 +55,4 @@ Comme tout scope, `format-cv` ne désactive **aucun** invariant : validation hum
 granulaire, piste d'audit et communication JSON↔Markdown restent en vigueur.
 
 Appartenance : voir le champ `scopes:` de chaque fiche de stage et la matrice de
-[`../common/protocols/scopes-and-axes.md`](../common/protocols/scopes-and-axes.md).
+le protocole `scopes-and-axes`.

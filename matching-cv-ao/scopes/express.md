@@ -23,7 +23,7 @@ utilisée — la **dernière version JSON** (`<nom>-<prenom>-<AAAA-MM-JJ>.json`)
 entre agents** (seule croisée avec un AO par le Matcher), et la **fiche Markdown** courante
 pour le **fichier à télécharger pour l'humain**. Voir la compétence `cv-analyse`
 (plugin `rh-assistant`, § Règle de sélection de la source CV, § Versionnage JSON) — détail porté par le skill, chargé
-par l'agent [`../agents/gestionnaire-cv-agent.md`](../agents/gestionnaire-cv-agent.md).
+par l'agent `Gestionnaire CV`.
 
 Appartenance : voir le champ `scopes:` de chaque fiche de stage et la matrice de
-[`../common/protocols/scopes-and-axes.md`](../common/protocols/scopes-and-axes.md).
+le protocole `scopes-and-axes`.

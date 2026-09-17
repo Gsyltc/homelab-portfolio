@@ -40,7 +40,7 @@ non résolu vers la racine persistante — livraison suspendue »). Journaliser 
 - **Analyses existantes** : scanner `${ROOT_DIRECTORY}/collaborateurs/` pour identifier, par collaborateur disposant d'un répertoire `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/`, les analyses présentes (JSON versionnés `<nom>-<prenom>-<AAAA-MM-JJ>.json` à la racine de ce répertoire `cv/`).
 
 ### Step 2 — Vérification de complétude (règle de sélection de la source CV)
-Déterminer l'état par collaborateur concerné, selon la **règle de sélection de la source CV** (voir [`../../../agents/gestionnaire-cv-agent.md`](../../../agents/gestionnaire-cv-agent.md)) :
+Déterminer l'état par collaborateur concerné, selon la **règle de sélection de la source CV** (voir l'agent `Gestionnaire CV`) :
 - **à extraire** : une pièce jointe CV (PDF/DOCX) est fournie sur l'issue → elle **prime** ; elle sera récupérée, analysée (nouvelle version), puis sa copie de travail **supprimée** ;
 - **dernière version extraite** : aucune nouvelle pièce jointe mais au moins un JSON d'analyse présent → réutiliser la **dernière version déjà extraite** pour le matching (JSON pour le flux A2A ; Markdown si le fichier doit être téléchargé pour l'humain). Comportement normal, l'original ayant déjà été traité et supprimé ;
 - **manquant** : ni pièce jointe ni analyse antérieure → signaler le collaborateur (pas de matching possible pour lui).

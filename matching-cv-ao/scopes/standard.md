@@ -29,7 +29,7 @@ sélectionné selon la **règle de sélection de la source CV** :
 
 Règle complète et journalisation d'audit : voir la compétence `cv-analyse`
 (plugin `rh-assistant`, § Règle de sélection de la source CV, § Versionnage JSON) — détail porté par le skill, l'agent
-[`../agents/gestionnaire-cv-agent.md`](../agents/gestionnaire-cv-agent.md) le chargeant à l'exécution.
+`Gestionnaire CV` le chargeant à l'exécution.
 
 Appartenance : voir le champ `scopes:` de chaque fiche de stage et la matrice de
-[`../common/protocols/scopes-and-axes.md`](../common/protocols/scopes-and-axes.md).
+le protocole `scopes-and-axes`.
