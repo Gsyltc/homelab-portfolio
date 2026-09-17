@@ -133,12 +133,6 @@ Ne jamais avancer sur un élément non validé.
 
 ---
 
-## Retour de délégation — anti-wake parasite
-
-Le Coordinateur ne place **jamais** de lien de mention actif vers lui-même dans une consigne de délégation (il déclencherait un run parasite du Coordinateur — observé sur EXPE-54) : l'instruction de retour est rédigée **en texte clair**. C'est l'**agent délégataire** qui construit le lien actif de reprise. Détail : protocole `stage-protocol` (temps 3) et « Règle A2A » de `governance-security`.
-
----
-
 ## OBLIGATOIRE : piste d'audit sur l'issue
 
 La piste d'audit vit **sur l'issue Multica**, jamais dans un fichier séparé. Chaque agent documente chaque étape en commentaire ; capture l'**entrée brute** des demandes / arbitrages humains sans la résumer ; n'écrase jamais l'historique.
