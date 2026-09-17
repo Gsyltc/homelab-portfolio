@@ -15,7 +15,7 @@ produces: [matching-resultats]
 consumes: [{artifact: ao-profils-recherches, required: true}, {artifact: cv-profils, required: true}, {artifact: cv-eligibilite, required: true}]
 requires_stage: [parse-ao, extraction-cv]
 sensors: []
-scopes: [standard]
+scopes: [standard, complex, express]
 inputs: "Exigences AO + verdict d'éligibilité (`cv-eligibilite`, retenus uniquement) + profils CV (dernière version JSON, `cv-profils`) des seuls retenus"
 outputs: "Scores et classement des profils (JSON)"
 ---
@@ -31,7 +31,7 @@ Croiser les exigences de l'AO avec les profils des collaborateurs et calculer un
 
 ## Steps
 ### Step 1 — Délégation au Matcher Profils
-Mentionner le Matcher Profils avec mission claire : croiser **la dernière version JSON** des **seuls profils retenus par le Gestionnaire CV** (`eligibilite.collaborateurs_possibles`, référencés par leur `analyse_json` dans `cv-eligibilite`) avec les exigences AO, calculer le score pondéré (compétences 50%, expérience 35%, études 10%, disponibilité 5%), classer par score décroissant. Le critère **Compétences (50 %)** **regroupe compétences + technologies + méthodologies** : évaluer la **couverture** des compétences/technologies/méthodologies exigées par l'AO (connues vs manquantes) à partir des `competences` et des agrégats `technologies`/`methodologies` du profil — le regroupement se fait **à l'intérieur** de ce critère, sans nouveau poids. **Ne pas scorer** les collaborateurs `exclu` ni `a_verifier` du filtre d'éligibilité amont — les propager tels quels (avec leurs raisons) au classement. **En fin de tâche, le Matcher rend son résultat en mentionnant en retour le Coordinateur** `[@Coordinateur Matching](mention://agent/<UUID-COORDINATEUR>)` (mention agent valide, pas une simple réponse), puis vérifie les `trigger_outcomes`. Ne jamais deviner ni coder en dur l'UUID : le résoudre à chaque fois via `multica agent list --output json` et l'injecter dans la mention.
+Mentionner le Matcher Profils avec mission claire : croiser **la dernière version JSON** des **seuls profils retenus par le Gestionnaire CV** (`eligibilite.collaborateurs_possibles`, référencés par leur `analyse_json` dans `cv-eligibilite`) avec les exigences AO, calculer le score pondéré (compétences 50%, expérience 35%, études 10%, disponibilité 5%), classer par score décroissant. Le critère **Compétences (50 %)** **regroupe compétences + technologies + méthodologies** : évaluer la **couverture** des compétences/technologies/méthodologies exigées par l'AO (connues vs manquantes) à partir des `competences` et des agrégats `technologies`/`methodologies` du profil — le regroupement se fait **à l'intérieur** de ce critère, sans nouveau poids. **Ne pas scorer** les collaborateurs `exclu` ni `a_verifier` du filtre d'éligibilité amont — les propager tels quels (avec leurs raisons) au classement. **Retour de délégation obligatoire au Coordinateur** en fin de tâche (mention agent valide + vérification `trigger_outcomes`) — procédure définie une seule fois dans le protocole `stage-protocol` (temps 3).
 
 > **Fraîcheur des compétences** : le Matcher doit **exclure du calcul de compatibilité toute compétence, technologie ou méthodologie non utilisée depuis plus de 10 ans** (champ `derniere_utilisation` — compétence ou agrégat techno/méthodo). Une exigence couverte uniquement par un élément périmé est considérée comme **non couverte**.
 

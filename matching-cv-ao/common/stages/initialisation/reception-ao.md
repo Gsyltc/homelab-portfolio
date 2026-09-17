@@ -15,7 +15,7 @@ produces: [ao-pdf-received]
 consumes: []
 requires_stage: []
 sensors: []
-scopes: [standard]
+scopes: [standard, complex, express]
 inputs: "PDF d'AO fourni par l'humain"
 outputs: "Confirmation de réception + chemin du PDF"
 ---

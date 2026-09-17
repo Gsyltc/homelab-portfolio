@@ -53,6 +53,8 @@ Légende : ✅ activé · ➖ allégé / optionnel · ❌ ignoré.
 
 Aucun scope ne désactive la validation humaine granulaire, la piste d'audit ou la communication JSON↔Markdown (invariants).
 
+> **Appartenance déclarée sur les stages (modèle en données).** Conformément à `scopes/README.md`, l'appartenance d'un stage à un scope est **déclarée dans le front-matter `scopes:` de la fiche de stage**. Les dix stages du parcours AO ↔ CV déclarent donc explicitement `standard, complex, express` (et `format-cv` pour les trois stages CV seul : `chargement-cv`, `extraction-cv`, `mise-a-jour-cv`). `complex` et `express` partagent l'**appartenance** de `standard` (mêmes stages actifs) ; leur différence est portée par l'**axe Depth** (`comprehensive` / `minimal`) et par les **allègements** notés ➖ dans la matrice ci-dessus (ex. `croisement-profils` allégé sous `express`), **pas** par une liste de stages différente. La matrice reste la **vue lisible** de ces activations/allègements.
+
 > **Granularité `format-cv` (par stage, pas par phase entière).** Ce scope n'active qu'un stage par phase concernée :
 > - ¹ Initialisation : `chargement-cv` ✅ ; `reception-ao` ❌.
 > - ² Analyse : `extraction-cv` ✅ (produit la fiche d'analyse Markdown versionnée = archivage/formatage) ; `parse-ao` ❌.

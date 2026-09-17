@@ -15,7 +15,7 @@ produces: [cv-available]
 consumes: [{artifact: ao-pdf-received, required: true}]
 requires_stage: [reception-ao]
 sensors: []
-scopes: [standard, format-cv]
+scopes: [standard, complex, express, format-cv]
 inputs: "Confirmation de réception AO"
 outputs: "Liste des CV disponibles (sources fournis en pièces jointes de l'issue + analyses existantes)"
 ---
@@ -27,13 +27,7 @@ Recenser les CV **sources à traiter** — fournis en **pièces jointes de l'iss
 
 ## Steps
 ### Step 0 — Résoudre et verrouiller `${ROOT_DIRECTORY}`
-Avant tout scan ou toute écriture, résoudre `${ROOT_DIRECTORY}` en **chemin absolu** depuis
-la variable d'environnement de l'agent et vérifier qu'il est **défini, absolu et existant**,
-et qu'il ne pointe **pas** dans un répertoire de run éphémère (chemin contenant `/workdir/`,
-`/task-`, ou un segment `/expe-…-<hash>/`). Si l'une de ces conditions n'est pas remplie →
-**halt-and-ask** : ne rien écrire, poser une mention humaine sur l'issue (« `${ROOT_DIRECTORY}`
-non résolu vers la racine persistante — livraison suspendue »). Journaliser sur l'issue le
-`${ROOT_DIRECTORY}` absolu retenu (trace d'audit).
+Avant tout scan ou toute écriture, appliquer la **procédure d'enracinement `${ROOT_DIRECTORY}`** définie une seule fois dans `conductor.md` (§ Enracinement des chemins) : résoudre en chemin absolu depuis la variable d'environnement, vérifier qu'il est défini/absolu/existant et **pas** dans un répertoire de run éphémère (`/workdir/`, `/task-`, `/expe-…-<hash>/`) → sinon **halt-and-ask** (ne rien écrire, mention humaine). Journaliser sur l'issue le `${ROOT_DIRECTORY}` absolu retenu (trace d'audit).
 
 ### Step 1 — Recenser les sources et les analyses existantes
 - **Sources à traiter** : lister les **pièces jointes de l'issue** (PDF, DOCX) fournies pour analyse (via `multica attachment --help` pour la récupération ; ne jamais ouvrir une URL de ressource Multica directement).

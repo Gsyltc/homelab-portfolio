@@ -96,9 +96,11 @@ flowchart TD
 | --- | --- | --- | --- |
 | **Initialisation** | 0 | `reception-ao` · `chargement-cv` | Non (bootstrap déterministe) |
 | **Analyse** | 1 | `parse-ao` · `extraction-cv` | Léger (validation extraction) |
-| **Matching** | 2 | `croisement-profils` · `classement-profils` | Advisory (presentation scores) |
+| **Matching** | 2 | `croisement-profils` · `classement-profils` | Léger (`human_gate: light`) — présentation *advisory* des scores |
 | **Validation** | 3 | `presentation-resultats` · `remplissage-grille` | Granulaire (Keep/Modify/Redo) |
 | **Clôture** | 4 | `livraison` · `mise-a-jour-cv` | Explicite |
+
+> **`human_gate` (blocage humain) ≠ nature de la revue/sensor.** La colonne « Gate humain » reporte la valeur `human_gate` de la fiche de stage (énum `none | light | granular | explicit`). « Advisory » qualifie la **nature d'une revue ou d'un sensor** (`review_class` / sensor `nature`), jamais un niveau de gate humain : au Matching, `human_gate` est **`light`** et la présentation des scores est *advisory* (consultative, non bloquante).
 
 ---
 
