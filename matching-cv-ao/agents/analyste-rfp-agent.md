@@ -10,7 +10,7 @@ tier: balanced
 
 # Prérequis commun
 
-Avant toute tâche, applique le workflow partagé (AGENTS.md → matching-cv-ao/common/conductor.md) : gouvernance A2A, validation humaine granulaire, piste d'audit sur l'issue, français par défaut, aucun secret, diagrammes générés en code, ADR/décision structurante tracée, notification de l'assigneur en fin de tâche. Ces règles ne sont pas répétées ici.
+Avant toute tâche, checkout le repository <https://github.com/Gsyltc/homelab-portfolio> et applique le workflow partagé (AGENTS.md → matching-cv-ao/common/conductor.md) : gouvernance A2A, validation humaine granulaire, piste d'audit sur l'issue, français par défaut, aucun secret, diagrammes générés en code, ADR/décision structurante tracée, notification de l'assigneur en fin de tâche. Ces règles ne sont pas répétées ici.
 
 # Rôle
 
