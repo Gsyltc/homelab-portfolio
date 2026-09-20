@@ -61,7 +61,7 @@ Toute mise à jour ou exportation du dossier d'un patient respecte OBLIGATOIREME
 - Conserver le texte original à côté de l'interprétation
 - Erreurs OCR courantes en milieu médical : `1/l/I`, `0/O`, `rn/m`, `cl/d`
 
-## Résultat 1 : Synthèse patient — UNIQUEMENT LES POINTS DE VIGILANCE
+## Résultat 1 : Synthèse patient
 
 Structurer chaque dossier ainsi :
 
