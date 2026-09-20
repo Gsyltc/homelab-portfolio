@@ -77,6 +77,7 @@ Questions ouvertes : [lacunes du dossier, points incertains]
 
 **Règles :**
 
+- **Analyses de laboratoire (uniquement le labo)** : la synthèse patient ne contient que les **points de suivi notables** issus des analyses biologiques (valeur critique, anomalie nouvelle ou persistante, tendance à surveiller). Pour toute information plus détaillée sur les analyses biologiques, les médecins se réfèrent à la **synthèse du laboratoire produite par la skill `analyse-laboratoire`**. Cette règle ne concerne **que** les données de laboratoire ; les rapports non biologiques restent traités normalement dans la synthèse.
 - Les valeurs anormales toujours signalées — jamais noyées dans la prose
 - Médicaments listés avec le nom générique en premier, la marque entre parenthèses
 - « Questions ouvertes » est obligatoire — aucun dossier n'est complet
@@ -98,6 +99,7 @@ Lorsqu'un raisonnement clinique est demandé :
 - Signaler immédiatement les valeurs critiques : `🚨 CRITIQUE : [valeur] nécessite une revue urgente`
 - Interactions médicamenteuses : classer `Majeure | Modérée | Mineure`
 - En cas de doute : « Données insuffisantes pour évaluer [X] — recommander [examen/anamnèse précis] »
+- **Analyses de laboratoire** : si le raisonnement clinique nécessite des informations supplémentaires sur des analyses de laboratoire (valeurs détaillées, historiques, tendances), consulter la synthèse du laboratoire produite par la skill `analyse-laboratoire` avant de conclure.
 
 ## Résultat 3 : Conseils de présentation des données
 
