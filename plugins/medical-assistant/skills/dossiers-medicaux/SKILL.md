@@ -77,6 +77,7 @@ Questions ouvertes : [lacunes du dossier, points incertains]
 
 **Règles :**
 
+- **Analyses de laboratoire (uniquement le labo)** : la synthèse patient ne contient que les **points de suivi notables** issus des analyses biologiques (valeur critique, anomalie nouvelle ou persistante, tendance à surveiller). Pour toute information plus détaillée sur les analyses biologiques (valeurs, unités, références, historiques), les médecins se réfèrent au **fichier de synthèse du laboratoire** (`laboratoire/synthese-bilans.md`, géré par la skill `analyse-laboratoire`). Cette règle ne concerne **que** les données de laboratoire ; les rapports non biologiques restent traités normalement dans la synthèse.
 - Les valeurs anormales toujours signalées — jamais noyées dans la prose
 - Médicaments listés avec le nom générique en premier, la marque entre parenthèses
 - « Questions ouvertes » est obligatoire — aucun dossier n'est complet
