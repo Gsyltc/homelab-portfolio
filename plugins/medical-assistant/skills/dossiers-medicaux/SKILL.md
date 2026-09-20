@@ -1,6 +1,6 @@
 ---
 name: dossiers-medicaux
-description: "Interprète les dossiers médicaux, les notes cliniques et les données FHIR, et conseille sur la présentation des données médicales (UI) : interprétation OCR, synthèse clinique et signalement des interactions médicamenteuses. Se déclenche sur : dossiers patients, données cliniques, PDF médicaux, produits health-tech ou présentation de données médicales."
+description: "Interprète les dossiers médicaux, les notes cliniques et les données FHIR, et conseille sur la présentation des données médicales (UI) : interprétation OCR, synthèse clinique et signalement des interactions médicamenteuses. La synthèse patient (synthese.md) ne contient que les points de vigilance — l'intégralité des bilans de laboratoire est gérée par la skill dédiée `analyse-laboratoire` (fichiers horodatés par examen + synthèse des bilans). Se déclenche sur : dossiers patients, données cliniques, PDF médicaux, produits health-tech ou présentation de données médicales."
 ---
 
 # Medic — Intelligence clinique
@@ -29,8 +29,10 @@ Les dossiers médicaux sont stockés dans le répertoire parent déclarée par l
 
 Chaque dossier patient contient deux fichiers qui doivent TOUJOURS exister et rester synchronisés :
 
-- `synthese.md` — le dossier médical pour les professionnels de la santé. **Source de vérité.**
+- `synthese.md` — le dossier médical pour les professionnels de la santé. **Source de vérité.** Contient **uniquement les points de vigilance** (voir « Résultat 1 »).
 - `resume-patient.md` — le résumé destiné au patient, toujours dérivé de `synthese.md`.
+
+Le sous-répertoire `laboratoire/` (géré par la skill `analyse-laboratoire`) conserve l'**intégralité des bilans** : un fichier horodaté de la date d'examen par bilan, plus un fichier de synthèse `synthese-bilans.md` utilisable par les médecins. La synthèse `synthese.md` n'en recopie pas les valeurs ; elle n'en retient que les points de vigilance et y renvoie.
 
 ### Mise à jour et exportation du dossier — 3 étapes obligatoires
 
@@ -59,7 +61,7 @@ Toute mise à jour ou exportation du dossier d'un patient respecte OBLIGATOIREME
 - Conserver le texte original à côté de l'interprétation
 - Erreurs OCR courantes en milieu médical : `1/l/I`, `0/O`, `rn/m`, `cl/d`
 
-## Résultat 1 : Synthèse patient
+## Résultat 1 : Synthèse patient — UNIQUEMENT LES POINTS DE VIGILANCE
 
 Structurer chaque dossier ainsi :
 
@@ -70,14 +72,22 @@ Démographie : [âge, sexe, antécédents sociaux pertinents]
 Problèmes actifs : [numérotés, avec code CIM-10 si disponible]
 Médicaments : [nom, dose, fréquence, voie]
 Allergies : [substance → type de réaction]
-Bilans clés : [anomalies signalées avec ↑↓, valeurs de référence]
+Points de vigilance : [uniquement les points d'attention issus des bilans ou du dossier — voir règles ci-dessous]
 Chronologie : [événements clés dans l'ordre chronologique]
 Questions ouvertes : [lacunes du dossier, points incertains]
 ```
 
+**Points de vigilance — ce qui y figure :**
+
+- Les anomalies biologiques qui nécessitent un suivi ou une action (une nouvelle anomalie, un paramètre qui s'aggrave ou reste hors plage, une valeur critique⁰).
+- Les changements cliniques notables (nouveau diagnostic, aggravation, changement de traitement, allergie, chirurgie).
+- Chaque point de vigilance est concis et rattaché au bilan source : `[paramètre] — [constat] — voir laboratoire/synthese-bilans.md` (date du bilan).
+
 **Règles :**
 
-- Les valeurs anormales toujours signalées — jamais noyées dans la prose
+- **La synthèse `synthese.md` ne contient QUE des points de vigilance** — le détail exhaustif des bilans (valeurs, unités, références, historiques, tendances) n'y a pas sa place.
+- **L'intégralité des bilans est gérée par la skill `analyse-laboratoire`** : fichiers horodatés de la date d'examen dans `laboratoire/` + fichier de synthèse `laboratoire/synthese-bilans.md`. La synthèse y renvoie sans recopier les valeurs.
+- Les points de vigilance toujours signalés — jamais noyés dans la prose
 - Médicaments listés avec le nom générique en premier, la marque entre parenthèses
 - « Questions ouvertes » est obligatoire — aucun dossier n'est complet
 
@@ -146,6 +156,7 @@ Pour passer des termes cliniques aux termes courants :
 | Ignorer le contexte                  | Une valeur « normale » peut être anormale pour ce patient    |
 | Submerger les patients de données    | Trier — ne montrer que ce qui est actionnable                |
 | Confondre les unités                 | Toujours indiquer les unités. mg vs mcg peut tuer.           |
+| Recopier les bilans complets dans la synthèse | `synthese.md` ne garde que les points de vigilance ; le détail vit dans `laboratoire/` (skill `analyse-laboratoire`) |
 
 ## Aide-mémoire FHIR
 
@@ -159,4 +170,3 @@ Pour passer des termes cliniques aux termes courants :
 | DiagnosticReport   | Imagerie, anatomopathologie |
 | Encounter          | Visites, hospitalisations   |
 | DocumentReference  | Documents scannés, PDF      |
-
