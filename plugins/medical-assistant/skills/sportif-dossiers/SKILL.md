@@ -22,7 +22,7 @@ Le dossier sportif est stocké là où sont stockés les dossiers médicaux, dan
 - Chaque patient a sa propre arborescence : ex. `"$ROOT_DIRECTORY"/<patient>/sport/`.
 - Le sous-répertoire `sport/` doit être créé s'il n'existe pas (avec les répertoires parents si nécessaire) avant toute écriture.
 - Le dossier sportif du patient est dans le même répertoire que son dossier médical : lire `synthese.md`, `resume-patient.md` et les archives pour le contexte de santé.
-- Lire aussi le **suivi morphologique** (`"$ROOT_DIRECTORY"/<patient>/morphologie/suivi-morphologie.md`, produit par la skill `suivi-morphologie`) : composition corporelle (poids, IMC, IMG, IGC / % masse grasse, masse maigre, tours, ratios), évolution et objectif de perte de poids. Ces éléments conditionnent l'ajustement du programme (voir « Ajustement selon la morphologie »).
+- Lire aussi le **suivi morphologique** produit par la skill `suivi-morphologie` : composition corporelle (poids, IMC, IMG, IGC / % masse grasse, masse maigre, tours, ratios), évolution et objectif de perte de poids. Ces éléments conditionnent l'ajustement du programme (voir « Ajustement selon la morphologie »).
 
 ## Fichiers du dossier sportif
 
@@ -55,7 +55,7 @@ Le versionnage du programme sportif suit EXACTEMENT l'approche des dossiers méd
 
 Pour chaque patient :
 
-1. **Lire le contexte** — dossier médical (`synthese.md`), commentaires des médecins, **suivi morphologique** (`morphologie/suivi-morphologie.md` : IGC / % masse grasse, IMC, IMG, masse maigre, tours, évolution, objectif de perte de poids), programme sportif existant et retours récents (`suivi-sportif.md`).
+1. **Lire le contexte** — dossier médical (`synthese.md`), commentaires des médecins, **suivi morphologique** produit par la skill `suivi-morphologie` (IGC / % masse grasse, IMC, IMG, masse maigre, tours, évolution, objectif de perte de poids), programme sportif existant et retours récents (`suivi-sportif.md`).
 2. **Recueillir les objectifs** — bien-être, endurance, prise de force, perte de poids, mobilité, etc.
 3. **Prendre en compte les problématiques de santé** (cardiaques, articulaires, respiratoires, métaboliques, médicamenteuses…) et adapter.
 4. **Adapter au matériel disponible** — n'utiliser QUE les appareils dont le patient dispose réellement :
@@ -69,7 +69,7 @@ Pour chaque patient :
 
 ## Ajustement selon la morphologie
 
-Le programme est ajusté en fonction du suivi morphologique (`morphologie/suivi-morphologie.md`). Prendre en compte l'IGC (% masse grasse), l'IMC, la masse maigre, l'évolution récente et l'objectif de perte de poids pour adapter :
+Le programme est ajusté en fonction du suivi morphologique produit par la skill `suivi-morphologie`. Prendre en compte l'IGC (% masse grasse), l'IMC, la masse maigre, l'évolution récente et l'objectif de perte de poids pour adapter :
 
 - **Type d'exercices** — selon l'objectif dominant issu de la morphologie :
   - Objectif perte de masse grasse (IGC/IMC élevé) : privilégier le cardio (stepper), les circuits en intensité modérée à élevée et le renforcement full-body pour préserver la masse maigre.
@@ -87,7 +87,7 @@ Toute adaptation morphologique reste consultative et suit le versionnage et les 
 Chaque dimanche, la revue est lancée (autopilote dédié). Elle vérifie que le programme est toujours d'actualité :
 
 - Relire le dossier médical et les commentaires des médecins.
-- Relire le suivi morphologique (`morphologie/suivi-morphologie.md`) : évolution de l'IGC, du poids et de la masse maigre, et réajuster le type d'exercices, les efforts et l'intensité en conséquence (voir « Ajustement selon la morphologie »).
+- Relire le suivi morphologique produit par la skill `suivi-morphologie` : évolution de l'IGC, du poids et de la masse maigre, et réajuster le type d'exercices, les efforts et l'intensité en conséquence (voir « Ajustement selon la morphologie »).
 - Lire les retours des patients dans le dossier sportif (difficulté, facilité, ressenti).
 - Modifier ou adapter les exercices si nécessaire.
 - Re-planifier les 2 semaines à venir (au moins 1 séance le dimanche).

@@ -55,7 +55,7 @@ ce fichier en donne la lecture chronologique côté produit.
     `analyse-laboratoire` et `sportif-dossiers`.
   - **`dossiers-medicaux` — suivi de l'IGC** : nouvelle section « Suivi de l'IGC — estimation des kilos à perdre »
     (masse maigre → poids cible → kilos à perdre) et règle de renvoi de la synthèse patient vers
-    `morphologie/suivi-morphologie.md` (le dossier médical ne conserve que les points de vigilance). Évolution
+    la skill `suivi-morphologie` (le dossier médical ne conserve que les points de vigilance). Évolution
     **documentaire**, invariant préservé : caractère consultatif, validation médicale requise.
   - **`sportif-dossiers` — ajustement selon la morphologie** : le coach lit `morphologie/suivi-morphologie.md`
     (IGC, IMC, IMG, masse maigre, évolution, objectif) et **adapte le type d'exercices, les efforts, l'intensité,
