@@ -29,7 +29,7 @@ Les dossiers médicaux sont stockés dans le répertoire parent déclarée par l
 
 Chaque dossier patient contient deux fichiers qui doivent TOUJOURS exister et rester synchronisés :
 
-- `synthese.md` — le dossier médical pour les professionnels de la santé. **Source de vérité.** Contient **uniquement les points de vigilance** (voir « Résultat 1 »).
+- `synthese.md` — le dossier médical pour les professionnels de la santé. **Source de vérité.**.
 - `resume-patient.md` — le résumé destiné au patient, toujours dérivé de `synthese.md`.
 
 > **Bilans de laboratoire :** hors périmètre de cette skill. Le sous-répertoire `laboratoire/` (skill `analyse-laboratoire`) porte l'intégralité des bilans ; `synthese.md` n'en retient que les points de vigilance et renvoie vers `laboratoire/synthese-bilans.md`. Cette règle vaut partout ci-dessous, sans être répétée.
