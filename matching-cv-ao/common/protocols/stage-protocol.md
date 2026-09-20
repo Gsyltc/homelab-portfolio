@@ -29,6 +29,12 @@ flowchart LR
 - **Agent ↔ Agent** : JSON uniquement. **Agent ↔ Humain** : Markdown uniquement.
 - Chaque décision structurante est tracée sur l'issue.
 - L'agent trace son avancement sur l'issue (piste d'audit au fil de l'eau).
+
+> ⛔ **UN STAGE DÉLÉGUÉ N'EST JAMAIS TERMINÉ SANS LIEN DE RETOUR ACTIF.** Produire le livrable
+> ne suffit pas : tant que le lien de mention actif vers l'assigneur n'est pas posé ET que ses
+> `trigger_outcomes` ne sont pas vérifiés, la tâche est **incomplète** et la chaîne A2A reste
+> bloquée (incident EXPE-58 : un « à toi pour la suite » en texte clair n'a réveillé personne).
+
 - **Retour de délégation (obligatoire, à la charge de l'agent délégataire)** : en fin de production, l'agent lead **construit lui-même** le lien de mention actif `[@Assigneur](mention://agent/<uuid-assigneur>)` vers **l'agent qui l'a délégué** dans son commentaire de livrable — UUID **résolu à chaque fois** via `multica agent list --output json` (à partir du **nom** de l'assigneur donné en texte clair dans la mission), **jamais copié depuis la consigne de délégation ni codé en dur**. C'est **ce lien, posé par l'agent qui termine, qui enqueue le run de reprise de l'assigneur**. Une mention en texte clair ou une simple réponse dans le fil **n'enqueue aucun run** et ne réveille pas l'assigneur. Réciproquement, **aucun agent ne se mentionne lui-même** avec un lien actif dans sa propre consigne de délégation (règle générale — voir `governance-security` « Règle A2A ») : il désigne l'agent de retour **par son nom**, en texte clair.
 - **Vérification `trigger_outcomes`** : après le post, l'agent lead vérifie les `trigger_outcomes` de son commentaire (statuts `blocked` / `coalesced` / `deferred`). Si la mention n'a pas déclenché le run attendu, il le signale sur l'issue (halt-and-ask) plutôt que de considérer la tâche terminée.
 
@@ -44,6 +50,15 @@ flowchart LR
 
 ## Contrôle — non contournable
 Le coordinateur valide chaque livrable avant validation humaine. La grille d'évaluation ne sera **jamais inventée** — elle sera demandée à l'humain si absente.
+
+## Checklist de sortie de stage (`mode: subagent`) — non contournable
+Un stage délégué (`mode: subagent`) n'est considéré **terminé** QUE lorsque les trois cases sont cochées, **dans cet ordre** :
+
+1. ☑ **Livrable produit et vérifié** — artefacts `produces` écrits sous `${ROOT_DIRECTORY}` absolu, contrôle du livrable (Step « Contrôle ») passé, piste d'audit posée sur l'issue.
+2. ☑ **Lien de retour ACTIF posé** — le commentaire de livrable se termine par `[@<Nom assigneur>](mention://agent/<uuid>)`, UUID résolu via `multica agent list --output json` (jamais copié/codé en dur), jamais une auto-mention. C'est ce lien qui enqueue le run de reprise.
+3. ☑ **`trigger_outcomes` vérifié** — la mention a bien déclenché le run attendu ; sinon (`blocked`/`coalesced`/`deferred`) → **halt-and-ask** sur l'issue, ne pas conclure.
+
+Tant que 2 ou 3 manque, la tâche est **incomplète** : ne jamais rendre la main comme si le stage était clos.
 
 ## Halt-and-ask
 Le cycle s'arrête et interroge l'humain dès : échec / impossibilité d'un livrable ; écart ou contrôle requis ; gate / sensor en écart ; décision structurante nouvelle non cadrée ; action à impact / destructive (jamais autonome).

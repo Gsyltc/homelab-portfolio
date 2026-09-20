@@ -47,8 +47,7 @@ Mentionner le Gestionnaire CV avec mission claire :
 - **créer un fichier Markdown d'analyse versionné** `<AAAA-MM-JJ>-<nom>-<prenom>.md` à la racine du répertoire `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/` du candidat (`<AAAA-MM-JJ>` = date du jour ISO ; `<nom>`/`<prenom>` en minuscules, cohérents avec le segment `<nom-prenom>` du répertoire) ;
 - **écrire le JSON d'analyse versionné** `<nom>-<prenom>-<AAAA-MM-JJ>.json` à la racine de `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/`, **sans écraser** les versions antérieures (historique conservé) ; renseigner `analyse_json` avec ce chemin ;
 - **une fois les livrables écrits et vérifiés, supprimer la copie de travail téléchargée** (aucun original n'est écrit dans le répertoire `cv/` du collaborateur). **Ne jamais supprimer la copie de travail avant** d'avoir écrit et vérifié le Markdown et le JSON versionné ;
-- produire le JSON `collaborateurs` (voir la compétence `cv-analyse` du plugin `rh-assistant` pour la sélection de la dernière version JSON pour le matching et la journalisation d'audit) ;
-- **retour de délégation obligatoire au Coordinateur** en fin de tâche (mention agent valide + vérification `trigger_outcomes`) — procédure définie une seule fois dans le protocole `stage-protocol` (temps 3).
+- produire le JSON `collaborateurs` (voir la compétence `cv-analyse` du plugin `rh-assistant` pour la sélection de la dernière version JSON pour le matching et la journalisation d'audit).
 
 ### Step 2 — Sélection d'éligibilité vis-à-vis de l'AO
 Une fois les profils extraits et **vérifiés à jour et cohérents**, le Gestionnaire CV applique le **filtre d'éligibilité en amont du matching** au regard des `profils_recherches` / exigences de l'AO (`ao-profils-recherches`, produit par `parse-ao`) :
@@ -75,6 +74,15 @@ Vérifier que le JSON contient bien la liste `collaborateurs` avec les champs : 
 
 ### Step 4 — Validation humaine légère
 Présenter à l'humain : nombre de collaborateurs analysés, pièce(s) jointe(s) source(s) traitée(s) puis supprimée(s) (nom, journalisé avant suppression), chemins des fichiers d'analyse Markdown créés et des JSON versionnés, synthèse des profils extraits. **Présenter le statut d'équivalence MIFI par collaborateur** (`equivalence_requise` + `niveau_equivalent_qc`) et **lister explicitement les collaborateurs en `a_verifier`** pour lesquels une réponse humaine est attendue (le CV ne permet pas de trancher — ne rien inventer). **Présenter la localisation par collaborateur** (`localisation.ville`) et **lister explicitement les collaborateurs dont la ville est manquante** (mention humaine posée). **Présenter le verdict d'éligibilité vis-à-vis de l'AO** en distinguant clairement les **retenus** (`possible`), les **à vérifier** (`a_verifier`, avec raisons + arbitrage humain attendu, ex. ville manquante, équivalence MIFI non tranchée, ou détention de certification non confirmée) et les **exclus** (`exclu`, avec raisons par axe — critères STRICTS Études, Localisation et Certifications requises tranchés et non atteints, ex. localisation > 70 km, niveau d'études requis non atteint faute d'équivalence reconnue, ou **certification obligatoire de l'AO non détenue** — ex. AWS Certified Solutions Architect – Associate). Demander validation.
+
+### Step 5 — Retour de délégation A2A (OBLIGATOIRE — dernière action)
+> ⛔ Le stage n'est **pas terminé** tant que ce Step n'est pas accompli. Voir la **checklist de sortie de stage** du protocole `stage-protocol`.
+
+En toute fin de tâche, le **Gestionnaire CV** clôt son commentaire de livrable par un **lien de mention actif** vers le **Coordinateur Matching** (l'assigneur) : `[@Coordinateur Matching](mention://agent/<uuid>)`.
+- UUID **résolu à chaque fois** via `multica agent list --output json` à partir du **nom** de l'assigneur donné en texte clair dans la mission — **jamais** copié depuis la consigne de délégation ni codé en dur.
+- **Seul ce lien actif enqueue le run de reprise du Coordinateur.** Une adresse en texte clair (« prêt pour la gate ») n'enqueue **aucun** run (incident EXPE-58).
+- **Ne pas s'auto-mentionner** avec un lien actif (anti-wake parasite).
+- Après le post, **vérifier les `trigger_outcomes`** ; si le run attendu n'est pas déclenché (`blocked`/`coalesced`/`deferred`) → **halt-and-ask** sur l'issue, ne pas conclure.
 
 ## Sensors
 Outputs: `cv-profils`, `cv-eligibilite`, `clients-contextes` → Phase Analyse (gate: light). `cv-eligibilite` porte le verdict d'éligibilité vis-à-vis de l'AO (3 états) et alimente le matching (seuls les `possible` sont scorés). `clients-contextes` (référentiel `${ROOT_DIRECTORY}/clients/<nom-client>.json` — contexte + mandats, mis à jour uniquement pour les CV contenant un contexte client) alimente l'analyse d'**expertise de firme** de l'Analyste RFP (voir `parse-ao.md` et la compétence `rfp-analyse`).
