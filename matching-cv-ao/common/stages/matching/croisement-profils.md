@@ -31,7 +31,7 @@ Croiser les exigences de l'AO avec les profils des collaborateurs et calculer un
 
 ## Steps
 ### Step 1 — Délégation au Matcher Profils
-Mentionner le Matcher Profils avec mission claire : croiser **la dernière version JSON** des **seuls profils retenus par le Gestionnaire CV** (`eligibilite.collaborateurs_possibles`, référencés par leur `analyse_json` dans `cv-eligibilite`) avec les exigences AO, calculer le score pondéré (compétences 50%, expérience 35%, études 10%, disponibilité 5%), classer par score décroissant. Le critère **Compétences (50 %)** **regroupe compétences + technologies + méthodologies** : évaluer la **couverture** des compétences/technologies/méthodologies exigées par l'AO (connues vs manquantes) à partir des `competences` et des agrégats `technologies`/`methodologies` du profil — le regroupement se fait **à l'intérieur** de ce critère, sans nouveau poids. **Ne pas scorer** les collaborateurs `exclu` ni `a_verifier` du filtre d'éligibilité amont — les propager tels quels (avec leurs raisons) au classement. **Retour de délégation obligatoire au Coordinateur** en fin de tâche (mention agent valide + vérification `trigger_outcomes`) — procédure définie une seule fois dans le protocole `stage-protocol` (temps 3).
+Mentionner le Matcher Profils avec mission claire : croiser **la dernière version JSON** des **seuls profils retenus par le Gestionnaire CV** (`eligibilite.collaborateurs_possibles`, référencés par leur `analyse_json` dans `cv-eligibilite`) avec les exigences AO, calculer le score pondéré (compétences 50%, expérience 35%, études 10%, disponibilité 5%), classer par score décroissant. Le critère **Compétences (50 %)** **regroupe compétences + technologies + méthodologies** : évaluer la **couverture** des compétences/technologies/méthodologies exigées par l'AO (connues vs manquantes) à partir des `competences` et des agrégats `technologies`/`methodologies` du profil — le regroupement se fait **à l'intérieur** de ce critère, sans nouveau poids. **Ne pas scorer** les collaborateurs `exclu` ni `a_verifier` du filtre d'éligibilité amont — les propager tels quels (avec leurs raisons) au classement.
 
 > **Fraîcheur des compétences** : le Matcher doit **exclure du calcul de compatibilité toute compétence, technologie ou méthodologie non utilisée depuis plus de 10 ans** (champ `derniere_utilisation` — compétence ou agrégat techno/méthodo). Une exigence couverte uniquement par un élément périmé est considérée comme **non couverte**.
 
@@ -44,6 +44,15 @@ Vérifier que le JSON contient la liste `resultats` avec les champs : `collabora
 
 ### Step 3 — Gate advisory
 Présenter à l'humain : top 5 des profils retenus avec scores, recommandations. **Faire ressortir explicitement les profils exclus** (`recommandation = "exclu"` — non-conformité du niveau d'études sur AO gouvernemental, avec motif) **et ceux à vérifier** (`conformite_etudes.conforme = "a_verifier"`, MIFI non tranché). **Rappeler les non-retenus d'éligibilité amont** (Gestionnaire CV) — `exclu` et `a_verifier` avec leurs raisons par axe (dont l'axe `localisation` : hors rayon de proximité > 70 km, ou ville manquante ; et l'axe `certifications` : certification `obligatoire` de l'AO non détenue, ex. AWS Certified Solutions Architect – Associate) — qui n'ont pas été scorés. L'humain peut ajuster les poids ou demander un recalcul.
+
+### Step 4 — Retour de délégation A2A (OBLIGATOIRE — dernière action)
+> ⛔ Le stage n'est **pas terminé** tant que ce Step n'est pas accompli. Voir la **checklist de sortie de stage** du protocole `stage-protocol`.
+
+En toute fin de tâche, le **Matcher Profils** clôt son commentaire de livrable par un **lien de mention actif** vers le **Coordinateur Matching** (l'assigneur) : `[@Coordinateur Matching](mention://agent/<uuid>)`.
+- UUID **résolu à chaque fois** via `multica agent list --output json` à partir du **nom** de l'assigneur donné en texte clair dans la mission — **jamais** copié depuis la consigne de délégation ni codé en dur.
+- **Seul ce lien actif enqueue le run de reprise du Coordinateur.** Une adresse en texte clair (« scores prêts ») n'enqueue **aucun** run (incident EXPE-58).
+- **Ne pas s'auto-mentionner** avec un lien actif (anti-wake parasite).
+- Après le post, **vérifier les `trigger_outcomes`** ; si le run attendu n'est pas déclenché (`blocked`/`coalesced`/`deferred`) → **halt-and-ask** sur l'issue, ne pas conclure.
 
 ## Sensors
 Outputs: `matching-resultats` → Phase Matching (gate: advisory).
