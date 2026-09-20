@@ -1,6 +1,6 @@
 ---
 name: dossiers-medicaux
-description: "Interprète les dossiers médicaux, les notes cliniques et les données FHIR, et conseille sur la présentation des données médicales (UI) : interprétation OCR, synthèse clinique et signalement des interactions médicamenteuses. La synthèse patient (synthese.md) ne retient que les points de vigilance ; les bilans de laboratoire relèvent de la skill dédiée `analyse-laboratoire`. Se déclenche sur : dossiers patients, données cliniques, PDF médicaux, produits health-tech ou présentation de données médicales."
+description: "Interprète les dossiers médicaux, les notes cliniques et les données FHIR, et conseille sur la présentation des données médicales (UI) : interprétation OCR, synthèse clinique et signalement des interactions médicamenteuses. Se déclenche sur : dossiers patients, données cliniques, PDF médicaux, produits health-tech ou présentation de données médicales."
 ---
 
 # Medic — Intelligence clinique
