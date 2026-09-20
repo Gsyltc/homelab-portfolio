@@ -30,7 +30,7 @@ Le sous-répertoire `morphologie/` contient :
 - **Un fichier par relevé** : `<date-du-relevé>-morphologie.md` (mesures brutes saisies, indicateurs calculés, comparaison — voir « Archivage »). Jamais écrasé : un nouveau relevé = un nouveau fichier. Date au format `yyyy-MM-dd_hh-mm` (ex. `2026-09-20_18-30-morphologie.md`).
 - **Un fichier de synthèse** : `suivi-morphologie.md` — la vue consolidée avec les **dernières valeurs et l'évolution**, destinée aux médecins et au coach sportif. Mis à jour à chaque nouveau relevé (voir « Synthèse »).
 
-Le dossier médical (`synthese.md`, géré par la skill `dossiers-medicaux`) ne conserve **que les points de vigilance** (IMC/IGC critique, tendance à surveiller) et renvoie à `morphologie/suivi-morphologie.md` : les valeurs détaillées n'y sont pas recopiées.
+Le dossier médical (`synthese.md`, géré par la skill `dossiers-medicaux`) ne conserve **que les points de vigilance** (IMC/IGC critique, tendance à surveiller) et renvoie à la skill `suivi-morphologie` : les valeurs détaillées n'y sont pas recopiées.
 
 ## Données suivies
 
