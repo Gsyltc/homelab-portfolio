@@ -57,6 +57,11 @@ ce fichier en donne la lecture chronologique côté produit.
     (masse maigre → poids cible → kilos à perdre) et règle de renvoi de la synthèse patient vers
     `morphologie/suivi-morphologie.md` (le dossier médical ne conserve que les points de vigilance). Évolution
     **documentaire**, invariant préservé : caractère consultatif, validation médicale requise.
+  - **`sportif-dossiers` — ajustement selon la morphologie** : le coach lit `morphologie/suivi-morphologie.md`
+    (IGC, IMC, IMG, masse maigre, évolution, objectif) et **adapte le type d'exercices, les efforts, l'intensité,
+    le repos et le cardio** en conséquence (nouvelle section « Ajustement selon la morphologie » ; lecture
+    intégrée à la constitution du programme et à la revue hebdomadaire). L'objectif de perte de poids reste fixé
+    côté médical ; le coach le traduit en charge d'entraînement sans le redéfinir.
 - **Contextes clients (sociétés) & expertise de firme** (workflow `matching-cv-ao`, plugin `rh-assistant`) —
   évolution **documentaire**, invariants préservés (JSON A2A / Markdown humain, validation humaine granulaire,
   scoring immuable 50/35/10/5, gates advisory non bloquants) :
