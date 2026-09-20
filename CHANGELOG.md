@@ -43,6 +43,20 @@ ce fichier en donne la lecture chronologique côté produit.
     `livraison.md` y renvoient au lieu de re-décrire la distinction.
 
 ### Added
+- **Suivi morphologique & composition corporelle** (plugin `medical-assistant`) :
+  - **Nouvelle compétence `suivi-morphologie`** (`plugins/medical-assistant/skills/suivi-morphologie/SKILL.md`) —
+    **source unique** du suivi de la composition corporelle du patient : poids, masse grasse (%/kg), masse maigre,
+    **IMC**, **IMG** (Deurenberg), **IGC** (méthode US Navy), tours (taille/cou/hanches), ratios (RTT/RTH),
+    métabolisme de base (Mifflin-St Jeor), poids cible et kilos à perdre. Relevés **horodatés et versionnés** dans
+    `${ROOT_DIRECTORY}/<patient>/morphologie/` (un fichier `<date>-morphologie.md` par relevé, jamais écrasé),
+    synthèse consolidée `suivi-morphologie.md` tenue à jour (dernières valeurs + évolution), archivage de la
+    synthèse avant modification dans `morphologie/archives/`. Objectif : **% graisse cible = 2/3 de la plage
+    normale** (sexe/âge), ajustable par le médecin. Même arborescence et conventions que `dossiers-medicaux`,
+    `analyse-laboratoire` et `sportif-dossiers`.
+  - **`dossiers-medicaux` — suivi de l'IGC** : nouvelle section « Suivi de l'IGC — estimation des kilos à perdre »
+    (masse maigre → poids cible → kilos à perdre) et règle de renvoi de la synthèse patient vers
+    `morphologie/suivi-morphologie.md` (le dossier médical ne conserve que les points de vigilance). Évolution
+    **documentaire**, invariant préservé : caractère consultatif, validation médicale requise.
 - **Contextes clients (sociétés) & expertise de firme** (workflow `matching-cv-ao`, plugin `rh-assistant`) —
   évolution **documentaire**, invariants préservés (JSON A2A / Markdown humain, validation humaine granulaire,
   scoring immuable 50/35/10/5, gates advisory non bloquants) :

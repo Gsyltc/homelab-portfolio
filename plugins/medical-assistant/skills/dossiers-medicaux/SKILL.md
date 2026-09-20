@@ -78,6 +78,7 @@ Questions ouvertes : [lacunes du dossier, points incertains]
 **Règles :**
 
 - **Analyses de laboratoire (uniquement le labo)** : la synthèse patient ne contient que les **points de suivi notables** issus des analyses biologiques (valeur critique, anomalie nouvelle ou persistante, tendance à surveiller). Pour toute information plus détaillée sur les analyses biologiques, les médecins se réfèrent à la **synthèse du laboratoire produite par la skill `analyse-laboratoire`**. Cette règle ne concerne **que** les données de laboratoire ; les rapports non biologiques restent traités normalement dans la synthèse.
+- **Morphologie / composition corporelle (uniquement la morphologie)** : la synthèse patient ne contient que les **points de vigilance** morphologiques (IMC/IGC critique, franchissement de seuil, tendance à surveiller). Pour le détail (poids, IMC, IMG, IGC, masses, tours, évolution, objectif de perte de poids), les médecins se réfèrent à la **synthèse produite par la skill `suivi-morphologie`** (`morphologie/suivi-morphologie.md`).
 - Les valeurs anormales toujours signalées — jamais noyées dans la prose
 - Médicaments listés avec le nom générique en premier, la marque entre parenthèses
 - « Questions ouvertes » est obligatoire — aucun dossier n'est complet
@@ -100,6 +101,20 @@ Lorsqu'un raisonnement clinique est demandé :
 - Interactions médicamenteuses : classer `Majeure | Modérée | Mineure`
 - En cas de doute : « Données insuffisantes pour évaluer [X] — recommander [examen/anamnèse précis] »
 - **Analyses de laboratoire** : si le raisonnement clinique nécessite des informations supplémentaires sur des analyses de laboratoire (valeurs détaillées, historiques, tendances), consulter la synthèse du laboratoire produite par la skill `analyse-laboratoire` avant de conclure.
+
+## Suivi de l'IGC — estimation des kilos à perdre
+
+Le dossier médical suit l'**IGC (Indice de Graisse Corporelle)** afin d'estimer le nombre de kilos que le patient devrait perdre.
+
+- **Source des données** : les valeurs détaillées de composition corporelle (IGC, IMC, IMG, poids, masses grasse/maigre, tours, évolution) sont gérées par la skill `suivi-morphologie` et consolidées dans `morphologie/suivi-morphologie.md`. Consulter ce fichier avant tout raisonnement — ne pas recopier les valeurs détaillées dans `synthese.md`.
+- **IGC (% de graisse corporelle)** : estimé par la méthode US Navy (tours de taille/cou/hanches + taille) ou repris de la masse grasse mesurée si disponible.
+- **Estimation des kilos à perdre** :
+  1. `masse maigre = poids − (poids × IGC/100)` (supposée conservée).
+  2. Retenir un **% de graisse cible** selon le sexe et l'âge (plages de référence dans la skill `suivi-morphologie` ; par défaut **les 2/3 de la plage « normale »**, ajustable par le médecin).
+  3. `poids cible = masse maigre / (1 − % graisse cible/100)`.
+  4. `kilos à perdre = poids actuel − poids cible` (si positif ; sinon « objectif atteint »).
+- **Points de vigilance dans la synthèse** : ne reporter dans `synthese.md` que l'objectif retenu (IGC cible, kilos à perdre) et les alertes (IGC élevé, tendance défavorable), avec renvoi à `morphologie/suivi-morphologie.md`.
+- **Garde-fous** : l'IGC est une estimation avec marge d'erreur ; l'objectif de perte de poids reste consultatif, à valider par le médecin et à coordonner avec le coach sportif (`sportif-dossiers`). Préfixer : `⚕️ Consultatif — validation médicale requise`.
 
 ## Résultat 3 : Conseils de présentation des données
 
