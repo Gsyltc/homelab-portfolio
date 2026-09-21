@@ -1,6 +1,6 @@
 # Verification gates Homelab — contrôle de traçabilité aux frontières de phases
 
-Manifeste déclaratif des **verification gates** du workflow Homelab, référencés par le triptyque [`homelab/common/`](../common/conductor.md) (source unique — voir [`conductor.md`](../common/conductor.md), « Verification gates aux frontières de phases ») et exécutés aux **frontières de phases** par le **Tech Lead Homelab**. **Advisory** : produit un « Rapport de vérification » sur l'issue, **ne bloque jamais** la validation humaine granulaire. Vue narrative historique (stub) : [`docs/homelab-workflow.md`](../../docs/homelab-workflow.md).
+Manifeste déclaratif des **verification gates** du workflow Homelab, référencés par le triptyque [`homelab/common/`](../common/conductor.md) (source unique — voir [`conductor.md`](../common/conductor.md), « Verification gates aux frontières de phases ») et exécutés aux **frontières de phases** par le **Tech Lead Homelab**. **Advisory par défaut** : produit un « Rapport de vérification » sur l'issue et **ne remplace, n'abaisse ni ne court-circuite jamais** la validation humaine granulaire (SG-3). **Exception bloquante par scope** : l'artefact `livrable_tfvars_present` de la frontière `phase3-phase4` est un **écart bloquant non conditionnel sur `new-stack` / `infra-terraform`** (voir `blocking_on_scope`, aligné sur le sensor `terraform-no-sni` déjà bloquant sur `new-stack`) — un écart bloquant **arrête l'avancée** jusqu'à correction ou **levée humaine explicite tracée**, sans jamais se substituer à la validation humaine. Vue narrative historique (stub) : [`docs/homelab-workflow.md`](../../docs/homelab-workflow.md).
 
 Pendant Homelab de [`../../core/sensors/gates.md`](../../core/sensors/gates.md) : même forme déclarative, **frontières et artefacts spécifiques au Homelab** (documentation officielle, paramètres requis §2.4, livrables compose + `.tfvars`, QA Docker, prérequis de déploiement §4.0).
 
@@ -57,11 +57,16 @@ boundaries:
     frontiere: "Phase 3 → Phase 4 (Production → Validation)"
     artefacts_requis:
       - livrable_compose_present           # docker-compose téléchargeable (§3.1)
-      - livrable_tfvars_present            # config Terraform .tfvars (§3.3) — conditionnel selon scope
+      - livrable_tfvars_present            # config Terraform .tfvars (§3.3) — REQUIS NON CONDITIONNEL sur new-stack / infra-terraform (voir blocking_on_scope) ; conditionnel sur stack-update / security-patch
       - qa_docker_passe                    # vérification QA Docker rendue et contrôlée (§3.2)
       - controle_qualite_central_go        # aiguillage GO du Tech Lead (§3.6)
     checks: [artefacts-presents, liaison-tracabilite, absence-orphelin]
     sensors: [yaml-validity, swarm-deploy-section, plaintext-secret, terraform-no-sni, traefik-coherence]
+    blocking_on_scope:                     # écarts BLOQUANTS selon scope (dérogation à `nature: advisory`, plancher SG-3, aligné terraform-no-sni)
+      - artefact: livrable_tfvars_present
+        scopes: [new-stack, infra-terraform]
+        severity: blocking                 # absence = écart bloquant : arrête l'avancée jusqu'à correction ou levée humaine explicite tracée
+        note: "conditionnel (advisory) sur stack-update / security-patch"
     prerequis_40:                          # prérequis de déploiement anticipés (§4.0)
       - repertoire_travail_defini          # variable [répertoire de travail] définie et non vide
       - flux_kestra_accessible             # flux Kestra configure_service accessible
@@ -84,8 +89,9 @@ Le contrôle `phase3-phase4` **anticipe** les prérequis de déploiement du §4.
 ## En cas d'écart (advisory)
 
 - Le Tech Lead Homelab **ne bloque pas** : il **signale l'écart** dans le « Rapport de vérification » sur l'issue et **propose de revenir corriger** avant de présenter le contenu à l'humain.
+- **Exception — écart bloquant par scope** : un artefact marqué `blocking` dans `blocking_on_scope` pour le scope courant (aujourd'hui `livrable_tfvars_present` sur `new-stack` / `infra-terraform`) **arrête l'avancée** : le Tech Lead revient corriger (déléguer le stage `terraform-configuration` au Spécialiste Terraform) ou ne peut lever le blocage que par une **décision humaine explicite tracée** sur l'issue. Un tel écart n'est **jamais** clôturé en `⚠️` toléré sans cette levée.
 - L'humain reste seul décideur : demander la correction, ou valider en connaissance de cause en actant l'écart sur l'issue.
-- Le gate automatique ne remplace, n'abaisse ni ne court-circuite jamais la validation humaine granulaire, le QA Docker systématique ni les garde-fous absolus (invariants non négociables — SG-3).
+- Le gate automatique ne remplace, n'abaisse ni ne court-circuite jamais la validation humaine granulaire, le QA Docker systématique ni les garde-fous absolus (invariants non négociables — SG-3). L'exception bloquante par scope **renforce** un garde-fou, elle ne l'abaisse pas.
 - Un écart advisory récurrent peut alimenter un **candidat-règle** de la boucle d'apprentissage ([`homelab/rules/`](../rules/README.md)), sans court-circuiter la validation (`SENSOR_PROPOSED`).
 
 ## Rapport de gate (piste d'audit)
@@ -97,5 +103,6 @@ Rapport de vérification — <frontière>   (source : homelab/sensors/gates.md @
 - artefacts-presents : ✅ | ⚠️ <artefact manquant> | ⛔ <indisponible>
 - liaison-tracabilite : ✅ | ⚠️ <paramètre / décision sans amont ni ADR> | ⛔ <indisponible>
 - absence-orphelin : ✅ | ⚠️ <livrable / décision orphelin> | ⛔ <indisponible>
+- livrable_tfvars_present (frontière Phase 3 → Phase 4) : ✅ présent | ⛔ BLOQUANT absent sur new-stack / infra-terraform (arrête l'avancée jusqu'à correction ou levée humaine tracée) | ⚠️ absent (conditionnel : stack-update / security-patch)
 - prérequis §4.0 (frontière Phase 3 → Phase 4) : ✅ | ⚠️ <[répertoire de travail] / Kestra> | ⛔ <indisponible>
 ```

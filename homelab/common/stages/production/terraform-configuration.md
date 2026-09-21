@@ -2,7 +2,7 @@
 slug: terraform-configuration
 phase: production
 execution: CONDITIONAL
-condition: "Config Terraform requise (accentué sous infra-terraform / new-stack ; ignoré sous config-change et branches autonomes)"
+condition: "OBLIGATOIRE et INCONDITIONNEL sur scope ∈ {new-stack, infra-terraform} (le livrable .tfvars ne peut y être ni sauté ni déclaré « non requis ») ; conditionnel sous stack-update / security-patch ; ignoré sous config-change et branches autonomes. Le scope est figé en amont (Phase 1 / 2), la condition ne se réinterprète pas en run."
 lead_agent: Spécialiste Terraform
 support_agents: []
 mode: subagent
@@ -30,6 +30,8 @@ Préparer les variables Terraform de la stack, sans jamais déployer.
 ### Step 1 — Déléguer après contrôle du QA Docker
 
 Après contrôle du travail de QA Docker, le Tech Lead ordonne au **Spécialiste Terraform** (mission + mention valide) de créer / modifier les **variables Terraform** de la stack (skill `configuration-applications`), cohérentes avec les paramètres collectés.
+
+**Sur scope `new-stack` / `infra-terraform`, ce stage est obligatoire et inconditionnel** : le Tech Lead ne peut ni le sauter, ni le reporter, ni déclarer le livrable `.tfvars` « non requis » / « à la demande » / « pas de Terraform à ce stade ». L'absence de délégation au Spécialiste Terraform et l'absence de livrable `.tfvars` sur ces scopes constituent un **écart bloquant** (aligné sur le gate `phase3-phase4`, artefact `livrable_tfvars_present` bloquant sur ces scopes) : la stack ne peut pas être clôturée. Toute levée reste une **décision humaine explicite tracée** sur l'issue (jamais une décision du Tech Lead seul).
 
 ### Step 2 — Produire les fichiers (jamais d'apply)
 

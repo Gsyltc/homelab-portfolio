@@ -21,6 +21,15 @@ secrets `_FILE`, exposition, permissions, absence de `${SNI}`, durcissement).
 jamais être abaissés par override sur ce scope — une création de stack touche par nature au réseau,
 aux secrets et à l'exposition.
 
+**Livrable Terraform non abaissable** : sur `new-stack`, la configuration Terraform (`livrable_tfvars`,
+stage [`terraform-configuration`](../common/stages/production/terraform-configuration.md)) fait partie
+du **garde-fou non abaissable** et **conditionne la clôture**. Elle ne peut être ni sautée, ni reportée,
+ni déclarée « non requise » par le Tech Lead : son absence est un **écart bloquant** (gate
+`phase3-phase4`, artefact `livrable_tfvars_present`). Le domaine / FQDN d'exposition y est écrit
+**en clair** (ex. `https://<service>.<domaine-homelab>`), **jamais `${SNI}`** (invariant SEC-1, sensor
+[`terraform-no-sni`](../sensors/sensors/terraform-no-sni.md) **bloquant** sur ce scope). Toute levée est
+une **décision humaine explicite tracée**, jamais une décision du Tech Lead seul.
+
 Appartenance : voir la matrice scope × phase de
 [`../common/protocols/scopes-and-axes.md`](../common/protocols/scopes-and-axes.md) et le champ `scopes:`
 des fiches de stage ([`../common/stages/`](../common/stages/), livrées au Stage 7).
