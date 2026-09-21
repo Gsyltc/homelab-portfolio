@@ -8,7 +8,7 @@ description: "Création complète d'une nouvelle stack — parcours complet, Dep
 
 # Scope `new-stack`
 
-Création complète d'une **nouvelle stack** (docker-compose et/ou configuration Terraform d'une
+Création complète d'une **nouvelle stack** (docker-compose et configuration Terraform d'une
 stack qui n'existe pas encore). C'est le cas le plus exigeant : toutes les étapes des phases 1 à 3
 s'exécutent, y compris l'arbitrage Docker Swarm vs Proxmox (§1.3), la collecte exhaustive des
 paramètres (§1.4) et la sélection automatique du type d'authentification.
@@ -21,14 +21,14 @@ secrets `_FILE`, exposition, permissions, absence de `${SNI}`, durcissement).
 jamais être abaissés par override sur ce scope — une création de stack touche par nature au réseau,
 aux secrets et à l'exposition.
 
-**Livrable Terraform non abaissable** : sur `new-stack`, la configuration Terraform (`livrable_tfvars`,
-stage [`terraform-configuration`](../common/stages/production/terraform-configuration.md)) fait partie
-du **garde-fou non abaissable** et **conditionne la clôture**. Elle ne peut être ni sautée, ni reportée,
-ni déclarée « non requise » par le Tech Lead : son absence est un **écart bloquant** (gate
-`phase3-phase4`, artefact `livrable_tfvars_present`). Le domaine / FQDN d'exposition y est écrit
-**en clair** (ex. `https://<service>.<domaine-homelab>`), **jamais `${SNI}`** (invariant SEC-1, sensor
-[`terraform-no-sni`](../sensors/sensors/terraform-no-sni.md) **bloquant** sur ce scope). Toute levée est
-une **décision humaine explicite tracée**, jamais une décision du Tech Lead seul.
+**Livrable Terraform obligatoire (non abaissable).** Sur ce scope, le stage
+[`terraform-configuration`](../common/stages/production/terraform-configuration.md) s'exécute
+**toujours** : le livrable `.tfvars` (`livrable_tfvars`) fait partie intégrante du parcours et
+**conditionne la clôture**. Il ne peut être ni sauté ni traité comme optionnel — pas même sur
+décision d'un agent coordinateur. Son absence est un **écart bloquant** à la frontière
+Production → Validation (voir [`gates.md`](../sensors/gates.md), frontière `phase3-phase4`),
+cohérent avec le sensor `terraform-no-sni` déjà bloquant sur `new-stack`. Le domaine / FQDN
+d'exposition y est écrit **en clair**, jamais via `${SNI}`.
 
 Appartenance : voir la matrice scope × phase de
 [`../common/protocols/scopes-and-axes.md`](../common/protocols/scopes-and-axes.md) et le champ `scopes:`
