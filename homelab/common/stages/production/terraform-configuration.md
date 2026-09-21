@@ -2,7 +2,7 @@
 slug: terraform-configuration
 phase: production
 execution: CONDITIONAL
-condition: "Config Terraform requise (accentué sous infra-terraform / new-stack ; ignoré sous config-change et branches autonomes)"
+condition: "OBLIGATOIRE et inconditionnelle sur scope ∈ {new-stack, infra-terraform} (livrable .tfvars non abaissable, conditionne la clôture) ; accentuée sous stack-update / security-patch ; ignorée sous config-change et branches autonomes"
 lead_agent: Spécialiste Terraform
 support_agents: []
 mode: subagent
@@ -31,6 +31,8 @@ Préparer les variables Terraform de la stack, sans jamais déployer.
 
 Après contrôle du travail de QA Docker, le Tech Lead ordonne au **Spécialiste Terraform** (mission + mention valide) de créer / modifier les **variables Terraform** de la stack (skill `configuration-applications`), cohérentes avec les paramètres collectés.
 
+Sur scope `new-stack` / `infra-terraform`, ce stage est **obligatoire et inconditionnel** : le Tech Lead ne peut ni le sauter ni le déclarer « non requis ». Ne pas produire le livrable `.tfvars` sur ces scopes est un **écart bloquant** (frontière `phase3-phase4`), non une décision légitime d'un coordinateur (invariant — SEC-1).
+
 ### Step 2 — Produire les fichiers (jamais d'apply)
 
 Préparer uniquement les fichiers `.tf` / `.tfvars` — **JAMAIS** `terraform init/apply/destroy` (invariant absolu). **Jamais `${SNI}`** : écrire les domaines / URLs en clair. Déposer le livrable **téléchargeable** et **mentionner le Tech Lead** (mention valide).
@@ -43,4 +45,4 @@ Upstream targets: `parametres_requis_complets` (required).
 
 ## Learn
 
-Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : candidats-règles (conventions Terraform, `.tfvars`, interdiction `${SNI}`) tracés, remontés au **gate humain granulaire** ; l'interdiction `terraform apply` et `${SNI}` sont des **invariants** (non abaissables — SEC-1).
+L'interdiction `terraform apply`, l'interdiction `${SNI}` et le caractère **obligatoire du livrable `.tfvars` sur `new-stack` / `infra-terraform`** sont des **invariants** non abaissables (SEC-1).
