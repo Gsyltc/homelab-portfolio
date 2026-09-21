@@ -22,14 +22,12 @@ jamais être abaissés par override sur ce scope — une création de stack touc
 aux secrets et à l'exposition.
 
 **Livrable Terraform obligatoire (non abaissable).** Sur ce scope, le stage
-[`terraform-configuration`](../common/stages/production/terraform-configuration.md) s'exécute
-**toujours** : le livrable `.tfvars` (`livrable_tfvars`) fait partie intégrante du parcours et
-**conditionne la clôture**. Il ne peut être ni sauté ni traité comme optionnel — pas même sur
-décision d'un agent coordinateur. Son absence est un **écart bloquant** à la frontière
-Production → Validation (voir [`gates.md`](../sensors/gates.md), frontière `phase3-phase4`),
+`terraform-configuration` s'exécute **toujours** : le livrable `.tfvars` (`livrable_tfvars`) fait
+partie intégrante du parcours et **conditionne la clôture**. Il ne peut être ni sauté ni traité
+comme optionnel — pas même sur décision d'un agent coordinateur. Son absence est un **écart
+bloquant** à la frontière Production → Validation (voir `gates.md`, frontière `phase3-phase4`),
 cohérent avec le sensor `terraform-no-sni` déjà bloquant sur `new-stack`. Le domaine / FQDN
 d'exposition y est écrit **en clair**, jamais via `${SNI}`.
 
-Appartenance : voir la matrice scope × phase de
-[`../common/protocols/scopes-and-axes.md`](../common/protocols/scopes-and-axes.md) et le champ `scopes:`
-des fiches de stage ([`../common/stages/`](../common/stages/), livrées au Stage 7).
+Appartenance : voir la matrice scope × phase de `scopes-and-axes.md` et le champ `scopes:`
+des fiches de stage (`homelab/common/stages/`, livrées au Stage 7).

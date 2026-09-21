@@ -45,4 +45,4 @@ Upstream targets: `parametres_requis_complets` (required).
 
 ## Learn
 
-Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : candidats-règles (conventions Terraform, `.tfvars`, interdiction `${SNI}`) tracés, remontés au **gate humain granulaire** ; l'interdiction `terraform apply`, `${SNI}` et le **caractère obligatoire du livrable `.tfvars` sur `new-stack` / `infra-terraform`** sont des **invariants** (non abaissables — SEC-1).
+L'interdiction `terraform apply`, l'interdiction `${SNI}` et le caractère **obligatoire du livrable `.tfvars` sur `new-stack` / `infra-terraform`** sont des **invariants** non abaissables (SEC-1).
