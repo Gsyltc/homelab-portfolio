@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Gsyltc/homelab-portfolio/homelab/common/protocols/report-format.schema.json",
+  "title": "Compte-rendu de revue Homelab (A2A)",
+  "description": "Source unique du contrat de compte-rendu structuré remonté par un spécialiste/reviewer au Tech Lead Homelab. Le JSON conforme est déposé en pièce jointe (review-<agent>-<stack>.json) ; le commentaire déclencheur ne porte que la mention valide du Leader + le verdict + « rapport JSON en pièce jointe ». Voir report-format.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["report"],
+  "properties": {
+    "report": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["agent", "verdict", "livrable", "points", "blocage"],
+      "properties": {
+        "agent": {
+          "type": "string",
+          "description": "Rôle générique de l'agent émetteur (kebab-case, aligné sur les rôles du workflow).",
+          "enum": ["docker", "qa-docker", "securite", "terraform", "n8n", "home-assistant"]
+        },
+        "verdict": {
+          "type": "string",
+          "description": "Aiguillage macro lu directement par le Tech Lead : OK (conforme), RENVOI (corrections attendues), BLOQUE (impossible de produire/poursuivre).",
+          "enum": ["OK", "RENVOI", "BLOQUE"]
+        },
+        "livrable": {
+          "type": ["string", "null"],
+          "description": "Nom du fichier livré (attaché à l'issue), ou null si aucun livrable produit."
+        },
+        "points": {
+          "type": "array",
+          "description": "Points remontés, TRIÉS par gravité décroissante (critical d'abord). Plafond : 3 par défaut, 5 sur security-patch / new-stack (voir report-format.md). Tableau vide = RAS.",
+          "maxItems": 5,
+          "items": { "$ref": "#/$defs/point" }
+        },
+        "blocage": {
+          "type": ["string", "null"],
+          "description": "Une phrase décrivant le blocage. Non-null UNIQUEMENT si verdict = BLOQUE (voir la contrainte conditionnelle)."
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "verdict": { "const": "BLOQUE" } } },
+          "then": { "properties": { "blocage": { "type": "string", "minLength": 1 } } },
+          "else": { "properties": { "blocage": { "type": "null" } } }
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "point": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "gravite", "constat", "cause", "correction", "domaine_correction", "arbitrage_requis", "arbitrage_motif"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Référence courte et stable du point (ex. P1, P2) pour que le Leader et l'agent correcteur le désignent sans ambiguïté.",
+          "pattern": "^P[0-9]+$"
+        },
+        "gravite": {
+          "type": "string",
+          "description": "Gravité du point (sert au tri : critical en tête).",
+          "enum": ["critical", "warning", "info"]
+        },
+        "constat": {
+          "type": "string",
+          "minLength": 1,
+          "description": "QUOI : le problème observé, factuel, une phrase."
+        },
+        "cause": {
+          "type": "string",
+          "minLength": 1,
+          "description": "POURQUOI : la cause racine, une phrase."
+        },
+        "correction": {
+          "type": "string",
+          "minLength": 1,
+          "description": "COMMENT CORRIGER : instruction actionnable et autosuffisante, exploitable par un autre agent sans relire tout le contexte."
+        },
+        "domaine_correction": {
+          "type": ["string", "null"],
+          "description": "Indice du rôle capable de corriger (une suggestion, pas une affectation ; le Leader tranche). null si l'agent ne sait pas.",
+          "enum": ["docker", "qa-docker", "securite", "terraform", "n8n", "home-assistant", null]
+        },
+        "arbitrage_requis": {
+          "type": "boolean",
+          "description": "L'agent SIGNALE qu'un choix non purement technique existe (true). Il ne décide pas de l'escalade : le Tech Lead lit ce drapeau et décide s'il remonte à l'humain (validation humaine granulaire, invariant)."
+        },
+        "arbitrage_motif": {
+          "type": ["string", "null"],
+          "description": "Une phrase expliquant le choix en jeu. Non-null UNIQUEMENT si arbitrage_requis = true (voir la contrainte conditionnelle)."
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "arbitrage_requis": { "const": true } } },
+          "then": { "properties": { "arbitrage_motif": { "type": "string", "minLength": 1 } } },
+          "else": { "properties": { "arbitrage_motif": { "type": "null" } } }
+        }
+      ]
+    }
+  }
+}

@@ -35,7 +35,7 @@ Sur scope `new-stack` / `infra-terraform`, ce stage est **obligatoire et incondi
 
 ### Step 2 — Produire les fichiers (jamais d'apply)
 
-Préparer uniquement les fichiers `.tf` / `.tfvars` — **JAMAIS** `terraform init/apply/destroy` (invariant absolu). **Jamais `${SNI}`** : écrire les domaines / URLs en clair. Déposer le livrable **téléchargeable** et **mentionner le Tech Lead** (mention valide).
+Préparer uniquement les fichiers `.tf` / `.tfvars` — **JAMAIS** `terraform init/apply/destroy` (invariant absolu). **Jamais `${SNI}`** : écrire les domaines / URLs en clair. Déposer le livrable **téléchargeable** et **mentionner le Tech Lead** (mention valide) avec le compte-rendu JSON en pièce jointe, au **format unique** [`report-format.md`](../../protocols/report-format.md) (corps de commentaire minimal).
 
 ## Sensors
 

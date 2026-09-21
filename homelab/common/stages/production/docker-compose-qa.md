@@ -38,7 +38,7 @@ Analyser syntaxe, compatibilité Swarm, réseaux / volumes / secrets, hardening 
 
 ### Step 3 — Cohérence Traefik
 
-Vérifier via **`traefik-manager-read`** que services, middlewares et entrypoints sont cohérents (aucune `configErrors`). Présenter les éléments modifiés / corrigés et la conformité, puis **mentionner le Tech Lead** (mention valide).
+Vérifier via **`traefik-manager-read`** que services, middlewares et entrypoints sont cohérents (aucune `configErrors`). Présenter les éléments modifiés / corrigés et la conformité, puis **mentionner le Tech Lead** (mention valide) en déposant le compte-rendu JSON en pièce jointe, au **format unique** [`report-format.md`](../../protocols/report-format.md) (corps de commentaire minimal).
 
 ## Sensors
 

@@ -30,8 +30,8 @@ Ton Leader te transmet le contexte, le périmètre et les critères dans sa ment
 
 Vérifie le fichier produit (syntaxe YAML, structure des services) et dépose-le téléchargeable sur l'issue (`multica attachment upload`). Ta **toute dernière action**, à chaque tâche (succès, échec OU blocage), est de publier sur l'issue un commentaire de compte-rendu qui **déclenche** ton Leader. Ce commentaire EST le compte-rendu ; sans lui le workflow s'arrête.
 
+- Le compte-rendu suit le **format unique** [`homelab/common/protocols/report-format.md`](../common/protocols/report-format.md) : dépose le JSON conforme (`review-docker-<stack>.json`) en **pièce jointe** (`--attachment`) ; le corps du commentaire est réduit au strict minimum (mention valide + `verdict` + « rapport JSON en pièce jointe »).
 - Le commentaire DOIT contenir la mention littérale et valide de ton Leader : `[@Stuart - Teach Lead Homelab](mention://agent/7d695bd3-69d5-4d92-b47b-7be344304529)`. Écrire « Stuart » en texte brut ne déclenche RIEN.
 - Publie ce commentaire **en réponse dans le thread** de la mission (`--parent <comment-id>`).
-- Récapitulatif : fichier livré, choix techniques, points d'attention.
 - Après publication, lis `trigger_outcomes` dans la réponse de la CLI ; statut `blocked` / `coalesced` / `deferred` → signale-le (tâche NON terminée) et corrige la mention.
 - Tu rends TOUJOURS compte au Leader, jamais à l'agent de notifications.
