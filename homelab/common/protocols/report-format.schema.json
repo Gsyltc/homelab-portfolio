@@ -88,7 +88,7 @@
         },
         "arbitrage_motif": {
           "type": ["string", "null"],
-          "description": "Une phrase expliquant le choix en jeu. Non-null UNIQUEMENT si arbitrage_requis = true (voir la contrainte conditionnelle)."
+          "description": "Motif d'arbitrage rédigé pour que le Tech Lead l'explique tel quel à l'humain : énonce le choix en jeu, les options (au moins deux) et le compromis / l'impact de chacune. Concis — 1 à 3 phrases, factuel, sans jargon interne ni rappel du workflow. Non-null UNIQUEMENT si arbitrage_requis = true (voir la contrainte conditionnelle)."
         }
       },
       "allOf": [

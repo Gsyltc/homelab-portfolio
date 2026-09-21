@@ -30,7 +30,7 @@ Le contrat complet (types, enums, obligations) est porté par [`report-format.sc
 - `points[]` — **trié par gravité décroissante (`critical` en tête)**. Plafond : **3 par défaut, 5 sur `security-patch` / `new-stack`**. Tableau vide = RAS.
 - Chaque `point` porte `constat` (quoi), `cause` (pourquoi) et `correction` (comment corriger — autosuffisant pour un autre agent), plus un `id` stable (`P1`, `P2`…).
 - `domaine_correction` — indice du rôle correcteur (**`null` autorisé** quand l'agent ne sait pas) ; c'est une **suggestion**, le Tech Lead tranche.
-- `arbitrage_requis` — l'agent **signale** qu'un choix non purement technique existe ; il **ne décide pas** de l'escalade. **Seul le Tech Lead** détecte l'arbitrage et décide de remonter à l'humain. `arbitrage_motif` est non-`null` **uniquement** si `arbitrage_requis = true`.
+- `arbitrage_requis` — l'agent **signale** qu'un choix non purement technique existe ; il **ne décide pas** de l'escalade. **Seul le Tech Lead** détecte l'arbitrage et décide de remonter à l'humain. `arbitrage_motif` (non-`null` **uniquement** si `arbitrage_requis = true`) est rédigé pour que **le Tech Lead l'explique tel quel à l'humain** : il énonce le **choix en jeu**, les **options** (au moins deux) et le **compromis / l'impact** de chacune. Assez détaillé pour éclairer la décision, **concis** pour autant : 1 à 3 phrases, factuel, sans jargon interne ni rappel du workflow.
 - `blocage` — non-`null` **uniquement** si `verdict = BLOQUE`.
 
 ## Traitement par le Tech Lead
@@ -38,4 +38,4 @@ Le contrat complet (types, enums, obligations) est porté par [`report-format.sc
 Le Tech Lead lit le `verdict` (aiguillage immédiat), télécharge le JSON attaché, agrège les `points` des différents spécialistes, puis :
 
 - **Renvoi à un agent correcteur** : délègue le(s) point(s) par `id` ; `constat` + `cause` + `correction` + `domaine_correction` suffisent à l'agent pour comprendre et corriger sans re-analyser. L'agent correcteur renvoie ensuite un compte-rendu au même format.
-- **Escalade humaine** : sur `arbitrage_requis = true` (ou tout choix structurant), le Tech Lead décide de l'escalade et présente l'arbitrage à l'humain (validation humaine granulaire, invariant). Les spécialistes ne s'adressent jamais directement à l'humain.
+- **Escalade humaine** : sur `arbitrage_requis = true` (ou tout choix structurant), le Tech Lead décide de l'escalade et **présente l'arbitrage à l'humain en s'appuyant sur `arbitrage_motif`** — qu'il reformule au besoin, mais qui doit déjà contenir le choix, les options et le compromis pour être explicable clairement (validation humaine granulaire, invariant). Les spécialistes ne s'adressent jamais directement à l'humain.
