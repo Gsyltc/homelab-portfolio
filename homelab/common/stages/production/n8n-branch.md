@@ -33,7 +33,7 @@ La demande est **entièrement** traitée par l'Expert n8n (aucune tâche n8n ex�
 
 ### Step 2 — Proposition → feu vert Tech Lead → validation humaine
 
-L'Expert n8n **propose** la conception ou les changements, les fait **valider par le Tech Lead** (mention valide), **n'applique rien** via le MCP avant ce feu vert, applique **après validation humaine explicite**, vérifie l'état du flux, puis **mentionne le Tech Lead** avec le compte-rendu JSON en pièce jointe, au **format unique** [`report-format.md`](../../protocols/report-format.md) (corps de commentaire minimal). Publication d'un flux : confirmation humaine explicite obligatoire.
+L'Expert n8n **propose** la conception ou les changements, les fait **valider par le Tech Lead** (mention valide), **n'applique rien** via le MCP avant ce feu vert, applique **après validation humaine explicite**, vérifie l'état du flux, puis **mentionne le Tech Lead** avec le récapitulatif. Publication d'un flux : confirmation humaine explicite obligatoire.
 
 ## Sensors
 
