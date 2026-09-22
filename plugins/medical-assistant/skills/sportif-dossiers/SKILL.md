@@ -28,7 +28,7 @@ Le dossier sportif est stocké là où sont stockés les dossiers médicaux, dan
 
 - `sport/programme-sportif.md` — **LE** programme sportif. Source de vérité unique. Contient : profil et objectifs du patient, équipement disponible, catalogue des exercices, planification sur 2 semaines, progression.
 - `sport/archives/` — versionnage du programme (voir plus bas).
-- `sport/suivi-sportif.md` — suivi des séances et retours du patient : chaque séance effectuée est confirmée par le patient ou l'humain et retranscrite avec sa date ; les retours (difficulté, facilité, ressenti, autres commentaires) y sont consignés. Ce fichier n'est pas versionné : c'est un journal chronologique.
+- `sport/suivi-sportif.md` — suivi des séances et retours du patient : chaque séance effectuée est confirmée par le patient ou l'humain et retranscrite avec sa date ; pour chaque exercice réalisé, consigner la **charge utilisée** (en kg, ou « poids du corps »). Les retours (difficulté, facilité, ressenti, autres commentaires) y sont consignés. Ce fichier n'est pas versionné : c'est un journal chronologique. La dernière charge enregistrée par exercice sert de « poids de la dernière séance » dans `programme-sportif.md`.
 - `sport/programme-sportif.pdf` — export PDF téléchargeable du programme. Régénéré uniquement quand le programme a évolué (voir « Export PDF »).
 
 ## Contenu d'un exercice — MINIMUM OBLIGATOIRE
@@ -39,6 +39,7 @@ Chaque exercice du programme décrit AU MINIMUM :
 - **Nombre de séries**
 - **Nombre de répétitions**
 - **Délai de repos entre les séries**
+- **Poids de la dernière séance** — dernière charge réellement utilisée par le patient sur cet exercice, pour que l'humain sache quel poids régler sur l'appareil. Format : `Dernière séance : <charge> kg`. Poids du corps → `Dernière séance : poids du corps`. Aucun historique → `Dernière séance : — (nouveau)`.
 
 Compléments recommandés selon les bonnes pratiques courantes des coachs de fitness : objectif de l'exercice, type / appareil utilisé, localisation des efforts (groupes musculaires ciblés), durée (pour le cardio), poids recommandé / progression, intensité, posture et points d'attention. Les valeurs (séries, répétitions, repos, poids) sont choisies selon les recommandations courantes de la profession et adaptées à la capacité et à la santé du patient.
 
