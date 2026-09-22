@@ -33,7 +33,7 @@ Traiter toute demande Home Assistant via MCP officiel, sous séquence de validat
 
 ### Step 2 — Confirmer l'effet réel et rendre compte
 
-Relire l'état des entités pour confirmer l'effet réel, puis **mentionner le Tech Lead** (mention valide) avec le récapitulatif.
+Relire l'état des entités pour confirmer l'effet réel, puis appliquer le **geste de fin de mission** [`../../protocols/producer-report.md`](../../protocols/producer-report.md) : souvent aucun fichier (livrable appliqué via MCP) — joindre un fichier **seulement s'il existe** ; corps minimal (mention valide du Tech Lead + une ligne de statut `proposé` / `appliqué` / `bloqué`), zéro prose.
 
 ## Sensors
 
