@@ -1,12 +1,12 @@
 ---
 name: configuration-applications
-description: "Configuration des applications (stacks) du Homelab pour le Spécialiste Terraform : processus à suivre, déduction automatique des 4 informations obligatoires d'une stack depuis le docker compose (type d'authentification via middlewares Traefik, cloudflare_dns_nb, domaine, criticité Kuma), et template obligatoire du fichier de configuration (Général, Cloudflare, Uptime Kuma, Authentik OAuth/ForwardAuth). Le template est le format de sortie officiel d'une configuration de stack."
+description: "Configuration des applications (stacks) du Homelab pour André - Spécialiste Terraform : processus à suivre, déduction automatique des 4 informations obligatoires d'une stack depuis le docker compose (type d'authentification via middlewares Traefik, cloudflare_dns_nb, domaine, criticité Kuma), et template obligatoire du fichier de configuration (Général, Cloudflare, Uptime Kuma, Authentik OAuth/ForwardAuth). Le template est le format de sortie officiel d'une configuration de stack."
 ---
-Skill « Configuration des applications » pour le Spécialiste Terraform. Elle définit le processus à suivre et le format de sortie obligatoire du fichier de configuration d'une stack du Homelab.
+Skill « Configuration des applications » pour André (Spécialiste Terraform). Elle définit le processus à suivre et le format de sortie obligatoire du fichier de configuration d'une stack du Homelab.
 
 ## Objectif
 
-Permettre au Spécialiste Terraform de configurer les services d'une stack Docker Swarm côté Terraform :
+Permettre à André de configurer les services d'une stack Docker Swarm côté Terraform :
 
 - savoir quelles informations réunir avant d'écrire une configuration, et où les trouver ;
 - produire un fichier de configuration au format standard du Homelab : **le template défini dans [references/template-stack.md](references/template-stack.md) est le format de sortie officiel de toute configuration de stack**. Ce fichier alimente ensuite les playbooks Terraform (`cloudflare`, `swarm`, `updatime_kuma`, configuration Authentik).
@@ -29,7 +29,7 @@ Permettre au Spécialiste Terraform de configurer les services d'une stack Docke
 3. Rassembler les autres valeurs (nom, descriptions, URLs, icône, éditeur, groupe Authentik, URIs OAuth…) depuis le docker compose et la demande ; toute donnée manquante se demande à l'humain — ne jamais inventer une valeur.
 4. Rédiger le fichier de configuration en respectant strictement le template défini dans [references/template-stack.md](references/template-stack.md) : toutes les variables des blocs Général, Cloudflare et Kuma sont présentes ; les sections d'authentification (commune, OAuth, ForwardAuth) ne sont écrites que si au moins un service utilise le mode concerné — jamais de bloc vide pour un mode non utilisé.
 5. Relire : une entrée de tableau par service concerné (longueurs cohérentes), domaine conforme au fichier des domaines, valeurs `kuma_*` conformes au niveau de criticité choisi, aucune section d'authentification vide (blocs non utilisés omis), aucun secret en clair.
-6. Soumettre le fichier sur l'issue pour validation (Tech Lead Homelab puis validation humaine explicite) avant toute application Terraform.
+6. Soumettre le fichier sur l'issue pour validation (Stuart puis validation humaine explicite) avant toute application Terraform.
 
 ## Déduction des informations obligatoires (analyse du docker compose)
 
