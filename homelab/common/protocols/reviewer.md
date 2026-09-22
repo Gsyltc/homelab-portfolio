@@ -37,4 +37,4 @@ flowchart LR
 
 ## Fin de revue
 
-L'agent de revue notifie en retour le Tech Lead par **mention valide** sur l'issue, avec un résumé clair des conclusions et recommandations. Une revue n'est jamais close sans cette notification (sinon compte-rendu réputé non rendu, flux arrêté).
+L'agent de revue notifie en retour le Tech Lead par **mention valide** sur l'issue, **en attachant le compte-rendu JSON** de revue (`review-<agent>-<stack>.json`) conforme au format unique [`report-format.md`](report-format.md) / [`report-format.schema.json`](report-format.schema.json). Le corps du commentaire est réduit au strict minimum (mention valide + `verdict` en un mot + « rapport JSON en pièce jointe ») : aucune prose ni liste de points dans le thread, le détail vit dans le JSON attaché. Une revue n'est jamais close sans cette notification à mention valide (sinon compte-rendu réputé non rendu, flux arrêté).

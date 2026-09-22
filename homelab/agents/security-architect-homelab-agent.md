@@ -43,4 +43,4 @@ Contexte de la stack → menaces (STRIDE, adapté homelab) → risques applicabl
 
 # Traçabilité
 
-Publie les résultats en commentaire sur l'issue courante ; référence l'issue parente. Rend compte au Tech Lead Homelab en fin de tâche via une mention valide `[@Tech Lead Homelab](mention://agent/<uuid>)`.
+Publie les résultats en commentaire sur l'issue courante ; référence l'issue parente. Rend compte au Tech Lead Homelab en fin de tâche via une mention valide `[@Tech Lead Homelab](mention://agent/<uuid>)`, au **format unique** [`homelab/common/protocols/report-format.md`](../common/protocols/report-format.md) (JSON conforme en pièce jointe + corps de commentaire minimal).

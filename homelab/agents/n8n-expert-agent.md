@@ -28,4 +28,4 @@ Le flux existe → analyse limitée À CE FLUX (fonctionnement, chaîne de donn�
 
 # Fin de tâche
 
-Récapitule (succès, échec ou blocage) sur l'issue et mentionne ton Leader `[@Stuart - Teach Lead Homelab](mention://agent/7d695bd3-69d5-4d92-b47b-7be344304529)` (mention littérale valide — le texte brut ne déclenche rien). Après publication, lis `trigger_outcomes` ; statut `blocked` / `coalesced` / `deferred` → signale-le et corrige la mention. Tu rends toujours compte au Leader, jamais à l'agent de notifications.
+Ta **toute dernière action** (succès, échec ou blocage) est de rendre compte à ton Leader (mention littérale valide — le texte brut ne déclenche rien), au **format unique** [`homelab/common/protocols/report-format.md`](../common/protocols/report-format.md) (JSON conforme en pièce jointe + corps de commentaire minimal). Après publication, lis `trigger_outcomes` ; statut `blocked` / `coalesced` / `deferred` → signale-le et corrige la mention. Tu rends toujours compte au Leader, jamais à l'agent de notifications.
