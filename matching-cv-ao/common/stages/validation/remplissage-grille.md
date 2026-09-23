@@ -32,8 +32,8 @@ Grille fournie → remplir. Grille absente → halt-and-ask, mention explicite d
 ### Step 2 — Remplissage
 Pour chaque critère de la grille, renseigner le(s) profil(s) correspondant(s) avec les données du matching validé (issues de l'artefact JSON `resultats-valides`). L'artefact produit `grille-remplie` est joint à l'issue (JSON / fichier de grille).
 
-### Step 3 — Validation (gate humaine, action seule)
-Présenter la grille remplie à l'humain pour validation via un **récap Markdown limité à l'action** (mention de l'humain + « valider la grille remplie — voir `grille-remplie` »). Les données restent dans l'artefact joint ; ne pas les reformuler en prose.
+### Step 3 — Validation (gate humaine, présentation détaillée)
+Présenter la grille remplie à l'humain **en clair et en détail** (contenu de chaque critère et le(s) profil(s) qui y répond(ent), avec les données du matching validé), puis demander la validation (mention de l'humain + « valider la grille remplie »). L'artefact `grille-remplie` reste joint comme source ; la présentation à l'humain **reprend son contenu**, elle ne se limite pas à le pointer.
 
 ## Sensors
 Outputs: `grille-remplie` → Phase Validation (gate: granular).

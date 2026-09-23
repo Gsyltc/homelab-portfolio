@@ -26,7 +26,7 @@ flowchart LR
 
 ### 3. Production
 - La fonction `lead_agent` produit les artefacts `produces`, dans la langue de l'humain.
-- **Agent ↔ Agent = fichier JSON joint** (message A2A, schéma unique dans `governance-security`) : le livrable et son contexte voyagent dans un **JSON téléversé** (`multica attachment`), pas en prose dans le fil. **Agent ↔ Humain** : Markdown uniquement, **et seulement aux gates humaines**, limité à l'action.
+- **Agent ↔ Agent = fichier JSON joint** (message A2A, schéma unique dans `governance-security`) : le livrable et son contexte voyagent dans un **JSON téléversé** (`multica attachment`), pas en prose dans le fil. **Agent ↔ Humain** : Markdown **détaillé aux gates humaines** (présentation finale très détaillée) — l'humain lit une restitution lisible et complète, jamais du JSON brut.
 - Chaque décision structurante est tracée sur l'issue.
 - L'agent trace son avancement sur l'issue (piste d'audit au fil de l'eau).
 

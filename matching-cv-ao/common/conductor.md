@@ -18,7 +18,7 @@ Ce fichier est la **source unique** des instructions du **coordinateur** du work
 
 | Fonction | Rôle |
 | --- | --- |
-| **Coordinateur Matching** | Orchestre le flux, contrôle les livrables, demande validations humaines (Keep/Modify/Redo), traduit le JSON joint en Markdown **aux gates humaines uniquement**. |
+| **Coordinateur Matching** | Orchestre le flux, contrôle les livrables, demande validations humaines (Keep/Modify/Redo), présente aux gates humaines une **restitution Markdown détaillée** du JSON joint (présentation finale très détaillée). |
 | **Analyste RFP** | Parse le PDF d'AO, extrait exigences + profils recherchés, produit le **résumé JSON** (joint à l'issue). **Évalue l'expertise de firme** (objet `expertise_firme`) face à une exigence d'expérience de firme en s'appuyant sur le référentiel `${ROOT_DIRECTORY}/clients/*.json` — **non bloquant**, gate humaine légère si les minimums ne sont pas atteints. |
 | **Gestionnaire CV** | Récupère les CV sources fournis en **pièces jointes de l'issue** (via `multica attachment`), en extrait les données puis **supprime la copie de travail** (originaux non conservés) ; met à jour les analyses versionnées. **Filtre l'éligibilité vis-à-vis de l'AO** (axes Études / MIFI si nécessaire / Expériences → 3 états `possible`/`a_verifier`/`exclu`) et **ne transmet pas les CV** au coordinateur — seulement le verdict d'éligibilité (retenus + à vérifier + exclus/raisons) et la référence `analyse_json` des retenus. **Maintient le référentiel des contextes clients** `${ROOT_DIRECTORY}/clients/<nom-client>.json` (contexte des sociétés + mandats réalisés) lorsqu'un CV long contient un contexte client — complète/enrichit, jamais d'écrasement aveugle. |
 | **Matcher Profils** | Croise exigences AO ↔ profils CV **des seuls retenus** transmis par le coordinateur, calcule le score pondéré, classe les profils ; conserve la conformité études (AO gouvernemental) en **double check** aval sur les retenus. |
@@ -27,7 +27,7 @@ Ce fichier est la **source unique** des instructions du **coordinateur** du work
 
 ## Communication
 
-Vecteurs de communication (A2A = fichier JSON joint + commentaire minimal mention active ; Agent↔Humain = Markdown réservé aux gates humaines, limité à l'action) : **définis une seule fois** dans le protocole `governance-security` (§ Règle A2A + « Deux formes de commentaire »). S'y référer.
+Vecteurs de communication (A2A = fichier JSON joint + commentaire minimal mention active ; Agent↔Humain = Markdown **détaillé** aux gates humaines, **présentation finale très détaillée**) : **définis une seule fois** dans le protocole `governance-security` (§ Règle A2A + « Deux formes de commentaire » + Invariant §5). S'y référer.
 
 ---
 
@@ -141,7 +141,7 @@ La piste d'audit vit **sur l'issue Multica**, jamais dans un fichier séparé. C
 ## OBLIGATOIRE : langue et format
 
 - Rédiger **tous les documents dans la langue de l'humain (français par défaut)**.
-- Vecteurs de communication (A2A = JSON joint ; Agent↔Humain = Markdown aux gates humaines) : voir le protocole `governance-security` (§ Règle A2A) — non répétés ici.
+- Vecteurs de communication (A2A = JSON joint ; Agent↔Humain = Markdown **détaillé** aux gates humaines, présentation finale très détaillée) : voir le protocole `governance-security` (§ Règle A2A) — non répétés ici.
 - Ne jamais inclure de secrets, mots de passe ou identifiants dans les livrables (JSON joint compris).
 - **Ne jamais inventer une grille d'évaluation** — la demander si absente.
 
@@ -149,7 +149,7 @@ La piste d'audit vit **sur l'issue Multica**, jamais dans un fichier séparé. C
 
 ## Garde-fous — invariants non contournables
 
-Les **invariants non contournables** (validation humaine granulaire, piste d'audit sur l'issue, aucune action à impact sans validation explicite, ne jamais inventer une grille, communication agent↔agent = fichier JSON joint / prose Markdown réservée aux gates humaines) sont **définis une seule fois** dans le protocole `governance-security` (§ Invariants non contournables) : s'y référer. Aucun scope, aucune règle apprise, aucun gate/sensor advisory ne peut les affaiblir.
+Les **invariants non contournables** (validation humaine granulaire, piste d'audit sur l'issue, aucune action à impact sans validation explicite, ne jamais inventer une grille, communication agent↔agent = fichier JSON joint / **présentation agent↔humain Markdown détaillée aux gates, présentation finale très détaillée**) sont **définis une seule fois** dans le protocole `governance-security` (§ Invariants non contournables) : s'y référer. Aucun scope, aucune règle apprise, aucun gate/sensor advisory ne peut les affaiblir.
 
 ---
 

@@ -23,15 +23,17 @@ outputs: "Profils validés par l'humain"
 # Présentation des résultats
 
 ## Objectif
-Présenter chaque profil à l'humain pour validation granulaire (Keep/Modify/Redo par profil). **Gate humaine** : le récap Markdown est **conservé mais limité à l'action** (Keep/Modify/Redo par profil) ; les données détaillées vivent dans le JSON joint `classement-final` (l'humain n'en lit jamais le brut).
+Présenter chaque profil à l'humain pour validation granulaire (Keep/Modify/Redo par profil). **Gate humaine granulaire** : la présentation Markdown reste **DÉTAILLÉE, profil par profil** — l'humain lit le détail complet de chaque profil pour décider, pas un simple pointeur vers le JSON. Le JSON joint `classement-final` reste la source/piste d'audit.
+
+> **Présentation détaillée (exigence humaine).** La réduction de prose vaut pour les échanges A2A (JSON joint), **pas** pour la présentation à l'humain aux gates. Le détail par critère, la recommandation et la justification sont **repris en clair** pour chaque profil.
 
 ## Steps
-### Step 1 — Présentation profil par profil (récap limité à l'action)
-Pour chaque profil (dans l'ordre du classement `classement-final`), présenter un **récap Markdown minimal** pointant le JSON : nom, score total, et la **décision demandée** — ✅ Keep / 💬 Modify / ❌ Redo. Le détail par critère (compétences, expérience, études, disponibilité), la recommandation et la justification restent dans le JSON joint ; ne pas les recopier en prose au-delà de ce qui éclaire la décision.
+### Step 1 — Présentation profil par profil (DÉTAILLÉE)
+Pour chaque profil (dans l'ordre du classement `classement-final`), présenter en Markdown, **en clair**, le détail utile à la décision : **nom**, **score total**, **détail par critère** (compétences, expérience, études, disponibilité), **recommandation**, **justification**, et — pour un AO gouvernemental — le **statut de conformité des études** (et le motif si `exclu`). Terminer chaque profil par la **décision demandée** : ✅ Keep / 💬 Modify / ❌ Redo. Le JSON joint `classement-final` reste la source ; la présentation à l'humain le **reprend en clair**, elle ne se limite pas à le pointer.
 
 ### Step 2 — Traitement des Modify/Redo
-Sur Modify : ajuster et re-présenter **cet élément uniquement** (récap limité à l'action).
-Sur Redo : proposer une alternative et relancer **cet élément uniquement**.
+Sur Modify : ajuster et re-présenter **cet élément uniquement** (avec le même niveau de détail).
+Sur Redo : proposer une alternative et relancer **cet élément uniquement** (présentation détaillée).
 Ne jamais avancer sur un profil non validé.
 
 ### Step 3 — Synthèse des validations (piste d'audit)

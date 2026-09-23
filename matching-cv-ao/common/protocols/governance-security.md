@@ -25,7 +25,7 @@ Un agent est déclenché par un **commentaire sur l'issue** qui porte deux chose
 | Cas | Mention | Texte du commentaire |
 | --- | --- | --- |
 | **Délégation SANS gate humaine** (handoff A2A pur) | `[@Agent](mention://agent/<uuid>)` **actif** | **Aucune prose.** Réduit à la mention + le **nom du fichier JSON joint**. Ex. `[@Matcher Profils](mention://agent/<uuid>) — scores prêts → classement-final.json` |
-| **Gate humaine REQUISE** | mention de **l'humain** | **La seule action à effectuer**, sans reformuler le contenu. Ex. `[@Humain](mention://member/<uuid>) : valider 3 profils — Keep/Modify/Redo — voir presentation.json` |
+| **Gate humaine REQUISE** | mention de **l'humain** | **Présentation Markdown DÉTAILLÉE** du contenu à décider (profils, scores, détail par critère, justifications, exclusions/raisons…) **reprise en clair** dans le commentaire, close par l'action à effectuer. La **présentation finale reste très détaillée**. Le JSON joint est la source/audit, pas un substitut à la présentation. Ex. `[@Humain](mention://member/<uuid>) : 3 profils à valider — Keep/Modify/Redo` suivi du détail par profil. |
 
 > **Anti-wake parasite (règle générale, tous agents)** : **aucun agent ne se mentionne lui-même** avec un lien de mention actif dans une consigne de délégation — un tel lien, posté dans son propre commentaire, déclenche un run parasite de cet agent (observé sur EXPE-54). L'assigneur **désigne l'agent de retour par son nom, en texte clair** (« reviens vers moi, <Nom de l'assigneur> ») ; la construction du lien de mention actif revient **toujours à l'agent délégataire**, jamais à l'assigneur.
 
@@ -77,7 +77,7 @@ Aucun scope, aucune règle apprise, aucun gate/sensor advisory ne peut affaiblir
 2. **Piste d'audit** sur l'issue.
 3. **Aucune action à impact** sans validation humaine explicite.
 4. **Ne jamais inventer une grille d'évaluation** — la demander si absente.
-5. **Communication agent↔agent = fichier JSON joint** (schéma « message A2A » ci-dessus), commentaire réduit à la mention active + nom du fichier ; **prose Markdown réservée aux gates humaines**, limitée à l'action à effectuer.
+5. **Communication agent↔agent = fichier JSON joint** (schéma « message A2A » ci-dessus), commentaire réduit à la mention active + nom du fichier. **Communication agent↔humain = Markdown DÉTAILLÉ aux gates humaines** : l'humain lit une présentation lisible et complète (la **présentation finale reste très détaillée**), jamais du JSON brut ni un simple pointeur. La réduction de prose vaut **uniquement pour les échanges A2A**, jamais pour les présentations aux gates humaines.
 
 ## Protection contre les entrées non fiables (UNTRUSTED DATA)
 

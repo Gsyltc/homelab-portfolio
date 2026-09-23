@@ -135,7 +135,7 @@ Le workflow capitalise le **contexte des sociétés clientes** et les **mandats 
 ## Communication
 
 - **Agent ↔ Agent** : **fichier JSON joint à l'issue** (message A2A — schéma défini une seule fois dans `common/protocols/governance-security.md`). Le commentaire est **minimal** : lien de mention **actif** `[@Agent](mention://agent/<uuid>)` + nom du fichier JSON joint. La mission et le livrable ne transitent **jamais en prose** dans le fil.
-- **Agent ↔ Humain** : Markdown **réservé aux gates humaines** (`presentation-resultats`, `remplissage-grille`, `livraison`), **limité à l'action** à effectuer (l'humain ne lit jamais de JSON brut). Aux étapes purement A2A, plus de récap Markdown.
+- **Agent ↔ Humain** : Markdown **détaillé aux gates humaines** (`presentation-resultats`, `remplissage-grille`, `livraison`, `mise-a-jour-cv`) — **présentation finale très détaillée** (profils, scores, détail par critère, justifications, exclusions/raisons), l'humain lit une restitution lisible et complète, jamais du JSON brut. Aux étapes purement A2A, plus de récap Markdown (JSON joint).
 
 > **Invariant préservé** : le lien de mention A2A reste **actif** (UUID résolu à chaque fois via `multica agent list --output json`, jamais auto-mention — anti-wake EXPE-54, `trigger_outcomes` vérifiés — EXPE-58). La réduction de prose ne touche qu'au texte **autour** du lien, jamais au lien lui-même. Le JSON joint **est** la piste d'audit ; le commentaire minimal la référence.
 
