@@ -15,7 +15,7 @@ Portée : aiguillage **GO / RENVOI** au niveau macro. Le Tech Lead vérifie uniq
 
 Portée : sécurité de base d'un homelab (secrets, exposition réseau, permissions, durcissement Docker/Swarm, cohérence Traefik, absence de `${SNI}`). **Aucune notion de Loi 25 / PCI DSS / GDPR / LPRPDE.**
 
-- **QA Docker** — contrôle sécurité **technique** (revue adversariale) : hardening, secrets `_FILE`, exposition, permissions, cohérence Traefik via `traefik-manager-read`.
+- **QA Docker** — contrôle sécurité **technique** (revue adversariale) : hardening, secrets `_FILE`, exposition, permissions, cohérence Traefik via `traefik-manager-read`. **Le QA contrôle et classifie** (critical / warning / info) : tout défaut est renvoyé au Spécialiste Docker (agent créateur) via le rapport JSON (`verdict = RENVOI`, points autosuffisants).
 - **Architecte de sécurité Homelab** — **jugement** de posture (voix adoptée / sollicité pour les décisions structurantes de sécurité et la couche `global` des règles).
 - **Déclenché systématiquement** dès qu'un stage produit ou modifie une surface de sécurité (compose, Terraform, hardening, exposition, Traefik, secrets).
 - Procédure : le Tech Lead poste un commentaire mentionnant le QA Docker (UUID résolu via `multica agent list --output json`) avec le contexte et le résumé des modifications ; **attend l'analyse** ; intègre les recommandations **avant** la validation humaine.

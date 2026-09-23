@@ -37,5 +37,5 @@ Le contrat complet (types, enums, obligations) est porté par [`report-format.sc
 
 Le Tech Lead lit le `verdict` (aiguillage immédiat), télécharge le JSON attaché, agrège les `points` des différents spécialistes, puis :
 
-- **Renvoi à un agent correcteur** : délègue le(s) point(s) par `id` ; `constat` + `cause` + `correction` + `domaine_correction` suffisent à l'agent pour comprendre et corriger sans re-analyser. L'agent correcteur renvoie ensuite un compte-rendu au même format.
+- **Renvoi à l'agent créateur** : sur `verdict = RENVOI` d'un QA, le Tech Lead délègue la correction au **Spécialiste Docker** (auteur du livrable), jamais au QA ; il transmet les `points[]` par `id` (`constat` + `cause` + `correction` + `domaine_correction` autosuffisants). Le Spécialiste Docker corrige, puis le compose corrigé **repasse par le QA** (contrôle, pas correction). Le QA ne modifie jamais le livrable lui-même.
 - **Escalade humaine** : sur `arbitrage_requis = true` (ou tout choix structurant), le Tech Lead décide de l'escalade et **présente l'arbitrage à l'humain en s'appuyant sur `arbitrage_motif`** — qu'il reformule au besoin, mais qui doit déjà contenir le choix, les options et le compromis pour être explicable clairement (validation humaine granulaire, invariant). Les spécialistes ne s'adressent jamais directement à l'humain.
