@@ -4,13 +4,7 @@ Protocole transverse consolidant la gouvernance multi-agents, les invariants non
 
 ## Acteurs et responsabilités
 
-| Fonction | Rôle |
-| --- | --- |
-| **Humain (demandeur / valideur)** | Fournit l'AO (PDF), la grille d'évaluation, arbitre, valide **chaque** profil (granulaire). |
-| **Coordinateur Matching** | Orchestre le flux, contrôle les livrables, demande les validations, traduit JSON→Markdown pour l'humain. Ne produit pas les livrables. |
-| **Analyste RFP** | Parse le PDF d'AO, extrait exigences + profils recherchés. |
-| **Gestionnaire CV** | Lit et met à jour les CV des collaborateurs. |
-| **Matcher Profils** | Croise exigences ↔ profils, calcule le score pondéré, classe les profils. |
+Le tableau détaillé des rôles (Humain, Coordinateur Matching, Analyste RFP, Gestionnaire CV, Matcher Profils) est **défini une seule fois** dans `conductor.md` (§ Rôles attendus). Rappel des principes de gouvernance : l'**Humain** fournit l'AO et la grille, arbitre et valide **chaque** profil (granulaire) ; le **Coordinateur Matching** orchestre et contrôle les livrables mais **ne les produit pas** ; les **agents spécialistes** (Analyste RFP, Gestionnaire CV, Matcher Profils) produisent les livrables de leur domaine.
 
 ## Règle A2A
 

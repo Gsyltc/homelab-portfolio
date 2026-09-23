@@ -27,8 +27,7 @@ Ce fichier est la **source unique** des instructions du **coordinateur** du work
 
 ## Communication
 
-- **Agent ↔ Agent** : **fichier JSON joint à l'issue** (message A2A — schéma unique dans `governance-security`). Le commentaire est **minimal** : mention active `[@Agent](mention://agent/<uuid>)` + nom du fichier JSON joint. Pas de prose de mission/livrable dans le fil.
-- **Agent ↔ Humain** : Markdown, **uniquement aux gates humaines**, limité à l'action à effectuer (l'humain ne lit jamais de JSON brut).
+Vecteurs de communication (A2A = fichier JSON joint + commentaire minimal mention active ; Agent↔Humain = Markdown réservé aux gates humaines, limité à l'action) : **définis une seule fois** dans le protocole `governance-security` (§ Règle A2A + « Deux formes de commentaire »). S'y référer.
 
 ---
 
@@ -142,8 +141,7 @@ La piste d'audit vit **sur l'issue Multica**, jamais dans un fichier séparé. C
 ## OBLIGATOIRE : langue et format
 
 - Rédiger **tous les documents dans la langue de l'humain (français par défaut)**.
-- **Agent ↔ Agent** : **fichier JSON joint** (message A2A) ; commentaire réduit à la mention active + nom du fichier.
-- **Agent ↔ Humain** : Markdown **réservé aux gates humaines**, limité à l'action à effectuer.
+- Vecteurs de communication (A2A = JSON joint ; Agent↔Humain = Markdown aux gates humaines) : voir le protocole `governance-security` (§ Règle A2A) — non répétés ici.
 - Ne jamais inclure de secrets, mots de passe ou identifiants dans les livrables (JSON joint compris).
 - **Ne jamais inventer une grille d'évaluation** — la demander si absente.
 
@@ -151,13 +149,7 @@ La piste d'audit vit **sur l'issue Multica**, jamais dans un fichier séparé. C
 
 ## Garde-fous — invariants non contournables
 
-Aucun scope, aucune règle apprise, aucun gate/sensor advisory ne peut désactiver :
-
-- **Validation humaine granulaire** (chaque profil validé / rejeté séparément).
-- **Piste d'audit** sur l'issue.
-- **Aucune action à impact** sans validation humaine explicite.
-- **Ne jamais inventer une grille d'évaluation** — la demander si absente.
-- **Communication agent↔agent = fichier JSON joint** (message A2A) ; prose Markdown **réservée aux gates humaines**, limitée à l'action.
+Les **invariants non contournables** (validation humaine granulaire, piste d'audit sur l'issue, aucune action à impact sans validation explicite, ne jamais inventer une grille, communication agent↔agent = fichier JSON joint / prose Markdown réservée aux gates humaines) sont **définis une seule fois** dans le protocole `governance-security` (§ Invariants non contournables) : s'y référer. Aucun scope, aucune règle apprise, aucun gate/sensor advisory ne peut les affaiblir.
 
 ---
 

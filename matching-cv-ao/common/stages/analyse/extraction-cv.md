@@ -29,7 +29,7 @@ Récupérer les CV sources des collaborateurs **fournis en pièces jointes de l'
 
 ## Steps
 ### Step 1 — Délégation au Gestionnaire CV
-**Téléverser un fichier JSON de mission** (type `delegation` du **message A2A**, schéma unique dans `governance-security`) via `multica attachment`, puis poster un commentaire **minimal** : mention active `[@Gestionnaire CV](mention://agent/<uuid>)` + nom du fichier JSON joint. Le contenu de mission ci-dessous vit **dans le JSON joint**, pas en prose dans le fil :
+Déléguer au Gestionnaire CV selon la **procédure de délégation A2A définie une seule fois dans `stage-protocol` (temps 2)** : JSON de mission joint (type `delegation` du message A2A) + commentaire **minimal** = mention active `[@Gestionnaire CV](mention://agent/<uuid>)` + nom du fichier JSON joint. Le contenu de mission ci-dessous vit **dans le JSON joint**, pas en prose dans le fil :
 - pour chaque collaborateur, **récupérer le(s) CV source(s) depuis les pièces jointes de l'issue** (via `multica attachment` ; jamais en ouvrant une URL de ressource Multica) et en extraire les informations structurées ;
 - pour **chaque compétence**, renseigner le **nombre de mois d'expérience** (`mois_experience`) et la **date de dernière utilisation** (`derniere_utilisation`) ;
 - pour **chaque expérience**, renseigner `date_debut` et `date_fin` au format `AAAA-MM` (`date_fin: "present"` si la mission est en cours), en plus de `duree_mois`, ainsi que les **méthodologies** (`methodologies`) et **technologies** (`technologies`) mobilisées sur la mission (**ne rien inventer** : `[]` si non mentionnées). Ces dates sont **celles de l'expérience elle-même**, indépendantes des projets (une expérience peut couvrir des périodes sans projet détaillé) ;
@@ -78,11 +78,7 @@ Le coordinateur présente à l'humain un **récap Markdown limité à l'action**
 ### Step 5 — Retour de délégation A2A (OBLIGATOIRE — dernière action)
 > ⛔ Le stage n'est **pas terminé** tant que ce Step n'est pas accompli. Voir la **checklist de sortie de stage** du protocole `stage-protocol`.
 
-En toute fin de tâche, le **Gestionnaire CV** **téléverse un JSON de retour** (type `retour` du message A2A — résultat + artefacts produits, `cv-eligibilite` / `cv-profils`) et clôt son commentaire **minimal** par un **lien de mention actif** vers le **Coordinateur Matching** (l'assigneur) + le nom du fichier JSON joint : `[@Coordinateur Matching](mention://agent/<uuid>) — cv-eligibilite.json`. **Aucune reformulation du livrable en prose.**
-- UUID **résolu à chaque fois** via `multica agent list --output json` à partir du **nom** de l'assigneur donné en texte clair dans la mission — **jamais** copié depuis la consigne de délégation ni codé en dur.
-- **Seul ce lien actif enqueue le run de reprise du Coordinateur.** Une adresse en texte clair (« prêt pour la gate ») n'enqueue **aucun** run (incident EXPE-58).
-- **Ne pas s'auto-mentionner** avec un lien actif (anti-wake parasite).
-- Après le post, **vérifier les `trigger_outcomes`** ; si le run attendu n'est pas déclenché (`blocked`/`coalesced`/`deferred`) → **halt-and-ask** sur l'issue, ne pas conclure.
+En toute fin de tâche, le **Gestionnaire CV** applique la **procédure de retour de délégation définie une seule fois dans `stage-protocol` (temps 3 + checklist de sortie de stage)** : JSON de retour joint (type `retour` du message A2A — résultat + artefacts produits, `cv-eligibilite` / `cv-profils`) + commentaire **minimal** clos par le lien de mention **actif** vers l'assigneur (le **Coordinateur Matching**) + le nom du fichier JSON — ici `[@Coordinateur Matching](mention://agent/<uuid>) — cv-eligibilite.json`, sans reformuler le livrable en prose. La résolution d'UUID, l'anti-wake, l'incident EXPE-58 et la vérification `trigger_outcomes` sont couverts par ce protocole (ne pas les redétailler).
 
 ## Sensors
 Outputs: `cv-profils`, `cv-eligibilite`, `clients-contextes` → Phase Analyse (gate: light). `cv-eligibilite` porte le verdict d'éligibilité vis-à-vis de l'AO (3 états) et alimente le matching (seuls les `possible` sont scorés). `clients-contextes` (référentiel `${ROOT_DIRECTORY}/clients/<nom-client>.json` — contexte + mandats, mis à jour uniquement pour les CV contenant un contexte client) alimente l'analyse d'**expertise de firme** de l'Analyste RFP (voir `parse-ao.md` et la compétence `rfp-analyse`).
