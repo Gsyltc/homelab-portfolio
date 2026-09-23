@@ -32,11 +32,8 @@ Vérifier que l'AO est disponible : PDF, DOCX ou contenu de l'issue. Si absent, 
 ### Step 2 — Création de la structure de répertoire
 Créer le répertoire de destination : `${ROOT_DIRECTORY}/ao/<client>/<titre-ao>/`. Copier l'AO dans ce répertoire.
 
-### Step 3 — Documenter la réception
-Poster un commentaire sur l'issue avec :
-- Nom du fichier PDF reçu
-- Chemin de stockage
-- Date de réception
+### Step 3 — Documenter la réception (piste d'audit)
+Tracer la réception sur l'issue comme **artefact JSON joint** `ao-pdf-received` (`multica attachment`), portant : nom du fichier PDF reçu, chemin de stockage, date de réception. Stage `inline` sans gate humaine → **pas de récap Markdown**, pas de mention A2A ; le commentaire se limite à référencer l'artefact joint (trace d'audit).
 
 ## Sensors
 Outputs: `ao-pdf-received` → Phase Initialisation (gate: none).

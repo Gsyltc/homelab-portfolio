@@ -7,7 +7,7 @@ Deux natures de revue coexistent dans le workflow, adaptées au domaine matching
 Portée : cohérence **exigences AO ↔ profils extraits**, absence de conflits entre critères, complétude / structure / format des livrables JSON.
 
 - **Portée par une fonction « review-only » distincte** : le **Reviewer de cohérence** (si existant dans le workspace), sollicité par mention A2A **par le coordinateur** à réception d'un livrable d'un agent spécialiste.
-- Vérifie : correspondance exigences ↔ profils, absence de critère non tracé, absence de profil orphelin, respect des conventions (format JSON, communication agent↔agent en JSON, agent↔humain en Markdown).
+- Vérifie : correspondance exigences ↔ profils, absence de critère non tracé, absence de profil orphelin, respect des conventions (format JSON, **communication agent↔agent par fichier JSON joint** — commentaire minimal = mention active + nom de fichier —, prose Markdown **réservée aux gates humaines** et limitée à l'action ; voir `governance-security` « Règle A2A »).
 - Verdict : demande de correction à l'agent responsable (via le coordinateur), ou passage à l'étape suivante (validation humaine).
 - **Classe** `review_class: advisory`. La revue de cohérence **ne remplace jamais** la validation humaine.
 

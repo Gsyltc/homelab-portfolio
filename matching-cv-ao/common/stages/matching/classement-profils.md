@@ -33,10 +33,10 @@ Agrégérer les résultats de matching, trier par score décroissant, grouper pa
 - **« Non retenus (Gestionnaire CV) »** — non-retenus du filtre d'éligibilité amont (`cv-eligibilite`, **jamais scorés**), en deux sous-listes `exclu` / `a_verifier`, chacune avec ses **raisons par axe** (`{axe, detail}`) ; ne rien inventer.
 
 ### Step 2 — Préparation de la présentation
-Pour chaque profil, préparer : nom, score total, détail par critère, recommandation, justification, et — pour un AO gouvernemental — le **statut de conformité des études** (`conformite_etudes.conforme`) et, si `conforme = "non"`, le **motif d'exclusion**. Format Markdown pour l'humain.
+Pour chaque profil, structurer dans l'artefact **JSON joint** `classement-final` : nom, score total, détail par critère, recommandation, justification, et — pour un AO gouvernemental — le **statut de conformité des études** (`conformite_etudes.conforme`) et, si `conforme = "non"`, le **motif d'exclusion**. **Pas de Markdown ici** : le classement est un artefact A2A ; sa restitution lisible à l'humain intervient à la gate du stage `presentation-resultats` (récap limité à l'action).
 
-### Step 3 — Confirmation de résumé
-Poster un résumé sur l'issue demandant confirmation avant de passer à la validation granulaire.
+### Step 3 — Confirmation de résumé (piste d'audit)
+Joindre l'artefact `classement-final` (JSON) à l'issue via `multica attachment` et poster un commentaire **minimal** le référençant. Ce stage est `inline` (pas de délégation, pas de mention A2A) ; la confirmation avant validation granulaire est portée par la gate humaine du stage suivant, **sans récap Markdown ici**.
 
 ## Sensors
 Outputs: `classement-final` → Phase Matching (gate: light).

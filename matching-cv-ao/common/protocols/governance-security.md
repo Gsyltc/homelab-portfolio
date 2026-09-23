@@ -14,9 +14,53 @@ Protocole transverse consolidant la gouvernance multi-agents, les invariants non
 
 ## Règle A2A
 
-Un agent est déclenché par un **commentaire sur l'issue avec une mention valide** `[@Label](mention://agent/<uuid>)` et une **mission claire** (objectif, périmètre, critères d'acceptation). **Ne jamais deviner un UUID** : le résoudre via `multica agent list --output json` avant chaque mention. **En fin de tâche, l'agent délégataire construit lui-même le lien de mention actif vers l'agent assigneur** — c'est **ce lien, posé par l'agent qui termine, qui enqueue le run de reprise** ; une mention en texte clair ou une simple réponse n'enqueue aucun run. Détail opératoire (résolution d'UUID, `trigger_outcomes`) : protocole `stage-protocol` (temps 3). Le coordinateur contrôle chaque livrable avant validation humaine.
+Un agent est déclenché par un **commentaire sur l'issue** qui porte deux choses, et rien de plus :
+
+1. un **lien de mention ACTIF** `[@Label](mention://agent/<uuid>)` — **seul vecteur de déclenchement** d'un run ;
+2. le **nom du fichier JSON joint à l'issue** qui porte la mission (ou le retour de livrable).
+
+**La mission et le livrable voyagent dans le fichier JSON joint, jamais en prose dans le fil.** À chaque délégation ou retour entre agents, l'agent **téléverse un fichier JSON** (via `multica attachment` — voir `multica attachment --help`) contenant l'objet, le périmètre, les critères d'acceptation ou le résultat, puis poste un **commentaire minimal**. Le JSON joint est la **source unique** lue par l'agent suivant ; le commentaire ne fait que le référencer. **Plus de prose de mission ni de livrable dans le fil** (« objectif, périmètre, critères… » reformulés en Markdown) — cette prose vit désormais dans le JSON.
+
+- **Ne jamais deviner un UUID** : le résoudre via `multica agent list --output json` avant chaque mention.
+- **En fin de tâche, l'agent délégataire construit lui-même le lien de mention actif vers l'agent assigneur** — c'est **ce lien, posé par l'agent qui termine, qui enqueue le run de reprise** ; une mention en texte clair ou une simple réponse n'enqueue aucun run.
+- **La réduction de prose ne touche qu'au texte AUTOUR du lien, jamais au lien de mention lui-même** : le lien reste **actif**, l'UUID résolu à chaque fois, jamais une auto-mention. Détail opératoire (résolution d'UUID, `trigger_outcomes`) : protocole `stage-protocol` (temps 2 et 3).
+- Le coordinateur contrôle chaque livrable (le JSON joint) avant validation humaine.
+
+### Deux formes de commentaire — jamais confondues
+
+| Cas | Mention | Texte du commentaire |
+| --- | --- | --- |
+| **Délégation SANS gate humaine** (handoff A2A pur) | `[@Agent](mention://agent/<uuid>)` **actif** | **Aucune prose.** Réduit à la mention + le **nom du fichier JSON joint**. Ex. `[@Matcher Profils](mention://agent/<uuid>) — scores prêts → classement-final.json` |
+| **Gate humaine REQUISE** | mention de **l'humain** | **La seule action à effectuer**, sans reformuler le contenu. Ex. `[@Humain](mention://member/<uuid>) : valider 3 profils — Keep/Modify/Redo — voir presentation.json` |
 
 > **Anti-wake parasite (règle générale, tous agents)** : **aucun agent ne se mentionne lui-même** avec un lien de mention actif dans une consigne de délégation — un tel lien, posté dans son propre commentaire, déclenche un run parasite de cet agent (observé sur EXPE-54). L'assigneur **désigne l'agent de retour par son nom, en texte clair** (« reviens vers moi, <Nom de l'assigneur> ») ; la construction du lien de mention actif revient **toujours à l'agent délégataire**, jamais à l'assigneur.
+
+## Schéma du message A2A (source unique)
+
+Tout échange agent↔agent — **délégation**, **retour de livrable**, **rapport de vérification** — est porté par un **fichier JSON joint à l'issue** conforme au schéma minimal ci-dessous. Il est **défini ici une seule fois** ; les fiches de stage et les sensors s'y **réfèrent par leur nom** (`message A2A`), sans le redéfinir.
+
+```json
+{
+  "type": "delegation | retour | rapport-verification",
+  "de": "<nom de l'agent émetteur>",
+  "vers": "<nom de l'agent destinataire ou 'humain'>",
+  "stage": "<slug du stage concerné>",
+  "objet": "<phrase courte : ce qui est demandé ou livré>",
+  "perimetre": ["<élément de périmètre>", "..."],
+  "criteres_acceptation": ["<critère>", "..."],
+  "artefacts": [
+    { "role": "produit | consomme", "nom": "<fichier>.json", "chemin": "${ROOT_DIRECTORY}/..." }
+  ],
+  "resultat": { "statut": "ok | ecart | halt", "detail": "<optionnel>" },
+  "gate_humaine": "aucune | legere | granulaire | explicite",
+  "reference_audit": "<id de commentaire ou d'artefact>"
+}
+```
+
+- **`delegation`** : `objet`, `perimetre`, `criteres_acceptation` renseignés ; `resultat` omis.
+- **`retour`** : `resultat` renseigné ; `artefacts` liste les livrables produits.
+- **`rapport-verification`** : `resultat.statut` + verdicts structurés (voir `sensors/gates.md`, qui ne redéfinit pas ce schéma).
+- Champs non pertinents omis. **Aucun secret** dans le JSON. La langue des valeurs libres suit celle de l'humain (français par défaut).
 
 ## Catégories décisionnelles — non-retenus & exclus (source unique)
 
@@ -39,7 +83,7 @@ Aucun scope, aucune règle apprise, aucun gate/sensor advisory ne peut affaiblir
 2. **Piste d'audit** sur l'issue.
 3. **Aucune action à impact** sans validation humaine explicite.
 4. **Ne jamais inventer une grille d'évaluation** — la demander si absente.
-5. **Communication agent↔agent en JSON**, agent↔humain en Markdown.
+5. **Communication agent↔agent = fichier JSON joint** (schéma « message A2A » ci-dessus), commentaire réduit à la mention active + nom du fichier ; **prose Markdown réservée aux gates humaines**, limitée à l'action à effectuer.
 
 ## Protection contre les entrées non fiables (UNTRUSTED DATA)
 

@@ -52,32 +52,28 @@ boundaries:
 
 ## En cas d'écart (advisory)
 
-- Le coordinateur **ne bloque pas** : il **signale l'écart** dans le « Rapport de vérification » sur l'issue et **propose de revenir corriger** avant de présenter le contenu à l'humain.
+- Le coordinateur **ne bloque pas** : il consigne l'écart dans le **« Rapport de vérification » joint en JSON** (voir ci-dessous) et **propose de revenir corriger** avant de présenter le contenu à l'humain.
+- **Seul un écart nécessitant l'humain** est reformulé en Markdown : une **mention de l'humain + l'action** à effectuer, sans recopier le rapport. Sinon, le commentaire se limite à référencer l'artefact JSON joint.
 - L'humain reste seul décideur : demander la correction, ou valider en connaissance de cause en actant l'écart sur l'issue.
 
-## Rapport de gate (piste d'audit)
+## Rapport de gate (piste d'audit — artefact JSON joint)
 
-Posté en commentaire sur l'issue, avant la validation humaine. Verdicts : `✅` conforme · `⚠️` écart · `⛔` indisponible.
+Le « Rapport de vérification » est un **artefact JSON joint à l'issue** (type `rapport-verification` du **message A2A** — schéma défini une seule fois dans `governance-security`, **non redéfini ici**), posté avant la validation humaine. Il porte les **verdicts structurés** par check : `ok` (✅ conforme) · `ecart` (⚠️ écart) · `indisponible` (⛔). Structure des verdicts (dans le champ `resultat`/`verdicts` du message A2A) :
 
-```
-Rapport de vérification — <frontière>   (source : matching-cv-ao/sensors/gates.md)
-- artefacts-presents : ✅ | ⚠️ <artefact manquant> | ⛔ <indisponible>
-- liaison-tracabilite : ✅ | ⚠️ <exigence sans profil> | ⛔ <indisponible>
-- absence-orphelin : ✅ | ⚠️ <profil orphelin> | ⛔ <indisponible>
-- disponibilite-complete : ✅ | ⚠️ <profil sans disponibilité complète> | ⛔ <indisponible>   (frontière Analyse → Matching ; détail : matching-cv-ao/sensors/disponibilite.md)
-- equivalence-mifi : ✅ | ⚠️ <profil sans objet mifi cohérent / en a_verifier> | ⛔ <indisponible>   (frontière Analyse → Matching ; détail : matching-cv-ao/sensors/equivalence-mifi.md)
-- localisation-complete : ✅ | ⚠️ <profil sans ville (localisation.ville)> | ⛔ <indisponible>   (frontière Analyse → Matching ; détail : matching-cv-ao/sensors/localisation.md)
-- expertise-firme : ✅ conforme / non exigée | ⚠️ minimums non atteints ou indéterminable (gate humaine légère, non bloquante) | ⛔ <indisponible>   (frontière Analyse → Matching ; détail : matching-cv-ao/sensors/expertise-firme.md)
+```json
+{
+  "type": "rapport-verification",
+  "stage": "<frontière, ex. analyse-matching>",
+  "verdicts": [
+    { "check": "artefacts-presents", "statut": "ok | ecart | indisponible", "detail": "<artefact manquant si écart>" },
+    { "check": "liaison-tracabilite", "statut": "ok | ecart | indisponible", "detail": "<exigence sans profil si écart>" },
+    { "check": "absence-orphelin", "statut": "ok | ecart | indisponible", "detail": "<profil orphelin si écart>" },
+    { "check": "disponibilite-complete", "statut": "ok | ecart | indisponible", "detail": "<collaborateur sans date_disponibilite / taux_utilisation> (frontière Analyse → Matching ; détail : matching-cv-ao/sensors/disponibilite.md)" },
+    { "check": "equivalence-mifi", "statut": "ok | ecart | indisponible", "detail": "<collaborateur sans objet mifi cohérent / en a_verifier> (frontière Analyse → Matching ; détail : matching-cv-ao/sensors/equivalence-mifi.md)" },
+    { "check": "localisation-complete", "statut": "ok | ecart | indisponible", "detail": "<collaborateur sans ville (localisation.ville) — mention humaine attendue> (frontière Analyse → Matching ; détail : matching-cv-ao/sensors/localisation.md)" },
+    { "check": "expertise-firme", "statut": "ok | ecart | indisponible", "detail": "conforme / non exigée | minimums non atteints ou indéterminable (gate humaine légère, non bloquante) (frontière Analyse → Matching ; détail : matching-cv-ao/sensors/expertise-firme.md)" }
+  ]
+}
 ```
 
-À la frontière **Analyse → Matching**, le check `disponibilite-complete` est reporté (détail dans le sensor `disponibilite`) :
-
-```
-Rapport de vérification — Analyse → Matching   (source : matching-cv-ao/sensors/gates.md)
-- artefacts-presents : ✅ | ⚠️ <artefact manquant> | ⛔ <indisponible>
-- liaison-tracabilite : ✅ | ⚠️ <exigence sans profil> | ⛔ <indisponible>
-- disponibilite-complete : ✅ | ⚠️ <collaborateur sans date_disponibilite / taux_utilisation> | ⛔ <indisponible>
-- equivalence-mifi : ✅ | ⚠️ <collaborateur sans objet mifi cohérent / en a_verifier (MIFI non tranché)> | ⛔ <indisponible>   (détail : matching-cv-ao/sensors/equivalence-mifi.md)
-- localisation-complete : ✅ | ⚠️ <collaborateur sans ville (localisation.ville) — mention humaine attendue> | ⛔ <indisponible>   (détail : matching-cv-ao/sensors/localisation.md)
-- expertise-firme : ✅ conforme / non exigée | ⚠️ minimums non atteints ou indéterminable (gate humaine légère, non bloquante) | ⛔ <indisponible>   (détail : matching-cv-ao/sensors/expertise-firme.md)
-```
+Seuls les checks pertinents à la frontière considérée sont inclus (voir la carte `boundaries` ci-dessus — à la frontière **Analyse → Matching**, les checks `disponibilite-complete`, `equivalence-mifi`, `localisation-complete`, `expertise-firme` s'ajoutent). La source du rapport (`matching-cv-ao/sensors/gates.md`) est rappelée dans le champ `de`/`reference_audit` du message A2A.
