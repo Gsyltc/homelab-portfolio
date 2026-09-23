@@ -17,14 +17,14 @@ requires_stage: [docker-compose-creation]
 sensors: [swarm-deploy-section, plaintext-secret, traefik-coherence]
 scopes: [stack-update, new-stack, config-change, security-patch]
 inputs: "Livrable docker-compose"
-outputs: "Rapport QA (syntaxe, Swarm, hardening, Traefik) + corrections appliquées / proposées"
+outputs: "Rapport QA JSON (syntaxe, Swarm, hardening, Traefik) — verdict OK / RENVOI / BLOQUE + classification des problèmes (critical / warning / info) ; sur défaut, RENVOI au Spécialiste Docker"
 ---
 
 # Vérification du docker-compose (QA Docker)
 
 ## Objectif
 
-Vérifier, corriger et durcir le docker-compose avant toute suite — vérification jamais sautée.
+Vérifier et durcir (par le contrôle) le docker-compose avant toute suite — vérification jamais sautée. **Le QA ne modifie jamais le livrable** : sur défaut, il émet un RENVOI au Spécialiste Docker via le rapport JSON.
 
 ## Steps
 
@@ -32,13 +32,13 @@ Vérifier, corriger et durcir le docker-compose avant toute suite — vérificat
 
 Le Tech Lead délègue au **QA Docker** (mission + mention valide). Ordre imposé : **tout compose passe par le QA Docker avant l'aiguillage du Tech Lead** ([`central-quality-control.md`](central-quality-control.md)).
 
-### Step 2 — Analyser et corriger (revue adversariale — plancher SG-3)
+### Step 2 — Analyser et classer (revue adversariale — plancher SG-3)
 
-Analyser syntaxe, compatibilité Swarm, réseaux / volumes / secrets, hardening (skill `docker-composer`), classer les problèmes (critical / warning / info), appliquer / proposer les corrections. **La skill `dockerfile-validator` s'applique uniquement aux stacks *build-from-source*** (celles qui fournissent un `Dockerfile` construit localement, `build:` dans le compose) : elle valide alors le `Dockerfile`. Pour une stack tirant des **images publiées** (pas de `Dockerfile` à construire), `dockerfile-validator` ne s'applique pas. Le QA Docker porte le **contrôle sécurité technique** (revue adversariale) : sur `security-patch` / `new-stack`, vérification `renforcé` non abaissable.
+Analyser syntaxe, compatibilité Swarm, réseaux / volumes / secrets, hardening (skill `docker-composer`), classer les problèmes (critical / warning / info) et rédiger chaque point de façon **autosuffisante** (`constat` / `cause` / `correction` / `domaine_correction`) dans le rapport JSON (`report-format.schema.json`) : sur au moins un défaut, le `verdict` est `RENVOI` et le rapport JSON est renvoyé au **Spécialiste Docker** (agent créateur du livrable) pour correction ; sans défaut, `verdict = OK`. **La skill `dockerfile-validator` s'applique uniquement aux stacks *build-from-source*** (celles qui fournissent un `Dockerfile` construit localement, `build:` dans le compose) : elle valide alors le `Dockerfile`. Pour une stack tirant des **images publiées** (pas de `Dockerfile` à construire), `dockerfile-validator` ne s'applique pas. Le QA Docker porte le **contrôle sécurité technique** (revue adversariale) : sur `security-patch` / `new-stack`, vérification `renforcé` non abaissable.
 
 ### Step 3 — Cohérence Traefik
 
-Vérifier via **`traefik-manager-read`** que services, middlewares et entrypoints sont cohérents (aucune `configErrors`). Présenter les éléments modifiés / corrigés et la conformité, puis **mentionner le Tech Lead** (mention valide).
+Vérifier via **`traefik-manager-read`** que services, middlewares et entrypoints sont cohérents (aucune `configErrors`). Présenter la conformité et, le cas échéant, le verdict `RENVOI` avec les `id` des points à corriger, puis **rendre compte au Tech Lead** (le QA construit lui-même son lien de retour — cf. Point 1). Le QA **ne présente aucun livrable modifié** : il ne produit qu'un rapport.
 
 ## Sensors
 

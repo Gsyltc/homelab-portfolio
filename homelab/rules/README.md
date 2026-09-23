@@ -18,7 +18,7 @@ Les règles capitalisent les **corrections humaines validées** afin qu'un agent
 
 ### Cycle de vie d'une règle
 
-1. **Capture** : pendant une étape, chaque correction / rejet / reformulation humaine sur un choix est un *candidat-règle* potentiel (tracé sur l'issue). Le QA Docker, les spécialistes et le Tech Lead Homelab génèrent des candidats quand ils corrigent une convention récurrente (ex. `_FILE` pour secrets, placement d'un healthcheck, réseau Traefik par défaut, `.tfvars` oublié).
+1. **Capture** : pendant une étape, chaque correction / rejet / reformulation humaine sur un choix est un *candidat-règle* potentiel (tracé sur l'issue). Le QA Docker (via ses `RENVOI`), les spécialistes et le Tech Lead Homelab génèrent des candidats quand un défaut de convention récurrent est signalé ou corrigé (ex. `_FILE` pour secrets, placement d'un healthcheck, réseau Traefik par défaut, `.tfvars` oublié).
 2. **Remontée** : au point de validation humaine, le Tech Lead Homelab propose les candidats formulés en règles courtes, avec couche et portée proposées.
 3. **Confirmation humaine** : l'humain garde ✅ / rejette ❌ / reformule 💬 chaque candidat séparément. Rien n'est écrit sans validation explicite.
 4. **Contrôle de conflit à l'admission** : précédence des couches + invariants non contournables + (pour toute règle `global`) contrôle sécurité systématique par l'**Architecte de sécurité Homelab**.
@@ -31,7 +31,7 @@ La capture est **systématique** : à chaque validation granulaire, le Tech Lead
 
 Déclencheurs principaux :
 
-- **Correction QA Docker** : le QA Docker corrige une convention → candidat (`_FILE` pour secrets, section `deploy` manquante, healthcheck mal placé, réseau Traefik par défaut).
+- **Renvoi QA Docker** : le QA Docker signale un défaut de convention via un `RENVOI` → candidat (`_FILE` pour secrets, section `deploy` manquante, healthcheck mal placé, réseau Traefik par défaut). La correction est portée par le Spécialiste Docker, pas par le QA.
 - **Revue de l'Architecte de sécurité Homelab** : un durcissement ou une correction de sécurité récurrente (exposition, permissions, secrets, TLS Traefik) → candidat de portée sécurité.
 - **Arbitrage humain** : l'humain tranche un point récurrent → candidat (ex. choix Swarm vs Proxmox pour un type de service, convention `.tfvars` pour un type de variable).
 - **Correction Spécialiste** : un spécialiste (Docker, Terraform) corrige un pattern récurrent → candidat.
