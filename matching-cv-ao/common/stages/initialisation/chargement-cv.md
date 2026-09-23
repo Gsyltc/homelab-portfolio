@@ -41,11 +41,13 @@ Déterminer l'état par collaborateur concerné, selon la **règle de sélection
 
 Si plusieurs pièces jointes sont fournies, elles sont toutes traitées comme sources de l'analyse à venir (aucune conservation d'historique d'originaux).
 
-### Step 3 — Documenter l'inventaire
-Poster un commentaire sur l'issue avec :
+### Step 3 — Documenter l'inventaire (piste d'audit)
+Tracer l'inventaire sur l'issue comme **artefact JSON joint** `cv-available` (`multica attachment`), portant :
 - Nombre de collaborateurs et, pour chacun, l'état (à extraire / dernière version extraite / manquant)
 - Pour les CV à extraire : liste des pièces jointes de l'issue (nom) — trace d'audit avant suppression
 - Collaborateurs manquants (le cas échéant)
+
+Stage `inline` sans gate humaine → **pas de récap Markdown**, pas de mention A2A ; le commentaire se limite à référencer l'artefact joint.
 
 ## Sensors
 Outputs: `cv-available` → Phase Initialisation (gate: none).
