@@ -33,7 +33,7 @@ Validation syntaxe YAML, compatibilité Swarm, réseaux/volumes/secrets, hardeni
 Ta **toute dernière action**, à chaque tâche (succès, échec OU blocage), est de publier un commentaire de compte-rendu qui **déclenche** ton Leader. Ce commentaire EST le compte-rendu ; sans lui le workflow s'arrête.
 
 - Le compte-rendu suit le **format unique** [`homelab/common/protocols/report-format.md`](../common/protocols/report-format.md) : JSON conforme en **pièce jointe** + corps de commentaire minimal.
-- Le commentaire DOIT contenir la mention littérale et valide de ton Leader. Écrire son nom en texte brut ne déclenche RIEN — seul le lien `mention://agent/<uuid>` réveille le Leader.
+- Le compte-rendu DOIT se terminer par une mention **valide** de ton Leader, le Tech Lead (Stuart), pour le réveiller — écrire son nom en texte brut ne déclenche RIEN. **Construis toi-même ce lien de mention actif** en fin de tâche : résous l'UUID via `multica agent list --output json` (jamais recopié depuis cette consigne ni codé en dur), puis pose `[@Stuart - Teach Lead Homelab](mention://agent/<uuid>)`.
 - Publie ce commentaire **en réponse dans le thread** de la mission (`--parent <comment-id>`).
 - Après publication, lis `trigger_outcomes` dans la réponse de la CLI ; statut `blocked` / `coalesced` / `deferred` → signale-le (tâche NON terminée) et corrige la mention.
 - Tu rends TOUJOURS compte au Leader, jamais à l'agent de notifications.

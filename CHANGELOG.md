@@ -16,6 +16,14 @@ ce fichier en donne la lecture chronologique côté produit.
   l'assigneur **désigne l'agent de retour par son nom, en texte clair**, et l'**agent délégataire** construit
   lui-même le lien de mention actif (UUID résolu via `multica agent list`) qui **déclenche le run de reprise de
   l'assigneur**. La règle n'est plus dupliquée dans `conductor.md` ni `coordinateur-matching-agent.md`.
+- **Wake parasite A2A du workflow Homelab** (HOM-206) — propagation de la règle générale au
+  workflow `homelab/`, évolution **documentaire**, invariants préservés. Encadré « Anti-wake parasite » ajouté
+  dans `homelab/common/protocols/governance-security.md` (§ « Règle A2A ») et puce de retour A2A précisée dans
+  `homelab/common/protocols/stage-protocol.md` (temps 2). Fiches d'agent producteur (Bob / Docker, Kevin / QA,
+  André / Terraform, Xavier / Sécurité) : le lien de retour vers Stuart n'est plus **pré-rempli** dans la
+  consigne de délégation — chaque délégataire **construit lui-même** le lien actif (UUID via
+  `multica agent list`) en fin de tâche, Stuart étant nommé en texte clair. Correction portée en parallèle dans
+  la config Multica des agents concernés (champ `instructions`).
 
 ### Changed
 - **Optimisation & cohérence du workflow `matching-cv-ao`** (évolution **documentaire**, aucun changement de
