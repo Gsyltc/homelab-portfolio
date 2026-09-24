@@ -20,7 +20,12 @@ En toute dernière action (livré, ou bloqué), le producteur :
   - si la reprise échoue → **passer l'issue en `blocked`** et **escalader à l'humain**
     (ne jamais laisser le flux s'arrêter silencieusement) ;
   - un compte-rendu dont `trigger_outcomes` ne confirme aucun run de reprise est
-    **réputé non rendu** — l'agent le signale explicitement plutôt que de clore.
+    **réputé non rendu** — l'agent le signale explicitement plutôt que de clore ;
+- **ne jamais régénérer ni relivrer le livrable pour corriger une mention manquante** :
+  le livrable est **idempotent** une fois produit — republier / compléter **uniquement**
+  la mention (retente unique), puis escalade si la reprise échoue. Régénérer un livrable
+  pour un problème de mention est un **défaut** (risque de perte de paramètres, double
+  livraison), pas une correction.
 
 Pour les branches **n8n / Home Assistant** : le livrable est appliqué via MCP ; ne joindre un fichier **que s'il existe** (p. ex. export de flux), sinon la ligne de statut suffit.
 
