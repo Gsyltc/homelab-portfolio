@@ -16,7 +16,7 @@ Définitions conformes (front-matter YAML + corps Markdown, même format que [`c
 
 ## Agent partagé (non dupliqué ici)
 
-- **Agent de notifications (Alfred)** — utilitaire de workspace partagé entre les deux workflows. Sa définition conforme unique vit dans [`core/agents/notification-agent.md`](../../core/agents/notification-agent.md) (source unique de vérité) ; le Tech Lead Homelab le mentionne via l'UUID `254d9349-1eb3-4f50-a4cd-b18a7043a7c0`. Pas de duplication sous `homelab/agents/` pour éviter deux sources divergentes.
+- **Agent de notifications** — utilitaire de workspace partagé entre les deux workflows. Sa définition conforme unique vit dans [`core/agents/notification-agent.md`](../../core/agents/notification-agent.md) (source unique de vérité) ; le Tech Lead Homelab le mentionne via l'UUID `254d9349-1eb3-4f50-a4cd-b18a7043a7c0`. Pas de duplication sous `homelab/agents/` pour éviter deux sources divergentes.
 
 ## Correspondance UUID (moteur A2A Multica)
 
