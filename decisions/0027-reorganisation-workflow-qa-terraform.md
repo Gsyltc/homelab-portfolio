@@ -3,7 +3,7 @@
 ---
 auteurs: Mika (agent)
 accepté par : multica.gaston
-accepté le : ""
+accepté le : 2026-09-24
 supersedes: ""
 superseded_by: ""
 
@@ -11,9 +11,9 @@ superseded_by: ""
 
 ## Status
 
-Proposed
+Accepted
 
-> Statut **Proposed** — en attente de validation humaine granulaire explicite (multica.gaston) en revue de PR. Cette réorganisation est **documentaire** (contrat `homelab/common/` + définitions d'agents + sensors) : elle ne modifie **aucune** posture de sécurité de fond — les invariants (Terraform ne déploie jamais, aucun secret en clair, jamais `${SNI}` dans un livrable Terraform, validation humaine granulaire, un seul traitement par stack), les clauses SG-1 à SG-6 et l'exception bloquante ALI-204 sont **préservés à l'identique**. Le passage à *Accepted* (renseigner `accepté le`) suit l'acceptation de la PR. Pas de merge autonome sur `main`.
+> Statut **Accepted** — validation humaine granulaire explicite obtenue (multica.gaston, 2026-09-24, acceptation de la PR). Cette réorganisation est **documentaire** (contrat `homelab/common/` + définitions d'agents + sensors) : elle ne modifie **aucune** posture de sécurité de fond — les invariants (Terraform ne déploie jamais, aucun secret en clair, jamais `${SNI}` dans un livrable Terraform, validation humaine granulaire, un seul traitement par stack), les clauses SG-1 à SG-6 et l'exception bloquante ALI-204 sont **préservés à l'identique**.
 
 ## Contexte
 
