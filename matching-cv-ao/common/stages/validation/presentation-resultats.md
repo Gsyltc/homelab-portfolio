@@ -29,7 +29,14 @@ Présenter chaque profil à l'humain pour validation granulaire (Keep/Modify/Red
 
 ## Steps
 ### Step 1 — Présentation profil par profil (DÉTAILLÉE)
-Pour chaque profil (dans l'ordre du classement `classement-final`), présenter en Markdown, **en clair**, le détail utile à la décision : **nom**, **score total**, **détail par critère** (compétences, expérience, études, disponibilité), **recommandation**, **justification**, et — pour un AO gouvernemental — le **statut de conformité des études** (et le motif si `exclu`). Terminer chaque profil par la **décision demandée** : ✅ Keep / 💬 Modify / ❌ Redo. Le JSON joint `classement-final` reste la source ; la présentation à l'humain le **reprend en clair**, elle ne se limite pas à le pointer.
+Ouvrir la présentation par un **tableau de synthèse** (repris de l'ancien rapport de la Phase 2, désormais porté ici, à la seule gate de décision humaine) donnant en un coup d'œil :
+
+- le **top des profils retenus** (score + recommandation) ;
+- les profils **exclus** (`recommandation = "exclu"` — non-conformité études sur AO gouvernemental, avec motif) ;
+- les profils **à vérifier** (`conformite_etudes.conforme = "a_verifier"`, MIFI non tranché) ;
+- le rappel des **non-retenus d'éligibilité amont** (Gestionnaire CV — `exclu`/`a_verifier` avec raisons par axe : `localisation` > 70 km / ville manquante, `certifications` obligatoires non détenues, etc.).
+
+Puis, pour chaque profil (dans l'ordre du classement `classement-final`), présenter en Markdown, **en clair**, le détail utile à la décision : **nom**, **score total**, **détail par critère** (compétences, expérience, études, disponibilité), **recommandation**, **justification**, et — pour un AO gouvernemental — le **statut de conformité des études** (et le motif si `exclu`). Terminer chaque profil par la **décision demandée** : ✅ Keep / 💬 Modify / ❌ Redo. Le JSON joint `classement-final` reste la source ; la présentation à l'humain le **reprend en clair**, elle ne se limite pas à le pointer.
 
 ### Step 2 — Traitement des Modify/Redo
 Sur Modify : ajuster et re-présenter **cet élément uniquement** (avec le même niveau de détail).

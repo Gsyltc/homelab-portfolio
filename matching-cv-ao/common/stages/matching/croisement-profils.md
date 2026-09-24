@@ -10,7 +10,7 @@ summary_confirmation: optional
 reviewer: null
 review_class: advisory
 review_artifact: ""
-human_gate: light
+human_gate: none
 produces: [matching-resultats]
 consumes: [{artifact: ao-profils-recherches, required: true}, {artifact: cv-profils, required: true}, {artifact: cv-eligibilite, required: true}]
 requires_stage: [parse-ao, extraction-cv]
@@ -42,16 +42,13 @@ Déléguer au Matcher Profils selon la **procédure de délégation A2A définie
 ### Step 2 — Contrôle du livrable
 Vérifier que le JSON contient la liste `resultats` avec les champs : `collaborateur`, `score_total`, détail par critère (dont `score_competences` — critère regroupant compétences + technologies + méthodologies : `competences_couvertes`/`competences_manquantes`, `technologies_couvertes`/`technologies_manquantes`, `methodologies_couvertes`/`methodologies_manquantes`, mois d'XP par techno/méthodo `mois_experience_technologies`/`mois_experience_methodologies`, et `competences_ignorees_peremption`), `conformite_etudes` (dont `conforme` et `motif_exclusion` si `conforme = "non"`, renseigné pour un AO gouvernemental), `recommandation` (valeur `exclu` possible), `justification`. Vérifier également que **seuls les retenus d'éligibilité** (`possible`) figurent dans `resultats`, et que les **non-retenus d'éligibilité** (`exclu` / `a_verifier` du Gestionnaire CV, avec leurs raisons) sont **propagés tels quels** vers le classement/livraison (distincts des exclus « conformité études » du Matcher).
 
-### Step 3 — Gate advisory
-Le coordinateur présente à l'humain un **récap Markdown détaillé** — le JSON joint (`matching-resultats.json`) reste la source/audit, l'humain n'en lit jamais le brut mais reçoit une restitution lisible et complète. Le récap reprend **en clair** ce qui appelle une décision : top 5 des profils retenus (score + recommandation), les profils **exclus** (`recommandation = "exclu"` — non-conformité études sur AO gouvernemental, avec motif) et ceux **à vérifier** (`conformite_etudes.conforme = "a_verifier"`, MIFI non tranché), et le rappel des **non-retenus d'éligibilité amont** (Gestionnaire CV — `exclu`/`a_verifier` avec raisons par axe, dont `localisation` > 70 km / ville manquante et `certifications` obligatoires non détenues). L'humain peut ajuster les poids ou demander un recalcul.
-
-### Step 4 — Retour de délégation A2A (OBLIGATOIRE — dernière action)
+### Step 3 — Retour de délégation A2A (OBLIGATOIRE — dernière action)
 > ⛔ Le stage n'est **pas terminé** tant que ce Step n'est pas accompli. Voir la **checklist de sortie de stage** du protocole `stage-protocol`.
 
 En toute fin de tâche, le **Matcher Profils** applique la **procédure de retour de délégation définie une seule fois dans `stage-protocol` (temps 3 + checklist de sortie de stage)** : JSON de retour joint (type `retour` du message A2A — scores + classement, artefact `matching-resultats`) + commentaire **minimal** clos par le lien de mention **actif** vers l'assigneur (le **Coordinateur Matching**) + le nom du fichier JSON — ici `[@Coordinateur Matching](mention://agent/<uuid>) — matching-resultats.json`, sans reformuler le livrable en prose. La résolution d'UUID, l'anti-wake, l'incident EXPE-58 et la vérification `trigger_outcomes` sont couverts par ce protocole (ne pas les redétailler).
 
 ## Sensors
-Outputs: `matching-resultats` → Phase Matching (gate: advisory).
+Outputs: `matching-resultats` → handoff A2A direct vers le classement (`classement-profils`), sans gate humaine (le sensor de traçabilité à la frontière reste advisory).
 Imports: none.
 
 ## Learn

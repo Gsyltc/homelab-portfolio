@@ -82,11 +82,11 @@ Le **schéma JSON complet** des analyses CV et les conventions de nommage/versio
 | --- | --- | --- | --- |
 | **Initialisation** | 0 | Réception AO + vérification CV | Non (bootstrap déterministe) |
 | **Analyse** | 1 | Parsing AO + extraction CV | Léger |
-| **Matching** | 2 | Croisement profils ↔ exigences + classement | Léger (`human_gate: light`) — présentation *advisory* des scores |
+| **Matching** | 2 | Croisement profils ↔ exigences + classement | Non (le rapport de scores est déplacé en Phase 3) |
 | **Validation** | 3 | Validation granulaire + remplissage grille | Granulaire (Keep/Modify/Redo) |
 | **Clôture** | 4 | Livraison + mise à jour CV si demandée | Explicite |
 
-> **`human_gate` (blocage humain) ≠ nature de la revue/sensor.** La colonne « Gate humain » reporte la valeur `human_gate` de la fiche de stage (énum `none | light | granular | explicit`). « Advisory » qualifie la **nature d'une revue ou d'un sensor** (`review_class` / sensor `nature`), pas un niveau de gate humain : au Matching, le `human_gate` est **`light`** et la présentation des scores est *advisory* (consultative, non bloquante).
+> **`human_gate` (blocage humain) ≠ nature de la revue/sensor.** La colonne « Gate humain » reporte la valeur `human_gate` de la fiche de stage (énum `none | light | granular | explicit`). « Advisory » qualifie la **nature d'une revue ou d'un sensor** (`review_class` / sensor `nature`), pas un niveau de gate humain : au Matching, le `human_gate` est désormais **`none`** (le rapport de scores — tableau + détail par profil — est déplacé en Phase 3, seule gate de décision humaine sur les profils) ; seul un **sensor advisory de traçabilité** subsiste à la frontière `matching-validation`.
 
 ## Scoring pondéré
 

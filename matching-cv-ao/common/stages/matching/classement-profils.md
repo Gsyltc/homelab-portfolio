@@ -10,7 +10,7 @@ summary_confirmation: required
 reviewer: null
 review_class: none
 review_artifact: ""
-human_gate: light
+human_gate: none
 produces: [classement-final]
 consumes: [{artifact: matching-resultats, required: true}, {artifact: cv-eligibilite, required: true}]
 requires_stage: [croisement-profils]
@@ -39,7 +39,7 @@ Pour chaque profil, structurer dans l'artefact **JSON joint** `classement-final`
 Joindre l'artefact `classement-final` (JSON) à l'issue via `multica attachment` et poster un commentaire **minimal** le référençant. Ce stage est `inline` (pas de délégation, pas de mention A2A) ; la confirmation avant validation granulaire est portée par la gate humaine du stage suivant, **sans récap Markdown ici**.
 
 ## Sensors
-Outputs: `classement-final` → Phase Matching (gate: light).
+Outputs: `classement-final` → transmis directement à la Phase 3 (`presentation-resultats`), sans gate humaine à cette frontière.
 Imports: none.
 
 ## Learn

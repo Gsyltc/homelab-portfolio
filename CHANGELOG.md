@@ -26,6 +26,17 @@ ce fichier en donne la lecture chronologique côté produit.
   la config Multica des agents concernés (champ `instructions`).
 
 ### Changed
+- **Allègement du workflow `matching-cv-ao` — suppression de la gate humaine de la Phase 2 (Matching)**
+  (évolution **documentaire**, invariants préservés) : la **gate humaine advisory de la Phase 2** est
+  supprimée (`human_gate: light` → `human_gate: none` dans `croisement-profils.md` et `classement-profils.md`)
+  et son **format de rapport** (tableau de synthèse + détail par profil) est **déplacé vers la Phase 3**
+  (`presentation-resultats.md`, validation granulaire), qui devient la **seule gate de décision humaine sur
+  les profils** (Keep/Modify/Redo). La Phase 2 devient un **handoff A2A pur** vers le classement puis la
+  validation. Diagrammes (`flowchart` et `sequenceDiagram`) et tableaux des phases (`conductor.md`,
+  `README.md`, `docs/guide-utilisation-workflow-matching.md`) mis en cohérence : plus aucune gate humaine
+  annoncée au Matching. **Invariants préservés** : validation humaine granulaire portée par la Phase 3
+  (invariant #1), piste d'audit sur l'issue, scoring immuable 50/35/10/5, communication JSON A2A / Markdown
+  humain, **sensor advisory de traçabilité à la frontière `matching-validation` inchangé**.
 - **Optimisation & cohérence du workflow `matching-cv-ao`** (évolution **documentaire**, aucun changement de
   comportement ; invariants préservés : JSON A2A / Markdown humain, validation humaine granulaire, scoring
   immuable 50/35/10/5, gates advisory non bloquants) :
