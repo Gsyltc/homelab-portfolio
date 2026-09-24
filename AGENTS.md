@@ -110,7 +110,7 @@ homelab-portfolio/
 │   ├── rules/                             #   Mémoire de règles multi-couches (boucle d'apprentissage)
 │   ├── scopes/                            #   Un fichier par scope (identité en données : depth, keywords…)
 │   ├── sensors/                           #   Manifestes des verification gates & sensors (advisory)
-│   ├── agents/                            #   Définitions d'agents du workflow (11 fichiers .md exportés)
+│   ├── agents/                            #   Définitions d'agents du workflow (12 fichiers .md exportés)
 │   └── common/ (ci-dessus)                #   (le workflow d'architecture vit sous core/common/)
 ├── homelab/                               # Workflow Homelab (A2A) — modèle conductor / stages / protocols
 │   ├── common/                            #   conductor.md + stages/<phase>/ + protocols/ (source unique)
@@ -125,7 +125,7 @@ homelab-portfolio/
 │   ├── common/                            #   conductor.md + stages/<phase>/ + protocols/ + scopes/ + sensors/
 │   ├── agents/                            #   4 agents : Coordinateur, Analyste RFP, Gestionnaire CV, Matcher
 │   └── README.md                          #   Documentation du workflow
-├── decisions/                             # Registre des décisions structurantes (0001…0024)
+├── decisions/                             # Registre des décisions structurantes (0001…0028)
 ├── docs/                                  # Guides d'utilisation (architecture, matching) + stubs de redirection
 └── plugins/                               # Packages de plugins d'agents (spec Agent Plugins v1.0.0) — portent les skills
     ├── architecture-assistant/            #   plugin.json + skills/ (OpenSpec, décision, gabarits, cybersécurité, AWS, Windows, supports de vente)
