@@ -12,7 +12,7 @@ origine: ALI-204
 
 # Sensor `swarm-deploy-section` — section `deploy` Swarm *(prioritaire)*
 
-Check déterministe déclenché **au gate de phase** (`fire_on: gate`) : vérifie que chaque service du docker-compose livré porte une section **`deploy`** compatible **Docker Swarm** (le Homelab déploie en Swarm — voir label `Docker Swarm`). **Advisory** (`default_severity: advisory`). Recoupe le contrôle « compatibilité Swarm » du QA Docker (§2.2) et le niveau `standard` de l'axe de vérification.
+Check déterministe déclenché **au gate de phase** (`fire_on: gate`) : vérifie que chaque service du docker-compose livré porte une section **`deploy`** compatible **Docker Swarm** (le Homelab déploie en Swarm — voir label `Docker Swarm`). **Advisory** (`default_severity: advisory`). Recoupe le contrôle « compatibilité Swarm » de l'Analyste QA (§2.2) et le niveau `standard` de l'axe de vérification.
 
 ## Contrat de vérification (`checks`)
 
@@ -37,4 +37,4 @@ Sensor swarm-deploy-section — <fichier>   (source : homelab/sensors/sensors/sw
 
 ## Garde-fou
 
-Advisory : signale l'absence de `deploy` ou une directive non-Swarm, ne bloque pas. **Ne remplace pas** l'analyse de compatibilité Swarm du QA Docker (§2.2), qui reste l'autorité technique. **Parsing statique uniquement** (SG-4).
+Advisory : signale l'absence de `deploy` ou une directive non-Swarm, ne bloque pas. **Ne remplace pas** l'analyse de compatibilité Swarm de l'Analyste QA (§2.2), qui reste l'autorité technique. **Parsing statique uniquement** (SG-4).

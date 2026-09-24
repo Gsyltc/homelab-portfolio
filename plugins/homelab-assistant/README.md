@@ -36,10 +36,11 @@ correspond au nom du dossier.
 | Skill | Fonction (rôle utilisateur) | Contenu annexe |
 |---|---|---|
 | `configuration-applications` | Spécialiste Terraform — configuration des stacks (`.tf`/`.tfvars`) | `references/` (authentification, criticités Kuma, domaines, template) |
-| `docker-composer` | Spécialiste Docker / QA Docker — génération de `docker-compose.yml` | `references/` (network, template) |
-| `dockerfile-validator` | QA Docker — lint/audit/scan de Dockerfile (stacks *build-from-source* uniquement) | `scripts/`, `references/`, `examples/`, `tests/` |
-| `homelab-vault-access` | Spécialiste Docker / QA Docker / Spécialiste Terraform — accès Vault (AppRole) | — |
-| `traefik-manager-read` | Spécialiste Docker / QA Docker / Architecte sécurité — lecture Traefik Manager | — |
+| `docker-composer` | Spécialiste Docker / Analyste QA — génération de `docker-compose.yml` | `references/` (network, template) |
+| `dockerfile-validator` | Analyste QA — lint/audit/scan de Dockerfile (stacks *build-from-source* uniquement) | `scripts/`, `references/`, `examples/`, `tests/` |
+| `terraform-qa` | Analyste QA — vérification adversariale d'une configuration Terraform (`.tf`/`.tfvars`) | `references/` (cloudflare-dns-nb) |
+| `homelab-vault-access` | Spécialiste Docker / Analyste QA / Spécialiste Terraform — accès Vault (AppRole) | — |
+| `traefik-manager-read` | Spécialiste Docker / Analyste QA / Architecte sécurité — lecture Traefik Manager | — |
 
 La skill de notifications (`ntfy-notifications`) est **mutualisée** : son porteur
 est l'Agent de notifications, dont la définition est partagée (`core/`). Elle

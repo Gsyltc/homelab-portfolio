@@ -3,7 +3,7 @@ name: security-patch
 depth: comprehensive
 verification: renforcé
 keywords: [sécurité, security, hardening, durcissement, secret, secrets, auth, authentification, exposition, permissions, Traefik, réseau, vulnérabilité, CVE, correctif sécurité, faille]
-description: "Tout impact sécurité (auth, réseau, secrets, hardening, Traefik) — QA Docker renforcé, traçabilité accrue"
+description: "Tout impact sécurité (auth, réseau, secrets, hardening, Traefik) — Analyste QA renforcé, traçabilité accrue"
 ---
 
 # Scope `security-patch`
@@ -13,7 +13,7 @@ exposition, secrets, hardening, permissions, routes Traefik. Correspond au décl
 le plus sensible de l'ancienne grille. Périmètre resserré, traçabilité renforcée, analyse
 d'impact / non-régression du correctif produite avant recommandation.
 
-Axes par défaut : Depth **`comprehensive`**, vérification **`renforcé`** — le QA Docker mène un
+Axes par défaut : Depth **`comprehensive`**, vérification **`renforcé`** — l'Analyste QA mène un
 audit de sécurité approfondi (secrets `_FILE`, absence de secret en clair, exposition minimale,
 permissions, absence de `${SNI}` en Terraform, durcissement complet, cohérence Traefik via
 `traefik-manager-read`).

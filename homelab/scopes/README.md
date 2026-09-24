@@ -42,7 +42,7 @@ fois, sur le stage**, jamais redéclarée dans sept blocs de scope séparés.
 ```yaml
 name: <scope>                 # requis — nom du scope (= stem du fichier)
 depth: minimal|standard|comprehensive     # requis — détail des artefacts par défaut
-verification: advisory|standard|renforcé  # requis — intensité du QA Docker par défaut
+verification: advisory|standard|renforcé  # requis — intensité de la vérification QA par défaut
 branch: false|autonome                    # optionnel — branche autonome (n8n / Home Assistant)
 keywords: [ ... ]             # optionnel — déclencheurs d'auto-détection FR / EN (liste plate)
 description: "<une ligne>"    # optionnel — libellé court (vue d'aide / lisible)
@@ -59,7 +59,7 @@ axes indépendants** :
 - **Axe 1 — Depth** (`minimal` / `standard` / `comprehensive`) : détail des artefacts produits
   (docker-compose, config Terraform, documentation). Contrôle *combien on écrit*.
 - **Axe 2 — Stratégie de vérification** (`advisory` / `standard` / `renforcé`) : **intensité du
-  QA Docker** et du contrôle qualité central. Contrôle *à quel point on vérifie*.
+  Analyste QA** et du contrôle qualité central. Contrôle *à quel point on vérifie*.
   - `advisory` — validité YAML + cohérence de base (syntaxe seule), signalé sans bloquer.
   - `standard` — vérification complète : Swarm `deploy`, réseaux/volumes/secrets, hardening
     standard, cohérence Traefik (`traefik-manager-read`).
@@ -85,7 +85,7 @@ Rappel des invariants du workflow Homelab — **aucun scope ne les désactive** 
 - Sur `security-patch` / `new-stack` : `depth` ≥ `standard` et `verification` ≥ `renforcé` ne
   peuvent jamais être abaissés par override. Sur ces deux scopes, les sensors sécurité
   `plaintext-secret` et `terraform-no-sni` sont **bloquants** (décision ALI-204 + contrôle
-  sécurité QA Docker — voir [`../sensors/README.md`](../sensors/README.md)) : une détection
+  sécurité Analyste QA — voir [`../sensors/README.md`](../sensors/README.md)) : une détection
   arrête l'avancée jusqu'à correction ou levée humaine explicite tracée.
 - **Auto-détection = plancher** : la confirmation humaine peut *monter* le contrôle, jamais le
   *descendre* sans validation tracée.

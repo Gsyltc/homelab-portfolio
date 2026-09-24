@@ -15,7 +15,7 @@
         "agent": {
           "type": "string",
           "description": "Rôle générique de l'agent émetteur (kebab-case, aligné sur les rôles du workflow).",
-          "enum": ["docker", "qa-docker", "securite", "terraform", "n8n", "home-assistant"]
+          "enum": ["docker", "analyste-qa", "securite", "terraform", "n8n", "home-assistant"]
         },
         "verdict": {
           "type": "string",
@@ -80,7 +80,7 @@
         "domaine_correction": {
           "type": ["string", "null"],
           "description": "Indice du rôle capable de corriger (une suggestion, pas une affectation ; le Leader tranche). null si l'agent ne sait pas.",
-          "enum": ["docker", "qa-docker", "securite", "terraform", "n8n", "home-assistant", null]
+          "enum": ["docker", "analyste-qa", "securite", "terraform", "n8n", "home-assistant", null]
         },
         "arbitrage_requis": {
           "type": "boolean",

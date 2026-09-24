@@ -26,6 +26,21 @@ ce fichier en donne la lecture chronologique côté produit.
   la config Multica des agents concernés (champ `instructions`).
 
 ### Changed
+- **Réorganisation Phase 3 du workflow Homelab + Analyste QA** (HOM-215 ; évolution **documentaire**,
+  invariants préservés) : dans la phase **Production et Contrôle**, la **configuration Terraform passe avant
+  le docker-compose** (ordre cible `autonomy-mode → terraform-configuration → docker-compose-creation →
+  quality-assurance → central-quality-control`), et l'agent QA — **renommé `QA Docker` → `Analyste QA`** —
+  voit son périmètre **élargi à la vérification du Terraform** (skill `terraform-qa`) en plus du compose.
+  Sous `infra-terraform`, l'Analyste QA vérifie le seul Terraform. Fiche de stage `docker-compose-qa.md`
+  renommée `quality-assurance.md` ; fiche d'agent `qa-docker-agent.md` renommée `analyste-qa-agent.md` ;
+  jeton de rôle `qa-docker` → `analyste-qa` dans `report-format.schema.json` ; artefact `qa_docker_passe`
+  → `qa_passe` et ordre des artefacts de la frontière `phase3-phase4` ajusté (`.tfvars` produit et vérifié
+  en premier) dans `sensors/gates.md`. Renommage propagé au triptyque `homelab/common/`, aux sensors, aux
+  scopes, aux règles et au `README` / `CHANGELOG` du plugin. **Invariants préservés** : livrable `.tfvars`
+  obligatoire et non abaissable sur `new-stack`/`infra-terraform` (SEC-1, exception bloquante ALI-204
+  inchangée), Terraform ne déploie jamais, aucun secret / jamais `${SNI}`, validation humaine granulaire.
+  Décision tracée dans `decisions/0027-…`. Les enregistrements ADR historiques (0013…0026) ne sont pas
+  réécrits (prose historique immuable).
 - **Allègement du workflow `matching-cv-ao` — suppression de la gate humaine de la Phase 2 (Matching)**
   (évolution **documentaire**, invariants préservés) : la **gate humaine advisory de la Phase 2** est
   supprimée (`human_gate: light` → `human_gate: none` dans `croisement-profils.md` et `classement-profils.md`)

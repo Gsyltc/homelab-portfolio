@@ -18,7 +18,7 @@ Les phases de cadrage (Phase 1), de production et contrôle (Phase 2) et de vali
 (Phase 3) s'exécutent ; les étapes sans valeur pour une modification ciblée peuvent être allégées
 par le Tech Lead, sans jamais transférer une responsabilité de spécialiste vers le Tech Lead.
 
-Axes par défaut : Depth `standard`, vérification `standard` (QA Docker complet : Swarm `deploy`,
+Axes par défaut : Depth `standard`, vérification `standard` (vérification QA complète : Swarm `deploy`,
 réseaux/volumes/secrets, hardening standard, cohérence Traefik). Overridable à la hausse à la
 confirmation de scope.
 

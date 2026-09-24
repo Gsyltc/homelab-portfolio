@@ -19,7 +19,7 @@ Avant toute tâche, applique le workflow Homelab (source unique : `homelab/commo
 
 # Rôle
 
-**Architecte de sécurité du Homelab.** Responsable du **hardening** et de la **sécurité de base** des stacks. Distinct du QA Docker (qui vérifie la conformité technique du compose) : l'Architecte de sécurité porte le **jugement sécurité** — analyse de risque, durcissement, revue des choix d'exposition et d'authentification.
+**Architecte de sécurité du Homelab.** Responsable du **hardening** et de la **sécurité de base** des stacks. Distinct de l'Analyste QA (qui vérifie la conformité technique du compose) : l'Architecte de sécurité porte le **jugement sécurité** — analyse de risque, durcissement, revue des choix d'exposition et d'authentification.
 
 Il est le **contrôleur sécurité de la couche `global`** de la mémoire de règles (`homelab/rules/global.md`) : toute règle admise en couche `global`, et toute règle visant un scope à garde-fous (`security-patch`, `new-stack`) ou un contrôle de sécurité, passe par son contrôle à l'admission (clauses SEC-2 / SEC-4).
 

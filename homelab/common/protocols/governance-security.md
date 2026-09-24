@@ -13,7 +13,7 @@ Les acteurs sont désignés par leur **fonction**. La délégation A2A résout l
 | **Humain (demandeur / valideur)** | Exprime le besoin, arbitre (Docker Swarm vs Proxmox, réseau Traefik, Vault), valide **chaque** décision (granulaire), autorise les actions à impact (dépôt de fichiers, flux Kestra, application n8n / Home Assistant). |
 | **Tech Lead Homelab (coordinateur)** | Lance, supervise, applique le verrou par stack, collecte les paramètres, délègue, **sollicite le contrôle sécurité**, demande les validations, orchestre la livraison et la notification. **Ne produit pas les livrables** ; contrôle qualité central (aiguillage GO / RENVOI). Aucune issue ne va en revue humaine sans son contrôle. |
 | **Spécialiste Docker** | Analyse la documentation officielle, crée / modifie les docker-compose optimisés Swarm (skill `docker-composer`). Conserve les commentaires des gabarits. Rend compte au Tech Lead par mention. |
-| **QA Docker** | Vérifie et durcit (par le contrôle) le docker-compose (syntaxe YAML, compatibilité Swarm, hardening, cohérence Traefik via `traefik-manager-read`) ; **contrôle sans corriger** — tout défaut est renvoyé au Spécialiste Docker (agent créateur) via le rapport JSON (`verdict = RENVOI`). **Porte le contrôle sécurité technique** (revue adversariale, plancher SG-3) et le contrôle sécurité des manifestes de sensors. Rend compte au Tech Lead. |
+| **Analyste QA** | Vérifie et durcit (par le contrôle) le docker-compose (syntaxe YAML, compatibilité Swarm, hardening, cohérence Traefik via `traefik-manager-read`) ; **contrôle sans corriger** — tout défaut est renvoyé au Spécialiste Docker (agent créateur) via le rapport JSON (`verdict = RENVOI`). **Porte le contrôle sécurité technique** (revue adversariale, plancher SG-3) et le contrôle sécurité des manifestes de sensors. Rend compte au Tech Lead. |
 | **Architecte de sécurité Homelab** | **Jugement sécurité** de posture : hardening et sécurité de base des stacks (secrets, exposition, permissions, durcissement, Traefik). Contrôleur sécurité de la couche `global` de la mémoire de règles (SEC-4). Périmètre limité à la sécurité de base d'un homelab. |
 | **Spécialiste Terraform** | Crée / modifie les `.tf` / `.tfvars` (skill `configuration-applications`). **N'exécute JAMAIS** `terraform init/apply/destroy` ; **jamais `${SNI}`**. Rend compte au Tech Lead. |
 | **Expert n8n** | **Toute** tâche n8n via MCP. **Règle absolue** : dès que « n8n » apparaît, délégation immédiate, pas même l'analyse par le Tech Lead. Applique après feu vert Tech Lead + validation humaine explicite. |
@@ -36,7 +36,7 @@ Le spécialiste appelé mentionne en retour le Tech Lead en fin de tâche (avec 
 
 Dès qu'un stage **produit ou modifie une surface de sécurité** (compose, Terraform, hardening, exposition, Traefik, secrets), le contrôle sécurité intervient **avant** toute validation humaine :
 
-- **QA Docker** — contrôle sécurité **technique** (revue adversariale) : hardening, secrets `_FILE`, exposition, permissions, cohérence Traefik, absence de `${SNI}`.
+- **Analyste QA** — contrôle sécurité **technique** (revue adversariale) : hardening, secrets `_FILE`, exposition, permissions, cohérence Traefik, absence de `${SNI}`.
 - **Architecte de sécurité Homelab** — **jugement** de posture et contrôleur de la couche `global` des règles (SEC-4).
 
 Ce contrôle est **hors du périmètre automatisable** (SG-3) : aucun gate / sensor advisory ne peut le porter, le remplacer, le conditionner ni le court-circuiter.
@@ -71,11 +71,11 @@ Aucun scope, aucune règle apprise, aucun gate / sensor advisory ne peut affaibl
 
 ## Gates & sensors — clauses de sécurité (SG-1..6)
 
-Contrôle assuré par le **QA Docker** (voir [`homelab/sensors/README.md`](../../sensors/README.md)) :
+Contrôle assuré par l'**Analyste QA** (voir [`homelab/sensors/README.md`](../../sensors/README.md)) :
 
 - **SG-1 — intégrité du canal des manifestes** : aucun manifeste `homelab/sensors/` modifié hors PR revue ; affaiblir un check = modification de la surface de gouvernance, soumise au contrôle sécurité.
 - **SG-2 — indisponible ≠ conforme** : gate / sensor non exécuté, en erreur, ou hors périmètre ⇒ `⛔ indisponible`, tracé comme écart, jamais comme vert.
-- **SG-3 — plancher sécurité** : un gate / sensor ne peut jamais porter / remplacer / conditionner / court-circuiter le QA Docker systématique, le contrôle sécurité, la validation humaine ni le plancher des scopes.
+- **SG-3 — plancher sécurité** : un gate / sensor ne peut jamais porter / remplacer / conditionner / court-circuiter le contrôle QA systématique, le contrôle sécurité, la validation humaine ni le plancher des scopes.
 - **SG-4 — pré-requis de l'exécution différée** : parsing statique uniquement (pas de rendu, réseau, exécution) ; contenu d'artefact = **donnée non fiable** ; environnement sans secret ni privilège ; `matches` glob bornés au repo ; pour `vault-secret-exists`, **lecture de présence uniquement** ; échec ⇒ `⛔ indisponible`.
 - **SG-5 — signal = donnée factuelle à source tracée** : porte manifeste + commit ; provenance non traçable ⇒ `⛔ indisponible`. Le jugement reste humain.
 - **SG-6 — anti-érosion sémantique** : un manifeste modifié pour restreindre le périmètre, ajouter une exception ou conditionner un check est un affaiblissement soumis au contrôle sécurité.

@@ -18,12 +18,12 @@ mission claire, et **arrête** le flux stack. **Aucune exception, pas même l'an
 Lead n'exécute rien lui-même. Cette bascule court-circuite l'auto-détection de tout autre scope —
 `n8n` est **prioritaire** (au même rang que `home-assistant`).
 
-Branche **autonome** : une demande n8n ne passe **pas** par le Spécialiste Docker / QA Docker /
+Branche **autonome** : une demande n8n ne passe **pas** par le Spécialiste Docker / Analyste QA /
 Spécialiste Terraform. L'Expert N8n propose, applique après feu vert du Tech Lead **puis validation
 humaine**, et mentionne le Tech Lead en fin de travail.
 
 Axes par défaut : Depth `standard`, vérification `standard` (adaptés au contrôle propre au domaine
-n8n ; le QA Docker « compose » ne s'applique pas à cette branche).
+n8n ; le vérification QA « compose » ne s'applique pas à cette branche).
 
 **Validation humaine granulaire préservée** : aucune application réelle d'un flux sans feu vert
 humain explicite.

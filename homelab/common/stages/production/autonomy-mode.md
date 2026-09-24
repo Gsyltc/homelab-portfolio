@@ -4,10 +4,10 @@ phase: production
 execution: ALWAYS
 condition: "Always executes — walking skeleton puis question du mode, une seule fois par lot"
 lead_agent: Tech Lead Homelab
-support_agents: [Spécialiste Docker, QA Docker]
+support_agents: [Spécialiste Terraform, Spécialiste Docker, Analyste QA]
 mode: pipeline
 summary_confirmation: required
-reviewer: QA Docker
+reviewer: Analyste QA
 review_class: adversarial
 review_artifact: walking-skeleton.md
 human_gate: granular
@@ -30,7 +30,7 @@ Valider la plus petite tranche cohérente, puis fixer le rythme de validation du
 
 ### Step 1 — Walking skeleton (premier jalon validé)
 
-La plus petite tranche cohérente du lot (ex. squelette du docker-compose vérifié par le QA Docker, ou premier `.tfvars`) passe **obligatoirement** par le QA Docker ([`docker-compose-qa.md`](docker-compose-qa.md)), le contrôle qualité central ([`central-quality-control.md`](central-quality-control.md)) et la validation granulaire. **Aucune autonomie avant ce jalon.**
+La plus petite tranche cohérente du lot (ex. premier `.tfvars`, ou squelette du docker-compose) passe **obligatoirement** par l'Analyste QA ([`quality-assurance.md`](quality-assurance.md)), le contrôle qualité central ([`central-quality-control.md`](central-quality-control.md)) et la validation granulaire. **Aucune autonomie avant ce jalon.**
 
 ### Step 2 — La question, posée une seule fois
 
@@ -44,7 +44,7 @@ Quel que soit le mode, l'exécution **s'arrête et interroge l'humain** sur : é
 
 Outputs: walking skeleton validé + mode consigné.
 Imports: `yaml-validity` (write), `swarm-deploy-section` (gate).
-Review artifact: `walking-skeleton.md` porte la section `## Review` du QA Docker (revue adversariale, plancher SG-3).
+Review artifact: `walking-skeleton.md` porte la section `## Review` de l'Analyste QA (revue adversariale, plancher SG-3).
 
 ## Learn
 

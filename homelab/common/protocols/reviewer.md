@@ -1,24 +1,24 @@
 # Protocole — revue (reviewer) Homelab
 
-Deux natures de revue coexistent dans le workflow Homelab, distinctes et non substituables. Miroir Homelab de [`core/common/protocols/reviewer.md`](../../../core/common/protocols/reviewer.md), adapté à l'équipe DevOps Homelab (pas d'Architecte cybersécurité dédié ; la sécurité technique est portée par le **QA Docker**, le jugement de posture par l'**Architecte de sécurité Homelab**).
+Deux natures de revue coexistent dans le workflow Homelab, distinctes et non substituables. Miroir Homelab de [`core/common/protocols/reviewer.md`](../../../core/common/protocols/reviewer.md), adapté à l'équipe DevOps Homelab (pas d'Architecte cybersécurité dédié ; la sécurité technique est portée par l'**Analyste QA**, le jugement de posture par l'**Architecte de sécurité Homelab**).
 
 ## 1. Contrôle qualité central (Tech Lead — advisory)
 
 Portée : aiguillage **GO / RENVOI** au niveau macro. Le Tech Lead vérifie uniquement : (a) le livrable répond-il à la demande et aux paramètres collectés ? (b) est-il du bon type et présent (fichier compose / `.tfvars` contenant les sections attendues, pas un rapport vide) ? (c) un secret en clair saute-t-il aux yeux ? (d) le compte-rendu du spécialiste signale-t-il un blocage ?
 
-- **Jamais** la validité syntaxique, la compatibilité applicative, le hardening ou la cohérence Traefik : ces analyses appartiennent au Spécialiste Docker (production / correctif) et au QA Docker (vérification technique).
-- **Ordre imposé** : tout compose passe par le QA Docker **avant** l'aiguillage du Tech Lead.
+- **Jamais** la validité syntaxique, la compatibilité applicative, le hardening ou la cohérence Traefik : ces analyses appartiennent au Spécialiste Docker / Spécialiste Terraform (production / correctif) et à l'Analyste QA (vérification technique).
+- **Ordre imposé** : tout livrable — **compose ET Terraform** — passe par l'Analyste QA **avant** l'aiguillage du Tech Lead.
 - Doute technique → renvoyer au spécialiste en décrivant le **symptôme** observé (« l'authentification risque d'échouer »), **sans** fournir de diagnostic ni de solution.
 - **Classe** `review_class: advisory`. Le contrôle qualité central **ne remplace jamais** le contrôle sécurité ni la validation humaine.
 
-## 2. Contrôle sécurité (QA Docker + Architecte de sécurité Homelab) — obligatoire, non substituable
+## 2. Contrôle sécurité (Analyste QA + Architecte de sécurité Homelab) — obligatoire, non substituable
 
 Portée : sécurité de base d'un homelab (secrets, exposition réseau, permissions, durcissement Docker/Swarm, cohérence Traefik, absence de `${SNI}`). **Aucune notion de Loi 25 / PCI DSS / GDPR / LPRPDE.**
 
-- **QA Docker** — contrôle sécurité **technique** (revue adversariale) : hardening, secrets `_FILE`, exposition, permissions, cohérence Traefik via `traefik-manager-read`. **Le QA contrôle et classifie** (critical / warning / info) : tout défaut est renvoyé au Spécialiste Docker (agent créateur) via le rapport JSON (`verdict = RENVOI`, points autosuffisants).
+- **Analyste QA** — contrôle sécurité **technique** (revue adversariale) sur **les deux livrables** (docker-compose et configuration Terraform) : hardening, secrets `_FILE`, exposition, permissions, cohérence Traefik via `traefik-manager-read`, et côté Terraform structure HCL / cohérence des variables / absence de `${SNI}` (skill `terraform-qa`). **L'Analyste QA contrôle et classifie** (critical / warning / info) : tout défaut est renvoyé à l'agent **créateur** (Spécialiste Docker pour le compose, Spécialiste Terraform pour le `.tfvars`) via le rapport JSON (`verdict = RENVOI`, points autosuffisants).
 - **Architecte de sécurité Homelab** — **jugement** de posture (voix adoptée / sollicité pour les décisions structurantes de sécurité et la couche `global` des règles).
 - **Déclenché systématiquement** dès qu'un stage produit ou modifie une surface de sécurité (compose, Terraform, hardening, exposition, Traefik, secrets).
-- Procédure : le Tech Lead poste un commentaire mentionnant le QA Docker (UUID résolu via `multica agent list --output json`) avec le contexte et le résumé des modifications ; **attend l'analyse** ; intègre les recommandations **avant** la validation humaine.
+- Procédure : le Tech Lead poste un commentaire mentionnant l'Analyste QA (UUID résolu via `multica agent list --output json`) avec le contexte et le résumé des modifications ; **attend l'analyse** ; intègre les recommandations **avant** la validation humaine.
 - **Plancher SG-3** : aucun contrôle qualité central, aucun gate / sensor advisory ne peut porter, remplacer, conditionner ni court-circuiter ce contrôle. Un « vert » de gate ne dispense jamais du contrôle sécurité.
 
 ## Articulation des deux revues et du gate humain
@@ -26,7 +26,7 @@ Portée : sécurité de base d'un homelab (secrets, exposition réseau, permissi
 ```mermaid
 flowchart LR
     L[Livrable produit] --> CQ[Controle qualite central - Tech Lead advisory]
-    CQ --> RS[Controle securite - QA Docker + Architecte securite Homelab]
+    CQ --> RS[Controle securite - Analyste QA + Architecte securite Homelab]
     RS --> VH[Validation humaine granulaire]
     VH -.->|Redo / Modify| L
 ```
