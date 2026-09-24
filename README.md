@@ -12,16 +12,17 @@ Ce dépôt documente et outille une infrastructure réelle, prête pour la produ
 
 - des **plugins d'agents** portables (manifestes conformes au schéma v1.0.0) ;
 - une **bibliothèque de skills** portées par les plugins, sous [`plugins/<nom>/skills/`](plugins/) ;
-- deux **workflows A2A cloisonnés** qui pilotent la façon dont les agents collaborent, tracent leurs décisions et sollicitent une validation humaine.
+- trois **workflows A2A cloisonnés** qui pilotent la façon dont les agents collaborent, tracent leurs décisions et sollicitent une validation humaine.
 
-## Les deux workflows
+## Les trois workflows
 
-Le dépôt porte **deux workflows d'orchestration totalement indépendants**. Une demande relève de **l'un ou de l'autre**, jamais des deux ; il n'existe aucune passerelle entre eux (règle de routage complète dans [`AGENTS.md`](AGENTS.md)).
+Le dépôt porte **trois workflows d'orchestration totalement indépendants**. Une demande relève de **l'un d'entre eux**, jamais de plusieurs ; il n'existe aucune passerelle entre eux (règle de routage complète dans [`AGENTS.md`](AGENTS.md)).
 
 | Workflow | Périmètre | Coordinateur | Source |
 | --- | --- | --- | --- |
 | **Architecture de solution** | Documentation d'architecture, décisions structurantes, diagrammes (C4 / Archimate / PlantUML / CALM), choix technologiques, intégration, cybersécurité, AWS, cycle spec-driven (OpenSpec) | Architecture Solution & Intégration | [`core/common/conductor.md`](core/common/conductor.md) |
 | **Homelab** | Stacks Docker Swarm / Proxmox, `docker-compose`, Terraform, flux n8n, Home Assistant, secrets Vault, routes Traefik | Tech Lead | [`homelab/common/conductor.md`](homelab/common/conductor.md) |
+| **Matching AO ↔ CV** | Analyse de PDF d'appels d'offres, extraction de profils, croisement profils ↔ exigences, scoring, remplissage de grille d'évaluation | Coordinateur Matching | [`matching-cv-ao/common/conductor.md`](matching-cv-ao/common/conductor.md) |
 
 Le workflow d'architecture est structuré selon le modèle **conductor / stages / protocols** :
 
@@ -42,11 +43,17 @@ Le workflow **Homelab** suit le **même modèle déclaratif** (aligné sur les c
 - [`homelab/sensors/`](homelab/sensors/) — manifestes des sensors (`id`/`kind`/`command`/`default_severity`/`fire_on`/`matches`).
 - [`homelab/agents/`](homelab/agents/) — définitions des agents DevOps Homelab (front-matter `disallowedTools: Task`, `tier`, skills).
 
+Le workflow **Matching AO ↔ CV** suit le même modèle déclaratif sous [`matching-cv-ao/`](matching-cv-ao/) :
+
+- [`matching-cv-ao/common/conductor.md`](matching-cv-ao/common/conductor.md) — instructions du coordinateur (Coordinateur Matching), la *source unique*.
+- [`matching-cv-ao/common/stages/`](matching-cv-ao/common/stages/) et [`matching-cv-ao/common/protocols/`](matching-cv-ao/common/protocols/) — fiches de stage et mécanismes transverses.
+- [`matching-cv-ao/agents/`](matching-cv-ao/agents/) — 4 agents : Coordinateur Matching, Analyste RFP, Gestionnaire CV, Matcher de profils.
+
 ## Structure du dépôt
 
 ```
 homelab-portfolio/
-├── AGENTS.md                 # Standards du dépôt + règle de routage entre les deux workflows
+├── AGENTS.md                 # Standards du dépôt + règle de routage entre les trois workflows
 ├── README.md
 ├── CONTRIBUTING.md           # Comment contribuer
 ├── CODE_OF_CONDUCT.md        # Code de conduite de la communauté
@@ -56,16 +63,18 @@ homelab-portfolio/
 │   ├── rules/                #   Règles persistantes multi-couches
 │   ├── scopes/               #   Un fichier par scope (identité en données : depth, keywords…)
 │   ├── sensors/              #   Verification gates & sensors (advisory)
-│   ├── agents/               #   Définitions des agents du workflow (11 fichiers .md)
-│   └── workflows/homelab/    #   Workflow Homelab narratif (+ VERSION)
+│   ├── agents/               #   Définitions des agents du workflow (12 fichiers .md)
 ├── homelab/                  # Workflow Homelab (A2A) — forme déclarative AI-DLC (un fichier par élément, front-matter)
 │   ├── common/               #   conductor.md + stages/<phase>/ + protocols/ (source unique — 26 fiches de stage)
 │   ├── rules/                #   Mémoire de règles multi-couches (global > stack > phase > scope) + learning loop
 │   ├── scopes/               #   Un fichier par scope (7 scopes : name, depth, verification, keywords)
 │   ├── sensors/              #   Manifestes des sensors (id/kind/command/default_severity/fire_on/matches)
 │   └── agents/               #   Définitions d'agents DevOps Homelab (front-matter disallowedTools: Task, tier)
-├── decisions/                # Registre des décisions structurantes (0001…0024)
-├── docs/                     # Stub de redirection core-workflow + doc générale
+├── matching-cv-ao/           # Workflow Matching AO ↔ CV (A2A) — analyse d'AO, profils, scoring
+│   ├── common/               #   conductor.md + stages/ + protocols/ (source unique — Coordinateur Matching)
+│   └── agents/               #   4 agents : Coordinateur Matching, Analyste RFP, Gestionnaire CV, Matcher
+├── decisions/                # Registre des décisions structurantes (0001…0028)
+├── docs/                     # Guides d'utilisation (architecture, matching) + PDF + stub de redirection core-workflow
 └── plugins/                  # Packages de plugins d'agents (spec v1.0.0) — portent les skills
     ├── architecture-assistant/    #   OpenSpec, décision, gabarits, cybersécurité, AWS, Windows, supports de vente
     ├── general-purpose-assistant/ #   workflow de stack, notifications
