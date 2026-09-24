@@ -16,7 +16,7 @@ support_agents: [<fonction>, ...]      # fonctions en appui (peut être vide)
 mode: <inline|subagent|pipeline|mob>   # topologie de communication (voir ci-dessous)
 for_each: <artefact>                   # (optionnel) itération une-fois-par-instance ; omis ⇒ exécution unique
 summary_confirmation: <required|optional|none>   # résumé confirmé avant d'avancer
-reviewer: <fonction|null>              # fonction de revue (QA Docker pour la technique/sécurité, Architecte de sécurité Homelab pour le jugement sécurité)
+reviewer: <fonction|null>              # fonction de revue (Analyste QA pour la technique/sécurité, Architecte de sécurité Homelab pour le jugement sécurité)
 review_class: <adversarial|advisory|none>        # nature de la revue indépendante (voir ci-dessous)
 review_artifact: <nom-du-livrable>     # (si reviewer != null) livrable portant la section ## Review ajoutée
 human_gate: <none|light|granular|explicit>       # gate humain applicable au stage (force du gate)
@@ -37,7 +37,7 @@ outputs: "<description libre des sorties>"
 | `mode`, `for_each`, `summary_confirmation` | topologie de communication, itération éventuelle, confirmation de résumé |
 | `produces`, `consumes`, `requires_stage` | flux d'artefacts et dépendances (le graphe émerge de ces déclarations) |
 | `sensors`, `scopes`, `inputs`, `outputs` | sensors importés, scopes actifs, entrées / sorties |
-| `lead_agent`, `support_agents`, `reviewer` | **fonctions** de l'équipe : Tech Lead Homelab (coordinateur), Spécialiste Docker, QA Docker, Spécialiste Terraform, Expert n8n, Expert Home Assistant, Architecte de sécurité Homelab, Agent de notifications — validées contre [`homelab/agents/`](../../agents/README.md) |
+| `lead_agent`, `support_agents`, `reviewer` | **fonctions** de l'équipe : Tech Lead Homelab (coordinateur), Spécialiste Docker, Analyste QA, Spécialiste Terraform, Expert n8n, Expert Home Assistant, Architecte de sécurité Homelab, Agent de notifications — validées contre [`homelab/agents/`](../../agents/README.md) |
 | `review_class`, `review_artifact` | nature de la revue et livrable qui porte sa section `## Review` |
 | `human_gate` | matérialise les gates du workflow : `none` (Initialisation), `light` (Idéation), `granular` (Cadrage / Production), `explicit` (Validation) |
 
@@ -45,7 +45,7 @@ outputs: "<description libre des sorties>"
 
 - `inline` — le stage s'exécute dans le contexte du Tech Lead ; les `support_agents` éventuels sont des voix adoptées. Stages courts (bootstrap, cadrage, aiguillage).
 - `subagent` — le `lead_agent` est délégué à un contexte frais (hub-and-spoke) via une mention A2A ; chaque support est dépêché en rayon aveugle aux autres.
-- `pipeline` — les supports sont chaînés dans l'ordre déclaré, chacun voyant tout le travail amont (ex. Spécialiste Docker → QA Docker → Spécialiste Terraform). **Exige `support_agents` non vide.**
+- `pipeline` — les supports sont chaînés dans l'ordre déclaré, chacun voyant tout le travail amont (ex. Spécialiste Docker → Analyste QA → Spécialiste Terraform). **Exige `support_agents` non vide.**
 - `mob` — tous les supports travaillent **en parallèle** contre le brouillon du lead, en **une ronde d'objection bornée**. **Exige `support_agents` non vide.**
 
 `support_agents` = **QUI** participe ; `mode` = **COMMENT**.
@@ -56,7 +56,7 @@ Nomme l'artefact dont les instances pilotent une exécution **une-fois-par-insta
 
 ### `review_class` — nature de la revue indépendante
 
-- `adversarial` — revue **indépendante et non substituable** cherchant activement les failles : la **revue de sécurité Homelab** (QA Docker pour la sécurité technique compose / Traefik ; Architecte de sécurité Homelab pour le jugement de posture — hardening, secrets, exposition, permissions). Plancher SG-3. Ne peut être ni portée, ni remplacée, ni conditionnée par un gate/sensor advisory.
+- `adversarial` — revue **indépendante et non substituable** cherchant activement les failles : la **revue de sécurité Homelab** (Analyste QA pour la sécurité technique compose / Traefik ; Architecte de sécurité Homelab pour le jugement de posture — hardening, secrets, exposition, permissions). Plancher SG-3. Ne peut être ni portée, ni remplacée, ni conditionnée par un gate/sensor advisory.
 - `advisory` — revue **consultative** préparant le gate humain : le contrôle qualité central du Tech Lead (aiguillage GO / RENVOI, cohérence livrable ↔ demande / paramètres). Ne remplace jamais la validation humaine.
 - `none` — aucune revue indépendante déclarée.
 
@@ -67,7 +67,7 @@ Nomme l'artefact dont les instances pilotent une exécution **une-fois-par-insta
 - `requires_stage` ne référence que des slugs existants (pas de dépendance orpheline — recoupe le contrôle `absence-orphelin` des gates).
 - `mode: pipeline | mob` ⇒ `support_agents` non vide.
 - `reviewer != null` ⇒ `review_class != none` **et** `review_artifact` renseigné ; `reviewer: null` ⇒ `review_class: none` et pas de `review_artifact`.
-- `reviewer: QA Docker` (⇒ `review_class: adversarial`) obligatoire dès que le stage produit ou modifie une **surface de sécurité** (livrable compose / Terraform, hardening, exposition, Traefik) — plancher SG-3.
+- `reviewer: Analyste QA` (⇒ `review_class: adversarial`) obligatoire dès que le stage produit ou modifie une **surface de sécurité** (livrable compose / Terraform, hardening, exposition, Traefik) — plancher SG-3.
 - `sensors:` ne référence que des manifestes existants sous [`homelab/sensors/sensors/`](../../sensors/README.md#sensors-définis) (pull-authoring, aucun id orphelin).
 
 ## Corps de la fiche — trois compartiments (ordre fixe)

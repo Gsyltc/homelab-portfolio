@@ -14,7 +14,7 @@ s'exécutent, y compris l'arbitrage Docker Swarm vs Proxmox (§1.3), la collecte
 paramètres (§1.4) et la sélection automatique du type d'authentification.
 
 Axes par défaut : Depth **`comprehensive`** (compose et Terraform détaillés, documentation
-complète) et vérification **`renforcé`** (QA Docker complet + audit de sécurité approfondi :
+complète) et vérification **`renforcé`** (vérification QA complète + audit de sécurité approfondi :
 secrets `_FILE`, exposition, permissions, absence de `${SNI}`, durcissement).
 
 **Garde-fou non abaissable** : `depth` ≥ `standard` et `verification` ≥ `renforcé` ne peuvent

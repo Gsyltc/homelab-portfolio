@@ -29,7 +29,7 @@ Les deux workflows du dépôt sont **totalement indépendants** : le Tech Lead H
 3. La complexité et la portée du changement (nouvelle stack vs correctif mineur).
 4. L'évaluation des risques et de l'impact (sécurité, déploiement, réseau).
 
-Ce principe est **outillé** par le mécanisme de **scopes** (quelles étapes s'exécutent) et par deux **axes d'exécution indépendants** — **Depth** (détail des artefacts) et **Stratégie de vérification** (intensité du QA Docker) — détaillés dans [`protocols/scopes-and-axes.md`](protocols/scopes-and-axes.md). La grille binaire historique « allégé vs complet » est **remplacée** par cette matrice : `config-change` est l'héritier de l'« allégé ».
+Ce principe est **outillé** par le mécanisme de **scopes** (quelles étapes s'exécutent) et par deux **axes d'exécution indépendants** — **Depth** (détail des artefacts) et **Stratégie de vérification** (intensité de la vérification QA) — détaillés dans [`protocols/scopes-and-axes.md`](protocols/scopes-and-axes.md). La grille binaire historique « allégé vs complet » est **remplacée** par cette matrice : `config-change` est l'héritier de l'« allégé ».
 
 ---
 
@@ -56,7 +56,7 @@ flowchart TD
 | **Initialisation** | 0 | Initialisation | [`stack-detection`](stages/initialisation/stack-detection.md) · [`concurrency-lock-read`](stages/initialisation/concurrency-lock-read.md) · [`deployment-prereqs-precheck`](stages/initialisation/deployment-prereqs-precheck.md) · [`labels-audit-init`](stages/initialisation/labels-audit-init.md) | Non (bootstrap déterministe) |
 | **Idéation** | 1 | Idéation | [`intent-capture`](stages/ideation/intent-capture.md) · [`feasibility-arbitration`](stages/ideation/feasibility-arbitration.md) · [`scope-detection`](stages/ideation/scope-detection.md) · [`auth-preselection`](stages/ideation/auth-preselection.md) · [`intent-scope-approval`](stages/ideation/intent-scope-approval.md) | Léger (intention + périmètre) |
 | **Cadrage et Paramètres** | 2 | Inception | [`n8n-absolute-rule`](stages/cadrage/n8n-absolute-rule.md) · [`domain-triage`](stages/cadrage/domain-triage.md) · [`intake-framing`](stages/cadrage/intake-framing.md) · [`swarm-proxmox-arbitration`](stages/cadrage/swarm-proxmox-arbitration.md) · [`required-parameters-collection`](stages/cadrage/required-parameters-collection.md) | Advisory (avant Production) |
-| **Production et Contrôle** | 3 | Construction | [`autonomy-mode`](stages/production/autonomy-mode.md) · [`docker-compose-creation`](stages/production/docker-compose-creation.md) · [`docker-compose-qa`](stages/production/docker-compose-qa.md) · [`terraform-configuration`](stages/production/terraform-configuration.md) · [`n8n-branch`](stages/production/n8n-branch.md) · [`home-assistant-branch`](stages/production/home-assistant-branch.md) · [`central-quality-control`](stages/production/central-quality-control.md) | Granulaire |
+| **Production et Contrôle** | 3 | Construction | [`autonomy-mode`](stages/production/autonomy-mode.md) · [`terraform-configuration`](stages/production/terraform-configuration.md) · [`docker-compose-creation`](stages/production/docker-compose-creation.md) · [`quality-assurance`](stages/production/quality-assurance.md) · [`n8n-branch`](stages/production/n8n-branch.md) · [`home-assistant-branch`](stages/production/home-assistant-branch.md) · [`central-quality-control`](stages/production/central-quality-control.md) | Granulaire |
 | **Validation et Déploiement** | 4 | Operation | [`deployment-prereqs-check`](stages/validation/deployment-prereqs-check.md) · [`review-and-notification`](stages/validation/review-and-notification.md) · [`human-granular-validation`](stages/validation/human-granular-validation.md) · [`file-deposit`](stages/validation/file-deposit.md) · [`kestra-deployment`](stages/validation/kestra-deployment.md) · [`closure`](stages/validation/closure.md) | Explicite |
 
 > **Compatibilité ascendante.** Les libellés Homelab historiques (`Cadrage et Paramètres`, `Production et Contrôle`, `Validation et Déploiement`) restent valides comme alias. Les couches de règles `phase` ([`homelab/rules/phases/<phase>.md`](../rules/README.md)) sont nommées par le **nom** de phase (pas le numéro) et restent inchangées.
@@ -107,13 +107,13 @@ Ne jamais avancer sur un élément non validé. Ne jamais fusionner des choix en
 
 ### Tenue du journal d'observations (candidats-règles)
 
-Pendant un stage, chaque correction / rejet ❌ / reformulation 💬 humaine (ou correction récurrente du QA Docker) sur un choix est consignée en commentaire sur l'issue comme **candidat-règle** potentiel (balise `[candidat-règle]`). Au point de validation, le Tech Lead remonte les candidats formulés en règles courtes (couche + portée proposées). **Aucune règle n'est écrite sans validation humaine explicite** ni sans le contrôle de conflit à l'admission ; une règle apprise s'applique au **prochain** workflow, jamais en cours de route. Détail : [`homelab/rules/`](../rules/README.md) et [`protocols/governance-security.md`](protocols/governance-security.md).
+Pendant un stage, chaque correction / rejet ❌ / reformulation 💬 humaine (ou correction récurrente de l'Analyste QA) sur un choix est consignée en commentaire sur l'issue comme **candidat-règle** potentiel (balise `[candidat-règle]`). Au point de validation, le Tech Lead remonte les candidats formulés en règles courtes (couche + portée proposées). **Aucune règle n'est écrite sans validation humaine explicite** ni sans le contrôle de conflit à l'admission ; une règle apprise s'applique au **prochain** workflow, jamais en cours de route. Détail : [`homelab/rules/`](../rules/README.md) et [`protocols/governance-security.md`](protocols/governance-security.md).
 
 ---
 
 ## Verification gates aux frontières de phases
 
-À **chaque transition de phase**, avant le point de validation humaine, le Tech Lead exécute le **contrôle automatique de traçabilité** décrit dans le manifeste [`homelab/sensors/gates.md`](../sensors/gates.md) et poste un **« Rapport de vérification »** sur l'issue. Ces gates (et les sensors déclenchés à l'écriture d'un artefact) sont **advisory par défaut** : ils factualisent la traçabilité mais **ne remplacent jamais** la validation humaine, le QA Docker systématique ni le contrôle sécurité (garde-fous SG-1..6 — voir [`protocols/governance-security.md`](protocols/governance-security.md)).
+À **chaque transition de phase**, avant le point de validation humaine, le Tech Lead exécute le **contrôle automatique de traçabilité** décrit dans le manifeste [`homelab/sensors/gates.md`](../sensors/gates.md) et poste un **« Rapport de vérification »** sur l'issue. Ces gates (et les sensors déclenchés à l'écriture d'un artefact) sont **advisory par défaut** : ils factualisent la traçabilité mais **ne remplacent jamais** la validation humaine, le contrôle QA systématique ni le contrôle sécurité (garde-fous SG-1..6 — voir [`protocols/governance-security.md`](protocols/governance-security.md)).
 
 > **Exception sécurité confirmée (ALI-204).** Les sensors `plaintext-secret` et `terraform-no-sni` sont **bloquants sur les scopes `security-patch` / `new-stack`** : une détection y arrête l'avancée jusqu'à correction ou levée humaine explicite tracée. Même bloquant, un sensor **ne décide jamais à la place de l'humain**.
 
@@ -152,7 +152,7 @@ Aucun scope, aucune règle apprise, aucun gate/sensor advisory ne peut désactiv
 - **Validation humaine granulaire** (chaque choix validé / rejeté séparément).
 - **Aucune action à impact** (dépôt de fichiers, flux Kestra, application n8n / Home Assistant) sans validation humaine explicite.
 - **Piste d'audit** sur l'issue ; **décision structurante tracée** en ADR.
-- **Contrôle sécurité** (sécurité de base d'un homelab : secrets, exposition, permissions, durcissement Docker/Swarm, Traefik) systématique, porté par le QA Docker et l'Architecte de sécurité Homelab.
+- **Contrôle sécurité** (sécurité de base d'un homelab : secrets, exposition, permissions, durcissement Docker/Swarm, Traefik) systématique, porté par l'Analyste QA et l'Architecte de sécurité Homelab.
 
 Le détail des garde-fous (plancher sécurité des scopes, SEC-1..5 du learning-loop, SG-1..6 des gates/sensors, protection contre les entrées non fiables) est dans [`protocols/governance-security.md`](protocols/governance-security.md).
 
@@ -164,9 +164,9 @@ Le détail des garde-fous (plancher sécurité des scopes, SEC-1..5 du learning-
 sequenceDiagram
     participant H as Humain
     participant S as Tech Lead Homelab
-    participant B as Specialiste Docker
-    participant K as QA Docker
     participant An as Specialiste Terraform
+    participant B as Specialiste Docker
+    participant K as Analyste QA
     participant M as Expert n8n
     participant Hu as Expert Home Assistant
     participant AL as Agent de notifications
@@ -176,13 +176,15 @@ sequenceDiagram
     S->>H: Gate leger - intention + perimetre + scope confirme (IDEATION)
     H-->>S: Approbation intention + perimetre
     S->>S: Doc officielle + arbitrage + parametres (CADRAGE)
+    S->>S: Walking skeleton valide -> question autonomie (une seule fois)
+    S->>An: Delegue variables Terraform en premier (jamais apply)
+    An-->>S: Config Terraform (.tfvars)
+    S->>K: Delegue verification Terraform (mention + mission)
+    K-->>S: Rapport QA Terraform
     S->>B: Delegue creation docker-compose (mention + mission)
     B-->>S: Compose + recapitulatif
     S->>K: Delegue verification compose (mention + mission)
-    K-->>S: Rapport + coherence Traefik
-    S->>S: Walking skeleton valide -> question autonomie (une seule fois)
-    S->>An: Delegue variables Terraform (jamais apply)
-    An-->>S: Config Terraform
+    K-->>S: Rapport QA + coherence Traefik
     S->>M: Branche n8n si demande n8n (delegation immediate)
     M-->>S: Proposition / flux applique apres validation
     S->>Hu: Branche Home Assistant si demande HA
@@ -191,7 +193,7 @@ sequenceDiagram
     S->>S: in_review + prerequis 4.0
     S->>AL: Demande notification revue prete
     AL-->>H: Notification ntfy
-    S->>H: Validation granulaire (Docker + Terraform)
+    S->>H: Validation granulaire (Terraform + Docker)
     H-->>S: Validation / rejet par element
     S->>H: Propose chemins de depot + attend confirmation (OPERATION)
     H-->>S: Confirmation depot + Kestra si demande (validation explicite)
@@ -205,7 +207,7 @@ sequenceDiagram
 - [`protocols/stage-definition.md`](protocols/stage-definition.md) — schéma du front-matter d'une fiche de stage.
 - [`protocols/stage-protocol.md`](protocols/stage-protocol.md) — cycle générique d'exécution d'un stage.
 - [`protocols/governance-security.md`](protocols/governance-security.md) — gouvernance A2A, contrôle sécurité, invariants, garde-fous, concurrence par stack.
-- [`protocols/reviewer.md`](protocols/reviewer.md) — protocole de revue (QA Docker + sécurité Homelab).
+- [`protocols/reviewer.md`](protocols/reviewer.md) — protocole de revue (Analyste QA + sécurité Homelab).
 - [`protocols/report-format.md`](protocols/report-format.md) — format unique du compte-rendu A2A (JSON en pièce jointe + mention valide), schéma [`protocols/report-format.schema.json`](protocols/report-format.schema.json).
 - [`protocols/scopes-and-axes.md`](protocols/scopes-and-axes.md) — scopes, axes Depth / vérification, matrice stage × scope.
 - [`stages/`](stages/) — fiches de stage des 5 phases.

@@ -3,6 +3,24 @@
 Format basé sur [Keep a Changelog](https://keepachangelog.com/) ; versionnage
 [SemVer](https://semver.org/).
 
+## [Non publié]
+
+### Added
+- Skill `terraform-qa` — vérification adversariale d'une configuration Terraform
+  (`.tf`/`.tfvars`) : structure HCL, conformité au template de stack, cohérence
+  des variables (dont `cloudflare_dns_nb`), absence de `${SNI}` et de secret en
+  clair, absence d'exécution Terraform. Skill agnostique du workflow (voir
+  `decisions/0028-…`). Rattaché à l'agent **Analyste QA** dans le cadre de la
+  réorganisation du workflow (`decisions/0027-…`). Ligne ajoutée au mapping des
+  skills de `README.md`.
+
+### Changed
+- **Renommage `QA Docker` → `Analyste QA`** dans le mapping des skills de
+  `README.md` : l'agent QA couvre désormais les livrables Docker Compose **et**
+  Terraform (skill `terraform-qa` en plus de `docker-composer` /
+  `dockerfile-validator`). Voir `decisions/0027-…` (réorganisation Phase 3 :
+  Terraform avant compose, QA élargi au Terraform).
+
 ## [1.0.0]
 
 ### Added

@@ -22,7 +22,7 @@ travail.
 court-circuite l'auto-détection des scopes stack dès qu'une tâche Home Assistant est identifiée.
 
 Axes par défaut : Depth `standard`, vérification `standard` (adaptés au domaine Home Assistant ;
-le QA Docker « compose » ne s'applique pas à cette branche).
+le vérification QA « compose » ne s'applique pas à cette branche).
 
 **Validation humaine granulaire préservée** : aucune modification réelle sans feu vert humain
 explicite.

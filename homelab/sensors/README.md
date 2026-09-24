@@ -15,17 +15,17 @@ Ces fichiers **décrivent le contrat** (périmètre de déclenchement, règles d
 
 - La grande majorité des gates et sensors **ne bloquent jamais** : ils laissent une trace d'audit factuelle sans arrêter le flux.
 - **Exception sécurité confirmée (ALI-204, arbitrage 2)** : `plaintext-secret` et `terraform-no-sni` sont **bloquants sur les scopes `security-patch` / `new-stack`** (`severity_overrides`) — une détection **arrête l'avancée du workflow** jusqu'à correction ou levée humaine explicite tracée. Partout ailleurs, ils restent advisory.
-- Même bloquant, un sensor **ne remplace jamais** la **validation humaine granulaire** (unique gate décisionnel de fond), ni le **QA Docker systématique** (§2.2), ni le contrôle qualité central du Tech Lead (§2.6) : bloquer, c'est forcer la correction ou une levée humaine tracée, pas décider à la place de l'humain.
+- Même bloquant, un sensor **ne remplace jamais** la **validation humaine granulaire** (unique gate décisionnel de fond), ni le **contrôle QA systématique** (§2.2), ni le contrôle qualité central du Tech Lead (§2.6) : bloquer, c'est forcer la correction ou une levée humaine tracée, pas décider à la place de l'humain.
 - Un signal **au vert ne vaut pas validation** ; un signal **en échec n'autorise aucun raccourci**.
-- Toute évolution de la sévérité d'un sensor (bascule bloquant/advisory, périmètre de scopes) est une décision structurante explicite (ADR + contrôle sécurité QA Docker, SG-1).
+- Toute évolution de la sévérité d'un sensor (bascule bloquant/advisory, périmètre de scopes) est une décision structurante explicite (ADR + contrôle sécurité Analyste QA, SG-1).
 
-## Clauses de sécurité (contrôle QA Docker — SG-1 à SG-6)
+## Clauses de sécurité (contrôle Analyste QA — SG-1 à SG-6)
 
-Ces clauses sont **contraignantes** et alignent `homelab/sensors/` sur le niveau d'exigence de `homelab/rules/`. Le contrôle sécurité du mécanisme est assuré par le **QA Docker** (compétence hardening / sécurité compose / Traefik ; pas d'Architecte cybersécurité dédié dans l'équipe Homelab) :
+Ces clauses sont **contraignantes** et alignent `homelab/sensors/` sur le niveau d'exigence de `homelab/rules/`. Le contrôle sécurité du mécanisme est assuré par l'**Analyste QA** (compétence hardening / sécurité compose / Traefik ; pas d'Architecte cybersécurité dédié dans l'équipe Homelab) :
 
 - **SG-1 — Intégrité du canal des manifestes** (analogue SEC-5) : aucun manifeste (gate ou sensor) n'est ajouté / modifié / supprimé **hors PR revue** ; toute modification est versionnée et porte `origine` (issue) + date ; un manifeste sans provenance traçable est **invalide**. **Affaiblir un check** (retrait d'une règle, ajout d'une exception, réduction du périmètre de déclenchement) est une modification de la surface de gouvernance **soumise au contrôle sécurité**.
 - **SG-2 — Indisponible ≠ conforme** : un sensor / gate non exécuté, en erreur, ou hors périmètre produit le verdict explicite `⛔ indisponible`, tracé comme un **écart**, jamais comme un vert. L'absence d'un signal attendu est elle-même un écart.
-- **SG-3 — Plancher sécurité** : un gate / sensor ne peut **jamais porter, remplacer, conditionner ni court-circuiter** le QA Docker systématique, le contrôle sécurité, la validation humaine granulaire, ni le plancher sécurité des scopes (`homelab/scopes/README.md`). Le contrôle sécurité reste hors du périmètre automatisable.
+- **SG-3 — Plancher sécurité** : un gate / sensor ne peut **jamais porter, remplacer, conditionner ni court-circuiter** le contrôle QA systématique, le contrôle sécurité, la validation humaine granulaire, ni le plancher sécurité des scopes (`homelab/scopes/README.md`). Le contrôle sécurité reste hors du périmètre automatisable.
 - **SG-4 — Pré-requis de l'exécution différée** (avant tout passage en CI) : parsing statique uniquement (pas de rendu, pas de réseau, pas d'exécution de code / directive embarquée) ; contenu d'artefact = donnée non fiable ; environnement sans secret ni privilège ; `matches` glob bornés au repo ; échec → `⛔ indisponible`, jamais `✅`. Pour `vault-secret-exists` : **lecture de présence uniquement**, jamais la valeur.
 - **SG-5 — Signal = donnée factuelle à source tracée** : un rapport / signal porte sa **source** (manifeste + version / commit) ; provenance non traçable → traité comme `⛔ indisponible`. Le jugement reste humain.
 - **SG-6 — Anti-érosion sémantique** (analogue SEC-1) : un manifeste modifié pour restreindre le périmètre, ajouter une exception ou conditionner un check est un affaiblissement soumis au contrôle sécurité, même sans contradiction littérale.
@@ -61,7 +61,7 @@ Six sensors, alignés sur le contrat amont « Sensors » (schéma de manifeste `
 
 > **Sensors prioritaires** (confirmés ALI-204, arbitrage 1) : `yaml-validity`, `swarm-deploy-section`, `plaintext-secret`, `terraform-no-sni`. **Complémentaire** : `traefik-coherence`. `vault-secret-exists` est **actif** (arbitrage 4), en existence seule.
 >
-> **Sévérité — advisory par défaut, bloquant conditionnel** (confirmé ALI-204, arbitrage 2) : `plaintext-secret` et `terraform-no-sni` sont **bloquants sur les scopes `security-patch` / `new-stack`** (front-matter `severity_overrides`), advisory partout ailleurs. Sur ces scopes, une détection **arrête l'avancée** jusqu'à correction ou levée humaine explicite tracée. Contrôle sécurité assuré par le QA Docker (SG-1). Tous les autres sensors restent advisory.
+> **Sévérité — advisory par défaut, bloquant conditionnel** (confirmé ALI-204, arbitrage 2) : `plaintext-secret` et `terraform-no-sni` sont **bloquants sur les scopes `security-patch` / `new-stack`** (front-matter `severity_overrides`), advisory partout ailleurs. Sur ces scopes, une détection **arrête l'avancée** jusqu'à correction ou levée humaine explicite tracée. Contrôle sécurité assuré par l'Analyste QA (SG-1). Tous les autres sensors restent advisory.
 
 ## Format d'un manifeste de sensor (contrat amont)
 

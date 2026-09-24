@@ -2,7 +2,7 @@
 
 Manifeste déclaratif des **verification gates** du workflow Homelab, référencés par le triptyque `homelab/common/` (source unique — voir `conductor.md`, « Verification gates aux frontières de phases ») et exécutés aux **frontières de phases** par le **Tech Lead Homelab**. **Advisory** : produit un « Rapport de vérification » sur l'issue, **ne bloque jamais** la validation humaine granulaire (sauf exception ci-dessous). Vue narrative historique (stub) : `docs/homelab-workflow.md`.
 
-Pendant Homelab de `core/sensors/gates.md` : même forme déclarative, **frontières et artefacts spécifiques au Homelab** (documentation officielle, paramètres requis §2.4, livrables compose + `.tfvars`, QA Docker, prérequis de déploiement §4.0).
+Pendant Homelab de `core/sensors/gates.md` : même forme déclarative, **frontières et artefacts spécifiques au Homelab** (documentation officielle, paramètres requis §2.4, livrables `.tfvars` + compose, vérification QA (Analyste QA), prérequis de déploiement §4.0).
 
 À chaque **frontière de phase**, en amont de la validation humaine, trois contrôles déterministes :
 
@@ -12,7 +12,7 @@ Pendant Homelab de `core/sensors/gates.md` : même forme déclarative, **fronti�
 
 ## Nature advisory et exception bloquante par scope
 
-Les gates sont **advisory par défaut** : ils signalent un écart, ne bloquent pas. **Exception (ALI-204, alignée sur les sensors bloquants)** : sur scope `new-stack` / `infra-terraform`, l'artefact `livrable_tfvars_present` de la frontière `phase3-phase4` est **requis de façon non-conditionnelle** — son absence est un **écart bloquant** qui arrête l'avancée jusqu'à correction ou levée humaine explicite tracée. Ce durcissement reflète le caractère non abaissable du livrable Terraform sur ces scopes (voir `new-stack.md` et `terraform-configuration.md`) et la sévérité déjà bloquante du sensor `terraform-no-sni` sur `new-stack`. Il **ne remplace pas** la validation humaine granulaire ni le QA Docker (SG-3).
+Les gates sont **advisory par défaut** : ils signalent un écart, ne bloquent pas. **Exception (ALI-204, alignée sur les sensors bloquants)** : sur scope `new-stack` / `infra-terraform`, l'artefact `livrable_tfvars_present` de la frontière `phase3-phase4` est **requis de façon non-conditionnelle** — son absence est un **écart bloquant** qui arrête l'avancée jusqu'à correction ou levée humaine explicite tracée. Ce durcissement reflète le caractère non abaissable du livrable Terraform sur ces scopes (voir `new-stack.md` et `terraform-configuration.md`) et la sévérité déjà bloquante du sensor `terraform-no-sni` sur `new-stack`. Il **ne remplace pas** la validation humaine granulaire ni le contrôle QA (SG-3).
 
 ## Frontières et artefacts requis
 
@@ -60,9 +60,9 @@ boundaries:
   - id: phase3-phase4
     frontiere: "Phase 3 → Phase 4 (Production → Validation)"
     artefacts_requis:
-      - livrable_compose_present           # docker-compose téléchargeable (§3.1)
-      - livrable_tfvars_present            # config Terraform .tfvars (§3.3) — bloquant sur new-stack / infra-terraform (voir blocking_on_scope) ; conditionnel sinon
-      - qa_docker_passe                    # vérification QA Docker rendue et contrôlée (§3.2)
+      - livrable_tfvars_present            # config Terraform .tfvars (§3.2) — PRODUIT EN PREMIER — bloquant sur new-stack / infra-terraform (voir blocking_on_scope) ; conditionnel sinon
+      - livrable_compose_present           # docker-compose téléchargeable (§3.3, après le Terraform)
+      - qa_passe                           # vérification QA (Analyste QA) rendue et contrôlée — Terraform ET compose (§3.4)
       - controle_qualite_central_go        # aiguillage GO du Tech Lead (§3.6)
     checks: [artefacts-presents, liaison-tracabilite, absence-orphelin]
     blocking_on_scope:                     # écart bloquant (non advisory) pour ces couples artefact × scope
@@ -93,7 +93,7 @@ Le contrôle `phase3-phase4` **anticipe** les prérequis de déploiement du §4.
 - Advisory (cas général) : le Tech Lead Homelab **ne bloque pas** ; il **signale l'écart** dans le « Rapport de vérification » et **propose de revenir corriger** avant de présenter le contenu à l'humain.
 - Bloquant : un `livrable_tfvars_present` manquant sur `new-stack` / `infra-terraform` (voir `blocking_on_scope`) **arrête l'avancée** jusqu'à correction ou levée humaine explicite tracée.
 - L'humain reste seul décideur : demander la correction, ou valider en connaissance de cause en actant l'écart sur l'issue.
-- Le gate automatique ne remplace, n'abaisse ni ne court-circuite jamais la validation humaine granulaire, le QA Docker systématique ni les garde-fous absolus (invariants non négociables — SG-3).
+- Le gate automatique ne remplace, n'abaisse ni ne court-circuite jamais la validation humaine granulaire, le contrôle QA systématique ni les garde-fous absolus (invariants non négociables — SG-3).
 
 ## Rapport de gate (piste d'audit)
 

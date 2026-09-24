@@ -1,6 +1,6 @@
 # Règles — couche `phase` : Production et Contrôle
 
-Règles propres à la phase **Production et Contrôle** (Phase 2 : création docker-compose, vérification QA Docker, configuration Terraform, branches n8n/HA, contrôle qualité central). Chargées **à la demande** quand la phase Production est déclenchée.
+Règles propres à la phase **Production et Contrôle** (Phase 2 : création docker-compose, vérification Analyste QA, configuration Terraform, branches n8n/HA, contrôle qualité central). Chargées **à la demande** quand la phase Production est déclenchée.
 
 Précédence : sous `global` et `stack`, au-dessus de `scope`.
 

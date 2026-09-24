@@ -31,7 +31,7 @@
 | PHASE 0 — Initialisation (§0.1–0.4) | [`stages/initialisation/`](../homelab/common/stages/initialisation/) (`stack-detection`, `concurrency-lock-read`, `deployment-prereqs-precheck`, `labels-audit-init`) |
 | PHASE 1 — Idéation (§1.1–1.3) | [`stages/ideation/`](../homelab/common/stages/ideation/) (`intent-capture`, `feasibility-arbitration`, `scope-detection`, `auth-preselection`, `intent-scope-approval`) |
 | PHASE 2 — Cadrage et Paramètres (§2.1–2.4) | [`stages/cadrage/`](../homelab/common/stages/cadrage/) (`n8n-absolute-rule`, `intake-framing`, `swarm-proxmox-arbitration`, `required-parameters-collection`) |
-| PHASE 3 — Production et Contrôle (§3.0–3.6) | [`stages/production/`](../homelab/common/stages/production/) (`autonomy-mode`, `docker-compose-creation`, `docker-compose-qa`, `terraform-configuration`, `n8n-branch`, `home-assistant-branch`, `central-quality-control`) |
+| PHASE 3 — Production et Contrôle (§3.0–3.6) | [`stages/production/`](../homelab/common/stages/production/) (`autonomy-mode`, `terraform-configuration`, `docker-compose-creation`, `quality-assurance`, `n8n-branch`, `home-assistant-branch`, `central-quality-control`) |
 | PHASE 4 — Validation et Déploiement (§4.0–4.5) | [`stages/validation/`](../homelab/common/stages/validation/) (`deployment-prereqs-check`, `review-and-notification`, `human-granular-validation`, `file-deposit`, `kestra-deployment`, `closure`) |
 | Points de synchronisation A2A, principes clés & garde-fous | Diagrammes + « Garde-fous » de [`conductor.md`](../homelab/common/conductor.md) |
 

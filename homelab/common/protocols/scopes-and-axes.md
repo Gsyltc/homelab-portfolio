@@ -1,6 +1,6 @@
 # Protocole — scopes & axes d'exécution (Homelab)
 
-Table partagée référencée par le [`conductor.md`](../conductor.md) et les fiches de stage. Le routage repose sur un **scope** nommé (parcours d'étapes déterministe et auditable) et deux **axes indépendants** — **Depth** (détail des artefacts) et **Stratégie de vérification** (intensité du QA Docker).
+Table partagée référencée par le [`conductor.md`](../conductor.md) et les fiches de stage. Le routage repose sur un **scope** nommé (parcours d'étapes déterministe et auditable) et deux **axes indépendants** — **Depth** (détail des artefacts) et **Stratégie de vérification** (intensité de la vérification QA).
 
 > **Source d'identité vs vue lisible.** L'**identité** de chaque scope (nom, `depth`, `verification`, `keywords`, `branch`) est portée en données, **un fichier par scope**, sous [`../../scopes/`](../../scopes/README.md) (contrat amont « Scopes »). Ce document reste la **vue lisible** consolidée — table des scopes, axes, ordre de désambiguïsation, matrice stage × scope. **En cas d'écart sur l'identité d'un scope, le fichier `homelab/scopes/<name>.md` fait foi.** L'appartenance (quels stages tournent sous un scope) est transposée sur le champ `scopes:` des fiches de stage.
 
@@ -31,9 +31,9 @@ Scope auto-détecté par mots-clés (FR / EN) puis **confirmé explicitement** a
 ## Axes
 
 - **Axe 1 — Depth** : `minimal` / `standard` / `comprehensive` (détail des artefacts : docker-compose, config Terraform, documentation). Contrôle *combien on écrit*.
-- **Axe 2 — Stratégie de vérification** : `advisory` / `standard` / `renforcé` (**intensité du QA Docker** et du contrôle qualité central). Contrôle *à quel point on vérifie*. Distinct de la Depth.
+- **Axe 2 — Stratégie de vérification** : `advisory` / `standard` / `renforcé` (**intensité de la vérification QA** et du contrôle qualité central). Contrôle *à quel point on vérifie*. Distinct de la Depth.
   - `advisory` — validité YAML + cohérence de base (syntaxe seule), signalée sans bloquer.
-  - `standard` — QA Docker complet : compatibilité Swarm (`deploy`), réseaux/volumes/secrets, hardening standard, cohérence Traefik (`traefik-manager-read`).
+  - `standard` — vérification QA complète : compatibilité Swarm (`deploy`), réseaux/volumes/secrets, hardening standard, cohérence Traefik (`traefik-manager-read`).
   - `renforcé` — vérification `standard` **plus** audit de sécurité approfondi (secrets `_FILE`, exposition, permissions, absence de `${SNI}`, revue durcissement).
 
 Les valeurs par défaut ci-dessous sont la **projection lisible** des champs `depth` / `verification` des fichiers de scope. **Le fichier `homelab/scopes/<name>.md` fait foi.**
@@ -64,9 +64,9 @@ Légende : ✅ activé · ➖ allégé / au juste nécessaire · ❌ ignoré · 
 | `swarm-proxmox-arbitration`      | ➖              | ✅           | ❌               | ➖                | ✅                 | ⏭           | ⏭                |
 | `required-parameters-collection` | ✅              | ✅           | ➖               | ✅                | ➖                 | ⏭           | ⏭                |
 | `autonomy-mode`                  | ✅              | ✅           | ➖               | ✅                | ✅                 | ⏭           | ⏭                |
-| `docker-compose-creation`        | ✅              | ✅           | ➖               | ✅                | ❌                 | ⏭           | ⏭                |
-| `docker-compose-qa`              | ✅              | ✅ 🔒         | ➖               | ✅ 🔒              | ❌                 | ⏭           | ⏭                |
 | `terraform-configuration`        | ➖              | ✅           | ❌               | ➖                | ✅                 | ⏭           | ⏭                |
+| `docker-compose-creation`        | ✅              | ✅           | ➖               | ✅                | ❌                 | ⏭           | ⏭                |
+| `quality-assurance`              | ✅              | ✅ 🔒         | ➖               | ✅ 🔒              | ✅                 | ⏭           | ⏭                |
 | `n8n-branch`                     | ❌              | ❌           | ❌               | ❌                | ❌                 | ✅           | ❌                |
 | `home-assistant-branch`          | ❌              | ❌           | ❌               | ❌                | ❌                 | ❌           | ✅                |
 | `central-quality-control`        | ✅              | ✅ 🔒         | ➖               | ✅ 🔒              | ✅                 | ✅           | ✅                |
