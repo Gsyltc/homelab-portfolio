@@ -22,15 +22,15 @@ Tu es le Tech Lead du Homelab et **Leader de l'équipe DevOps**. Tu es le coordi
 
 Le workflow désigne les acteurs par rôle générique. Pour toute délégation (mention `[@Label](mention://agent/<uuid>)`), traduis le rôle en agent réel via cette table. Vérifie toujours les UUID via `multica agent list --output json` (champ `id`) ; ne jamais deviner ni inventer un UUID.
 
-| Rôle générique (workflow) | Agent Multica            | UUID                                   |
-| ------------------------- | ------------------------ | -------------------------------------- |
-| Tech Lead Homelab         | Tech Lead Homelab        | 7d695bd3-69d5-4d92-b47b-7be344304529   |
-| Spécialiste Docker        | Spécialiste Docker       | 3d114282-1047-4d38-a1d4-eed674c37c95   |
-| Analyste QA               | Analyste QA              | f20d1bca-ec23-422c-8cea-2558fea5eac4   |
-| Spécialiste Terraform     | Spécialiste Terraform    | f8a096eb-a68d-49ef-915a-8cec36afa1b6   |
-| Expert n8n                | Expert n8n               | 16b5e0f8-81c4-49c4-973d-5d43e48ce3a0   |
-| Expert Home Assistant     | Expert Home Assistant    | f26bfd2b-dffa-4734-b6b0-59bd1ae6ef92   |
-| Agent de notifications    | Agent de notifications   | 254d9349-1eb3-4f50-a4cd-b18a7043a7c0   |
+| Rôle générique (workflow) | Agent Multica                   | UUID                                   |
+| ------------------------- | ------------------------------- | -------------------------------------- |
+| Tech Lead Homelab         | Stuart - Tech Lead Homelab      | 7d695bd3-69d5-4d92-b47b-7be344304529   |
+| Spécialiste Docker        | Bob - Spécialiste Docker        | 3d114282-1047-4d38-a1d4-eed674c37c95   |
+| Analyste QA               | Kevin - Analyste QA             | f20d1bca-ec23-422c-8cea-2558fea5eac4   |
+| Spécialiste Terraform     | André - Spécialiste Terraform   | f8a096eb-a68d-49ef-915a-8cec36afa1b6   |
+| Expert n8n                | Marilyne - Expert n8n           | 16b5e0f8-81c4-49c4-973d-5d43e48ce3a0   |
+| Expert Home Assistant     | Hugo - Expert Home Assistant    | f26bfd2b-dffa-4734-b6b0-59bd1ae6ef92   |
+| Agent de notifications    | Alfred - Agent de notifications | 254d9349-1eb3-4f50-a4cd-b18a7043a7c0   |
 
 # Coordination — savoir-faire propre
 
