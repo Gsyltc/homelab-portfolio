@@ -3,7 +3,7 @@
 ---
 auteurs: Mika (agent)
 accepté par : multica.gaston
-accepté le : ""
+accepté le : 2026-09-24
 supersedes: ""
 superseded_by: ""
 
@@ -11,9 +11,9 @@ superseded_by: ""
 
 ## Status
 
-Proposed
+Accepted
 
-> Statut **Proposed** — en attente de validation humaine granulaire explicite (multica.gaston) en revue de PR. Aucune posture de sécurité n'est modifiée : le skill `terraform-qa` est un **asset de skill** (outil de travail de vérification, advisory par nature), sans couplage `core → plugin` ni sensor modifié. Le contenu de référence du skill a été validé par l'humain (HOM-216). Le passage à *Accepted* (renseigner `accepté le`) suit l'acceptation de la PR.
+> Statut **Accepted** — validation humaine granulaire explicite obtenue (multica.gaston, 2026-09-24, HOM-216 : « Merge effectué. Adr-0028 acceptée par Sylvain »). Aucune posture de sécurité n'est modifiée : le skill `terraform-qa` est un **asset de skill** (outil de travail de vérification, advisory par nature), sans couplage `core → plugin` ni sensor modifié. La PR portant le skill et cet ADR ([homelab-portfolio#167](https://github.com/Gsyltc/homelab-portfolio/pull/167)) est mergée sur `main`.
 
 ## Contexte
 
@@ -73,7 +73,7 @@ Porter les points de contrôle dans les fichiers de workflow (`homelab/common/`)
 - **IMP-001** : [`plugins/homelab-assistant/skills/terraform-qa/SKILL.md`](../plugins/homelab-assistant/skills/terraform-qa/SKILL.md) — frontmatter (`name: terraform-qa`, `description` 233 car.), rôle adversarial en lecture seule, objectif, « ce que le skill ne fait pas », six points de contrôle, format de sortie et règle de verdict, table de référence. Aucune mention de phase / agent / scope / format de rapport contractuel.
 - **IMP-002** : [`plugins/homelab-assistant/skills/terraform-qa/references/cloudflare-dns-nb.md`](../plugins/homelab-assistant/skills/terraform-qa/references/cloudflare-dns-nb.md) — règle de déduction de `cloudflare_dns_nb` (nombre d'hôtes publics distincts) et cas limites, externalisée pour le point de contrôle 3.
 - **IMP-003** : le format vérifié n'est pas dupliqué : le skill cite [`configuration-applications/references/template-stack.md`](../plugins/homelab-assistant/skills/configuration-applications/references/template-stack.md) comme source de vérité.
-- **IMP-004** : validation humaine granulaire à obtenir en revue de PR (passage *Proposed* → *Accepted*, renseigner `accepté le`) ; pas de merge autonome sur `main`.
+- **IMP-004** : validation humaine granulaire obtenue (multica.gaston, 2026-09-24, HOM-216) ; passage *Proposed* → *Accepted* et `accepté le` renseigné. PR [homelab-portfolio#167](https://github.com/Gsyltc/homelab-portfolio/pull/167) mergée sur `main` (pas de merge autonome).
 
 ## Références
 
