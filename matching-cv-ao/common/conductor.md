@@ -86,7 +86,6 @@ flowchart TD
     P3 --> P4[PHASE 4 - CLÔTURE]
     P0 -.->|bootstrap deterministe - reception AO - sans gate humain| P0
     P1 -.->|gate leger - validation extraction| P1
-    P2 -.->|gate advisory - presentation scores| P2
     P3 -.->|validation granulaire humaine - Keep/Modify/Redo| P3
     P4 -.->|validation humaine explicite| P4
 ```
@@ -95,11 +94,11 @@ flowchart TD
 | --- | --- | --- | --- |
 | **Initialisation** | 0 | `reception-ao` · `chargement-cv` | Non (bootstrap déterministe) |
 | **Analyse** | 1 | `parse-ao` · `extraction-cv` | Léger (validation extraction) |
-| **Matching** | 2 | `croisement-profils` · `classement-profils` | Léger (`human_gate: light`) — présentation *advisory* des scores |
+| **Matching** | 2 | `croisement-profils` · `classement-profils` | Non (sensor advisory de traçabilité uniquement) |
 | **Validation** | 3 | `presentation-resultats` · `remplissage-grille` | Granulaire (Keep/Modify/Redo) |
 | **Clôture** | 4 | `livraison` · `mise-a-jour-cv` | Explicite |
 
-> **`human_gate` (blocage humain) ≠ nature de la revue/sensor.** La colonne « Gate humain » reporte la valeur `human_gate` de la fiche de stage (énum `none | light | granular | explicit`). « Advisory » qualifie la **nature d'une revue ou d'un sensor** (`review_class` / sensor `nature`), jamais un niveau de gate humain : au Matching, `human_gate` est **`light`** et la présentation des scores est *advisory* (consultative, non bloquante).
+> **`human_gate` (blocage humain) ≠ nature de la revue/sensor.** La colonne « Gate humain » reporte la valeur `human_gate` de la fiche de stage (énum `none | light | granular | explicit`). « Advisory » qualifie la **nature d'une revue ou d'un sensor** (`review_class` / sensor `nature`), jamais un niveau de gate humain : au Matching, `human_gate` est désormais **`none`** (le rapport de scores — tableau + détail par profil — est déplacé en Phase 3, seule gate de décision humaine sur les profils) ; seul un **sensor advisory de traçabilité** subsiste à la frontière `matching-validation`.
 
 ---
 
@@ -173,8 +172,6 @@ sequenceDiagram
     H-->>S: Approbation extractions + eligibilite
     S->>M: Delegue croisement - retenus uniquement (mention + mission.json joint)
     M-->>S: Retour A2A (mention + matching-resultats.json joint)
-    S->>H: Gate advisory - presentation scores (MATCHING)
-    H-->>S: Commentaires / ajustements
     S->>S: Presentation resultats (VALIDATION)
     S->>H: Validation granulaire (Keep/Modify/Redo par profil)
     H-->>S: Validation / rejet par element

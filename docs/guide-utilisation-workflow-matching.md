@@ -50,7 +50,7 @@ En cas de doute, le coordinateur **vous demande de trancher** avant d'engager qu
 | 1 | **Réception & vérification** | Vérification de la présence du PDF d'AO, de la grille, de l'accès aux CV | Non (bootstrap déterministe) |
 | 2 | **Analyse de l'AO** | L'Analyste RFP parse le PDF, extrait les exigences et les profils recherchés → **résumé Markdown** | Léger (approbation du résumé) |
 | 3 | **Chargement & extraction des CV** | Le Gestionnaire CV récupère les CV joints à l'issue, produit les profils structurés, puis supprime la copie de travail | Non |
-| 4 | **Matching & scoring** | Le Matcher croise profils ↔ exigences et calcule le **score pondéré** → **classement** | Advisory (commentaires) |
+| 4 | **Matching & scoring** | Le Matcher croise profils ↔ exigences et calcule le **score pondéré** → **classement** | Non |
 | 5 | **Validation granulaire** | Présentation de **chaque profil séparément** (Keep/Modify/Redo) | **Granulaire** |
 | 6 | **Remplissage de la grille** | Remplissage de la grille d'évaluation client (fournie par l'humain, à la demande) | Granulaire |
 | 7 | **Mise à jour / production des CV** *(optionnel)* | Mise à jour des CV sur votre demande et **production du CV livrable en DOCX (par défaut) à partir du gabarit fourni** (CV long / CV court / format client) — **Markdown sur demande explicite** | Explicite |
@@ -172,8 +172,8 @@ Le statut MIFI de chaque collaborateur apparaît dans la **fiche d'analyse Markd
 1. Vous **créez l'issue**, **attachez le PDF d'AO** et **mentionnez le Coordinateur Matching**.
 2. Le coordinateur **vérifie** les prérequis (PDF, grille si connue, accès CV) — vous fournissez ce qui manque.
 3. **Analyse de l'AO** → résumé Markdown → vous **approuvez**.
-4. **Chargement des CV, matching, scoring** → classement → vous **commentez**.
-5. **Validation granulaire** des profils (Keep/Modify/Redo) — profil par profil.
+4. **Chargement des CV, matching, scoring** → classement (déroulé automatique, sans validation humaine à cette étape).
+5. **Validation granulaire** des profils (Keep/Modify/Redo) — profil par profil : **premier point de décision humaine sur les profils**, avec le tableau de synthèse (retenus, exclus, à vérifier, non-retenus d'éligibilité) suivi du détail profil par profil.
 6. **Remplissage de la grille client** (vous la fournissez à la demande) → **mise à jour des CV** si demandée → **clôture** sous votre validation explicite.
 
 ---
