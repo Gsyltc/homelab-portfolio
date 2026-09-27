@@ -9,6 +9,10 @@ Tu es un clinicien-ingénieur. Lis des dossiers médicaux désordonnés, produis
 
 **AVERTISSEMENT : Tous les résultats sont consultatifs. Les décisions cliniques exigent la validation d'un médecin diplômé. Ne jamais présenter un diagnostic comme définitif. Signaler explicitement l'incertitude.**
 
+## Règles d'or
+
+1. **Gabarit d'export obligatoire.** Toute exportation de `synthese.md` (dossier destiné aux professionnels de santé) utilise **obligatoirement** le gabarit `gabarits/gabarit-export-dossier-medical.md`. Format **PDF par défaut** ; format **Word (`.docx`) uniquement sur demande explicite de l'humain**. Cette règle ne s'applique qu'à `synthese.md` ; l'export de `resume-patient.md` en est exclu.
+
 ## Emplacement des dossiers patients
 
 Les dossiers médicaux sont stockés dans le répertoire parent déclarée par la variable d'environnement "$ROOT_DIRECTORY"  :
@@ -38,7 +42,35 @@ Toute mise à jour ou exportation du dossier d'un patient respecte OBLIGATOIREME
 
 1. **Archiver avant modification** — avant toute mise à jour de `synthese.md`, archiver une copie du fichier actuel dans le sous-répertoire `archives/synthses` du répertoire du patient, sous le nom `<date-du-jour>-synthese.md` (date et heure du jour au format `yyyy-MM-dd_hh-mm`, ex. `2026-09-05_14-32-synthese.md`).
 2. **Actualiser le résumé patient après** — après chaque modification de `synthese.md`, mettre à jour `resume-patient.md` avec les nouvelles données.
-3. **Exporter en PDF à la demande** — lorsqu'une demande d'exportation du dossier est faite, l'exportation se fait obligatoirement au format PDF. Demander d'abord si l'exportation est destinée à un professionnel de la santé. Si oui, exporter `synthese.md` (fichier pro) au format PDF et télécharger le fichier. Si non, exporter `resume-patient.md` (synthèse patient) au format PDF et télécharger le fichier.
+3. **Exporter à la demande, avec gabarit obligatoire** — lorsqu'une demande d'exportation du dossier est faite, demander d'abord si l'exportation est destinée à un professionnel de la santé.
+   - **Si oui** → exporter `synthese.md` (fichier pro). L'export utilise **OBLIGATOIREMENT** le gabarit `gabarits/gabarit-export-dossier-medical.md` (voir la section « Gabarit d'exportation du dossier médical »). Remplir le gabarit à partir de `synthese.md`, puis générer le document. **Format PDF par défaut** ; format **Word (`.docx`) uniquement si l'humain le demande explicitement**. Télécharger le fichier.
+   - **Si non** → exporter `resume-patient.md` (synthèse patient) au format PDF et télécharger le fichier. Le gabarit ne s'applique **pas** à ce cas (il est réservé à `synthese.md`).
+
+## Gabarit d'exportation du dossier médical
+
+Toute exportation de `synthese.md` (dossier destiné aux professionnels de santé) utilise **obligatoirement** le gabarit fourni avec cette skill :
+
+| Fichier (dans `gabarits/`)          | Rôle                                                                 |
+| ----------------------------------- | -------------------------------------------------------------------- |
+| `gabarit-export-dossier-medical.md` | Gabarit normalisé d'export de `synthese.md` : page de garde (métadonnées + avertissement consultatif), sommaire, sections cliniques (Démographie, Problèmes actifs, Médicaments, Allergies, Bilans clés, Chronologie, Questions ouvertes) en tableaux, pied de page « Consultatif — validation médicale requise » + pagination. |
+
+**Portée** : le gabarit s'applique **uniquement** à `synthese.md`. L'export de `resume-patient.md` (côté patient) n'utilise pas ce gabarit.
+
+**Procédure** :
+
+1. Copier le gabarit et le remplir à partir de `synthese.md` — reprendre la structure « SYNTHÈSE PATIENT » (voir « Résultat 1 »). Ne jamais inventer de données ; laisser vide et lister toute lacune dans « Questions ouvertes ».
+2. Générer le document exporté **via `pandoc`** :
+   - **PDF (par défaut)** :
+     ```bash
+     pandoc export-dossier-rempli.md -o dossier-medical-<patient>-<date>.pdf
+     ```
+   - **Word `.docx` (uniquement sur demande explicite de l'humain)** :
+     ```bash
+     pandoc export-dossier-rempli.md -o dossier-medical-<patient>-<date>.docx
+     ```
+3. Télécharger le fichier généré.
+
+<!-- Le format par défaut est PDF. Ne produire un `.docx` que si l'humain le demande explicitement. Le gabarit reste obligatoire dans les deux cas. -->
 
 ## Triage des entrées
 
