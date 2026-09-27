@@ -27,7 +27,7 @@ Les dossiers patients sont stockés dans le répertoire parent déclaré par la 
 
 La skill `analyse-laboratoire` est **la source unique de l'intégralité des bilans** du patient. Le sous-répertoire `laboratoire/` contient :
 
-- **Un fichier par examen** : `<date-de-l-examen>-bilan-laboratoire.md` (résultats bruts, analyse, comparaison — voir « Archivage »). Jamais écrasé : un nouvel examen = un nouveau fichier.
+- **Un fichier par examen** : `<date-de-l-examen>-<type-de-l-examen>.md` (résultats bruts, analyse, comparaison — voir « Archivage »). Jamais écrasé : un nouvel examen = un nouveau fichier.
 - **Un fichier de synthèse** : `synthese-bilans.md` — la vue consolidée destinée aux médecins (voir « Synthèse pour les médecins »). Mis à jour à chaque bilan.
 
 Le dossier médical (`synthese.md`, géré par la skill `dossiers-medicaux`) ne conserve **que les points de vigilance** et renvoie à `laboratoire/synthese-bilans.md` : les valeurs détaillées n'y sont pas recopiées.
@@ -112,9 +112,20 @@ Chaque bilan de laboratoire est archivé dans le dossier médical du patient, da
 
 ### Nom du fichier — horodaté de la date de l'examen
 
-- Nom du fichier : `<date-de-l-examen>-bilan-laboratoire.md` avec la **date de l'examen** au format `yyyy-MM-dd` (ex. `2026-09-20-bilan-laboratoire.md`). Ce n'est pas la date du jour : c'est celle du prélèvement / de l'examen.
-- Plusieurs examens le même jour : suffixer avec l'heure (ex. `2026-09-20_08-30-bilan-laboratoire.md`).
+- Nom du fichier : `<date-de-l-examen>-<type-de-l-examen>.md` avec la **date de l'examen** au format `yyyy-MM-dd` (ex. `2026-09-20-nfs.md`). Ce n'est pas la date du jour : c'est celle du prélèvement / de l'examen.
+- `<type-de-l-examen>` : identifiant **court** du type d'examen (voir « Règles du type d'examen » ci-dessous), **30 caractères maximum**.
+- Plusieurs examens le même jour : suffixer la date avec l'heure (ex. `2026-09-20_08-30-nfs.md`).
 - Fichier unique par examen ; l'ancienne valeur n'est jamais écrasée (nouvel examen = nouveau fichier).
+
+### Règles du type d'examen (`<type-de-l-examen>`)
+
+Le type est dérivé de la nature de l'examen analysé et normalisé pour servir de nom de fichier :
+
+- **Court : 30 caractères maximum.** Si le libellé dépasse, l'abréger vers une forme reconnaissable (ex. « bilan thyroïdien complet » → `bilan-thyroidien`).
+- Minuscules, sans accents ni caractères spéciaux ; espaces et séparateurs remplacés par des tirets `-` (slug sûr pour un système de fichiers : `[a-z0-9-]`).
+- Rester explicite et cohérent d'un bilan à l'autre pour un même type (ex. `nfs`, `ionogramme`, `bilan-hepatique`, `bilan-renal`, `bilan-lipidique`, `glycemie`, `tsh`, `crp`).
+- Bilan multi-panels sans type dominant : utiliser `bilan-laboratoire` comme type générique (≤ 30 caractères).
+- En cas de doute sur le type dominant d'un bilan mixte, choisir le panel principal ou le type générique plutôt que d'enchaîner plusieurs types.
 
 ### Contenu du fichier archivé
 
@@ -158,7 +169,7 @@ Chaque point : [paramètre] — [constat] — (vu le [date du dernier bilan])
 [paramètre | date | valeur (unité) | référence | tendance (↑↓→) | commentaire]
 
 ## Historique des bilans
-[liste chronologique des fichiers <date>-bilan-laboratoire.md, du plus récent au plus ancien]
+[liste chronologique des fichiers <date-de-l-examen>-<type-de-l-examen>.md, du plus récent au plus ancien]
 ```
 
 ### Règles de la synthèse
