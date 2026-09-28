@@ -1,0 +1,13 @@
+#!/bin/bash
+
+java -version
+
+mkdir -p /tmp/structurizr
+wget https://github.com/structurizr/cli/releases/download/v2025.11.09/structurizr-cli.zip -O /tmp/structurizr/structurizr-cli.zip
+
+cd /tmp/structurizr
+unzip structurizr-cli.zip
+rm structurizr-cli.zip
+
+cp -R /tmp/structurizr/* /usr/local/bin
+ls -lhsa /usr/local/bin

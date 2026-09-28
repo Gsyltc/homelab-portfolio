@@ -1,0 +1,64 @@
+#!/bin/bash
+
+#BASEDIR=${ROOT_DIR}/${REPOSITORY}
+#echo "BASEDIR: ${REPOSITORY}"
+#cd $BASEDIR
+BASEDIR=.
+
+## Add Certificate to the java keystore
+whereis java
+readlink -f /usr/bin/java | sed "s:bin/java::"
+
+yes | keytool -storepass changeit -keypass changeit -import -alias alithya -keystore /usr/lib/jvm/java-21-openjdk-amd64/lib/security/cacerts -file ${BASEDIR}/scripts/alithya.der
+
+# Liste les projets du repository
+array=()
+if [[ $PROJECT =~ ";" ]]; then
+  array=(${PROJECT//;/ })
+else
+  array=(${PROJECT})
+fi
+
+for i in "${!array[@]}"
+do
+    projet=${array[i]}
+    file=$BASEDIR/${projet}/workspace.dsl
+
+    echo "======================================================="
+    echo "[INFO] Validation du Workspace ${projet} en cours"
+    echo "======================================================="
+    echo
+    if [[ -f $file ]] ; then 
+        if [[ $1 == "validate" ]] ; then
+            # Lancer la validation du fichier DSL
+            structurizr.sh validate -w $BASEDIR/${projet}/workspace.dsl
+            # Vérifie le code de sortie et lance une erreur si nécessaire
+            [ $? -eq 0 ]  || exit 1
+            echo "[INFO] le workspace est valide"
+        fi
+
+        if [[ $1 == "push" ]] ; then
+            workspace_props=$BASEDIR/${projet}/workspace.properties
+            # Lecture des propriétés du workspace
+            declare -A props
+
+            while IFS='=' read -r key value; do
+                props["$key"]="$value"
+            done < "$workspace_props"
+
+            id=${props["id"]}
+            url=${props["url"]}
+            key=${props["key"]}
+            secret=${props["secret"]}
+
+            # Lancer la mise à jour du workspace
+            ls -lhsa /usr/local/bin/
+            /usr/local/bin/structurizr.sh push -url ${url}/api -id ${id} -key ${key} -secret ${secret} -w $file
+            # Vérifie le code de sortie et lance une erreur si nécessaire
+            [ $? -eq 0 ]  || exit 1
+        fi
+    else
+        echo "[FATAL] Le fichier workspace.dsl n'existe pas."
+        exit 1 
+    fi
+done
