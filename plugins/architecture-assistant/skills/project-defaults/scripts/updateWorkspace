@@ -1,0 +1,4 @@
+#!/bin/bash
+
+git fetch && git checkout $BITBUCKET_BRANCH && git reset && git pull origin $BITBUCKET_BRANCH
+#(cd ${ROOT_DIR}/${REPOSITORY} && git fetch && git checkout $BITBUCKET_BRANCH && git reset && git pull origin $BITBUCKET_BRANCH) 

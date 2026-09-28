@@ -1,0 +1,92 @@
+#!/bin/bash
+# Update environment
+echo "========================="
+echo "[INFO] Update environment"
+echo "========================="
+apt-get update -y
+apt-get -y install curl jq sed
+
+export COMMITS=$(curl -H "Authorization: Bearer ${ACCESS_TOKEN}" -d "include=${BITBUCKET_BRANCH}" -d "exclude=master" "https://api.bitbucket.org/2.0/repositories/${ACCOUNT}/${REPOSITORY}/commits")
+export COMMIT_MESSAGES=""
+export value=""
+
+for i in $(jq '.values | keys | .[]' <<< "$COMMITS"); do
+    value=$(jq -r ".values[$i]" <<< ${COMMITS})
+    message=$(jq -r '.message' <<< "$value")
+    if [[ "$message" != *"Merge"* ]]; then
+        COMMIT_MESSAGES="$COMMIT_MESSAGES> "$message"\n\n"
+    fi
+done
+
+# Définit les options de merge
+DEFAULT_REVIEWERS=""
+BRANCH_TO_MERGE="integration"
+
+if [[ "${BITBUCKET_BRANCH}" == "integration" ]] ; then
+    BRANCH_TO_MERGE="master"
+fi
+echo "========================="
+echo "[INFO] Création de la PR"
+echo "   - Current branch : ${BITBUCKET_BRANCH}"
+echo "   - Message de commit : ${COMMIT_MESSAGES}"
+# Création de la PR
+PR_ID=$(curl https://api.bitbucket.org/2.0/repositories/${ACCOUNT}/${REPOSITORY}/pullrequests \
+    -s -S -X POST \
+    -H 'Content-Type: application/json' \
+    -H "Authorization: Bearer ${ACCESS_TOKEN}" \
+    -d '{
+        "title": "Automated Pull request",
+        "description":"'"${COMMIT_MESSAGES}"'",
+        "source": {
+            "branch": {
+                "name": "'"${BITBUCKET_BRANCH}"'"
+            }
+        },
+        "destination": {
+            "branch": {
+                "name": "'"${BRANCH_TO_MERGE}"'"
+            }
+        },
+        "close_source_branch": false
+    }' | sed -E "s/.*\"id\": ([0-9]+).*/\1/g")
+
+
+echo "[INFO] Identitiant de la Pull Request : $PR_ID"
+
+if [[ "${BITBUCKET_BRANCH}" != "integration" ]] ; then
+
+echo echo "[INFO] Merge de la Pull Request : $PR_ID"
+echo "========================="
+
+    # Merge sauf pour la branche master (En manuel)
+    curl -X POST https://api.bitbucket.org/2.0/repositories/${ACCOUNT}/${REPOSITORY}/pullrequests/$PR_ID/merge \
+        --fail --show-error --silent \
+        -H "Authorization: Bearer ${ACCESS_TOKEN}" \
+        -H 'content-type: application/json' \
+        -d '{
+            "close_source_branch": false,
+            "merge_strategy": "merge_commit"
+        }'
+else
+    #echo "[DEBUG] Réviseurs par défaut ${REVIEWERS}"
+    echo "[INFO] Ajout des réviseurs par défaut sur la PR $PR_ID"
+    echo "========================="
+    REVIEWERS=$(curl https://api.bitbucket.org/2.0/repositories/${ACCOUNT}/${REPOSITORY}/default-reviewers \
+        -s -S -f -X GET \
+        -H "Authorization: Bearer ${ACCESS_TOKEN}" | jq '.values' | jq 'map({uuid})' )
+    
+    curl https://api.bitbucket.org/2.0/repositories/${ACCOUNT}/${REPOSITORY}/pullrequests \
+        -s -S -X POST \
+        -H 'Content-Type: application/json' \
+        -H "Authorization: Bearer ${ACCESS_TOKEN}" \
+        -d '{
+            "title": "Automated Pull request",
+            "description":"'"${COMMIT_MESSAGES}"'",
+            "source": {
+                "branch": {
+                    "name": "'"${BITBUCKET_BRANCH}"'"
+                }
+            },
+            "reviewers": '"${REVIEWERS}"'
+        }'        
+fi

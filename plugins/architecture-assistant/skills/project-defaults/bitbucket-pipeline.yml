@@ -1,0 +1,50 @@
+# -----
+image: atlassian/default-image:5
+
+pipelines:
+  default:
+    - step:
+        runs-on:
+          - docker
+        name: "Mise à jour du workspace sur structurizr"
+        script:
+          - /bin/bash ./scripts/updateWorkspace      
+    - step:
+        runs-on:
+          - docker
+        name: "Validation DSL"
+        script:
+          - /bin/bash ./scripts/installStructurizr
+          - /bin/bash ./scripts/updateStructurizr validate
+    - step:
+        name: "Merge dans la branche integration"
+        script:
+          - /bin/bash ./scripts/mergeRequest
+
+  branches:
+    integration:
+      - step:
+          runs-on:
+            - docker
+          name: "Mise à jour de la branche integration sur @structurizr"
+          script:
+            - /bin/bash ./scripts/updateWorkspace
+      - step:
+          name: "Création de la Pull Request"
+          script:
+          - /bin/bash ./scripts/mergeRequest
+
+    master:
+      - step:
+          runs-on:
+            - docker
+          name: "Mise à jour de la branche master sur @structurizr"
+          script:
+            - /bin/bash ./scripts/updateWorkspace
+      - step:
+          runs-on:
+            - docker
+          name: "Deploiement DSL"
+          script:
+            - /bin/bash ./scripts/installStructurizr
+            - /bin/bash ./scripts/updateStructurizr push
