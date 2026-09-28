@@ -143,20 +143,20 @@ Les agents sont créés — et doivent être recréés — sous le format :
 
 | Nom | Fonction | Définition (fichier) | UUID (référence — à revérifier) |
 |-----|----------|----------------------|---------------------------------|
-| Sylvain | Architecture Solution & Intégration (**coordinateur**) | [`core/agents/architecture-solution-integration-agent.md`](../../../../core/agents/architecture-solution-integration-agent.md) | `713b64a4-98f6-4cec-949a-e1521bd37d51` |
-| Manuel | Architecte de solution | [`core/agents/solution-architect-agent.md`](../../../../core/agents/solution-architect-agent.md) | `992ce2c8-aaba-4592-9702-dc47786e64ab` |
-| Florian | Architecte AWS | [`core/agents/aws-architect-agent.md`](../../../../core/agents/aws-architect-agent.md) | `84e04027-7d53-4013-b09a-5c7cfc978699` |
-| Xavier | Architecte Cybersécurité | [`core/agents/cybersecurity-architect-agent.md`](../../../../core/agents/cybersecurity-architect-agent.md) | `694a1a6f-9659-48ea-b45f-43ae6dc01706` |
-| Diego | Architecte de données | [`core/agents/data-architect-agent.md`](../../../../core/agents/data-architect-agent.md) | `1a6c5df6-7e75-4733-9c83-4633b7c69006` |
-| Fabien | OpenSpec Expert | [`core/agents/openspec-agent.md`](../../../../core/agents/openspec-agent.md) | `c2dbee8f-9ed4-4867-9b21-6cdd4a8840eb` |
-| Nina | Experte d'archivage | [`core/agents/archiving-agent.md`](../../../../core/agents/archiving-agent.md) | `8f54de1e-9725-4c0a-9dc7-9bb32f160acb` |
-| Michel | Vente & Appels d'Offres | [`core/agents/sales-proposals-agent.md`](../../../../core/agents/sales-proposals-agent.md) | `1e8ec68f-4969-416d-9b05-51a1f854eae4` |
-| Sami | Reviewer de cohérence | [`core/agents/consistency-reviewer-agent.md`](../../../../core/agents/consistency-reviewer-agent.md) | `d97f7847-2a89-407d-9b7a-dd9641acfbc5` |
-| Benoit | Reviewer de sécurité | [`core/agents/security-reviewer-agent.md`](../../../../core/agents/security-reviewer-agent.md) | `67406e48-12f1-49a9-8346-abb1508e72cb` |
-| Admin | Infrastructure Windows | [`core/agents/windows-infrastructure-admin-agent.md`](../../../../core/agents/windows-infrastructure-admin-agent.md) | `c1b4db07-a7b8-42d7-998a-0fc54aba630b` |
-| Alfred | Agent de notifications | [`core/agents/notification-agent.md`](../../../../core/agents/notification-agent.md) | `9b5a4076-7b9c-4db6-9d03-06ba49ae0f0f` |
+| Sylvain | Architecture Solution & Intégration (**coordinateur**) | [`architecture-solution-integration-agent.md`](../../../../core/agents/architecture-solution-integration-agent.md) | `713b64a4-98f6-4cec-949a-e1521bd37d51` |
+| Manuel | Architecte de solution | [`solution-architect-agent.md`](../../../../core/agents/solution-architect-agent.md) | `992ce2c8-aaba-4592-9702-dc47786e64ab` |
+| Florian | Architecte AWS | [`aws-architect-agent.md`](../../../../core/agents/aws-architect-agent.md) | `84e04027-7d53-4013-b09a-5c7cfc978699` |
+| Xavier | Architecte Cybersécurité | [`cybersecurity-architect-agent.md`](../../../../core/agents/cybersecurity-architect-agent.md) | `694a1a6f-9659-48ea-b45f-43ae6dc01706` |
+| Diego | Architecte de données | [`data-architect-agent.md`](../../../../core/agents/data-architect-agent.md) | `1a6c5df6-7e75-4733-9c83-4633b7c69006` |
+| Fabien | OpenSpec Expert | [`openspec-agent.md`](../../../../core/agents/openspec-agent.md) | `c2dbee8f-9ed4-4867-9b21-6cdd4a8840eb` |
+| Nina | Experte d'archivage | [`archiving-agent.md`](../../../../core/agents/archiving-agent.md) | `8f54de1e-9725-4c0a-9dc7-9bb32f160acb` |
+| Michel | Vente & Appels d'Offres | [`sales-proposals-agent.md`](../../../../core/agents/sales-proposals-agent.md) | `1e8ec68f-4969-416d-9b05-51a1f854eae4` |
+| Sami | Reviewer de cohérence | [`consistency-reviewer-agent.md`](../../../../core/agents/consistency-reviewer-agent.md) | `d97f7847-2a89-407d-9b7a-dd9641acfbc5` |
+| Benoit | Reviewer de sécurité | [`security-reviewer-agent.md`](../../../../core/agents/security-reviewer-agent.md) | `67406e48-12f1-49a9-8346-abb1508e72cb` |
+| Admin | Infrastructure Windows | [`windows-infrastructure-admin-agent.md`](../../../../core/agents/windows-infrastructure-admin-agent.md) | `c1b4db07-a7b8-42d7-998a-0fc54aba630b` |
+| Alfred | Agent de notifications | [`notification-agent.md`](../../../../core/agents/notification-agent.md) | `9b5a4076-7b9c-4db6-9d03-06ba49ae0f0f` |
 
-> La définition conforme (front-matter + corps) de chaque agent vit dans [`core/agents/`](../../../../core/agents/). Pour (re)créer un agent, utiliser le `display_name` du fichier comme `<fonction>` et l'associer à son `<nom>` selon la table ci-dessus, au format `<nom> - <fonction>`.
+> La définition conforme (front-matter + corps) de chaque agent vit dans [`agents/`](../../../../core/agents/). Pour (re)créer un agent, utiliser le `display_name` du fichier comme `<fonction>` et l'associer à son `<nom>` selon la table ci-dessus, au format `<nom> - <fonction>`.
 
 ## Création d'un nouveau projet
 
@@ -178,7 +178,7 @@ Les agents sont créés — et doivent être recréés — sous le format :
    Sous `${ROOT_DIRECTORY}/<nom-client>/<nom-projet>/`, créer l'arborescence décrite dans [Structure de répertoire par défaut](#structure-de-répertoire-par-défaut) (`decisions/`, `documentation/{architecture-logicielle,architecture-infra,architecture-securite}/`, `models/`, `views/`) et le `README.md` renseigné avec la description complète (voir [Métadonnées du projet](#métadonnées-du-projet)).
 
 5. **Créer les agents du workflow `core` s'ils n'existent pas.**
-   Vérifier via `multica agent list --output json` la présence des agents de la [Table de correspondance des agents](#table-de-correspondance-des-agents). Pour chaque agent absent, le créer au format `<nom> - <fonction>` à partir de sa définition dans [`core/agents/`](../../../../core/agents/) (front-matter + corps).
+   Vérifier via `multica agent list --output json` la présence des agents de la [Table de correspondance des agents](#table-de-correspondance-des-agents). Pour chaque agent absent, le créer au format `<nom> - <fonction>` à partir de sa définition dans [`agents/`](../../../../core/agents/) (front-matter + corps).
 
 6. **Créer les skills du workflow `core` s'ils n'existent pas.**
    Vérifier via `multica skill list --output json` la présence des skills du workflow `core` (portées par le plugin [`architecture-assistant`](../../)) et, pour chacune absente, l'importer (`multica skill import`) puis l'assigner aux agents concernés (`multica agent skills add|set`). Un `SKILL.md` présent dans le dépôt n'est **pas** découvert automatiquement à l'exécution : il faut l'importer dans le workspace.

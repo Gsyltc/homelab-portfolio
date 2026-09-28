@@ -1,6 +1,6 @@
 # Agents — workflow `core` (Architecture de solution & intégration)
 
-Définitions conformes (front-matter YAML + corps Markdown) des agents du **workflow `core`** d'architecture de solution & intégration, coordonné par l'**Architecture Solution & Intégration**. Le workflow de référence est [`../common/conductor.md`](../common/conductor.md) (source unique — instructions du coordinateur ; le QUOI de chaque étape vit dans [`../common/stages/`](../common/stages/) et les mécanismes transverses dans [`../common/protocols/`](../common/protocols/)). Règle de routage entre workflows : section « Architecture Flow » de [`../../AGENTS.md`](../../AGENTS.md).
+Définitions conformes (front-matter YAML + corps Markdown) des agents du **workflow `core`** d'architecture de solution & intégration, coordonné par l'**Architecture Solution & Intégration**. Le workflow de référence est [`conductor.md`](../common/conductor.md) (source unique — instructions du coordinateur ; le QUOI de chaque étape vit dans [`stages/`](../common/stages/) et les mécanismes transverses dans [`protocols/`](../common/protocols/)). Règle de routage entre workflows : section « Architecture Flow » de [`AGENTS.md`](../../AGENTS.md).
 
 ## Rôles génériques → fichiers
 
@@ -21,7 +21,7 @@ Définitions conformes (front-matter YAML + corps Markdown) des agents du **work
 
 ## Correspondance nom ↔ fonction ↔ UUID (source unique)
 
-Les fichiers ci-dessus définissent les acteurs par **rôle générique** (fonction). La correspondance concrète **nom ↔ fonction ↔ UUID** — nécessaire pour recréer la liste des agents, rechercher un UUID et router une délégation A2A — fait foi dans la skill **`project-defaults`** ([`../../plugins/architecture-assistant/skills/project-defaults/SKILL.md`](../../plugins/architecture-assistant/skills/project-defaults/SKILL.md)), **source unique de vérité**. Aucun agent ne duplique cette table.
+Les fichiers ci-dessus définissent les acteurs par **rôle générique** (fonction). La correspondance concrète **nom ↔ fonction ↔ UUID** — nécessaire pour recréer la liste des agents, rechercher un UUID et router une délégation A2A — fait foi dans la skill **`project-defaults`** ([`SKILL.md`](../../plugins/architecture-assistant/skills/project-defaults/SKILL.md)), **source unique de vérité**. Aucun agent ne duplique cette table.
 
 Les agents sont créés au format **`<nom> - <fonction>`** (ex. `Manuel - Architecte de solution`), la `<fonction>` reprenant le `display_name` du fichier de définition. Pour toute délégation, la mention prend la forme `[@Label](mention://agent/<uuid>)` : **résoudre l'UUID via `multica agent list --output json`** (champ `id`), ne jamais deviner ni inventer un UUID.
 
@@ -31,4 +31,4 @@ La procédure de **création d'un nouveau projet** (projet workspace, liaison du
 
 ## Garde-fous (rappel)
 
-Coordination par l'issue (piste d'audit sur l'issue Multica) · délégation A2A par mention valide `[@Label](mention://agent/<uuid>)` · le coordinateur coordonne, les spécialistes produisent · validation humaine granulaire · aucun secret dans les livrables · diagrammes générés en code. Ces règles sont définies une seule fois dans [`../common/conductor.md`](../common/conductor.md) et [`../common/protocols/`](../common/protocols/).
+Coordination par l'issue (piste d'audit sur l'issue Multica) · délégation A2A par mention valide `[@Label](mention://agent/<uuid>)` · le coordinateur coordonne, les spécialistes produisent · validation humaine granulaire · aucun secret dans les livrables · diagrammes générés en code. Ces règles sont définies une seule fois dans [`conductor.md`](../common/conductor.md) et [`protocols/`](../common/protocols/).
