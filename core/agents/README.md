@@ -19,9 +19,9 @@ Définitions conformes (front-matter YAML + corps Markdown) des agents du **work
 | Infrastructure Windows | [windows-infrastructure-admin-agent.md](windows-infrastructure-admin-agent.md) | Administration Windows : migration Win10→Win11, Intune, VMs, golden image, Autopilot, SCCM. |
 | Agent de notifications | [notification-agent.md](notification-agent.md) | Notifications de fin de tâches. Utilitaire de workspace partagé (source unique de vérité de sa définition). |
 
-## Correspondance nom ↔ fonction ↔ UUID (source unique)
+## Correspondance nom ↔ fonction (source unique)
 
-Les fichiers ci-dessus définissent les acteurs par **rôle générique** (fonction). La correspondance concrète **nom ↔ fonction ↔ UUID** — nécessaire pour recréer la liste des agents, rechercher un UUID et router une délégation A2A — fait foi dans la skill **`project-defaults`** ([`SKILL.md`](../../plugins/architecture-assistant/skills/project-defaults/SKILL.md)), **source unique de vérité**. Aucun agent ne duplique cette table.
+Les fichiers ci-dessus définissent les acteurs par **rôle générique** (fonction). La correspondance concrète **nom ↔ fonction** — nécessaire pour recréer la liste des agents et router une délégation A2A — fait foi dans la skill **`project-defaults`** ([`SKILL.md`](../../plugins/architecture-assistant/skills/project-defaults/SKILL.md)), **source unique de vérité**. Aucun agent ne duplique cette table. Cette table ne fige **aucun UUID** : chaque workspace a ses propres UUID, à résoudre à la demande.
 
 Les agents sont créés au format **`<nom> - <fonction>`** (ex. `Manuel - Architecte de solution`), la `<fonction>` reprenant le `display_name` du fichier de définition. Pour toute délégation, la mention prend la forme `[@Label](mention://agent/<uuid>)` : **résoudre l'UUID via `multica agent list --output json`** (champ `id`), ne jamais deviner ni inventer un UUID.
 

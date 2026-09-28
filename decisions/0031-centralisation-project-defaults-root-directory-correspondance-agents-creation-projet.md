@@ -32,7 +32,7 @@ Le format d'agent du workspace est `<nom> - <fonction>` (ex. `Manuel - Architect
 Contenu de la décision :
 
 - **DEC-001 — `${ROOT_DIRECTORY}`.** Remplacer toute référence au chemin littéral `/nfs/workspace/alithya` par la variable d'environnement `${ROOT_DIRECTORY}` (définie dans les agents). La convention de racine devient `${ROOT_DIRECTORY}/<nom-client-en-minuscules>/<nom-projet-en-minuscules>`. Aucun chemin absolu codé en dur.
-- **DEC-002 — Table de correspondance des agents.** Ajouter à la skill une table **nom ↔ fonction ↔ UUID** des agents du workflow `core`, accompagnée de la convention de nommage `<nom> - <fonction>`. Cette table sert à recréer la liste des agents, rechercher un UUID et router les délégations. Les UUID y figurent comme référence de l'état courant, **toujours à revérifier via `multica agent list --output json`** ; ne jamais deviner ni inventer un UUID. **Aucun agent ne duplique cette table** : tout agent qui en a besoin (notamment le coordinateur `Architecture Solution & Intégration`) se réfère à la skill.
+- **DEC-002 — Table de correspondance des agents.** Ajouter à la skill une table **nom ↔ fonction** des agents du workflow `core`, accompagnée de la convention de nommage `<nom> - <fonction>`. Cette table sert à recréer la liste des agents et router les délégations. Elle **ne fige aucun UUID** : chaque workspace a ses propres UUID, **toujours résolus à la demande via `multica agent list --output json`** (champ `id`) ; ne jamais deviner ni inventer un UUID. **Aucun agent ne duplique cette table** : tout agent qui en a besoin (notamment le coordinateur `Architecture Solution & Intégration`) se réfère à la skill.
 - **DEC-003 — Procédure de création d'un nouveau projet.** Ajouter à la skill la procédure ordonnée : (1) créer le projet dans le workspace, (2) ajouter le repository aux ressources du projet, (3) demander une description complète servant à la fois la description du projet workspace et le `README.md`, (4) créer la structure du projet sur le disque, (5) créer les agents du workflow `core` absents, (6) créer/importer les skills du workflow `core` absentes.
 - **DEC-004 — Export dans le dépôt.** Exporter la skill à l'emplacement canonique [`project-defaults/`](../plugins/architecture-assistant/skills/project-defaults/) (spec Agent Plugins v1.0.0), avec les fichiers auxiliaires existants (pipeline, `.gitignore`, `scripts/`).
 - **DEC-005 — Retrait de toute duplication.** Le coordinateur `Architecture Solution & Intégration` renvoie explicitement à la skill pour la correspondance des agents et la création de projet, sans porter la table lui-même.
@@ -48,7 +48,7 @@ Contenu de la décision :
 
 ### Négatives
 
-- **NEG-001** : les UUID inscrits dans la table sont un instantané ; ils doivent être revérifiés via `multica agent list --output json` avant toute mention. Atténuation : la skill l'exige explicitement et lie chaque agent à son fichier de définition (source de vérité du rôle).
+- **NEG-001** : la table ne portant aucun UUID, toute mention exige une résolution préalable de l'UUID via `multica agent list --output json`. Atténuation : la skill l'exige explicitement et lie chaque agent à son fichier de définition (source de vérité du rôle) ; cela évite en contrepartie tout UUID figé, propre à un seul workspace.
 - **NEG-002** : double emplacement de la skill (workspace + dépôt) à garder synchronisé lors des évolutions futures. Atténuation : le dépôt est l'emplacement canonique ; la mise à jour du workspace se fait par réimport/mise à jour de la skill.
 
 ## Alternatives étudiées

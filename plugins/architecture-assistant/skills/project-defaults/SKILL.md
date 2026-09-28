@@ -1,6 +1,6 @@
 ---
 name: project-defaults
-description: Paramètres par défaut des projets d'architecture. Définit la structure de répertoire standard, les conventions de nommage, l'emplacement racine (${ROOT_DIRECTORY}), la table de correspondance des agents du workflow core (nom, fonction, UUID) et la procédure de création d'un nouveau projet. Utiliser pour initialiser ou vérifier la structure d'un projet, recréer la liste des agents ou créer un nouveau projet.
+description: Paramètres par défaut des projets d'architecture. Définit la structure de répertoire standard, les conventions de nommage, l'emplacement racine (${ROOT_DIRECTORY}), la table de correspondance des agents du workflow core (nom, fonction) et la procédure de création d'un nouveau projet. Utiliser pour initialiser ou vérifier la structure d'un projet, recréer la liste des agents ou créer un nouveau projet.
 ---
 
 # Paramètres par défaut des projets d'architecture
@@ -9,7 +9,7 @@ Cette skill définit les **paramètres par défaut** que tout architecte doit ap
 
 Elle est également la **source unique de vérité** pour :
 
-- la **table de correspondance des agents** du workflow `core` (nom, fonction, UUID) — voir [Table de correspondance des agents](#table-de-correspondance-des-agents) ;
+- la **table de correspondance des agents** du workflow `core` (nom, fonction) — voir [Table de correspondance des agents](#table-de-correspondance-des-agents) ;
 - la **procédure de création d'un nouveau projet** — voir [Création d'un nouveau projet](#création-dun-nouveau-projet).
 
 ## Structure de répertoire par défaut
@@ -121,13 +121,13 @@ Chaque projet doit contenir un fichier `README.md` à sa racine avec les métado
 
 ## Table de correspondance des agents
 
-Cette table est la **source unique de vérité** de la correspondance **nom ↔ fonction ↔ UUID** des agents du workflow `core` (architecture de solution & intégration). Elle sert à :
+Cette table est la **source unique de vérité** de la correspondance **nom ↔ fonction** des agents du workflow `core` (architecture de solution & intégration). Elle sert à :
 
 - **recréer la liste des agents** dans un nouveau workspace (création d'agent) ;
 - **rechercher l'UUID** d'un agent pour une délégation A2A par mention `[@Label](mention://agent/<uuid>)` ;
 - **router** une demande vers le bon agent selon sa fonction.
 
-**Aucun agent ne doit dupliquer cette table** : tout agent qui en aurait besoin (notamment le coordinateur) doit se référer à cette skill `project-defaults`. Les UUID ci-dessous sont donnés à titre de référence de l'état courant du workspace ; **vérifier toujours l'UUID réel via `multica agent list --output json`** (champ `id`) avant une mention et **ne jamais deviner ni inventer un UUID**.
+**Aucun agent ne doit dupliquer cette table** : tout agent qui en aurait besoin (notamment le coordinateur) doit se référer à cette skill `project-defaults`. Cette table ne fige **aucun UUID** : chaque workspace a ses propres UUID. **Résoudre l'UUID d'un agent via `multica agent list --output json`** (champ `id`) avant chaque mention, en s'appuyant sur son nom/sa fonction ci-dessous, et **ne jamais deviner ni inventer un UUID**.
 
 ### Convention de nommage des agents
 
@@ -139,22 +139,22 @@ Les agents sont créés — et doivent être recréés — sous le format :
 
 **Exemple** : `Manuel - Architecte de solution`. Le `<nom>` est le prénom identifiant l'agent ; la `<fonction>` correspond au rôle générique du workflow.
 
-### Correspondance nom ↔ fonction ↔ UUID (workflow core)
+### Correspondance nom ↔ fonction (workflow core)
 
-| Nom | Fonction | Définition (fichier) | UUID (référence — à revérifier) |
-|-----|----------|----------------------|---------------------------------|
-| Sylvain | Architecture Solution & Intégration (**coordinateur**) | [`architecture-solution-integration-agent.md`](../../../../core/agents/architecture-solution-integration-agent.md) | `713b64a4-98f6-4cec-949a-e1521bd37d51` |
-| Manuel | Architecte de solution | [`solution-architect-agent.md`](../../../../core/agents/solution-architect-agent.md) | `992ce2c8-aaba-4592-9702-dc47786e64ab` |
-| Florian | Architecte AWS | [`aws-architect-agent.md`](../../../../core/agents/aws-architect-agent.md) | `84e04027-7d53-4013-b09a-5c7cfc978699` |
-| Xavier | Architecte Cybersécurité | [`cybersecurity-architect-agent.md`](../../../../core/agents/cybersecurity-architect-agent.md) | `694a1a6f-9659-48ea-b45f-43ae6dc01706` |
-| Diego | Architecte de données | [`data-architect-agent.md`](../../../../core/agents/data-architect-agent.md) | `1a6c5df6-7e75-4733-9c83-4633b7c69006` |
-| Fabien | OpenSpec Expert | [`openspec-agent.md`](../../../../core/agents/openspec-agent.md) | `c2dbee8f-9ed4-4867-9b21-6cdd4a8840eb` |
-| Nina | Experte d'archivage | [`archiving-agent.md`](../../../../core/agents/archiving-agent.md) | `8f54de1e-9725-4c0a-9dc7-9bb32f160acb` |
-| Michel | Vente & Appels d'Offres | [`sales-proposals-agent.md`](../../../../core/agents/sales-proposals-agent.md) | `1e8ec68f-4969-416d-9b05-51a1f854eae4` |
-| Sami | Reviewer de cohérence | [`consistency-reviewer-agent.md`](../../../../core/agents/consistency-reviewer-agent.md) | `d97f7847-2a89-407d-9b7a-dd9641acfbc5` |
-| Benoit | Reviewer de sécurité | [`security-reviewer-agent.md`](../../../../core/agents/security-reviewer-agent.md) | `67406e48-12f1-49a9-8346-abb1508e72cb` |
-| Admin | Infrastructure Windows | [`windows-infrastructure-admin-agent.md`](../../../../core/agents/windows-infrastructure-admin-agent.md) | `c1b4db07-a7b8-42d7-998a-0fc54aba630b` |
-| Alfred | Agent de notifications | [`notification-agent.md`](../../../../core/agents/notification-agent.md) | `9b5a4076-7b9c-4db6-9d03-06ba49ae0f0f` |
+| Nom | Fonction | Définition (fichier) |
+|-----|----------|----------------------|
+| Sylvain | Architecture Solution & Intégration (**coordinateur**) | [`architecture-solution-integration-agent.md`](../../../../core/agents/architecture-solution-integration-agent.md) |
+| Manuel | Architecte de solution | [`solution-architect-agent.md`](../../../../core/agents/solution-architect-agent.md) |
+| Florian | Architecte AWS | [`aws-architect-agent.md`](../../../../core/agents/aws-architect-agent.md) |
+| Xavier | Architecte Cybersécurité | [`cybersecurity-architect-agent.md`](../../../../core/agents/cybersecurity-architect-agent.md) |
+| Diego | Architecte de données | [`data-architect-agent.md`](../../../../core/agents/data-architect-agent.md) |
+| Fabien | OpenSpec Expert | [`openspec-agent.md`](../../../../core/agents/openspec-agent.md) |
+| Nina | Experte d'archivage | [`archiving-agent.md`](../../../../core/agents/archiving-agent.md) |
+| Michel | Vente & Appels d'Offres | [`sales-proposals-agent.md`](../../../../core/agents/sales-proposals-agent.md) |
+| Sami | Reviewer de cohérence | [`consistency-reviewer-agent.md`](../../../../core/agents/consistency-reviewer-agent.md) |
+| Benoit | Reviewer de sécurité | [`security-reviewer-agent.md`](../../../../core/agents/security-reviewer-agent.md) |
+| Admin | Infrastructure Windows | [`windows-infrastructure-admin-agent.md`](../../../../core/agents/windows-infrastructure-admin-agent.md) |
+| Alfred | Agent de notifications | [`notification-agent.md`](../../../../core/agents/notification-agent.md) |
 
 > La définition conforme (front-matter + corps) de chaque agent vit dans [`agents/`](../../../../core/agents/). Pour (re)créer un agent, utiliser le `display_name` du fichier comme `<fonction>` et l'associer à son `<nom>` selon la table ci-dessus, au format `<nom> - <fonction>`.
 
