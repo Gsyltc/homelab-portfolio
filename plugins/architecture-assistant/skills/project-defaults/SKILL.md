@@ -84,7 +84,7 @@ ${ROOT_DIRECTORY}/<nom-client-en-minuscules>/<nom-projet-en-minuscules>
 ```
 
 - `${ROOT_DIRECTORY}` est une **variable d'environnement définie dans les agents**. Ne jamais coder en dur un chemin absolu ; toujours résoudre le chemin racine à partir de cette variable.
-- **Exemple** : Pour le client « RTC » et le projet « Migration », avec `${ROOT_DIRECTORY}` valant `/data/projets` → `/data/projets/rtc/migration`.
+- **Exemple** : Pour le client « monclient » et le projet « Migration », avec `${ROOT_DIRECTORY}` valant `/data/projets` → `/data/projets/monclient/migration`.
 
 **Règles** :
 - Le nom du client est toujours en **minuscules**
