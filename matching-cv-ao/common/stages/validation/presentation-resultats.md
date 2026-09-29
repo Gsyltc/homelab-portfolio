@@ -60,10 +60,16 @@ Le tableau de rappel des scores globaux comporte **une colonne par profil recher
 
 Une colonne est ajoutée **par profil recherché** de l'AO (intitulé abrégé `PR-00x <intitulé court>`) ; le verdict de chaque cellule est celui du candidat **pour ce profil**. Le verdict par profil est **dérivé de l'adéquation par profil** (Step 1bis) tant qu'aucun score chiffré par profil n'existe.
 
-### Step 2 — Traitement des Modify/Redo
-Sur Modify : ajuster et re-présenter **cet élément uniquement** (avec le même niveau de détail).
-Sur Redo : proposer une alternative et relancer **cet élément uniquement** (présentation détaillée).
-Ne jamais avancer sur un profil non validé.
+### Step 2 — Traitement des Modify/Redo (boucle bornée)
+Avant de traiter le premier Modify/Redo d'un profil, **fixer et annoncer sa condition de sortie** (aucun profil n'entre en boucle sans condition de terminaison explicite définie en tête de boucle).
+
+- Sur Modify : ajuster et re-présenter **cet élément uniquement** (avec le même niveau de détail).
+- Sur Redo : proposer une alternative et relancer **cet élément uniquement** (présentation détaillée).
+- **`max_iterations` par profil = 3** tours Modify/Redo (compteur unique Modify+Redo, tenu et **tracé sur l'issue** à chaque tour).
+- **Condition de sortie (un profil est *terminé* quand)** : **Keep**, **OU** exclusion actée, **OU** `max_iterations` atteint → **arbitrage humain**.
+- **Au-delà du cap : halt-and-ask, pas de relance.** À `max_iterations` atteint sans validation, **cesser toute relance** et interroger explicitement l'humain (mention active) pour trancher : **garder le profil en l'état / l'exclure / consigne précise**. Ne jamais relancer un tour de plus de soi-même après le cap.
+
+Ne jamais avancer sur un profil non validé. Ce bornage ne modifie **jamais** la pondération immuable (`matching-scoring`). Définition transverse complète : `conductor.md` § « Bornage de la boucle ».
 
 ### Step 3 — Synthèse des validations (piste d'audit)
 Consigner sur l'issue l'artefact **JSON joint** `resultats-valides` (profils validés / rejetés / modifiés) et poster un commentaire **minimal** le référençant.

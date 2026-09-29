@@ -124,6 +124,19 @@ Avant toute exécution, le coordinateur :
 
 Ne jamais avancer sur un élément non validé.
 
+### Bornage de la boucle — cap d'itérations + condition de sortie (obligatoire, impact tokens direct)
+
+La boucle Modify/Redo est **bornée par élément**. Avant d'entrer dans la boucle pour un élément, le coordinateur **fixe et annonce sa condition de terminaison** ; aucun élément n'entre en boucle sans condition de sortie explicite définie *en tête de boucle*.
+
+- **`max_iterations` par élément = 3** — un même profil / choix ne peut subir **au plus 3 tours** Modify/Redo (les tours Modify et Redo sont comptés ensemble dans le même compteur). Le coordinateur tient ce compteur par élément et le trace sur l'issue à chaque tour.
+- **Au-delà du cap : halt-and-ask, pas de relance.** Lorsqu'un élément atteint `max_iterations` sans être validé, le coordinateur **cesse toute nouvelle relance** et **interroge explicitement l'humain** avec un choix tranché (mention active) : **garder l'élément en l'état**, **l'exclure**, ou **fournir une consigne précise** de résolution. Il ne relance jamais un tour supplémentaire de lui-même après le cap.
+- **Condition de sortie explicite (un élément est *terminé* quand)** :
+  1. **Keep** — l'élément est validé ; **OU**
+  2. **exclusion actée** — l'humain a décidé d'exclure l'élément ; **OU**
+  3. **`max_iterations` atteint** — la boucle est close et **l'arbitrage humain** (halt-and-ask ci-dessus) tranche le sort final de l'élément.
+
+Tant qu'aucune de ces trois conditions n'est remplie, l'élément reste en boucle ; dès que l'une l'est, l'élément est **terminé** (on n'y revient plus sans nouvelle demande humaine explicite). Ce bornage ne modifie **jamais** la pondération immuable du scoring (`matching-scoring`).
+
 ---
 
 ## OBLIGATOIRE : piste d'audit sur l'issue
