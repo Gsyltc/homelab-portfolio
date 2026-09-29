@@ -47,6 +47,7 @@ flowchart LR
 ### 6. Validation humaine granulaire
 - Selon `human_gate` : `none` (aucune — Initialisation), `light` (approbation extraction — Analyse), `granular` (choix par choix — Validation), `explicit` (validation explicite — Clôture).
 - Boucle **Keep / Modify / Redo** par élément (voir `conductor.md`). Sur `Modify` / `Redo`, retour au temps 3 pour l'élément concerné uniquement.
+- **Boucle bornée (obligatoire, impact tokens direct)** : avant d'entrer dans la boucle pour un élément, fixer *en tête de boucle* sa **condition de sortie explicite** ; `max_iterations` **= 3** tours Modify/Redo **par élément** (compteur unique Modify+Redo, tracé sur l'issue). Un élément est **terminé** quand : **Keep**, **OU** exclusion actée, **OU** `max_iterations` atteint. Au-delà du cap : **halt-and-ask** (garder en l'état / exclure / consigne précise via mention active), **jamais** de nouvelle relance autonome. Définition complète : `conductor.md` § « Bornage de la boucle ».
 
 ## Contrôle — non contournable
 Le coordinateur valide chaque livrable avant validation humaine. La grille d'évaluation ne sera **jamais inventée** — elle sera demandée à l'humain si absente.
