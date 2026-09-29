@@ -34,7 +34,9 @@ ce fichier en donne la lecture chronologique côté produit.
   `souhaitée` de l'AO — les certifications `obligatoire` restent un prérequis éliminatoire amont, non re-scoré) et
   **Langues** (couverture des langues exigées). Propagé à la skill `matching-scoring` (table, schéma JSON de sortie,
   garde-fous), `conductor.md`, `matcher-profils-agent.md`, `croisement-profils.md`, `presentation-resultats.md`,
-  `livraison.md`, le guide d'utilisation et les ADR 0029/0030 (invariant de pondération mis à jour).
+  `livraison.md`, le guide d'utilisation. **Traçabilité ADR** : nouvelle **[ADR-0032](decisions/0032-refonte-ponderation-scoring-matching.md)**
+  (Accepted) qui acte la pondération à 6 critères et **supersede [ADR-0030](decisions/0030-scoring-chiffre-par-profil-recherche.md)**
+  (désormais `Superseded`, conservée comme historique) ; l'invariant de pondération cité dans ADR-0029 est mis à jour.
 - **Réorganisation Phase 3 du workflow Homelab + Analyste QA** (HOM-215 ; évolution **documentaire**,
   invariants préservés) : dans la phase **Production et Contrôle**, la **configuration Terraform passe avant
   le docker-compose** (ordre cible `autonomy-mode → terraform-configuration → docker-compose-creation →
