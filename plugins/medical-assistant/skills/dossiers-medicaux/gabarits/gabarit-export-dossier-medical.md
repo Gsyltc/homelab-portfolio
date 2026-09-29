@@ -37,9 +37,13 @@ La source est TOUJOURS `synthese.md` (source de vérité, destinée aux professi
 
 1. Démographie
 2. Problèmes actifs
+   2.1 Problèmes résolus
 3. Médicaments
 4. Allergies
-5. Bilans clés
+5. Résultats d'analyses et d'examens
+   5.1 Analyses de laboratoire (résumé)
+   5.2 Examens (résumé)
+   5.3 Bilans clés — points de vigilance
 6. Chronologie
 7. Questions ouvertes
 
@@ -92,6 +96,19 @@ Reporter les données morphologiques clés du patient. Le DÉTAIL (poids, IMC, I
 
 ---
 
+## 2.1 Problèmes résolus
+
+<!-- Problèmes antérieurs résolus. Ne jamais supprimer : conserver avec une description COURTE de la résolution. Les éléments INVALIDÉS par une analyse/imagerie n'apparaissent PAS ici — ils sont retirés du dossier. -->
+
+| #   | Problème résolu        | Résolution (courte)                 | Date de résolution |
+| --- | ---------------------- | ----------------------------------- | ------------------ |
+| 1   | [libellé du problème]  | [ex. résolu sous traitement X]      | [YYYY-MM]          |
+| 2   |                        |                                     |                    |
+
+**Tableau 5. Problèmes résolus**
+
+---
+
 ## 3. Médicaments
 
 <!-- Nom générique en premier, marque entre parenthèses. Une ligne par médicament. -->
@@ -101,7 +118,7 @@ Reporter les données morphologiques clés du patient. Le DÉTAIL (poids, IMC, I
 | [générique (marque)]            | [dose]   | [fréquence] | [voie]        |
 |                                 |          |             |               |
 
-**Tableau 5. Médicaments actifs**
+**Tableau 6. Médicaments actifs**
 
 ---
 
@@ -114,24 +131,60 @@ Reporter les données morphologiques clés du patient. Le DÉTAIL (poids, IMC, I
 | [substance]       | [type de réaction]           | [Majeure/Modérée/Mineure] |
 |                   |                              |                       |
 
-**Tableau 6. Allergies**
+**Tableau 7. Allergies**
 
 ---
 
-## 5. Bilans clés
+## 5. Résultats d'analyses et d'examens
 
 <!--
-Ne reporter que les points de suivi notables (valeur critique, anomalie nouvelle/persistante, tendance à surveiller).
-Signaler les anomalies avec ↑ (au-dessus) / ↓ (en-dessous) de la référence. Toujours indiquer les unités.
-Pour le détail des analyses biologiques, renvoyer à la skill `analyse-laboratoire` ; pour la morphologie, à `suivi-morphologie`.
+Le dossier médical ne contient PAS les résultats détaillés : deux tableaux résumés (labo, examens)
+puis un sous-paragraphe de points de vigilance.
+Détail complet : `laboratoire/synthese-bilans.md` (skill `analyse-laboratoire`)
+et `examens/synthese-examens.md` (skill `analyse-examens`).
 -->
 
-| Bilan / Paramètre | Valeur     | Référence      | Signalement | Date       |
-| ----------------- | ---------- | -------------- | ----------- | ---------- |
-| [paramètre]       | [valeur+unité] | [plage réf.] | ↑ / ↓ / —   | [date]     |
-|                   |            |                |             |            |
+### 5.1 Analyses de laboratoire (résumé)
 
-**Tableau 7. Bilans clés**
+<!-- Résumé uniquement. Détail : laboratoire/synthese-bilans.md (skill analyse-laboratoire). -->
+
+| Date         | Type d'analyse         | Prescripteur | Conclusion sommaire        |
+| ------------ | ---------------------- | ------------ | -------------------------- |
+| [YYYY-MM-DD] | [NFS / ionogramme / …] | [Dr …]       | [conclusion en une ligne]  |
+|              |                        |              |                            |
+
+**Tableau 8. Résumé des analyses de laboratoire**
+
+> Détail complet : `laboratoire/synthese-bilans.md` (skill `analyse-laboratoire`).
+
+### 5.2 Examens (résumé)
+
+<!-- Résumé uniquement. Détail : examens/synthese-examens.md (skill analyse-examens). -->
+
+| Date         | Type d'examen             | Prescripteur | Conclusion sommaire        |
+| ------------ | ------------------------- | ------------ | -------------------------- |
+| [YYYY-MM-DD] | [IRM cérébrale / ECG / …] | [Dr …]       | [conclusion en une ligne]  |
+|              |                           |              |                            |
+
+**Tableau 9. Résumé des examens**
+
+> Détail complet : `examens/synthese-examens.md` (skill `analyse-examens`).
+
+### 5.3 Bilans clés — points de vigilance
+
+<!--
+Ne reporter QUE les points de vigilance cliniques issus des analyses et des examens
+(valeur critique, anomalie nouvelle/persistante, tendance à surveiller).
+Aucune valeur exhaustive ici : le détail vit dans les synthèses dédiées ci-dessus (5.1 et 5.2).
+Signaler les anomalies avec ↑ (au-dessus) / ↓ (en-dessous). Toujours indiquer les unités.
+-->
+
+| Point de vigilance     | Source (labo / examen) | Constat            | Date       |
+| ---------------------- | ---------------------- | ------------------ | ---------- |
+| [paramètre / anomalie] | [labo / examen]        | ↑ / ↓ / anomalie   | [date]     |
+|                        |                        |                    |            |
+
+**Tableau 10. Bilans clés — points de vigilance**
 
 > 🚨 **Valeurs critiques** : reporter ici toute valeur critique nécessitant une revue urgente — `🚨 CRITIQUE : [valeur] nécessite une revue urgente`.
 
@@ -146,7 +199,7 @@ Pour le détail des analyses biologiques, renvoyer à la skill `analyse-laborato
 | [date]     | [événement clé]                                |
 |            |                                                |
 
-**Tableau 8. Chronologie des événements**
+**Tableau 11. Chronologie des événements**
 
 ---
 
@@ -159,7 +212,7 @@ Pour le détail des analyses biologiques, renvoyer à la skill `analyse-laborato
 | 1   | [lacune / point incertain]                     |
 | 2   |                                                |
 
-**Tableau 9. Questions ouvertes**
+**Tableau 12. Questions ouvertes**
 
 ---
 
