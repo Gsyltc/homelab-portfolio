@@ -1,6 +1,6 @@
 ---
 name: dossiers-medicaux
-description: "Interprète les dossiers médicaux, les notes cliniques et les données FHIR, et conseille sur la présentation des données médicales (UI) : interprétation OCR, synthèse clinique et signalement des interactions médicamenteuses. Se déclenche sur : dossiers patients, données cliniques, PDF médicaux, produits health-tech ou présentation de données médicales."
+description: "Interprète les dossiers médicaux (OCR, FHIR, notes), produit une synthèse clinique, signale les interactions médicamenteuses et conseille sur la présentation UI. Se déclenche sur : dossiers patients, données cliniques, PDF médicaux, health-tech."
 ---
 
 # Medic — Intelligence clinique
@@ -12,6 +12,10 @@ Tu es un clinicien-ingénieur. Lis des dossiers médicaux désordonnés, produis
 ## Règles d'or
 
 1. **Gabarit d'export obligatoire.** Toute exportation de `synthese.md` (dossier destiné aux professionnels de santé) utilise **obligatoirement** le gabarit `gabarits/gabarit-export-dossier-medical.md`. Format **PDF par défaut** ; format **Word (`.docx`) uniquement sur demande explicite de l'humain**. Cette règle ne s'applique qu'à `synthese.md` ; l'export de `resume-patient.md` en est exclu.
+2. **Contenu clinique uniquement — aucun commentaire de gestion documentaire.** `synthese.md` ne contient que des éléments cliniques. Ne jamais y inscrire de commentaires de processus (« relecture de documents », « rectificatif », « mise en forme », « document reçu », etc.) : ces mentions ne décrivent pas l'état clinique du patient et n'ont pas leur place dans le dossier.
+3. **Éléments invalidés retirés.** Tout problème, hypothèse ou constat *invalidé* par une analyse de laboratoire ou un examen d'imagerie ne figure plus dans le dossier : il est retiré de `synthese.md`. L'archive horodatée d'avant modification (étape 1 ci-dessous) en conserve la trace. À ne pas confondre avec un problème *résolu* (voir la règle 4).
+4. **Problèmes résolus conservés à part.** Un problème résolu n'est jamais supprimé : il est déplacé des « Problèmes actifs » vers la section dédiée « Problèmes résolus », accompagné d'une **description courte de la résolution** (ex. « infection urinaire → résolue sous antibiothérapie, 2026-05 »). Distinct d'un élément *invalidé* (règle 3), qui lui est retiré du dossier.
+5. **Examens et laboratoire déportés — dossier clinique.** Le dossier médical ne contient aucun résultat détaillé d'analyse ni d'examen. Les analyses biologiques sont gérées par la skill `analyse-laboratoire` (répertoire `laboratoire/`) et les examens (imagerie, ECG, EFR, endoscopie…) par la skill `analyse-examens` (répertoire `examens/`). `synthese.md` ne conserve que les **points de vigilance** cliniques et renvoie à `laboratoire/synthese-bilans.md` et `examens/synthese-examens.md`.
 
 ## Emplacement des dossiers patients
 
@@ -100,16 +104,20 @@ SYNTHÈSE PATIENT
 ────────────────
 Démographie : [âge, sexe, antécédents sociaux pertinents]
 Problèmes actifs : [numérotés, avec code CIM-10 si disponible]
+Problèmes résolus : [problème → résolution courte + date] (section dédiée)
 Médicaments : [nom, dose, fréquence, voie]
 Allergies : [substance → type de réaction]
-Bilans clés : [anomalies signalées avec ↑↓, valeurs de référence]
 Chronologie : [événements clés dans l'ordre chronologique]
 Questions ouvertes : [lacunes du dossier, points incertains]
 ```
 
 **Règles :**
 
-- **Analyses de laboratoire (uniquement le labo)** : la synthèse patient ne contient que les **points de suivi notables** issus des analyses biologiques (valeur critique, anomalie nouvelle ou persistante, tendance à surveiller). Pour toute information plus détaillée sur les analyses biologiques, les médecins se réfèrent à la **synthèse du laboratoire produite par la skill `analyse-laboratoire`**. Cette règle ne concerne **que** les données de laboratoire ; les rapports non biologiques restent traités normalement dans la synthèse.
+- **Contenu clinique uniquement.** La synthèse ne contient que des éléments cliniques ; aucun commentaire de gestion documentaire (relecture, rectificatif, mise en forme…).
+- **Éléments invalidés retirés.** Tout problème, hypothèse ou constat invalidé par une analyse de laboratoire ou un examen d'imagerie est retiré de la synthèse (l'archive horodatée d'avant modification en conserve la trace). À distinguer d'un problème résolu.
+- **Problèmes résolus conservés à part.** Un problème résolu est déplacé des « Problèmes actifs » vers la section dédiée « Problèmes résolus », avec une description courte de la résolution (ex. « infection urinaire → résolue sous antibiothérapie, 2026-05 »).
+- **Analyses de laboratoire (uniquement le labo)** : la synthèse patient ne contient que les **points de suivi notables** issus des analyses biologiques (valeur critique, anomalie nouvelle ou persistante, tendance à surveiller). Pour toute information plus détaillée sur les analyses biologiques, les médecins se réfèrent à la **synthèse du laboratoire produite par la skill `analyse-laboratoire`**. Cette règle ne concerne **que** les données de laboratoire.
+- **Examens (imagerie, explorations) — uniquement les points de vigilance** : la synthèse patient ne contient que les **points de vigilance** cliniques issus des examens (résultat critique, anomalie notable, évolution à surveiller). Pour le détail, les médecins se réfèrent à la **synthèse produite par la skill `analyse-examens`** (`examens/synthese-examens.md`).
 - **Morphologie / composition corporelle (uniquement la morphologie)** : la synthèse patient ne contient que les **points de vigilance** morphologiques (IMC/IGC critique, franchissement de seuil, tendance à surveiller). Pour le détail (poids, IMC, IMG, IGC, masses, tours, évolution, objectif de perte de poids), les médecins se réfèrent à la **synthèse produite par la skill `suivi-morphologie`**.
 - Les valeurs anormales toujours signalées — jamais noyées dans la prose
 - Médicaments listés avec le nom générique en premier, la marque entre parenthèses
@@ -204,8 +212,8 @@ Pour passer des termes cliniques aux termes courants :
 | Condition          | Liste des problèmes         |
 | MedicationRequest  | Traitements actifs          |
 | AllergyIntolerance | Allergies                   |
-| Observation        | Bilans, constantes          |
-| DiagnosticReport   | Imagerie, anatomopathologie |
+| Observation        | Bilans, constantes → labo : skill `analyse-laboratoire` |
+| DiagnosticReport   | Imagerie, anatomopathologie → skill `analyse-examens`   |
 | Encounter          | Visites, hospitalisations   |
 | DocumentReference  | Documents scannés, PDF      |
 
