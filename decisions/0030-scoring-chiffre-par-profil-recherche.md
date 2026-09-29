@@ -5,15 +5,17 @@ auteurs: Mika (agent)
 accepté par : multica.gaston
 accepté le : ""
 supersedes: ""
-superseded_by: ""
+superseded_by: "0032-refonte-ponderation-scoring-matching"
 
 ---
 
 ## Status
 
-Proposed
+Superseded par [ADR-0032](0032-refonte-ponderation-scoring-matching.md)
 
-> Statut **Proposed** — décision **traçée** à la demande de multica.gaston (EXPE-67, 2026-09-26) pour être **arbitrée plus tard**. La PR qui porte cet ADR est **immédiate et sans gate humaine** (traçage de l'option), mais **l'implémentation n'est PAS engagée** : elle est portée par une **issue séparée placée en Backlog**, où l'humain décidera s'il applique. Ce document décrit le périmètre, l'impact et les alternatives — il ne modifie aucun fichier du workflow tant qu'il n'est pas passé `Accepted`.
+> ⚠️ **Superseded (EXPE-71, 2026-09-29).** La pondération immuable de référence a changé (50/35/10/5 → **45/30/10/5/5/5**, 6 critères — voir [ADR-0032](0032-refonte-ponderation-scoring-matching.md)). Ce document est **conservé comme historique** : son contenu décrit l'état au moment où il a été rédigé (pondération 50/35/10/5) et **ne doit pas être appliqué tel quel**. L'option « score chiffré par profil recherché » reste **différée** ; si elle est un jour reprise, elle doit s'appuyer sur la pondération à 6 critères d'[ADR-0032](0032-refonte-ponderation-scoring-matching.md).
+
+> Statut d'origine **Proposed** — décision **traçée** à la demande de multica.gaston (EXPE-67, 2026-09-26) pour être **arbitrée plus tard**. La PR qui porte cet ADR est **immédiate et sans gate humaine** (traçage de l'option), mais **l'implémentation n'est PAS engagée** : elle est portée par une **issue séparée placée en Backlog**, où l'humain décidera s'il applique. Ce document décrit le périmètre, l'impact et les alternatives — il ne modifie aucun fichier du workflow tant qu'il n'est pas passé `Accepted`.
 
 ## Contexte
 

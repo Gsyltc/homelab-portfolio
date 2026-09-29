@@ -92,9 +92,11 @@ Le **schéma JSON complet** des analyses CV et les conventions de nommage/versio
 
 | Critère | Poids |
 | --- | --- |
-| Compétences techniques | 50% |
-| Expérience en projets | 35% |
+| Expérience en projets | 45% |
+| Compétences (compétences + technologies + méthodologies) | 30% |
 | Études | 10% |
+| Certifications | 5% |
+| Langues | 5% |
 | Disponibilité | 5% |
 
 ## Équivalence MIFI & conformité études (client gouvernemental)

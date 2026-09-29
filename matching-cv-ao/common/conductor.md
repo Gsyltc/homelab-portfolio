@@ -33,12 +33,7 @@ Vecteurs de communication (A2A = fichier JSON joint + commentaire minimal mentio
 
 ## Scoring pondéré
 
-| Critère | Poids |
-| --- | --- |
-| Compétences techniques | 50% |
-| Expérience en projets (jours/personnes, mois de projets similaires, clients similaires) | 35% |
-| Études | 10% |
-| Disponibilité | 5% |
+La **pondération immuable** du scoring (critères, poids, méthodes de calcul, schéma JSON, garde-fous) est définie **une seule fois** dans la compétence `matching-scoring` (plugin `rh-assistant`) — **source unique**. Le Matcher Profils la charge avant tout calcul ; elle n'est pas redupliquée ici. Toute évolution des poids passe par une **validation humaine explicite tracée** (ADR) — voir [ADR-0032](../../decisions/0032-refonte-ponderation-scoring-matching.md).
 
 ---
 

@@ -13,7 +13,7 @@ superseded_by: ""
 
 Accepted
 
-> Statut **Accepted** — décision de traçage demandée explicitement par multica.gaston (EXPE-67, 2026-09-26) avec **PR immédiate, sans gate humaine**. La décision est **documentaire et de présentation** : elle ne touche que la restitution Markdown à l'humain au stage `presentation-resultats` (Phase 3 — Validation). Elle **n'altère aucune** posture de sécurité, aucun invariant A2A, et surtout **pas la pondération immuable du scoring** (Compétences 50 % · Expérience 35 % · Études 10 % · Disponibilité 5 %) ni le calcul du score global unique par candidat.
+> Statut **Accepted** — décision de traçage demandée explicitement par multica.gaston (EXPE-67, 2026-09-26) avec **PR immédiate, sans gate humaine**. La décision est **documentaire et de présentation** : elle ne touche que la restitution Markdown à l'humain au stage `presentation-resultats` (Phase 3 — Validation). Elle **n'altère aucune** posture de sécurité, aucun invariant A2A, et surtout **pas la pondération immuable du scoring** (Expérience 45 % · Compétences 30 % · Études 10 % · Certifications 5 % · Langues 5 % · Disponibilité 5 %) ni le calcul du score global unique par candidat.
 
 ## Contexte
 
@@ -36,7 +36,7 @@ Le problème traité : la fiche `presentation-resultats` ne codifie ni l'**écla
 
 2. **Section par profil recherché.** Pour **chaque** profil recherché de l'AO (PR-001, PR-002, …) : rappel des exigences (minimales + atouts), **tableau d'adéquation candidat par candidat** (`Candidat | Adéquation | Couvert | Manquant`, l'`Adéquation` reprenant le verdict du candidat pour CE profil), puis **classement du poste**.
 
-3. **Tableau « Rappel — scores globaux » — une colonne par profil = verdict.** Le tableau de rappel comporte **une colonne par profil recherché de l'AO**, chaque cellule portant le **verdict du candidat pour ce profil** (`recommandé` / `possible` / `déconseillé` / `exclu`). Le **score global /100** et le **détail par critère** (pondération immuable 50/35/10/5) restent dans les premières colonnes. La colonne globale unique « recommandation / profils visés » est remplacée par ces colonnes par profil.
+3. **Tableau « Rappel — scores globaux » — une colonne par profil = verdict.** Le tableau de rappel comporte **une colonne par profil recherché de l'AO**, chaque cellule portant le **verdict du candidat pour ce profil** (`recommandé` / `possible` / `déconseillé` / `exclu`). Le **score global /100** et le **détail par critère** (pondération immuable 45/30/10/5/5/5) restent dans les premières colonnes. La colonne globale unique « recommandation / profils visés » est remplacée par ces colonnes par profil.
 
 4. **Invariants préservés.** La pondération du scoring reste **immuable** ; le **score global reste unique par candidat** (calculé sur l'union des exigences du volet) — cette décision **n'introduit pas** de score chiffré par profil (traité séparément dans [ADR-0030](0030-scoring-chiffre-par-profil-recherche.md)). Le JSON `classement-final` reste la source d'audit ; seule la **restitution Markdown à l'humain** évolue.
 
