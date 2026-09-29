@@ -43,7 +43,7 @@ La **pondération immuable** du scoring (critères, poids, méthodes de calcul, 
 | --- | --- |
 | CV sources (PDF, DOCX) | **Pièces jointes de l'issue** — récupérés via `multica attachment`, **supprimés après extraction** (non stockés) |
 | **Gabarits CV fournis** (CV long / CV court / format client spécifique) | `${ROOT_DIRECTORY}/gabarits/cv/` — **fournis par l'humain, jamais inventés** |
-| Analyses CV (Markdown du jour + JSON versionnés à la racine, mémoire ; anciennes fiches dans `cv/archives/`) | `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv` |
+| Analyses CV (Markdown du jour + YAML versionnés à la racine, mémoire ; anciennes fiches dans `cv/archives/`) | `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv` |
 | **Référentiel des contextes clients** (1 fichier par client — contexte de la société + mandats réalisés par la firme) | `${ROOT_DIRECTORY}/clients/<nom-client>.json` — **maintenu par le Gestionnaire CV** lors de l'analyse d'un CV long contenant un contexte client (complété/enrichi, jamais écrasé) ; **exploité par l'Analyste RFP** pour l'expertise de firme |
 | **CV livrable** (DOCX par défaut depuis un gabarit ; Markdown sur demande explicite) | `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/<nom>-<prenom>-<type-gabarit>-<AAAA-MM-JJ>.docx` (ou `…-cv-<AAAA-MM-JJ>.md`) |
 | Résumés AO | `${ROOT_DIRECTORY}/ao/<client>/<titre-ao>` |
@@ -66,7 +66,7 @@ La **pondération immuable** du scoring (critères, poids, méthodes de calcul, 
 >    absolu attendu (et non sous le CWD du run) avant de conclure la tâche.
 > Ne jamais utiliser un chemin absolu hors `${ROOT_DIRECTORY}` ni un relatif non enraciné.
 
-> **Format du CV livrable — DOCX par défaut, Markdown sur demande explicite** : le **CV livrable** remis à l'humain / au client est **par défaut un DOCX** produit à partir d'un des **gabarits fournis** (CV long, CV court, format client spécifique) rangés dans `${ROOT_DIRECTORY}/gabarits/cv/` — **jamais inventé** (gabarit absent ⇒ halt-and-ask, pas de repli Markdown automatique). Le **format Markdown reste possible uniquement sur demande explicite de l'humain**. La fiche d'analyse Markdown et le JSON restent la mémoire interne (données), distincts du CV livrable.
+> **Format du CV livrable — DOCX par défaut, Markdown sur demande explicite** : le **CV livrable** remis à l'humain / au client est **par défaut un DOCX** produit à partir d'un des **gabarits fournis** (CV long, CV court, format client spécifique) rangés dans `${ROOT_DIRECTORY}/gabarits/cv/` — **jamais inventé** (gabarit absent ⇒ halt-and-ask, pas de repli Markdown automatique). Le **format Markdown reste possible uniquement sur demande explicite de l'humain**. La fiche d'analyse Markdown et le YAML restent la mémoire interne (données), distincts du CV livrable.
 
 ---
 
@@ -175,7 +175,7 @@ sequenceDiagram
     S->>A: Delegue parsing AO (mention + mission.yaml joint)
     A-->>S: Retour A2A (mention + resume-ao.json joint)
     S->>G: Delegue extraction CV + filtre eligibilite vs AO (mention + mission.yaml joint)
-    G-->>S: Retour A2A (mention + cv-eligibilite.json joint, sans les CV)
+    G-->>S: Retour A2A (mention + cv-eligibilite.yaml joint, sans les CV)
     S->>H: Gate leger - validation extractions + eligibilite (ANALYSE)
     H-->>S: Approbation extractions + eligibilite
     S->>M: Delegue croisement - retenus uniquement (mention + mission.yaml joint)

@@ -32,7 +32,7 @@ Le référentiel `clients/` est **transverse aux collaborateurs** et **partagé 
   "slug": "<nom-client slugifié — cohérent avec le nom de fichier>",
   "contexte": "<contexte du client (secteur, mission, taille, enjeux) — complété/enrichi au fil des CV, jamais écrasé aveuglément>",
   "date_derniere_modification": "<AAAA-MM-JJ — date du jour de la dernière mise à jour>",
-  "sources": [ { "collaborateur": "<prénom nom>", "cv_analyse_json": "<chemin du JSON d'analyse ayant alimenté ce fichier>", "date": "<AAAA-MM-JJ>" } ],
+  "sources": [ { "collaborateur": "<prénom nom>", "cv_analyse_yaml": "<chemin du YAML d'analyse ayant alimenté ce fichier>", "date": "<AAAA-MM-JJ>" } ],
   "mandats": [
     {
       "collaborateur": "<prénom nom du collaborateur ayant réalisé le mandat>",
@@ -74,7 +74,7 @@ Déclenchée **uniquement** lors de l'analyse d'un **CV (long) contenant un cont
 3. **Enrichissement, jamais d'écrasement aveugle** :
    - **`contexte`** : **compléter** avec l'information pertinente **non redondante** apportée par le CV, **sans effacer** l'existant. Ne pas dupliquer une information déjà présente.
    - **`mandats[]`** : **dédoublonner** — un mandat **déjà présent** (même `collaborateur` + même `projet`/période) est **mis à jour/complété** ; un mandat **nouveau** est **ajouté**.
-4. Renseigner **`date_derniere_modification`** = date du jour et **ajouter une entrée `sources[]`** (collaborateur + chemin du JSON d'analyse + date).
+4. Renseigner **`date_derniere_modification`** = date du jour et **ajouter une entrée `sources[]`** (collaborateur + chemin du YAML d'analyse + date).
 5. **Écrire** le fichier en **JSON valide** sous `${ROOT_DIRECTORY}/clients/` (jamais dans le workdir du run), puis **vérifier** son existence après écriture.
 6. **Ne rien inventer** : une donnée absente du CV reste `null`/`[]` ; poser une **mention humaine** si une information ambiguë mérite confirmation. Aucun secret dans le référentiel.
 

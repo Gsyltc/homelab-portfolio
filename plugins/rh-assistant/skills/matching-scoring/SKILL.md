@@ -16,8 +16,8 @@ Le Matcher **ne score que les collaborateurs retenus** par le filtre d'éligibil
 ## Entrées
 
 - Les **exigences AO** (JSON produit par `parse-ao` : `exigences`, `profils_recherches`, `ao.client_gouvernemental`, `ao.equivalence_diplomes`, `ao.localisation_travail`), **y compris les technologies et méthodologies exigées** par l'AO (portées par `exigences` / `profils_recherches`).
-- La **liste des retenus** transmise par le Coordinateur (`eligibilite.collaborateurs_possibles`) — pour chaque retenu, une référence `analyse_json`.
-- Pour chaque retenu, **lire soi-même** la **dernière version JSON** référencée par `analyse_json` (`cv-profils`, `<nom>-<prenom>-<AAAA-MM-JJ>.json`) — les CV ne sont **pas** transmis par le Gestionnaire CV. En plus des `competences`, lire les **agrégats collaborateur `technologies` et `methodologies`** (`{ nom, mois_experience, derniere_utilisation }`, mois d'XP en union calendaire) pour évaluer la couverture des technos/méthodos exigées par l'AO, ainsi que les **certifications détenues** (`certifications[]`) et les **langues** (`langues[]`) pour alimenter les critères **Certifications (5 %)** et **Langues (5 %)**. Les versions JSON antérieures et les sources supprimés ne sont **jamais** croisés.
+- La **liste des retenus** transmise par le Coordinateur (`eligibilite.collaborateurs_possibles`) — pour chaque retenu, une référence `analyse_yaml`.
+- Pour chaque retenu, **lire soi-même** la **dernière version YAML** référencée par `analyse_yaml` (`cv-profils`, `<nom>-<prenom>-<AAAA-MM-JJ>.yaml`) — les CV ne sont **pas** transmis par le Gestionnaire CV. En plus des `competences`, lire les **agrégats collaborateur `technologies` et `methodologies`** (`{ nom, mois_experience, derniere_utilisation }`, mois d'XP en union calendaire) pour évaluer la couverture des technos/méthodos exigées par l'AO, ainsi que les **certifications détenues** (`certifications[]`) et les **langues** (`langues[]`) pour alimenter les critères **Certifications (5 %)** et **Langues (5 %)**. Les versions YAML antérieures et les sources supprimés ne sont **jamais** croisés.
 
 ## Scoring pondéré
 
@@ -60,7 +60,7 @@ Cette règle s'applique **uniquement** lorsque `ao.client_gouvernemental = true`
 
 ## Procédure
 
-1. **Recevoir** les exigences AO (JSON) et la **liste des retenus** (`eligibilite.collaborateurs_possibles`). Pour chaque retenu, **lire soi-même** la dernière version JSON via `analyse_json`. **Ne pas scorer** les `exclu` ni `a_verifier` du filtre d'éligibilité amont — les propager tels quels au classement.
+1. **Recevoir** les exigences AO (JSON) et la **liste des retenus** (`eligibilite.collaborateurs_possibles`). Pour chaque retenu, **lire soi-même** la dernière version YAML via `analyse_yaml`. **Ne pas scorer** les `exclu` ni `a_verifier` du filtre d'éligibilité amont — les propager tels quels au classement.
 2. **Croiser** chaque profil CV avec les exigences AO, en appliquant la règle de fraîcheur (compétences / technologies / méthodologies > 10 ans ignorées). Pour le critère **Compétences (30 %)**, évaluer la **couverture regroupée** des compétences, **technologies** et **méthodologies** exigées par l'AO (connues vs manquantes) à partir des `competences` et des agrégats `technologies` / `methodologies` du profil. Évaluer aussi la **couverture des certifications `souhaitee`** (critère Certifications 5 %) et la **couverture des langues exigées** (critère Langues 5 %).
 3. **Calculer le score pondéré** (45/30/10/5/5/5) pour chaque profil.
 4. **Identifier les forces et écarts** de chaque profil par rapport aux exigences.
@@ -148,7 +148,7 @@ Cette règle s'applique **uniquement** lorsque `ao.client_gouvernemental = true`
 - **Fraîcheur > 10 ans** — s'applique aux compétences **et** aux technologies/méthodologies (via `derniere_utilisation` des agrégats) : un élément périmé ne couvre aucune exigence et alimente les `ecarts` / listes `*_manquantes`.
 - **Mois d'XP techno/méthodo informatifs** — les agrégats `mois_experience` (union calendaire) servent au remplissage des grilles et à la présentation humaine ; ils ne modifient pas la règle binaire de couverture/fraîcheur.
 - **Ne scorer que les retenus** — jamais les `exclu` ni les `a_verifier` du filtre d'éligibilité amont (y compris les exclusions de **localisation** et de **certifications requises `obligatoire`**) ; les propager tels quels avec leurs raisons, sans jamais réintégrer un collaborateur exclu.
-- **Lire soi-même la dernière version JSON** de chaque retenu — ne jamais croiser une version antérieure ni un source supprimé ; les CV ne circulent pas en A2A.
+- **Lire soi-même la dernière version YAML** de chaque retenu — ne jamais croiser une version antérieure ni un source supprimé ; les CV ne circulent pas en A2A.
 - **Ne rien inventer** — une donnée manquante (MIFI non tranché, niveau d'études indéterminé) reste `a_verifier` et se signale à l'humain ; jamais d'exclusion sur donnée inconnue.
 - **Aucun secret** dans les livrables, justifications ou notifications.
 

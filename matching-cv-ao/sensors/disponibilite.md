@@ -4,7 +4,7 @@ Manifeste déclaratif du sensor qui contrôle la présence **obligatoire** de l'
 
 ## Objet
 
-Chaque collaborateur du JSON `cv-profils` (produit par le stage `extraction-cv`, Gestionnaire CV) **doit** porter une disponibilité complète, structurée en objet, ainsi qu'un **type de collaborateur** :
+Chaque collaborateur du YAML `cv-profils` (produit par le stage `extraction-cv`, Gestionnaire CV) **doit** porter une disponibilité complète, structurée en objet, ainsi qu'un **type de collaborateur** :
 
 - `type_collaborateur` — statut du collaborateur qui **qualifie sa disponibilité**, l'une des **4 valeurs** (`enum`) : `alithya` (interne, disponible selon `disponibilite`) · `recrutement` (candidat en cours de recrutement, disponible conditionnellement à l'embauche) · `offre_conditionnelle` (disponible seulement si l'AO est remporté) · `non_disponible` (ne peut pas être positionné — **écarté du matching**) ;
 - `disponibilite.date_disponibilite` — date ISO `AAAA-MM-JJ` à partir de laquelle le collaborateur est disponible ;

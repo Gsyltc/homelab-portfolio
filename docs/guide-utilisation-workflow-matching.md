@@ -90,7 +90,7 @@ La délégation se fait par **mention** sur l'issue ; l'agent sollicité répond
 | CV sources (PDF, DOCX) | **Pièces jointes de l'issue** — analysés puis **supprimés** (non conservés) |
 | **Gabarits CV fournis** (CV long / CV court / format client spécifique) | `${ROOT_DIRECTORY}/gabarits/cv/` — **fournis par vous, jamais inventés** |
 | Anciennes fiches d'analyse Markdown | `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/archives/` |
-| Fiche d'analyse Markdown courante + JSON versionnés (mémoire) | Racine de `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/` |
+| Fiche d'analyse Markdown courante + YAML versionnés (mémoire) | Racine de `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/` |
 | **CV livrable** (DOCX par défaut depuis un gabarit ; Markdown sur demande explicite) | `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/<nom>-<prenom>-<type-gabarit>-<AAAA-MM-JJ>.docx` (ou `…-cv-<AAAA-MM-JJ>.md`) |
 | Résumés AO | `${ROOT_DIRECTORY}/ao/<client>/<titre-ao>/` |
 | **Contextes clients (sociétés)** — 1 fichier par client : contexte de la société + mandats réalisés par la firme | `${ROOT_DIRECTORY}/clients/<nom-client>.json` — **alimenté automatiquement** par le Gestionnaire CV à partir des CV longs (complété/enrichi, jamais écrasé) ; utilisé par l'Analyste RFP pour l'expertise de firme |
@@ -107,10 +107,10 @@ Ces chemins sont créés **si absents**, toujours au bon endroit (client = nom d
 
 > **CV sources fournis dans l'issue** : joignez les CV des collaborateurs (PDF, DOCX) **en pièces jointes de
 > l'issue**. À chaque analyse, le Gestionnaire CV les récupère, produit une fiche Markdown datée **du jour** à la
-> racine de `cv/` (les anciennes fiches sont déplacées dans `cv/archives/`) et un JSON d'analyse **versionné**
-> (`<nom>-<prenom>-<AAAA-MM-JJ>.json`), **puis supprime la copie de travail** — **les originaux ne sont pas
+> racine de `cv/` (les anciennes fiches sont déplacées dans `cv/archives/`) et un YAML d'analyse **versionné**
+> (`<nom>-<prenom>-<AAAA-MM-JJ>.yaml`), **puis supprime la copie de travail** — **les originaux ne sont pas
 > conservés** (leur nom est journalisé sur l'issue avant suppression, pour l'audit). Seule la **dernière version
-> JSON** est croisée avec un AO ; le fichier retenu et les versions écartées sont journalisés sur l'issue.
+> YAML** est croisée avec un AO ; le fichier retenu et les versions écartées sont journalisés sur l'issue.
 
 > **Contextes clients & expertise de firme** : lorsqu'un **CV long** décrit le **contexte des sociétés
 > clientes** et les **mandats** réalisés, le Gestionnaire CV capitalise ces informations dans

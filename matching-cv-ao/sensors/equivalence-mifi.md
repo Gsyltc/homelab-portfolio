@@ -4,7 +4,7 @@ Manifeste déclaratif du sensor qui contrôle la présence et la cohérence de l
 
 ## Objet
 
-Chaque collaborateur du JSON `cv-profils` (produit par le stage `extraction-cv`, Gestionnaire CV) **doit** porter un objet `mifi` documentant si son niveau d'études nécessite une **équivalence MIFI** (Ministère de l'Immigration, de la Francisation et de l'Intégration). Le champ pivot `equivalence_requise` porte **4 états** :
+Chaque collaborateur du YAML `cv-profils` (produit par le stage `extraction-cv`, Gestionnaire CV) **doit** porter un objet `mifi` documentant si son niveau d'études nécessite une **équivalence MIFI** (Ministère de l'Immigration, de la Francisation et de l'Intégration). Le champ pivot `equivalence_requise` porte **4 états** :
 
 - `non_requise` — **diplôme canadien** : aucune équivalence nécessaire ; `niveau_equivalent_qc` = le niveau tel quel.
 - `oui` — le collaborateur **possède le MIFI** : `niveau_equivalent_qc` reconnu (DEC, BAC, etc.).
