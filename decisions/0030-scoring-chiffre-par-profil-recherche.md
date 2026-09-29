@@ -19,7 +19,7 @@ Proposed
 
 Sur **EXPE-67** (AO MEQ 256490-S4-AP, Volet B, 2 profils recherchés), l'humain a validé une présentation **détaillée par profil** avec, dans le tableau de rappel, **une colonne verdict par profil** (recommandé, possible, etc.) — décision tracée dans [ADR-0029](0029-scoring-multi-profils-colonne-verdict-par-profil.md), à implémenter immédiatement.
 
-Le modèle de scoring actuel produit **un score global unique par candidat**, calculé sur **l'union des exigences du volet** (pondération immuable Compétences 50 % · Expérience 35 % · Études 10 % · Disponibilité 5 %). La couverture par profil recherché est aujourd'hui exprimée **qualitativement** (fort / pertinent / partiel → verdict recommandé / possible / déconseillé), sans **score chiffré propre à chaque profil**.
+Le modèle de scoring actuel produit **un score global unique par candidat**, calculé sur **l'union des exigences du volet** (pondération immuable Expérience 45 % · Compétences 30 % · Études 10 % · Certifications 5 % · Langues 5 % · Disponibilité 5 %). La couverture par profil recherché est aujourd'hui exprimée **qualitativement** (fort / pertinent / partiel → verdict recommandé / possible / déconseillé), sans **score chiffré propre à chaque profil**.
 
 Une évolution plus ambitieuse a été identifiée : produire un **score /100 distinct par profil recherché** de l'AO (PR-001, PR-002, …), calculé sur le **sous-ensemble d'exigences propre à ce profil**, en plus (ou à la place) du verdict qualitatif. Cette option est **plus lourde** et **différée** : l'humain veut d'abord **voir les changements qu'elle implique** avant de décider.
 
@@ -29,7 +29,7 @@ Une évolution plus ambitieuse a été identifiée : produire un **score /100 di
 
 Périmètre pressenti (à valider si passage `Accepted`) :
 
-1. **Calcul par sous-ensemble d'exigences.** Pour chaque profil recherché, ne prendre en compte que **les exigences de ce profil** (exigences minimales + atouts propres au profil) au lieu de l'union du volet. La pondération des critères (50/35/10/5) resterait immuable **à l'intérieur** de chaque score par profil.
+1. **Calcul par sous-ensemble d'exigences.** Pour chaque profil recherché, ne prendre en compte que **les exigences de ce profil** (exigences minimales + atouts propres au profil) au lieu de l'union du volet. La pondération des critères (45/30/10/5/5/5) resterait immuable **à l'intérieur** de chaque score par profil.
 2. **Schéma JSON étendu.** L'artefact `matching-resultats` (produit par le Matcher) porterait, par candidat, un tableau `scores_par_profil` (`{profil_id, intitulé, score_total, détail par critère, recommandation}`) en plus du `score_total` global conservé pour compatibilité.
 3. **Restitution.** Le tableau de rappel afficherait, par profil, **le score chiffré ET le verdict** (au lieu du seul verdict d'[ADR-0029](0029-scoring-multi-profils-colonne-verdict-par-profil.md)).
 
@@ -72,4 +72,4 @@ Dériver un score par profil au moment de la présentation, sans modifier le Mat
 - **REF-001** : EXPE-67 — AO MEQ 256490-S4-AP, Volet B (2 profils) — contexte de la demande.
 - **REF-002** : [ADR-0029 — Scoring multi-profils : détail par profil + colonne verdict par profil](0029-scoring-multi-profils-colonne-verdict-par-profil.md) — décision A, implémentée immédiatement ; ADR-0030 en est le prolongement optionnel.
 - **REF-003** : `matching-cv-ao/common/stages/matching/croisement-profils.md` et le skill `matching-scoring` — points d'impact principaux si la décision est acceptée.
-- **REF-004** : `matching-cv-ao/common/conductor.md` (§ Scoring pondéré) — pondération immuable 50/35/10/5, à préserver à l'intérieur de chaque score par profil.
+- **REF-004** : `matching-cv-ao/common/conductor.md` (§ Scoring pondéré) — pondération immuable 45/30/10/5/5/5, à préserver à l'intérieur de chaque score par profil.

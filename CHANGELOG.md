@@ -26,6 +26,15 @@ ce fichier en donne la lecture chronologique côté produit.
   la config Multica des agents concernés (champ `instructions`).
 
 ### Changed
+- **Refonte de la pondération du scoring `matching-cv-ao`** (EXPE-71 ; changement **fonctionnel validé humain**) —
+  la pondération immuable passe de **4 critères 50/35/10/5** (Compétences 50 % · Expérience 35 % · Études 10 % ·
+  Disponibilité 5 %) à **6 critères 45/30/10/5/5/5** : **Expérience 45 %** · **Compétences 30 %** (compétences +
+  technologies + méthodologies, regroupées) · **Études 10 %** · **Certifications 5 %** · **Langues 5 %** ·
+  **Disponibilité 5 %**. Deux nouveaux critères apparaissent : **Certifications** (couverture des certifications
+  `souhaitée` de l'AO — les certifications `obligatoire` restent un prérequis éliminatoire amont, non re-scoré) et
+  **Langues** (couverture des langues exigées). Propagé à la skill `matching-scoring` (table, schéma JSON de sortie,
+  garde-fous), `conductor.md`, `matcher-profils-agent.md`, `croisement-profils.md`, `presentation-resultats.md`,
+  `livraison.md`, le guide d'utilisation et les ADR 0029/0030 (invariant de pondération mis à jour).
 - **Réorganisation Phase 3 du workflow Homelab + Analyste QA** (HOM-215 ; évolution **documentaire**,
   invariants préservés) : dans la phase **Production et Contrôle**, la **configuration Terraform passe avant
   le docker-compose** (ordre cible `autonomy-mode → terraform-configuration → docker-compose-creation →

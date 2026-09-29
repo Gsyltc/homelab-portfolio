@@ -35,9 +35,11 @@ Vecteurs de communication (A2A = fichier JSON joint + commentaire minimal mentio
 
 | Critère | Poids |
 | --- | --- |
-| Compétences techniques | 50% |
-| Expérience en projets (jours/personnes, mois de projets similaires, clients similaires) | 35% |
+| Expérience en projets (jours/personnes, mois de projets similaires, clients similaires) | 45% |
+| Compétences (compétences + technologies + méthodologies) | 30% |
 | Études | 10% |
+| Certifications | 5% |
+| Langues | 5% |
 | Disponibilité | 5% |
 
 ---

@@ -141,12 +141,14 @@ Le **Matcher Profils** calcule le score pondéré (immuable — seul un changeme
 
 | Critère | Poids |
 | --- | --- |
-| Compétences (compétences + technologies + méthodologies) | 50% |
-| Expérience en projets | 35% |
+| Expérience en projets | 45% |
+| Compétences (compétences + technologies + méthodologies) | 30% |
 | Études | 10% |
+| Certifications | 5% |
+| Langues | 5% |
 | Disponibilité | 5% |
 
-Le critère **Compétences (50 %)** **regroupe les compétences, les technologies et les méthodologies** : il évalue la **couverture** des compétences/technologies/méthodologies exigées par l'AO (connues vs manquantes). Ce regroupement se fait **à l'intérieur** du critère Compétences — **les poids 50/35/10/5 restent inchangés**, sans nouveau critère ni nouvelle pondération. Chaque expérience du CV porte ses **méthodologies** et **technologies**, et le profil expose des **grilles d'expérience par technologie et par méthodologie** (mois d'XP en temps calendaire, sans double comptage des périodes simultanées) — ces mois d'XP sont **informatifs** (remplissage de grilles) et ne modifient pas la règle de couverture. Un élément exigé non couvert (ou couvert uniquement par un élément périmé — dernière utilisation > 10 ans) est un **écart**.
+Le critère **Compétences (30 %)** **regroupe les compétences, les technologies et les méthodologies** : il évalue la **couverture** des compétences/technologies/méthodologies exigées par l'AO (connues vs manquantes). Ce regroupement se fait **à l'intérieur** du critère Compétences. Les **certifications `souhaitée`** de l'AO et les **langues exigées** sont désormais évaluées par leurs **critères dédiés** (Certifications 5 %, Langues 5 %) ; les certifications `obligatoire` restent un **prérequis éliminatoire amont**, non re-scoré. **Si l'AO ne précise aucune langue, le français est considéré comme exigé par défaut.** Chaque expérience du CV porte ses **méthodologies** et **technologies**, et le profil expose des **grilles d'expérience par technologie et par méthodologie** (mois d'XP en temps calendaire, sans double comptage des périodes simultanées) — ces mois d'XP sont **informatifs** (remplissage de grilles) et ne modifient pas la règle de couverture. Un élément exigé non couvert (ou couvert uniquement par un élément périmé — dernière utilisation > 10 ans) est un **écart**.
 
 ---
 
@@ -163,7 +165,7 @@ Le statut MIFI de chaque collaborateur apparaît dans la **fiche d'analyse Markd
 
 **Pour un appel d'offres d'un client gouvernemental**, le **niveau d'études requis devient un critère éliminatoire**. Le workflow détecte le caractère gouvernemental de l'AO et la **politique d'équivalence** qu'il accepte (ex. « Baccalauréat requis — équivalence DEC + 3 ans d'expérience par année d'études manquante »), **sans jamais l'inventer** : si l'AO ne la précise pas, elle est marquée « non précisée ». Un collaborateur dont le niveau d'études (compte tenu de l'équivalence MIFI et de la compensation éventuelle) **ne satisfait pas** l'exigence est **exclu du classement**, avec un **motif** ; ces exclusions figurent **dans le classement et dans le rapport final de livraison**. Un cas « à vérifier » n'entraîne pas d'exclusion automatique : il vous est signalé pour décision.
 
-> Cette conformité gouvernementale **ne modifie pas** la pondération du scoring (50/35/10/5) : elle agit comme un filtre d'éligibilité, pas comme un poids.
+> Cette conformité gouvernementale **ne modifie pas** la pondération du scoring (45/30/10/5/5/5) : elle agit comme un filtre d'éligibilité, pas comme un poids.
 
 ---
 

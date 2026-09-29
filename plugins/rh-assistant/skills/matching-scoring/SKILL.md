@@ -1,8 +1,8 @@
 ---
 name: matching-scoring
 description: >
-    Croisement et scoring des profils du workflow Matching : calcul du score pondéré IMMUABLE (Compétences 50 % / Expérience 35 % / Études 10 % / Disponibilité 5 %) sur les seuls collaborateurs retenus par le filtre d'éligibilité amont, règle de fraîcheur des compétences (> 10 ans ignorée), double check de conformité du niveau d'études (AO gouvernemental / équivalence MIFI / compensation), classement, schéma JSON de sortie et garde-fous. Charger avant tout croisement ou calcul de score.
-keywords: [matching, scoring pondere, ponderation immuable, fraicheur competences, conformite etudes, mifi, equivalence diplomes, classement profils, forces ecarts, exclusion gouvernemental, certifications requises, prerequis certification]
+    Croisement et scoring des profils du workflow Matching : calcul du score pondéré IMMUABLE (Expérience 45 % / Compétences 30 % / Études 10 % / Certifications 5 % / Langues 5 % / Disponibilité 5 %) sur les seuls collaborateurs retenus par le filtre d'éligibilité amont, règle de fraîcheur des compétences (> 10 ans ignorée), double check de conformité du niveau d'études (AO gouvernemental / équivalence MIFI / compensation), classement, schéma JSON de sortie et garde-fous. Charger avant tout croisement ou calcul de score.
+keywords: [matching, scoring pondere, ponderation immuable, fraicheur competences, conformite etudes, mifi, equivalence diplomes, classement profils, forces ecarts, exclusion gouvernemental, certifications requises, prerequis certification, langues, certifications scoring]
 ---
 
 # Croisement et scoring des profils
@@ -11,13 +11,13 @@ Cette compétence porte tout le détail opératoire du **croisement exigences AO
 
 Le Matcher **ne score que les collaborateurs retenus** par le filtre d'éligibilité amont du Gestionnaire CV : le Coordinateur ne transmet que la **liste des retenus** (`eligibilite.collaborateurs_possibles`). Les collaborateurs `exclu` et `a_verifier` du filtre d'éligibilité **ne sont pas scorés** — ils sont propagés tels quels (avec leurs raisons) au classement et à la livraison. Cela inclut les exclusions de **localisation** (collaborateur hors du rayon de proximité — 70 km par défaut — d'un AO `sur_site`/`hybride`), les exclusions de **certifications requises** (collaborateur ne détenant pas une certification marquée `obligatoire` dans l'AO — ex. AWS Certified Solutions Architect – Associate) et les `a_verifier` correspondants (ville manquante, détention de certification non confirmée) : ces décisions sont prises **en amont** par le Gestionnaire CV et **n'entrent pas dans le scoring pondéré immuable**.
 
-> **Certifications requises = éligibilité amont, pas scoring.** Une certification exigée par l'AO (`profils_recherches[].certifications_requises` avec `criticite: "obligatoire"`) est un **prérequis éliminatoire tranché en amont** (axe `certifications` du filtre d'éligibilité). Le Matcher **ne re-score pas** ce prérequis et **ne réintègre jamais** un collaborateur exclu pour certification manquante. À l'intérieur du scoring, les certifications (comme les certifications `souhaitee`/`nice-to-have`) alimentent uniquement la **couverture Compétences (50 %)** ; elles **n'ajoutent ni critère, ni pondération** et ne modifient pas les poids immuables 50/35/10/5.
+> **Certifications requises `obligatoire` = éligibilité amont, pas scoring.** Une certification exigée par l'AO (`profils_recherches[].certifications_requises` avec `criticite: "obligatoire"`) est un **prérequis éliminatoire tranché en amont** (axe `certifications` du filtre d'éligibilité). Le Matcher **ne re-score pas** ce prérequis éliminatoire et **ne réintègre jamais** un collaborateur exclu pour certification obligatoire manquante. En revanche, le scoring pondéré comporte désormais un **critère Certifications (5 %)** distinct qui mesure la **couverture des certifications `souhaitee` / nice-to-have** de l'AO par les certifications détenues du collaborateur (`certifications[]`) — ce critère **n'entre pas** dans le critère Compétences et **n'altère pas** le caractère éliminatoire des certifications `obligatoire`.
 
 ## Entrées
 
 - Les **exigences AO** (JSON produit par `parse-ao` : `exigences`, `profils_recherches`, `ao.client_gouvernemental`, `ao.equivalence_diplomes`, `ao.localisation_travail`), **y compris les technologies et méthodologies exigées** par l'AO (portées par `exigences` / `profils_recherches`).
 - La **liste des retenus** transmise par le Coordinateur (`eligibilite.collaborateurs_possibles`) — pour chaque retenu, une référence `analyse_json`.
-- Pour chaque retenu, **lire soi-même** la **dernière version JSON** référencée par `analyse_json` (`cv-profils`, `<nom>-<prenom>-<AAAA-MM-JJ>.json`) — les CV ne sont **pas** transmis par le Gestionnaire CV. En plus des `competences`, lire les **agrégats collaborateur `technologies` et `methodologies`** (`{ nom, mois_experience, derniere_utilisation }`, mois d'XP en union calendaire) pour évaluer la couverture des technos/méthodos exigées par l'AO et remplir les grilles. Les versions JSON antérieures et les sources supprimés ne sont **jamais** croisés.
+- Pour chaque retenu, **lire soi-même** la **dernière version JSON** référencée par `analyse_json` (`cv-profils`, `<nom>-<prenom>-<AAAA-MM-JJ>.json`) — les CV ne sont **pas** transmis par le Gestionnaire CV. En plus des `competences`, lire les **agrégats collaborateur `technologies` et `methodologies`** (`{ nom, mois_experience, derniere_utilisation }`, mois d'XP en union calendaire) pour évaluer la couverture des technos/méthodos exigées par l'AO, ainsi que les **certifications détenues** (`certifications[]`) et les **langues** (`langues[]`) pour alimenter les critères **Certifications (5 %)** et **Langues (5 %)**. Les versions JSON antérieures et les sources supprimés ne sont **jamais** croisés.
 
 ## Scoring pondéré
 
@@ -25,14 +25,16 @@ Le Matcher **ne score que les collaborateurs retenus** par le filtre d'éligibil
 
 | Critère | Poids | Méthode de calcul |
 | --- | --- | --- |
-| Compétences (compétences + technologies + méthodologies) | 50 % | **Couverture regroupée** : nombre d'éléments requis par l'AO (compétences **+ technologies + méthodologies**) couverts par le profil (compétence **éligible** / techno / méthodo présente dans les agrégats et **fraîche ≤ 10 ans**) / total des éléments requis par l'AO |
-| Expérience en projets | 35 % | Pertinence clients similaires + durée projets similaires (jours/personnes, mois) |
-| Études | 10 % | Niveau de formation correspondant — **niveau le plus élevé parmi `etudes[]`** (après équivalence MIFI). Les certifications relèvent du critère Compétences, pas de celui-ci |
+| Expérience en projets | 45 % | Pertinence clients similaires + durée projets similaires (jours/personnes, mois) |
+| Compétences (compétences + technologies + méthodologies) | 30 % | **Couverture regroupée** : nombre d'éléments requis par l'AO (compétences **+ technologies + méthodologies**) couverts par le profil (compétence **éligible** / techno / méthodo présente dans les agrégats et **fraîche ≤ 10 ans**) / total des éléments requis par l'AO |
+| Études | 10 % | Niveau de formation correspondant — **niveau le plus élevé parmi `etudes[]`** (après équivalence MIFI). Les certifications relèvent du critère Certifications, pas de celui-ci |
+| Certifications | 5 % | **Couverture des certifications `souhaitee` / nice-to-have** de l'AO par les certifications détenues du collaborateur (`certifications[]`). Les certifications `obligatoire` restent un **prérequis éliminatoire amont** et **ne sont pas re-scorées** ici |
+| Langues | 5 % | **Couverture des langues exigées** par l'AO (`langues[]` du profil vs langues requises) — présence et niveau de maîtrise attendu. **Si l'AO ne précise aucune exigence de langue, considérer le français comme exigé par défaut** (maîtrise du français ⇒ critère couvert). |
 | Disponibilité | 5 % | À partir de `disponibilite.date_disponibilite` (plus la disponibilité est proche, plus le score est élevé) et `disponibilite.taux_utilisation` (plus le taux d'utilisation est bas, plus le collaborateur est disponible) |
 
-`score_total` = somme pondérée des quatre critères, sur 100.
+`score_total` = somme pondérée des six critères, sur 100.
 
-> **Critère Compétences (50 %) — regroupement.** Le critère Compétences **regroupe compétences + technologies + méthodologies** dans **un seul et même critère à 50 %** — il n'y a **ni nouveau critère, ni nouvelle pondération** : le regroupement se fait **à l'intérieur** du critère Compétences. La couverture = (éléments requis par l'AO — compétences, technologies **et** méthodologies — effectivement couverts par le profil) / (total des éléments requis par l'AO). Un élément requis **non couvert**, ou couvert **uniquement** par un élément **périmé** (`derniere_utilisation` à plus de 10 ans), est traité comme **non couvert** → il alimente les `ecarts`. Les mois d'XP par techno/méthodo (agrégats `mois_experience`) sont **informatifs** (grilles) et ne modifient pas cette règle de couverture.
+> **Critère Compétences (30 %) — regroupement.** Le critère Compétences **regroupe compétences + technologies + méthodologies** dans **un seul et même critère à 30 %** — le regroupement se fait **à l'intérieur** du critère Compétences. La couverture = (éléments requis par l'AO — compétences, technologies **et** méthodologies — effectivement couverts par le profil) / (total des éléments requis par l'AO). Un élément requis **non couvert**, ou couvert **uniquement** par un élément **périmé** (`derniere_utilisation` à plus de 10 ans), est traité comme **non couvert** → il alimente les `ecarts`. Les mois d'XP par techno/méthodo (agrégats `mois_experience`) sont **informatifs** (grilles) et ne modifient pas cette règle de couverture. Les **certifications** ne font **plus** partie de ce critère : elles sont portées par le critère **Certifications (5 %)**.
 
 ## Règle d'éligibilité des compétences (fraîcheur)
 
@@ -46,7 +48,7 @@ Le Matcher **ne score que les collaborateurs retenus** par le filtre d'éligibil
 
 ## Règle de conformité du niveau d'études (client gouvernemental) — double check aval
 
-> **Double contrôle en aval du filtre d'éligibilité amont** — le filtre d'éligibilité du Gestionnaire CV **ne supprime pas** ce contrôle : il est **conservé** comme double vérification sur les seuls retenus. Cette règle **n'altère pas** les poids du scoring immuable (50/35/10/5). Elle agit comme un critère de conformité qui peut conduire à l'**exclusion** d'un collaborateur, sans jamais modifier la pondération du score.
+> **Double contrôle en aval du filtre d'éligibilité amont** — le filtre d'éligibilité du Gestionnaire CV **ne supprime pas** ce contrôle : il est **conservé** comme double vérification sur les seuls retenus. Cette règle **n'altère pas** les poids du scoring immuable (45/30/10/5/5/5). Elle agit comme un critère de conformité qui peut conduire à l'**exclusion** d'un collaborateur, sans jamais modifier la pondération du score.
 
 Cette règle s'applique **uniquement** lorsque `ao.client_gouvernemental = true`, sur les collaborateurs **retenus** par le filtre d'éligibilité amont. Elle évalue la conformité du niveau d'études du collaborateur au **niveau requis** de l'AO (`profils_recherches[].etudes_requises`), en tenant compte de l'équivalence MIFI et de la politique de compensation de l'AO.
 
@@ -59,8 +61,8 @@ Cette règle s'applique **uniquement** lorsque `ao.client_gouvernemental = true`
 ## Procédure
 
 1. **Recevoir** les exigences AO (JSON) et la **liste des retenus** (`eligibilite.collaborateurs_possibles`). Pour chaque retenu, **lire soi-même** la dernière version JSON via `analyse_json`. **Ne pas scorer** les `exclu` ni `a_verifier` du filtre d'éligibilité amont — les propager tels quels au classement.
-2. **Croiser** chaque profil CV avec les exigences AO, en appliquant la règle de fraîcheur (compétences / technologies / méthodologies > 10 ans ignorées). Pour le critère **Compétences (50 %)**, évaluer la **couverture regroupée** des compétences, **technologies** et **méthodologies** exigées par l'AO (connues vs manquantes) à partir des `competences` et des agrégats `technologies` / `methodologies` du profil.
-3. **Calculer le score pondéré** (50/35/10/5) pour chaque profil.
+2. **Croiser** chaque profil CV avec les exigences AO, en appliquant la règle de fraîcheur (compétences / technologies / méthodologies > 10 ans ignorées). Pour le critère **Compétences (30 %)**, évaluer la **couverture regroupée** des compétences, **technologies** et **méthodologies** exigées par l'AO (connues vs manquantes) à partir des `competences` et des agrégats `technologies` / `methodologies` du profil. Évaluer aussi la **couverture des certifications `souhaitee`** (critère Certifications 5 %) et la **couverture des langues exigées** (critère Langues 5 %).
+3. **Calculer le score pondéré** (45/30/10/5/5/5) pour chaque profil.
 4. **Identifier les forces et écarts** de chaque profil par rapport aux exigences.
 5. **Appliquer le double check de conformité des études** si `ao.client_gouvernemental = true`.
 6. **Classer les profils** par score décroissant ; les exclus (conformité études) et les `exclu`/`a_verifier` amont apparaissent avec leurs raisons hors du classement principal.
@@ -74,9 +76,14 @@ Cette règle s'applique **uniquement** lorsque `ao.client_gouvernemental = true`
     {
       "collaborateur": "<prénom nom>",
       "score_total": <score sur 100>,
+      "score_experience": {
+        "score": <sur 100>,
+        "poids": 0.45,
+        "details": ["<pertinence>"]
+      },
       "score_competences": {
         "score": <sur 100>,
-        "poids": 0.50,
+        "poids": 0.30,
         "regroupe": ["competences", "technologies", "methodologies"],
         "details": ["<compétence couverte (éligible)>"],
         "competences_couvertes": ["<compétence requise par l'AO et couverte (éligible ≤ 10 ans)>"],
@@ -89,15 +96,24 @@ Cette règle s'applique **uniquement** lorsque `ao.client_gouvernemental = true`
         "mois_experience_methodologies": [ { "nom": "<méthodologie>", "mois_experience": 0, "derniere_utilisation": "<AAAA-MM>" } ],
         "competences_ignorees_peremption": ["<compétence/techno/méthodo exclue car > 10 ans sans utilisation>"]
       },
-      "score_experience": {
-        "score": <sur 100>,
-        "poids": 0.35,
-        "details": ["<pertinence>"]
-      },
       "score_etudes": {
         "score": <sur 100>,
         "poids": 0.10,
         "details": ["<niveau>"]
+      },
+      "score_certifications": {
+        "score": <sur 100>,
+        "poids": 0.05,
+        "certifications_couvertes": ["<certification souhaitée par l'AO et détenue par le collaborateur>"],
+        "certifications_manquantes": ["<certification souhaitée par l'AO non détenue>"],
+        "details": ["<certification détenue pertinente>"]
+      },
+      "score_langues": {
+        "score": <sur 100>,
+        "poids": 0.05,
+        "langues_couvertes": ["<langue exigée par l'AO et maîtrisée au niveau attendu>"],
+        "langues_manquantes": ["<langue exigée par l'AO non maîtrisée ou niveau insuffisant>"],
+        "details": ["<langue et niveau>"]
       },
       "score_disponibilite": {
         "score": <sur 100>,
@@ -128,7 +144,7 @@ Cette règle s'applique **uniquement** lorsque `ao.client_gouvernemental = true`
 
 ## Garde-fous
 
-- **Scoring IMMUABLE** — les poids 50/35/10/5 ne changent qu'avec une validation humaine explicite tracée. Ni la fraîcheur, ni la conformité des études, ni aucun scope ne modifie ces poids. Le **regroupement compétences + technologies + méthodologies se fait à l'intérieur du critère Compétences (50 %)** — **aucun nouveau critère, aucune nouvelle pondération**.
+- **Scoring IMMUABLE** — les poids 45/30/10/5/5/5 (Expérience 45 % / Compétences 30 % / Études 10 % / Certifications 5 % / Langues 5 % / Disponibilité 5 %) ne changent qu'avec une validation humaine explicite tracée. Ni la fraîcheur, ni la conformité des études, ni aucun scope ne modifie ces poids. Le **regroupement compétences + technologies + méthodologies se fait à l'intérieur du critère Compétences (30 %)** ; les **certifications** et les **langues** sont des critères distincts à 5 % chacun.
 - **Fraîcheur > 10 ans** — s'applique aux compétences **et** aux technologies/méthodologies (via `derniere_utilisation` des agrégats) : un élément périmé ne couvre aucune exigence et alimente les `ecarts` / listes `*_manquantes`.
 - **Mois d'XP techno/méthodo informatifs** — les agrégats `mois_experience` (union calendaire) servent au remplissage des grilles et à la présentation humaine ; ils ne modifient pas la règle binaire de couverture/fraîcheur.
 - **Ne scorer que les retenus** — jamais les `exclu` ni les `a_verifier` du filtre d'éligibilité amont (y compris les exclusions de **localisation** et de **certifications requises `obligatoire`**) ; les propager tels quels avec leurs raisons, sans jamais réintégrer un collaborateur exclu.
