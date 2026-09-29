@@ -37,6 +37,9 @@ ce fichier en donne la lecture chronologique côté produit.
   `livraison.md`, le guide d'utilisation. **Traçabilité ADR** : nouvelle **[ADR-0032](decisions/0032-refonte-ponderation-scoring-matching.md)**
   (Accepted) qui acte la pondération à 6 critères et **supersede [ADR-0030](decisions/0030-scoring-chiffre-par-profil-recherche.md)**
   (désormais `Superseded`, conservée comme historique) ; l'invariant de pondération cité dans ADR-0029 est mis à jour.
+  **Déduplication** : les poids répétés dans `matcher-profils-agent.md` et le stage `livraison.md` sont **retirés**
+  et renvoient à la compétence `matching-scoring` (source unique), conformément au principe « fiches slim, détail dans
+  la compétence » ; aucun impact fonctionnel (la pondération vit dans la skill chargée par le Matcher).
 - **Réorganisation Phase 3 du workflow Homelab + Analyste QA** (HOM-215 ; évolution **documentaire**,
   invariants préservés) : dans la phase **Production et Contrôle**, la **configuration Terraform passe avant
   le docker-compose** (ordre cible `autonomy-mode → terraform-configuration → docker-compose-creation →

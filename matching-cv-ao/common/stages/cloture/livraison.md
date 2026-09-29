@@ -40,7 +40,7 @@ Produire l'artefact **JSON joint** `livraison-finale` (via `multica attachment`)
 ### Step 2 — Présentation finale DÉTAILLÉE + validation explicite
 Présenter à l'humain une **présentation finale Markdown détaillée et lisible** reprenant l'intégralité du contenu du livrable (le JSON joint `livraison-finale` reste la source/piste d'audit) :
 - **Résumé de l'AO analysée** (client, objet, exigences clés, profils recherchés).
-- **Profils retenus** — pour **chaque** profil : nom, **score total**, **détail par critère** (expérience 45 %, compétences 30 %, études 10 %, certifications 5 %, langues 5 %, disponibilité 5 %), **recommandation** et **justification**.
+- **Profils retenus** — pour **chaque** profil : nom, **score total**, **détail par critère** (les critères et leur pondération immuable sont définis dans la compétence `matching-scoring`), **recommandation** et **justification**.
 - **Collaborateurs non retenus** (filtre d'éligibilité Gestionnaire CV) — sous-états `exclu` / `a_verifier` avec **raisons par axe** (`{axe, detail}`).
 - **Pour un AO gouvernemental** : bloc **« exclus — non-conformité études »** avec le **motif d'exclusion** par collaborateur.
 - **Grille remplie** (si disponible) et **recommandations**.
