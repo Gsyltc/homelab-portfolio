@@ -9,6 +9,22 @@ ce fichier en donne la lecture chronologique côté produit.
 ## [Non publié]
 
 ### Fixed
+- **Contrôle de fraîcheur du CV JSON réutilisé (cache périmé) — `matching-cv-ao`** (réf. EXPE-77 ; évolution
+  **documentaire**, invariants préservés). À la **réutilisation d'un JSON d'analyse déjà extrait** (collaborateur
+  sans nouvelle pièce jointe — cas 2 de la règle de sélection de la source CV), le JSON rejoué est un **cache**
+  qui n'était soumis à **aucun contrôle de fraîcheur** : le `fraicheur_cv` n'était calculé qu'à l'extraction
+  fraîche et la règle « > 10 ans » du Matcher ne porte que sur les compétences *à l'intérieur* d'un CV, pas sur
+  l'âge de l'analyse réutilisée (contenu périmé = matching silencieusement dégradé). Ajout d'un **contrôle d'âge
+  de l'analyse** (`date_derniere_modification` vs date du jour) contre un **seuil de péremption
+  `SEUIL_PEREMPTION_ANALYSE` (12 mois par défaut)** : au-delà ⇒ collaborateur classé **`a_verifier`** (axe
+  `fraicheur_cv`) **+ mention humaine** « analyse ancienne, CV à jour ? », au lieu d'un scoring silencieux sur
+  données périmées. Le cache reste utilisable en attendant l'arbitrage (repasse `possible` si le CV est confirmé
+  à jour, sinon l'humain fournit un CV récent → nouvelle extraction). Contrôle **distinct** de la fraîcheur des
+  compétences du Matcher (> 10 ans). Source unique dans la compétence `cv-analyse` (règle de sélection de la
+  source CV + sélection d'éligibilité + schéma d'axes `a_verifier`) ; reflété dans les stages
+  `initialisation/chargement-cv.md` (Step 2) et `analyse/extraction-cv.md` (bloc conditionnel + Step 2), et note
+  d'axe `fraicheur_cv` mise à jour dans `protocols/governance-security.md` (l'axe couvre désormais aussi
+  l'`a_verifier` du cache périmé, plus seulement l'`exclu`).
 - **Wake parasite A2A du workflow `matching-cv-ao`** (réf. EXPE-54) — évolution **documentaire**, invariants
   préservés. **Règle générale (tous agents)** énoncée dans les seules règles A2A (`protocols/stage-protocol.md`
   temps 3 et `protocols/governance-security.md` « Règle A2A ») : **aucun agent ne se mentionne lui-même** avec un
