@@ -8,7 +8,7 @@ support_agents: []
 mode: subagent
 summary_confirmation: optional
 reviewer: null
-review_class: advisory
+review_class: none
 review_artifact: ""
 human_gate: light
 produces: [ao-exigences, ao-profils-recherches, ao-expertise-firme]
@@ -24,6 +24,8 @@ outputs: "Résumé AO (JSON) + exigences + profils recherchés + évaluation d'e
 
 ## Objectif
 Parser le PDF d'appel d'offres, en extraire les exigences fonctionnelles et techniques, identifier les profils recherchés, et — lorsque l'AO exige une **expertise/expérience de firme** — évaluer si la firme y répond à partir du référentiel des contextes clients (`${ROOT_DIRECTORY}/clients/*.json`), de façon **non bloquante** (gate humaine légère si les minimums ne sont pas atteints).
+
+> **Dépendance `clients-contextes` = état persistant, jamais intra-run.** L'artefact `clients-contextes` (`consumes`, `required: false`) est **produit par `extraction-cv`**, qui s'exécute **après** `parse-ao` (`extraction-cv.requires_stage: [parse-ao]`). `parse-ao` ne lit donc **jamais** une production du run courant : la lecture du référentiel `${ROOT_DIRECTORY}/clients/*.json` porte **uniquement sur l'état persistant laissé par des runs antérieurs** (référentiel maintenu au fil du temps par le Gestionnaire CV). Un référentiel **vide ou absent** (premier run, aucun contexte client encore capitalisé) est **normal et non bloquant** ⇒ `couverture` `non_couvert` / `verdict` `indeterminable`, jamais une expertise supposée.
 
 ## Steps
 ### Step 1 — Délégation à l'Analyste RFP
