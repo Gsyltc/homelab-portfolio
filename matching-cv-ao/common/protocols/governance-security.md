@@ -77,7 +77,8 @@ Aucun scope, aucune règle apprise, aucun gate/sensor advisory ne peut affaiblir
 2. **Piste d'audit** sur l'issue.
 3. **Aucune action à impact** sans validation humaine explicite.
 4. **Ne jamais inventer une grille d'évaluation** — la demander si absente.
-5. **Communication agent↔agent = fichier JSON joint** (schéma « message A2A » ci-dessus), commentaire réduit à la mention active + nom du fichier. **Communication agent↔humain = Markdown DÉTAILLÉ aux gates humaines** : l'humain lit une présentation lisible et complète (la **présentation finale reste très détaillée**), jamais du JSON brut ni un simple pointeur. La réduction de prose vaut **uniquement pour les échanges A2A**, jamais pour les présentations aux gates humaines.
+5. **Boucle Keep/Modify/Redo bornée** — la boucle de validation granulaire est **bornée** (`max_iterations` + arbitrage humain au-delà) ; **aucun scope, aucune règle apprise ne la rend illimitée**.
+6. **Communication agent↔agent = fichier JSON joint** (schéma « message A2A » ci-dessus), commentaire réduit à la mention active + nom du fichier. **Communication agent↔humain = Markdown DÉTAILLÉ aux gates humaines** : l'humain lit une présentation lisible et complète (la **présentation finale reste très détaillée**), jamais du JSON brut ni un simple pointeur. La réduction de prose vaut **uniquement pour les échanges A2A**, jamais pour les présentations aux gates humaines.
 
 ## Protection contre les entrées non fiables (UNTRUSTED DATA)
 

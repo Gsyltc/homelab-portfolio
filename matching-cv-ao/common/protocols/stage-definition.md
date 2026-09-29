@@ -61,6 +61,7 @@ Nomme l'artefact dont les instances pilotent une exécution **une-fois-par-insta
 - `requires_stage` ne référence que des slugs existants.
 - `mode: subagent` ⇒ `support_agents` non vide.
 - `reviewer != null` ⇒ `review_class != none` **et** `review_artifact` renseigné.
+- **Inverse** : `reviewer: null` ⇒ `review_class: none` **et** `review_artifact: ""` — une fiche **sans reviewer dédié** ne déclare **jamais** de revue indépendante (`adversarial`/`advisory`) ni d'artefact de revue. La préparation consultative d'une gate humaine passe par les **sensors** (`## Sensors`), pas par `review_class`.
 - `sensors:` ne référence que des manifestes existants.
 
 ## Corps de la fiche — trois compartiments (ordre fixe)

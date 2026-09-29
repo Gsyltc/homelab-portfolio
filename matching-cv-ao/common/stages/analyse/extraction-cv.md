@@ -8,7 +8,7 @@ support_agents: []
 mode: subagent
 summary_confirmation: optional
 reviewer: null
-review_class: advisory
+review_class: none
 review_artifact: ""
 human_gate: light
 produces: [cv-profils, cv-eligibilite, clients-contextes]
