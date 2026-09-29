@@ -27,7 +27,7 @@ Présenter chaque profil à l'humain pour validation granulaire (Keep/Modify/Red
 
 > **Présentation détaillée (exigence humaine).** La réduction de prose vaut pour les échanges A2A (JSON joint), **pas** pour la présentation à l'humain aux gates. Le détail par critère, la recommandation et la justification sont **repris en clair** pour chaque profil.
 
-> **Multi-profils (exigence humaine).** Lorsqu'un AO comporte **plusieurs profils recherchés** (≥ 2 profils dans `ao-profils-recherches`), le scoring final est **toujours détaillé par profil** : une **section par profil recherché** (adéquation candidat par candidat) + un **tableau de rappel des scores globaux avec une colonne par profil portant le verdict** (recommandé, possible, etc.). Voir Steps 1bis / 1ter. Le score global reste **unique par candidat** (pondération immuable 45/30/10/5/5/5) ; le score chiffré par profil n'est **pas** introduit ici (option différée).
+> **Multi-profils (exigence humaine).** Lorsqu'un AO comporte **plusieurs profils recherchés** (≥ 2 profils dans `ao-profils-recherches`), le scoring final est **toujours détaillé par profil** : une **section par profil recherché** (adéquation candidat par candidat) + un **tableau de rappel des scores globaux avec une colonne par profil portant le verdict** (recommandé, possible, etc.). Voir Steps 1bis / 1ter. Le score global reste **unique par candidat** (pondération immuable définie dans la compétence `matching-scoring`) ; le score chiffré par profil n'est **pas** introduit ici (option différée).
 
 ## Steps
 ### Step 1 — Présentation profil par profil (DÉTAILLÉE)
@@ -50,7 +50,7 @@ Lorsque l'AO comporte **plusieurs profils recherchés** (≥ 2 profils dans `ao-
 Clore par le **tableau de rappel des scores globaux** au format « une colonne par profil = verdict » (Step 1ter). *(AO mono-profil : Step 1bis non applicable — la présentation par candidat du Step 1 suffit.)*
 
 ### Step 1ter — Tableau « Rappel — scores globaux » (une colonne par profil = verdict)
-Le tableau de rappel des scores globaux comporte **une colonne par profil recherché de l'AO**, chaque cellule portant le **verdict du candidat pour ce profil** (`recommandé` / `possible` / `déconseillé` / `exclu`) — et non un verdict global unique. Conserver le **score global /100** et le **détail par critère** (pondération immuable 45/30/10/5/5/5) dans les premières colonnes ; ne pas altérer la pondération ni introduire de score chiffré par profil (option différée). Format :
+Le tableau de rappel des scores globaux comporte **une colonne par profil recherché de l'AO**, chaque cellule portant le **verdict du candidat pour ce profil** (`recommandé` / `possible` / `déconseillé` / `exclu`) — et non un verdict global unique. Conserver le **score global /100** et le **détail par critère** (pondération immuable définie dans `matching-scoring`) dans les premières colonnes ; ne pas altérer la pondération ni introduire de score chiffré par profil (option différée). Le tableau ci-dessous illustre le format de restitution (une colonne par critère + une colonne par profil recherché) :
 
 ```markdown
 | Rang | Candidat | Score /100 | Exp. 45% | Comp. 30% | Études 10% | Cert. 5% | Langues 5% | Dispo 5% | PR-001 <intitulé> | PR-002 <intitulé> | … |
