@@ -25,7 +25,7 @@ outputs: "Livrable final (artefact JSON joint `livraison-finale`) + présentatio
 ## Objectif
 Produire et livrer le résumé final du matching à l'humain. **Gate `explicit`** : le livrable structuré est un **artefact JSON joint** `livraison-finale` (source machine / piste d'audit), mais la **présentation finale à l'humain reste TRÈS DÉTAILLÉE en Markdown** — l'humain lit un rapport complet et lisible, jamais du JSON brut ni un simple pointeur vers le fichier.
 
-> **Présentation finale = détaillée (exigence humaine, non négociable).** La réduction de prose du workflow vaut pour les **échanges A2A** (agent↔agent, portés par JSON joint) ; elle **ne s'applique pas** à la présentation finale à l'humain. Le récap de livraison doit **reprendre en clair** l'ensemble du contenu du livrable (résumé AO, profils retenus avec scores et justification détaillée, non-retenus et exclusions avec motifs, grille, recommandations), pas seulement l'action « valider ».
+> **Présentation finale = détaillée (exigence humaine, non négociable).** La réduction de prose du workflow vaut pour les **échanges A2A** (agent↔agent, portés par YAML joint) ; elle **ne s'applique pas** à la présentation finale à l'humain. Le récap de livraison doit **reprendre en clair** l'ensemble du contenu du livrable (résumé AO, profils retenus avec scores et justification détaillée, non-retenus et exclusions avec motifs, grille, recommandations), pas seulement l'action « valider ».
 
 ## Steps
 ### Step 1 — Production du livrable final (JSON joint)

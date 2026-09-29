@@ -2,7 +2,7 @@
 name: coordinateur-matching-agent
 display_name: "Coordinateur Matching"
 description: >
-    Coordinateur du workflow Matching AO ↔ CV : orchestre le flux complet (réception AO, analyse, croisement profils, validation humaine, livraison), contrôle les livrables et traduit JSON→Markdown pour l'humain.
+    Coordinateur du workflow Matching AO ↔ CV : orchestre le flux complet (réception AO, analyse, croisement profils, validation humaine, livraison), contrôle les livrables et traduit YAML→Markdown pour l'humain.
 skills:
   - ntfy-notifications
 disallowedTools: Task
