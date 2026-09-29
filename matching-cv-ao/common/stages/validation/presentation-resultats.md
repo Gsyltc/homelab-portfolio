@@ -25,7 +25,7 @@ outputs: "Profils validés par l'humain"
 ## Objectif
 Présenter chaque profil à l'humain pour validation granulaire (Keep/Modify/Redo par profil). **Gate humaine granulaire** : la présentation Markdown reste **DÉTAILLÉE, profil par profil** — l'humain lit le détail complet de chaque profil pour décider, pas un simple pointeur vers le JSON. Le JSON joint `classement-final` reste la source/piste d'audit.
 
-> **Présentation détaillée (exigence humaine).** La réduction de prose vaut pour les échanges A2A (JSON joint), **pas** pour la présentation à l'humain aux gates. Le détail par critère, la recommandation et la justification sont **repris en clair** pour chaque profil.
+> **Présentation détaillée (exigence humaine).** La réduction de prose vaut pour les échanges A2A (YAML joint), **pas** pour la présentation à l'humain aux gates. Le détail par critère, la recommandation et la justification sont **repris en clair** pour chaque profil.
 
 > **Multi-profils (exigence humaine).** Lorsqu'un AO comporte **plusieurs profils recherchés** (≥ 2 profils dans `ao-profils-recherches`), le scoring final est **toujours détaillé par profil** : une **section par profil recherché** (adéquation candidat par candidat) + un **tableau de rappel des scores globaux avec une colonne par profil portant le verdict** (recommandé, possible, etc.). Voir Steps 1bis / 1ter. Le score global reste **unique par candidat** (pondération immuable définie dans la compétence `matching-scoring`) ; le score chiffré par profil n'est **pas** introduit ici (option différée).
 

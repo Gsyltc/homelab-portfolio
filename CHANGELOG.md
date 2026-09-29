@@ -42,6 +42,23 @@ ce fichier en donne la lecture chronologique côté produit.
   la config Multica des agents concernés (champ `instructions`).
 
 ### Changed
+- **Format de l'enveloppe du message A2A `matching-cv-ao` : JSON → YAML compact** (EXPE-79 ; changement de
+  **format d'échange validé humain**, invariants préservés). La communication **agent↔agent** (message A2A :
+  `delegation` / `retour` / `rapport-verification`, joint à l'issue) passe du **JSON** au **YAML compact** pour
+  **réduire le coût en tokens** : **mesure réelle ~25 %** d'économie par handoff (BPE `cl100k_base` −24,6 % :
+  793 → 598 tokens ; `o200k_base` −26,9 % ; par type : `delegation` −20,6 %, `retour` −25,0 %,
+  `rapport-verification` −28,9 %). **Mêmes champs, même sémantique, auditabilité conservée** (le YAML joint reste
+  la piste d'audit). **Périmètre strict = enveloppe A2A** : les schémas et fichiers de **données** des skills
+  (`cv-analyse`, `contexte-client`, `matching-scoring` ; `resume-ao.json`, `cv-eligibilite.json`,
+  `classement-final`, `clients/*.json`, `livraison-finale`, `resultats-valides`, `cv-available`,
+  `ao-pdf-received`) **restent en JSON** (hors périmètre), tout comme les flags CLI `--output json`. Deux **règles
+  de validité YAML** intégrées au schéma (guillemeter en notation *flow* toute valeur contenant `${...}`, `,` ou
+  `:` ; omettre les champs vides). **Invariants intacts** : lien de mention actif (seul vecteur de déclenchement,
+  anti-wake EXPE-54 / `trigger_outcomes` EXPE-58), validation humaine granulaire, présentation Markdown détaillée
+  aux gates humaines, aucun secret. Source unique dans `matching-cv-ao/common/protocols/governance-security.md` ;
+  reflété dans `stage-protocol.md`, `sensors/gates.md` (bloc `verdicts`), `README.md`, `conductor.md`, les fiches
+  de délégation/retour, `reviewer.md` et les fiches d'agent. **Traçabilité ADR** : nouvelle
+  **[ADR-0033](decisions/0033-format-yaml-compact-message-a2a.md)** (Accepted).
 - **Refonte de la pondération du scoring `matching-cv-ao`** (EXPE-71 ; changement **fonctionnel validé humain**) —
   la pondération immuable passe de **4 critères 50/35/10/5** (Compétences 50 % · Expérience 35 % · Études 10 % ·
   Disponibilité 5 %) à **6 critères 45/30/10/5/5/5** : **Expérience 45 %** · **Compétences 30 %** (compétences +

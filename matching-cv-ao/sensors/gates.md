@@ -52,28 +52,27 @@ boundaries:
 
 ## En cas d'écart (advisory)
 
-- Le coordinateur **ne bloque pas** : il consigne l'écart dans le **« Rapport de vérification » joint en JSON** (voir ci-dessous) et **propose de revenir corriger** avant de présenter le contenu à l'humain.
-- **Seul un écart nécessitant l'humain** est reformulé en Markdown : une **mention de l'humain + l'action** à effectuer, sans recopier le rapport. Sinon, le commentaire se limite à référencer l'artefact JSON joint.
+- Le coordinateur **ne bloque pas** : il consigne l'écart dans le **« Rapport de vérification » joint en YAML** (voir ci-dessous) et **propose de revenir corriger** avant de présenter le contenu à l'humain.
+- **Seul un écart nécessitant l'humain** est reformulé en Markdown : une **mention de l'humain + l'action** à effectuer, sans recopier le rapport. Sinon, le commentaire se limite à référencer l'artefact YAML joint.
 - L'humain reste seul décideur : demander la correction, ou valider en connaissance de cause en actant l'écart sur l'issue.
 
-## Rapport de gate (piste d'audit — artefact JSON joint)
+## Rapport de gate (piste d'audit — artefact YAML joint)
 
-Le « Rapport de vérification » est un **artefact JSON joint à l'issue** (type `rapport-verification` du **message A2A** — schéma défini une seule fois dans `governance-security`, **non redéfini ici**), posté avant la validation humaine. Il porte les **verdicts structurés** par check : `ok` (✅ conforme) · `ecart` (⚠️ écart) · `indisponible` (⛔). Structure des verdicts (dans le champ `resultat`/`verdicts` du message A2A) :
+Le « Rapport de vérification » est un **artefact YAML joint à l'issue** (type `rapport-verification` du **message A2A** — schéma défini une seule fois dans `governance-security`, **non redéfini ici**, format YAML compact — [ADR-0033](../../decisions/0033-format-yaml-compact-message-a2a.md)), posté avant la validation humaine. Il porte les **verdicts structurés** par check : `ok` (✅ conforme) · `ecart` (⚠️ écart) · `indisponible` (⛔). Structure des verdicts (dans le champ `resultat`/`verdicts` du message A2A) :
 
-```json
-{
-  "type": "rapport-verification",
-  "stage": "<frontière, ex. analyse-matching>",
-  "verdicts": [
-    { "check": "artefacts-presents", "statut": "ok | ecart | indisponible", "detail": "<artefact manquant si écart>" },
-    { "check": "liaison-tracabilite", "statut": "ok | ecart | indisponible", "detail": "<exigence sans profil si écart>" },
-    { "check": "absence-orphelin", "statut": "ok | ecart | indisponible", "detail": "<profil orphelin si écart>" },
-    { "check": "disponibilite-complete", "statut": "ok | ecart | indisponible", "detail": "<collaborateur sans date_disponibilite / taux_utilisation> (frontière Analyse → Matching ; détail : matching-cv-ao/sensors/disponibilite.md)" },
-    { "check": "equivalence-mifi", "statut": "ok | ecart | indisponible", "detail": "<collaborateur sans objet mifi cohérent / en a_verifier> (frontière Analyse → Matching ; détail : matching-cv-ao/sensors/equivalence-mifi.md)" },
-    { "check": "localisation-complete", "statut": "ok | ecart | indisponible", "detail": "<collaborateur sans ville (localisation.ville) — mention humaine attendue> (frontière Analyse → Matching ; détail : matching-cv-ao/sensors/localisation.md)" },
-    { "check": "expertise-firme", "statut": "ok | ecart | indisponible", "detail": "conforme / non exigée | minimums non atteints ou indéterminable (gate humaine légère, non bloquante) (frontière Analyse → Matching ; détail : matching-cv-ao/sensors/expertise-firme.md)" }
-  ]
-}
+```yaml
+type: rapport-verification
+stage: <frontière, ex. analyse-matching>
+verdicts:
+  - {check: artefacts-presents, statut: ok | ecart | indisponible, detail: "<artefact manquant si écart>"}
+  - {check: liaison-tracabilite, statut: ok | ecart | indisponible, detail: "<exigence sans profil si écart>"}
+  - {check: absence-orphelin, statut: ok | ecart | indisponible, detail: "<profil orphelin si écart>"}
+  - {check: disponibilite-complete, statut: ok | ecart | indisponible, detail: "<collaborateur sans date_disponibilite / taux_utilisation> (frontière Analyse → Matching ; détail : matching-cv-ao/sensors/disponibilite.md)"}
+  - {check: equivalence-mifi, statut: ok | ecart | indisponible, detail: "<collaborateur sans objet mifi cohérent / en a_verifier> (frontière Analyse → Matching ; détail : matching-cv-ao/sensors/equivalence-mifi.md)"}
+  - {check: localisation-complete, statut: ok | ecart | indisponible, detail: "<collaborateur sans ville (localisation.ville) — mention humaine attendue> (frontière Analyse → Matching ; détail : matching-cv-ao/sensors/localisation.md)"}
+  - {check: expertise-firme, statut: ok | ecart | indisponible, detail: "conforme / non exigée | minimums non atteints ou indéterminable (gate humaine légère, non bloquante) (frontière Analyse → Matching ; détail : matching-cv-ao/sensors/expertise-firme.md)"}
 ```
+
+> **Validité YAML** : en notation *flow* (`{...}`), toute valeur `detail` contenant `:` suivi d'un espace, une virgule, `${...}`, `{` ou `}` est **mise entre guillemets** (règle définie dans `governance-security`). Les `detail` vides sont **omis**.
 
 Seuls les checks pertinents à la frontière considérée sont inclus (voir la carte `boundaries` ci-dessus — à la frontière **Analyse → Matching**, les checks `disponibilite-complete`, `equivalence-mifi`, `localisation-complete`, `expertise-firme` s'ajoutent). La source du rapport (`matching-cv-ao/sensors/gates.md`) est rappelée dans le champ `de`/`reference_audit` du message A2A.

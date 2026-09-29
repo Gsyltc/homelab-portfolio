@@ -11,50 +11,50 @@ Le tableau détaillé des rôles (Humain, Coordinateur Matching, Analyste RFP, G
 Un agent est déclenché par un **commentaire sur l'issue** qui porte deux choses, et rien de plus :
 
 1. un **lien de mention ACTIF** `[@Label](mention://agent/<uuid>)` — **seul vecteur de déclenchement** d'un run ;
-2. le **nom du fichier JSON joint à l'issue** qui porte la mission (ou le retour de livrable).
+2. le **nom du fichier YAML joint à l'issue** qui porte la mission (ou le retour de livrable).
 
-**La mission et le livrable voyagent dans le fichier JSON joint, jamais en prose dans le fil.** À chaque délégation ou retour entre agents, l'agent **téléverse un fichier JSON** (via `multica attachment` — voir `multica attachment --help`) contenant l'objet, le périmètre, les critères d'acceptation ou le résultat, puis poste un **commentaire minimal**. Le JSON joint est la **source unique** lue par l'agent suivant ; le commentaire ne fait que le référencer. **Plus de prose de mission ni de livrable dans le fil** (« objectif, périmètre, critères… » reformulés en Markdown) — cette prose vit désormais dans le JSON.
+**La mission et le livrable voyagent dans le fichier YAML joint (message A2A), jamais en prose dans le fil.** À chaque délégation ou retour entre agents, l'agent **téléverse un fichier YAML** (via `multica attachment` — voir `multica attachment --help`) contenant l'objet, le périmètre, les critères d'acceptation ou le résultat, puis poste un **commentaire minimal**. Le YAML joint est la **source unique** lue par l'agent suivant ; le commentaire ne fait que le référencer. **Plus de prose de mission ni de livrable dans le fil** (« objectif, périmètre, critères… » reformulés en Markdown) — cette prose vit désormais dans le YAML.
 
 - **Ne jamais deviner un UUID** : le résoudre via `multica agent list --output json` avant chaque mention.
 - **En fin de tâche, l'agent délégataire construit lui-même le lien de mention actif vers l'agent assigneur** — c'est **ce lien, posé par l'agent qui termine, qui enqueue le run de reprise** ; une mention en texte clair ou une simple réponse n'enqueue aucun run.
 - **La réduction de prose ne touche qu'au texte AUTOUR du lien, jamais au lien de mention lui-même** : le lien reste **actif**, l'UUID résolu à chaque fois, jamais une auto-mention. Détail opératoire (résolution d'UUID, `trigger_outcomes`) : protocole `stage-protocol` (temps 2 et 3).
-- Le coordinateur contrôle chaque livrable (le JSON joint) avant validation humaine.
+- Le coordinateur contrôle chaque livrable (le YAML joint) avant validation humaine.
 
 ### Deux formes de commentaire — jamais confondues
 
 | Cas | Mention | Texte du commentaire |
 | --- | --- | --- |
-| **Délégation SANS gate humaine** (handoff A2A pur) | `[@Agent](mention://agent/<uuid>)` **actif** | **Aucune prose.** Réduit à la mention + le **nom du fichier JSON joint**. Ex. `[@Matcher Profils](mention://agent/<uuid>) — scores prêts → classement-final.json` |
-| **Gate humaine REQUISE** | mention de **l'humain** | **Présentation Markdown DÉTAILLÉE** du contenu à décider (profils, scores, détail par critère, justifications, exclusions/raisons…) **reprise en clair** dans le commentaire, close par l'action à effectuer. La **présentation finale reste très détaillée**. Le JSON joint est la source/audit, pas un substitut à la présentation. Ex. `[@Humain](mention://member/<uuid>) : 3 profils à valider — Keep/Modify/Redo` suivi du détail par profil. |
+| **Délégation SANS gate humaine** (handoff A2A pur) | `[@Agent](mention://agent/<uuid>)` **actif** | **Aucune prose.** Réduit à la mention + le **nom du fichier YAML joint**. Ex. `[@Matcher Profils](mention://agent/<uuid>) — scores prêts → classement-final.yaml` |
+| **Gate humaine REQUISE** | mention de **l'humain** | **Présentation Markdown DÉTAILLÉE** du contenu à décider (profils, scores, détail par critère, justifications, exclusions/raisons…) **reprise en clair** dans le commentaire, close par l'action à effectuer. La **présentation finale reste très détaillée**. Le YAML joint est la source/audit, pas un substitut à la présentation. Ex. `[@Humain](mention://member/<uuid>) : 3 profils à valider — Keep/Modify/Redo` suivi du détail par profil. |
 
 > **Anti-wake parasite (règle générale, tous agents)** : **aucun agent ne se mentionne lui-même** avec un lien de mention actif dans une consigne de délégation — un tel lien, posté dans son propre commentaire, déclenche un run parasite de cet agent (observé sur EXPE-54). L'assigneur **désigne l'agent de retour par son nom, en texte clair** (« reviens vers moi, <Nom de l'assigneur> ») ; la construction du lien de mention actif revient **toujours à l'agent délégataire**, jamais à l'assigneur.
 
 ## Schéma du message A2A (source unique)
 
-Tout échange agent↔agent — **délégation**, **retour de livrable**, **rapport de vérification** — est porté par un **fichier JSON joint à l'issue** conforme au schéma minimal ci-dessous. Il est **défini ici une seule fois** ; les fiches de stage et les sensors s'y **réfèrent par leur nom** (`message A2A`), sans le redéfinir.
+Tout échange agent↔agent — **délégation**, **retour de livrable**, **rapport de vérification** — est porté par un **fichier YAML joint à l'issue** conforme au schéma minimal ci-dessous. Il est **défini ici une seule fois** ; les fiches de stage et les sensors s'y **réfèrent par leur nom** (`message A2A`), sans le redéfinir.
 
-```json
-{
-  "type": "delegation | retour | rapport-verification",
-  "de": "<nom de l'agent émetteur>",
-  "vers": "<nom de l'agent destinataire ou 'humain'>",
-  "stage": "<slug du stage concerné>",
-  "objet": "<phrase courte : ce qui est demandé ou livré>",
-  "perimetre": ["<élément de périmètre>", "..."],
-  "criteres_acceptation": ["<critère>", "..."],
-  "artefacts": [
-    { "role": "produit | consomme", "nom": "<fichier>.json", "chemin": "${ROOT_DIRECTORY}/..." }
-  ],
-  "resultat": { "statut": "ok | ecart | halt", "detail": "<optionnel>" },
-  "gate_humaine": "aucune | legere | granulaire | explicite",
-  "reference_audit": "<id de commentaire ou d'artefact>"
-}
+> **Format = YAML compact** (décision [ADR-0033](../../../decisions/0033-format-yaml-compact-message-a2a.md), EXPE-79). Le YAML compact remplace le JSON pour la **seule enveloppe du message A2A** : mêmes champs, même sémantique, aucune perte d'information ni d'auditabilité, ~25 % de tokens en moins par handoff (mesure réelle, voir l'ADR). Les **schémas de données** portés par les skills (`cv-analyse`, `contexte-client`, `matching-scoring`) et les **présentations Markdown aux gates humaines** restent inchangés.
+
+```yaml
+type: delegation | retour | rapport-verification
+de: <nom de l'agent émetteur>
+vers: <nom de l'agent destinataire ou 'humain'>
+stage: <slug du stage concerné>
+objet: <phrase courte — ce qui est demandé ou livré>
+perimetre: [<élément de périmètre>, ...]
+criteres_acceptation: [<critère>, ...]
+artefacts:
+  - {role: produit | consomme, nom: <fichier>.yaml, chemin: "${ROOT_DIRECTORY}/..."}
+resultat: {statut: ok | ecart | halt, detail: <optionnel>}
+gate_humaine: aucune | legere | granulaire | explicite
+reference_audit: <id de commentaire ou d'artefact>
 ```
 
 - **`delegation`** : `objet`, `perimetre`, `criteres_acceptation` renseignés ; `resultat` omis.
 - **`retour`** : `resultat` renseigné ; `artefacts` liste les livrables produits.
 - **`rapport-verification`** : `resultat.statut` + verdicts structurés (voir `sensors/gates.md`, qui ne redéfinit pas ce schéma).
-- Champs non pertinents omis. **Aucun secret** dans le JSON. La langue des valeurs libres suit celle de l'humain (français par défaut).
+- Champs non pertinents omis. **Aucun secret** dans le YAML. La langue des valeurs libres suit celle de l'humain (français par défaut).
+- **Règle de validité YAML (obligatoire)** : en notation *flow* (`[...]` / `{...}`), **mettre entre guillemets** toute valeur contenant `${...}`, `{`, `}`, `:` suivi d'un espace, ou une **virgule** (ex. `chemin: "${ROOT_DIRECTORY}/..."`, `detail: "5 profils, 1 exclu"`). Un doute sur la validité ⇒ passer la valeur en guillemets. Le fichier reste **YAML valide** de bout en bout (piste d'audit lisible).
 
 ## Catégories décisionnelles — non-retenus & exclus (source unique)
 
@@ -78,7 +78,7 @@ Aucun scope, aucune règle apprise, aucun gate/sensor advisory ne peut affaiblir
 3. **Aucune action à impact** sans validation humaine explicite.
 4. **Ne jamais inventer une grille d'évaluation** — la demander si absente.
 5. **Boucle Keep/Modify/Redo bornée** — la boucle de validation granulaire est **bornée** (`max_iterations` + arbitrage humain au-delà) ; **aucun scope, aucune règle apprise ne la rend illimitée**.
-6. **Communication agent↔agent = fichier JSON joint** (schéma « message A2A » ci-dessus), commentaire réduit à la mention active + nom du fichier. **Communication agent↔humain = Markdown DÉTAILLÉ aux gates humaines** : l'humain lit une présentation lisible et complète (la **présentation finale reste très détaillée**), jamais du JSON brut ni un simple pointeur. La réduction de prose vaut **uniquement pour les échanges A2A**, jamais pour les présentations aux gates humaines.
+6. **Communication agent↔agent = fichier YAML joint** (schéma « message A2A » ci-dessus, format YAML compact — [ADR-0033](../../../decisions/0033-format-yaml-compact-message-a2a.md)), commentaire réduit à la mention active + nom du fichier. **Communication agent↔humain = Markdown DÉTAILLÉ aux gates humaines** : l'humain lit une présentation lisible et complète (la **présentation finale reste très détaillée**), jamais l'enveloppe brute ni un simple pointeur. La réduction de prose vaut **uniquement pour les échanges A2A**, jamais pour les présentations aux gates humaines.
 
 ## Protection contre les entrées non fiables (UNTRUSTED DATA)
 
