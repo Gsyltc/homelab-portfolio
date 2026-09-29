@@ -49,7 +49,7 @@ matching-cv-ao/
 ├── sensors/                            # Verification gates & sensors
 │   ├── README.md
 │   ├── gates.md                        # Gates aux frontières de phases
-│   ├── disponibilite.md                # Sensor advisory — disponibilité complète (Analyse → Matching)
+│   ├── disponibilite.md                # Sensor advisory — disponibilité complète + type de collaborateur (Analyse → Matching)
 │   ├── equivalence-mifi.md             # Sensor advisory — équivalence MIFI (Analyse → Matching)
 │   ├── localisation.md                 # Sensor advisory — localisation complète / ville candidat (Analyse → Matching)
 │   └── expertise-firme.md              # Sensor advisory — expertise de firme vs référentiel clients/ (Analyse → Matching, gate humaine légère non bloquante)

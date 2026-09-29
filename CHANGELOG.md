@@ -8,6 +8,24 @@ ce fichier en donne la lecture chronologique côté produit.
 
 ## [Non publié]
 
+### Added
+- **Type de collaborateur (disponibilité) — `matching-cv-ao`** (réf. EXPE-80 ; évolution **documentaire**,
+  invariants et poids de scoring préservés). Ajout d'un champ **obligatoire** `type_collaborateur` à chaque
+  profil CV (`cv-profils`), à **4 valeurs** (`enum`) qui **qualifient la disponibilité** : `alithya` (interne,
+  disponible selon `disponibilite`), `recrutement` (candidat en cours de recrutement, disponible
+  conditionnellement à l'embauche), `offre_conditionnelle` (disponible seulement si l'AO est remporté),
+  `non_disponible` (**écarté du matching**). Le filtre d'éligibilité gagne un **axe strict `disponibilite`** :
+  `type_collaborateur = non_disponible` (tranché) ⇒ **`exclu`** automatique ; type **non tranché** (`null`) ⇒
+  **`a_verifier`** + mention humaine (ne rien inventer) ; les autres types n'excluent pas. Le sensor advisory
+  `disponibilite-complete` contrôle désormais aussi la présence/validité de `type_collaborateur` (règle
+  `type-collaborateur-present`) et **signale** les collaborateurs `non_disponible`. Source unique dans la
+  compétence `cv-analyse` (schéma JSON, règles, sélection d'éligibilité) ; reflété dans le stage
+  `analyse/extraction-cv.md` (Steps 1–3, 6 axes), le sensor `sensors/disponibilite.md` (+ `sensors/README.md`),
+  l'arbre et le tableau des compétences de `matching-cv-ao/README.md`, et l'axe `disponibilite` ajouté à
+  l'énumération des axes de raison dans `protocols/governance-security.md`. La **mise à jour des données des
+  collaborateurs existants** (attribution d'un `type_collaborateur` par collaborateur) relève des données de
+  runtime sous `${ROOT_DIRECTORY}/collaborateurs/`, **hors de ce dépôt**.
+
 ### Fixed
 - **Contrôle de fraîcheur du CV JSON réutilisé (cache périmé) — `matching-cv-ao`** (réf. EXPE-77 ; évolution
   **documentaire**, invariants préservés). À la **réutilisation d'un JSON d'analyse déjà extrait** (collaborateur
