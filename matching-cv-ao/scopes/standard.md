@@ -16,7 +16,7 @@ Tous les stages des 5 phases s'exécutent. Depth par défaut : `standard`. Aucun
 
 ## CV utilisés par défaut
 
-Comme en `complex` et `express`, ce scope suit la **règle de sélection de la source CV** (pièce jointe extraite en priorité, sinon dernière version déjà extraite : JSON pour le flux A2A, fiche Markdown du jour pour le téléchargement humain). Règle complète, versionnage et journalisation d'audit : compétence `cv-analyse` (plugin `rh-assistant`, § Règle de sélection de la source CV, § Versionnage JSON), chargée par l'agent `Gestionnaire CV`.
+Comme en `complex` et `express`, ce scope suit la **règle de sélection de la source CV** (pièce jointe extraite en priorité, sinon dernière version déjà extraite : YAML pour le flux A2A, fiche Markdown du jour pour le téléchargement humain). Règle complète, versionnage et journalisation d'audit : compétence `cv-analyse` (plugin `rh-assistant`, § Règle de sélection de la source CV, § Versionnage YAML), chargée par l'agent `Gestionnaire CV`.
 
 Appartenance : voir le champ `scopes:` de chaque fiche de stage et la matrice de
 le protocole `scopes-and-axes`.

@@ -8,6 +8,31 @@ ce fichier en donne la lecture chronologique côté produit.
 
 ## [Non publié]
 
+### Changed
+- **Format des données CV : JSON → YAML — `matching-cv-ao`** (réf. EXPE-81, décision
+  [ADR-0034](decisions/0034-format-yaml-donnees-cv.md) ; évolution **documentaire**, invariants et poids de
+  scoring préservés). Les **données CV** (profils `cv-profils`, verdict d'éligibilité `cv-eligibilite`, et le
+  **fichier d'analyse versionné** par collaborateur) passent du **JSON au YAML** pour réduire la consommation de
+  tokens sur des données volumineuses re-lues plusieurs fois par exécution (extraction, scoring de chaque
+  retenu, génération du CV livrable). **Mesure réelle** sur un échantillon représentatif : **−24,3 %** de tokens
+  (`cl100k_base`), **−25,5 %** (`o200k_base`), −35,3 % de caractères, YAML valide (parse + round-trip PyYAML) ;
+  le JSON minifié (~−33 %) a été **écarté** pour préserver la lisibilité de la piste d'audit. Renommages :
+  fichier `<nom>-<prenom>-<AAAA-MM-JJ>.json` → **`.yaml`**, champ `analyse_json` → **`analyse_yaml`** (et
+  `sources[].cv_analyse_json` → `cv_analyse_yaml` dans le référentiel clients). **Mêmes champs, même
+  sémantique** — rien ajouté/retiré. **Cinq règles de validité YAML** intégrées au schéma (dates ISO complètes,
+  dates partielles et valeurs numériques-chaînes entre guillemets, booléens réservés, quoting en notation
+  *flow*). **Source unique** dans la compétence `cv-analyse` (§ Format de sortie YAML, § Versionnage YAML,
+  § Règles de validité YAML) ; reflété dans `analyse/extraction-cv.md`, `initialisation/chargement-cv.md`,
+  `matching/croisement-profils.md`, `cloture/mise-a-jour-cv.md`, `common/conductor.md`, les sensors
+  `localisation`/`disponibilite`/`equivalence-mifi`, les scopes `standard`/`complex`/`express`/`format-cv`, la
+  fiche `agents/gestionnaire-cv-agent.md`, les compétences `cv-generation` (lecture) et `matching-scoring`
+  (lecture par le Matcher), `matching-cv-ao/README.md` et `docs/guide-utilisation-workflow-matching.md`.
+  **Périmètre = données CV uniquement** : restent en **JSON** (hors périmètre) le référentiel des contextes
+  clients `clients/<nom-client>.json`, `resume-ao`, `classement-final`, `matching-resultats`, `livraison-finale`,
+  `resultats-valides`, `cv-available` (inventaire), `ao-pdf-received` et `grille-remplie` ; l'enveloppe A2A est
+  déjà YAML ([ADR-0033](decisions/0033-format-yaml-compact-message-a2a.md)). La **migration des fichiers `.json`
+  existants** sous `${ROOT_DIRECTORY}/collaborateurs/` relève des données de runtime, **hors de ce dépôt**.
+
 ### Added
 - **Type de collaborateur (disponibilité) — `matching-cv-ao`** (réf. EXPE-80 ; évolution **documentaire**,
   invariants et poids de scoring préservés). Ajout d'un champ **obligatoire** `type_collaborateur` à chaque

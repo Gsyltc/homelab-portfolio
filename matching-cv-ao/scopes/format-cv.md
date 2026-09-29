@@ -19,14 +19,14 @@ Seuls trois stages s'exécutent sous ce scope :
 - **`chargement-cv`** (Initialisation) — repérage / inventaire des CV sources à traiter (pièces jointes de l'issue) et des analyses existantes.
 - **`extraction-cv`** (Analyse) — récupération des CV sources depuis les **pièces jointes de l'issue**, extraction des informations
   structurées (dont l'**équivalence MIFI** — objet `mifi` à 4 états, avec mention humaine pour tout `a_verifier`), production de la **fiche d'analyse Markdown versionnée** à la racine de `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/` (anciennes
-  fiches déplacées dans `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/archives/`) et du **JSON d'analyse versionné**, puis **suppression de la copie de
+  fiches déplacées dans `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/archives/`) et du **YAML d'analyse versionné**, puis **suppression de la copie de
   travail téléchargée** — le tout daté du **jour**.
 - **`mise-a-jour-cv`** (Clôture) — mise à jour des CV et **production du CV livrable au format DOCX (par défaut) à partir des gabarits fournis** (CV long / CV court / format client spécifique, dans `${ROOT_DIRECTORY}/gabarits/cv/` — jamais inventés) — **Markdown possible sur demande explicite de l'humain** —, dans la même arborescence stricte enracinée sur `${ROOT_DIRECTORY}`.
 
 > **Organisation stricte du répertoire `cv/`** — `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/` (enraciné sur `${ROOT_DIRECTORY}` ; voir la fiche de l'agent
 > l'agent `Gestionnaire CV`) : les **sources PDF/DOCX** sont
 > **fournis en pièces jointes de l'issue** et **supprimés après extraction** (non conservés, non stockés dans
-> ce répertoire) · `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/archives/` (anciennes fiches Markdown) · fiche Markdown du jour et JSON versionnés à la racine
+> ce répertoire) · `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/archives/` (anciennes fiches Markdown) · fiche Markdown du jour et YAML versionnés à la racine
 > (mémoire) · **CV livrable** (`<nom>-<prenom>-<type-gabarit>-<AAAA-MM-JJ>.docx` en DOCX par défaut depuis un
 > gabarit fourni — `${ROOT_DIRECTORY}/gabarits/cv/` —, ou `<nom>-<prenom>-cv-<AAAA-MM-JJ>.md` en Markdown sur
 > demande explicite). La date de dernière modification reportée est **toujours la date du jour**.

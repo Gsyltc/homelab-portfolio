@@ -4,7 +4,7 @@ Manifeste déclaratif du sensor qui contrôle la présence **obligatoire** de l'
 
 ## Objet
 
-Chaque collaborateur du JSON `cv-profils` (produit par le stage `extraction-cv`, Gestionnaire CV) **doit** porter une localisation, structurée en objet :
+Chaque collaborateur du YAML `cv-profils` (produit par le stage `extraction-cv`, Gestionnaire CV) **doit** porter une localisation, structurée en objet :
 
 - `localisation.ville` — **ville de résidence/rattachement du collaborateur** (obligatoire) ;
 - `localisation.region` — province/région si disponible (optionnel) ;
