@@ -21,6 +21,7 @@ ${ROOT_DIRECTORY}/<nom-client>/<nom-projet>/
 ├── decisions/              # ADR (Architecture Decision Records)
 ├── documentation/          # Documentation d'architecture de solution
 │   ├── architecture-logicielle/    # Architecture détaillée logicielle
+│   ├── architecture-donnee/        # Architecture détaillée des données
 │   ├── architecture-infra/         # Architecture détaillée infrastructure
 │   └── architecture-securite/      # Architecture détaillée sécurité
 ├── models/                 # Modèles de diagrammes (C4, PlantUML, etc.)
@@ -48,6 +49,7 @@ ${ROOT_DIRECTORY}/<nom-client>/<nom-projet>/
 | Sous-répertoire | Contenu |
 |------------------|---------|
 | `architecture-logicielle/` | Architecture détaillée de chaque système logiciel (composants, séquences, données) |
+| `architecture-donnee/` | Architecture détaillée des données (modèles, flux, gouvernance des données, cycle de vie) |
 | `architecture-infra/` | Architecture détaillée de l'infrastructure (réseau, calcul, stockage, déploiement) |
 | `architecture-securite/` | Architecture détaillée de la sécurité (STRIDE, contrôles, conformité) |
 
