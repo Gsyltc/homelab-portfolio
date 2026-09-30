@@ -53,5 +53,5 @@ Chaque gabarit décrit les **chapitres nécessaires** au type, les **sources d'a
 
 - `presentation-targeting` : repère, dans les documents d'architecture du projet, où se trouve l'information (front-matter des gabarits d'architecture).
 - `architecture-solution-gabarits` : lecture des documents d'architecture source (DAS).
-- `archify` : production des diagrammes dynamiques (HTML/SVG, thèmes, export PNG/JPEG/WebP/SVG/WebM) ; accepte des exigences en langage naturel ou du Mermaid (flowchart, sequenceDiagram, stateDiagram).
+- `archify` (skill importée dans le workspace ; source amont https://github.com/tt-a1i/archify) : production des diagrammes dynamiques (HTML/SVG, thèmes, export PNG/JPEG/WebP/SVG/WebM) ; accepte des exigences en langage naturel ou du Mermaid (flowchart, sequenceDiagram, stateDiagram).
 - `project-defaults` : structure du projet et emplacement d'archivage des livrables.
