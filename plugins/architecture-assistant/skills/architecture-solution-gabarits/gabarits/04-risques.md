@@ -1,3 +1,17 @@
+---
+doc_id: das-04-risques
+theme: Analyse des risques
+domaine: [affaires, securite]
+sujets:
+  - Analyse de risques
+  - Tableau récapitulatif des risques
+  - Matrice de risques
+  - Domaine de risque 1
+types_presentation: [executive, entreprise, securite]
+sensibilite: interne
+togaf_layer: business
+ordre_presentation: 4
+---
 ## Analyse de risques
 
 <!--

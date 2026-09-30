@@ -1,3 +1,19 @@
+---
+doc_id: das-14-preventions-resilience
+theme: Prévention, résilience
+domaine: [infrastructure]
+sujets:
+  - Prévention, reprise après sinistre et résilience
+  - Plan de continuité des activités (PCA)
+  - Plan de reprise des activités (PRA)
+  - Criticité par système / processus
+  - Indicateurs clés (RTO / RPO)
+  - Niveau de services
+types_presentation: [technique, entreprise]
+sensibilite: interne
+togaf_layer: technology
+ordre_presentation: 14
+---
 ## Prévention, reprise après sinistre et résilience
 
 <!-- Cette section décrit les moyens de **prévention**, de **reprise après sinistre (PRA)** et de **résilience** de la solution, en cohérence avec les risques du `04-risques.md` et la criticité des systèmes.-->

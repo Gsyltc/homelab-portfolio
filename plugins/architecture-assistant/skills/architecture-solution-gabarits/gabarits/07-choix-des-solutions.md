@@ -1,3 +1,22 @@
+---
+doc_id: das-07-choix-des-solutions
+theme: Solutions étudiées et choix
+domaine: [solution, logiciel]
+sujets:
+  - Description des solutions étudiées
+  - État des lieux / Solution actuelle
+  - Récapitulatif des solutions étudiées
+  - Matrice de décision pondérée
+  - Comparaison des coûts
+  - Décision formelle
+  - Solution recommandée (SOL-001)
+  - Solution alternative 1 (SOL-002)
+  - Solution alternative 2 (SOL-003)
+types_presentation: [technique, entreprise]
+sensibilite: interne
+togaf_layer: application
+ordre_presentation: 7
+---
 ## Description des solutions étudiées
 
 <!-- 

@@ -1,3 +1,18 @@
+---
+doc_id: das-01-introduction
+theme: Contexte, vision, périmètre
+domaine: [affaires]
+sujets:
+  - Introduction
+  - Contexte
+  - Périmètre
+  - Parties prenantes
+  - Hypothèses
+types_presentation: [executive, entreprise]
+sensibilite: interne
+togaf_layer: business
+ordre_presentation: 1
+---
 ## Introduction
 
 <!--

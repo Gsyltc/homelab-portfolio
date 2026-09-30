@@ -1,3 +1,24 @@
+---
+doc_id: das-11-securite
+theme: Sécurité (STRIDE, gouvernance)
+domaine: [securite]
+sujets:
+  - Sécurité
+  - Modélisation des menaces (STRIDE)
+  - Sécurité applicative
+  - Sécurité Infrastructure
+  - Chiffrement
+  - Segmentation réseau et durcissement
+  - Sécurité de la chaîne d'approvisionnement (SBOM / SCA)
+  - Politique « Zero Trust »
+  - Gestion des identités et des accès (GIA)
+  - Politique du moindre privilège
+  - Authentification / Autorisation
+types_presentation: [securite, technique]
+sensibilite: restreint
+togaf_layer: technology
+ordre_presentation: 11
+---
 ## Sécurité
 
 <!-- Cette section identifie les risques potentiels de sécurité afin de mettre en place les moyens de sécurité appropriés. Elle décline les contraintes du `08-contraintes.md` (Loi 25, normes `NOR-001`…`NOR-004`) et est harmonisée avec le registre des risques du `04-risques.md` (mêmes échelles de **probabilité/impact**, mêmes statuts).

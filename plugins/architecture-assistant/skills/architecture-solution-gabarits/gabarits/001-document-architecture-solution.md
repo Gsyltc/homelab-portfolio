@@ -1,3 +1,22 @@
+---
+doc_id: das-001-page-de-garde
+theme: Page de garde / métadonnées
+domaine: [transverse]
+sujets:
+  - Métadonnées du document
+  - Historique du document
+  - Arrimages
+  - Lexique
+  - Références documentaires
+  - Structure de la documentation
+  - Liste des images et diagrammes
+  - Liste des tableaux du document
+  - Mappage préoccupations → vues (ISO 42010)
+types_presentation: [executive]
+sensibilite: interne
+togaf_layer: null
+ordre_presentation: null
+---
 # Document d'architecture de solution (DAS)
 
 <!--

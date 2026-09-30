@@ -1,3 +1,16 @@
+---
+doc_id: das-03-besoins-affaires
+theme: Besoins d'affaires, BAE, cas d'usage
+domaine: [affaires]
+sujets:
+  - Besoins d'affaires et exigences
+  - Processus d'affaires
+  - Cas d'utilisation
+types_presentation: [entreprise]
+sensibilite: interne
+togaf_layer: business
+ordre_presentation: 3
+---
 ## Besoins d'affaires et exigences
 
 <!-- 

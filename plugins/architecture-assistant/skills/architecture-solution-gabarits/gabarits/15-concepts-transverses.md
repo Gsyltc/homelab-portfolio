@@ -1,3 +1,22 @@
+---
+doc_id: das-15-concepts-transverses
+theme: Concepts transverses (IA, observabilité…)
+domaine: [ia, transverse]
+sujets:
+  - Concepts transverses
+  - TRV-001 — Communication et intégration
+  - TRV-002 — Gestion des exceptions et des erreurs
+  - TRV-003 — Gestion des transactions
+  - TRV-004 — Cache et mise en cache
+  - TRV-005 — Persistance
+  - TRV-006 — Journalisation, observabilité et audit
+  - TRV-007 — Gestion de la configuration
+  - TRV-008 — Accessibilité et internationalisation
+types_presentation: [technique]
+sensibilite: interne
+togaf_layer: application
+ordre_presentation: 15
+---
 ## Concepts transverses
 
 <!-- Cette section regroupe les **concepts transverses** de la solution : les préoccupations techniques partagées par plusieurs systèmes logiciels (communication, gestion des erreurs, transactions, cache, persistance, observabilité, configuration, accessibilité). Elle correspond au Cross-cutting Concepts (arc42 §8). Chaque concept est relié aux **patrons** du répertoire `patron-architecture/` et à la **matrice de suivi** du `02-objectifs.md`.-->

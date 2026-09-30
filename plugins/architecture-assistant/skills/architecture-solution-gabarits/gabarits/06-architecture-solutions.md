@@ -1,3 +1,24 @@
+---
+doc_id: das-06-architecture-solutions
+theme: Architecture de solution, diagrammes
+domaine: [solution, logiciel, infrastructure]
+sujets:
+  - Architectures de solution
+  - Description de l'architecture de solution
+  - Liste des diagrammes d'architecture
+  - Diagramme système (DIA-001)
+  - Software System 1 (SYS-001) — Diagramme de contexte (DIA-002)
+  - Software System 2 (SYS-002) — Diagramme de contexte (DIA-003)
+  - Scénarios d'exécution (Runtime View)
+  - Défauts d'architecture
+  - Registre des interfaces externes / contrats d'API
+  - Évaluation de l'architecture
+  - Satisfaction exigences → composants/vues
+types_presentation: [technique, entreprise]
+sensibilite: interne
+togaf_layer: application
+ordre_presentation: 6
+---
 ## Architectures de solution
 
 <!-- 
