@@ -33,7 +33,7 @@ Chaque gabarit décrit les **chapitres nécessaires** au type, les **sources d'a
 2. **Cibler avant de produire** : localiser l'information dans les documents d'architecture via `presentation-targeting` (front-matter) ; ne charger que les sections utiles.
 3. **Fidélité à la source** : n'inventer ni chiffres, ni garanties, ni fonctionnalités absents des livrables validés ; en cas de doute, remonter au coordinateur.
 4. **Lisibilité d'abord** : titres clairs, une idée par section/diapositive, visuels et tableaux, progression logique. Appliquer le patron `Contexte → Objectifs → Moyens → Méthodes → Résultats` quand adapté.
-5. **Diagrammes Archify** : produits avec la skill `archify` (générés en code, syntaxe validée avant export) ; réutiliser ceux des livrables, produire une version simplifiée si nécessaire.
+5. **Diagrammes Archify** : produits avec **Archify** (skill externe référencée par lien — voir Arrimage ; générés en code, syntaxe validée avant export) ; réutiliser ceux des livrables, produire une version simplifiée si nécessaire.
 6. **Nomenclature client** (Technique/Fonctionnelle) : nommer chaque domaine selon la nomenclature du client.
 7. **Charte graphique client** : appliquer couleurs, logo, typographie et gabarit fournis ; à défaut, gabarit neutre validé.
 8. **Format contraint par type** : respecter la colonne « Formats » du tableau (Technique/Fonctionnelle = HTML dynamique uniquement). Demander le format si plusieurs sont autorisés et non précisé.
@@ -42,7 +42,7 @@ Chaque gabarit décrit les **chapitres nécessaires** au type, les **sources d'a
 
 ## Formats de sortie
 
-- **HTML dynamique** : fichier autoportant (CSS/JS inline si possible), diagrammes produits avec la skill **`archify`** (SVG inline, thèmes clair/sombre, export PNG/JPEG/WebP/SVG/WebM), responsive.
+- **HTML dynamique** : fichier autoportant (CSS/JS inline si possible), diagrammes produits avec **Archify** (skill externe référencée par lien — voir Arrimage), SVG inline, thèmes clair/sombre, export PNG/JPEG/WebP/SVG/WebM, responsive.
 - **PowerPoint (.pptx)** — recommandation (tokens minimisés + compatibilité) :
   - **Par défaut : Marp** (Markdown → PPTX). Le contenu est rédigé en **Markdown compact** (peu de tokens), converti de façon **déterministe** en `.pptx` ; thèmes CSS pour la charte ; bonne compatibilité PowerPoint/LibreOffice/Keynote.
   - **Quand le client fournit un gabarit `.pptx`** : **Pandoc** avec `--reference-doc <gabarit-client.pptx>` (reprend la charte, les masques et polices du client).
@@ -53,5 +53,5 @@ Chaque gabarit décrit les **chapitres nécessaires** au type, les **sources d'a
 
 - `presentation-targeting` : repère, dans les documents d'architecture du projet, où se trouve l'information (front-matter des gabarits d'architecture).
 - `architecture-solution-gabarits` : lecture des documents d'architecture source (DAS).
-- `archify` : production des diagrammes dynamiques (HTML/SVG, thèmes, export PNG/JPEG/WebP/SVG/WebM) ; accepte des exigences en langage naturel ou du Mermaid (flowchart, sequenceDiagram, stateDiagram).
+- **Archify** (skill externe, **référencée par lien** — non intégrée au dépôt ni au workspace) : https://github.com/tt-a1i/archify/blob/main/archify/SKILL.md — production des diagrammes dynamiques (HTML/SVG, thèmes, export PNG/JPEG/WebP/SVG/WebM) ; accepte des exigences en langage naturel ou du Mermaid (flowchart, sequenceDiagram, stateDiagram). Consulter ce `SKILL.md` et l'appliquer au besoin.
 - `project-defaults` : structure du projet et emplacement d'archivage des livrables.
