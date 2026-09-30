@@ -1,7 +1,7 @@
 ---
 doc_id: das-06-architecture-solutions
 theme: Architecture de solution, diagrammes
-domaine: [logiciel, infrastructure]
+domaine: [solution, logiciel, infrastructure]
 sujets:
   - Architectures de solution
   - Description de l'architecture de solution

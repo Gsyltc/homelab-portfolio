@@ -1,7 +1,7 @@
 ---
 doc_id: das-07-choix-des-solutions
 theme: Solutions étudiées et choix
-domaine: [logiciel]
+domaine: [solution, logiciel]
 sujets:
   - Description des solutions étudiées
   - État des lieux / Solution actuelle

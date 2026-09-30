@@ -38,7 +38,7 @@ Chaque gabarit de la DAS (`001`, `01`–`15`) porte en tête un **front-matter Y
 ---
 doc_id: <id-stable>                       # ex. das-03-besoins-affaires
 theme: <thème principal>                  # ex. Besoins d'affaires, BAE, cas d'usage
-domaine: [<domaines>]                     # affaires, logiciel, data, infrastructure, ia, securite, transverse
+domaine: [<domaines>]                     # affaires, solution, logiciel, data, infrastructure, ia, securite, transverse
 sujets: [<titres H2 et H3>]               # = titres ## et ### du document, dans l'ordre ; maj quand les titres changent
 types_presentation: [<types>]            # executive, entreprise, technique, securite
 sensibilite: <public|interne|restreint>   # confidentialité réelle (ne pas exposer 'restreint' au client)
@@ -48,6 +48,7 @@ ordre_presentation: <n|null>
 ```
 
 - **`sujets`** est le **sommaire ciblable** : la liste des intitulés H2/H3 (texte du titre), dans l'ordre du document. Il permet de mapper un chapitre de présentation directement vers la ou les sections concernées. Le maintenir à jour à chaque ajout/renommage/suppression d'un titre H2/H3 (règle d'or 13).
+- **`domaine`** classe le document par domaine d'architecture : `affaires`, `solution`, `logiciel`, `data`, `infrastructure`, `ia`, `securite`, `transverse`. Le domaine **`solution`** traite de l'**architecture de solution à haut niveau** (vue d'ensemble, cadrage, choix structurants de la solution), par opposition au détail logiciel/data/infra.
 - **`sensibilite`** doit refléter la confidentialité **réelle** du contenu ; `restreint` (ex. modélisation des menaces, GIA) n'est jamais exposé au client.
 - **Aucun secret** ne figure dans le front-matter (règle d'or 12).
 
