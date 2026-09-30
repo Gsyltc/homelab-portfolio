@@ -76,7 +76,7 @@ homelab-portfolio/
 ├── decisions/                # Registre des décisions structurantes (0001…0028)
 ├── docs/                     # Guides d'utilisation (architecture, matching) + PDF + stub de redirection core-workflow
 └── plugins/                  # Packages de plugins d'agents (spec v1.0.0) — portent les skills
-    ├── architecture-assistant/    #   OpenSpec, décision, gabarits, cybersécurité, AWS, Windows, supports de vente
+    ├── architecture-assistant/    #   OpenSpec, décision, gabarits, cybersécurité, AWS, Windows, supports de vente, présentations client
     ├── general-purpose-assistant/ #   workflow de stack, notifications
     ├── homelab-assistant/         #   docker-composer, traefik
     ├── investment-assistant/      #   analyse, data provider, liste de titres
@@ -95,7 +95,7 @@ Chaque sous-répertoire de [`plugins/`](plugins/) est un plugin auto-contenu, av
 
 | Plugin | Rôle |
 | --- | --- |
-| `architecture-assistant` | Architecture de solution : OpenSpec, décision, gabarits DAS, cybersécurité, AWS, Windows, supports de vente |
+| `architecture-assistant` | Architecture de solution : OpenSpec, décision, gabarits DAS, cybersécurité, AWS, Windows, supports de vente, présentations client |
 | `general-purpose-assistant` | Skills transverses (workflow de stack, notifications) |
 | `homelab-assistant` | Homelab : `docker-compose`, Traefik |
 | `investment-assistant` | Domaine investissement |
