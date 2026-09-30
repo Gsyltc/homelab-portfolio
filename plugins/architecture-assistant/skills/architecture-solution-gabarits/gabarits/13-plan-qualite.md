@@ -1,3 +1,20 @@
+---
+doc_id: das-13-plan-qualite
+theme: Plan de qualité
+domaine: [transverse]
+sujets:
+  - Plan de qualité
+  - Pyramide de tests
+  - Test à la charge du développeur
+  - Plan assurance qualité
+  - Tests non-fonctionnels
+  - Environnements et données de test
+  - Traçabilité exigences / cas d'utilisation → tests
+types_presentation: [technique, entreprise]
+sensibilite: interne
+togaf_layer: null
+ordre_presentation: 13
+---
 ## Plan de qualité
 
 <!-- 

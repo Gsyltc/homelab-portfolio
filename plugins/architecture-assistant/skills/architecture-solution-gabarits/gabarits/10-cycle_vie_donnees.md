@@ -1,3 +1,21 @@
+---
+doc_id: das-10-cycle-vie-donnees
+theme: Cycle de vie & taxonomie des données
+domaine: [data]
+sujets:
+  - Cycle de vie des données
+  - Gouvernance de données
+  - Gestion du consentement sur l'utilisation des données
+  - Classification des données
+  - Règles de conservation des données
+  - Règles d'épuration des données
+  - Règles d'archivage des données
+  - Modèle d'information de la solution
+types_presentation: [technique, securite]
+sensibilite: interne
+togaf_layer: data
+ordre_presentation: 10
+---
 ## Cycle de vie des données
 
 <!-- 

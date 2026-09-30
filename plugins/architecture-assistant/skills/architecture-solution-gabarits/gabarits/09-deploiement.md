@@ -1,3 +1,18 @@
+---
+doc_id: das-09-deploiement
+theme: Déploiement, DevSecOps
+domaine: [infrastructure]
+sujets:
+  - Implantation et déploiement
+  - Implantation de la solution
+  - Description de l'environnement
+  - Plan de déploiement de la solution
+  - Approche DevSecOps
+types_presentation: [technique]
+sensibilite: interne
+togaf_layer: technology
+ordre_presentation: 9
+---
 ## Implantation et déploiement
 
 <!-- Cette section décrit la façon dont la solution sera **implantée dans son écosystème**, ainsi que son **déploiement** et sa **surveillance**. Elle est rédigée en collaboration avec les architectes infrastructure, cloud, sécurité et DevOps. -->

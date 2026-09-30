@@ -1,3 +1,18 @@
+---
+doc_id: das-12-volumetries
+theme: Volumétrie
+domaine: [data, infrastructure]
+sujets:
+  - Volumétrie
+  - Volumétrie d'affaires
+  - Volumétrie des données
+  - Volumétrie infrastructure
+  - Volumétries applicatives
+types_presentation: [technique]
+sensibilite: interne
+togaf_layer: technology
+ordre_presentation: 12
+---
 ## Volumétrie
 
 <!-- 

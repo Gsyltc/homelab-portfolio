@@ -30,6 +30,27 @@ Cette skill inclut aussi un **catalogue de patrons d'architecture cloud** dans l
 | `14-preventions-et-resilience.md`    | Prévention, reprise après sinistre, résilience |
 | `15-concepts-transverses.md`         | Concepts transverses (communication, erreurs, transactions, cache, persistance, observabilité, configuration, accessibilité) |
 
+## Front-matter de ciblage
+
+Chaque gabarit de la DAS (`001`, `01`–`15`) porte en tête un **front-matter YAML** (délimité par `---`), non intrusif (ignoré au rendu Markdown) et placé **avant** le contenu. Il permet à la skill `presentation-targeting` de **localiser l'information à présenter sans lecture exhaustive** du corps. Le front-matter est copié avec le gabarit à l'initialisation (règle d'or 3) puis maintenu à jour (règles d'or 12 et 13).
+
+```yaml
+---
+doc_id: <id-stable>                       # ex. das-03-besoins-affaires
+theme: <thème principal>                  # ex. Besoins d'affaires, BAE, cas d'usage
+domaine: [<domaines>]                     # affaires, logiciel, data, infrastructure, ia, securite, transverse
+sujets: [<titres H2 et H3>]               # = titres ## et ### du document, dans l'ordre ; maj quand les titres changent
+types_presentation: [<types>]            # executive, entreprise, technique, securite
+sensibilite: <public|interne|restreint>   # confidentialité réelle (ne pas exposer 'restreint' au client)
+togaf_layer: <business|data|application|technology|null>
+ordre_presentation: <n|null>
+---
+```
+
+- **`sujets`** est le **sommaire ciblable** : la liste des intitulés H2/H3 (texte du titre), dans l'ordre du document. Il permet de mapper un chapitre de présentation directement vers la ou les sections concernées. Le maintenir à jour à chaque ajout/renommage/suppression d'un titre H2/H3 (règle d'or 13).
+- **`sensibilite`** doit refléter la confidentialité **réelle** du contenu ; `restreint` (ex. modélisation des menaces, GIA) n'est jamais exposé au client.
+- **Aucun secret** ne figure dans le front-matter (règle d'or 12).
+
 ## Quand utiliser
 
 - Créer la documentation d'architecture de solution et d'intégration d'un nouveau projet.
@@ -39,7 +60,7 @@ Cette skill inclut aussi un **catalogue de patrons d'architecture cloud** dans l
 
 1. **Toujours modifier dans les mêmes fichiers.** La documentation d'architecture d'un projet est découpée dans des fichiers fixes. Toute modification se fait en **lisant, analysant puis modifiant les fichiers existants** — jamais en recréant ou en restructurant le découpage.
 2. **Vérifier la couverture d'un patron.** Chaque décision d'architecture (choix de solution, de technologie, de structure d'intégration) doit **vérifier si elle couvre un patron** du répertoire `patron-architecture/` de cette skill. Si oui, référencer la fiche du patron (ex. `patron-architecture/circuit-breaker.md`) dans le fichier concerné et dans la matrice de suivi du `02` ; si aucun patron ne couvre la décision, l'expliciter.
-3. **Initialisation** : copier **l'ensemble** des fichiers de `gabarits/` dans le répertoire `documentation/` du projet, en conservant les noms de fichiers. Si un thème n'est pas couvert pour l'instant, le gabarit est simplement copié tel quel.
+3. **Initialisation** : copier **l'ensemble** des fichiers de `gabarits/` dans le répertoire `documentation/` du projet, en conservant les noms de fichiers **et le front-matter YAML de ciblage** en tête de chaque fichier (voir « Front-matter de ciblage »). Si un thème n'est pas couvert pour l'instant, le gabarit est simplement copié tel quel, front-matter compris.
 4. **Modification** :
    - Lire et analyser les fichiers existants (contexte global, décisions déjà prises) avant toute modification.
    - Appliquer les modifications selon les nouvelles exigences, à la bonne section du bon fichier.
@@ -52,8 +73,11 @@ Cette skill inclut aussi un **catalogue de patrons d'architecture cloud** dans l
 9. Les diagrammes sont générés en **code** (PlantUML, Mermaid, Structurizr, BPMN, C4) et référencés dans l'index du `001`.
 10. Les **décisions d'architecture** sont tracées dans des ADR (voir la skill `create-architectural-decision-record`) et référencées dans les fichiers concernés.
 11. Ne jamais inclure de secrets, mots de passe ou identifiants dans la documentation.
+12. **Front-matter de ciblage maintenu à jour.** Chaque fichier de la DAS (`001`, `01`–`15`) porte en tête un **front-matter YAML de ciblage** (voir « Front-matter de ciblage ») consommé par la skill `presentation-targeting`. Le maintenir cohérent avec le contenu : **jamais de secret** dans le front-matter, et une **sensibilité réelle** (`sensibilite`) reflétant la confidentialité effective des sections (`restreint` n'est jamais exposé au client).
+13. **Maintenance du champ `sujets`.** Le champ `sujets` du front-matter reflète les **titres de niveau 2 (`##`) et niveau 3 (`###`)** du document, dans l'ordre du document. Dès qu'un titre H2/H3 est **ajouté, renommé ou supprimé**, mettre à jour `sujets` dans le même changement pour qu'il reste le reflet fidèle de la structure ciblable.
 
 ## Arrimage avec les autres skills
 
 - `create-architectural-decision-record` : chaque décision d'architecture (choix de solution, patron, technologie) fait l'objet d'un ADR référencé dans les fichiers concernés.
+- `presentation-targeting` : consomme le **front-matter de ciblage** de chaque fichier de la DAS (`theme`, `domaine`, `types_presentation`, `sensibilite` et surtout `sujets` = titres H2/H3) pour localiser l'information à présenter sans lecture exhaustive. Garder ce front-matter à jour (règles d'or 12 et 13) pour que le ciblage reste fiable.
 - Les fichiers `09`, `12`, `14` sont rédigés en collaboration avec les architectes infrastructure, cloud, sécurité et DevOps ; `13` en arrimage avec le leader Assurance Qualité.

@@ -1,3 +1,19 @@
+---
+doc_id: das-05-planification
+theme: Planification, CAPEX/OPEX
+domaine: [affaires]
+sujets:
+  - Planification
+  - Planification des tâches
+  - Récapitulatif des efforts
+  - Efforts de développement
+  - Feuille de route
+  - Estimation des coûts
+types_presentation: [executive, entreprise]
+sensibilite: interne
+togaf_layer: business
+ordre_presentation: 5
+---
 ## Planification
 
 <!-- Cette section présente la planification du projet : découpage des livrables selon la **Work Breakdown Structure (WBS)**, récapitulatif des efforts, feuille de route et estimation des coûts. Les efforts et coûts sont alignés avec l'estimé de projet (WBS, `REF-01` du `001`), les rôles de l'arrimage RACI (`001`) et les volumétries (`12-volumetries.md`). -->
