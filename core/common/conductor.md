@@ -52,7 +52,7 @@ flowchart TD
 
 | Phase | N° | Stages (fiches) | Gate humain |
 | --- | --- | --- | --- |
-| **Initialization** | 0 | [`directory-check`](stages/initialization/directory-check.md) · [`brownfield-greenfield-detection`](stages/initialization/brownfield-greenfield-detection.md) · [`audit-trail-init`](stages/initialization/audit-trail-init.md) | Non (bootstrap déterministe) |
+| **Initialization** | 0 | [`directory-check`](stages/initialization/directory-check.md) · [`git-detection`](stages/initialization/git-detection.md) · [`brownfield-greenfield-detection`](stages/initialization/brownfield-greenfield-detection.md) · [`audit-trail-init`](stages/initialization/audit-trail-init.md) | Non (bootstrap déterministe) |
 | **Ideation** | 1 | [`intent-capture`](stages/ideation/intent-capture.md) · [`feasibility-constraints`](stages/ideation/feasibility-constraints.md) · [`scope-definition`](stages/ideation/scope-definition.md) · [`mockups`](stages/ideation/mockups.md) · [`intent-scope-approval`](stages/ideation/intent-scope-approval.md) | Approbation intention + périmètre (léger) |
 | **Inception** | 2 | [`intake-framing`](stages/inception/intake-framing.md) · [`existing-context-loading`](stages/inception/existing-context-loading.md) · [`requirements-analysis`](stages/inception/requirements-analysis.md) · [`deliverables-breakdown`](stages/inception/deliverables-breakdown.md) · [`design-and-decisions`](stages/inception/design-and-decisions.md) | Validation granulaire humaine |
 | **Construction** | 3 | [`walking-skeleton`](stages/construction/walking-skeleton.md) · [`detailed-deliverables`](stages/construction/detailed-deliverables.md) · [`security-consistency-check`](stages/construction/security-consistency-check.md) · [`consolidation-handoff`](stages/construction/consolidation-handoff.md) | Validation granulaire humaine |
@@ -65,9 +65,10 @@ flowchart TD
 Avant toute exécution, le coordinateur :
 
 1. **Vérifie le répertoire officiel du projet** — s'il n'existe pas ou en cas de doute, demander confirmation à l'humain ; ne pas lancer les travaux sans elle (voir [`stages/initialization/directory-check.md`](stages/initialization/directory-check.md)).
-2. **Charge le contexte existant** — documentation d'architecture, décisions structurantes, diagrammes, contraintes déjà tracées.
-3. **Applique les paramètres par défaut d'architecture** — structure de répertoire, conventions de nommage, emplacements des décisions et diagrammes.
-4. **Détermine si une méthodologie s'applique** (voir « Activation conditionnelle d'une méthodologie »).
+2. **Détecte le contexte Git** — avant toute création de fichiers dans le répertoire projet, déterminer si le projet est sous Git (indicateur `Git : Oui` / `Git : Non` de la description du projet, sinon détection d'un `.git/` sur disque et enrichissement de la description) ; si projet Git, créer une branche `feature/<id-issue>-<slug-court>` dédiée à l'issue (voir [`stages/initialization/git-detection.md`](stages/initialization/git-detection.md)).
+3. **Charge le contexte existant** — documentation d'architecture, décisions structurantes, diagrammes, contraintes déjà tracées.
+4. **Applique les paramètres par défaut d'architecture** — structure de répertoire, conventions de nommage, emplacements des décisions et diagrammes.
+5. **Détermine si une méthodologie s'applique** (voir « Activation conditionnelle d'une méthodologie »).
 
 ### Chargement optimisé (lazy loading)
 
@@ -174,7 +175,7 @@ sequenceDiagram
     participant AL as Agent de notifications
 
     H->>S: Demande (issue)
-    S->>S: Bootstrap deterministe - repertoire + brownfield/greenfield (INITIALIZATION)
+    S->>S: Bootstrap deterministe - repertoire + git (branche si projet Git) + brownfield/greenfield (INITIALIZATION)
     S->>H: Approbation intention + perimetre/scope (IDEATION)
     H-->>S: Intention et scope approuves
     S->>S: Cadrage + besoins + decoupage (INCEPTION)
