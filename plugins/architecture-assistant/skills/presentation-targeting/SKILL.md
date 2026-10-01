@@ -27,6 +27,8 @@ Le ciblage s'appuie idéalement sur un **front-matter présent dans les gabarits
 
 À partir de la fiche de périmètre (type de présentation, sujets, chapitres retenus), lister les **thèmes à couvrir** et, pour chacun, les **informations attendues** (ex. Entreprise/Affaires → besoins d'affaires, registres BAE, risques, CAPEX/OPEX, juridiction).
 
+Pour chaque thème, noter aussi la **question** qu'il pose (structure, étapes, ordre temporel, flux de données, états) : elle prépare le **choix de la recette Archify** (parmi les 12, donc du type parmi les 5) fait à la génération (`client-presentation-generation` → `references/archify-diagram-types.md`). Le ciblage ne produit pas le diagramme ; il **transmet l'intention de diagramme** (recette pressentie) dans la carte de ciblage.
+
 Le ciblage peut être **granulaire** : sélectionner **un ou plusieurs éléments spécifiques** à l'intérieur d'un thème plutôt que le thème entier — par exemple **un ou plusieurs besoins d'affaires précis** (par identifiant `BES-001`, `UC-001`… ou par section H2/H3 du `03-besoins_affaires_exigences.md`). La carte de ciblage retient alors les seules sections correspondantes.
 
 ## Étape 2 — Repérer les sources par front-matter
@@ -68,16 +70,19 @@ Pour chaque entrée de la carte de ciblage, ouvrir **seulement** les sections n�
 
 ## Étape 4 — Restituer la carte de ciblage
 
-Fournir au processus de génération (`client-presentation-generation`) une carte claire :
+Fournir au processus de génération (`client-presentation-generation`) une carte claire, incluant l'**intention de diagramme** (recette Archify pressentie d'après la question du thème ; choix définitif fait à la génération) :
 
 ```
-Thème                     | Source (document)                     | Section / ancrage
-------------------------- | ------------------------------------- | ------------------
-Besoins d'affaires        | documentation/03-besoins_affaires...  | ## Besoins d'affaires
-Risques                   | documentation/04-risques.md           | ## Registre des risques
-Cycle de vie des données  | documentation/10-cycle_vie_donnees.md | ## Cycle de vie des données
-...                       | ...                                   | ...
+Thème                     | Source (document)                     | Section / ancrage        | Recette pressentie (→ type)
+------------------------- | ------------------------------------- | ------------------------ | ------------------------------
+Vue d'ensemble solution   | documentation/06-architecture-solu... | ## Architecture          | <recette d'après la référence>
+Besoins d'affaires        | documentation/03-besoins_affaires...  | ## Besoins d'affaires    | —
+Dépendances initiatives   | documentation/05-planification.md     | ## Dépendances           | <recette d'après la référence>
+Cycle de vie des données  | documentation/10-cycle_vie_donnees.md | ## Cycle de vie          | <recette d'après la référence>
+...                       | ...                                   | ...                      | ...
 ```
+
+- La colonne **Recette pressentie** est **indicative** et n'est **pas définie ici** : la renseigner en appliquant la question du thème à la **table de correspondance de [`references/archify-diagram-types.md`](../client-presentation-generation/references/archify-diagram-types.md#correspondance-publicthème--recette-source-unique)** (source unique) ; `—` si le thème n'appelle pas de diagramme. Le **choix définitif** (recette → type + composition + trace) est arrêté à la génération selon le public. Ne pas recopier la correspondance ici.
 
 - Marquer les thèmes **sans source identifiée** comme écart à arbitrer (ne rien inventer).
 - Ne pas modifier les livrables source ; ce ciblage est en lecture seule.

@@ -19,6 +19,8 @@ Pour une présentation technique, l'information détaillée se trouve **souvent 
 
 ## Chapitres (sélectionner selon le périmètre)
 
+> **Diagramme Archify par chapitre** : déterminer la recette **avant production** selon la question posée. La **correspondance par chapitre (chapitre → question → recette → type → composition)** est portée **uniquement** par la référence : voir [`references/archify-diagram-types.md` → Détail par chapitre — présentation Technique / Fonctionnelle](../references/archify-diagram-types.md#détail-par-chapitre--présentation-technique--fonctionnelle). Ne pas la recopier ici. Procédure générale : [Sélection du diagramme Archify](../SKILL.md#sélection-du-diagramme-archify-avant-production).
+
 1. **Contexte technique & périmètre**.
    - Sources : `documentation/01-introduction.md`, `06-architecture-solutions.md`.
 2. **Logiciel** — composants, intégrations, séquences.
@@ -37,6 +39,7 @@ Pour une présentation technique, l'information détaillée se trouve **souvent 
 ## Règles spécifiques
 
 - **HTML dynamique uniquement** ; diagrammes **Archify** interactifs.
+- **Choix du diagramme avant production** : appliquer la correspondance par chapitre portée par la [référence](../references/archify-diagram-types.md#détail-par-chapitre--présentation-technique--fonctionnelle) (recette → type + composition) ; préférer `signal-flow` pour les flux/échanges et `blueprint` pour les topologies. Une recette par diagramme.
 - **Descendre dans les sous-répertoires de `documentation/`** (`architecture-logicielle/`, `architecture-donnee/`, `architecture-infra/`, `architecture-securite/`, etc.) pour le détail par domaine ; la DAS racine donne la synthèse.
 - Appliquer la **nomenclature client** à chaque domaine (noms de systèmes, environnements, zones).
 - Respecter les **patrons d'infrastructure client** dans le chapitre Infrastructure.
