@@ -51,7 +51,7 @@ Sous `format-cv`, le stage `mise-a-jour-cv` ne dépend **pas** de `livraison-fin
 ## Garde-fous
 
 Comme tout scope, `format-cv` ne désactive **aucun** invariant : validation humaine
-granulaire, piste d'audit et communication JSON↔Markdown restent en vigueur.
+granulaire, piste d'audit et communication YAML↔Markdown restent en vigueur.
 
 Appartenance : voir le champ `scopes:` de chaque fiche de stage et la matrice de
 le protocole `scopes-and-axes`.

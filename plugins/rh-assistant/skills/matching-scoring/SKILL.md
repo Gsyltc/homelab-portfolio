@@ -1,7 +1,7 @@
 ---
 name: matching-scoring
 description: >
-    Croisement et scoring des profils du workflow Matching : calcul du score pondéré IMMUABLE (Expérience 45 % / Compétences 30 % / Études 10 % / Certifications 5 % / Langues 5 % / Disponibilité 5 %) sur les seuls collaborateurs retenus par le filtre d'éligibilité amont, règle de fraîcheur des compétences (> 10 ans ignorée), double check de conformité du niveau d'études (AO gouvernemental / équivalence MIFI / compensation), classement, schéma JSON de sortie et garde-fous. Charger avant tout croisement ou calcul de score.
+    Croisement et scoring des profils du workflow Matching : calcul du score pondéré IMMUABLE (Expérience 45 % / Compétences 30 % / Études 10 % / Certifications 5 % / Langues 5 % / Disponibilité 5 %) sur les seuls collaborateurs retenus par le filtre d'éligibilité amont, règle de fraîcheur des compétences (> 10 ans ignorée), double check de conformité du niveau d'études (AO gouvernemental / équivalence MIFI / compensation), classement, schéma YAML de sortie et garde-fous. Charger avant tout croisement ou calcul de score.
 keywords: [matching, scoring pondere, ponderation immuable, fraicheur competences, conformite etudes, mifi, equivalence diplomes, classement profils, forces ecarts, exclusion gouvernemental, certifications requises, prerequis certification, langues, certifications scoring]
 ---
 
@@ -15,7 +15,7 @@ Le Matcher **ne score que les collaborateurs retenus** par le filtre d'éligibil
 
 ## Entrées
 
-- Les **exigences AO** (JSON produit par `parse-ao` : `exigences`, `profils_recherches`, `ao.client_gouvernemental`, `ao.equivalence_diplomes`, `ao.localisation_travail`), **y compris les technologies et méthodologies exigées** par l'AO (portées par `exigences` / `profils_recherches`).
+- Les **exigences AO** (YAML produit par `parse-ao` : `exigences`, `profils_recherches`, `ao.client_gouvernemental`, `ao.equivalence_diplomes`, `ao.localisation_travail`), **y compris les technologies et méthodologies exigées** par l'AO (portées par `exigences` / `profils_recherches`).
 - La **liste des retenus** transmise par le Coordinateur (`eligibilite.collaborateurs_possibles`) — pour chaque retenu, une référence `analyse_yaml`.
 - Pour chaque retenu, **lire soi-même** la **dernière version YAML** référencée par `analyse_yaml` (`cv-profils`, `<YYYY-mm-dd>-<nom>.yaml`, seul YAML à la racine de `cv/`) — les CV ne sont **pas** transmis par le Gestionnaire CV. En plus des `competences`, lire les **agrégats collaborateur `technologies` et `methodologies`** (`{ nom, mois_experience, derniere_utilisation }`, mois d'XP en union calendaire) pour évaluer la couverture des technos/méthodos exigées par l'AO, ainsi que les **certifications détenues** (`certifications[]`) et les **langues** (`langues[]`) pour alimenter les critères **Certifications (5 %)** et **Langues (5 %)**. Les versions YAML antérieures et les sources supprimés ne sont **jamais** croisés.
 
@@ -66,78 +66,68 @@ Cette règle s'applique **uniquement** lorsque `ao.client_gouvernemental = true`
 4. **Identifier les forces et écarts** de chaque profil par rapport aux exigences.
 5. **Appliquer le double check de conformité des études** si `ao.client_gouvernemental = true`.
 6. **Classer les profils** par score décroissant ; les exclus (conformité études) et les `exclu`/`a_verifier` amont apparaissent avec leurs raisons hors du classement principal.
-7. **Produire le JSON structuré** avec les résultats, y compris justification, forces et écarts.
+7. **Produire le YAML structuré** avec les résultats, y compris justification, forces et écarts.
 
-## Format de sortie (JSON → Agent)
+## Format de sortie (YAML → Agent)
 
-```json
-{
-  "resultats": [
-    {
-      "collaborateur": "<prénom nom>",
-      "score_total": <score sur 100>,
-      "score_experience": {
-        "score": <sur 100>,
-        "poids": 0.45,
-        "details": ["<pertinence>"]
-      },
-      "score_competences": {
-        "score": <sur 100>,
-        "poids": 0.30,
-        "regroupe": ["competences", "technologies", "methodologies"],
-        "details": ["<compétence couverte (éligible)>"],
-        "competences_couvertes": ["<compétence requise par l'AO et couverte (éligible ≤ 10 ans)>"],
-        "competences_manquantes": ["<compétence requise par l'AO non couverte (ou périmée > 10 ans)>"],
-        "technologies_couvertes": ["<technologie requise par l'AO et couverte (agrégat, fraîche ≤ 10 ans)>"],
-        "technologies_manquantes": ["<technologie requise par l'AO non couverte (ou périmée > 10 ans)>"],
-        "methodologies_couvertes": ["<méthodologie requise par l'AO et couverte (agrégat, fraîche ≤ 10 ans)>"],
-        "methodologies_manquantes": ["<méthodologie requise par l'AO non couverte (ou périmée > 10 ans)>"],
-        "mois_experience_technologies": [ { "nom": "<technologie>", "mois_experience": 0, "derniere_utilisation": "<AAAA-MM>" } ],
-        "mois_experience_methodologies": [ { "nom": "<méthodologie>", "mois_experience": 0, "derniere_utilisation": "<AAAA-MM>" } ],
-        "competences_ignorees_peremption": ["<compétence/techno/méthodo exclue car > 10 ans sans utilisation>"]
-      },
-      "score_etudes": {
-        "score": <sur 100>,
-        "poids": 0.10,
-        "details": ["<niveau>"]
-      },
-      "score_certifications": {
-        "score": <sur 100>,
-        "poids": 0.05,
-        "certifications_couvertes": ["<certification souhaitée par l'AO et détenue par le collaborateur>"],
-        "certifications_manquantes": ["<certification souhaitée par l'AO non détenue>"],
-        "details": ["<certification détenue pertinente>"]
-      },
-      "score_langues": {
-        "score": <sur 100>,
-        "poids": 0.05,
-        "langues_couvertes": ["<langue exigée par l'AO et maîtrisée au niveau attendu>"],
-        "langues_manquantes": ["<langue exigée par l'AO non maîtrisée ou niveau insuffisant>"],
-        "details": ["<langue et niveau>"]
-      },
-      "score_disponibilite": {
-        "score": <sur 100>,
-        "poids": 0.05,
-        "details": ["<disponibilité>"]
-      },
-      "forces": ["<force du profil>"],
-      "ecarts": ["<écart par rapport aux exigences>"],
-      "conformite_etudes": {
-        "requise": true,
-        "niveau_requis": "<ex. Baccalauréat>",
-        "niveau_collaborateur": "<ex. DEC (via MIFI) | BAC canadien | étranger non équivalé>",
-        "equivalence_mifi": "non_requise | oui | non | a_verifier",
-        "compensation_appliquee": "<ex. '3 ans/année manquante — 9 ans requis'>",
-        "annees_xp_compensation": 0,
-        "conforme": "oui | non | a_verifier",
-        "motif_exclusion": "<renseigné si conforme = non>",
-        "justification": "..."
-      },
-      "recommandation": "recommande|possible|deconseille|exclu",
-      "justification": "<justification courte>"
-    }
-  ]
-}
+```yaml
+resultats:
+  - collaborateur: <prénom nom>
+    score_total: <score sur 100>
+    score_experience:
+      score: <sur 100>
+      poids: 0.45
+      details: ["<pertinence>"]
+    score_competences:
+      score: <sur 100>
+      poids: 0.30
+      regroupe: [competences, technologies, methodologies]
+      details: ["<compétence couverte (éligible)>"]
+      competences_couvertes: ["<compétence requise par l'AO et couverte (éligible ≤ 10 ans)>"]
+      competences_manquantes: ["<compétence requise par l'AO non couverte (ou périmée > 10 ans)>"]
+      technologies_couvertes: ["<technologie requise par l'AO et couverte (agrégat, fraîche ≤ 10 ans)>"]
+      technologies_manquantes: ["<technologie requise par l'AO non couverte (ou périmée > 10 ans)>"]
+      methodologies_couvertes: ["<méthodologie requise par l'AO et couverte (agrégat, fraîche ≤ 10 ans)>"]
+      methodologies_manquantes: ["<méthodologie requise par l'AO non couverte (ou périmée > 10 ans)>"]
+      mois_experience_technologies:
+        - {nom: <technologie>, mois_experience: 0, derniere_utilisation: "<AAAA-MM>"}
+      mois_experience_methodologies:
+        - {nom: <méthodologie>, mois_experience: 0, derniere_utilisation: "<AAAA-MM>"}
+      competences_ignorees_peremption: ["<compétence/techno/méthodo exclue car > 10 ans sans utilisation>"]
+    score_etudes:
+      score: <sur 100>
+      poids: 0.10
+      details: ["<niveau>"]
+    score_certifications:
+      score: <sur 100>
+      poids: 0.05
+      certifications_couvertes: ["<certification souhaitée par l'AO et détenue par le collaborateur>"]
+      certifications_manquantes: ["<certification souhaitée par l'AO non détenue>"]
+      details: ["<certification détenue pertinente>"]
+    score_langues:
+      score: <sur 100>
+      poids: 0.05
+      langues_couvertes: ["<langue exigée par l'AO et maîtrisée au niveau attendu>"]
+      langues_manquantes: ["<langue exigée par l'AO non maîtrisée ou niveau insuffisant>"]
+      details: ["<langue et niveau>"]
+    score_disponibilite:
+      score: <sur 100>
+      poids: 0.05
+      details: ["<disponibilité>"]
+    forces: ["<force du profil>"]
+    ecarts: ["<écart par rapport aux exigences>"]
+    conformite_etudes:
+      requise: true
+      niveau_requis: "<ex. Baccalauréat>"
+      niveau_collaborateur: "<ex. DEC (via MIFI) | BAC canadien | étranger non équivalé>"
+      equivalence_mifi: non_requise | oui | non | a_verifier
+      compensation_appliquee: "<ex. '3 ans/année manquante — 9 ans requis'>"
+      annees_xp_compensation: 0
+      conforme: oui | non | a_verifier
+      motif_exclusion: <renseigné si conforme = non>
+      justification: "..."
+    recommandation: recommande | possible | deconseille | exclu
+    justification: <justification courte>
 ```
 
 > **Bloc `conformite_etudes` et valeur `recommandation: "exclu"`** : renseignés uniquement pour un AO gouvernemental (`ao.client_gouvernemental = true` → `conformite_etudes.requise = true`). Ce bloc **n'altère pas** les poids du scoring immuable ; il agit comme critère de conformité/éligibilité pouvant conduire à l'exclusion. Quand `conforme = "non"`, le collaborateur est **exclu** : `recommandation = "exclu"`, `score_total` écarté du classement principal, `motif_exclusion` explicite ; l'exclusion doit apparaître dans le classement **et le rapport final de livraison**. Quand `conforme = "a_verifier"` (MIFI non tranché sur AO gouvernemental), **ne pas exclure automatiquement** : signaler à l'humain pour décision. Pour un AO **non** gouvernemental, `conformite_etudes.requise = false` et les études sont évaluées uniquement via le critère de scoring « Études » (10 %).
@@ -154,4 +144,4 @@ Cette règle s'applique **uniquement** lorsque `ao.client_gouvernemental = true`
 
 ## Communication
 
-Invariant JSON↔Markdown (Agent↔Agent en JSON, Agent↔Humain en Markdown) — défini une seule fois dans le protocole `governance-security` et le conductor ; non redéfini ici.
+Invariant YAML↔Markdown (Agent↔Agent en YAML, Agent↔Humain en Markdown) — défini une seule fois dans le protocole `governance-security` et le conductor ; non redéfini ici.

@@ -10,7 +10,7 @@ Manifeste déclaratif des **verification gates** du workflow Matching AO ↔ CV.
 4. **`disponibilite-complete`** — chaque profil CV porte une disponibilité complète (date de disponibilité + taux d'utilisation en %), champs **mandatory** — voir `disponibilite.md`.
 5. **`equivalence-mifi`** — chaque profil CV porte un objet `mifi` cohérent (4 états d'`equivalence_requise` ; `niveau_equivalent_qc` non vide si `oui`/`non_requise`) ; les collaborateurs en `a_verifier` sont signalés (MIFI non tranché) — voir `equivalence-mifi.md`.
 6. **`localisation-complete`** — chaque profil CV porte une ville (`localisation.ville`), champ **mandatory** ; les villes manquantes sont signalées (mention humaine attendue) — voir `localisation.md`.
-7. **`expertise-firme`** — lorsque l'AO exige une expertise de firme, l'objet `expertise_firme` est présent et sa couverture est **appuyée sur le référentiel `${ROOT_DIRECTORY}/clients/*.json`** ; un `verdict` ≠ `conforme` est signalé et déclenche une **gate humaine légère** (non bloquante) — voir `expertise-firme.md`.
+7. **`expertise-firme`** — lorsque l'AO exige une expertise de firme, l'objet `expertise_firme` est présent et sa couverture est **appuyée sur le référentiel `${ROOT_DIRECTORY}/clients/*.yaml`** ; un `verdict` ≠ `conforme` est signalé et déclenche une **gate humaine légère** (non bloquante) — voir `expertise-firme.md`.
 
 ## Frontières et artefacts requis
 

@@ -44,7 +44,7 @@ La production DOCX s'appuie **exclusivement** sur les **gabarits fournis par l'h
 
 ## Contexte client dans le CV long (bloc « Contexte de l'organisation »)
 
-Le **CV long** comporte, pour chaque mandat, un bloc **« Contexte de l'organisation »** décrivant la société cliente. Ce contexte est capitalisé dans le **référentiel des contextes clients** `${ROOT_DIRECTORY}/clients/<nom-client>.json` — dont le **schéma et le contrat de lecture** sont définis dans la compétence dédiée `contexte-client` (source unique ; maintenu par le Gestionnaire CV via la compétence `cv-analyse`). Lors de la génération d'un **CV long**, renseigner le bloc « Contexte de l'organisation » de chaque mandat à partir du `contexte` du client correspondant dans `clients/<nom-client>.json` s'il est disponible ; à défaut, utiliser le contexte présent dans les données d'analyse du collaborateur. **Ne rien inventer** : contexte client indisponible ⇒ laisser le marqueur « à compléter » (jamais fabriqué). Cette réutilisation est en **lecture seule** : elle ne modifie **pas** le référentiel `clients/` ni la charte du gabarit.
+Le **CV long** comporte, pour chaque mandat, un bloc **« Contexte de l'organisation »** décrivant la société cliente. Ce contexte est capitalisé dans le **référentiel des contextes clients** `${ROOT_DIRECTORY}/clients/<nom-client>.yaml` — dont le **schéma et le contrat de lecture** sont définis dans la compétence dédiée `contexte-client` (source unique ; maintenu par le Gestionnaire CV via la compétence `cv-analyse`). Lors de la génération d'un **CV long**, renseigner le bloc « Contexte de l'organisation » de chaque mandat à partir du `contexte` du client correspondant dans `clients/<nom-client>.yaml` s'il est disponible ; à défaut, utiliser le contexte présent dans les données d'analyse du collaborateur. **Ne rien inventer** : contexte client indisponible ⇒ laisser le marqueur « à compléter » (jamais fabriqué). Cette réutilisation est en **lecture seule** : elle ne modifie **pas** le référentiel `clients/` ni la charte du gabarit.
 
 ## Prérequis
 
@@ -91,4 +91,4 @@ Le **schéma des données CV (YAML)** (compétences, expérience, `etudes[]` —
 
 ## Communication
 
-Invariant JSON↔Markdown défini une seule fois dans `governance-security` / le conductor (non redéfini ici). **Spécificité de cette compétence** : le **CV livrable** transmis à l'humain est un **DOCX** par défaut (pièce jointe / fichier), ou un **CV Markdown** si l'humain l'a explicitement demandé — dans les deux cas distinct de la conversation Markdown (diff avant/après pour la validation).
+Invariant YAML↔Markdown défini une seule fois dans `governance-security` / le conductor (non redéfini ici). **Spécificité de cette compétence** : le **CV livrable** transmis à l'humain est un **DOCX** par défaut (pièce jointe / fichier), ou un **CV Markdown** si l'humain l'a explicitement demandé — dans les deux cas distinct de la conversation Markdown (diff avant/après pour la validation).
