@@ -17,19 +17,19 @@ requires_stage: [presentation-resultats]
 sensors: []
 scopes: [standard, complex, express]
 inputs: "Profils validés"
-outputs: "Livrable final (artefact JSON joint `livraison-finale`) + présentation finale Markdown DÉTAILLÉE à l'humain"
+outputs: "Livrable final (artefact YAML joint `livraison-finale`) + présentation finale Markdown DÉTAILLÉE à l'humain"
 ---
 
 # Livraison
 
 ## Objectif
-Produire et livrer le résumé final du matching à l'humain. **Gate `explicit`** : le livrable structuré est un **artefact JSON joint** `livraison-finale` (source machine / piste d'audit), mais la **présentation finale à l'humain reste TRÈS DÉTAILLÉE en Markdown** — l'humain lit un rapport complet et lisible, jamais du JSON brut ni un simple pointeur vers le fichier.
+Produire et livrer le résumé final du matching à l'humain. **Gate `explicit`** : le livrable structuré est un **artefact YAML joint** `livraison-finale` (source machine / piste d'audit), mais la **présentation finale à l'humain reste TRÈS DÉTAILLÉE en Markdown** — l'humain lit un rapport complet et lisible, jamais du JSON brut ni un simple pointeur vers le fichier.
 
 > **Présentation finale = détaillée (exigence humaine, non négociable).** La réduction de prose du workflow vaut pour les **échanges A2A** (agent↔agent, portés par YAML joint) ; elle **ne s'applique pas** à la présentation finale à l'humain. Le récap de livraison doit **reprendre en clair** l'ensemble du contenu du livrable (résumé AO, profils retenus avec scores et justification détaillée, non-retenus et exclusions avec motifs, grille, recommandations), pas seulement l'action « valider ».
 
 ## Steps
-### Step 1 — Production du livrable final (JSON joint)
-Produire l'artefact **JSON joint** `livraison-finale` (via `multica attachment`) contenant :
+### Step 1 — Production du livrable final (YAML joint)
+Produire l'artefact **YAML joint** `livraison-finale` (via `multica attachment`) contenant :
 - Résumé de l'AO analysée
 - Liste des profils retenus avec scores et justification
 - **Section obligatoire « collaborateurs non retenus » (filtre d'éligibilité Gestionnaire CV)** : **chaque collaborateur écarté en amont du matching** (issu de `cv-eligibilite`) en distinguant les deux sous-états `exclu` / `a_verifier`, chacun avec ses **raisons par axe** (`{axe, detail}`). Catégories, sous-états et axes définis une seule fois dans le protocole `governance-security` (§ Catégories décisionnelles — non-retenus & exclus). **Obligatoire**, même si aucun collaborateur n'est concerné (indiquer alors « aucun »).
@@ -38,7 +38,7 @@ Produire l'artefact **JSON joint** `livraison-finale` (via `multica attachment`)
 - Recommandations
 
 ### Step 2 — Présentation finale DÉTAILLÉE + validation explicite
-Présenter à l'humain une **présentation finale Markdown détaillée et lisible** reprenant l'intégralité du contenu du livrable (le JSON joint `livraison-finale` reste la source/piste d'audit) :
+Présenter à l'humain une **présentation finale Markdown détaillée et lisible** reprenant l'intégralité du contenu du livrable (le YAML joint `livraison-finale` reste la source/piste d'audit) :
 - **Résumé de l'AO analysée** (client, objet, exigences clés, profils recherchés).
 - **Profils retenus** — pour **chaque** profil : nom, **score total**, **détail par critère** (les critères et leur pondération immuable sont définis dans la compétence `matching-scoring`), **recommandation** et **justification**.
 - **Collaborateurs non retenus** (filtre d'éligibilité Gestionnaire CV) — sous-états `exclu` / `a_verifier` avec **raisons par axe** (`{axe, detail}`).

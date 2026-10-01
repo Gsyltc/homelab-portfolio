@@ -9,6 +9,30 @@ ce fichier en donne la lecture chronologique côté produit.
 ## [Non publié]
 
 ### Changed
+- **Format exclusivement YAML pour tous les artefacts de données — `matching-cv-ao`**
+  (réf. EXPE-85, décision [ADR-0036](decisions/0036-format-yaml-exclusif-workflow-matching.md),
+  qui **lève la frontière** laissée par [ADR-0033](decisions/0033-format-yaml-compact-message-a2a.md) et
+  [ADR-0034](decisions/0034-format-yaml-donnees-cv.md) ; évolution **documentaire**, invariants et poids de
+  scoring préservés). Sur la consigne de multica.gaston (EXPE-84 : « Je veux **exclusivement du YAML** »),
+  **tous les artefacts de données restés en JSON** passent au **YAML** : `resume-ao`, `matching-resultats`,
+  `classement-final`, `livraison-finale`, `resultats-valides`, `grille-remplie`, `cv-available`,
+  `ao-pdf-received`, et le **référentiel des contextes clients** `clients/<nom-client>` (`.json` → **`.yaml`**).
+  **Mêmes champs, même sémantique** — seuls changent l'extension et les pointeurs de fichiers ; unique renommage
+  de champ `clients_json` → **`clients_yaml`** (preuves d'`expertise_firme`). **Schémas source-unique convertis**
+  dans les compétences `rfp-analyse` (`resume-ao`), `matching-scoring` (`matching-resultats`) et `contexte-client`
+  (`clients/<nom-client>`) ; propagé dans les fiches de stage `parse-ao`, `croisement-profils`,
+  `classement-profils`, `presentation-resultats`, `livraison`, `remplissage-grille`, `chargement-cv`,
+  `reception-ao`, `extraction-cv`, le `conductor`, les sensors `expertise-firme`/`gates`/`README`, les scopes
+  `README`/`format-cv`, les protocoles `scopes-and-axes`/`reviewer`, les fiches d'agent, `matching-cv-ao/README.md`
+  et `docs/guide-utilisation-workflow-matching.md`. **Textes d'invariant réalignés** : « communication
+  JSON↔Markdown » / « Agent↔Agent en JSON » → **« YAML↔Markdown »** / **« en YAML »** (cohérents avec ADR-0033,
+  l'A2A étant déjà YAML) ; agent↔humain reste **Markdown**. **Règles de validité YAML réutilisées** de 0033/0034
+  (quoting en notation *flow*, dates ISO/partielles et numériques-chaînes guillemetées, parse sans erreur avant
+  remise). YAML valide vérifié (PyYAML) sur tous les schémas et fences ; aucune référence `.json` résiduelle hors
+  périmètre. **Hors périmètre** (inchangé) : présentations Markdown aux gates humaines, flags CLI `--output json`,
+  CV livrable DOCX/Markdown (`cv-generation`), `plugin.json`. **Migration runtime** du référentiel `clients/`
+  (fichiers déjà écrits en `.json`) : conversion / reconstruction côté runtime à la prochaine capitalisation,
+  hors de ce dépôt (même logique que ADR-0034 NEG-002).
 - **Nommage daté unifié des artefacts CV + archivage de la dernière analyse seule — `matching-cv-ao`**
   (réf. EXPE-88, décision [ADR-0035](decisions/0035-nommage-date-unifie-archivage-derniere-analyse-cv.md),
   qui **prolonge** [ADR-0034](decisions/0034-format-yaml-donnees-cv.md) ; évolution **documentaire**, invariants

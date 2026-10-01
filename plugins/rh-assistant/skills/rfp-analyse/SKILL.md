@@ -1,15 +1,15 @@
 ---
 name: rfp-analyse
 description: >
-    Analyse d'un appel d'offres (AO) du workflow Matching : parsing du PDF/DOCX fourni, extraction structurée des exigences (fonctionnelles, techniques, organisationnelles) et des profils recherchés, détection du caractère gouvernemental et de la politique d'équivalence des diplômes, détection du mode de travail et de la localisation du site (rayon de proximité), évaluation de l'expertise de firme face à une exigence d'expérience de firme (lecture du référentiel `${ROOT_DIRECTORY}/clients/<nom-client>.json` — non bloquante, gate humaine légère si les minimums ne sont pas atteints), production du résumé versionné en JSON et sauvegarde dans le répertoire de l'AO. Charger avant toute analyse d'appel d'offres.
-keywords: [analyse ao, appel d'offres, rfp, parse ao, exigences, profils recherches, scoring implicite, equivalence diplomes, client gouvernemental, localisation travail, rayon proximite, certifications requises, certification prerequis, expertise firme, experience firme, contexte client, clients json, gate humaine legere]
+    Analyse d'un appel d'offres (AO) du workflow Matching : parsing du PDF/DOCX fourni, extraction structurée des exigences (fonctionnelles, techniques, organisationnelles) et des profils recherchés, détection du caractère gouvernemental et de la politique d'équivalence des diplômes, détection du mode de travail et de la localisation du site (rayon de proximité), évaluation de l'expertise de firme face à une exigence d'expérience de firme (lecture du référentiel `${ROOT_DIRECTORY}/clients/<nom-client>.yaml` — non bloquante, gate humaine légère si les minimums ne sont pas atteints), production du résumé versionné en JSON et sauvegarde dans le répertoire de l'AO. Charger avant toute analyse d'appel d'offres.
+keywords: [analyse ao, appel d'offres, rfp, parse ao, exigences, profils recherches, scoring implicite, equivalence diplomes, client gouvernemental, localisation travail, rayon proximite, certifications requises, certification prerequis, expertise firme, experience firme, contexte client, clients yaml, gate humaine legere]
 ---
 
 # Analyse d'appel d'offres (AO)
 
-Cette compétence porte tout le détail opératoire de l'**analyse d'un appel d'offres** pour le workflow Matching : parsing du document, extraction des exigences et des profils recherchés, détection du contexte gouvernemental / équivalence des diplômes, détection du mode de travail / localisation, puis production du résumé structuré en JSON. Elle est chargée par l'agent **Analyste RFP** et alimente le stage `parse-ao` (phase Analyse) du workflow Matching.
+Cette compétence porte tout le détail opératoire de l'**analyse d'un appel d'offres** pour le workflow Matching : parsing du document, extraction des exigences et des profils recherchés, détection du contexte gouvernemental / équivalence des diplômes, détection du mode de travail / localisation, puis production du résumé structuré en YAML. Elle est chargée par l'agent **Analyste RFP** et alimente le stage `parse-ao` (phase Analyse) du workflow Matching.
 
-L'AO source est fourni **en pièce jointe de l'issue** (PDF/DOCX) ou dans le **contenu de l'issue**. Le livrable (résumé JSON) est écrit dans `${ROOT_DIRECTORY}/ao/<client>/<titre-ao>/`.
+L'AO source est fourni **en pièce jointe de l'issue** (PDF/DOCX) ou dans le **contenu de l'issue**. Le livrable (résumé YAML) est écrit dans `${ROOT_DIRECTORY}/ao/<client>/<titre-ao>/`.
 
 ## Responsabilités opératoires
 
@@ -19,96 +19,79 @@ L'AO source est fourni **en pièce jointe de l'issue** (PDF/DOCX) ou dans le **c
 4. **Détecter le caractère gouvernemental** du client (`client_gouvernemental`) et, le cas échéant, la **politique d'équivalence des diplômes** acceptée par l'AO (`equivalence_diplomes`).
 5. **Détecter le mode de travail** (`localisation_travail`) et, pour un travail sur site / hybride, la **localisation du site** (rayon de proximité).
 6. **Créer les dossiers si absents** — toujours au bon chemin : `${ROOT_DIRECTORY}/ao/<client>/<titre-ao>/` (`client` = nom du client, `titre-ao` = slug du titre).
-7. **Sauvegarder le résumé JSON** dans ce répertoire.
-8. **Évaluer l'expertise de firme** lorsque l'AO exige une **expérience/expertise de firme** (référence à des mandats similaires, un secteur, des technologies ou un contexte comparables) : croiser cette exigence avec le **référentiel des contextes clients** `${ROOT_DIRECTORY}/clients/<nom-client>.json` (contexte des sociétés + mandats réalisés par la firme, maintenu par le Gestionnaire CV) pour statuer si la firme dispose de l'expérience et des compétences requises. Produire l'objet `expertise_firme` (voir § dédiée). **Analyse non bloquante** : elle **n'arrête jamais** le workflow ; si les **minimums requis ne sont pas atteints**, poser une **gate humaine légère** (signalement + demande de confirmation), sans blocage automatique.
+7. **Sauvegarder le résumé YAML** dans ce répertoire.
+8. **Évaluer l'expertise de firme** lorsque l'AO exige une **expérience/expertise de firme** (référence à des mandats similaires, un secteur, des technologies ou un contexte comparables) : croiser cette exigence avec le **référentiel des contextes clients** `${ROOT_DIRECTORY}/clients/<nom-client>.yaml` (contexte des sociétés + mandats réalisés par la firme, maintenu par le Gestionnaire CV) pour statuer si la firme dispose de l'expérience et des compétences requises. Produire l'objet `expertise_firme` (voir § dédiée). **Analyse non bloquante** : elle **n'arrête jamais** le workflow ; si les **minimums requis ne sont pas atteints**, poser une **gate humaine légère** (signalement + demande de confirmation), sans blocage automatique.
 
 > **Ne jamais inventer.** Toute donnée non présente dans l'AO reste `non_precise` / `null` avec, si utile, une mention humaine pour lever le doute. Aucune exigence, aucun profil, aucun niveau d'études, aucune localisation ne se fabrique.
 
-## Format de sortie (JSON → Agent)
+## Format de sortie (YAML → Agent)
 
-```json
-{
-  "ao": {
-    "client": "<nom du client>",
-    "titre": "<titre de l'AO>",
-    "date_reception": "<YYYY-MM-DD>",
-    "contexte": "<résumé du contexte>",
-    "client_gouvernemental": true,
-    "equivalence_diplomes": {
-      "acceptee": "oui | non | non_precise",
-      "mecanisme": "<ex. 'compensation des études', 'MIFI', 'équivalence DEC'>",
-      "compensation_annees_par_annee_manquante": "<nb d'années d'xp par année d'études manquante, ex. 3>",
-      "reference_ao": "<citation/section de l'AO — ne jamais inventer>"
-    },
-    "localisation_travail": {
-      "mode": "teletravail | sur_site | hybride | non_precise",
-      "ville_site": "<ville du site de travail — requise si sur_site/hybride, sinon null>",
-      "adresse_site": "<adresse complète du site si disponible, sinon null>",
-      "rayon_km": 70,
-      "reference_ao": "<citation/section de l'AO — ne jamais inventer>"
-    }
-  },
-  "exigences": [
-    {
-      "id": "EX-001",
-      "type": "technique|fonctionnelle|organisationnelle",
-      "description": "<description>",
-      "criticite": "obligatoire|souhaitee|nice-to-have"
-    }
-  ],
-  "profils_recherches": [
-    {
-      "id": "PR-001",
-      "intitule": "<intitulé du poste>",
-      "competences_requises": ["<compétence>"],
-      "experience_requise": "<description>",
-      "etudes_requises": "<niveau/formation requis, ex. Baccalauréat>",
-      "certifications_requises": [
-        {
-          "nom": "<intitulé exact de la certification, ex. AWS Certified Solutions Architect – Associate>",
-          "organisme": "<organisme émetteur si précisé, ex. AWS, sinon null>",
-          "criticite": "obligatoire | souhaitee | nice-to-have",
-          "reference_ao": "<citation/section de l'AO — ne jamais inventer>"
-        }
-      ],
-      "disponibilite": "<immédiate|<durée>>"
-    }
-  ],
-  "scoring_implicite": [
-    {
-      "critere": "<critère identifié dans l'AO>",
-      "poids_implicite": "<fort|moyen|faible>",
-      "justification": "<pourquoi ce poids>"
-    }
-  ],
-  "expertise_firme": {
-    "exigee": "oui | non | non_precise",
-    "reference_ao": "<citation/section de l'AO exigeant une expérience/expertise de firme — ne jamais inventer>",
-    "criteres_attendus": [
-      { "type": "secteur | technologie | contexte | mandat_similaire | volume", "attendu": "<ex. 'expérience dans le secteur de la santé au Québec'>", "minimum": "<seuil minimal si l'AO en fixe un, ex. '3 mandats similaires' / '2 ans', sinon null>" }
-    ],
-    "couverture": [
-      {
-        "critere": "<rappel du critère attendu>",
-        "statut": "couvert | partiel | non_couvert",
-        "preuves": [ { "client": "<nom du client>", "clients_json": "<chemin clients/<nom-client>.json>", "mandats": ["<projet/collaborateur/technologies pertinents>"] } ],
-        "commentaire": "<justification factuelle, issue du référentiel clients — ne rien inventer>"
-      }
-    ],
-    "verdict": "conforme | minimums_non_atteints | indeterminable",
-    "gate_humaine": "aucune | legere",
-    "detail_gate": "<si gate_humaine = legere : ce qui manque (critère non couvert / minimum non atteint) à faire confirmer par l'humain>"
-  }
-}
+```yaml
+ao:
+  client: <nom du client>
+  titre: <titre de l'AO>
+  date_reception: "<YYYY-MM-DD>"
+  contexte: <résumé du contexte>
+  client_gouvernemental: true
+  equivalence_diplomes:
+    acceptee: oui | non | non_precise
+    mecanisme: "<ex. 'compensation des études', 'MIFI', 'équivalence DEC'>"
+    compensation_annees_par_annee_manquante: "<nb d'années d'xp par année d'études manquante, ex. 3>"
+    reference_ao: <citation/section de l'AO — ne jamais inventer>
+  localisation_travail:
+    mode: teletravail | sur_site | hybride | non_precise
+    ville_site: <ville du site de travail — requise si sur_site/hybride, sinon null>
+    adresse_site: <adresse complète du site si disponible, sinon null>
+    rayon_km: 70
+    reference_ao: <citation/section de l'AO — ne jamais inventer>
+exigences:
+  - id: EX-001
+    type: technique | fonctionnelle | organisationnelle
+    description: <description>
+    criticite: obligatoire | souhaitee | nice-to-have
+profils_recherches:
+  - id: PR-001
+    intitule: <intitulé du poste>
+    competences_requises: ["<compétence>"]
+    experience_requise: <description>
+    etudes_requises: "<niveau/formation requis, ex. Baccalauréat>"
+    certifications_requises:
+      - nom: "<intitulé exact de la certification, ex. AWS Certified Solutions Architect – Associate>"
+        organisme: "<organisme émetteur si précisé, ex. AWS, sinon null>"
+        criticite: obligatoire | souhaitee | nice-to-have
+        reference_ao: <citation/section de l'AO — ne jamais inventer>
+    disponibilite: "<immédiate | <durée>>"
+scoring_implicite:
+  - critere: <critère identifié dans l'AO>
+    poids_implicite: fort | moyen | faible
+    justification: <pourquoi ce poids>
+expertise_firme:
+  exigee: oui | non | non_precise
+  reference_ao: <citation/section de l'AO exigeant une expérience/expertise de firme — ne jamais inventer>
+  criteres_attendus:
+    - type: secteur | technologie | contexte | mandat_similaire | volume
+      attendu: "<ex. 'expérience dans le secteur de la santé au Québec'>"
+      minimum: "<seuil minimal si l'AO en fixe un, ex. '3 mandats similaires' / '2 ans', sinon null>"
+  couverture:
+    - critere: <rappel du critère attendu>
+      statut: couvert | partiel | non_couvert
+      preuves:
+        - client: <nom du client>
+          clients_yaml: "<chemin clients/<nom-client>.yaml>"
+          mandats: ["<projet/collaborateur/technologies pertinents>"]
+      commentaire: <justification factuelle, issue du référentiel clients — ne rien inventer>
+  verdict: conforme | minimums_non_atteints | indeterminable
+  gate_humaine: aucune | legere
+  detail_gate: "<si gate_humaine = legere : ce qui manque (critère non couvert / minimum non atteint) à faire confirmer par l'humain>"
 ```
 
 ## Objet `expertise_firme` (expertise de firme — non bloquant, gate humaine légère)
 
-Lorsqu'un AO exige une **expérience ou une expertise de firme** — c.-à-d. que le soumissionnaire (la firme) démontre avoir déjà réalisé des mandats comparables (même secteur, mêmes technologies, contexte similaire, volume) — l'Analyste RFP évalue si la firme y répond en s'appuyant sur le **référentiel des contextes clients** `${ROOT_DIRECTORY}/clients/<nom-client>.json` (contexte des sociétés + `mandats[]` réalisés par les collaborateurs de la firme). Le **schéma, le nommage et le contrat de lecture** de ce référentiel vivent dans la compétence dédiée `contexte-client` (**source unique**) — la charger avant de lire `clients/*.json`. Ce référentiel est **maintenu par le Gestionnaire CV** (producteur, via la compétence `cv-analyse`) ; l'Analyste RFP en est **consommateur en lecture seule**.
+Lorsqu'un AO exige une **expérience ou une expertise de firme** — c.-à-d. que le soumissionnaire (la firme) démontre avoir déjà réalisé des mandats comparables (même secteur, mêmes technologies, contexte similaire, volume) — l'Analyste RFP évalue si la firme y répond en s'appuyant sur le **référentiel des contextes clients** `${ROOT_DIRECTORY}/clients/<nom-client>.yaml` (contexte des sociétés + `mandats[]` réalisés par les collaborateurs de la firme). Le **schéma, le nommage et le contrat de lecture** de ce référentiel vivent dans la compétence dédiée `contexte-client` (**source unique**) — la charger avant de lire `clients/*.yaml`. Ce référentiel est **maintenu par le Gestionnaire CV** (producteur, via la compétence `cv-analyse`) ; l'Analyste RFP en est **consommateur en lecture seule**.
 
 - **`exigee`** : `oui` si l'AO demande une expérience/expertise de firme, `non` si elle n'en demande pas (objet renseigné à minima, `couverture: []`), `non_precise` si le doute subsiste (mention humaine possible). **Ne rien inventer** : une exigence d'expertise de firme non explicite n'est pas supposée.
 - **`criteres_attendus[]`** : décomposition de l'exigence en critères (secteur, technologie, contexte, mandat similaire, volume), avec le `minimum` fixé par l'AO le cas échéant (`null` sinon).
-- **`couverture[]`** : pour chaque critère, statut `couvert` / `partiel` / `non_couvert`, appuyé sur des **preuves factuelles** tirées du référentiel `clients/*.json` (client, chemin du fichier, mandats pertinents). **Ne rien inventer** : si le référentiel `clients/` est vide ou ne contient pas l'information, le critère est `non_couvert`/indéterminable — jamais une couverture supposée.
+- **`couverture[]`** : pour chaque critère, statut `couvert` / `partiel` / `non_couvert`, appuyé sur des **preuves factuelles** tirées du référentiel `clients/*.yaml` (client, chemin du fichier, mandats pertinents). **Ne rien inventer** : si le référentiel `clients/` est vide ou ne contient pas l'information, le critère est `non_couvert`/indéterminable — jamais une couverture supposée.
 - **`verdict`** : `conforme` (tous les critères couverts / minimums atteints), `minimums_non_atteints` (au moins un critère non couvert ou un minimum non atteint), `indeterminable` (référentiel insuffisant pour statuer).
 - **Non bloquant + gate humaine légère** : cette analyse **ne bloque jamais** le workflow. Si `verdict` ∈ {`minimums_non_atteints`, `indeterminable`}, positionner **`gate_humaine: "legere"`** et renseigner `detail_gate` (ce qui manque) : le Coordinateur **signale** le point à l'humain et **demande une confirmation légère** (poursuivre malgré le manque, ou compléter le référentiel `clients/`), **sans arrêt automatique**. Si `verdict = conforme`, `gate_humaine: "aucune"`. Le contrôle est doublé par le sensor advisory `expertise-firme` (voir le sensor `expertise-firme`).
 
@@ -152,19 +135,19 @@ Objet renseigné pour statuer sur la contrainte de localisation du mandat. `mode
 ## Stockage du livrable
 
 - Répertoire de l'AO : `${ROOT_DIRECTORY}/ao/<client>/<titre-ao>/` — `client` = nom du client, `titre-ao` = slug du titre. **Créer les dossiers si absents.**
-- Le résumé JSON structuré est écrit dans ce répertoire.
+- Le résumé YAML structuré est écrit dans ce répertoire.
 - Ne jamais coder en dur un chemin absolu : toujours partir de `${ROOT_DIRECTORY}`.
 - La pièce jointe source (PDF/DOCX) est une **copie de travail transitoire** : elle n'est pas stockée dans le répertoire de l'AO ; journaliser son nom sur l'issue (piste d'audit).
 
 ## Contrôle du livrable (avant remise)
 
-Vérifier que le JSON produit contient bien :
+Vérifier que le YAML produit contient bien :
 
 - `ao` (métadonnées) dont `client_gouvernemental`, `equivalence_diplomes` avec `acceptee` ∈ {`oui`, `non`, `non_precise`}, et `localisation_travail` avec `mode` ∈ {`teletravail`, `sur_site`, `hybride`, `non_precise`} et `ville_site` **non nul** si `mode` ∈ {`sur_site`, `hybride`} ;
 - `exigences` (liste) ;
 - `profils_recherches` (liste) dont `etudes_requises` renseigné pour chaque profil, et `certifications_requises` (liste, `[]` si aucune) dont chaque entrée porte `nom`, `criticite` ∈ {`obligatoire`, `souhaitee`, `nice-to-have`} et `reference_ao` ;
 - `scoring_implicite` (liste) le cas échéant ;
-- `expertise_firme` (objet) dont `exigee` ∈ {`oui`, `non`, `non_precise`}, `criteres_attendus` (liste), `couverture` (liste, appuyée sur le référentiel `clients/*.json` — jamais inventée), `verdict` ∈ {`conforme`, `minimums_non_atteints`, `indeterminable`} et `gate_humaine` ∈ {`aucune`, `legere`} (`legere` + `detail_gate` renseigné dès que le verdict n'est pas `conforme`). L'analyse d'expertise de firme est **non bloquante**.
+- `expertise_firme` (objet) dont `exigee` ∈ {`oui`, `non`, `non_precise`}, `criteres_attendus` (liste), `couverture` (liste, appuyée sur le référentiel `clients/*.yaml` — jamais inventée), `verdict` ∈ {`conforme`, `minimums_non_atteints`, `indeterminable`} et `gate_humaine` ∈ {`aucune`, `legere`} (`legere` + `detail_gate` renseigné dès que le verdict n'est pas `conforme`). L'analyse d'expertise de firme est **non bloquante**.
 
 Signaler tout écart avant de remettre le livrable.
 
@@ -172,5 +155,5 @@ Signaler tout écart avant de remettre le livrable.
 
 - **Ne jamais inventer** — exigence, profil, niveau d'études, équivalence, localisation absents ⇒ `non_precise`/`null` + mention humaine si pertinent ; jamais fabriqués.
 - **Aucun secret** dans les livrables, commentaires ou notifications.
-- **Communication** — Agent ↔ Agent en JSON uniquement ; Agent ↔ Humain en Markdown uniquement (règle du conductor, non redéfinie ici).
+- **Communication** — Agent ↔ Agent en YAML uniquement ; Agent ↔ Humain en Markdown uniquement (règle du conductor, non redéfinie ici).
 - **Périmètre** — cette compétence porte le *comment* opératoire de l'analyse d'AO ; la gouvernance A2A, la validation humaine granulaire, la piste d'audit sur l'issue et le retour de délégation au Coordinateur sont définis une seule fois dans le conductor du workflow Matching et ne sont pas répétés ici.

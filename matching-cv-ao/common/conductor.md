@@ -19,8 +19,8 @@ Ce fichier est la **source unique** des instructions du **coordinateur** du work
 | Fonction | Rôle |
 | --- | --- |
 | **Coordinateur Matching** | Orchestre le flux, contrôle les livrables, demande validations humaines (Keep/Modify/Redo), présente aux gates humaines une **restitution Markdown détaillée** du YAML joint (présentation finale très détaillée). |
-| **Analyste RFP** | Parse le PDF d'AO, extrait exigences + profils recherchés, produit le **résumé JSON** (joint à l'issue). **Évalue l'expertise de firme** (objet `expertise_firme`) face à une exigence d'expérience de firme en s'appuyant sur le référentiel `${ROOT_DIRECTORY}/clients/*.json` — **non bloquant**, gate humaine légère si les minimums ne sont pas atteints. |
-| **Gestionnaire CV** | Récupère les CV sources fournis en **pièces jointes de l'issue** (via `multica attachment`), en extrait les données puis **supprime la copie de travail** (originaux non conservés) ; met à jour les analyses versionnées. **Filtre l'éligibilité vis-à-vis de l'AO** (axes Études / MIFI si nécessaire / Expériences → 3 états `possible`/`a_verifier`/`exclu`) et **ne transmet pas les CV** au coordinateur — seulement le verdict d'éligibilité (retenus + à vérifier + exclus/raisons) et la référence `analyse_yaml` des retenus. **Maintient le référentiel des contextes clients** `${ROOT_DIRECTORY}/clients/<nom-client>.json` (contexte des sociétés + mandats réalisés) lorsqu'un CV long contient un contexte client — complète/enrichit, jamais d'écrasement aveugle. |
+| **Analyste RFP** | Parse le PDF d'AO, extrait exigences + profils recherchés, produit le **résumé YAML** (joint à l'issue). **Évalue l'expertise de firme** (objet `expertise_firme`) face à une exigence d'expérience de firme en s'appuyant sur le référentiel `${ROOT_DIRECTORY}/clients/*.yaml` — **non bloquant**, gate humaine légère si les minimums ne sont pas atteints. |
+| **Gestionnaire CV** | Récupère les CV sources fournis en **pièces jointes de l'issue** (via `multica attachment`), en extrait les données puis **supprime la copie de travail** (originaux non conservés) ; met à jour les analyses versionnées. **Filtre l'éligibilité vis-à-vis de l'AO** (axes Études / MIFI si nécessaire / Expériences → 3 états `possible`/`a_verifier`/`exclu`) et **ne transmet pas les CV** au coordinateur — seulement le verdict d'éligibilité (retenus + à vérifier + exclus/raisons) et la référence `analyse_yaml` des retenus. **Maintient le référentiel des contextes clients** `${ROOT_DIRECTORY}/clients/<nom-client>.yaml` (contexte des sociétés + mandats réalisés) lorsqu'un CV long contient un contexte client — complète/enrichit, jamais d'écrasement aveugle. |
 | **Matcher Profils** | Croise exigences AO ↔ profils CV **des seuls retenus** transmis par le coordinateur, calcule le score pondéré, classe les profils ; conserve la conformité études (AO gouvernemental) en **double check** aval sur les retenus. |
 
 ---
@@ -33,7 +33,7 @@ Vecteurs de communication (A2A = fichier YAML joint + commentaire minimal mentio
 
 ## Scoring pondéré
 
-La **pondération immuable** du scoring (critères, poids, méthodes de calcul, schéma JSON, garde-fous) est définie **une seule fois** dans la compétence `matching-scoring` (plugin `rh-assistant`) — **source unique**. Le Matcher Profils la charge avant tout calcul ; elle n'est pas redupliquée ici. Toute évolution des poids passe par une **validation humaine explicite tracée** (ADR) — voir [ADR-0032](../../decisions/0032-refonte-ponderation-scoring-matching.md).
+La **pondération immuable** du scoring (critères, poids, méthodes de calcul, schéma YAML, garde-fous) est définie **une seule fois** dans la compétence `matching-scoring` (plugin `rh-assistant`) — **source unique**. Le Matcher Profils la charge avant tout calcul ; elle n'est pas redupliquée ici. Toute évolution des poids passe par une **validation humaine explicite tracée** (ADR) — voir [ADR-0032](../../decisions/0032-refonte-ponderation-scoring-matching.md).
 
 ---
 
@@ -44,7 +44,7 @@ La **pondération immuable** du scoring (critères, poids, méthodes de calcul, 
 | CV sources (PDF, DOCX) | **Pièces jointes de l'issue** — récupérés via `multica attachment`, **supprimés après extraction** (non stockés) |
 | **Gabarits CV fournis** (CV long / CV court / format client spécifique) | `${ROOT_DIRECTORY}/gabarits/cv/` — **fournis par l'humain, jamais inventés** |
 | Analyses CV (dernière analyse à la racine : couple `<YYYY-mm-dd>-<nom>.{yaml,md}`, mémoire ; versions antérieures des deux artefacts — Markdown **et** YAML — dans `cv/archives/`) | `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv` |
-| **Référentiel des contextes clients** (1 fichier par client — contexte de la société + mandats réalisés par la firme) | `${ROOT_DIRECTORY}/clients/<nom-client>.json` — **maintenu par le Gestionnaire CV** lors de l'analyse d'un CV long contenant un contexte client (complété/enrichi, jamais écrasé) ; **exploité par l'Analyste RFP** pour l'expertise de firme |
+| **Référentiel des contextes clients** (1 fichier par client — contexte de la société + mandats réalisés par la firme) | `${ROOT_DIRECTORY}/clients/<nom-client>.yaml` — **maintenu par le Gestionnaire CV** lors de l'analyse d'un CV long contenant un contexte client (complété/enrichi, jamais écrasé) ; **exploité par l'Analyste RFP** pour l'expertise de firme |
 | **CV livrable** (DOCX par défaut depuis un gabarit ; Markdown sur demande explicite) | `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/<YYYY-mm-dd>-<nom>-<type-gabarit>.docx` (ou `<YYYY-mm-dd>-<nom>-cv.md`) |
 | Résumés AO | `${ROOT_DIRECTORY}/ao/<client>/<titre-ao>` |
 | Grille d'évaluation | Fournie par l'humain à chaque fois — **ne jamais inventer une grille**, la demander si absente |
@@ -173,13 +173,13 @@ sequenceDiagram
     H->>S: Demande AO (PDF) (issue)
     S->>S: Bootstrap deterministe - reception AO + verification CV (INITIALISATION)
     S->>A: Delegue parsing AO (mention + mission.yaml joint)
-    A-->>S: Retour A2A (mention + resume-ao.json joint)
+    A-->>S: Retour A2A (mention + resume-ao.yaml joint)
     S->>G: Delegue extraction CV + filtre eligibilite vs AO (mention + mission.yaml joint)
     G-->>S: Retour A2A (mention + cv-eligibilite.yaml joint, sans les CV)
     S->>H: Gate leger - validation extractions + eligibilite (ANALYSE)
     H-->>S: Approbation extractions + eligibilite
     S->>M: Delegue croisement - retenus uniquement (mention + mission.yaml joint)
-    M-->>S: Retour A2A (mention + matching-resultats.json joint)
+    M-->>S: Retour A2A (mention + matching-resultats.yaml joint)
     S->>S: Presentation resultats (VALIDATION)
     S->>H: Validation granulaire (Keep/Modify/Redo par profil)
     H-->>S: Validation / rejet par element

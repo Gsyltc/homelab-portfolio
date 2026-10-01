@@ -13,7 +13,7 @@ Table partagée référencée par le `conductor.md` et les fiches de stage. Le r
 | `express` | AO simple, 1-2 profils | Chemin court, allégé |
 | `format-cv` | Traitement CV seul (sans AO ni matching) | Chargement + extraction/formatage/archivage + mise à jour CV |
 
-Défaut : `standard`. **Invariants non négociables quel que soit le scope** : validation humaine granulaire, piste d'audit, communication JSON↔Markdown.
+Défaut : `standard`. **Invariants non négociables quel que soit le scope** : validation humaine granulaire, piste d'audit, communication YAML↔Markdown.
 
 ## Auto-détection & désambiguïsation
 
@@ -51,7 +51,7 @@ Légende : ✅ activé · ➖ allégé / optionnel · ❌ ignoré.
 | Clôture (4.x) | ✅ | ✅ | ✅ | ✅³ |
 | Validation humaine granulaire | ✅ | ✅ | ✅ | ✅ |
 
-Aucun scope ne désactive la validation humaine granulaire, la piste d'audit ou la communication JSON↔Markdown (invariants).
+Aucun scope ne désactive la validation humaine granulaire, la piste d'audit ou la communication YAML↔Markdown (invariants).
 
 > **Appartenance déclarée sur les stages (modèle en données).** Conformément à `scopes/README.md`, l'appartenance d'un stage à un scope est **déclarée dans le front-matter `scopes:` de la fiche de stage**. Les dix stages du parcours AO ↔ CV déclarent donc explicitement `standard, complex, express` (et `format-cv` pour les trois stages CV seul : `chargement-cv`, `extraction-cv`, `mise-a-jour-cv`). `complex` et `express` partagent l'**appartenance** de `standard` (mêmes stages actifs) ; leur différence est portée par l'**axe Depth** (`comprehensive` / `minimal`) et par les **allègements** notés ➖ dans la matrice ci-dessus (ex. `croisement-profils` allégé sous `express`), **pas** par une liste de stages différente. La matrice reste la **vue lisible** de ces activations/allègements.
 
