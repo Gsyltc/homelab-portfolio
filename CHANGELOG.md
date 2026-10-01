@@ -52,6 +52,23 @@ ce fichier en donne la lecture chronologique côté produit.
   runtime sous `${ROOT_DIRECTORY}/collaborateurs/`, **hors de ce dépôt**.
 
 ### Fixed
+- **Cohérence documentaire YAML des données CV finalisée — `matching-cv-ao`** (réf. EXPE-86, décision
+  [ADR-0034](decisions/0034-format-yaml-donnees-cv.md) ; évolution **documentaire**, invariants et poids de
+  scoring préservés). Correction des **occurrences résiduelles** qui décrivaient encore des **données CV**
+  (analyse réutilisée / cache) comme du JSON alors qu'ADR-0034 les a passées en YAML : dans la compétence
+  `cv-analyse` (§ Sélection d'éligibilité — « réutilisation d'un JSON déjà extrait » et « cache JSON » →
+  **YAML**), dans `protocols/governance-security.md` (axe `fraicheur_cv` — « cache JSON rejoué » →
+  **« cache YAML rejoué »**) et dans [ADR-0032](decisions/0032-adaptation-cv-selon-mandat-apres-scoring.md)
+  (statut *Proposed* ; DEC-003 « dernière analyse JSON » → **« dernière analyse YAML »**, DEC-004 « données
+  d'analyse JSON » → **« données d'analyse YAML »**, POS-003 « JSON d'analyse intacts » → **« YAML d'analyse
+  intacts »**). La **frontière ADR-0034** est préservée : restent explicitement en **JSON** le référentiel
+  `clients/<nom-client>.json`, `resume-ao` (résumé AO conservé en JSON dans ADR-0032), `classement-final`,
+  `matching-resultats`, `livraison-finale`, `resultats-valides`, `cv-available`, `ao-pdf-received`,
+  `grille-remplie`, l'enveloppe A2A (déjà YAML, ADR-0033) et les flags CLI `--output json`. Les **entrées
+  d'historique** de ce CHANGELOG décrivant l'**état passé** (pré-ADR-0034) en JSON restent **inchangées** (faits
+  historiques, pas des instructions). Aucune donnée CV runtime JSON à convertir dans ce dépôt (données de
+  runtime sous `${ROOT_DIRECTORY}/collaborateurs/`, hors dépôt ; le JSON éventuel n'est **pas** supprimé —
+  conversion additive).
 - **Contrôle de fraîcheur du CV JSON réutilisé (cache périmé) — `matching-cv-ao`** (réf. EXPE-77 ; évolution
   **documentaire**, invariants préservés). À la **réutilisation d'un JSON d'analyse déjà extrait** (collaborateur
   sans nouvelle pièce jointe — cas 2 de la règle de sélection de la source CV), le JSON rejoué est un **cache**

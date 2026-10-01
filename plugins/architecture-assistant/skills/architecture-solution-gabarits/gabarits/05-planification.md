@@ -1,6 +1,6 @@
 ---
 doc_id: das-05-planification
-theme: Planification, CAPEX/OPEX
+theme: Planification, CAPEX/OPEX, crédit CDAE-IA
 domaine: [affaires]
 sujets:
   - Planification
@@ -10,6 +10,7 @@ sujets:
   - Feuille de route
   - Estimation des coûts
   - Analyse CAPEX / OPEX
+  - Crédit d'impôt CDAE-IA (estimation)
 types_presentation: [executive, entreprise]
 sensibilite: interne
 togaf_layer: business
@@ -109,3 +110,29 @@ Sur un horizon de 3 ans et en dollars canadiens (CAD), le projet « Portail clie
 | **Total** | **Coût total de possession (TCO)**             | —     | —                    | $ 177 000 | $ 42 000  | $ 42 000  | $ 261 000   | CAPEX amorti + OPEX                                  |
 
 **Tableau 75. Analyse CAPEX / OPEX**
+
+### Crédit d'impôt CDAE-IA (estimation)
+
+<!--
+Sous-section CONDITIONNELLE — ne la renseigner (et ne conserver cette section) QUE si les trois conditions sont réunies :
+1. l'humain a demandé explicitement l'estimation du crédit CDAE-IA ;
+2. le projet est éligible — la description du projet porte `CDAE-AI: Oui` ;
+3. l'ensemble des informations nécessaires au calcul sont disponibles.
+Si une information manque, indiquer les éléments manquants à l'humain et NE PAS produire d'estimation partielle. Si le projet n'est pas éligible (`CDAE-AI: Non`) ou si aucune demande n'a été faite, laisser la section vide ou la retirer.
+La méthode, les conditions d'éligibilité et les taux font autorité dans la skill `cdae-ai-eligibilite` (source unique) — ne pas les dupliquer ici, s'y référer.
+Estimation INFORMATIVE, NON CONTRACTUELLE et SANS valeur de conseil fiscal : les attestations et le traitement fiscal relèvent d'Investissement Québec et de Revenu Québec.
+-->
+
+- **Éligibilité (description du projet)** : `CDAE-AI: Oui`
+- **Taux appliqué** : 30 % des salaires admissibles (22 % remboursable + 8 % non remboursable) — **ou** taux réduit 15 % (11 % + 4 %) si ≥ 50 % des revenus proviennent de services rendus hors Québec à une société ayant un lien de dépendance.
+- **Base de calcul** : salaires admissibles (revenu d'emploi selon la Loi sur les impôts du Québec ; plus de plafond salarial), proratisés selon les jours travaillés.
+
+| **Employé / rôle** | **Salaires admissibles** | **Jours travaillés / jours exercice** | **Taux** | **Crédit remboursable** | **Crédit non remboursable** | **Crédit total** |
+|--------------------|--------------------------|----------------------------------------|----------|-------------------------|-----------------------------|------------------|
+| —                  | $ 0                      | 0 / 0                                   | 30 %     | $ 0                     | $ 0                         | $ 0              |
+| **Total**          | **$ 0**                  | -                                      | -        | **$ 0**                 | **$ 0**                     | **$ 0**          |
+
+**Tableau 21. Estimation du crédit d'impôt CDAE-IA**
+
+> Estimation informative et non contractuelle, sans valeur de conseil fiscal. Conditions d'éligibilité et méthode de calcul : skill `cdae-ai-eligibilite` (source unique). Attestations et traitement fiscal : Investissement Québec / Revenu Québec.
+
