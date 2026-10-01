@@ -66,6 +66,7 @@ ${ROOT_DIRECTORY}/<nom-client>/<nom-projet>/
 - Formats supportés : PlantUML (`.puml`), Mermaid (`.mmd`), Structurizr DSL (`.dsl`), CALM, Archimate
 - Nommage : `<type>-<description>.<extension>` (ex. `c4-context-systeme-principal.dsl`)
 - Les modèles C4 doivent être dans un fichier unique en respectant le DSL de Structurizr
+- Les diagrammes **réutilisent le thème du projet** (répertoire `theme/`, p. ex. `theme/0000-default-styles.dsl`) **lorsqu'il est disponible** (Structurizr, PlantUML, etc.) ; ne pas réinventer ni approximer un style quand le thème existe
 - Toujours demander le format souhaité avant de générer
 
 ### `views/`

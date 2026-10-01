@@ -69,13 +69,15 @@ ordre_presentation: <n|null>
    - Toute modification doit être **approuvée par l'humain** lors de la phase de revue.
 5. Conserver le découpage des fichiers, les noms de fichiers et la structure des sections.
 6. Maintenir la **numérotation globale et continue** des tableaux ainsi que l'index du fichier `001` (liste des tableaux et des diagrammes) à chaque changement.
-7. Mettre à jour l'**historique du document** (`001`) à chaque modification (version, date, statut, motif, auteur, approbateur).
+7. Mettre à jour l'**historique du document** (`001`) à chaque modification (version, date, statut, motif, auteur, approbateur). La **description / motif du changement** reste **concise** et limitée à l'essentiel (une à deux lignes factuelles, sans prose superflue).
 8. Utiliser des **identifiants codés** cohérents pour les articles (ex. `RISQ-001`, `UC-001`, `CT-001`).
-9. Les diagrammes sont générés en **code** (PlantUML, Mermaid, Structurizr, BPMN, C4) et référencés dans l'index du `001`.
+9. Les diagrammes sont générés en **code** (PlantUML, Mermaid, Structurizr, BPMN, C4) et référencés dans l'index du `001`. Ils **réutilisent le thème du projet** (répertoire `theme/`, p. ex. `theme/0000-default-styles.dsl`) **lorsqu'il est disponible** ; ne pas réinventer ni approximer un style quand le thème existe.
 10. Les **décisions d'architecture** sont tracées dans des ADR (voir la skill `create-architectural-decision-record`) et référencées dans les fichiers concernés.
 11. Ne jamais inclure de secrets, mots de passe ou identifiants dans la documentation.
 12. **Front-matter de ciblage maintenu à jour.** Chaque fichier de la DAS (`001`, `01`–`15`) porte en tête un **front-matter YAML de ciblage** (voir « Front-matter de ciblage ») consommé par la skill `presentation-targeting`. Le maintenir cohérent avec le contenu : **jamais de secret** dans le front-matter, et une **sensibilité réelle** (`sensibilite`) reflétant la confidentialité effective des sections (`restreint` n'est jamais exposé au client).
 13. **Maintenance du champ `sujets`.** Le champ `sujets` du front-matter reflète les **titres de niveau 2 (`##`) et niveau 3 (`###`)** du document, dans l'ordre du document. Dès qu'un titre H2/H3 est **ajouté, renommé ou supprimé**, mettre à jour `sujets` dans le même changement pour qu'il reste le reflet fidèle de la structure ciblable.
+14. **Aucune information de génération dans la documentation.** Un document livré ne contient que ce qui concerne le projet (architecture, décisions, exigences, etc.). Proscrire toute mention de méta-génération — p. ex. « diagramme généré avec … », « document produit par … », notes d'outil ou horodatage de génération.
+15. **Feuille de route sans date → J+7.** Pour toute feuille de route / timeline / roadmap, si aucune date n'est indiquée, considérer le début à **J + 7 jours à compter de la date du jour**.
 
 ## Arrimage avec les autres skills
 
