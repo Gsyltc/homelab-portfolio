@@ -89,9 +89,9 @@ La délégation se fait par **mention** sur l'issue ; l'agent sollicité répond
 | --- | --- |
 | CV sources (PDF, DOCX) | **Pièces jointes de l'issue** — analysés puis **supprimés** (non conservés) |
 | **Gabarits CV fournis** (CV long / CV court / format client spécifique) | `${ROOT_DIRECTORY}/gabarits/cv/` — **fournis par vous, jamais inventés** |
-| Anciennes fiches d'analyse Markdown | `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/archives/` |
-| Fiche d'analyse Markdown courante + YAML versionnés (mémoire) | Racine de `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/` |
-| **CV livrable** (DOCX par défaut depuis un gabarit ; Markdown sur demande explicite) | `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/<nom>-<prenom>-<type-gabarit>-<AAAA-MM-JJ>.docx` (ou `…-cv-<AAAA-MM-JJ>.md`) |
+| Anciennes analyses (fiches Markdown **et** YAML des versions antérieures) | `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/archives/` |
+| Dernière analyse à la racine : couple `<YYYY-mm-dd>-<nom>.{yaml,md}` (fiche Markdown courante + YAML courant, mémoire) | Racine de `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/` |
+| **CV livrable** (DOCX par défaut depuis un gabarit ; Markdown sur demande explicite) | `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/<YYYY-mm-dd>-<nom>-<type-gabarit>.docx` (ou `<YYYY-mm-dd>-<nom>-cv.md`) |
 | Résumés AO | `${ROOT_DIRECTORY}/ao/<client>/<titre-ao>/` |
 | **Contextes clients (sociétés)** — 1 fichier par client : contexte de la société + mandats réalisés par la firme | `${ROOT_DIRECTORY}/clients/<nom-client>.json` — **alimenté automatiquement** par le Gestionnaire CV à partir des CV longs (complété/enrichi, jamais écrasé) ; utilisé par l'Analyste RFP pour l'expertise de firme |
 | Grille d'évaluation | Fournie par l'humain — **jamais inventée** |
@@ -107,10 +107,12 @@ Ces chemins sont créés **si absents**, toujours au bon endroit (client = nom d
 
 > **CV sources fournis dans l'issue** : joignez les CV des collaborateurs (PDF, DOCX) **en pièces jointes de
 > l'issue**. À chaque analyse, le Gestionnaire CV les récupère, produit une fiche Markdown datée **du jour** à la
-> racine de `cv/` (les anciennes fiches sont déplacées dans `cv/archives/`) et un YAML d'analyse **versionné**
-> (`<nom>-<prenom>-<AAAA-MM-JJ>.yaml`), **puis supprime la copie de travail** — **les originaux ne sont pas
-> conservés** (leur nom est journalisé sur l'issue avant suppression, pour l'audit). Seule la **dernière version
-> YAML** est croisée avec un AO ; le fichier retenu et les versions écartées sont journalisés sur l'issue.
+> racine de `cv/` (`<YYYY-mm-dd>-<nom>.md`) et un YAML d'analyse **du jour**
+> (`<YYYY-mm-dd>-<nom>.yaml`), **puis supprime la copie de travail** — **les originaux ne sont pas
+> conservés** (leur nom est journalisé sur l'issue avant suppression, pour l'audit). **Seule la dernière analyse
+> reste à la racine** (un couple YAML + Markdown) : avant d'écrire la nouvelle, les versions antérieures des
+> **deux** artefacts sont déplacées dans `cv/archives/`. Seule la **dernière version YAML** est croisée avec un
+> AO ; le fichier retenu et les versions archivées sont journalisés sur l'issue.
 
 > **Contextes clients & expertise de firme** : lorsqu'un **CV long** décrit le **contexte des sociétés
 > clientes** et les **mandats** réalisés, le Gestionnaire CV capitalise ces informations dans

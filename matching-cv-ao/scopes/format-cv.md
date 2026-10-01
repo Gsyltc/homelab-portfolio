@@ -26,9 +26,8 @@ Seuls trois stages s'exécutent sous ce scope :
 > **Organisation stricte du répertoire `cv/`** — `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/` (enraciné sur `${ROOT_DIRECTORY}` ; voir la fiche de l'agent
 > l'agent `Gestionnaire CV`) : les **sources PDF/DOCX** sont
 > **fournis en pièces jointes de l'issue** et **supprimés après extraction** (non conservés, non stockés dans
-> ce répertoire) · `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/archives/` (anciennes fiches Markdown) · fiche Markdown du jour et YAML versionnés à la racine
-> (mémoire) · **CV livrable** (`<nom>-<prenom>-<type-gabarit>-<AAAA-MM-JJ>.docx` en DOCX par défaut depuis un
-> gabarit fourni — `${ROOT_DIRECTORY}/gabarits/cv/` —, ou `<nom>-<prenom>-cv-<AAAA-MM-JJ>.md` en Markdown sur
+> ce répertoire) · `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/archives/` (versions antérieures des deux artefacts — fiches Markdown **et** YAML) · **dernière analyse à la racine** : un seul couple `<YYYY-mm-dd>-<nom>.{yaml,md}` (fiche Markdown + YAML du jour, mémoire) · **CV livrable** (`<YYYY-mm-dd>-<nom>-<type-gabarit>.docx` en DOCX par défaut depuis un
+> gabarit fourni — `${ROOT_DIRECTORY}/gabarits/cv/` —, ou `<YYYY-mm-dd>-<nom>-cv.md` en Markdown sur
 > demande explicite). La date de dernière modification reportée est **toujours la date du jour**.
 
 Depth par défaut : `standard`. Aucun `review_cap` — pas d'abaissement au niveau du scope.

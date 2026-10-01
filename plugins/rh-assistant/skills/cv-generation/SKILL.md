@@ -17,7 +17,7 @@ Deux artefacts distincts ne doivent **jamais** être confondus :
 
 | Artefact | Format | Rôle | Producteur |
 | --- | --- | --- | --- |
-| **Fiche d'analyse** | **Markdown** (`<AAAA-MM-JJ>-<nom>-<prenom>.md`) + YAML versionné | **Mémoire interne persistante** du CV (données structurées, MIFI, localisation, disponibilité) — jamais un livrable client | `cv-analyse` (stage `extraction-cv`) |
+| **Fiche d'analyse** | **Markdown** (`<YYYY-mm-dd>-<nom>.md`) + YAML (`<YYYY-mm-dd>-<nom>.yaml`) | **Mémoire interne persistante** du CV (données structurées, MIFI, localisation, disponibilité) — jamais un livrable client | `cv-analyse` (stage `extraction-cv`) |
 | **CV livrable** | **DOCX par défaut** (depuis un gabarit fourni) · **Markdown sur demande explicite** de l'humain | **Document présentable** remis à l'humain / au client | `cv-generation` (stage `mise-a-jour-cv`) |
 
 La fiche d'analyse Markdown et le YAML restent la **source de données** (mémoire) ; le **CV livrable est un DOCX par défaut** rempli depuis un gabarit fourni. On ne livre jamais la fiche d'analyse Markdown telle quelle comme CV.
@@ -25,7 +25,7 @@ La fiche d'analyse Markdown et le YAML restent la **source de données** (mémoi
 ## Format du CV livrable (DOCX par défaut ; Markdown sur demande explicite)
 
 - **Par défaut : DOCX** — produit à partir d'un des **gabarits fournis** (CV long / CV court / format client spécifique). C'est le format retenu en l'absence de demande contraire.
-- **Markdown : uniquement sur demande explicite de l'humain** — lorsque l'humain **demande explicitement** un CV livrable au format Markdown, produire un **document Markdown présentable** (distinct de la fiche d'analyse : c'est un livrable mis en forme pour l'humain, pas la mémoire interne) à partir des données du YAML courant, nommé `<nom>-<prenom>-cv-<AAAA-MM-JJ>.md` à la racine de `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv` (sans écraser l'historique ni la fiche d'analyse). Le Markdown livrable **ne s'appuie pas sur un gabarit DOCX** ; il n'est produit **que** sur demande explicite — jamais par défaut, jamais en substitution silencieuse d'un gabarit DOCX manquant (gabarit DOCX manquant ⇒ halt-and-ask, pas de repli Markdown automatique).
+- **Markdown : uniquement sur demande explicite de l'humain** — lorsque l'humain **demande explicitement** un CV livrable au format Markdown, produire un **document Markdown présentable** (distinct de la fiche d'analyse : c'est un livrable mis en forme pour l'humain, pas la mémoire interne) à partir des données du YAML courant, nommé `<YYYY-mm-dd>-<nom>-cv.md` à la racine de `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv` (sans écraser l'historique ni la fiche d'analyse). Le Markdown livrable **ne s'appuie pas sur un gabarit DOCX** ; il n'est produit **que** sur demande explicite — jamais par défaut, jamais en substitution silencieuse d'un gabarit DOCX manquant (gabarit DOCX manquant ⇒ halt-and-ask, pas de repli Markdown automatique).
 
 ## Gabarits fournis (jamais inventés)
 
@@ -67,8 +67,8 @@ Le **CV long** comporte, pour chaque mandat, un bloc **« Contexte de l'organisa
 3. **Appliquer la modification / le remplissage** sur une copie de travail : en DOCX, injecter les données du YAML dans les emplacements prévus par le gabarit (sans altérer sa charte) ; en Markdown (sur demande), mettre en forme les données du YAML en un document présentable — sans écraser l'historique.
 4. **Présenter la production à l'humain** (Markdown pour la conversation : diff clair avant/après des données injectées + format et, en DOCX, type de gabarit utilisé) et **attendre la validation explicite**. Aucune écriture avant accord.
 5. **Écrire les livrables versionnés** une fois validé :
-   - **CV livrable** — en **DOCX** (défaut) : `<nom>-<prenom>-<type-gabarit>-<AAAA-MM-JJ>.docx` (ex. `dupont-jean-cv-long-2026-09-15.docx`) ; en **Markdown** (sur demande explicite) : `<nom>-<prenom>-cv-<AAAA-MM-JJ>.md` — à la racine de `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv`, sans écraser l'historique ni la fiche d'analyse ;
-   - mise à jour des **données** si modifiées : nouveau YAML `<nom>-<prenom>-<AAAA-MM-JJ>.yaml` (date du jour, sans écraser l'historique) et fiche d'analyse Markdown du jour `<AAAA-MM-JJ>-<nom>-<prenom>.md`, en **archivant** la fiche antérieure dans `cv/archives/` ;
+   - **CV livrable** — en **DOCX** (défaut) : `<YYYY-mm-dd>-<nom>-<type-gabarit>.docx` (ex. `2026-09-15-dupont-jean-cv-long.docx`) ; en **Markdown** (sur demande explicite) : `<YYYY-mm-dd>-<nom>-cv.md` — à la racine de `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv`, sans écraser l'historique ni la fiche d'analyse ;
+   - mise à jour des **données** si modifiées : nouveau YAML `<YYYY-mm-dd>-<nom>.yaml` et fiche d'analyse Markdown du jour `<YYYY-mm-dd>-<nom>.md` (date du jour), en **archivant** dans `cv/archives/` les versions antérieures des **deux** artefacts (YAML **et** Markdown) avant écriture — à la racine ne subsiste qu'un seul couple ;
    - `date_derniere_modification` = **toujours la date du jour**.
 6. **Journaliser sur l'issue** la nature de la modification, le **format** (DOCX/Markdown) et, en DOCX, le **type de gabarit**, le fichier produit, la version YAML produite et la validation humaine obtenue (piste d'audit).
 

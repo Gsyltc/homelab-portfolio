@@ -148,9 +148,9 @@ Le workflow capitalise le **contexte des sociétés clientes** et les **mandats 
 | CV sources (PDF, DOCX) | **Pièces jointes de l'issue** — récupérés via `multica attachment`, **supprimés après extraction** (non stockés) |
 | **Gabarits CV fournis** (CV long / CV court / format client spécifique) | `${ROOT_DIRECTORY}/gabarits/cv/` — **fournis par l'humain, jamais inventés** |
 | Anciennes fiches d'analyse Markdown | `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/archives/` |
-| Fiche d'analyse Markdown courante (du jour, mémoire) | `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/<AAAA-MM-JJ>-<nom>-<prenom>.md` |
-| Analyses YAML **versionnées** (mémoire ; seule la dernière sert au matching) | `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/<nom>-<prenom>-<AAAA-MM-JJ>.yaml` |
-| **CV livrable** (DOCX par défaut depuis un gabarit ; Markdown sur demande explicite) | `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/<nom>-<prenom>-<type-gabarit>-<AAAA-MM-JJ>.docx` (ou `…-cv-<AAAA-MM-JJ>.md`) |
+| Fiche d'analyse Markdown courante (du jour, mémoire — seule à la racine) | `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/<YYYY-mm-dd>-<nom>.md` |
+| Analyses YAML courantes (mémoire ; seule la dernière à la racine sert au matching, versions antérieures dans `cv/archives/`) | `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/<YYYY-mm-dd>-<nom>.yaml` |
+| **CV livrable** (DOCX par défaut depuis un gabarit ; Markdown sur demande explicite) | `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/<YYYY-mm-dd>-<nom>-<type-gabarit>.docx` (ou `<YYYY-mm-dd>-<nom>-cv.md`) |
 | Résumés AO | `${ROOT_DIRECTORY}/ao/<client>/<titre-ao>` |
 | **Référentiel des contextes clients** (1 fichier par client — contexte de la société + mandats réalisés) | `${ROOT_DIRECTORY}/clients/<nom-client>.json` — **maintenu par le Gestionnaire CV** (CV long avec contexte client, complété/enrichi jamais écrasé) ; **exploité par l'Analyste RFP** pour l'expertise de firme |
 | Grille d'évaluation | Fournie par l'humain — **ne jamais inventer** |
