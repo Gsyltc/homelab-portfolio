@@ -31,6 +31,7 @@
 4. **Vue d'ensemble de la solution** — un diagramme haut niveau (Archify), formulé en bénéfices.
    - **Principaux bénéfices métier** (liste courte, orientée valeur).
    - **Étapes de déploiement** (vue macro : jalons de mise en œuvre).
+   - **Diagramme Archify** : recette/type selon la [correspondance de la référence (Executive)](../references/archify-diagram-types.md#correspondance-publicthème--recette-source-unique) ; procédure : [Sélection du diagramme Archify](../SKILL.md#sélection-du-diagramme-archify-avant-production).
    - Sources : `06-architecture-solutions.md`, `views/`, `09-deploiement.md`.
 5. **Risques maîtrisés / points d'attention** — avec **suivi des risques** (tableau).
    - Exemple de tableau de suivi :
@@ -69,6 +70,7 @@
 ## Règles spécifiques
 
 - Une idée par diapositive ; privilégier chiffres-clés, tableaux et visuels.
+- **Diagrammes Archify — public direction** : déterminer la recette **avant production** selon la [correspondance de la référence (section Executive)](../references/archify-diagram-types.md#correspondance-publicthème--recette-source-unique) ; privilégier une composition `classic` **sans trace** (synthèse orientée décision). Ne pas recopier la correspondance ici.
 - Traduire chaque élément technique en bénéfice métier.
 - **KPIs, suivi des risques et synthèse CAPEX/OPEX présentés sous forme de tableau.**
 - **CAPEX / OPEX** : uniquement **si disponible** dans la documentation, en **k$ CAD** ; sinon exclu.

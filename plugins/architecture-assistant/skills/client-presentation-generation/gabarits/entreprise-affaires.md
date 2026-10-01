@@ -34,15 +34,18 @@
 9. **Juridiction** (contraintes légales / réglementaires applicables).
    - Sources : `08-contraintes.md`.
 10. **Alignement architecture d'entreprise (TOGAF)** — couches Métier, Données, Application, Technologie.
+    - **Diagramme Archify** : recette/type selon la [correspondance de la référence (Entreprise/Affaires)](../references/archify-diagram-types.md#correspondance-publicthème--recette-source-unique).
     - Sources : `06-architecture-solutions.md`, `10-cycle_vie_donnees.md`, front-matter `togaf_layer` des documents.
 11. **Gestion du changement organisationnel**.
     - Impact sur les équipes, **compétences requises**, **formations nécessaires**, adhésion. Souvent sous-estimé mais critique pour l'adoption réelle.
     - Sources : `05-planification.md`, `09-deploiement.md`, `01-introduction.md` (parties prenantes).
 12. **Dépendances critiques entre initiatives**.
     - Dépendances **techniques, temporelles et de ressources** entre les pièces de la feuille de route (ex. diagramme de dépendances Archify).
+    - **Diagramme Archify** : recette/type selon la [correspondance de la référence (Entreprise/Affaires)](../references/archify-diagram-types.md#correspondance-publicthème--recette-source-unique).
     - Sources : `05-planification.md`, `06-architecture-solutions.md`, `07-choix-des-solutions.md`.
 13. **Plan de transition par étapes (Transition Architectures)**.
     - Plutôt qu'une feuille de route unique, définir des **états intermédiaires mesurables**, chacun avec ses **livrables** et critères de sortie (TOGAF — Transition Architectures).
+    - **Diagramme Archify** : recette/type selon la [correspondance de la référence (Entreprise/Affaires)](../references/archify-diagram-types.md#correspondance-publicthème--recette-source-unique).
     - Sources : `05-planification.md`, `09-deploiement.md`.
 14. **Feuille de route / recommandations**.
     - Sources : `05-planification.md`, `07-choix-des-solutions.md`.
@@ -55,6 +58,7 @@
 - **CAPEX / OPEX — gate légère (inclusion/exclusion)** : à inclure **sur demande de l'humain** et **seulement si disponible dans la documentation** ; sinon exclure (ne rien inventer).
 - **Besoins d'affaires ciblables** : selon la présentation désirée, présenter tous les besoins ou **un/plusieurs besoins spécifiques**, sélectionnés par identifiant (`BES-001`, `UC-001`…) ou par section ; confirmer ce sous-ensemble au périmètre. Les chapitres liés (BAE, KPIs, risques, dépendances) se restreignent alors au(x) besoin(s) retenu(s) pour rester cohérents.
 - Rendre visibles les **dépendances critiques** (technique / temps / ressources) et les **états de transition** (jalons mesurables + livrables).
+- **Diagrammes Archify — public affaires/architecture** : déterminer la recette **avant production** selon la [correspondance de la référence (section Entreprise/Affaires)](../references/archify-diagram-types.md#correspondance-publicthème--recette-source-unique) ; `+trace` si l'ownership/évidence doit être démontré. Ne pas recopier la correspondance ici.
 - Ne pas négliger la **conduite du changement** (compétences, formations, adhésion).
 - Tableaux clairs pour parties prenantes, KPIs, risques, coûts, conformités et dépendances.
 - **Ne rien inventer** : produire chaque chapitre uniquement depuis la documentation validée. **Tout chapitre sans documentation disponible est exclu** (ne pas forcer un chapitre, ne pas laisser de section vide) ; signaler le manque au périmètre pour arbitrage.
