@@ -54,7 +54,7 @@ Introduire une **étape d'adaptation du CV au mandat**, conditionnelle et pilot�
   4. seuls les CV **explicitement choisis** par l'humain donnent lieu à une instance de `cv-adaptation-demande` transmise au Gestionnaire CV. **Aucune adaptation autonome.**
 
 - **DEC-003 — Nouveau type d'opération dans la compétence `cv-generation` : « Adaptation d'un CV au mandat ».** Étendre `plugins/rh-assistant/skills/cv-generation/SKILL.md` avec une opération d'adaptation qui :
-  - part de la **dernière analyse JSON** du collaborateur et du **résumé JSON de l'AO** (`resume-ao`, exigences + profils recherchés + vocabulaire) ;
+  - part de la **dernière analyse YAML** du collaborateur et du **résumé JSON de l'AO** (`resume-ao`, exigences + profils recherchés + vocabulaire) ;
   - **aligne le CV sur les termes de l'AO** (terminologie, intitulés d'exigences, profils recherchés) et **fait ressortir les éléments à plus forte correspondance** (réordonnancement, mise en avant des compétences/expériences couvrant les exigences) — **sans inventer** de compétence, d'expérience ou de durée absente des données (donnée manquante ⇒ mention humaine) ;
   - produit un **diff avant/après lisible** (éléments mis en avant, réordonnés, reformulés au vocabulaire de l'AO) présenté à l'humain **avant écriture**, pour validation des ajouts (invariant : aucune écriture avant accord explicite) ;
   - écrit une **copie spécifique dédiée à l'AO**, **jamais** en écrasant le CV catalogue ni les données d'analyse.
@@ -63,7 +63,7 @@ Introduire une **étape d'adaptation du CV au mandat**, conditionnelle et pilot�
 
   `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/<AAAA-MM-JJ>-<nom-prenom>-<titre-ao-slug>.docx`
 
-  où `<titre-ao-slug>` est le titre de l'AO normalisé (minuscules, tirets). Le **CV original / catalogue et les données d'analyse JSON ne sont pas modifiés** par l'adaptation (la copie adaptée est un livrable **dérivé et daté**, versionné sans écrasement de l'historique).
+  où `<titre-ao-slug>` est le titre de l'AO normalisé (minuscules, tirets). Le **CV original / catalogue et les données d'analyse YAML ne sont pas modifiés** par l'adaptation (la copie adaptée est un livrable **dérivé et daté**, versionné sans écrasement de l'historique).
 
 - **DEC-005 — Orchestration dans le `conductor.md` et wiring des phases.** Insérer `adaptation-cv` dans la phase **Clôture**, **après** `presentation-resultats` (donc après scoring et validation des profils) et **en amont ou en parallèle** de `livraison` selon l'ordre retenu à l'implémentation ; documenter la nouvelle gate dans la séquence A2A du conductor (le Coordinateur porte la question d'éligibilité/choix ; le Gestionnaire CV exécute l'adaptation par CV retenu). Mettre à jour les tableaux de phases/stages (README workflow + conductor) et le guide d'utilisation (`docs/guide-utilisation-workflow-matching.md`).
 
@@ -81,7 +81,7 @@ Introduire une **étape d'adaptation du CV au mandat**, conditionnelle et pilot�
 
 - **POS-001** : le besoin humain est couvert de bout en bout — question d'adaptation après scoring, éligibilité `> 75`, choix granulaire, adaptation au mandat, diff de validation, copie DOCX dédiée non destructive.
 - **POS-002** : **aucune régression** sur le scoring (pondération immuable préservée) ni sur la mise à jour générique existante (`mise-a-jour-cv` inchangé dans son rôle).
-- **POS-003** : **non destructif et auditable** — copie datée dédiée à l'AO, original/catalogue et JSON d'analyse intacts, diff présenté et validé, piste d'audit sur l'issue.
+- **POS-003** : **non destructif et auditable** — copie datée dédiée à l'AO, original/catalogue et YAML d'analyse intacts, diff présenté et validé, piste d'audit sur l'issue.
 - **POS-004** : cohérent avec la gouvernance existante — gate humaine explicite, délégation A2A par JSON joint, format DOCX depuis gabarit fourni, enracinement `${ROOT_DIRECTORY}`, « ne rien inventer ».
 - **POS-005** : détail opératoire centralisé dans `cv-generation` (source unique), fiches d'agents restant slim — pas de duplication.
 
