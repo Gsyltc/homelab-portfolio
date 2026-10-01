@@ -9,6 +9,26 @@ ce fichier en donne la lecture chronologique côté produit.
 ## [Non publié]
 
 ### Changed
+- **Responsabilités, réalisations et biens livrables par expérience dans les données CV — `matching-cv-ao`**
+  (réf. EXPE-95 / EXPE-94, décision [ADR-0037](decisions/0037-responsabilites-realisations-livrables-par-experience-cv.md) ;
+  évolution **documentaire**, invariants et poids de scoring préservés). La rubrique source
+  **« Responsabilités, réalisations et biens livrables »** des CV était partiellement perdue à l'extraction :
+  seul `responsabilites` existait au niveau `experience[].projets[]` (réalisations et biens livrables sans
+  emplacement). **Sur arbitrage humain au gate (multica.gaston, Modify)** — « responsabilités, réalisations
+  et livrables sont un seul et même champ (tableau) ; ils sont sous l'`experience` et non le `projet` » —
+  ajout d'**un champ liste unique** **`responsabilites_realisations_livrables: []`** **au niveau de
+  l'expérience** (`experience[]`), regroupant les trois axes de la rubrique source (une entrée par bullet).
+  Les projets (`experience[].projets[]`) ne portent **plus** de responsabilités/réalisations/livrables
+  (champ `responsabilites` du projet retiré et absorbé dans le champ unique de l'expérience ; `projets[]`
+  réduit à `nom`/`date_debut`/`date_fin`). **Schéma source-unique** mis à jour dans `cv-analyse` (bloc YAML
+  d'exemple, § Champs obligatoires et règles, contenu de la fiche Markdown) ; propagé au stage
+  `extraction-cv` (consigne d'extraction du champ unique au Step 1, contrôle du livrable au Step 3) et à la
+  compétence `cv-generation` (opération « Mise à jour d'expérience » + section **« Responsabilités,
+  réalisations et biens livrables » par mandat** du CV livrable DOCX/Markdown, avec garde-fou de cohérence
+  des gabarits `gabarits/cv/` : si aucun emplacement adapté, signalement humain, aucune mise en page
+  inventée). **Garde-fou « ne rien inventer » reconduit** : rubrique absente ⇒ `[]` + mention humaine si
+  pertinent, jamais fabriqué ; pas de scission ni de déduction d'axe non écrit. **Mêmes règles de validité
+  YAML** (ADR-0034 / ADR-0036), aucune règle nouvelle ; bloc de schéma YAML parsé sans erreur.
 - **Format exclusivement YAML pour tous les artefacts de données — `matching-cv-ao`**
   (réf. EXPE-85, décision [ADR-0036](decisions/0036-format-yaml-exclusif-workflow-matching.md),
   qui **lève la frontière** laissée par [ADR-0033](decisions/0033-format-yaml-compact-message-a2a.md) et
