@@ -9,6 +9,36 @@ ce fichier en donne la lecture chronologique côté produit.
 ## [Non publié]
 
 ### Changed
+- **Nommage daté unifié des artefacts CV + archivage de la dernière analyse seule — `matching-cv-ao`**
+  (réf. EXPE-88, décision [ADR-0035](decisions/0035-nommage-date-unifie-archivage-derniere-analyse-cv.md),
+  qui **prolonge** [ADR-0034](decisions/0034-format-yaml-donnees-cv.md) ; évolution **documentaire**, invariants
+  et poids de scoring préservés). **(1) Nommage daté unifié `<YYYY-mm-dd>-<nom>`** aligné sur le runtime, pour
+  les **deux** artefacts d'analyse et le CV livrable : fiche Markdown `<AAAA-MM-JJ>-<nom>-<prenom>.md` →
+  **`<YYYY-mm-dd>-<nom>.md`**, données YAML `<nom>-<prenom>-<AAAA-MM-JJ>.yaml` → **`<YYYY-mm-dd>-<nom>.yaml`**,
+  CV livrable DOCX `<nom>-<prenom>-<type-gabarit>-<AAAA-MM-JJ>.docx` → **`<YYYY-mm-dd>-<nom>-<type-gabarit>.docx`**,
+  CV livrable Markdown `<nom>-<prenom>-cv-<AAAA-MM-JJ>.md` → **`<YYYY-mm-dd>-<nom>-cv.md`**. Préfixe `<YYYY-mm-dd>`
+  = date du jour (ISO) ; `<nom>` = slug minuscule cohérent avec le segment `<nom-prenom>` du répertoire ; champs
+  `analyse_markdown` / `analyse_yaml` **conservés**. **(2) Seule la dernière analyse à la racine de `cv/`** : avant
+  d'écrire la nouvelle analyse, **toutes** les versions antérieures des **deux** artefacts (YAML **et** Markdown)
+  sont déplacées dans `cv/archives/` ; la racine ne contient qu'**un seul couple** `<YYYY-mm-dd>-<nom>.{yaml,md}`
+  (fin du tri par date/mtime). Remplace la règle « YAML jamais écrasé, toutes versions à la racine » (historique
+  conservé dans `archives/`). **(3) Conservation explicite des deux formats d'analyse** actée : **YAML**
+  (données reparsables par le Matcher / `cv-generation` / sensors, cf. ADR-0034) **et Markdown** (fiche d'analyse
+  humaine) — **aucune suppression de la fiche Markdown**. Justification par **analyse de tokens** (`tiktoken`
+  cl100k + o200k, 9 CV, information identique, round-trip PyYAML) : JSON 67 428/64 912 ; YAML 57 183/54 611
+  (−15 à −16 %) ; Markdown 38 963/36 331 (−42 à −44 %) — le Markdown est le moins coûteux mais **non reparsable**,
+  le YAML reste le format des données. **Source unique** dans la compétence `cv-analyse` (structure `cv/`,
+  § Analyse versionnée Markdown, § Versionnage YAML, règle de sélection de la source, champs obligatoires,
+  exemple YAML) ; reflété dans `analyse/extraction-cv.md` (outputs, Step 1 archivage des deux, Step 3 contrôle),
+  `initialisation/chargement-cv.md` (inventaire racine + `archives/`), `matching/croisement-profils.md`,
+  `cloture/mise-a-jour-cv.md`, `common/conductor.md`, `scopes/format-cv.md`, `matching-cv-ao/README.md`,
+  les compétences `cv-generation` et `matching-scoring`, et `docs/guide-utilisation-workflow-matching.md`.
+  Résidus pré-ADR-0034 corrigés au passage (`conductor.md` : `analyse_json` → `analyse_yaml` ; `mise-a-jour-cv.md`
+  : « JSON d'analyse versionné » → YAML du jour). **Hors périmètre** (inchangé) : format de sérialisation (données
+  CV YAML / autres artefacts JSON, cf. ADR-0034), champs du schéma, poids du scoring ([ADR-0032](decisions/0032-refonte-ponderation-scoring-matching.md)),
+  format de date **valeur** `AAAA-MM-JJ` des champs ISO (distinct du préfixe de nommage). La **migration /
+  normalisation des fichiers runtime existants** relève des données de runtime, **hors de ce dépôt** (cf.
+  ADR-0034 NEG-002).
 - **Format des données CV : JSON → YAML — `matching-cv-ao`** (réf. EXPE-81, décision
   [ADR-0034](decisions/0034-format-yaml-donnees-cv.md) ; évolution **documentaire**, invariants et poids de
   scoring préservés). Les **données CV** (profils `cv-profils`, verdict d'éligibilité `cv-eligibilite`, et le

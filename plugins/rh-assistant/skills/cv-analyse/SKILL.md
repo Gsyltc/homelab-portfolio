@@ -23,7 +23,7 @@ Dans cet ordre :
 
 1. **CV PDF/DOCX en pièce jointe de l'issue** → extraire les données de ce fichier (nouvelle analyse) : fiche Markdown du jour + YAML versionné, journaliser le nom de la pièce jointe, puis supprimer la copie de travail. La pièce jointe **prime toujours** : c'est une nouvelle version.
 2. **Analyse nécessitant un CV, aucune pièce jointe** → utiliser la **dernière version déjà extraite** :
-   - flux A2A → **dernière version YAML** (`<nom>-<prenom>-<AAAA-MM-JJ>.yaml`) ;
+   - flux A2A → **dernière version YAML** (`<YYYY-mm-dd>-<nom>.yaml`, seul YAML à la racine de `cv/`) ;
    - fichier à télécharger pour l'humain → **fiche d'analyse Markdown** courante (du jour).
    - > **Contrôle de fraîcheur du cache réutilisé (OBLIGATOIRE).** Le YAML réutilisé est un **cache** : avant de le retenir pour le matching, contrôler l'**âge de l'analyse** via `date_derniere_modification` (= date de la dernière extraction). Écart > **seuil de péremption de l'analyse** (`SEUIL_PEREMPTION_ANALYSE`, **12 mois** par défaut) entre la date du jour et `date_derniere_modification` ⇒ classer le collaborateur **`a_verifier`** (axe `fraicheur_cv`) **+ mention humaine** « analyse ancienne (dernière extraction le `<AAAA-MM-JJ>`) — CV toujours à jour ? Fournir un CV récent en pièce jointe si nécessaire ». **Ne jamais scorer silencieusement** une analyse périmée ni la « rafraîchir » soi-même (aucune nouvelle extraction sans pièce jointe fournie). Le cache reste utilisable en attendant la réponse humaine, mais le verdict d'éligibilité porte l'alerte. Après réponse humaine confirmant que le CV est à jour, le collaborateur repasse `possible` (le cache est validé) ; sinon l'humain fournit un CV récent (retour au cas 1).
 3. **Ni pièce jointe ni analyse antérieure** → CV **manquant** : le signaler (pas de matching possible pour ce collaborateur).
@@ -36,17 +36,21 @@ Les CV sources ne sont **pas stockés**. `cv/` ne contient que les livrables d'a
 
 ```
 ${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/
-├── archives/                                     # anciennes fiches Markdown d'analyse
-├── <AAAA-MM-JJ>-<nom>-<prenom>.md                # dernière analyse Markdown (courante, mémoire)
-├── <nom>-<prenom>-<AAAA-MM-JJ>.yaml              # données CV YAML versionnées (mémoire)
-└── <nom>-<prenom>-<type-gabarit>-<AAAA-MM-JJ>.docx # CV livrable (DOCX par défaut ; Markdown …-cv-<AAAA-MM-JJ>.md sur demande) — produit par cv-generation
+├── archives/                                     # anciennes analyses (fiches Markdown ET YAML des versions antérieures)
+├── <YYYY-mm-dd>-<nom>.md                         # dernière analyse Markdown (courante, mémoire — seule à la racine)
+├── <YYYY-mm-dd>-<nom>.yaml                        # dernières données CV YAML (courantes, mémoire — seul YAML à la racine)
+└── <YYYY-mm-dd>-<nom>-<type-gabarit>.docx         # CV livrable (DOCX par défaut ; Markdown <YYYY-mm-dd>-<nom>-cv.md sur demande) — produit par cv-generation
 ```
+
+> **Nommage daté unifié `<YYYY-mm-dd>-<nom>`** : les deux artefacts d'analyse (fiche Markdown et données YAML) et le CV livrable partagent le même **préfixe daté `<YYYY-mm-dd>`** (toujours la **date du jour** ISO, cohérente avec `date_derniere_modification`) suivi du **slug `<nom>`** (minuscule, cohérent avec le segment `<nom-prenom>` du répertoire). Fiche d'analyse : `<YYYY-mm-dd>-<nom>.md` ; données CV : `<YYYY-mm-dd>-<nom>.yaml` ; CV livrable : `<YYYY-mm-dd>-<nom>-<type-gabarit>.docx` (ou `<YYYY-mm-dd>-<nom>-cv.md`).
+
+> **Seule la dernière analyse à la racine (couple YAML + Markdown)** : la racine de `cv/` ne contient qu'**un seul couple** `<YYYY-mm-dd>-<nom>.{yaml,md}` — la dernière analyse. **Avant** d'écrire une nouvelle analyse, **toutes** les versions antérieures des **deux** artefacts (YAML **et** Markdown) sont **déplacées dans `archives/`**. L'historique est **conservé** dans `archives/` ; la « dernière version » est donc **triviale** (le seul couple à la racine), sans règle de tri par date/mtime.
 
 Les **gabarits DOCX fournis** (CV long / CV court / format client) vivent dans `${ROOT_DIRECTORY}/gabarits/cv/` — voir la compétence `cv-generation`. Le format **par défaut du CV livrable est le DOCX** ; le **Markdown** n'est produit que **sur demande explicite de l'humain**.
 
 - **Sources (PDF, DOCX)** : **non stockés**. Fournis en pièces jointes de l'issue, récupérés via `multica attachment`, puis copie de travail **supprimée**.
-- **`archives/`** : anciennes fiches d'analyse Markdown (déplacées à chaque nouvelle analyse).
-- **Racine de `cv/`** : la fiche Markdown courante (du jour), les **données CV YAML versionnées** (**mémoire persistante**) et les **CV livrables** (DOCX produits depuis les gabarits ; Markdown sur demande explicite).
+- **`archives/`** : anciennes analyses des deux formats — fiches Markdown **et** YAML des versions antérieures, déplacés à chaque nouvelle analyse.
+- **Racine de `cv/`** : la **dernière** analyse uniquement — un seul couple `<YYYY-mm-dd>-<nom>.md` (fiche Markdown courante) + `<YYYY-mm-dd>-<nom>.yaml` (**données CV courantes**, mémoire persistante) — et les **CV livrables** (DOCX produits depuis les gabarits ; Markdown sur demande explicite).
 
 ## Traitement des CV sources
 
@@ -57,21 +61,22 @@ Les **gabarits DOCX fournis** (CV long / CV court / format client) vivent dans `
 
 ## Analyse versionnée (Markdown)
 
-Fichier à la **racine de `cv/`**, versionné par la **date du jour** : `<AAAA-MM-JJ>-<nom>-<prenom>.md`.
+Fichier à la **racine de `cv/`**, nommé par le **préfixe daté du jour** : `<YYYY-mm-dd>-<nom>.md`.
 
-- Préfixe `<AAAA-MM-JJ>` = **toujours la date du jour** de l'analyse (ISO). `<nom>`/`<prenom>` en minuscules, cohérents avec le répertoire. Même jour → écrase ; autre jour → nouveau fichier.
-- **Archivage** : avant d'écrire la fiche du jour, déplacer toute fiche antérieure de la racine vers `archives/`.
+- Préfixe `<YYYY-mm-dd>` = **toujours la date du jour** de l'analyse (ISO). `<nom>` = slug minuscule cohérent avec le segment `<nom-prenom>` du répertoire. Même jour → écrase le fichier du jour ; autre jour → nouvelle fiche (la précédente est archivée).
+- **Archivage (seule la dernière à la racine)** : avant d'écrire la fiche du jour, déplacer **toute** fiche d'analyse Markdown antérieure présente à la racine vers `archives/`. À la racine ne subsiste que la fiche courante.
 - `date_derniere_modification` reportée = **toujours la date du jour**, jamais la date du fichier source.
 - Contenu (Markdown lisible, aucun secret) : CV source traité (nom, journalisé avant suppression), compétences avec mois d'expérience + dernière utilisation, expérience (avec `date_debut`/`date_fin`, méthodologies et technologies mobilisées par mission, et le **détail des projets** de chaque expérience — un ou plusieurs projets avec `nom`, `date_debut`/`date_fin` et `responsabilites`), **grilles d'expérience par technologie et par méthodologie** (mois d'XP calendaires + dernière utilisation, issus des agrégats collaborateur), **études** (une ou plusieurs, chacune avec niveau, formation, établissement, année d'obtention), **certifications** (liste distincte des études — chacune avec intitulé, organisme, année, expiration éventuelle), équivalence MIFI (état, étude concernée, `niveau_equivalent_qc`, `reference_mifi`, commentaire — signaler les `a_verifier` en attente humaine), type de collaborateur (alithya / recrutement / offre conditionnelle / non disponible — signaler un type non déterminé en attente humaine), disponibilité (date + taux %), localisation (ville, région/pays — signaler ville manquante en attente humaine), langues.
 - Ce fichier est un **livrable humain** : Markdown uniquement, aucun secret.
 
 ## Versionnage YAML
 
-Fichier à la racine de `cv/` : `<nom>-<prenom>-<AAAA-MM-JJ>.yaml`. **Jamais écrasé** (historique conservé).
+Fichier à la racine de `cv/` : `<YYYY-mm-dd>-<nom>.yaml`. **Seule la dernière analyse** reste à la racine (couple YAML + Markdown) ; l'historique est conservé dans `archives/`.
 
-- Même jour → met à jour le fichier du jour ; autre jour → nouveau fichier.
-- **Dernière version** = date encodée dans le nom la plus récente ; à défaut (dates égales), mtime la plus récente. **Seule la dernière version** est croisée avec un AO ; les versions antérieures ne le sont **jamais**.
-- **Journaliser** sur l'issue le fichier YAML retenu (nom + date) et la liste des versions écartées (piste d'audit).
+- Préfixe `<YYYY-mm-dd>` = **toujours la date du jour** de l'analyse (ISO) ; `<nom>` = slug minuscule cohérent avec le répertoire. Même jour → met à jour le fichier du jour ; autre jour → nouveau fichier (le précédent est archivé).
+- **Archivage (seul le YAML courant à la racine)** : **avant** d'écrire le YAML du jour, déplacer **tout** YAML d'analyse antérieur présent à la racine vers `archives/` (comme pour la fiche Markdown). À la racine ne subsiste qu'**un seul** YAML — la **dernière version**.
+- **Dernière version** = l'**unique** YAML à la racine (règle triviale : plus de tri par date/mtime pour départager plusieurs versions racine). **Seule la dernière version** est croisée avec un AO ; les versions antérieures (dans `archives/`) ne le sont **jamais**.
+- **Journaliser** sur l'issue le fichier YAML retenu (nom + date) et la liste des versions déplacées dans `archives/` (piste d'audit).
 - **CV par défaut (scopes `standard`/`complex`/`express`)** : flux A2A → dernière version YAML ; flux de gate humain → fiche Markdown courante.
 
 ## Format de sortie (YAML — données CV)
@@ -83,8 +88,8 @@ collaborateurs:
   - nom: <prénom nom>
     date_derniere_modification: "<AAAA-MM-JJ — TOUJOURS la date du jour de l'analyse>"  # quoté (date ISO complète)
     source_cv: {fichier: <pièce jointe traitée, journalisée avant suppression>, provenance: issue-attachment, conserve: false}
-    analyse_markdown: <chemin vers <AAAA-MM-JJ>-<nom>-<prenom>.md (racine de cv/)>
-    analyse_yaml: <chemin vers <nom>-<prenom>-<AAAA-MM-JJ>.yaml (racine de cv/)>
+    analyse_markdown: <chemin vers <YYYY-mm-dd>-<nom>.md (racine de cv/)>
+    analyse_yaml: <chemin vers <YYYY-mm-dd>-<nom>.yaml (racine de cv/)>
     competences:
       - {nom: <compétence>, mois_experience: 0, derniere_utilisation: "<AAAA-MM>"}
     experience:
@@ -158,7 +163,7 @@ Le YAML des données CV **doit rester parsable sans ambiguïté de type**. Règl
   - Ces agrégats sont **informatifs** (remplissage de grilles, présentation humaine) et alimentent le Matcher pour la couverture technos/méthodos vis-à-vis de l'AO.
 - **`etudes` (liste)** : un collaborateur porte **une ou plusieurs études** (`etudes[]`). Chaque étude porte `niveau` (diplôme), `formation`, `etablissement` et `annee_obtention` (`AAAA` ou `null`). C'est le **niveau le plus élevé** parmi `etudes[]` — après équivalence MIFI tranchée — qui sert au critère strict Études. **Ne rien inventer** : une étude non mentionnée n'est pas ajoutée ; aucune étude dans le CV ⇒ `etudes: []` + mention humaine si l'AO exige un niveau.
 - **`certifications` (liste, distincte des études)** : les certifications professionnelles (ex. PMP, AWS, Scrum, ITIL) sont portées par une liste **séparée** `certifications[]`, **jamais** mélangées à `etudes[]`. Chaque certification porte `nom`, `organisme`, `annee_obtention` (`AAAA`/`null`), `date_expiration` (`AAAA-MM`/`null`) et `reference` (`null` si absent). Les certifications **ne relèvent pas** de l'équivalence MIFI ni du critère strict Études. Elles jouent **deux rôles** vis-à-vis de l'AO : (1) elles alimentent la couverture **Compétences** côté Matcher ; (2) lorsqu'une certification est marquée **`obligatoire`** dans l'AO (`profils_recherches[].certifications_requises` avec `criticite: "obligatoire"`), elles servent au **critère strict Certifications requises** du filtre d'éligibilité (voir § Sélection d'éligibilité). **Ne rien inventer** : aucune certification ⇒ `certifications: []` ; une certification **expirée** (`date_expiration` dépassée à la date du jour) n'est **pas** considérée comme détenue pour le critère strict.
-- **`date_derniere_modification` / `source_cv` / `analyse_yaml`** : `date_derniere_modification` = toujours la date du jour. `source_cv` documente la pièce jointe (`provenance: "issue-attachment"`, `conserve: false`) — seule trace de l'entrée supprimée. `analyse_yaml` pointe vers le fichier YAML versionné (`<nom>-<prenom>-<AAAA-MM-JJ>.yaml`) ; seule la dernière version est croisée avec un AO.
+- **`date_derniere_modification` / `source_cv` / `analyse_yaml`** : `date_derniere_modification` = toujours la date du jour. `source_cv` documente la pièce jointe (`provenance: "issue-attachment"`, `conserve: false`) — seule trace de l'entrée supprimée. `analyse_yaml` pointe vers le fichier YAML courant (`<YYYY-mm-dd>-<nom>.yaml`, seul YAML à la racine) ; seule la dernière version est croisée avec un AO.
 - **`type_collaborateur`** (obligatoire — qualifie la disponibilité) : **statut du collaborateur** vis-à-vis de la firme, qui **conditionne sa disponibilité** pour le matching. Quatre valeurs (`enum`), mutuellement exclusives :
   - `alithya` — **collaborateur interne Alithya** (salarié en poste). **Disponible** pour le matching selon sa `disponibilite` (`date_disponibilite` + `taux_utilisation`).
   - `recrutement` — **profil en cours de recrutement** (candidat non encore embauché). **Disponible conditionnellement** à l'embauche ; à présenter à l'humain comme tel.

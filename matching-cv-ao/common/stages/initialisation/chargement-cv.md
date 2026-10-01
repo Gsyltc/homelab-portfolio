@@ -31,7 +31,7 @@ Avant tout scan ou toute écriture, appliquer la **procédure d'enracinement `${
 
 ### Step 1 — Recenser les sources et les analyses existantes
 - **Sources à traiter** : lister les **pièces jointes de l'issue** (PDF, DOCX) fournies pour analyse (via `multica attachment --help` pour la récupération ; ne jamais ouvrir une URL de ressource Multica directement).
-- **Analyses existantes** : scanner `${ROOT_DIRECTORY}/collaborateurs/` pour identifier, par collaborateur disposant d'un répertoire `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/`, les analyses présentes (YAML versionnés `<nom>-<prenom>-<AAAA-MM-JJ>.yaml` à la racine de ce répertoire `cv/`).
+- **Analyses existantes** : scanner `${ROOT_DIRECTORY}/collaborateurs/` pour identifier, par collaborateur disposant d'un répertoire `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/`, les analyses présentes : à la **racine** de ce répertoire `cv/`, le **couple courant** `<YYYY-mm-dd>-<nom>.{yaml,md}` (dernière analyse — un seul YAML et une seule fiche Markdown) ; dans `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/archives/`, les versions antérieures des deux artefacts (historique conservé). Seul le YAML courant à la racine sert au matching.
 
 ### Step 2 — Vérification de complétude (règle de sélection de la source CV)
 Déterminer l'état par collaborateur concerné, selon la **règle de sélection de la source CV** (voir l'agent `Gestionnaire CV`) :
