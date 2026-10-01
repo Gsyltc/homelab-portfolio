@@ -74,7 +74,7 @@ Le coordinateur **ne fusionne jamais** les profils en un « tout ou rien », et 
 
 | Fonction | Rôle dans le workflow |
 | --- | --- |
-| **Coordinateur Matching** | Orchestre le flux, délégué, contrôle, sollicite vos validations, traduit les résultats JSON en Markdown |
+| **Coordinateur Matching** | Orchestre le flux, délégué, contrôle, sollicite vos validations, traduit les résultats YAML en Markdown |
 | **Analyste RFP** | Analyse l'AO (PDF), extrait exigences et profils recherchés |
 | **Gestionnaire CV** | Lit et met à jour les CV des collaborateurs |
 | **Matcher Profils** | Croise profils ↔ exigences, calcule le **score pondéré**, classe les profils |
@@ -93,7 +93,7 @@ La délégation se fait par **mention** sur l'issue ; l'agent sollicité répond
 | Dernière analyse à la racine : couple `<YYYY-mm-dd>-<nom>.{yaml,md}` (fiche Markdown courante + YAML courant, mémoire) | Racine de `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/` |
 | **CV livrable** (DOCX par défaut depuis un gabarit ; Markdown sur demande explicite) | `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv/<YYYY-mm-dd>-<nom>-<type-gabarit>.docx` (ou `<YYYY-mm-dd>-<nom>-cv.md`) |
 | Résumés AO | `${ROOT_DIRECTORY}/ao/<client>/<titre-ao>/` |
-| **Contextes clients (sociétés)** — 1 fichier par client : contexte de la société + mandats réalisés par la firme | `${ROOT_DIRECTORY}/clients/<nom-client>.json` — **alimenté automatiquement** par le Gestionnaire CV à partir des CV longs (complété/enrichi, jamais écrasé) ; utilisé par l'Analyste RFP pour l'expertise de firme |
+| **Contextes clients (sociétés)** — 1 fichier par client : contexte de la société + mandats réalisés par la firme | `${ROOT_DIRECTORY}/clients/<nom-client>.yaml` — **alimenté automatiquement** par le Gestionnaire CV à partir des CV longs (complété/enrichi, jamais écrasé) ; utilisé par l'Analyste RFP pour l'expertise de firme |
 | Grille d'évaluation | Fournie par l'humain — **jamais inventée** |
 
 Ces chemins sont créés **si absents**, toujours au bon endroit (client = nom du client, titre-ao = slug du titre). **Tous les chemins relatifs sont enracinés sur `${ROOT_DIRECTORY}`** (le répertoire de travail du workspace).
@@ -116,7 +116,7 @@ Ces chemins sont créés **si absents**, toujours au bon endroit (client = nom d
 
 > **Contextes clients & expertise de firme** : lorsqu'un **CV long** décrit le **contexte des sociétés
 > clientes** et les **mandats** réalisés, le Gestionnaire CV capitalise ces informations dans
-> `${ROOT_DIRECTORY}/clients/<nom-client>.json` (un fichier par client : contexte de la société + mandats —
+> `${ROOT_DIRECTORY}/clients/<nom-client>.yaml` (un fichier par client : contexte de la société + mandats —
 > collaborateur, rôle, projet, dates, jours-personnes, contexte, tâches, technologies). Le référentiel est
 > **complété/enrichi** au fil des CV, **jamais écrasé**. Lorsqu'un **appel d'offres exige une expertise ou une
 > expérience de firme** (mandats similaires, secteur, technologies), l'Analyste RFP s'appuie sur ce référentiel
@@ -129,7 +129,7 @@ Ces chemins sont créés **si absents**, toujours au bon endroit (client = nom d
 
 ## 8. Communication et principes
 
-- **Agent ↔ Agent** : JSON uniquement.
+- **Agent ↔ Agent** : YAML uniquement.
 - **Agent ↔ Humain** : Markdown uniquement.
 - **Comportement « jamais inventer la grille »** : toute grille d'évaluation est fournie par l'humain à chaque fois. En cas d'absence, **halt-and-ask**.
 - **Piste d'audit** : chaque étape et décision est tracée sur l'issue.

@@ -27,7 +27,7 @@ skeleton: on|off              # optionnel
 
 ## Garde-fous (non désactivables par un scope)
 
-- Validation humaine granulaire, piste d'audit, communication JSON↔Markdown — **aucun scope ne les désactive**.
+- Validation humaine granulaire, piste d'audit, communication YAML↔Markdown — **aucun scope ne les désactive**.
 - Auto-détection = **plancher** : la confirmation humaine peut monter le contrôle, jamais le descendre sans validation tracée.
 
 ## Ordre de désambiguïsation

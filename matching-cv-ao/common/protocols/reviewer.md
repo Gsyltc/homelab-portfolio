@@ -4,7 +4,7 @@ Deux natures de revue coexistent dans le workflow, adaptées au domaine matching
 
 ## 1. Revue de cohérence (Reviewer de cohérence)
 
-Portée : cohérence **exigences AO ↔ profils extraits**, absence de conflits entre critères, complétude / structure / format des livrables JSON.
+Portée : cohérence **exigences AO ↔ profils extraits**, absence de conflits entre critères, complétude / structure / format des livrables YAML.
 
 - **Portée par une fonction « review-only » distincte** : le **Reviewer de cohérence** (si existant dans le workspace), sollicité par mention A2A **par le coordinateur** à réception d'un livrable d'un agent spécialiste.
 - Vérifie : correspondance exigences ↔ profils, absence de critère non tracé, absence de profil orphelin, respect des conventions (format JSON, **communication agent↔agent par fichier YAML joint** — commentaire minimal = mention active + nom de fichier —, présentation agent↔humain **Markdown détaillée aux gates** ; voir `governance-security` « Règle A2A »).
