@@ -40,7 +40,7 @@ Ce fichier est le point d'entrée de la documentation d'architecture et reste st
 
 ## Historique du document
 
-<!-- Mettre à jour cet historique à **chaque** modification de la documentation. La version la plus récente figure en première ligne. -->
+<!-- Mettre à jour cet historique à **chaque** modification de la documentation. La version la plus récente figure en première ligne. La description / motif du changement reste **concise** : une à deux lignes factuelles, sans prose superflue. -->
 
 | **Version** | **Date**   | **Statut** | **Description / Motif du changement** | **Auteurs**                                 | **Approbateur**            |
 | ----------- | ---------- | ---------- | ------------------------------------- | ------------------------------------------- | -------------------------- |
@@ -154,7 +154,7 @@ La documentation d'architecture de solution est découpée en fichiers Markdown 
 ## Liste des images et diagrammes
 
 <!--
-Index des diagrammes de la documentation avec le fichier et la section où ils se trouvent. À maintenir à chaque ajout ou modification d'un diagramme. Les diagrammes sont générés en code (PlantUML, Mermaid, Structurizr, BPMN, C4) et référencés ici.
+Index des diagrammes de la documentation avec le fichier et la section où ils se trouvent. À maintenir à chaque ajout ou modification d'un diagramme. Les diagrammes sont générés en code (PlantUML, Mermaid, Structurizr, BPMN, C4), réutilisent le thème du projet (répertoire `theme/`) lorsqu'il est disponible, et sont référencés ici. Ne pas inscrire de mention de génération d'outil (p. ex. « généré avec … ») dans la documentation.
 -->
 
 | Fichier                        | Section                           | Diagramme                 | Description                       |
