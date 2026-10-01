@@ -88,6 +88,25 @@ ce fichier en donne la lecture chronologique côté produit.
   existants** sous `${ROOT_DIRECTORY}/collaborateurs/` relève des données de runtime, **hors de ce dépôt**.
 
 ### Added
+- **Machine à états du `type_collaborateur` (cycle de vie, transitions strictes) — `matching-cv-ao`**
+  (réf. EXPE-93, déclencheur EXPE-92 ; évolution **documentaire**, invariants et poids de scoring préservés).
+  Formalisation des **transitions** du champ `type_collaborateur` existant (introduit par EXPE-80) en une
+  **machine à états à transitions STRICTES**, ne portant que l'**état courant** (**aucun historique**).
+  Transitions autorisées : `recrutement → offre_conditionnelle`, `recrutement → alithya` (embauche directe),
+  `offre_conditionnelle → alithya`, et depuis **n'importe quel** état `→ non_disponible` (se retire / démission) ;
+  **toute autre transition est interdite** (`non_disponible` sans sortie, pas de retour arrière). Le changement
+  d'état est posé par le **Gestionnaire CV** au stage `extraction-cv` à partir d'une **consigne humaine explicite
+  ou du contexte de l'issue** (**ne rien inventer** ; type non déterminable ⇒ `null` + mention humaine). Une
+  demande de transition **hors graphe** n'est **pas appliquée** : elle est **signalée** à l'humain par le sensor
+  advisory `disponibilite-complete` (nouvelle règle `transition-stricte`), qui tranche. Lors d'une transition vers
+  **`offre_conditionnelle` ou `recrutement`**, disponibilité par défaut **100 % à la date du jour**
+  (`disponibilite.taux_utilisation: 100`, `date_disponibilite` = jour) **sauf avis contraire** de l'humain.
+  **Impact éligibilité inchangé** : seul `non_disponible` écarte (`exclu`, axe `disponibilite`) ; les autres
+  états n'excluent pas. **Source unique** dans la compétence `cv-analyse` (§ Champs obligatoires et règles —
+  nouveau bloc « Machine à états », mots-clés) ; reflété dans `analyse/extraction-cv.md`, le sensor
+  `sensors/disponibilite.md` (règle `transition-stricte`, rapport) et `sensors/README.md`. La **mise à jour de
+  l'état des collaborateurs existants** relève des données de runtime sous `${ROOT_DIRECTORY}/collaborateurs/`,
+  **hors de ce dépôt**.
 - **Type de collaborateur (disponibilité) — `matching-cv-ao`** (réf. EXPE-80 ; évolution **documentaire**,
   invariants et poids de scoring préservés). Ajout d'un champ **obligatoire** `type_collaborateur` à chaque
   profil CV (`cv-profils`), à **4 valeurs** (`enum`) qui **qualifient la disponibilité** : `alithya` (interne,
