@@ -24,13 +24,3 @@ Ces règles reprennent les **invariants non négociables** déjà en vigueur (el
   - **Noms de responsables** : lorsqu'un nom doit être renseigné, indiquer le **nom réel du responsable du projet** tel que défini dans les Arrimages (matrice RACI, colonne « Nom »), jamais un placeholder ni un nom d'agent.
   - _portée_ : workspace · _origine_ : demande workspace multica.gaston (chat) · _ajoutée le_ : 2026-09-10
 
-## Rédaction documentaire
-
-- **RULE-WS-007** — **OBLIGATOIRE.** Aucun document livré ne porte d'information issue de sa génération : il ne contient que ce qui concerne le projet (architecture, décisions, exigences, etc.). Proscrire toute mention de méta-génération — p. ex. « diagramme généré avec … », « document produit par … », notes d'outil, horodatage de génération.
-  - _portée_ : workspace · _origine_ : demande workspace multica.gaston (ORIG-42) · _ajoutée le_ : 2026-10-01
-- **RULE-WS-008** — Les descriptions des versions documentaires (motif du changement dans l'historique du document) sont **concises** et limitées à l'essentiel : une à deux lignes factuelles, sans prose superflue.
-  - _portée_ : workspace · _origine_ : demande workspace multica.gaston (ORIG-42) · _ajoutée le_ : 2026-10-01
-- **RULE-WS-009** — Les diagrammes **réutilisent le thème du projet** (répertoire `theme/`, p. ex. `theme/0000-default-styles.dsl`) **lorsqu'il est disponible**, pour Structurizr, PlantUML et les autres moteurs de rendu. Ne pas réinventer ni approximer un style quand le thème existe.
-  - _portée_ : workspace · _origine_ : demande workspace multica.gaston (ORIG-42) · _ajoutée le_ : 2026-10-01
-- **RULE-WS-010** — Pour toute feuille de route / timeline / roadmap, **si aucune date n'est indiquée**, considérer le début à **J + 7 jours à compter de la date du jour**.
-  - _portée_ : workspace · _origine_ : demande workspace multica.gaston (ORIG-42) · _ajoutée le_ : 2026-10-01

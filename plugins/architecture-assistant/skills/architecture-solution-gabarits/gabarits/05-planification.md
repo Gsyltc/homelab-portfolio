@@ -19,7 +19,7 @@ ordre_presentation: 5
 <!-- Cette section présente la planification du projet : découpage des livrables selon la **Work Breakdown Structure (WBS)**, récapitulatif des efforts, feuille de route et estimation des coûts. Les efforts et coûts sont alignés avec l'estimé de projet (WBS, `REF-01` du `001`), les rôles de l'arrimage RACI (`001`) et les volumétries (`12-volumetries.md`). -->
 
 - **Date de début estimée** : YYYY-MM-DD <!-- À défaut de date fournie, J + 7 jours à compter de la date du jour. -->
-- **Date de fin estimée** : YYYY-MM-DD
+- **Date de fin estimée** : YYYY-MM-DD <!-- Calculer lorsque c'est possible : date de début + durée estimée dérivée de la WBS et du récapitulatif des efforts (en tenant compte du nombre de collaborateurs et du calendrier ouvré). À défaut de données suffisantes, laisser le placeholder et le signaler. -->
 
 ### Planification des tâches
 
