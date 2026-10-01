@@ -199,6 +199,7 @@ Index des tableaux de la documentation, groupé par fichier. **Numérotation glo
 | `05`    | Récapitulatif des efforts                         | 18         | Efforts par rôle (estimation en trois points)     |
 | `05`    | Efforts de développement                          | 19         | Efforts de développement (écart type)             |
 | `05`    | Estimation des coûts                              | 20         | Estimation des coûts du projet                    |
+| `05`    | Analyse CAPEX / OPEX                              | 75         | Analyse CAPEX / OPEX (investissement / exploitation) |
 | `06`    | Liste des diagrammes d'architecture               | 21         | Liste des diagrammes                              |
 | `06`    | Liste des acteurs                                 | 22         | Liste des acteurs                                 |
 | `06`    | Liste des systèmes                                | 23         | Liste des systèmes applicatifs                    |
