@@ -34,7 +34,7 @@ Ce stage **ne s'exécute que si l'humain le demande** (évaluation d'éligibilit
 
 ### Step 2 — Analyse d'éligibilité (Oui / Non / À déterminer)
 
-L'Architecte de solution évalue le projet contre les **critères société** (établissement QC, à but lucratif, ≥ 75 % revenus TI, ≥ 50 % codes SCIAN, intégration IA significative, attestation IQ) et les **critères employés** (≥ 6 employés admissibles à temps plein, ≥ 75 % du temps à l'IA). Conclure :
+L'Architecte de solution évalue le projet contre les **critères société et employés** définis dans la skill `cdae-ai-eligibilite` (source unique — ne pas les répéter ici) et conclut :
 
 - **Oui** — critères applicables satisfaits.
 - **Non** — au moins un critère déterminant non satisfait.
@@ -52,7 +52,7 @@ L'Architecte de solution évalue le projet contre les **critères société** (�
 
 N'estimer **que si les trois conditions** sont réunies : (1) demande explicite de l'humain pour le calcul, (2) la description porte `CDAE-AI: Oui`, (3) toutes les informations de calcul disponibles. Sinon, **indiquer les éléments manquants** à l'humain.
 
-Appliquer la méthode de la skill (30 % des salaires admissibles = 22 % remboursable + 8 % non remboursable ; taux réduit de moitié — 11 % + 4 % — si ≥ 50 % des revenus proviennent de services hors Québec avec lien de dépendance ; plus de plafond salarial ; proratisation des jours travaillés). Consigner l'estimation **avec les informations financières** dans `documentation/05-planification.md`, sous-section « Crédit d'impôt CDAE-IA (estimation) ». Estimation **informative, non contractuelle, sans valeur de conseil fiscal**.
+Appliquer la **méthode de calcul de la skill** `cdae-ai-eligibilite` (taux et proratisation — source unique, ne pas la répéter ici). Consigner l'estimation **avec les informations financières** dans `documentation/05-planification.md`, sous-section « Crédit d'impôt CDAE-IA (estimation) ». Estimation **informative, non contractuelle, sans valeur de conseil fiscal**.
 
 ### Step 5 — Validation granulaire humaine
 
