@@ -54,7 +54,7 @@ flowchart TD
 | --- | --- | --- | --- |
 | **Initialization** | 0 | [`directory-check`](stages/initialization/directory-check.md) · [`git-detection`](stages/initialization/git-detection.md) · [`brownfield-greenfield-detection`](stages/initialization/brownfield-greenfield-detection.md) · [`audit-trail-init`](stages/initialization/audit-trail-init.md) | Non (bootstrap déterministe) |
 | **Ideation** | 1 | [`intent-capture`](stages/ideation/intent-capture.md) · [`feasibility-constraints`](stages/ideation/feasibility-constraints.md) · [`scope-definition`](stages/ideation/scope-definition.md) · [`mockups`](stages/ideation/mockups.md) · [`intent-scope-approval`](stages/ideation/intent-scope-approval.md) | Approbation intention + périmètre (léger) |
-| **Inception** | 2 | [`intake-framing`](stages/inception/intake-framing.md) · [`existing-context-loading`](stages/inception/existing-context-loading.md) · [`requirements-analysis`](stages/inception/requirements-analysis.md) · [`deliverables-breakdown`](stages/inception/deliverables-breakdown.md) · [`design-and-decisions`](stages/inception/design-and-decisions.md) | Validation granulaire humaine |
+| **Inception** | 2 | [`intake-framing`](stages/inception/intake-framing.md) · [`existing-context-loading`](stages/inception/existing-context-loading.md) · [`requirements-analysis`](stages/inception/requirements-analysis.md) · [`cdae-ai-eligibility`](stages/inception/cdae-ai-eligibility.md) *(à la demande)* · [`deliverables-breakdown`](stages/inception/deliverables-breakdown.md) · [`design-and-decisions`](stages/inception/design-and-decisions.md) | Validation granulaire humaine |
 | **Construction** | 3 | [`walking-skeleton`](stages/construction/walking-skeleton.md) · [`detailed-deliverables`](stages/construction/detailed-deliverables.md) · [`security-consistency-check`](stages/construction/security-consistency-check.md) · [`consolidation-handoff`](stages/construction/consolidation-handoff.md) | Validation granulaire humaine |
 | **Operation** | 4 | [`deployment-under-validation`](stages/operation/deployment-under-validation.md) · [`completion-notification`](stages/operation/completion-notification.md) · [`maintenance-support`](stages/operation/maintenance-support.md) | Validation humaine explicite |
 
@@ -121,6 +121,22 @@ Quand un stage soulève une question ouverte ou une contradiction (entre décisi
 ### Tenue du journal d'observations (candidats-règles)
 
 Pendant un stage, chaque correction / rejet ❌ / reformulation 💬 humaine sur un choix est consignée en commentaire sur l'issue comme **candidat-règle** potentiel. Au point de validation, le coordinateur remonte les candidats formulés en règles courtes (couche + portée proposées). **Aucune règle n'est écrite sans validation humaine explicite** ni sans le contrôle de conflit à l'admission ; une règle apprise s'applique au **prochain** workflow, jamais en cours de route. Détail : `core/rules/` et [`protocols/governance-security.md`](protocols/governance-security.md).
+
+---
+
+## Analyse d'éligibilité CDAE-IA (à la demande de l'humain)
+
+Lorsque l'humain le demande, le coordinateur déclenche l'**analyse d'éligibilité au crédit d'impôt CDAE-IA** (Développement des affaires électroniques intégrant l'IA, Québec) et la confie à l'**Architecte de solution** via le stage [`stages/inception/cdae-ai-eligibility.md`](stages/inception/cdae-ai-eligibility.md). Ce stage est **conditionnel** : il ne s'exécute **que sur demande explicite** ; hors demande, il est marqué `N/A`. Les conditions d'éligibilité et la méthode de calcul font autorité dans la skill **`cdae-ai-eligibilite`** (source unique — ne pas les dupliquer).
+
+**Verdict et écriture dans la description du projet.** L'analyse conclut **`Oui` / `Non` / `À déterminer`** :
+
+- **`Oui`** → si la description du projet **ne contient aucune** information `CDAE-AI: Oui / Non`, ajouter **`CDAE-AI: Oui`** dans la description du projet.
+- **`Non`** → si la description du projet **ne contient aucune** information `CDAE-AI: Oui / Non`, ajouter **`CDAE-AI: Non`** dans la description du projet.
+- **`À déterminer`** → il manque des informations : **ne rien écrire**, demander à l'humain les éléments manquants et attendre (garde-fou « ne jamais deviner »).
+
+L'écriture `CDAE-AI` est **idempotente** (ne jamais écraser une valeur existante sans validation humaine) et constitue une **action à impact** soumise à la validation humaine granulaire.
+
+**Estimation du crédit (conditionnelle).** Le calcul n'est produit **que si les trois conditions** sont réunies : (1) **demande explicite** de l'humain, (2) la description porte **`CDAE-AI: Oui`**, (3) **toutes les informations** nécessaires sont disponibles. Sinon, indiquer les éléments manquants à l'humain. L'estimation chiffrée **apparaît avec les informations financières** (OPEX, CAPEX, estimation des coûts) dans `documentation/05-planification.md`, sous-section « Crédit d'impôt CDAE-IA (estimation) ». Elle est **informative, non contractuelle et sans valeur de conseil fiscal**.
 
 ---
 
