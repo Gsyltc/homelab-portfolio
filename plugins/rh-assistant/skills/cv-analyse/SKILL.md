@@ -2,7 +2,7 @@
 name: cv-analyse
 description: >
     Analyse d'un CV source (PDF/DOCX fourni en pièce jointe d'issue) du workflow Matching : extraction structurée vers livrables versionnés (fiche Markdown du jour + YAML des données CV), archivage, traçabilité, équivalence MIFI, localisation, disponibilité, sélection d'éligibilité amont (Études, Localisation et Certifications requises STRICTES/éliminatoires) vis-à-vis d'un AO, et maintenance du référentiel des contextes clients (sociétés) `${ROOT_DIRECTORY}/clients/<nom-client>.json` lorsqu'un CV long en contient (contexte + mandats réalisés — complète/enrichit, jamais d'écrasement aveugle). Charger avant toute extraction de CV ou classement d'éligibilité.
-keywords: [analyse cv, extraction cv, eligibilite, mifi, localisation, disponibilite, type collaborateur, type de collaborateur, alithya, recrutement, offre conditionnelle, non disponible, versionnage cv, format yaml cv, filtre eligibilite, certifications, certification requise, prerequis, contexte client, clients json, mandats, expertise firme, referentiel clients]
+keywords: [analyse cv, extraction cv, eligibilite, mifi, localisation, disponibilite, type collaborateur, type de collaborateur, cycle de vie collaborateur, machine a etats, transition type collaborateur, alithya, recrutement, offre conditionnelle, non disponible, versionnage cv, format yaml cv, filtre eligibilite, certifications, certification requise, prerequis, contexte client, clients json, mandats, expertise firme, referentiel clients]
 ---
 
 # Analyse de CV
@@ -170,7 +170,31 @@ Le YAML des données CV **doit rester parsable sans ambiguïté de type**. Règl
   - `offre_conditionnelle` — **disponibilité conditionnée à l'obtention de l'offre** (le collaborateur ne serait mobilisé que si l'AO est remporté). **Disponible conditionnellement**.
   - `non_disponible` — **collaborateur non disponible** (ne peut pas être positionné sur l'AO, quelle que soit sa `disponibilite`). **Écarté du matching** : l'axe de sélection d'éligibilité classe ce collaborateur **`exclu`** (axe `disponibilite`, `detail` = « type_collaborateur = non_disponible »), sans validation humaine préalable.
   - **Ne rien inventer** : si le type n'est pas déterminable depuis le CV / le contexte de l'issue, **poser une mention humaine** demandant le type de collaborateur et laisser le champ à `null` en attendant ; après réponse humaine, renseigner la valeur. Présence contrôlée par le sensor advisory `disponibilite-complete` (voir ce sensor). Le type `alithya`/`recrutement`/`offre_conditionnelle` **n'exclut jamais** de lui-même : il qualifie la disponibilité présentée à l'humain ; seul `non_disponible` écarte le collaborateur.
-- **`disponibilite`** (obligatoire) : `date_disponibilite` (ISO) + `taux_utilisation` (0–100). Un CV sans disponibilité complète est incomplet. Présence contrôlée par le sensor advisory `disponibilite-complete` à la frontière Analyse → Matching. Le champ `type_collaborateur` **qualifie** cette disponibilité (voir ci-dessus) : un collaborateur `non_disponible` est écarté quelle que soit sa `disponibilite`.
+  - **Machine à états (transitions STRICTES).** `type_collaborateur` est le **cycle de vie** du collaborateur vis-à-vis de la firme ; seul l'**état courant** est porté par le YAML (**aucun historique** conservé). Les transitions autorisées sont **limitées au graphe ci-dessous** — toute autre transition est **interdite** (ex. `non_disponible` n'a aucune sortie ; pas de retour `offre_conditionnelle → recrutement` ni `alithya → offre_conditionnelle`) :
+
+    ```mermaid
+    stateDiagram-v2
+        [*] --> recrutement
+        recrutement --> offre_conditionnelle: accepte l'offre conditionnelle
+        offre_conditionnelle --> alithya: embauché (effectif)
+        recrutement --> alithya: embauché (effectif)
+        recrutement --> non_disponible: se retire
+        offre_conditionnelle --> non_disponible: se retire
+        alithya --> non_disponible: démission
+    ```
+
+    | Depuis | Vers | Déclencheur |
+    | --- | --- | --- |
+    | *(initial)* | `recrutement` | candidat entré en processus de recrutement |
+    | `recrutement` | `offre_conditionnelle` | accepte l'offre conditionnelle |
+    | `recrutement` | `alithya` | embauche effective (directe) |
+    | `offre_conditionnelle` | `alithya` | embauche effective |
+    | `recrutement` / `offre_conditionnelle` / `alithya` | `non_disponible` | se retire / démission |
+
+    - **Déclencheur / qui modifie** : la valeur est posée/mise à jour par le **Gestionnaire CV** au stage `extraction-cv`, à partir du **contexte de l'issue ou d'une consigne humaine explicite** (ex. « a accepté l'offre conditionnelle », « a été embauché », « a démissionné »). **Ne rien inventer** : aucun changement d'état sans élément dans le CV / l'issue ; type non déterminable ⇒ `null` + mention humaine.
+    - **Transition hors graphe** : une demande de transition non prévue par le graphe (ex. `non_disponible → *`, saut arrière) n'est **pas appliquée silencieusement** — elle est **signalée** à l'humain (mention + rapport du sensor advisory `disponibilite-complete`), qui tranche. **Ne jamais** réécrire un état vers une cible interdite de sa propre initiative.
+    - **Disponibilité par défaut lors d'une transition vers `offre_conditionnelle` ou `recrutement`** : **sauf avis contraire de l'humain**, considérer le collaborateur **disponible à 100 %** au moment de la modification — renseigner `disponibilite.taux_utilisation: 100` et `disponibilite.date_disponibilite` = **date du jour** de la transition. Si l'humain fournit une disponibilité différente, elle prime. Les transitions vers `alithya` ou `non_disponible` **ne forcent pas** de disponibilité par défaut (`alithya` suit sa `disponibilite` réelle ; `non_disponible` est écarté quelle que soit sa `disponibilite`).
+- **`disponibilite`** (obligatoire) : `date_disponibilite` (ISO) + `taux_utilisation` (0–100). Un CV sans disponibilité complète est incomplet. Présence contrôlée par le sensor advisory `disponibilite-complete` à la frontière Analyse → Matching. Le champ `type_collaborateur` **qualifie** cette disponibilité (voir ci-dessus) : un collaborateur `non_disponible` est écarté quelle que soit sa `disponibilite`. Lors d'une **transition** vers `offre_conditionnelle`/`recrutement`, la disponibilité par défaut est **100 % à la date du jour** sauf avis contraire de l'humain (voir § Machine à états ci-dessus).
 - **`localisation`** (obligatoire — ville) : `ville` requise, `region`/`pays` optionnels. **Si absente du CV, ne rien inventer** : poser une **mention humaine** demandant la ville, laisser `null` en attendant ; après réponse → renseigner `ville`, `source: "humain"`. Base du critère de proximité (70 km) pour AO `sur_site`/`hybride`. Présence contrôlée par le sensor advisory `localisation-complete`.
 - **`mifi`** (équivalence MIFI — contexte gouvernemental Québec) — 4 états d'`equivalence_requise` :
   - `non_requise` — diplôme canadien : `niveau_equivalent_qc` = niveau tel quel.
