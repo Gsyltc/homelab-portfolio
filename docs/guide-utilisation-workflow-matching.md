@@ -171,6 +171,22 @@ Le statut MIFI de chaque collaborateur apparaît dans la **fiche d'analyse Markd
 
 ---
 
+## 9 ter. Type de collaborateur (dont les pigistes) et rémunération
+
+Chaque collaborateur porte un **type** qui **qualifie sa disponibilité** et apparaît dans une **colonne « Type »** du tableau de résultats du matching :
+
+- **Interne (`alithya`)** — salarié en poste, disponible selon sa disponibilité réelle. Rémunéré par un **salaire annuel** ($CAD/an).
+- **Recrutement** — candidat en cours de recrutement, disponible conditionnellement à l'embauche.
+- **Offre conditionnelle** — mobilisable seulement si l'AO est remporté. Rémunéré par un **salaire annuel** ($CAD/an).
+- **Pigiste** — **travailleur autonome / freelance**, marqué comme tel **lorsque son profil est validé au recrutement**. Un pigiste est **toujours considéré disponible à 100 %** (taux d'utilisation = 0). Rémunéré à un **taux horaire** (**$CAD/heure**), jamais à l'année.
+- **Non disponible** — ne peut pas être positionné : **exclu** du matching.
+
+**Rémunération.** Selon le type, le collaborateur porte soit un **taux horaire** ($CAD/h, pour un **pigiste**), soit un **salaire annuel** ($CAD/an, pour un **interne** ou une **offre conditionnelle**). Rien n'est inventé : si le montant n'est pas connu, **on vous le demande** sur l'issue.
+
+Au moment du matching, le **tableau de synthèse** (et, pour un AO multi-profils, le tableau de rappel des scores globaux) comporte une **colonne « Type »** indiquant pour chaque candidat s'il est **pigiste / interne / offre conditionnelle**. Cette colonne est **informative** : elle n'entre pas dans le calcul du score.
+
+---
+
 ## 10. En résumé — le parcours type
 
 1. Vous **créez l'issue**, **attachez le PDF d'AO** et **mentionnez le Coordinateur Matching**.

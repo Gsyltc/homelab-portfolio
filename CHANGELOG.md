@@ -8,6 +8,35 @@ ce fichier en donne la lecture chronologique côté produit.
 
 ## [Non publié]
 
+### Added
+- **Type de collaborateur `pigiste` (freelance) + rémunération (taux horaire / salaire annuel) — `matching-cv-ao`**
+  (réf. EXPE-104 ; évolution **documentaire**, invariants et poids de scoring préservés). Ajout d'une **5ᵉ valeur**
+  `pigiste` à l'`enum` `type_collaborateur` (travailleur autonome / freelance), avec une nouvelle **transition**
+  `recrutement → pigiste` (profil **validé comme pigiste au recrutement**) et la sortie `pigiste → non_disponible`
+  dans la **machine à états à transitions STRICTES**. Un **pigiste est toujours considéré disponible à 100 %** :
+  `disponibilite.taux_utilisation` est **ramené à `0`** (nouvelle règle de sensor `pigiste-utilisation-nulle`,
+  advisory). Introduction d'un objet **`remuneration`** **conditionné par le type** : un **pigiste** porte un
+  **taux horaire** (`type: taux_horaire`, `taux_horaire_cad`, **$CAD/heure**) ; un **`alithya`** ou une
+  **`offre_conditionnelle`** porte un **salaire annuel** (`type: salaire_annuel`, `salaire_annuel_cad`, **$CAD/an**) ;
+  `recrutement`/`non_disponible` restent `type: null` tant que l'humain n'a pas tranché. **Ne rien inventer** :
+  type / montant non connus ⇒ `null` + mention humaine. Au **matching**, `type_collaborateur` et `remuneration`
+  sont **repris tels quels** (passthrough, **non scorés**) et alimentent une nouvelle **colonne « Type »**
+  (pigiste / interne / offre conditionnelle) du **tableau de résultats** présenté à l'humain (synthèse +
+  tableau de rappel des scores globaux). **Scoring IMMUABLE inchangé** (45/30/10/5/5/5) : un pigiste à
+  `taux_utilisation = 0` obtient simplement la composante d'utilisation maximale du critère Disponibilité (5 %),
+  sans traitement particulier. **Source unique** dans la compétence `cv-analyse` (`enum`, § Machine à états —
+  diagramme + table de transitions, objet `remuneration`, règle « pigiste ⇒ `taux_utilisation = 0` », mots-clés) ;
+  propagé au stage `analyse/extraction-cv.md` (consigne d'extraction `type_collaborateur`/`remuneration`, axe
+  d'éligibilité `disponibilite`, contrôle du livrable, import du sensor), aux sensors `sensors/disponibilite.md`
+  (règles `type-collaborateur-present`, `transition-stricte`, nouvelle `pigiste-utilisation-nulle`, rapport) et
+  `sensors/README.md`, à la compétence `matching-scoring` (schéma `resultats` : passthrough `type_collaborateur`/
+  `remuneration`, note Disponibilité), aux stages `matching/croisement-profils.md` et `matching/classement-profils.md`
+  (propagation vers `matching-resultats` → `classement-final`) et `validation/presentation-resultats.md`
+  (colonne « Type » dans la synthèse et le tableau de rappel), à `matching-cv-ao/README.md` (nouvelle section
+  « Type de collaborateur & rémunération ») et au guide `docs/guide-utilisation-workflow-matching.md` (section
+  « 9 ter »). La **mise à jour de l'état et de la rémunération des collaborateurs existants** relève des données
+  de runtime sous `${ROOT_DIRECTORY}/collaborateurs/`, **hors de ce dépôt**.
+
 ### Changed
 - **Responsabilités, réalisations et biens livrables par expérience dans les données CV — `matching-cv-ao`**
   (réf. EXPE-95 / EXPE-94, décision [ADR-0037](decisions/0037-responsabilites-realisations-livrables-par-experience-cv.md) ;
