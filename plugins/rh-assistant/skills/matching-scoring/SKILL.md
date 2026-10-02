@@ -17,7 +17,7 @@ Le Matcher **ne score que les collaborateurs retenus** par le filtre d'éligibil
 
 - Les **exigences AO** (YAML produit par `parse-ao` : `exigences`, `profils_recherches`, `ao.client_gouvernemental`, `ao.equivalence_diplomes`, `ao.localisation_travail`), **y compris les technologies et méthodologies exigées** par l'AO (portées par `exigences` / `profils_recherches`).
 - La **liste des retenus** transmise par le Coordinateur (`eligibilite.collaborateurs_possibles`) — pour chaque retenu, une référence `analyse_yaml`.
-- Pour chaque retenu, **lire soi-même** la **dernière version YAML** référencée par `analyse_yaml` (`cv-profils`, `<YYYY-mm-dd>-<nom>.yaml`, seul YAML à la racine de `cv/`) — les CV ne sont **pas** transmis par le Gestionnaire CV. En plus des `competences`, lire les **agrégats collaborateur `technologies` et `methodologies`** (`{ nom, mois_experience, derniere_utilisation }`, mois d'XP en union calendaire) pour évaluer la couverture des technos/méthodos exigées par l'AO, ainsi que les **certifications détenues** (`certifications[]`) et les **langues** (`langues[]`) pour alimenter les critères **Certifications (5 %)** et **Langues (5 %)**. Les versions YAML antérieures et les sources supprimés ne sont **jamais** croisés.
+- Pour chaque retenu, **lire soi-même** la **dernière version YAML** référencée par `analyse_yaml` (`cv-profils`, `<YYYY-mm-dd>-<nom>.yaml`, seul YAML à la racine de `cv/`) — les CV ne sont **pas** transmis par le Gestionnaire CV. En plus des `competences`, lire les **agrégats collaborateur `technologies` et `methodologies`** (`{ nom, mois_experience, derniere_utilisation }`, mois d'XP en union calendaire) pour évaluer la couverture des technos/méthodos exigées par l'AO, ainsi que les **certifications détenues** (`certifications[]`) et les **langues** (`langues[]`) pour alimenter les critères **Certifications (5 %)** et **Langues (5 %)**. Lire aussi **`type_collaborateur`** et **`remuneration`** du profil : ces deux champs sont **repris tels quels** dans `resultats` (passthrough, non scorés) pour alimenter la **colonne « Type »** et l'affichage de la rémunération à la présentation humaine. Les versions YAML antérieures et les sources supprimés ne sont **jamais** croisés.
 
 ## Scoring pondéré
 
@@ -30,7 +30,7 @@ Le Matcher **ne score que les collaborateurs retenus** par le filtre d'éligibil
 | Études | 10 % | Niveau de formation correspondant — **niveau le plus élevé parmi `etudes[]`** (après équivalence MIFI). Les certifications relèvent du critère Certifications, pas de celui-ci |
 | Certifications | 5 % | **Couverture des certifications `souhaitee` / nice-to-have** de l'AO par les certifications détenues du collaborateur (`certifications[]`). Les certifications `obligatoire` restent un **prérequis éliminatoire amont** et **ne sont pas re-scorées** ici |
 | Langues | 5 % | **Couverture des langues exigées** par l'AO (`langues[]` du profil vs langues requises) — présence et niveau de maîtrise attendu. **Si l'AO ne précise aucune exigence de langue, considérer le français comme exigé par défaut** (maîtrise du français ⇒ critère couvert). |
-| Disponibilité | 5 % | À partir de `disponibilite.date_disponibilite` (plus la disponibilité est proche, plus le score est élevé) et `disponibilite.taux_utilisation` (plus le taux d'utilisation est bas, plus le collaborateur est disponible) |
+| Disponibilité | 5 % | À partir de `disponibilite.date_disponibilite` (plus la disponibilité est proche, plus le score est élevé) et `disponibilite.taux_utilisation` (plus le taux d'utilisation est bas, plus le collaborateur est disponible). Un **`pigiste`** porte `taux_utilisation = 0` (disponible à 100 %) ⇒ composante d'utilisation **maximale**, sans traitement particulier (la règle générale s'applique telle quelle) |
 
 `score_total` = somme pondérée des six critères, sur 100.
 
@@ -73,6 +73,8 @@ Cette règle s'applique **uniquement** lorsque `ao.client_gouvernemental = true`
 ```yaml
 resultats:
   - collaborateur: <prénom nom>
+    type_collaborateur: alithya | recrutement | offre_conditionnelle | pigiste | non_disponible   # repris tel quel du CV — alimente la colonne « Type » de la présentation
+    remuneration: {type: taux_horaire | salaire_annuel | null, taux_horaire_cad: 0, salaire_annuel_cad: 0}   # repris tel quel du CV (pigiste ⇒ taux horaire $CAD/h ; alithya/offre_conditionnelle ⇒ salaire annuel $CAD/an)
     score_total: <score sur 100>
     score_experience:
       score: <sur 100>

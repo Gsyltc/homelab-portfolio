@@ -99,6 +99,22 @@ Le **schéma YAML complet** des analyses CV et les conventions de nommage/versio
 | Langues | 5% |
 | Disponibilité | 5% |
 
+## Type de collaborateur & rémunération
+
+Chaque profil CV porte un champ **`type_collaborateur`** (`enum` à **5 valeurs**, qui **qualifie la disponibilité**) et un objet **`remuneration`** (mode conditionné par le type) :
+
+| `type_collaborateur` | Signification | Disponibilité | Rémunération |
+| --- | --- | --- | --- |
+| `alithya` | Collaborateur interne | selon `disponibilite` | **Salaire annuel** (`salaire_annuel_cad`, $CAD/an) |
+| `recrutement` | Candidat en cours de recrutement | conditionnelle à l'embauche | non fixée tant que non tranchée |
+| `offre_conditionnelle` | Mobilisable si l'AO est remporté | conditionnelle | **Salaire annuel** (`salaire_annuel_cad`, $CAD/an) |
+| `pigiste` | **Travailleur autonome / freelance**, validé comme pigiste au recrutement | **toujours 100 % — `taux_utilisation = 0`** | **Taux horaire** (`taux_horaire_cad`, **$CAD/heure**) |
+| `non_disponible` | Ne peut pas être positionné | — | — (écarté : `exclu`, axe `disponibilite`) |
+
+`type_collaborateur` suit une **machine à états à transitions STRICTES** : un **pigiste** est marqué comme tel **lorsque son profil est validé au recrutement** (`recrutement → pigiste`) et est **toujours disponible à 100 %** (`taux_utilisation = 0`). Au matching, `type_collaborateur` et `remuneration` sont **repris tels quels** (non scorés) et alimentent une **colonne « Type »** (pigiste / interne / offre conditionnelle) du tableau de résultats présenté à l'humain.
+
+Détail opératoire — **source unique** : compétence `cv-analyse` (champ `type_collaborateur`, § Machine à états — **graphe complet des transitions**, objet `remuneration`, règle « pigiste ⇒ `taux_utilisation = 0` »). Présence/transitions contrôlées par le sensor advisory `disponibilite-complete`. Propagation au matching : `matching-scoring` (passthrough `type_collaborateur`/`remuneration`), stages `croisement-profils` / `classement-profils` / `presentation-resultats` (colonne « Type »).
+
 ## Équivalence MIFI & conformité études (client gouvernemental)
 
 Chaque profil CV porte un objet `mifi` (équivalence des diplômes — contexte gouvernemental Québec) à **4 états** d'`equivalence_requise` : `non_requise`, `oui`, `non`, `a_verifier` (→ mention humaine, ne rien inventer). Pour un **AO gouvernemental** (`ao.client_gouvernemental = true`), le niveau d'études requis est un **critère de conformité éliminatoire** (double check aval du Matcher, sans altérer les poids du scoring immuable).
