@@ -25,7 +25,8 @@ ${ROOT_DIRECTORY}/<nom-client>/<nom-projet>/
 │   ├── architecture-infra/         # Architecture détaillée infrastructure
 │   └── architecture-securite/      # Architecture détaillée sécurité
 ├── models/                 # Modèles de diagrammes (C4, PlantUML, etc.)
-└── views/                  # Vues de diagrammes (C4 views, etc.)
+├── views/                  # Vues de diagrammes (C4 views, etc.)
+└── presentations/          # Présentations archivées (horodatées)
 ```
 
 ## Description des répertoires
@@ -78,6 +79,15 @@ ${ROOT_DIRECTORY}/<nom-client>/<nom-projet>/
 - Chaque vue référence le modèle correspondant dans `models/`
 - Nommage : `<niveau>-<description>.<extension>` (ex. `contexte-systeme-principal.png`)
 
+### `presentations/`
+
+**Contient** : Les présentations archivées du projet (supports de revue, comités, présentations client, etc.).
+
+**Conventions** :
+- Chaque présentation est **horodatée** et archivée dans le répertoire `presentations/` du projet : `${ROOT_DIRECTORY}/<nom-client>/<nom-projet>/presentations/`
+- Nommage : `<YYYY-MM-DD>-<nom-de-la-présentation>` (date ISO 8601 en préfixe), ex. `2026-10-02-revue-architecture-cible.pdf`
+- La date correspond à la date de la présentation ; conserver chaque version archivée (ne pas écraser une présentation antérieure)
+
 ## Répertoire racine du projet
 
 Le répertoire racine d'un projet suit la convention :
@@ -115,6 +125,7 @@ Chaque projet doit contenir un fichier `README.md` à sa racine avec les métado
 - `documentation/` : Documentation d'architecture de solution
 - `models/` : Modèles de diagrammes
 - `views/` : Vues de diagrammes
+- `presentations/` : Présentations archivées (horodatées, `<YYYY-MM-DD>-<nom>`)
 
 ## Statut
 - Date de création : YYYY-MM-DD
@@ -178,7 +189,7 @@ Les agents sont créés — et doivent être recréés — sous le format :
    Ne pas inventer la description : si elle n'est pas fournie, la demander avant de continuer.
 
 4. **Créer la structure du projet sur le disque.**
-   Sous `${ROOT_DIRECTORY}/<nom-client>/<nom-projet>/`, créer l'arborescence décrite dans [Structure de répertoire par défaut](#structure-de-répertoire-par-défaut) (`decisions/`, `documentation/{architecture-logicielle,architecture-infra,architecture-securite}/`, `models/`, `views/`) et le `README.md` renseigné avec la description complète (voir [Métadonnées du projet](#métadonnées-du-projet)).
+   Sous `${ROOT_DIRECTORY}/<nom-client>/<nom-projet>/`, créer l'arborescence décrite dans [Structure de répertoire par défaut](#structure-de-répertoire-par-défaut) (`decisions/`, `documentation/{architecture-logicielle,architecture-infra,architecture-securite,architecture-donnees}/`, `models/`, `views/`, `presentations/`) et le `README.md` renseigné avec la description complète (voir [Métadonnées du projet](#métadonnées-du-projet)).
 
 5. **Créer les agents du workflow `core` s'ils n'existent pas.**
    Vérifier via `multica agent list --output json` la présence des agents de la [Table de correspondance des agents](#table-de-correspondance-des-agents). Pour chaque agent absent, le créer au format `<nom> - <fonction>` à partir de sa définition dans [`agents/`](../../../../core/agents/) (front-matter + corps).
