@@ -8,6 +8,8 @@
 
 > **Diagramme Archify** : déterminer la recette **avant production** selon la [correspondance de la référence (section Sécurité/Conformité)](../references/archify-diagram-types.md#correspondance-publicthème--recette-source-unique) ; procédure : [Sélection du diagramme Archify](../SKILL.md#sélection-du-diagramme-archify-avant-production). Pour ce public, **`+trace` recommandé** (évidence d'audit) — **sans exposer de détail exploitable**. Ne pas recopier la correspondance ici.
 
+0a. **Page de garde** *(par défaut, tous types)* — slide d'ouverture à mise en forme graphique moderne reprenant la charte `theme/` (logo inliné, dégradé primaire/secondaire, accent). Contenu : **titre**, **sous-titre**, **public visé**, **date/version**, **confidentialité**. Ne rien inventer : titre/public issus du cadrage, charte issue de `theme/` (jamais approximée). Présente en **HTML dynamique et en PowerPoint**.
+0b. **Sommaire** *(par défaut, tous types)* — juste après la page de garde : table des matières des **chapitres retenus** (thèmes de **niveau 1** uniquement), reflétant uniquement les chapitres réellement présents. En HTML dynamique, cohérent avec le menu latéral auto (`data-chapter`). Présent en **HTML dynamique et en PowerPoint**.
 1. **Normes de sécurité applicables**.
    - Sources : `documentation/11-securite.md`, `08-contraintes.md`.
 2. **Conformités / réglementation**.

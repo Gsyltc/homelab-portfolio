@@ -8,6 +8,8 @@
 
 ## Chapitres
 
+0a. **Page de garde** *(par défaut, tous types)* — slide d'ouverture à mise en forme graphique moderne reprenant la charte `theme/` (logo inliné, dégradé primaire/secondaire, accent). Contenu : **titre**, **sous-titre**, **public visé**, **date/version**, **confidentialité**. Ne rien inventer : titre/public issus du cadrage, charte issue de `theme/` (jamais approximée). Présente en **HTML dynamique et en PowerPoint**.
+0b. **Sommaire** *(par défaut, tous types)* — juste après la page de garde : table des matières des **chapitres retenus** (thèmes de **niveau 1** uniquement), reflétant uniquement les chapitres réellement présents (un chapitre exclu faute de documentation n'y figure pas). En HTML dynamique, cohérent avec le menu latéral auto (`data-chapter`). Présent en **HTML dynamique et en PowerPoint**.
 1. **Synthèse exécutive**.
    - Message clé, valeur d'affaires et décision attendue, en une page/diapositive.
    - Sources : `documentation/01-introduction.md`, `02-objectifs.md`.
