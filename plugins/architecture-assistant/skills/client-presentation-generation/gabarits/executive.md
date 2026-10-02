@@ -8,7 +8,7 @@
 
 ## Chapitres
 
-0a. **Page de garde** *(par défaut, tous types)* — slide d'ouverture à mise en forme graphique moderne reprenant la charte `theme/` (logo inliné, dégradé primaire/secondaire, accent). Contenu : **titre**, **sous-titre**, **public visé**, **date/version**, **confidentialité**. Ne rien inventer : titre/public issus du cadrage, charte issue de `theme/` (jamais approximée). Présente en **HTML dynamique et en PowerPoint**.
+0a. **Page de garde** *(par défaut, tous types)* — slide d'ouverture à mise en forme graphique moderne reprenant la charte `theme/` (logo inliné, dégradé primaire/secondaire, accent). **Champs normalisés** : **titre**, **sous-titre**, **public visé**, **auteur**, **année**, **date/version**, **baseline/tagline**, **confidentialité**. Ne rien inventer : titre/public/auteur issus du cadrage, charte issue de `theme/` (jamais approximée). Présente en **HTML dynamique et en PowerPoint**.
 0b. **Sommaire** *(par défaut, tous types)* — juste après la page de garde : table des matières des **chapitres retenus** (thèmes de **niveau 1** uniquement), reflétant uniquement les chapitres réellement présents (un chapitre exclu faute de documentation n'y figure pas). En HTML dynamique, cohérent avec le menu latéral auto (`data-chapter`). Présent en **HTML dynamique et en PowerPoint**.
 1. **Résumé exécutif** — le besoin et la valeur en quelques phrases.
    - Sources : `documentation/01-introduction.md`, `02-objectifs.md`.
@@ -72,6 +72,8 @@
 ## Règles spécifiques
 
 - Une idée par diapositive ; privilégier chiffres-clés, tableaux et visuels.
+- **Densité et clarté rédactionnelle** : diapositives de contenu rédigées (**~180–320 mots utiles**, alternant paragraphe rédigé et liste à puces) ; diapositive à diagramme = **paragraphe de contexte au-dessus du schéma**. Densité suffisante sans jamais inventer : matière manquante **signalée**, pas comblée (cf. règles d'or 4, 13).
+- **Aucune note de génération dans le rendu** (règle d'or 14) : pas de « Source : … », « rien d'inventé », process-sourcing, descripteur de rendu ni ligne de version-process **sur les diapositives** ; la discipline « ne rien inventer » reste une règle de production, non un texte de slide.
 - **Diagrammes Archify — public direction** : déterminer la recette **avant production** selon la [correspondance de la référence (section Executive)](../references/archify-diagram-types.md#correspondance-publicthème--recette-source-unique) ; privilégier une composition `classic` **sans trace** (synthèse orientée décision). Ne pas recopier la correspondance ici.
 - Traduire chaque élément technique en bénéfice métier.
 - **KPIs, suivi des risques et synthèse CAPEX/OPEX présentés sous forme de tableau.**

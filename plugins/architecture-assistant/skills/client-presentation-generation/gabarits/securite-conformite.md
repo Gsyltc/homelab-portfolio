@@ -8,7 +8,7 @@
 
 > **Diagramme Archify** : déterminer la recette **avant production** selon la [correspondance de la référence (section Sécurité/Conformité)](../references/archify-diagram-types.md#correspondance-publicthème--recette-source-unique) ; procédure : [Sélection du diagramme Archify](../SKILL.md#sélection-du-diagramme-archify-avant-production). Pour ce public, **`+trace` recommandé** (évidence d'audit) — **sans exposer de détail exploitable**. Ne pas recopier la correspondance ici.
 
-0a. **Page de garde** *(par défaut, tous types)* — slide d'ouverture à mise en forme graphique moderne reprenant la charte `theme/` (logo inliné, dégradé primaire/secondaire, accent). Contenu : **titre**, **sous-titre**, **public visé**, **date/version**, **confidentialité**. Ne rien inventer : titre/public issus du cadrage, charte issue de `theme/` (jamais approximée). Présente en **HTML dynamique et en PowerPoint**.
+0a. **Page de garde** *(par défaut, tous types)* — slide d'ouverture à mise en forme graphique moderne reprenant la charte `theme/` (logo inliné, dégradé primaire/secondaire, accent). **Champs normalisés** : **titre**, **sous-titre**, **public visé**, **auteur**, **année**, **date/version**, **baseline/tagline**, **confidentialité**. Ne rien inventer : titre/public/auteur issus du cadrage, charte issue de `theme/` (jamais approximée). Présente en **HTML dynamique et en PowerPoint**.
 0b. **Sommaire** *(par défaut, tous types)* — juste après la page de garde : table des matières des **chapitres retenus** (thèmes de **niveau 1** uniquement), reflétant uniquement les chapitres réellement présents. En HTML dynamique, cohérent avec le menu latéral auto (`data-chapter`). Présent en **HTML dynamique et en PowerPoint**.
 1. **Normes de sécurité applicables**.
    - Sources : `documentation/11-securite.md`, `08-contraintes.md`.
@@ -30,3 +30,5 @@
 - Le **contrôle sécurité systématique** (Reviewer de sécurité) est porté par le workflow, en amont de la validation.
 - Relier chaque norme/réglementation aux mesures de la solution.
 - Tenir compte du champ `sensibilite` des documents source (ne pas présenter le `restreint` tel quel au client).
+- **Densité et clarté rédactionnelle** : diapositives de contenu rédigées (**~180–320 mots utiles**, alternant paragraphe rédigé et liste à puces) ; diapositive à diagramme = **paragraphe de contexte au-dessus du schéma**. Densité suffisante sans jamais inventer : matière manquante **signalée**, pas comblée (cf. règles d'or 4, 13).
+- **Aucune note de génération dans le rendu** (règle d'or 14) : pas de « Source : … », « rien d'inventé », process-sourcing, descripteur de rendu ni ligne de version-process **sur les diapositives** ; la discipline « ne rien inventer » reste une règle de production, non un texte de slide.
