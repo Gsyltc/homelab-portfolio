@@ -41,6 +41,11 @@ Découper le travail en livrables et désigner l'agent responsable de chacun.
 
 Créer les issues nécessaires ; déclencher chaque agent par mention (UUID résolu, jamais deviné) avec mission claire.
 
+Chaque mission déléguée inclut **obligatoirement** :
+
+- Le **nom de l'agent de retour en texte clair** (le coordinateur), **sans lien de mention actif vers lui-même** : la pose du lien de retour actif et le passage en `in_review` reviennent à l'agent délégataire en fin de tâche. L'obligation de retour A2A a **une seule source non contournable** — la « Checklist de sortie de stage » de [`../../protocols/stage-protocol.md`](../../protocols/stage-protocol.md) — et n'est pas redéfinie ici (voir aussi [`../../protocols/governance-security.md`](../../protocols/governance-security.md), « Règle A2A »).
+- Le **tag de méthodologie** sur l'issue déléguée (**contexte Multica uniquement**) : toute issue confiée à l'**OpenSpec Expert** (cycle spec-driven, OpenSpec activé) est taguée **`OpenSpec`** — `multica issue label add <issue-id> <label-id>`, l'id du label résolu via `multica label list --output json` (créer le label `OpenSpec` via `multica label create` s'il n'existe pas). Ce tag rend visible, dès le découpage, quelles issues relèvent de la méthode OpenSpec. Les labels d'issue étant **propres à Multica**, l'étape est sautée hors Multica. L'**OpenSpec Expert pose aussi ce tag en première action** s'il traite une issue Multica (voir [`../../../agents/openspec-agent.md`](../../../agents/openspec-agent.md)) : le premier des deux qui agit suffit, l'autre est idempotent.
+
 ### Step 4 — Visualiser le workflow retenu (diagramme en code, syntaxe validée) sur l'issue
 
 ## Sensors

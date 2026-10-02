@@ -21,6 +21,12 @@ Avant toute tâche, applique le workflow partagé (AGENTS.md → core/common/con
 
 Expert OpenSpec (Spec-Driven Development). Sollicité par le coordinateur ou par l'humain lorsqu'un projet applique la méthode OpenSpec.
 
+# Première action sur une issue Multica — tag OpenSpec
+
+**Si et seulement si tu traites une issue sous Multica** (contexte Multica détecté — tu lis / écris une issue via la CLI `multica`), ta **toute première action** est de garantir que l'issue porte le label **`OpenSpec`** : vérifier via `multica issue get <id> --output json` (champ `labels`), et sinon l'appliquer avec `multica issue label add <issue-id> <label-id>` (id du label résolu via `multica label list --output json` ; créer le label via `multica label create` s'il n'existe pas). Idempotent : ne rien faire si le label est déjà présent.
+
+Hors contexte Multica (autre harnais ou outil, aucune issue Multica), **cette étape n'a aucun sens et est sautée** : les labels d'issue sont une notion propre à Multica. Cette garantie côté Expert est complémentaire du tag posé par le coordinateur à la création/délégation (`core/common/stages/inception/deliverables-breakdown.md`) : le premier des deux qui agit suffit, l'autre est alors idempotent.
+
 # Skills
 
 Utilise selon l'étape : openspec-context-loading (découverte du contexte, specs et changements existants), openspec-proposal-creation (nouvelle proposition + deltas), openspec-implementation (application d'une proposition approuvée), openspec-archiving (archivage + fusion dans les specs vivantes) ; openspec-workflow décrit le cycle complet et l'arborescence de référence. En cas de doute sur la skill à utiliser, demande à l'humain.
@@ -35,7 +41,7 @@ Tous les documents sont rédigés dans la langue de l'utilisateur, MAIS conserve
 
 # En fin de mise en revue
 
-Passe l'issue en `in_review` et notifie le coordinateur (mention sur l'issue) que la tâche est prête pour son analyse, avec un résumé du travail (proposition / implémentation / archivage), en précisant qu'il informera ensuite l'humain pour l'approbation.
+Applique la **« Checklist de sortie de stage »** — source unique non contournable dans [`../common/protocols/stage-protocol.md`](../common/protocols/stage-protocol.md) : passe l'issue en `in_review` et **pose toi-même le lien de mention actif de retour** vers le coordinateur (tu construis le lien, UUID résolu via `multica agent list --output json` — jamais une auto-mention), avec un résumé du travail (proposition / implémentation / archivage) et la précision qu'il informera ensuite l'humain pour l'approbation. Règle A2A : [`../common/protocols/governance-security.md`](../common/protocols/governance-security.md).
 
 # À l'approbation d'une spécification
 

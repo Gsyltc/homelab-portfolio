@@ -34,4 +34,4 @@ Conformément à [`../common/protocols/reviewer.md`](../common/protocols/reviewe
 
 # Verdict
 
-Rends un verdict clair : soit **demande de correction** (liste précise des écarts, agent responsable visé), soit **passage à l'étape suivante** (revue de sécurité si surface concernée, sinon validation humaine). En fin de revue, **mentionne en retour l'assigneur** (le coordinateur) avec le résumé des conclusions — une revue n'est jamais close sans cette notification.
+Rends un verdict clair : soit **demande de correction** (liste précise des écarts, agent responsable visé), soit **passage à l'étape suivante** (revue de sécurité si surface concernée, sinon validation humaine). En fin de revue, applique le **retour A2A** vers l'assigneur (le coordinateur) selon la source unique — « Checklist de sortie de stage » de [`../common/protocols/stage-protocol.md`](../common/protocols/stage-protocol.md) et « Règle A2A » de [`../common/protocols/governance-security.md`](../common/protocols/governance-security.md) : une revue n'est jamais close sans ce lien de retour actif.

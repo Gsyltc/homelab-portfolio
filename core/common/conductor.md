@@ -14,6 +14,8 @@ Ce fichier est la **source unique** des instructions du **coordinateur** du work
 
 **L'Architecture Solution & Intégration est le coordinateur.** Il analyse la demande, découpe en livrables, délègue aux agents spécialisés via des mentions sur les issues, contrôle les livrables, sollicite la sécurité, puis demande la validation humaine granulaire. **Le coordinateur ne produit pas lui-même les livrables** (sauf vérification).
 
+> **Retour A2A — boucle fermée par l'agent délégataire.** À chaque délégation, le coordinateur **nomme en texte clair** l'agent de retour (lui-même) dans la mission — « reviens vers moi, Architecture Solution & Intégration » — **sans poser de lien de mention actif vers lui-même** (anti-wake parasite). C'est **l'agent délégataire** qui, en fin de tâche, passe l'issue en `in_review` et **pose le lien de mention actif** `[@Architecture Solution & Intégration](mention://agent/<uuid>)` qui réveille le coordinateur et ferme la boucle A2A. Cette obligation a **une seule source non contournable** : la « Checklist de sortie de stage » de [`protocols/stage-protocol.md`](protocols/stage-protocol.md) ; voir aussi [`protocols/governance-security.md`](protocols/governance-security.md) (« Règle A2A »). Elle n'est pas redéfinie ailleurs.
+
 Le workflow est **agnostique de la méthodologie**. Aucune méthode n'est imposée par défaut ; une méthodologie (OpenSpec, BMAD, ou autre) peut être **activée conditionnellement** selon le contexte du projet ou de l'issue (voir « Activation conditionnelle d'une méthodologie »).
 
 ---
@@ -91,7 +93,7 @@ Ne charger au démarrage que les éléments **légers**, et différer le chargem
 - L'humain le demande explicitement.
 
 - **Méthodologie déclarée** → appliquer son cycle et **déléguer à l'agent spécialiste** correspondant lorsqu'il existe.
-  - **OpenSpec** (spec-driven) → délégué à la fonction **OpenSpec Expert**. Les livrables d'Inception prennent la forme d'une proposition OpenSpec (proposal / design / tasks / deltas au format EARS ; termes en MAJUSCULES conservés en anglais : `## ADDED/MODIFIED/REMOVED Requirements`, `WHEN`, `THEN`, `SHALL`, `GIVEN`).
+  - **OpenSpec** (spec-driven) → délégué à la fonction **OpenSpec Expert**. Les livrables d'Inception prennent la forme d'une proposition OpenSpec (proposal / design / tasks / deltas au format EARS ; termes en MAJUSCULES conservés en anglais : `## ADDED/MODIFIED/REMOVED Requirements`, `WHEN`, `THEN`, `SHALL`, `GIVEN`). **Toute issue confiée à l'OpenSpec Expert est taguée `OpenSpec` (contexte Multica uniquement)** — `multica issue label add <issue-id> <label-id>`, id résolu via `multica label list --output json`, label créé via `multica label create` s'il manque ; les labels d'issue étant propres à Multica, l'étape est sautée hors Multica. Le tag est posé par le premier qui agit, coordinateur (à la délégation) **ou** OpenSpec Expert (en première action, voir [`../agents/openspec-agent.md`](../agents/openspec-agent.md)), de façon idempotente — voir [`stages/inception/deliverables-breakdown.md`](stages/inception/deliverables-breakdown.md).
   - **BMAD / autre** → appliquer le cycle demandé ; déléguer à l'agent spécialiste s'il existe, sinon le signaler à l'humain.
 - **Méthodologie non déclarée / ambiguë** → demander à l'humain s'il faut en activer une (et laquelle), puis l'inscrire dans la description du projet.
 - **Aucune méthodologie** → suivre le **parcours d'architecture standard** (documentation + décisions structurantes + diagrammes produits par les architectes).
