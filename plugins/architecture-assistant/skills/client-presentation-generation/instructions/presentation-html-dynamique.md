@@ -8,6 +8,48 @@ Fichier d'**instructions** (pas un gabarit figé) : il guide la production, de b
 
 Un **fichier HTML unique**, ouvrable sans réseau. **Aucune** ressource externe : pas de `<link>`, `<script src>`, `@import`, CDN, `url(http…)`. Tout en inline : CSS, JS, logo (data URI base64), SVG de diagramme. **Vérifier `0`** occurrence de `http(s)://` hors du namespace SVG (`http://www.w3.org/2000/svg`) avant livraison.
 
+## 0. Page de garde + sommaire (par défaut, tous types)
+
+Toute présentation s'ouvre par **deux slides fixes**, avant les chapitres de contenu : une **page de garde**, puis un **sommaire**. Elles sont requises quel que soit le type (en Technique/Fonctionnelle comme ailleurs, ici en HTML dynamique).
+
+**Slide 1 — page de garde** (`class="slide active"`, `data-chapter="Page de garde"`) : mise en forme graphique moderne reprenant la charte réelle de `theme/` (dégradé `--al-primary → --al-secondary`, accent `--al-accent`, logo inliné en data URI). Contenu : **titre**, **sous-titre**, **public visé**, **date / version**, **mention de confidentialité**. Ne rien inventer : titre/public issus du cadrage ; jamais d'approximation de charte.
+
+```html
+<section class="slide active cover" data-chapter="Page de garde" data-sub="Page de garde">
+  <img class="cover-logo" src="data:image/png;base64,…" alt="Logo client">
+  <h1>Titre de la présentation</h1>
+  <p class="cover-sub">Sous-titre — public visé</p>
+  <p class="cover-meta">Version 1.0 · AAAA-MM-JJ · Confidentiel</p>
+</section>
+```
+```css
+.cover{display:flex;flex-direction:column;justify-content:center;gap:1rem;
+  background:linear-gradient(135deg,var(--al-primary),var(--al-secondary));color:#fff}
+.cover-logo{width:180px;max-width:40%}
+.cover h1{font-size:clamp(1.8rem,4vw,3rem);border:0}
+.cover-sub{font-size:clamp(1.1rem,2vw,1.4rem);opacity:.95}
+.cover-meta{color:#dbe6f4;border-top:3px solid var(--al-accent);padding-top:.6rem;display:inline-block}
+```
+
+**Slide 2 — sommaire** (`data-chapter="Sommaire"`) : table des matières des **chapitres de niveau 1 réellement présents** (thèmes `data-chapter`, hors « Page de garde » / « Sommaire »). Générée **automatiquement** depuis les slides pour rester cohérente avec le menu latéral ; ne lister que les chapitres existants (un chapitre exclu faute de documentation n'y figure pas).
+
+```html
+<section class="slide" data-chapter="Sommaire" data-sub="Sommaire">
+  <h2><span class="bar"></span>Sommaire</h2>
+  <ol class="toc" id="toc"></ol>
+</section>
+```
+```js
+// Sommaire auto : thèmes niveau 1, hors page de garde & sommaire, dans l'ordre d'apparition.
+const skip=new Set(['Page de garde','Sommaire']);
+const seen=[]; document.querySelectorAll('.slide').forEach(s=>{const c=s.dataset.chapter;
+  if(c&&!skip.has(c)&&!seen.includes(c))seen.push(c);});
+const toc=document.getElementById('toc');
+if(toc)seen.forEach(c=>{const li=document.createElement('li');li.textContent=c;toc.appendChild(li);});
+```
+
+> **PowerPoint** : reproduire les deux mêmes ouvertures — une diapositive de garde (charte, titre/sous-titre/public/version/date/confidentialité) puis une diapositive de sommaire (chapitres de niveau 1). En Marp, deux premières slides Markdown ; en Pandoc `--reference-doc`, utiliser le masque « page de titre » du gabarit client.
+
 ## 1. Créer les sections requises par le type de présentation
 
 Les **sections dépendent du type** demandé — ne pas imposer un jeu de chapitres fixe. Reprendre le plan du gabarit de contenu correspondant :
@@ -33,7 +75,7 @@ Procédure :
   <span class="demo-tag">Source : documentation/… (ou « valeurs fictives — démonstration »)</span>
 </section>
 ```
-La première slide porte `class="slide active"`.
+La première slide porte `class="slide active"` — c'est la **page de garde** (voir §0), suivie du **sommaire**, puis des chapitres de contenu.
 
 ## 2. Créer les diagrammes associés au type de présentation
 
@@ -184,6 +226,7 @@ Modèle d'une arête :
 ## Checklist de livraison
 
 - [ ] **Autoportance** : `0` `http(s)://` hors namespace SVG ; aucun `<link>`/`<script src>`/`@import`/CDN.
+- [ ] **Page de garde + sommaire** : présentation ouverte par une page de garde (charte `theme/`, titre/sous-titre/public/version/date/confidentialité) puis un sommaire (chapitres de niveau 1 réellement présents) — HTML dynamique **et** PPTX (sauf Technique/Fonctionnelle = HTML uniquement).
 - [ ] **Sections** : conformes au type de présentation ; aucune section vide ; menu latéral correct.
 - [ ] **Diagrammes** : type archify adapté ; géométrie R1–R5 (natif) ; aucun chevauchement/recouvrement ; pointes visibles.
 - [ ] **Charte** : tokens réels de `theme/`, logo inliné, aucune approximation résiduelle.

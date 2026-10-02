@@ -21,6 +21,8 @@ Pour une présentation technique, l'information détaillée se trouve **souvent 
 
 > **Diagramme Archify par chapitre** : déterminer la recette **avant production** selon la question posée. La **correspondance par chapitre (chapitre → question → recette → type → composition)** est portée **uniquement** par la référence : voir [`references/archify-diagram-types.md` → Détail par chapitre — présentation Technique / Fonctionnelle](../references/archify-diagram-types.md#détail-par-chapitre--présentation-technique--fonctionnelle). Ne pas la recopier ici. Procédure générale : [Sélection du diagramme Archify](../SKILL.md#sélection-du-diagramme-archify-avant-production).
 
+0a. **Page de garde** *(par défaut, tous types)* — slide d'ouverture à mise en forme graphique moderne reprenant la charte `theme/` (logo inliné, dégradé primaire/secondaire, accent). Contenu : **titre**, **sous-titre**, **public visé**, **date/version**, **confidentialité**. Ne rien inventer : titre/public issus du cadrage, charte issue de `theme/` (jamais approximée). **HTML dynamique uniquement** pour ce type (contrainte de format).
+0b. **Sommaire** *(par défaut, tous types)* — juste après la page de garde : table des matières des **chapitres retenus** (thèmes de **niveau 1** uniquement), reflétant uniquement les chapitres réellement présents. Cohérent avec le menu latéral auto (`data-chapter`). **HTML dynamique uniquement** pour ce type.
 1. **Contexte technique & périmètre**.
    - Sources : `documentation/01-introduction.md`, `06-architecture-solutions.md`.
 2. **Logiciel** — composants, intégrations, séquences.
