@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Workflow Core — Documentation</title>
+<style>
+  :root{
+    --ink:#2b2219;
+    --muted:#7a6a56;
+    --brand:#1f4a46;
+    --brand2:#5c8475;
+    --accent:#cf8a3a;
+    --line:#e0d2bb;
+    --soft:#faf4e9;
+    --soft2:#f3e9d8;
+    --ok:#6a7636;
+  }
+  @page{
+    size:A4;
+    margin:15mm 15mm 14mm 15mm;
+    @bottom-left{
+      content:"Auteur : Sylvain Goubaud · 2026";
+      font-family:"Noto Sans","DejaVu Sans",sans-serif;
+      font-size:7.5pt; color:#7a6a56;
+    }
+    @bottom-center{
+      content:"Workflow Core — Documentation";
+      font-family:"Noto Sans","DejaVu Sans",sans-serif;
+      font-size:7.5pt; color:#a89782;
+    }
+    @bottom-right{
+      content:"page " counter(page) " / " counter(pages);
+      font-family:"Noto Sans","DejaVu Sans",sans-serif;
+      font-size:7.5pt; color:#a89782;
+    }
+  }
+  @page:first{ margin:0; @bottom-left{content:none;} @bottom-center{content:none;} @bottom-right{content:none;} }
+
+  *{box-sizing:border-box;}
+  html{font-family:"Noto Sans","DejaVu Sans",sans-serif; color:var(--ink); font-size:9.6pt; line-height:1.45;}
+  body{margin:0;}
+
+  h1,h2,h3{font-weight:700; color:var(--brand); margin:0;}
+  h2{font-size:14pt; margin:11pt 0 5pt; padding-bottom:3pt; border-bottom:2px solid var(--brand2);}
+  h2 .n{color:var(--accent); font-weight:800; margin-right:5pt;}
+  h3{font-size:10.5pt; color:var(--brand2); margin:9pt 0 3pt;}
+  p{margin:0 0 5pt;}
+  ul{margin:3pt 0 6pt; padding-left:15pt;}
+  li{margin:1.5pt 0;}
+  b,strong{color:var(--ink);}
+  .lead{color:var(--muted);}
+  .section{break-inside:avoid;}
+
+  .cover{
+    height:297mm; color:#fff; position:relative; padding:34mm 22mm 0;
+    background:linear-gradient(180deg,#15332e 0%,#1f4a46 34%,#4a6a52 60%,#9c7a44 82%,#cf8a3a 100%);
+  }
+  .cover:before{
+    content:""; position:absolute; left:0; right:0; bottom:0; height:70mm;
+    background:linear-gradient(180deg,rgba(207,138,58,0) 0%,rgba(207,138,58,.35) 100%);
+  }
+  .cover .kicker{letter-spacing:3.5px; font-size:10pt; text-transform:uppercase; color:#e8dcc2; font-weight:600;}
+  .cover h1{color:#fff; font-size:40pt; line-height:1.05; margin:10mm 0 4mm; letter-spacing:-.5px;}
+  .cover .accentbar{width:34mm; height:4px; background:var(--accent); margin:0 0 7mm;}
+  .cover .sub{font-size:13pt; color:#ecdfc8; max-width:120mm; line-height:1.5;}
+  .cover .tags{position:absolute; bottom:40mm; left:22mm; right:22mm; display:flex; gap:8px; flex-wrap:wrap;}
+  .cover .tag{border:1px solid rgba(43,34,25,.45); border-radius:30px; padding:4px 12px; font-size:8.5pt; color:#2b2219; background:rgba(255,248,235,.35);}
+  .cover .foot{position:absolute; bottom:16mm; left:22mm; right:22mm; font-size:8.5pt; color:#3a2a14; display:flex; justify-content:space-between; border-top:1px solid rgba(43,34,25,.35); padding-top:5mm;}
+
+  .grid2{display:flex; gap:10px;}
+  .grid2>div{flex:1;}
+  .card{background:var(--soft); border:1px solid var(--line); border-radius:6px; padding:8px 11px; break-inside:avoid;}
+  .card.brand{border-left:3px solid var(--brand2);}
+  .card.gold{border-left:3px solid var(--accent);}
+  .callout{background:var(--soft2); border-left:4px solid var(--accent); padding:7px 11px; border-radius:0 5px 5px 0; margin:6pt 0;}
+  .callout b{color:var(--brand);}
+
+  table{width:100%; border-collapse:collapse; margin:5pt 0 7pt; font-size:8.6pt;}
+  th{background:var(--brand); color:#fff; text-align:left; padding:5px 7px; font-weight:600;}
+  td{padding:4px 7px; border-bottom:1px solid var(--line); vertical-align:top;}
+  tr:nth-child(even) td{background:var(--soft);}
+  td .fn{color:var(--muted);}
+
+  .pill{display:inline-block; background:var(--brand2); color:#fff; border-radius:20px; padding:1px 8px; font-size:7.6pt; font-weight:600;}
+  .pill.g{background:var(--accent);}
+  .pill.ok{background:var(--ok);}
+
+  figure{margin:5pt 0; break-inside:avoid;}
+  figcaption{font-size:8pt; color:var(--muted); margin-top:3pt; text-align:center;}
+  .fig-wrap{border:1px solid var(--line); border-radius:6px; background:#fff; padding:7px;}
+
+  .legend{font-size:7.8pt; color:var(--muted); margin-top:2pt;}
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <div class="kicker">Documentation de référence</div>
+  <h1>Le Workflow&nbsp;Core</h1>
+  <div class="accentbar"></div>
+  <div class="sub">Un cadre de collaboration entre intelligences artificielles spécialisées,
+  piloté par l'humain, pour concevoir et faire évoluer des architectures de solution
+  avec rigueur, traçabilité et sécurité.</div>
+
+  <div class="tags">
+    <span class="tag">Coordination multi-agents (A2A)</span>
+    <span class="tag">Validation humaine à chaque étape</span>
+    <span class="tag">Sécurité systématique</span>
+    <span class="tag">Mémoire &amp; apprentissage</span>
+    <span class="tag">Portable &amp; agnostique</span>
+  </div>
+
+  <div class="foot">
+    <span>Architecture de solution &amp; intégration</span>
+    <span>Document de présentation — v1.0</span>
+  </div>
+</section>
+
+<section class="section">
+  <h2><span class="n">1</span>Contexte &amp; objectifs</h2>
+  <p class="lead">Le <b>workflow Core</b> est la méthode de travail d'une équipe d'<b>agents d'intelligence
+  artificielle spécialisés</b> en architecture de solution. Chaque demande — concevoir un système,
+  faire évoluer une plateforme, documenter une architecture — est traitée comme un projet encadré,
+  où un <b>coordinateur</b> orchestre des experts et où <b>l'humain décide à chaque jalon</b>.</p>
+
+  <div class="grid2">
+    <div class="card brand">
+      <h3>Le contexte</h3>
+      <p>Les projets d'architecture mêlent des expertises variées (solution, cloud, données, sécurité)
+      et exigent des décisions tracées et vérifiables. Le workflow Core apporte un cadre commun :
+      une suite d'étapes claires, des rôles bien définis et une gouvernance qui garde l'humain
+      aux commandes.</p>
+    </div>
+    <div class="card gold">
+      <h3>Les objectifs</h3>
+      <ul>
+        <li><b>Adapter l'effort au besoin</b> — léger pour le simple, complet pour le complexe.</li>
+        <li><b>Garantir la traçabilité</b> — chaque décision est consignée et justifiée.</li>
+        <li><b>Sécuriser par défaut</b> — un contrôle sécurité à chaque modification.</li>
+        <li><b>Garder l'humain décideur</b> — rien n'avance sans sa validation.</li>
+        <li><b>Apprendre dans le temps</b> — les corrections deviennent des règles durables.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout">
+    <b>Principe fondateur : le workflow s'adapte au travail, et non l'inverse.</b>
+    Une modification simple reçoit un traitement minimal&nbsp;; un chantier complexe ou à risque
+    reçoit un traitement complet. L'effort est calibré selon l'intention, l'existant,
+    la complexité et le risque.
+  </div>
+</section>
+
+<section class="section">
+  <h2><span class="n">2</span>Fonctionnement global : cinq phases</h2>
+  <p>Un projet avance en <b>cinq phases successives</b>. Entre chaque phase, un
+  <b>point de contrôle</b> (le « gate ») laisse l'humain approuver avant de continuer.
+  Plus on avance, plus la validation est exigeante.</p>
+
+  <figure>
+  <div class="fig-wrap">
+  <svg viewBox="0 0 760 150" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans, DejaVu Sans, sans-serif">
+    <defs>
+      <marker id="ar" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+        <path d="M0,0 L6,3 L0,6 Z" fill="#5c8475"/>
+      </marker>
+    </defs>
+    <g>
+      <rect x="6"   y="40" width="138" height="54" rx="7" fill="#f3e9d8" stroke="#1f4a46"/>
+      <text x="75"  y="60" font-size="12" font-weight="700" fill="#1f4a46" text-anchor="middle">0 · Initialization</text>
+      <text x="75"  y="78" font-size="9.5" fill="#7a6a56" text-anchor="middle">Mise en place</text>
+      <text x="75"  y="90" font-size="8" fill="#a89782" text-anchor="middle">sans gate humain</text>
+      <rect x="156" y="40" width="138" height="54" rx="7" fill="#f3e9d8" stroke="#1f4a46"/>
+      <text x="225" y="60" font-size="12" font-weight="700" fill="#1f4a46" text-anchor="middle">1 · Ideation</text>
+      <text x="225" y="78" font-size="9.5" fill="#7a6a56" text-anchor="middle">Intention &amp; cadrage</text>
+      <text x="225" y="90" font-size="8" fill="#cf8a3a" text-anchor="middle">approbation légère</text>
+      <rect x="306" y="40" width="138" height="54" rx="7" fill="#f3e9d8" stroke="#1f4a46"/>
+      <text x="375" y="60" font-size="12" font-weight="700" fill="#1f4a46" text-anchor="middle">2 · Inception</text>
+      <text x="375" y="78" font-size="9.5" fill="#7a6a56" text-anchor="middle">Conception</text>
+      <text x="375" y="90" font-size="8" fill="#cf8a3a" text-anchor="middle">validation granulaire</text>
+      <rect x="456" y="40" width="138" height="54" rx="7" fill="#f3e9d8" stroke="#1f4a46"/>
+      <text x="525" y="60" font-size="12" font-weight="700" fill="#1f4a46" text-anchor="middle">3 · Construction</text>
+      <text x="525" y="78" font-size="9.5" fill="#7a6a56" text-anchor="middle">Production</text>
+      <text x="525" y="90" font-size="8" fill="#cf8a3a" text-anchor="middle">validation granulaire</text>
+      <rect x="606" y="40" width="148" height="54" rx="7" fill="#f3e9d8" stroke="#1f4a46"/>
+      <text x="680" y="60" font-size="12" font-weight="700" fill="#1f4a46" text-anchor="middle">4 · Operation</text>
+      <text x="680" y="78" font-size="9.5" fill="#7a6a56" text-anchor="middle">Mise en service</text>
+      <text x="680" y="90" font-size="8" fill="#cf8a3a" text-anchor="middle">validation explicite</text>
+    </g>
+    <line x1="144" y1="67" x2="156" y2="67" stroke="#5c8475" stroke-width="2" marker-end="url(#ar)"/>
+    <line x1="294" y1="67" x2="306" y2="67" stroke="#5c8475" stroke-width="2" marker-end="url(#ar)"/>
+    <line x1="444" y1="67" x2="456" y2="67" stroke="#5c8475" stroke-width="2" marker-end="url(#ar)"/>
+    <line x1="594" y1="67" x2="606" y2="67" stroke="#5c8475" stroke-width="2" marker-end="url(#ar)"/>
+    <text x="380" y="20" font-size="9" fill="#7a6a56" text-anchor="middle">◆ Point de contrôle humain à chaque transition de phase (de plus en plus exigeant) ◆</text>
+    <text x="680" y="118" font-size="7.6" fill="#a89782" text-anchor="middle">rollback si action destructive</text>
+  </svg>
+  </div>
+  <figcaption>Figure 1 — Les cinq phases du workflow et l'exigence croissante de validation humaine.</figcaption>
+  </figure>
+
+  <table>
+    <tr><th style="width:20%">Phase</th><th style="width:50%">Ce qui s'y passe</th><th style="width:30%">Contrôle humain</th></tr>
+    <tr><td><b>0 · Initialization</b></td><td>Vérifications de départ : répertoire du projet, contexte Git, projet neuf ou existant, ouverture de la piste d'audit.</td><td>Automatique<br><span class="fn">aucun gate</span></td></tr>
+    <tr><td><b>1 · Ideation</b></td><td>Capture de l'intention, contraintes et faisabilité, définition du périmètre, maquettes éventuelles.</td><td>Approbation de l'intention et du périmètre <span class="pill">léger</span></td></tr>
+    <tr><td><b>2 · Inception</b></td><td>Cadrage, analyse des besoins, découpage en livrables, conception et décisions structurantes.</td><td>Validation <span class="pill">choix par choix</span></td></tr>
+    <tr><td><b>3 · Construction</b></td><td>Première tranche de bout en bout (« walking skeleton »), puis production détaillée des livrables.</td><td>Validation <span class="pill">choix par choix</span></td></tr>
+    <tr><td><b>4 · Operation</b></td><td>Mise à disposition sous validation, notification de fin, maintenance et support.</td><td>Validation <span class="pill g">explicite</span> + rollback</td></tr>
+  </table>
+</section>
+
+<section class="section">
+  <h2><span class="n">3</span>Les méthodes du workflow</h2>
+
+  <h3>3.1 — Le cycle d'une étape (6 temps)</h3>
+  <p>Chaque étape (ou « stage ») suit le même rythme. Ce canevas garantit qu'aucune production
+  n'échappe au contrôle qualité, sécurité et humain.</p>
+
+  <figure>
+  <div class="fig-wrap">
+  <svg viewBox="0 0 760 92" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans, DejaVu Sans, sans-serif">
+    <defs>
+      <marker id="ar2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+        <path d="M0,0 L6,3 L0,6 Z" fill="#5c8475"/>
+      </marker>
+    </defs>
+    <g font-size="8.6" text-anchor="middle">
+      <rect x="4"   y="30" width="112" height="38" rx="6" fill="#1f4a46"/>
+      <text x="60"  y="47" fill="#fff" font-weight="700">1 · Entrée</text>
+      <text x="60"  y="60" fill="#e8dcc2" font-size="7.4">pré-requis vérifiés</text>
+      <rect x="128" y="30" width="112" height="38" rx="6" fill="#356056"/>
+      <text x="184" y="47" fill="#fff" font-weight="700">2 · Délégation</text>
+      <text x="184" y="60" fill="#e8dcc2" font-size="7.4">A2A — mission cadrée</text>
+      <rect x="252" y="30" width="112" height="38" rx="6" fill="#5c8475"/>
+      <text x="308" y="47" fill="#fff" font-weight="700">3 · Production</text>
+      <text x="308" y="60" fill="#f1e8d6" font-size="7.4">livrables</text>
+      <rect x="376" y="30" width="112" height="38" rx="6" fill="#5c8475"/>
+      <text x="432" y="47" fill="#fff" font-weight="700">4 · Sensors</text>
+      <text x="432" y="60" fill="#f1e8d6" font-size="7.4">contrôles auto</text>
+      <rect x="500" y="30" width="112" height="38" rx="6" fill="#356056"/>
+      <text x="556" y="47" fill="#fff" font-weight="700">5 · Gate</text>
+      <text x="556" y="60" fill="#e8dcc2" font-size="7.4">traçabilité</text>
+      <rect x="624" y="30" width="132" height="38" rx="6" fill="#cf8a3a"/>
+      <text x="690" y="47" fill="#2b2219" font-weight="700">6 · Validation</text>
+      <text x="690" y="60" fill="#3a3417" font-size="7.4">humaine granulaire</text>
+    </g>
+    <g stroke="#5c8475" stroke-width="1.8" marker-end="url(#ar2)">
+      <line x1="116" y1="49" x2="128" y2="49"/>
+      <line x1="240" y1="49" x2="252" y2="49"/>
+      <line x1="364" y1="49" x2="376" y2="49"/>
+      <line x1="488" y1="49" x2="500" y2="49"/>
+      <line x1="612" y1="49" x2="624" y2="49"/>
+    </g>
+    <path d="M690,70 L690,82 L308,82 L308,70" fill="none" stroke="#cf8a3a" stroke-width="1.4" stroke-dasharray="4,3" marker-end="url(#ar2)"/>
+    <text x="500" y="90" font-size="7.4" fill="#cf8a3a" text-anchor="middle">Modify / Redo : on revient à la production, pour cet élément seulement</text>
+  </svg>
+  </div>
+  <figcaption>Figure 2 — Le cycle en 6 temps d'une étape, de l'entrée à la validation humaine.</figcaption>
+  </figure>
+
+  <h3>3.2 — La décision humaine : Keep / Modify / Redo</h3>
+  <p>À chaque point de validation, le coordinateur présente <b>chaque choix séparément</b>
+  (le choix, sa justification, une alternative). L'humain tranche <b>élément par élément</b> :</p>
+  <div class="grid2">
+    <div class="card"><span class="pill ok">Keep</span> &nbsp;Le choix est validé, on avance.</div>
+    <div class="card"><span class="pill">Modify</span> &nbsp;L'humain reformule, on réajuste.</div>
+    <div class="card"><span class="pill g">Redo</span> &nbsp;Le choix est rejeté, on propose une alternative.</div>
+  </div>
+  <p class="legend">Aucun élément non validé n'avance. Jamais d'approbation globale « tout ou rien ».</p>
+
+  <h3>3.3 — Calibrer l'effort : scopes &amp; axes</h3>
+  <p>Le principe « le workflow s'adapte au travail » est outillé par des <b>scopes</b> (le type de
+  chantier, qui détermine les étapes exécutées) et par <b>deux réglages indépendants</b> :
+  la <b>profondeur</b> du détail produit et le <b>niveau de vérification</b>.</p>
+  <div class="grid2">
+    <div class="card brand">
+      <h3 style="margin-top:0">8 scopes types</h3>
+      <p><span class="pill">standard</span> (défaut) · <span class="pill">feature</span> ·
+      <span class="pill">infra</span> · <span class="pill">security-patch</span> ·
+      <span class="pill">mvp</span> · <span class="pill">poc</span> ·
+      <span class="pill">express</span> · <span class="pill">enterprise</span></p>
+      <p class="legend">Le scope est auto-détecté puis <b>confirmé explicitement</b> avant de démarrer — jamais de démarrage silencieux.</p>
+    </div>
+    <div class="card gold">
+      <h3 style="margin-top:0">2 axes de réglage</h3>
+      <ul style="margin:0">
+        <li><b>Profondeur</b> : minimal · standard · comprehensive</li>
+        <li><b>Vérification</b> : advisory · standard · renforcé</li>
+      </ul>
+      <p class="legend">Un niveau lié à la sécurité ne peut <b>jamais</b> être abaissé sans validation humaine tracée.</p>
+    </div>
+  </div>
+
+  <h3>3.4 — La mémoire de règles (apprentissage)</h3>
+  <p>Le workflow <b>apprend des corrections humaines</b> : quand une personne corrige ou rejette un
+  choix, cela devient un <b>candidat-règle</b>. Après confirmation explicite, la règle est écrite
+  et <b>s'appliquera au prochain projet</b> — jamais rétroactivement. La mémoire est organisée en
+  <b>quatre couches</b> de priorité décroissante.</p>
+
+  <figure>
+  <div class="fig-wrap">
+  <svg viewBox="0 0 760 120" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans, DejaVu Sans, sans-serif">
+    <defs>
+      <marker id="ar3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+        <path d="M0,0 L6,3 L0,6 Z" fill="#1f4a46"/>
+      </marker>
+    </defs>
+    <text x="10" y="16" font-size="9" font-weight="700" fill="#1f4a46">Quatre couches (priorité décroissante)</text>
+    <g font-size="8.4" text-anchor="middle">
+      <rect x="10"  y="26" width="150" height="30" rx="5" fill="#1f4a46"/><text x="85"  y="45" fill="#fff" font-weight="700">workspace</text>
+      <rect x="170" y="26" width="150" height="30" rx="5" fill="#356056"/><text x="245" y="45" fill="#fff" font-weight="700">project</text>
+      <rect x="330" y="26" width="150" height="30" rx="5" fill="#5c8475"/><text x="405" y="45" fill="#fff" font-weight="700">phase</text>
+      <rect x="490" y="26" width="150" height="30" rx="5" fill="#b07a4f"/><text x="565" y="45" fill="#fff" font-weight="700">scope</text>
+    </g>
+    <g stroke="#c0a885" stroke-width="1.5">
+      <line x1="160" y1="41" x2="170" y2="41"/><line x1="320" y1="41" x2="330" y2="41"/><line x1="480" y1="41" x2="490" y2="41"/>
+    </g>
+    <text x="10" y="80" font-size="9" font-weight="700" fill="#cf8a3a">Cycle d'apprentissage</text>
+    <g font-size="7.8" text-anchor="middle" fill="#2b2219">
+      <text x="60"  y="100">Capture</text>
+      <text x="185" y="100">Remontée</text>
+      <text x="330" y="100">Confirmation humaine</text>
+      <text x="495" y="100">Contrôle de conflit</text>
+      <text x="640" y="100">Écriture</text>
+      <text x="722" y="100">▶ projet suivant</text>
+    </g>
+    <g stroke="#cf8a3a" stroke-width="1.6" marker-end="url(#ar3)">
+      <line x1="95"  y1="97" x2="140" y2="97"/>
+      <line x1="235" y1="97" x2="275" y2="97"/>
+      <line x1="395" y1="97" x2="440" y2="97"/>
+      <line x1="560" y1="97" x2="600" y2="97"/>
+      <line x1="670" y1="97" x2="690" y2="97"/>
+    </g>
+  </svg>
+  </div>
+  <figcaption>Figure 3 — Couches de la mémoire de règles et cycle d'apprentissage.</figcaption>
+  </figure>
+
+  <h3>3.5 — Garde-fous &amp; contrôles automatiques</h3>
+  <div class="grid2">
+    <div class="card">
+      <h3 style="margin-top:0">Invariants non contournables</h3>
+      <ul style="margin:0">
+        <li>Validation humaine granulaire</li>
+        <li>Décision structurante tracée (registre de décisions)</li>
+        <li>Piste d'audit tenue sur l'issue</li>
+        <li>Contrôle sécurité systématique (OWASP / STRIDE)</li>
+        <li>Aucune action à impact sans validation ; rollback avant action destructive</li>
+        <li>Blocage ⇒ mention explicite de l'humain</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">Gates &amp; sensors (advisory)</h3>
+      <p>Des contrôles automatiques factualisent la <b>traçabilité</b> (sections obligatoires,
+      cycle de vie des données, couverture de la demande, validité des diagrammes, sources des
+      affirmations, chaîne exigence → décision → livrable).</p>
+      <p class="legend">Ils <b>ne bloquent jamais</b> et <b>ne remplacent ni</b> la validation humaine
+      <b>ni</b> le contrôle sécurité : ils assistent la décision, qui reste humaine.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <h2><span class="n">4</span>Les agents &amp; les compétences mobilisés</h2>
+  <p>Le workflow réunit une <b>équipe d'agents spécialisés</b>, coordonnée par un chef d'orchestre.
+  Le <b>coordinateur ne produit pas les livrables</b> : il analyse, découpe, délègue, contrôle et
+  fait valider. Les experts produisent dans leur domaine.</p>
+
+  <table>
+    <tr><th style="width:30%">Agent (fonction)</th><th>À quoi il sert</th></tr>
+    <tr><td><b>Architecture Solution &amp; Intégration</b><br><span class="fn">coordinateur</span></td><td>Orchestre le workflow : analyse la demande, délègue, sollicite les contrôles, demande les validations humaines, met les livrables à disposition.</td></tr>
+    <tr><td><b>Architecte de solution</b></td><td>Conçoit les solutions : documentation d'architecture, décisions structurantes, diagrammes.</td></tr>
+    <tr><td><b>Architecte AWS</b></td><td>Définit les services cloud requis, produit les diagrammes et optimise les coûts.</td></tr>
+    <tr><td><b>Architecte Cybersécurité</b></td><td>Conçoit et renforce la sécurité (OWASP, STRIDE, normes sur demande).</td></tr>
+    <tr><td><b>Architecte de données</b></td><td>Modélise les données, le cycle de vie, la gouvernance et la classification.</td></tr>
+    <tr><td><b>OpenSpec Expert</b></td><td>Pilote la méthode spec-driven lorsqu'elle est activée.</td></tr>
+    <tr><td><b>Reviewer de cohérence</b></td><td>Vérifie la cohérence documentation ↔ décisions (revue seule, aucun livrable).</td></tr>
+    <tr><td><b>Reviewer de sécurité</b></td><td>Rend le verdict de revue sécurité — obligatoire dès qu'une surface de sécurité évolue.</td></tr>
+    <tr><td><b>Administrateur infrastructure Windows</b></td><td>Administration Windows (migrations, Intune, VM, golden image, Autopilot, SCCM).</td></tr>
+    <tr><td><b>Vente &amp; Appels d'Offres</b></td><td>Synthétise les architectures en supports de vente et réponses d'appels d'offres.</td></tr>
+    <tr><td><b>Présentation client</b></td><td>Produit des présentations ciblées à partir des documents validés.</td></tr>
+    <tr><td><b>Experte d'archivage</b></td><td>Import / export de documents, mise à disposition et archivage des livrables validés.</td></tr>
+    <tr><td><b>Agent de notifications</b></td><td>Notifie la fin des tâches, sur demande du coordinateur.</td></tr>
+  </table>
+
+  <h3>Les compétences (« skills ») partagées</h3>
+  <div class="grid2">
+    <div class="card brand">
+      <ul style="margin:0">
+        <li><b>project-defaults</b> — structure de projet, conventions de nommage et correspondance des agents (source unique).</li>
+        <li><b>architecture-solution-gabarits</b> — modèles standardisés des documents d'architecture.</li>
+      </ul>
+    </div>
+    <div class="card brand">
+      <ul style="margin:0">
+        <li><b>create-architectural-decision-record</b> — format normalisé des décisions structurantes (ADR).</li>
+        <li><b>cdae-ai-eligibilite</b> — analyse d'éligibilité au crédit d'impôt CDAE-IA (sur demande).</li>
+      </ul>
+    </div>
+  </div>
+  <p class="legend">Une compétence est une référence commune que les agents consultent pour travailler
+  de façon cohérente d'un projet à l'autre.</p>
+</section>
+
+<section class="section">
+  <h2><span class="n">5</span>L'A2A : comment les agents collaborent</h2>
+  <p>« A2A » désigne la collaboration <b>d'agent à agent</b>. Dans le workflow, elle repose sur un
+  principe simple : <b>tout passe par l'issue</b> (le fil du projet). Le coordinateur délègue en
+  publiant un commentaire qui <b>mentionne</b> l'agent voulu et lui confie une <b>mission cadrée</b>
+  (objectif, périmètre, critères d'acceptation). L'agent produit, puis rend la main pour contrôle.</p>
+
+  <figure>
+  <div class="fig-wrap">
+  <svg viewBox="0 0 760 196" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans, DejaVu Sans, sans-serif">
+    <defs>
+      <marker id="a4" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c8475"/></marker>
+      <marker id="a4g" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#cf8a3a"/></marker>
+    </defs>
+    <rect x="300" y="8" width="160" height="30" rx="15" fill="#cf8a3a"/>
+    <text x="380" y="27" font-size="10" font-weight="700" fill="#2b2219" text-anchor="middle">Humain (décideur)</text>
+    <circle cx="380" cy="100" r="40" fill="#1f4a46"/>
+    <text x="380" y="97" font-size="9.5" font-weight="700" fill="#fff" text-anchor="middle">Coordinateur</text>
+    <text x="380" y="110" font-size="7.6" fill="#e8dcc2" text-anchor="middle">orchestre</text>
+    <line x1="380" y1="38" x2="380" y2="60" stroke="#cf8a3a" stroke-width="2" marker-end="url(#a4g)"/>
+    <line x1="400" y1="60" x2="400" y2="40" stroke="#cf8a3a" stroke-width="1.4" stroke-dasharray="3,3" marker-end="url(#a4g)"/>
+    <text x="470" y="52" font-size="7.4" fill="#a89782" text-anchor="middle">demande ⇄ validation</text>
+    <g font-size="8" text-anchor="middle">
+      <rect x="20"  y="150" width="130" height="34" rx="6" fill="#f3e9d8" stroke="#5c8475"/><text x="85"  y="167" fill="#1f4a46" font-weight="700">Architecte solution</text><text x="85" y="178" fill="#7a6a56" font-size="7">+ données (délégué)</text>
+      <rect x="162" y="150" width="120" height="34" rx="6" fill="#f3e9d8" stroke="#5c8475"/><text x="222" y="171" fill="#1f4a46" font-weight="700">Architecte AWS</text>
+      <rect x="294" y="150" width="130" height="34" rx="6" fill="#f3e9d8" stroke="#5c8475"/><text x="359" y="167" fill="#1f4a46" font-weight="700">Architecte</text><text x="359" y="178" fill="#1f4a46" font-weight="700" font-size="7.6">cybersécurité</text>
+      <rect x="436" y="150" width="130" height="34" rx="6" fill="#f3e9d8" stroke="#5c8475"/><text x="501" y="167" fill="#1f4a46" font-weight="700">Reviewers</text><text x="501" y="178" fill="#7a6a56" font-size="7">cohérence · sécurité</text>
+      <rect x="578" y="150" width="162" height="34" rx="6" fill="#f3e9d8" stroke="#5c8475"/><text x="659" y="167" fill="#1f4a46" font-weight="700">Archivage · Notifications</text><text x="659" y="178" fill="#7a6a56" font-size="7">mise à dispo · ntfy</text>
+    </g>
+    <g stroke="#5c8475" stroke-width="1.5" marker-end="url(#a4)" fill="none">
+      <path d="M352,128 C250,140 150,142 95,150"/>
+      <path d="M366,135 C320,146 260,148 230,150"/>
+      <path d="M380,140 L368,150"/>
+      <path d="M396,135 C440,146 480,148 500,150"/>
+      <path d="M408,128 C520,140 600,142 650,150"/>
+    </g>
+    <text x="150" y="128" font-size="7.4" fill="#5c8475">délégation : mention + mission cadrée</text>
+    <text x="612" y="128" font-size="7.4" fill="#5c8475" text-anchor="end">retour : livrable + mention de l'assigneur</text>
+  </svg>
+  </div>
+  <figcaption>Figure 4 — Le coordinateur délègue en « étoile » (hub-and-spoke) ; chaque livraison revient pour contrôle avant validation humaine.</figcaption>
+  </figure>
+
+  <div class="grid2">
+    <div class="card brand">
+      <h3 style="margin-top:0">Les règles de la collaboration</h3>
+      <ul style="margin:0">
+        <li>Déclenchement par <b>mention valide</b> sur l'issue + mission claire.</li>
+        <li>Le coordinateur <b>contrôle chaque livrable</b> avant la validation humaine.</li>
+        <li>L'agent sollicité <b>mentionne en retour</b> l'assigneur pour vérification.</li>
+        <li>Un contrôle de sécurité est <b>sollicité à chaque modification</b> d'architecture.</li>
+      </ul>
+    </div>
+    <div class="card gold">
+      <h3 style="margin-top:0">Quatre façons de collaborer</h3>
+      <ul style="margin:0">
+        <li><b>En étoile</b> — chaque expert travaille isolément pour le coordinateur.</li>
+        <li><b>En chaîne</b> — les experts se passent le relais dans l'ordre.</li>
+        <li><b>En nuée</b> — plusieurs experts challengent un même brouillon.</li>
+        <li><b>En direct</b> — le coordinateur exécute lui-même l'étape.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout">
+    <b>Toujours sous contrôle humain.</b> Quelle que soit la façon de collaborer, dès qu'un blocage
+    survient, l'agent concerné <b>mentionne explicitement l'humain</b> et met le projet en pause :
+    il n'avance jamais en devinant. La décision finale appartient toujours à la personne.
+  </div>
+</section>
+
+<!-- ============ 6. UTILISATION AVEC MULTICA ============ -->
+<section class="section">
+  <h2><span class="n">6</span>Utiliser le workflow avec Multica</h2>
+  <p>Sur Multica, le workflow s'exécute <b>autour de l'issue</b> : chaque demande ouvre une issue,
+  et <b>tout le travail — analyse, délégation, décisions, validations — vit en commentaires</b> sur
+  cette issue, qui tient lieu de piste d'audit. L'humain déclenche, suit et valide depuis ce même fil.</p>
+
+  <figure>
+  <div class="fig-wrap">
+  <svg viewBox="0 0 760 150" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans, DejaVu Sans, sans-serif">
+    <defs>
+      <marker id="m6" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c8475"/></marker>
+      <marker id="m6g" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#cf8a3a"/></marker>
+    </defs>
+    <g font-size="8.6" text-anchor="middle">
+      <rect x="8"   y="20" width="150" height="40" rx="6" fill="#cf8a3a"/>
+      <text x="83"  y="38" fill="#2b2219" font-weight="700">1 · Ouvrir l'issue</text>
+      <text x="83"  y="51" fill="#3a3417" font-size="7.4">la demande = une issue</text>
+
+      <rect x="178" y="20" width="150" height="40" rx="6" fill="#1f4a46"/>
+      <text x="253" y="38" fill="#fff" font-weight="700">2 · Mentionner Mika</text>
+      <text x="253" y="51" fill="#e8dcc2" font-size="7.4">le coordinateur démarre</text>
+
+      <rect x="348" y="20" width="150" height="40" rx="6" fill="#356056"/>
+      <text x="423" y="38" fill="#fff" font-weight="700">3 · Délégation A2A</text>
+      <text x="423" y="51" fill="#e8dcc2" font-size="7.4">mention des experts</text>
+
+      <rect x="518" y="20" width="150" height="40" rx="6" fill="#5c8475"/>
+      <text x="593" y="38" fill="#fff" font-weight="700">4 · Production</text>
+      <text x="593" y="51" fill="#f1e8d6" font-size="7.4">tracée en commentaires</text>
+
+      <rect x="300" y="92" width="168" height="40" rx="6" fill="#cf8a3a"/>
+      <text x="384" y="110" fill="#2b2219" font-weight="700">5 · Validation humaine</text>
+      <text x="384" y="123" fill="#3a3417" font-size="7.4">choix par choix, sur l'issue</text>
+    </g>
+    <g stroke="#5c8475" stroke-width="1.8" marker-end="url(#m6)">
+      <line x1="158" y1="40" x2="178" y2="40"/>
+      <line x1="328" y1="40" x2="348" y2="40"/>
+      <line x1="498" y1="40" x2="518" y2="40"/>
+    </g>
+    <path d="M593,60 C593,80 470,86 460,92" fill="none" stroke="#cf8a3a" stroke-width="1.6" marker-end="url(#m6g)"/>
+    <path d="M300,112 C150,118 60,90 83,62" fill="none" stroke="#cf8a3a" stroke-width="1.4" stroke-dasharray="4,3" marker-end="url(#m6g)"/>
+    <text x="150" y="146" font-size="7.4" fill="#cf8a3a" text-anchor="middle">Modify / Redo : l'humain renvoie l'élément en production</text>
+  </svg>
+  </div>
+  <figcaption>Figure 5 — Le parcours d'une demande sur Multica, de l'ouverture de l'issue à la validation humaine.</figcaption>
+  </figure>
+
+  <div class="grid2">
+    <div class="card brand">
+      <h3 style="margin-top:0">Les mécanismes Multica mobilisés</h3>
+      <ul style="margin:0">
+        <li><b>L'issue comme pivot</b> — statut, priorité, assignation et historique au même endroit.</li>
+        <li><b>La mention A2A</b> — déléguer, c'est mentionner l'agent voulu avec une mission cadrée ; l'identité de l'agent est résolue automatiquement, jamais devinée.</li>
+        <li><b>La piste d'audit</b> — chaque étape est un commentaire ; l'historique n'est jamais écrasé.</li>
+        <li><b>Les pièces jointes</b> — les livrables (documents, diagrammes, PDF) sont attachés à l'issue.</li>
+      </ul>
+    </div>
+    <div class="card gold">
+      <h3 style="margin-top:0">Mettre le workflow en service</h3>
+      <ul style="margin:0">
+        <li><b>Agents</b> — créer l'équipe (coordinateur + spécialistes), chacun porté par sa définition.</li>
+        <li><b>Compétences</b> — les skills sont d'abord <b>importées</b> dans l'espace de travail, puis <b>assignées</b> aux agents : une compétence présente dans le dépôt n'est pas active tant qu'elle n'est pas importée.</li>
+        <li><b>Démarrage</b> — ouvrir l'issue, décrire le besoin, mentionner le coordinateur : le workflow se déroule et sollicite l'humain à chaque jalon.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout">
+    <b>L'humain reste aux commandes depuis l'issue.</b> Rien n'avance sans sa validation, aucune
+    action à impact n'est engagée sans accord explicite, et tout blocage le mentionne directement
+    pour qu'il tranche.
+  </div>
+</section>
+
+<!-- ============ 7. AGNOSTICITÉ & AUTRES HARNAIS ============ -->
+<section class="section">
+  <h2><span class="n">7</span>Un workflow agnostique : au-delà de Multica</h2>
+  <p>Le workflow n'est <b>pas lié à un moteur d'exécution particulier</b>. Il est entièrement décrit
+  en <b>documents Markdown lisibles</b> — les instructions du coordinateur, les fiches d'étape, les
+  protocoles, la mémoire de règles, les scopes et les contrôles. Cette <b>forme déclarative</b> est
+  sa force : <b>la méthode est le contenu, pas l'outil</b> qui l'exécute.</p>
+
+  <div class="grid2">
+    <div class="card brand">
+      <h3 style="margin-top:0">Deux niveaux d'agnosticité</h3>
+      <ul style="margin:0">
+        <li><b>Agnostique de méthodologie</b> — aucune méthode imposée ; une approche spec-driven
+        (p. ex. OpenSpec) s'active seulement si le projet la déclare.</li>
+        <li><b>Agnostique d'outillage</b> — la description est volontairement séparée de tout moteur
+        technique propriétaire : on adopte <b>la forme, pas la machinerie</b>.</li>
+      </ul>
+    </div>
+    <div class="card gold">
+      <h3 style="margin-top:0">Ce qu'un harnais doit fournir</h3>
+      <ul style="margin:0">
+        <li>Lire des <b>instructions en Markdown</b> et les suivre.</li>
+        <li>Faire tourner des <b>agents spécialisés</b> et les <b>faire dialoguer</b> (A2A).</li>
+        <li>Un <b>fil partagé</b> pour tracer les décisions et solliciter l'humain.</li>
+      </ul>
+    </div>
+  </div>
+
+  <figure>
+  <div class="fig-wrap">
+  <svg viewBox="0 0 760 160" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans, DejaVu Sans, sans-serif">
+    <defs>
+      <marker id="m7" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c8475"/></marker>
+    </defs>
+    <!-- source -->
+    <rect x="250" y="8" width="260" height="46" rx="8" fill="#1f4a46"/>
+    <text x="380" y="27" font-size="10.5" font-weight="700" fill="#fff" text-anchor="middle">Une source unique, déclarative</text>
+    <text x="380" y="43" font-size="8" fill="#e8dcc2" text-anchor="middle">conductor · stages · protocols · rules · scopes · sensors</text>
+    <!-- adapter -->
+    <rect x="300" y="68" width="160" height="24" rx="12" fill="#cf8a3a"/>
+    <text x="380" y="84" font-size="8.4" font-weight="700" fill="#2b2219" text-anchor="middle">projection par harnais</text>
+    <line x1="380" y1="54" x2="380" y2="68" stroke="#5c8475" stroke-width="2" marker-end="url(#m7)"/>
+    <!-- harnesses -->
+    <g font-size="8.4" text-anchor="middle">
+      <rect x="6"   y="118" width="100" height="30" rx="6" fill="#f3e9d8" stroke="#5c8475"/><text x="56"  y="137" fill="#1f4a46" font-weight="700">Multica</text>
+      <rect x="115" y="118" width="100" height="30" rx="6" fill="#f3e9d8" stroke="#5c8475"/><text x="165" y="137" fill="#1f4a46" font-weight="700">Claude</text>
+      <rect x="224" y="118" width="100" height="30" rx="6" fill="#f3e9d8" stroke="#5c8475"/><text x="274" y="137" fill="#1f4a46" font-weight="700">Codex</text>
+      <rect x="333" y="118" width="100" height="30" rx="6" fill="#f3e9d8" stroke="#5c8475"/><text x="383" y="137" fill="#1f4a46" font-weight="700">OpenCode</text>
+      <rect x="442" y="118" width="100" height="30" rx="6" fill="#f3e9d8" stroke="#5c8475"/><text x="492" y="137" fill="#1f4a46" font-weight="700">Hermes</text>
+      <rect x="551" y="118" width="100" height="30" rx="6" fill="#f3e9d8" stroke="#5c8475"/><text x="601" y="137" fill="#1f4a46" font-weight="700">Deepseek</text>
+      <rect x="660" y="118" width="100" height="30" rx="6" fill="#f3e9d8" stroke="#5c8475"/><text x="710" y="137" fill="#1f4a46" font-weight="700">Kiro</text>
+    </g>
+    <g stroke="#5c8475" stroke-width="1.4" marker-end="url(#m7)" fill="none">
+      <path d="M322,90 C180,104 90,108 56,118"/>
+      <path d="M340,92 C250,104 190,110 165,118"/>
+      <path d="M358,93 C320,106 290,112 274,118"/>
+      <path d="M380,92 L383,118"/>
+      <path d="M402,93 C440,106 470,112 492,118"/>
+      <path d="M420,92 C510,104 570,110 601,118"/>
+      <path d="M438,90 C580,104 670,108 710,118"/>
+    </g>
+  </svg>
+  </div>
+  <figcaption>Figure 6 — La même source alimente différents harnais ; seule la couche d'adaptation change, jamais la méthode.</figcaption>
+  </figure>
+
+  <h3>Comment l'utiliser avec un autre harnais</h3>
+  <p>Le passage d'un harnais à l'autre ne touche <b>ni les phases, ni les étapes, ni les garde-fous</b> :
+  seule change la <b>fine couche d'adaptation</b> qui relie la méthode aux spécificités de l'outil
+  (format d'instruction d'agent, mécanisme de messages, façon de solliciter l'humain).</p>
+  <table>
+    <tr><th style="width:22%">Harnais</th><th>Ce qui change (couche d'adaptation)</th><th style="width:28%">Ce qui ne change jamais</th></tr>
+    <tr><td><b>Multica</b></td><td>Issue + commentaires, mentions A2A, pièces jointes — l'exécution native décrite en section 6.</td><td rowspan="7">Les 5 phases, le cycle d'étape, la décision Keep / Modify / Redo, les scopes &amp; axes, la mémoire de règles, le contrôle sécurité et tous les invariants.</td></tr>
+    <tr><td><b>Claude</b></td><td>Fichiers d'instructions et de sous-agents au format attendu par l'outil ; options spécifiques projetées depuis la source.</td></tr>
+    <tr><td><b>Codex</b></td><td>Instructions projetées dans sa configuration d'agent ; messages d'étape adaptés à sa surface.</td></tr>
+    <tr><td><b>OpenCode</b></td><td>Définitions d'agents et déclenchements adaptés à son modèle d'exécution.</td></tr>
+    <tr><td><b>Hermes</b></td><td>Même source, projetée dans son mécanisme d'orchestration et de messages.</td></tr>
+    <tr><td><b>Deepseek Harness</b></td><td>Instructions et définitions d'agents projetées dans son format ; messages d'étape adaptés à sa surface d'exécution.</td></tr>
+    <tr><td><b>Kiro</b></td><td>Agents et instructions portés dans sa configuration native ; déclenchements et sollicitations humaines adaptés à son moteur.</td></tr>
+  </table>
+
+  <div class="callout">
+    <b>Une méthode, plusieurs moteurs.</b> Parce que la rigueur vit dans les documents — et non dans
+    un outil — le workflow garde <b>le même comportement, les mêmes garde-fous et la même qualité</b>
+    quel que soit le harnais qui l'exécute. On change de moteur sans réécrire la méthode.
+  </div>
+</section>
+
+</body>
+</html>

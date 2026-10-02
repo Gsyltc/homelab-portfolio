@@ -26,6 +26,21 @@ This is a monorepo of [Agent Plugins](https://agent-plugins.org) maintained by S
 - Use imperative mood in skill descriptions ("Summarize the document" not "Summarizes the document").
 - One concern per skill — prefer multiple small skills over one large one.
 
+## Mise à jour de la documentation des workflows (consigne agent)
+
+Lorsqu'un humain demande la **création ou la mise à jour de la documentation d'un workflow**
+(`core`, `homelab`, `matching-cv-ao`) — ou de la documentation du dépôt relative à ces
+workflows — l'agent **doit utiliser la skill [`guide-utilisation-workflow-generation`](plugins/general-purpose-assistant/skills/guide-utilisation-workflow-generation/SKILL.md)**
+(plugin `general-purpose-assistant`). Elle porte le **mode opératoire unique** : trame éditoriale,
+charte graphique, pied de page, gabarit HTML de construction et régénération WeasyPrint, pour que
+chaque mise à jour suive **toujours la même procédure**.
+
+- Livrable : **PDF uniquement**, dans `docs/`, nommé `guide-utilisation-workflow-<workflow>.pdf`.
+  Le HTML est un élément de construction (non conservé dans `docs/`).
+- Ne référencer **que le workflow visé** (cloisonnement — voir « Architecture Flow »).
+- Gouvernance inchangée : branche git dédiée à l'issue ; **aucun commit, PR ou push sans accord
+  explicite de l'humain**.
+
 ## Architecture Flow
 
 Ce dépôt porte **trois workflows d'orchestration multi-agents (A2A) totalement
