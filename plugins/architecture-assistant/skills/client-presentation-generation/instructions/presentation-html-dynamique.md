@@ -12,22 +12,26 @@ Un **fichier HTML unique**, ouvrable sans réseau. **Aucune** ressource externe 
 
 Toute présentation s'ouvre par **deux slides fixes**, avant les chapitres de contenu : une **page de garde**, puis un **sommaire**. Elles sont requises quel que soit le type (en Technique/Fonctionnelle comme ailleurs, ici en HTML dynamique).
 
-**Slide 1 — page de garde** (`class="slide active"`, `data-chapter="Page de garde"`) : mise en forme graphique moderne reprenant la charte réelle de `theme/` (dégradé `--al-primary → --al-secondary`, accent `--al-accent`, logo inliné en data URI). Contenu : **titre**, **sous-titre**, **public visé**, **date / version**, **mention de confidentialité**. Ne rien inventer : titre/public issus du cadrage ; jamais d'approximation de charte.
+**Slide 1 — page de garde** (`class="slide active"`, `data-chapter="Page de garde"`) : mise en forme graphique moderne reprenant la charte réelle de `theme/` (dégradé `--al-primary → --al-secondary`, accent `--al-accent`, logo inliné en data URI). **Champs normalisés** : **titre**, **sous-titre**, **public visé**, **auteur**, **année**, **date / version**, **baseline / tagline** (ligne d'accroche organisation/programme), **mention de confidentialité**. Ne rien inventer : titre/public/auteur issus du cadrage ; jamais d'approximation de charte.
 
 ```html
 <section class="slide active cover" data-chapter="Page de garde" data-sub="Page de garde">
   <img class="cover-logo" src="data:image/png;base64,…" alt="Logo client">
   <h1>Titre de la présentation</h1>
   <p class="cover-sub">Sous-titre — public visé</p>
+  <p class="cover-author">Auteur · AAAA</p>
+  <p class="cover-tagline">Baseline / tagline — accroche organisation ou programme</p>
   <p class="cover-meta">Version 1.0 · AAAA-MM-JJ · Confidentiel</p>
 </section>
 ```
 ```css
-.cover{display:flex;flex-direction:column;justify-content:center;gap:1rem;
+.cover{display:flex;flex-direction:column;justify-content:center;gap:.8rem;
   background:linear-gradient(135deg,var(--al-primary),var(--al-secondary));color:#fff}
 .cover-logo{width:180px;max-width:40%}
 .cover h1{font-size:clamp(1.8rem,4vw,3rem);border:0}
 .cover-sub{font-size:clamp(1.1rem,2vw,1.4rem);opacity:.95}
+.cover-author{font-size:clamp(1rem,1.6vw,1.15rem);opacity:.9}
+.cover-tagline{font-size:clamp(.95rem,1.5vw,1.1rem);opacity:.85;font-style:italic}
 .cover-meta{color:#dbe6f4;border-top:3px solid var(--al-accent);padding-top:.6rem;display:inline-block}
 ```
 
@@ -48,7 +52,7 @@ const toc=document.getElementById('toc');
 if(toc)seen.forEach(c=>{const li=document.createElement('li');li.textContent=c;toc.appendChild(li);});
 ```
 
-> **PowerPoint** : reproduire les deux mêmes ouvertures — une diapositive de garde (charte, titre/sous-titre/public/version/date/confidentialité) puis une diapositive de sommaire (chapitres de niveau 1). En Marp, deux premières slides Markdown ; en Pandoc `--reference-doc`, utiliser le masque « page de titre » du gabarit client.
+> **PowerPoint** : reproduire les deux mêmes ouvertures — une diapositive de garde (charte ; titre, sous-titre, public visé, **auteur**, **année**, version, date, **baseline / tagline**, confidentialité) puis une diapositive de sommaire (chapitres de niveau 1). En Marp, deux premières slides Markdown ; en Pandoc `--reference-doc`, utiliser le masque « page de titre » du gabarit client.
 
 ## 1. Créer les sections requises par le type de présentation
 
@@ -64,17 +68,19 @@ Les **sections dépendent du type** demandé — ne pas imposer un jeu de chapit
 Procédure :
 1. Choisir le type ; ouvrir `../<type>.md` pour la liste des chapitres.
 2. Ne **créer une section que lorsqu'elle est requise** par le sujet demandé et disponible dans la documentation (via `presentation-targeting`). Ne pas produire de section vide ; ne pas fusionner les types.
-3. Structurer chaque slide ainsi (le menu latéral se génère **automatiquement** à partir de `data-chapter`/`data-sub`) :
+3. Structurer chaque slide ainsi (le menu latéral se génère **automatiquement** à partir de `data-chapter`/`data-sub`). **Alterner un paragraphe rédigé et une liste à puces** (et, selon le propos, cartes / tableau / encadré) : viser un rendu structuré, ni bloc de prose compact ni simple liste de puces.
 
 ```html
 <section class="slide" data-chapter="Thème (niveau 1 du menu)" data-sub="Sous-chapitre (niveau 2)">
   <div class="eyebrow">SURTITRE</div>
   <h2><span class="bar"></span>Titre de la slide</h2>
-  <p class="lead">Paragraphe de contexte + « pourquoi ça compte ».</p>
-  <!-- cartes / tableau / liste / diagramme selon le chapitre -->
-  <span class="demo-tag">Source : documentation/… (ou « valeurs fictives — démonstration »)</span>
+  <p class="lead">Paragraphe de contexte rédigé + « pourquoi ça compte ».</p>
+  <ul><li>Puce explicative…</li><li>Puce explicative…</li></ul>
+  <!-- cartes / tableau / encadré / diagramme selon le chapitre -->
 </section>
 ```
+
+> **Aucune note de génération / méta-production dans le rendu** (règle d'or). Ne **jamais** écrire sur une diapositive : tag de source par slide (« Source : documentation/… »), « aucun contenu inventé », « produit uniquement à partir des documents validés », descripteurs de rendu présentés comme note (« interactif et animé », « syntaxe validée », « fidélité stricte… »), ligne de version-process (« v2 — révisée … »). La traçabilité des sources et la discipline « ne rien inventer » restent des **règles de production** appliquées en travaillant, pas du texte de diapositive. **Seule exception** : le `<span class="demo-tag">` est réservé à l'**étiquette d'une donnée fictive** (« valeurs fictives — démonstration »), jamais à une attribution de source.
 La première slide porte `class="slide active"` — c'est la **page de garde** (voir §0), suivie du **sommaire**, puis des chapitres de contenu.
 
 ## 2. Créer les diagrammes associés au type de présentation
@@ -140,9 +146,9 @@ Pour les SVG `archify`, le layout est géré par l'outil (valider la syntaxe ava
 
 ## 5. Densité du contenu
 
-- Viser une densité **adaptée au type**. Référence Executive validée : **~180–250 mots utiles par slide de fond** (un deck trop maigre — ~97 mots/slide — a été refusé). Technique/Fonctionnelle : plus dense encore.
-- Chaque slide apporte **contexte + puces explicatives + « pourquoi ça compte »**, pas seulement des libellés.
-- **Puiser dans la documentation réelle** (`documentation/…`) et **citer la source** par slide. Ne pas inventer le contenu qualitatif.
+- Viser une densité **adaptée au type**, suffisante. Cible : **diapositive de contenu rédigée ~180–320 mots utiles** ; Technique/Fonctionnelle plutôt vers le haut de la fourchette. **Diapositive à diagramme** : un **paragraphe de contexte au-dessus du schéma** (propos + « pourquoi ça compte »), pas une simple légende.
+- Chaque slide apporte **contexte + puces explicatives + « pourquoi ça compte »**, en **alternant paragraphe rédigé et liste à puces** (règle de clarté rédactionnelle), pas seulement des libellés.
+- **Puiser dans la documentation réelle** (`documentation/…`). La **traçabilité des sources est une discipline de production** (tenue par l'agent / le périmètre), **pas un texte de diapositive** : ne pas afficher de tag « Source : … » sur les slides (voir §1). Ne pas inventer le contenu qualitatif : si la matière manque, **le signaler** plutôt que combler.
 - **Frontière fictif/réel** : hors du principe « ne rien inventer », une démonstration/un test peut autoriser (sur **accord humain explicite**) des KPI/CAPEX-OPEX/feuille de route inventés — chacun **clairement étiqueté « démonstration »** (`demo-tag`), la **méthode** restant réelle. Ne jamais brouiller la frontière.
 
 ## 6. Longueur / largeur de prose
@@ -226,11 +232,13 @@ Modèle d'une arête :
 ## Checklist de livraison
 
 - [ ] **Autoportance** : `0` `http(s)://` hors namespace SVG ; aucun `<link>`/`<script src>`/`@import`/CDN.
-- [ ] **Page de garde + sommaire** : présentation ouverte par une page de garde (charte `theme/`, titre/sous-titre/public/version/date/confidentialité) puis un sommaire (chapitres de niveau 1 réellement présents) — HTML dynamique **et** PPTX (sauf Technique/Fonctionnelle = HTML uniquement).
+- [ ] **Page de garde + sommaire** : présentation ouverte par une page de garde (charte `theme/` ; titre, sous-titre, public visé, **auteur**, **année**, version/date, **baseline/tagline**, confidentialité) puis un sommaire (chapitres de niveau 1 réellement présents) — HTML dynamique **et** PPTX (sauf Technique/Fonctionnelle = HTML uniquement).
 - [ ] **Sections** : conformes au type de présentation ; aucune section vide ; menu latéral correct.
 - [ ] **Diagrammes** : type archify adapté ; géométrie R1–R5 (natif) ; aucun chevauchement/recouvrement ; pointes visibles.
 - [ ] **Charte** : tokens réels de `theme/`, logo inliné, aucune approximation résiduelle.
-- [ ] **Densité** : ~180–250 mots/slide (Executive) ; sources citées ; frontière fictif/réel nette.
+- [ ] **Densité** : ~180–320 mots/slide de contenu ; diapo à diagramme = paragraphe de contexte au-dessus du schéma ; matière manquante **signalée**, jamais comblée.
+- [ ] **Clarté rédactionnelle** : alternance paragraphes rédigés / listes à puces ; ni bloc de prose compact ni simple liste de puces.
+- [ ] **Aucune note de génération** : aucun tag « Source : … », « rien d'inventé », process-sourcing, descripteur de rendu ni ligne de version-process dans le rendu ; `demo-tag` réservé aux seules données fictives.
 - [ ] **Prose** : largeur dynamique ≥ 70 % ; aucun `max-width:…ch`.
 - [ ] **Accessibilité** : `prefers-reduced-motion` respecté ; responsive.
 - [ ] **Sécurité** : aucun secret ni identifiant.
@@ -245,8 +253,10 @@ Chaque règle corrige un défaut déjà constaté et refusé en validation ; les
 | Flèches « dans le vide » ; diagrammes statiques | Connecteurs bord-à-bord (R1) ; filtres de canaux + flux animé |
 | Flèches cachées sous des blocs ; espacements trop serrés | Couloirs `via` (R2) ; grille aérée (R3) ; étiquette hors pointe (R4) |
 | Charte approximée au lieu de la charte réelle | Lire `theme/`, ne jamais approximer |
-| Contenu trop court ; connecteurs superposés | Densité ~180–250 mots/slide ; ancres fractionnaires (R5) |
+| Contenu trop court ; connecteurs superposés | Densité ~180–320 mots/slide ; ancres fractionnaires (R5) |
 | Textes de prose trop étroits | Prose ≥ 70 %, aucun `max-width:…ch` |
+| Bloc de prose compact ou simple liste de puces | Alternance paragraphes rédigés / listes à puces (clarté rédactionnelle) |
+| Notes de production affichées sur les slides (« Source : … », « rien d'inventé », « v2 — révisée », descripteurs de rendu) | Aucune note de génération dans le rendu ; traçabilité = discipline de production, pas texte de slide ; `demo-tag` réservé au fictif |
 
 ## Arrimage
 
