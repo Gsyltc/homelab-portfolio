@@ -37,4 +37,4 @@ flowchart LR
 
 ## Fin de revue
 
-L'agent de revue notifie en retour l'assigneur / le demandeur par mention sur l'issue, avec un résumé clair des conclusions et recommandations. Une revue n'est jamais close sans cette notification.
+Une revue n'est jamais close sans un **retour A2A par lien de mention actif** vers l'assigneur (le coordinateur) ou l'humain demandeur, avec un résumé clair des conclusions et recommandations. Les mécanismes de ce retour (passage de statut, lien actif posé par l'agent de revue lui-même, vérification `trigger_outcomes`, anti-wake parasite) sont définis **une seule fois** dans la « Checklist de sortie de stage » de [`stage-protocol.md`](stage-protocol.md) et la « Règle A2A » de [`governance-security.md`](governance-security.md) — non redéfinis ici.

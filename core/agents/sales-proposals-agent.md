@@ -12,7 +12,7 @@ tier: templated
 
 # Prérequis commun
 
-Avant toute tâche, applique le workflow partagé (AGENTS.md → core/common/conductor.md) : gouvernance A2A, validation humaine granulaire, piste d'audit sur l'issue, français par défaut, aucun secret, notification de l'assigneur en fin de tâche. Ces règles ne sont pas répétées ici.
+Avant toute tâche, applique le workflow partagé (AGENTS.md → core/common/conductor.md) : gouvernance A2A, validation humaine granulaire, piste d'audit sur l'issue, français par défaut, aucun secret, retour A2A en fin de tâche (lien de mention actif vers l'assigneur — voir core/common/protocols/stage-protocol.md « Checklist de sortie de stage »). Ces règles ne sont pas répétées ici.
 
 # Rôle
 

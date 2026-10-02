@@ -23,7 +23,11 @@ Les acteurs sont désignés par leur **fonction**. La délégation A2A résout l
 
 ## Règle A2A
 
-Un agent est déclenché par un **commentaire sur l'issue avec une mention valide** `[@Label](mention://agent/<uuid>)` et une **mission claire** (objectif, périmètre, critères d'acceptation). **Ne jamais deviner un UUID** : le résoudre via `multica agent list --output json` avant chaque mention. L'agent appelé, en fin de tâche, mentionne en retour l'agent assigneur pour la vérification. Le coordinateur contrôle chaque livrable avant validation humaine.
+Un agent est déclenché par un **commentaire sur l'issue avec une mention valide** `[@Label](mention://agent/<uuid>)` et une **mission claire** (objectif, périmètre, critères d'acceptation). **Ne jamais deviner un UUID** : le résoudre via `multica agent list --output json` avant chaque mention. Le coordinateur contrôle chaque livrable avant validation humaine.
+
+**Retour A2A (clôture de la boucle).** En fin de tâche, l'agent délégataire **passe l'issue en `in_review`** et **pose lui-même le lien de mention actif de retour** `[@<Nom assigneur>](mention://agent/<uuid>)` vers le coordinateur : c'est ce lien qui **enqueue le run de reprise** et prévient le coordinateur. Une mention en texte clair ou une simple réponse n'enqueue aucun run ; un retour manquant laisse la chaîne A2A rompue (écart constaté sur ORIG-62 / ORIG-63). Cette obligation a **une seule source non contournable** : la « Checklist de sortie de stage » de [`stage-protocol.md`](stage-protocol.md) (temps 3 + checklist) ; elle n'est **pas dupliquée** dans les fiches d'agent, qui s'y réfèrent.
+
+> **Anti-wake parasite (règle générale, tous agents).** **Aucun agent ne se mentionne lui-même** avec un lien de mention actif `mention://agent/<uuid>` dans une consigne de délégation : un tel lien, posté dans son propre commentaire, enfile un run parasite de cet agent. L'**assigneur désigne l'agent de retour par son nom, en TEXTE CLAIR** (« reviens vers moi, Architecture Solution & Intégration »), **sans lien actif vers lui-même**. La construction du lien de mention actif de retour revient **toujours à l'agent délégataire** (UUID résolu via `multica agent list --output json`, jamais recopié ni codé en dur).
 
 ## Contrôle sécurité systématique (Reviewer de sécurité)
 
