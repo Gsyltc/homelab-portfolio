@@ -16,14 +16,14 @@ requires_stage: [deployment-under-validation]
 sensors: []
 scopes: [standard, feature, infra, security-patch, mvp, express, enterprise]
 inputs: "Tâche réalisée et passée en revue"
-outputs: "Notification ntfy de fin de tâche"
+outputs: "Notification de fin de tâche à l'humain (canal porté par l'Agent de notifications)"
 ---
 
 # Notification de fin
 
 ## Objectif
 
-Notifier l'humain de la fin de la tâche via ntfy.
+Notifier l'humain de la fin de la tâche, via l'Agent de notifications qui porte l'outil adapté au harnais.
 
 ## Steps
 
@@ -33,7 +33,7 @@ Une fois la tâche réalisée et revue, le coordinateur demande à l'**Agent de 
 
 ## Sensors
 
-Outputs: notification envoyée (code HTTP 2xx confirmé par l'Agent de notifications sur l'issue).
+Outputs: notification envoyée (succès confirmé par l'Agent de notifications sur l'issue, selon le canal qu'il porte).
 Imports: none.
 
 ## Learn

@@ -219,7 +219,7 @@ sequenceDiagram
     S->>H: Validation deploiement (OPERATION)
     H-->>S: Validation explicite (+ rollback si destructif)
     S->>AL: Demande notification de fin
-    AL-->>H: Notification ntfy
+    AL-->>H: Notification (canal porte par l Agent de notifications)
 ```
 
 ---
