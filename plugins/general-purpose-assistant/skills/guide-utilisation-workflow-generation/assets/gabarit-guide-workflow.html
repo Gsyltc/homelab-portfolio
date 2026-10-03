@@ -90,6 +90,27 @@
   .fig-wrap{border:1px solid var(--line); border-radius:6px; background:#fff; padding:7px;}
 
   .legend{font-size:7.8pt; color:var(--muted); margin-top:2pt;}
+
+  /* Annexe — fiche de scope + diagrammes d'état par scope (voir SKILL.md § Conventions des diagrammes d'interaction) */
+  .scope-card{border:1px solid var(--line); border-radius:7px; background:var(--soft); padding:9px 12px; margin:7pt 0; break-inside:avoid;}
+  .scope-card h3{margin-top:0; display:flex; align-items:baseline; gap:7px;}
+  .scope-card h3 code{font-family:"Noto Sans Mono","DejaVu Sans Mono",monospace; font-size:10.5pt; color:var(--brand); background:#fff; border:1px solid var(--line); border-radius:4px; padding:0 6px;}
+  .scope-meta{font-size:7.9pt; color:var(--muted); margin:1pt 0 5pt;}
+  .scope-body{display:flex; gap:11px; align-items:stretch;}
+  .scope-body .txt{flex:1.05;}
+  .scope-body .dia{flex:1; min-width:0;}
+  .dia .fw{border:1px solid var(--line); border-radius:6px; background:#fff; padding:5px; height:100%;}
+  .dia-cap{font-size:7.2pt; color:var(--muted); text-align:center; margin-top:2pt;}
+  .axis{display:inline-block; border-radius:4px; padding:1px 7px; font-size:7.6pt; font-weight:600; margin-right:4px;}
+  .axis.d{background:var(--brand2); color:#fff;}
+  .axis.v{background:var(--ok); color:#fff;}
+  .axis.vhi{background:#b07a4f; color:#fff;}
+  /* Légende du code couleur des flèches (A2A vert · Humain ocre · boucle terracotta) */
+  .flowkey{font-size:7.2pt; color:var(--muted); margin:3pt 0 0;}
+  .k{display:inline-block; width:14px; height:0; border-top-width:2px; border-top-style:solid; vertical-align:middle; margin:0 3px 2px 0;}
+  .k.a2a{border-color:#5c8475;}
+  .k.hum{border-color:#cf8a3a;}
+  .k.loop{border-top-style:dashed; border-color:#b07a4f;}
 </style>
 </head>
 <body>
@@ -444,6 +465,86 @@
   <figcaption>Figure 4 — Le coordinateur délègue en « étoile » (hub-and-spoke) ; chaque livraison revient pour contrôle avant validation humaine.</figcaption>
   </figure>
 
+  <!-- 5.1 — États & interactions (section OBLIGATOIRE de la trame — voir SKILL.md).
+       Adapter les couloirs aux acteurs du workflow visé : Humain · coordinateur · acteurs qui CONSTRUISENT
+       (un couloir chacun) · acteur qui VÉRIFIE (QA) · acteur de NOTIFICATION.
+       Conventions couleur : A2A = vert (#5c8475), Agent ↔ Humain = ocre (#cf8a3a),
+       boucle de retour = terracotta pointillé (#b07a4f), gate = losange ◆.
+       Flèches STRICTEMENT HORIZONTALES reliant deux lignes de vie ; colonne « état de l'issue » à droite. -->
+  <h3>5.1 — États &amp; interactions : A2A, Agent ↔ Humain, gates</h3>
+  <p>Au-delà de la topologie « en étoile », le travail est une <b>séquence d'interactions</b> rythmée par les
+  <b>gates</b> et par l'<b>état de l'issue</b>. Le diagramme se lit de haut en bas : chaque <b>flèche horizontale</b>
+  relie deux acteurs — en <span style="color:#5c8475"><b>vert</b></span> l'<b>A2A</b> (entre agents), en
+  <span style="color:#cf8a3a"><b>ocre</b></span> l'<b>Agent ↔ Humain</b> — chaque <b>losange</b> est un gate, et la
+  colonne de droite donne l'<b>état de l'issue</b>. Les acteurs qui <b>construisent</b> et celui qui <b>vérifie</b>
+  ont chacun leur couloir, et la <b>notification</b> finale est explicite.</p>
+
+  <figure>
+  <div class="fig-wrap">
+  <svg viewBox="0 0 760 400" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans, DejaVu Sans, sans-serif">
+    <defs>
+      <marker id="t5" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c8475"/></marker>
+      <marker id="t5h" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#cf8a3a"/></marker>
+      <marker id="t5r" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#b07a4f"/></marker>
+    </defs>
+    <!-- Lignes de vie x : Humain=80 Coordinateur=235 Constructeur·A=385 Constructeur·B=500 Reviewer/QA=610 Notifs=710 -->
+    <g text-anchor="middle" font-weight="700" font-size="8">
+      <rect x="36"  y="6" width="88"  height="30" rx="6" fill="#cf8a3a"/><text x="80"  y="19" fill="#2b2219">Humain</text><text x="80" y="30" fill="#3a3417" font-size="6.6" font-weight="400">décideur</text>
+      <rect x="189" y="6" width="92"  height="30" rx="6" fill="#1f4a46"/><text x="235" y="19" fill="#fff">Coordinateur</text><text x="235" y="30" fill="#e8dcc2" font-size="6.6" font-weight="400">orchestre + contrôle</text>
+      <rect x="339" y="6" width="92"  height="30" rx="6" fill="#5c8475"/><text x="385" y="19" fill="#fff">Constructeur A</text><text x="385" y="30" fill="#f1e8d6" font-size="6.6" font-weight="400">produit</text>
+      <rect x="454" y="6" width="92"  height="30" rx="6" fill="#5c8475"/><text x="500" y="19" fill="#fff">Constructeur B</text><text x="500" y="30" fill="#f1e8d6" font-size="6.6" font-weight="400">produit</text>
+      <rect x="566" y="6" width="88"  height="30" rx="6" fill="#356056"/><text x="610" y="19" fill="#fff">Reviewer / QA</text><text x="610" y="30" fill="#e8dcc2" font-size="6.6" font-weight="400">vérifie</text>
+      <rect x="666" y="6" width="88"  height="30" rx="6" fill="#b07a4f"/><text x="710" y="19" fill="#fff">Notifications</text><text x="710" y="30" fill="#f3e9d8" font-size="6.6" font-weight="400">ntfy</text>
+    </g>
+    <text x="730" y="46" font-size="6.6" font-weight="700" fill="#7a6a56" text-anchor="middle">état de l'issue</text>
+    <g stroke="#e0d2bb" stroke-width="1.3" stroke-dasharray="3,3">
+      <line x1="80"  y1="36" x2="80"  y2="378"/>
+      <line x1="235" y1="36" x2="235" y2="378"/>
+      <line x1="385" y1="36" x2="385" y2="378"/>
+      <line x1="500" y1="36" x2="500" y2="378"/>
+      <line x1="610" y1="36" x2="610" y2="378"/>
+      <line x1="710" y1="36" x2="710" y2="378"/>
+    </g>
+    <line x1="80" y1="58" x2="231" y2="58" stroke="#cf8a3a" stroke-width="1.5" marker-end="url(#t5h)"/>
+    <text x="84" y="54" font-size="7.2" fill="#cf8a3a">1 · ouvre l'issue + mentionne le coordinateur</text>
+    <rect x="704" y="50" width="52" height="15" rx="7" fill="#f3e9d8" stroke="#b07a4f"/><text x="730" y="61" font-size="6.6" fill="#b07a4f" text-anchor="middle">todo</text>
+    <path d="M235,74 l12,9 l-12,9 l-12,-9 Z" fill="#cf8a3a"/>
+    <line x1="235" y1="100" x2="84" y2="100" stroke="#cf8a3a" stroke-width="1.5" marker-end="url(#t5h)"/>
+    <text x="231" y="96" font-size="7.2" fill="#7a6a56" text-anchor="end">gate — cadrage (⇄ humain)</text>
+    <text x="84" y="112" font-size="7" fill="#cf8a3a">2 · propose cadrage → l'humain confirme</text>
+    <rect x="700" y="92" width="56" height="15" rx="7" fill="#1f4a46"/><text x="728" y="103" font-size="6.6" fill="#fff" text-anchor="middle">in_progress</text>
+    <line x1="235" y1="130" x2="381" y2="130" stroke="#5c8475" stroke-width="1.5" marker-end="url(#t5)"/>
+    <text x="239" y="126" font-size="7.2" fill="#5c8475">3 · délègue (mention UUID + mission)</text>
+    <line x1="235" y1="152" x2="496" y2="152" stroke="#5c8475" stroke-width="1.5" marker-end="url(#t5)"/>
+    <text x="239" y="148" font-size="7.2" fill="#5c8475">3b · délègue en parallèle</text>
+    <line x1="385" y1="182" x2="239" y2="182" stroke="#5c8475" stroke-width="1.5" marker-end="url(#t5)"/>
+    <text x="381" y="178" font-size="7.2" fill="#5c8475" text-anchor="end">4 · livrable + mention retour</text>
+    <line x1="500" y1="204" x2="239" y2="204" stroke="#5c8475" stroke-width="1.5" marker-end="url(#t5)"/>
+    <text x="496" y="200" font-size="7.2" fill="#5c8475" text-anchor="end">4b · livrable + mention retour</text>
+    <line x1="235" y1="234" x2="606" y2="234" stroke="#5c8475" stroke-width="1.5" marker-end="url(#t5)"/>
+    <text x="239" y="230" font-size="7.2" fill="#5c8475">5 · demande revue / vérification</text>
+    <path d="M610,242 l12,9 l-12,9 l-12,-9 Z" fill="#cf8a3a"/>
+    <line x1="610" y1="276" x2="389" y2="276" stroke="#b07a4f" stroke-width="1.4" stroke-dasharray="4,3" marker-end="url(#t5r)"/>
+    <text x="606" y="272" font-size="7.2" fill="#b07a4f" text-anchor="end">6 · renvoi au créateur (jamais corrigé par le reviewer)</text>
+    <line x1="610" y1="298" x2="239" y2="298" stroke="#356056" stroke-width="1.5" marker-end="url(#t5)"/>
+    <text x="606" y="294" font-size="7.2" fill="#356056" text-anchor="end">6b · GO (livrables conformes)</text>
+    <line x1="235" y1="328" x2="84" y2="328" stroke="#cf8a3a" stroke-width="1.5" marker-end="url(#t5h)"/>
+    <text x="84" y="324" font-size="7.2" fill="#cf8a3a">7 · présente chaque choix (Keep / Modify / Redo)</text>
+    <path d="M80,336 l12,9 l-12,9 l-12,-9 Z" fill="#cf8a3a"/>
+    <line x1="80" y1="366" x2="231" y2="366" stroke="#6a7636" stroke-width="1.6" marker-end="url(#t5)"/>
+    <text x="84" y="362" font-size="7.2" fill="#6a7636">8 · Keep → mise à disposition</text>
+    <rect x="702" y="330" width="54" height="15" rx="7" fill="#cf8a3a"/><text x="729" y="341" font-size="6.6" fill="#2b2219" text-anchor="middle">in_review</text>
+    <line x1="235" y1="366" x2="706" y2="366" stroke="#b07a4f" stroke-width="1.5" marker-end="url(#t5r)" opacity="0"/>
+    <rect x="700" y="358" width="56" height="15" rx="7" fill="#6a7636"/><text x="728" y="369" font-size="6.6" fill="#fff" text-anchor="middle">done (humain)</text>
+    <line x1="247" y1="366" x2="686" y2="366" stroke="#b07a4f" stroke-width="1.3" marker-end="url(#t5r)"/>
+    <text x="300" y="362" font-size="7" fill="#b07a4f">9 · déclenche la notification (ntfy)</text>
+  </svg>
+  </div>
+  <figcaption>Figure 4bis — Diagramme d'états &amp; interactions (gabarit à adapter) : couloirs Humain · coordinateur ·
+  constructeurs · reviewer/QA · notifications ; flèches horizontales (vert A2A, ocre Agent ↔ Humain), losanges = gates,
+  colonne de droite = état de l'issue, boucles renvoi / Modify-Redo.</figcaption>
+  </figure>
+
   <div class="grid2">
     <div class="card brand">
       <h3 style="margin-top:0">Les règles de la collaboration</h3>
@@ -632,6 +733,61 @@
     un outil — le workflow garde <b>le même comportement, les mêmes garde-fous et la même qualité</b>
     quel que soit le harnais qui l'exécute. On change de moteur sans réécrire la méthode.
   </div>
+</section>
+
+<!-- ============ 8. ANNEXE — SCOPES EN DÉTAIL (section OBLIGATOIRE de la trame — voir SKILL.md) ============
+     Produire UNE fiche .scope-card PAR SCOPE du workflow visé (à partir de <workflow>/scopes/).
+     Chaque fiche porte : titre <code>, mots-clés + axes (Depth/Vérification), prose d'intention/garde-fous,
+     ET un DIAGRAMME D'ÉTAT du flux spécifique au scope mettant en avant les interactions A2A (vert #5c8475)
+     et Humain (ocre #cf8a3a), avec boucles de retour (terracotta pointillé #b07a4f) et gates (◆).
+     Le bloc ci-dessous est un GABARIT à dupliquer/adapter — ne pas livrer tel quel. -->
+<section class="section">
+  <h2><span class="n">8</span>Annexe — Les scopes en détail</h2>
+  <p>Un <b>scope</b> est le <b>type de chantier</b> : il fixe le parcours d'étapes et porte des <b>valeurs par
+  défaut</b> d'axes — <b>Depth</b> (combien on écrit) et <b>Vérification</b> (à quel point on vérifie). Cette annexe
+  détaille chaque scope du workflow avec un <b>diagramme d'état</b> de son <b>flux spécifique</b>, <b>interactions
+  A2A</b> (<span style="color:#5c8475"><b>vert</b></span>) et <b>Humain</b> (<span style="color:#cf8a3a"><b>ocre</b></span>)
+  mises en avant.</p>
+
+  <p class="flowkey"><b>Légende des diagrammes d'état par scope :</b>
+  <span class="k a2a"></span> interaction A2A (agent → agent) &nbsp;·&nbsp;
+  <span class="k hum"></span> interaction Agent ↔ Humain &nbsp;·&nbsp;
+  <span class="k loop"></span> boucle de retour (renvoi / Modify / escalade) &nbsp;·&nbsp;
+  ◆ gate / validation.</p>
+
+  <!-- GABARIT de fiche de scope — dupliquer pour chaque scope du workflow visé -->
+  <div class="scope-card">
+    <h3><code>&lt;nom-du-scope&gt;</code> <span class="pill">libellé / priorité</span></h3>
+    <div class="scope-meta">Mots-clés : … — <span class="axis d">Depth …</span><span class="axis v">Vérif. …</span></div>
+    <div class="scope-body">
+      <div class="txt">
+        <p>Intention du scope + ce qui le distingue (parcours, étapes allégées / renforcées / court-circuitées).</p>
+        <p><b>Flux A2A &amp; Humain.</b> Décrire qui délègue à qui (A2A), où l'humain valide, les boucles de retour
+        et les garde-fous propres au scope.</p>
+      </div>
+      <div class="dia"><div class="fw">
+      <svg viewBox="0 0 236 150" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans, DejaVu Sans, sans-serif">
+        <defs>
+          <marker id="tpl-a" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c8475"/></marker>
+          <marker id="tpl-h" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#cf8a3a"/></marker>
+          <marker id="tpl-r" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#b07a4f"/></marker>
+        </defs>
+        <g text-anchor="middle" font-size="7">
+          <rect x="68" y="6"   width="100" height="18" rx="4" fill="#1f4a46"/><text x="118" y="18" fill="#fff">Coordinateur — scope ◆</text>
+          <rect x="56" y="42"  width="124" height="18" rx="4" fill="#5c8475"/><text x="118" y="54" fill="#fff">Constructeur (A2A)</text>
+          <rect x="60" y="78"  width="116" height="18" rx="4" fill="#356056"/><text x="118" y="90" fill="#fff">Reviewer / QA ◆</text>
+          <rect x="54" y="114" width="128" height="16" rx="4" fill="#cf8a3a"/><text x="118" y="126" fill="#2b2219">Humain — validation ◆</text>
+        </g>
+        <line x1="118" y1="24" x2="118" y2="41"  stroke="#5c8475" stroke-width="1.4" marker-end="url(#tpl-a)"/>
+        <line x1="118" y1="60" x2="118" y2="77"  stroke="#5c8475" stroke-width="1.4" marker-end="url(#tpl-a)"/>
+        <line x1="118" y1="96" x2="118" y2="113" stroke="#cf8a3a" stroke-width="1.4" marker-end="url(#tpl-h)"/>
+        <path d="M60,87 C26,80 26,52 56,49" fill="none" stroke="#b07a4f" stroke-width="1.2" stroke-dasharray="3,2" marker-end="url(#tpl-r)"/>
+        <text x="30" y="70" font-size="5.6" fill="#b07a4f" text-anchor="middle">renvoi</text>
+      </svg>
+      </div><div class="dia-cap">Flux du scope : A2A → vérification → validation humaine (à adapter)</div></div>
+    </div>
+  </div>
+
 </section>
 
 </body>
