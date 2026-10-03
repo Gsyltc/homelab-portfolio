@@ -32,8 +32,8 @@ Dès qu'un agent notifie l'humain (mention humaine sur blocage, ou toute autre s
 
 - **Type d'évènement** : `Issue Multica` (constante).
 - **Titre** : le nom (titre) de l'issue.
-- **Message** : `<Fonction de l'agent qui demande la notification> demande ton attention pour la tache <Nom de la tache>. Cette tache est actuellement en <status de la tache>`
+- **Message** : `<Nom de l'agent qui demande la notification> demande ton attention pour la tache <Nom de la tache>. Cette tache est actuellement en <status de la tache>`
 
-Les valeurs (`<Fonction de l'agent…>` = la **fonction** de l'agent déclencheur, jamais son nom/prénom ; `<Nom de la tache>` = titre de l'issue ; `<status de la tache>` = statut courant de l'issue) sont fournies par l'agent déclencheur ; si l'une manque, la demander plutôt que de l'inventer.
+Les valeurs (`<Nom de l'agent…>` = le **nom** (prénom) de l'agent déclencheur — **exception conviviale propre aux notifications**, on utilise le nom et non la fonction ; `<Nom de la tache>` = titre de l'issue ; `<status de la tache>` = statut courant de l'issue) sont fournies par l'agent déclencheur ; si l'une manque, la demander plutôt que de l'inventer.
 
 Mise en œuvre ntfy (outil que tu portes) : passer le **Type d'évènement** via le tag `Tags: Issue Multica`, le **Titre** via l'en-tête `Title`, le **Message** en corps ; vérifier le succès (code HTTP 2xx) puis confirmer sur l'issue (sans secret). Sous un autre harnais sans ntfy, utiliser l'outil de notification disponible ou, à défaut, tracer un no-op (la mention humaine de l'invariant 6 reste, elle, obligatoire).

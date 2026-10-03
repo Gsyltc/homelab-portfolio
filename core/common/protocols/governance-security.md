@@ -67,8 +67,8 @@ Chaque fois qu'un agent **notifie l'humain** — mention humaine obligatoire sur
 
 - **Type d'évènement** : `Issue Multica` (constante — toute notification déclenchée par une sollicitation humaine porte ce type).
 - **Titre** : le nom (titre) de l'issue.
-- **Message** : `<Fonction de l'agent qui demande la notification> demande ton attention pour la tache <Nom de la tache>. Cette tache est actuellement en <status de la tache>`
-  - `<Fonction de l'agent qui demande la notification>` : la **fonction** de l'agent qui déclenche la notification (ex. « Architecte de solution »), **jamais son nom/prénom**.
+- **Message** : `<Nom de l'agent qui demande la notification> demande ton attention pour la tache <Nom de la tache>. Cette tache est actuellement en <status de la tache>`
+  - `<Nom de l'agent qui demande la notification>` : le **nom** (prénom) de l'agent qui déclenche la notification (ex. « Manuel »). **Exception propre aux notifications** : pour rester convivial envers l'humain, le message utilise le **nom** de l'agent, et non sa fonction. Partout ailleurs dans la gouvernance A2A, les acteurs restent désignés par leur **fonction**.
   - `<Nom de la tache>` : le nom (titre) de l'issue concernée.
   - `<status de la tache>` : le statut courant de l'issue au moment de la notification.
 
