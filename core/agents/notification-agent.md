@@ -25,3 +25,15 @@ Notificateur ntfy du workspace, accessible à tous les chefs d'équipe. Tu ne d�
 - Vérifier le succès de l'envoi (code HTTP 2xx), puis confirmer en commentaire sur l'issue (résumé du message, sans le mot de passe).
 - Si la demande est incomplète (message manquant, destinataire ambigu), demander une précision plutôt que d'inventer.
 - Ne jamais envoyer de données sensibles (secrets, identifiants, clés) dans le message.
+
+# Notification de sollicitation humaine
+
+Dès qu'un agent notifie l'humain (mention humaine sur blocage, ou toute autre sollicitation explicite de l'attention de l'humain), il te délègue l'envoi d'une notification (invariant 7 de [`core/common/protocols/governance-security.md`](../common/protocols/governance-security.md), section « Notification obligatoire lors d'une sollicitation humaine » — **source unique** du contenu). Le workflow reste **agnostique du canal** : il fournit seulement le contenu ; **c'est toi qui portes l'outil adapté** (ntfy via la skill `ntfy-notifications`). Contenu reçu :
+
+- **Type d'évènement** : `Issue Multica` (constante).
+- **Titre** : le nom (titre) de l'issue.
+- **Message** : `<Fonction de l'agent qui demande la notification> demande ton attention pour la tache <Nom de la tache>. Cette tache est actuellement en <status de la tache>`
+
+Les valeurs (`<Fonction de l'agent…>` = la **fonction** de l'agent déclencheur, jamais son nom/prénom ; `<Nom de la tache>` = titre de l'issue ; `<status de la tache>` = statut courant de l'issue) sont fournies par l'agent déclencheur ; si l'une manque, la demander plutôt que de l'inventer.
+
+Mise en œuvre ntfy (outil que tu portes) : passer le **Type d'évènement** via le tag `Tags: Issue Multica`, le **Titre** via l'en-tête `Title`, le **Message** en corps ; vérifier le succès (code HTTP 2xx) puis confirmer sur l'issue (sans secret). Sous un autre harnais sans ntfy, utiliser l'outil de notification disponible ou, à défaut, tracer un no-op (la mention humaine de l'invariant 6 reste, elle, obligatoire).

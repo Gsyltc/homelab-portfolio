@@ -19,7 +19,7 @@ Les acteurs sont désignés par leur **fonction**. La délégation A2A résout l
 | **Administrateur infrastructure Windows** | Windows, Intune, VM, golden image, Autopilot, SCCM. Rollback validé avant action destructive. |
 | **OpenSpec Expert** | Cycle spec-driven. **Sollicité uniquement si OpenSpec activé.** |
 | **Experte d'archivage** | Import / export, mise à disposition des livrables validés. |
-| **Agent de notifications** | Notification ntfy de fin de tâche, sur demande du coordinateur. |
+| **Agent de notifications** | Notification de l'humain (fin de tâche, sollicitation d'attention), sur demande d'un agent. Porte l'outil de notification adapté au harnais (canal agnostique côté workflow). |
 
 ## Règle A2A
 
@@ -45,6 +45,7 @@ Aucun scope, aucune règle apprise, aucun gate / sensor advisory ne peut affaibl
 4. **Contrôle sécurité minimal** OWASP / STRIDE, systématique.
 5. **Aucune action à impact** sans validation humaine explicite ; **rollback validé** avant action destructive.
 6. **Mention humaine obligatoire sur blocage** — dès qu'un blocage survient, **quel que soit l'agent** concerné (coordinateur, architecte, reviewer, expert, agent support…), l'agent qui rencontre le blocage **doit mentionner explicitement l'humain demandeur** (`[@Nom](mention://member/<user_id>)`) sur l'issue pour qu'il intervienne. Un commentaire posté sans mention humaine ne satisfait **pas** cet invariant : un blocage laissé sans mention est un écart de gouvernance. Voir « Mention humaine obligatoire en cas de blocage » ci-dessous.
+7. **Notification obligatoire sur sollicitation humaine** — chaque fois qu'un agent notifie l'humain (mention humaine sur blocage de l'invariant 6, ou toute autre sollicitation explicite de l'attention de l'humain), le même agent **doit également demander à l'Agent de notifications** d'envoyer une notification, en parallèle de la mention sur l'issue. Le **canal** est agnostique du harnais : le workflow décrit le contenu, l'Agent de notifications porte l'outil adapté (règle de dégradation ADR 0038 : no-op tracé si aucun outil). La mention humaine seule ne satisfait **pas** cet invariant. Voir « Notification obligatoire lors d'une sollicitation humaine » ci-dessous.
 
 ## Mention humaine obligatoire en cas de blocage
 
@@ -57,6 +58,21 @@ Un **blocage** est toute situation où le workflow ne peut pas avancer sans arbi
 3. **Passe l'issue au statut `blocked`** (`multica issue status <id> blocked`) pour rendre l'état visible.
 
 L'agent **ne devine jamais** et **n'avance pas** sur l'élément bloqué tant que l'humain n'a pas tranché. Cette obligation est **non contournable** : aucun scope, aucune règle apprise, aucun gate / sensor advisory, aucune frontière de délégation ne peut la désactiver ou la reléguer à un autre agent. Un agent délégué qui se bloque mentionne l'humain **directement** (il peut en informer aussi le coordinateur, mais la mention humaine reste obligatoire et ne se délègue pas).
+
+## Notification obligatoire lors d'une sollicitation humaine
+
+Chaque fois qu'un agent **notifie l'humain** — mention humaine obligatoire sur blocage (invariant 6 et section ci-dessus), ou toute autre situation où l'agent sollicite explicitement l'attention de l'humain sur l'issue — ce même agent **doit également demander à l'Agent de notifications** d'envoyer une notification. La mention humaine sur l'issue et la demande de notification sont **complémentaires** : la mention ne satisfait pas à elle seule l'invariant 7.
+
+**Règle** : en plus de poster la mention humaine sur l'issue, l'agent qui notifie l'humain **délègue** à l'**Agent de notifications** (`DELEGATE(fonction, mission)`, voir ADR 0038) l'envoi d'une notification, en lui fournissant le contenu exact ci-dessous. La délégation suit la mécanique de coordination du harnais courant (sous Multica : mention A2A `[@<Label>](mention://agent/<uuid>)`, UUID **résolu** via `multica agent list --output json` pour la fonction « Agent de notifications », jamais deviné). Contenu de la notification :
+
+- **Type d'évènement** : `Issue Multica` (constante — toute notification déclenchée par une sollicitation humaine porte ce type).
+- **Titre** : le nom (titre) de l'issue.
+- **Message** : `<Fonction de l'agent qui demande la notification> demande ton attention pour la tache <Nom de la tache>. Cette tache est actuellement en <status de la tache>`
+  - `<Fonction de l'agent qui demande la notification>` : la **fonction** de l'agent qui déclenche la notification (ex. « Architecte de solution »), **jamais son nom/prénom**.
+  - `<Nom de la tache>` : le nom (titre) de l'issue concernée.
+  - `<status de la tache>` : le statut courant de l'issue au moment de la notification.
+
+L'Agent de notifications choisit l'outil adapté, envoie la notification, en vérifie le succès selon son canal et confirme sur l'issue (sans secret). Si l'agent déclencheur **est lui-même** l'Agent de notifications, il envoie directement au lieu de se déléguer. Cette obligation est **non contournable** et suit les mêmes règles A2A (pas d'auto-mention active, résolution d'UUID dynamique) que le reste de la gouvernance.
 
 ## Garde-fous des scopes (plancher sécurité)
 
