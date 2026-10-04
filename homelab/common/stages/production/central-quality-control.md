@@ -2,7 +2,7 @@
 slug: central-quality-control
 phase: production
 execution: ALWAYS
-condition: "Always executes — aiguillage GO / RENVOI du Tech Lead sur chaque livrable"
+condition: "Démarre uniquement lorsque TOUTES les sous-issues spécialistes du stage sont à `done` (barrière de stage : Docker ET Terraform `done`, jamais sur `in_review`) ; aiguillage GO / RENVOI du Tech Lead sur chaque livrable"
 lead_agent: Tech Lead Homelab
 support_agents: []
 mode: inline
@@ -27,6 +27,10 @@ outputs: "Aiguillage GO / RENVOI + décision de passage en Validation"
 Router chaque livrable (GO / RENVOI) au niveau macro, sans analyse technique de fond.
 
 ## Steps
+
+### Step 0 — Barrière de stage : ne démarrer que sur toutes les sous-issues `done`
+
+Le contrôle qualité central **ne démarre que lorsque toutes les sous-issues spécialistes du stage sont à `done`** (barrière de stage : Docker **et** Terraform `done`). Chaque sous-issue atteint `done` à la **validation QA** (`verdict = OK`) de **son** livrable (cf. [`quality-assurance.md`](quality-assurance.md) et [`protocols/stage-protocol.md` § Cycle de statut des sous-issues & barrière de stage](../../protocols/stage-protocol.md#cycle-de-statut-des-sous-issues--barrière-de-stage)). Tant qu'une sous-issue demeure en `in_progress` ou `in_review` (y compris en boucle courte de `RENVOI`), **la barrière n'est pas franchie et ce stage ne démarre pas**. La condition de démarrage est « **toutes les sous-issues `done`** », jamais « au moins un livrable en `in_review` ».
 
 ### Step 1 — Contrôle macro (jamais technique)
 

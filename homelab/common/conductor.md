@@ -127,7 +127,7 @@ La piste d'audit vit **sur l'issue Multica**, jamais dans un fichier `audit.md`.
 
 ## OBLIGATOIRE : concurrence — un seul traitement par stack (lecture **par artefact**)
 
-Le verrou « un seul traitement par stack » se lit **par artefact / livrable** : deux traitements **disjoints** (le docker-compose et la configuration Terraform `.tfvars`) peuvent progresser **en parallèle** sur la même stack, car ces livrables ne s'écrasent jamais. Deux agents sur le **même** artefact restent **interdits**. Le Tech Lead pose une clé `active_step` **par artefact** (ex. `specialiste-docker:compose`, `specialiste-terraform:tfvars`) à la délégation, l'efface au retour contrôlé, et sérialise toute demande concurrente visant le **même** artefact. Détail et séquence `new-stack` : [`protocols/governance-security.md`](protocols/governance-security.md) § concurrence.
+Le verrou « un seul traitement par stack » se lit **par artefact / livrable** : deux traitements **disjoints** (le docker-compose et la configuration Terraform `.tfvars`) peuvent progresser **en parallèle** sur la même stack, car ces livrables ne s'écrasent jamais. Deux agents sur le **même** artefact restent **interdits**. Le Tech Lead pose une clé `active_step` **par artefact** (ex. `specialiste-docker:compose`, `specialiste-terraform:tfvars`) à la délégation, l'efface au retour contrôlé, et sérialise toute demande concurrente visant le **même** artefact. Chaque livrable est porté par une **sous-issue `--stage 1`** suivant le cycle de statut `in_progress` → `in_review` → `done` ; le **contrôle qualité central** ([`stages/production/central-quality-control.md`](stages/production/central-quality-control.md)) ne démarre qu'une fois **toutes** les sous-issues spécialistes à `done` (barrière de stage). Détail et séquence `new-stack` : [`protocols/governance-security.md`](protocols/governance-security.md) § concurrence et [`protocols/stage-protocol.md` § Cycle de statut des sous-issues & barrière de stage](protocols/stage-protocol.md#cycle-de-statut-des-sous-issues--barrière-de-stage).
 
 ---
 
@@ -185,10 +185,12 @@ sequenceDiagram
     B-->>S: Compose + recapitulatif
     S->>K: Delegue verification compose (mention + mission)
     K-->>S: Rapport QA + coherence Traefik
+    Note over S,K: Sous-issues Docker/Terraform : in_progress -> in_review (livrable) -> done (QA OK)
     S->>M: Branche n8n si demande n8n (delegation immediate)
     M-->>S: Proposition / flux applique apres validation
     S->>Hu: Branche Home Assistant si demande HA
     Hu-->>S: Proposition / modif apres validation
+    Note over S: Barriere de stage : central-quality-control demarre uniquement quand toutes les sous-issues sont done
     S->>S: Controle qualite central de chaque livrable (PRODUCTION)
     S->>S: in_review + prerequis 4.0
     S->>AL: Demande notification revue prete
