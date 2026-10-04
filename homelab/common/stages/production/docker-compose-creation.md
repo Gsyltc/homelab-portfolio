@@ -2,7 +2,7 @@
 slug: docker-compose-creation
 phase: production
 execution: CONDITIONAL
-condition: "Stack Docker (Swarm) — ignoré sous infra-terraform et branches autonomes"
+condition: "Stack Docker (Swarm) — ignoré sous infra-terraform et branches autonomes. Produit en parallèle de terraform-configuration."
 lead_agent: Spécialiste Docker
 support_agents: []
 mode: subagent
@@ -11,11 +11,11 @@ reviewer: null
 review_class: none
 human_gate: granular
 produces: [livrable_compose]
-consumes: [{artifact: parametres_requis_complets, required: true}, {artifact: walking_skeleton_valide, required: true}, {artifact: livrable_tfvars, required: false}]
-requires_stage: [terraform-configuration]
+consumes: [{artifact: parametres_requis_complets, required: true}, {artifact: walking_skeleton_valide, required: true}]
+requires_stage: [autonomy-mode]
 sensors: [yaml-validity, plaintext-secret]
 scopes: [stack-update, new-stack, config-change, security-patch]
-inputs: "Paramètres requis + documentation officielle + walking skeleton validé + config Terraform déjà produite (.tfvars)"
+inputs: "Paramètres requis (collectés en Cadrage §2.4 — domaine / FQDN, auth) + documentation officielle + walking skeleton validé"
 outputs: "Fichier docker-compose optimisé Swarm, téléchargeable"
 ---
 
@@ -23,13 +23,13 @@ outputs: "Fichier docker-compose optimisé Swarm, téléchargeable"
 
 ## Objectif
 
-Produire le docker-compose optimisé Swarm, cohérent avec les paramètres, la documentation officielle **et la configuration Terraform déjà produite en amont** (`.tfvars`, cf. [`terraform-configuration.md`](terraform-configuration.md)).
+Produire le docker-compose optimisé Swarm, cohérent avec les **paramètres collectés en Cadrage (§2.4)** (domaine / FQDN, auth) et la documentation officielle. Ce stage s'exécute **en parallèle** de la configuration Terraform ([`terraform-configuration.md`](terraform-configuration.md)) : il ne dépend pas du `.tfvars`, et la cohérence `.tfvars` ↔ compose est réconciliée par l'Analyste QA en aval.
 
 ## Steps
 
-### Step 1 — Déléguer au Spécialiste Docker
+### Step 1 — Déléguer au Spécialiste Docker (en parallèle du Terraform)
 
-Le Tech Lead délègue au **Spécialiste Docker** par mention valide (mission + périmètre + critères). Le docker-compose vient **après** la configuration Terraform : sur `new-stack` / `infra-terraform`, le livrable `.tfvars` (`livrable_tfvars`) est déjà produit et vérifié, et sert de référence de cohérence (domaine / FQDN, auth). C'est le Spécialiste Docker — **pas le Tech Lead** — qui exploite la documentation officielle pour établir le **relevé fin** (variables d'environnement supportées, convention de secrets `_FILE` ou non, volumes, port, healthcheck, versions).
+Le Tech Lead délègue au **Spécialiste Docker** par mention valide (mission + périmètre + critères), **en parallèle** de la délégation au Spécialiste Terraform (deux sous-issues `--stage 1` ; verrou de concurrence par artefact, cf. [`../../protocols/governance-security.md`](../../protocols/governance-security.md) § concurrence). Le compose s'appuie sur les **paramètres collectés en Cadrage (§2.4)**, pas sur un `.tfvars` en amont. C'est le Spécialiste Docker — **pas le Tech Lead** — qui exploite la documentation officielle pour établir le **relevé fin** (variables d'environnement supportées, convention de secrets `_FILE` ou non, volumes, port, healthcheck, versions).
 
 ### Step 2 — Produire le livrable
 
@@ -40,8 +40,8 @@ Produire le fichier (skill `docker-composer`), conserver les commentaires `#` de
 ## Sensors
 
 Outputs: livrable compose téléchargeable. Gate humain granulaire (via `quality-assurance` puis `central-quality-control` puis Validation).
-Imports: `yaml-validity` (write), `plaintext-secret` (write — **bloquant sur `security-patch` / `new-stack`**, ALI-204).
-Upstream targets: `parametres_requis_complets` (required), `walking_skeleton_valide` (required), `livrable_tfvars` (required sur `new-stack` / `infra-terraform`, produit en amont).
+Imports: `yaml-validity` (write), `plaintext-secret` (write — **bloquant sur `security-patch` / `new-stack`**).
+Upstream targets: `parametres_requis_complets` (required), `walking_skeleton_valide` (required). Plus de dépendance `livrable_tfvars` : le compose est produit en parallèle du `.tfvars`.
 
 ## Learn
 

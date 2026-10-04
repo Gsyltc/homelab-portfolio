@@ -60,8 +60,8 @@ boundaries:
   - id: phase3-phase4
     frontiere: "Phase 3 → Phase 4 (Production → Validation)"
     artefacts_requis:
-      - livrable_tfvars_present            # config Terraform .tfvars (§3.2) — PRODUIT EN PREMIER — bloquant sur new-stack / infra-terraform (voir blocking_on_scope) ; conditionnel sinon
-      - livrable_compose_present           # docker-compose téléchargeable (§3.3, après le Terraform)
+      - livrable_tfvars_present            # config Terraform .tfvars (§3.2) — produit en parallèle du compose — bloquant sur new-stack / infra-terraform (voir blocking_on_scope) ; conditionnel sinon
+      - livrable_compose_present           # docker-compose téléchargeable (§3.3, produit en parallèle du Terraform)
       - qa_passe                           # vérification QA (Analyste QA) rendue et contrôlée — Terraform ET compose (§3.4)
       - controle_qualite_central_go        # aiguillage GO du Tech Lead (§3.6)
     checks: [artefacts-presents, liaison-tracabilite, absence-orphelin]

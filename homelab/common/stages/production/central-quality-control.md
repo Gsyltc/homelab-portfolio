@@ -34,7 +34,11 @@ Le Tech Lead vérifie uniquement : (a) le livrable répond-il à la demande et a
 
 ### Step 2 — Ordre imposé et renvoi
 
-Tout livrable — **compose ET Terraform** — passe par l'Analyste QA ([`quality-assurance.md`](quality-assurance.md)) **avant** cet aiguillage. Le Tech Lead ne réalise **jamais** lui-même l'analyse de compatibilité, l'audit sécurité / hardening, la cohérence Traefik, la vérification du `.tfvars` ni un correctif. Doute technique → renvoyer au spécialiste (Docker ou Terraform) en décrivant le **symptôme** (« l'authentification risque d'échouer »), **sans** diagnostic ni solution. Livrable incomplet / hors-sujet → renvoyer avec la liste des manques.
+Tout livrable — **compose ET Terraform** — passe par l'Analyste QA ([`quality-assurance.md`](quality-assurance.md)) **avant** cet aiguillage. Le Tech Lead ne réalise **jamais** lui-même l'analyse de compatibilité, l'audit sécurité / hardening, la cohérence Traefik, la vérification du `.tfvars` ni un correctif. Les `RENVOI` techniques de la QA transitent par une boucle courte directe QA ↔ spécialiste : le Tech Lead intervient sur le **travail finalisé** (après QA `OK`). Doute macro → renvoyer au spécialiste en décrivant le **symptôme** (« l'authentification risque d'échouer »), **sans** diagnostic ni solution. Livrable incomplet / hors-sujet → renvoyer avec la liste des manques.
+
+### Step 3 — Enchaînement vers la délégation sécurité
+
+Sur `GO`, et dès qu'un livrable touche une surface de sécurité, le Tech Lead enchaîne — **avant** la validation humaine — sur l'étape de délégation sécurité ([`security-delegation.md`](security-delegation.md)) : Tech Lead → Architecte de sécurité Homelab. Le contrôle du travail finalisé précède donc toujours le contrôle de sécurité.
 
 ## Sensors
 
