@@ -34,7 +34,7 @@ flowchart LR
 
 - Le contrôle qualité central **prépare** la délégation sécurité et le gate humain ; il ne les remplace pas.
 - Le **Tech Lead contrôle le travail finalisé** (contrôle qualité central) **avant** le contrôle de sécurité : la **délégation sécurité** (Tech Lead → Architecte de sécurité Homelab, [`security-delegation.md`](../stages/production/security-delegation.md)) est une **étape séquentielle placée après** le contrôle qualité central.
-- Le contrôle sécurité précède toujours la validation humaine sur toute surface de sécurité (règle normative : [`governance-security.md` § Contrôle sécurité systématique](governance-security.md#contrôle-sécurité-systématique)).
+- L'ordre contrôle sécurité → validation humaine sur toute surface de sécurité est fixé par la règle normative unique : [`governance-security.md` § Contrôle sécurité systématique](governance-security.md#contrôle-sécurité-systématique).
 - La **validation humaine granulaire** reste l'unique gate décisionnel contraignant (invariant) ; l'escalade sécurité critique/majeure **est** cette validation granulaire.
 
 ## Fin de revue

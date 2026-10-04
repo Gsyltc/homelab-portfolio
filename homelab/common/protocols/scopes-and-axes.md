@@ -16,7 +16,7 @@ Table partagée référencée par le [`conductor.md`](../conductor.md) et les fi
 | [`n8n`](../../scopes/n8n.md)                              | Toute demande n8n — **branche autonome**                                     | Court-circuit immédiat → Expert n8n                                                      |
 | [`home-assistant`](../../scopes/home-assistant.md)        | Toute demande Home Assistant — **branche autonome**                          | Court-circuit immédiat → Expert Home Assistant                                           |
 
-Défaut : `stack-update`. **Invariants non négociables quel que soit le scope** (aucun scope ne les désactive) : règle absolue n8n, sélection auto d'authentification, validation humaine granulaire, aucune action à impact sans validation explicite, Terraform ne déploie jamais, aucun secret, jamais `${SNI}`, un seul traitement par stack, piste d'audit, contrôle sécurité minimal.
+Défaut : `stack-update`. **Aucun scope ne désactive les invariants non contournables** : leur liste autoritaire unique est portée par [`governance-security.md` § Invariants non contournables](governance-security.md#invariants-non-contournables).
 
 ## Auto-détection & désambiguïsation
 

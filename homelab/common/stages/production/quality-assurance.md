@@ -26,7 +26,7 @@ outputs: "Rapport QA JSON par livrable (compose : syntaxe, Swarm, hardening, Tra
 
 Vérifier et durcir (par le contrôle) chaque livrable de la stack avant toute suite — **docker-compose ET configuration Terraform** — vérification jamais sautée. **L'Analyste QA ne modifie jamais le livrable** : sur défaut, il émet un RENVOI vers l'agent **créateur** (Spécialiste Docker pour le compose, Spécialiste Terraform pour le `.tfvars`) via le rapport JSON.
 
-> **Périmètre par scope.** Sur `new-stack` / `stack-update` / `security-patch` : l'Analyste QA vérifie le Terraform **et** le compose, et — ces deux livrables étant produits **en parallèle** — porte explicitement la **réconciliation de leur cohérence croisée** (domaine / FQDN, auth, réseau Traefik) ; tout désaccord est renvoyé directement au(x) spécialiste(s) (boucle courte, cf. Step 4). Sous `infra-terraform` : il vérifie **uniquement le Terraform** (aucun compose n'est produit). Sous `config-change` : au juste nécessaire selon les livrables présents.
+> **Périmètre par scope.** Sur `new-stack` / `stack-update` / `security-patch` : l'Analyste QA vérifie le Terraform **et** le compose, et — ces deux livrables étant produits **en parallèle** — porte explicitement la **réconciliation de leur cohérence croisée** (domaine / FQDN, auth, réseau Traefik) ; tout désaccord est renvoyé directement au(x) spécialiste(s) (boucle courte, cf. Step 5). Sous `infra-terraform` : il vérifie **uniquement le Terraform** (aucun compose n'est produit). Sous `config-change` : au juste nécessaire selon les livrables présents.
 
 ## Steps
 
@@ -46,11 +46,13 @@ Sur les scopes produisant un compose, analyser syntaxe, compatibilité Swarm, r�
 
 Vérifier via **`traefik-manager-read`** que services, middlewares et entrypoints sont cohérents (aucune `configErrors`). Présenter la conformité et, le cas échéant, le verdict `RENVOI` avec les `id` des points à corriger.
 
-**Routage des `RENVOI` — boucle courte QA ↔ spécialiste.** Sur `verdict = RENVOI`, l'Analyste QA **mentionne directement l'agent créateur** (Spécialiste Docker pour le compose, Spécialiste Terraform pour le `.tfvars`), sans passer par le Tech Lead, avec mention valide + rapport JSON joint. Le spécialiste corrige puis **mentionne l'Analyste QA en retour** pour re-contrôle ; le livrable corrigé ne repasse pas par le Tech Lead. La boucle itère jusqu'à `verdict = OK`. **Un `RENVOI` laisse la sous-issue correspondante en `in_review`** (elle ne passe pas à `done` tant que le re-contrôle n'a pas rendu `OK`). Le Tech Lead est tenu informé (piste d'audit) mais n'aiguille plus les `RENVOI` techniques.
+### Step 5 — Routage des `RENVOI`, validation et compte-rendu
+
+**Routage des `RENVOI` — boucle courte QA ↔ spécialiste.** Sur `verdict = RENVOI` (quel que soit le livrable concerné — compose, `.tfvars` ou cohérence Traefik), l'Analyste QA **mentionne directement l'agent créateur** (Spécialiste Docker pour le compose, Spécialiste Terraform pour le `.tfvars`), sans passer par le Tech Lead, avec mention valide + rapport JSON joint. Le spécialiste corrige puis **mentionne l'Analyste QA en retour** pour re-contrôle ; le livrable corrigé ne repasse pas par le Tech Lead. La boucle itère jusqu'à `verdict = OK`. **Un `RENVOI` laisse la sous-issue correspondante en `in_review`** (elle ne passe pas à `done` tant que le re-contrôle n'a pas rendu `OK`). Le Tech Lead est tenu informé (piste d'audit) mais n'aiguille plus les `RENVOI` techniques.
 
 **Validation QA → sous-issue correspondante `done`.** Dès qu'un livrable obtient `verdict = OK`, **la sous-issue spécialiste correspondant à ce livrable passe à `done`** (`multica issue status <sous-issue-id> done`) — correspondance **un-pour-un** : livrable **Docker** validé → sous-issue **Docker** `done` ; livrable **Terraform** validé → sous-issue **Terraform** `done`. Chaque sous-issue bascule indépendamment, à la validation de **son** livrable. Ce `done` est le signal d'**acceptation technique du livrable** qui alimente la **barrière de stage** du contrôle qualité central (cf. [`stage-protocol.md` § Cycle de statut des sous-issues & barrière de stage](../../protocols/stage-protocol.md#cycle-de-statut-des-sous-issues--barrière-de-stage)) ; il ne vaut pas clôture humaine de l'issue parente.
 
-Lorsque le(s) livrable(s) sont `OK`, l'Analyste QA **rend compte au Tech Lead** (l'Analyste QA construit lui-même son lien de retour — cf. Point 1) : la phase QA est passée, le travail finalisé est prêt pour le contrôle qualité central. L'Analyste QA **ne présente aucun livrable modifié** : il ne produit qu'un rapport.
+Lorsque le(s) livrable(s) sont `OK`, l'Analyste QA **rend compte au Tech Lead** (l'Analyste QA construit lui-même son lien de retour — cf. Step 1) : la phase QA est passée, le travail finalisé est prêt pour le contrôle qualité central. L'Analyste QA **ne présente aucun livrable modifié** : il ne produit qu'un rapport.
 
 ## Sensors
 
