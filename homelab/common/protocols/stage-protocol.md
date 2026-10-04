@@ -53,7 +53,7 @@ flowchart LR
 
 ## Contrôle sécurité — non contournable
 
-Dès qu'un stage **produit ou modifie une surface de sécurité** (compose, Terraform, hardening, exposition, Traefik, secrets), le contrôle sécurité (Analyste QA pour la technique ; Architecte de sécurité Homelab pour la posture) intervient **avant** la validation humaine. L'autonomie (Production) ne court-circuite ni ne diffère jamais ce contrôle. Voir [`governance-security.md`](governance-security.md) et [`reviewer.md`](reviewer.md).
+Dès qu'un stage **produit ou modifie une surface de sécurité** (compose, Terraform, hardening, exposition, Traefik, secrets), le contrôle sécurité intervient **avant** la validation humaine ; l'autonomie (Production) ne le court-circuite ni ne le diffère jamais. Règle normative et répartition des rôles (Analyste QA technique / Architecte de sécurité Homelab posture) : [`governance-security.md` § Contrôle sécurité systématique](governance-security.md#contrôle-sécurité-systématique) et [`reviewer.md`](reviewer.md).
 
 ## Halt-and-ask
 

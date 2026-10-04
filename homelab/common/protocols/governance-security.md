@@ -46,7 +46,7 @@ Ce contrôle est **hors du périmètre automatisable** (SG-3) : aucun gate / sen
 Dès qu'une surface de sécurité est touchée (cas de `new-stack`), le flux est :
 
 1. **Terraform et Docker en parallèle** — deux livrables disjoints (`.tfvars` et compose) produits concurremment via **deux sous-issues `--stage 1`** ; la barrière de stage réveille le Tech Lead quand les deux sont prêts. Cohérence `.tfvars` ↔ compose **réconciliée par l'Analyste QA**.
-2. **Contrôle QA technique** (Analyste QA) ; sur `RENVOI`, **boucle courte directe QA ↔ spécialiste créateur** (le spécialiste corrige et mentionne la QA en retour), sans passer par le Tech Lead. QA `OK` → l'Analyste QA mentionne le Tech Lead.
+2. **Contrôle QA technique** (Analyste QA) ; sur `RENVOI`, **boucle courte directe QA ↔ spécialiste créateur** (détail : [`quality-assurance.md` Step 4](../stages/production/quality-assurance.md) et [`reviewer.md` § Contrôle sécurité](reviewer.md)), sans passer par le Tech Lead. QA `OK` → l'Analyste QA mentionne le Tech Lead.
 3. **Contrôle qualité central** (Tech Lead) sur le **travail finalisé** — advisory, GO / RENVOI macro.
 4. **Délégation sécurité** Tech Lead → **Architecte de sécurité Homelab** ([`stages/production/security-delegation.md`](../stages/production/security-delegation.md)), **après** le contrôle qualité central et **avant** la validation humaine. Branchement par gravité : **critique / majeur** → escalade humaine via la validation granulaire (la « Gate renforcée » **est** cette validation granulaire, pas un gate distinct) ; **non critique** → retour au Tech Lead par mention valide.
 5. **Validation humaine granulaire** — unique gate contraignant (invariant).
