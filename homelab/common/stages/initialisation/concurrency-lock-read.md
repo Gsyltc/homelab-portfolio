@@ -29,11 +29,11 @@ Garantir de façon déterministe qu'un seul traitement est actif par stack avant
 
 ### Step 1 — Lire le verrou
 
-Lire la clé de metadata `active_step` de la stack visée (règle « un seul traitement par stack »).
+Lire la clé de metadata `active_step` de la stack visée (règle « un seul traitement par stack », lue **par artefact** : clés distinctes par livrable, ex. `specialiste-docker:compose`, `specialiste-terraform:tfvars`).
 
-### Step 2 — Sérialiser si occupé
+### Step 2 — Sérialiser si l'artefact est occupé
 
-Si un traitement est **déjà actif** sur cette stack : ne pas démarrer un second flux ; mettre la demande en file (commentaire « en attente : traitement `<X>` en cours ») et reprendre à la libération du verrou. Cette lecture est déterministe et **précède** tout cadrage.
+Si un traitement est **déjà actif sur le même artefact** : ne pas démarrer un second flux sur ce livrable ; mettre la demande en file (commentaire « en attente : traitement `<X>` en cours ») et reprendre à la libération. Deux artefacts **disjoints** (compose vs `.tfvars`) peuvent en revanche progresser en parallèle. Cette lecture est déterministe et **précède** tout cadrage.
 
 ## Sensors
 

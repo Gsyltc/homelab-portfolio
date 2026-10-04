@@ -15,7 +15,7 @@ Portée : aiguillage **GO / RENVOI** au niveau macro. Le Tech Lead vérifie uniq
 
 Portée : sécurité de base d'un homelab (secrets, exposition réseau, permissions, durcissement Docker/Swarm, cohérence Traefik, absence de `${SNI}`). **Aucune notion de Loi 25 / PCI DSS / GDPR / LPRPDE.**
 
-- **Analyste QA** — contrôle sécurité **technique** (revue adversariale) sur **les deux livrables** (docker-compose et configuration Terraform) : hardening, secrets `_FILE`, exposition, permissions, cohérence Traefik via `traefik-manager-read`, et côté Terraform structure HCL / cohérence des variables / absence de `${SNI}` (skill `terraform-qa`). **L'Analyste QA contrôle et classifie** (critical / warning / info) : tout défaut est renvoyé à l'agent **créateur** (Spécialiste Docker pour le compose, Spécialiste Terraform pour le `.tfvars`) via le rapport JSON (`verdict = RENVOI`, points autosuffisants).
+- **Analyste QA** — contrôle sécurité **technique** (revue adversariale) sur **les deux livrables** (docker-compose et configuration Terraform) : hardening, secrets `_FILE`, exposition, permissions, cohérence Traefik via `traefik-manager-read`, et côté Terraform structure HCL / cohérence des variables / absence de `${SNI}` (skill `terraform-qa`). **L'Analyste QA contrôle et classifie** (critical / warning / info) : tout défaut est renvoyé à l'agent **créateur** (Spécialiste Docker pour le compose, Spécialiste Terraform pour le `.tfvars`) via le rapport JSON (`verdict = RENVOI`, points autosuffisants). **Routage direct :** sur `RENVOI`, l'Analyste QA **mentionne directement le spécialiste créateur** (sans passer par le Tech Lead) ; le spécialiste corrige puis **mentionne l'Analyste QA en retour** pour re-contrôle (boucle courte, itérée jusqu'à `OK`). Le Tech Lead est tenu informé (piste d'audit) mais n'aiguille pas les `RENVOI` techniques.
 - **Architecte de sécurité Homelab** — **jugement** de posture (voix adoptée / sollicité pour les décisions structurantes de sécurité et la couche `global` des règles).
 - **Déclenché systématiquement** dès qu'un stage produit ou modifie une surface de sécurité (compose, Terraform, hardening, exposition, Traefik, secrets).
 - Procédure : le Tech Lead poste un commentaire mentionnant l'Analyste QA (UUID résolu via `multica agent list --output json`) avec le contexte et le résumé des modifications ; **attend l'analyse** ; intègre les recommandations **avant** la validation humaine.
@@ -25,15 +25,17 @@ Portée : sécurité de base d'un homelab (secrets, exposition réseau, permissi
 
 ```mermaid
 flowchart LR
-    L[Livrable produit] --> CQ[Controle qualite central - Tech Lead advisory]
-    CQ --> RS[Controle securite - Analyste QA + Architecte securite Homelab]
-    RS --> VH[Validation humaine granulaire]
+    L[Livrable produit] --> QA[Controle QA technique - Analyste QA + boucle courte specialiste]
+    QA --> CQ[Controle qualite central - Tech Lead advisory - travail finalise]
+    CQ --> DS[Delegation securite - Tech Lead vers Architecte securite Homelab]
+    DS --> VH[Validation humaine granulaire]
     VH -.->|Redo / Modify| L
 ```
 
-- Le contrôle qualité central **prépare** le contrôle sécurité et le gate humain ; il ne les remplace pas.
+- Le contrôle qualité central **prépare** la délégation sécurité et le gate humain ; il ne les remplace pas.
+- Le **Tech Lead contrôle le travail finalisé** (contrôle qualité central) **avant** le contrôle de sécurité : la **délégation sécurité** (Tech Lead → Architecte de sécurité Homelab, [`security-delegation.md`](../stages/production/security-delegation.md)) est une **étape séquentielle placée après** le contrôle qualité central.
 - Le contrôle sécurité **précède toujours** la validation humaine sur toute surface de sécurité.
-- La **validation humaine granulaire** reste l'unique gate décisionnel contraignant (invariant).
+- La **validation humaine granulaire** reste l'unique gate décisionnel contraignant (invariant) ; l'escalade sécurité critique/majeure **est** cette validation granulaire.
 
 ## Fin de revue
 

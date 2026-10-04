@@ -1,6 +1,6 @@
 # Protocole — gouvernance A2A & sécurité (Homelab)
 
-Protocole transverse consolidant la gouvernance multi-agents, le contrôle sécurité systématique, la concurrence par stack, les invariants non contournables et les garde-fous du workflow Homelab, adaptés au moteur A2A Multica (mentions UUID, `trigger_outcomes`, statut d'issue, verrou metadata, piste d'audit sur l'issue).
+Protocole transverse consolidant la gouvernance multi-agents, le contrôle sécurité systématique, la concurrence par stack (lecture par artefact), les invariants non contournables et les garde-fous du workflow Homelab, adaptés au moteur A2A Multica (mentions UUID, `trigger_outcomes`, statut d'issue, verrou metadata, piste d'audit sur l'issue).
 
 Miroir Homelab de [`core/common/protocols/governance-security.md`](../../../core/common/protocols/governance-security.md). **Le Homelab n'a aucune notion de Loi 25, PCI DSS, GDPR/RGPD, LPRPDE** — ces normes ne s'appliquent pas ici ; le périmètre sécurité est la **sécurité de base d'un homelab** (secrets, exposition réseau, permissions, durcissement Docker/Swarm, Traefik).
 
@@ -12,10 +12,10 @@ Les acteurs sont désignés par leur **fonction**. La délégation A2A résout l
 | --- | --- |
 | **Humain (demandeur / valideur)** | Exprime le besoin, arbitre (Docker Swarm vs Proxmox, réseau Traefik, Vault), valide **chaque** décision (granulaire), autorise les actions à impact (dépôt de fichiers, flux Kestra, application n8n / Home Assistant). |
 | **Tech Lead Homelab (coordinateur)** | Lance, supervise, applique le verrou par stack, collecte les paramètres, délègue, **sollicite le contrôle sécurité**, demande les validations, orchestre la livraison et la notification. **Ne produit pas les livrables** ; contrôle qualité central (aiguillage GO / RENVOI). Aucune issue ne va en revue humaine sans son contrôle. |
-| **Spécialiste Docker** | Analyse la documentation officielle, crée / modifie les docker-compose optimisés Swarm (skill `docker-composer`). Conserve les commentaires des gabarits. Rend compte au Tech Lead par mention. |
-| **Analyste QA** | Vérifie et durcit (par le contrôle) le docker-compose (syntaxe YAML, compatibilité Swarm, hardening, cohérence Traefik via `traefik-manager-read`) ; **contrôle sans corriger** — tout défaut est renvoyé au Spécialiste Docker (agent créateur) via le rapport JSON (`verdict = RENVOI`). **Porte le contrôle sécurité technique** (revue adversariale, plancher SG-3) et le contrôle sécurité des manifestes de sensors. Rend compte au Tech Lead. |
+| **Spécialiste Docker** | Analyse la documentation officielle, crée / modifie les docker-compose optimisés Swarm (skill `docker-composer`). Conserve les commentaires des gabarits. Rend compte au Tech Lead par mention ; **sur correction d'un `RENVOI` QA, mentionne obligatoirement l'Analyste QA en retour**. |
+| **Analyste QA** | Vérifie et durcit (par le contrôle) le docker-compose (syntaxe YAML, compatibilité Swarm, hardening, cohérence Traefik via `traefik-manager-read`) ; **contrôle sans corriger** — tout défaut est renvoyé **directement à l'agent créateur** (Spécialiste Docker / Terraform) par mention valide + rapport JSON (`verdict = RENVOI`), sans transiter par le Tech Lead. **Porte le contrôle sécurité technique** (revue adversariale, plancher SG-3) et le contrôle sécurité des manifestes de sensors. Rend compte au Tech Lead une fois le livrable `OK`. |
 | **Architecte de sécurité Homelab** | **Jugement sécurité** de posture : hardening et sécurité de base des stacks (secrets, exposition, permissions, durcissement, Traefik). Contrôleur sécurité de la couche `global` de la mémoire de règles (SEC-4). Périmètre limité à la sécurité de base d'un homelab. |
-| **Spécialiste Terraform** | Crée / modifie les `.tf` / `.tfvars` (skill `configuration-applications`). **N'exécute JAMAIS** `terraform init/apply/destroy` ; **jamais `${SNI}`**. Rend compte au Tech Lead. |
+| **Spécialiste Terraform** | Crée / modifie les `.tf` / `.tfvars` (skill `configuration-applications`). **N'exécute JAMAIS** `terraform init/apply/destroy` ; **jamais `${SNI}`**. Rend compte au Tech Lead ; **sur correction d'un `RENVOI` QA, mentionne obligatoirement l'Analyste QA en retour**. |
 | **Expert n8n** | **Toute** tâche n8n via MCP. **Règle absolue** : dès que « n8n » apparaît, délégation immédiate, pas même l'analyse par le Tech Lead. Applique après feu vert Tech Lead + validation humaine explicite. |
 | **Expert Home Assistant** | **Toute** tâche Home Assistant via MCP officiel. Séquence obligatoire : proposition → vérification Tech Lead → validation humaine explicite → modification réelle. |
 | **Agent de notifications** | Notification ntfy, déclenchée **uniquement par le Tech Lead** ; les spécialistes ne l'appellent jamais directement. Agent partagé (source unique [`core/agents/notification-agent.md`](../../../core/agents/notification-agent.md)). |
@@ -28,9 +28,9 @@ Le spécialiste appelé mentionne en retour le Tech Lead en fin de tâche (avec 
 
 > **Anti-wake parasite (règle générale, tous agents).** **Aucun agent ne se mentionne lui-même** avec un lien de mention actif `mention://agent/<uuid>` dans une consigne de délégation : un tel lien, posté dans son propre commentaire, enfile un run parasite de cet agent. L'**assigneur désigne l'agent de retour par sa fonction, en TEXTE CLAIR** (« rends compte au Tech Lead »), **sans lien actif vers lui-même**. La construction du lien de mention actif de retour revient **toujours à l'agent délégataire** en fin de tâche — UUID résolu via `multica agent list --output json`, jamais copié depuis la consigne de délégation ni codé en dur. C'est ce lien, posé par l'agent qui termine, qui enfile le run de reprise de l'assigneur.
 
-## Concurrence — un seul traitement en cours par stack
+## Concurrence — un seul traitement par stack (lecture **par artefact**)
 
-À un instant donné, une stack n'a **qu'un seul traitement actif**, matérialisé par la clé de metadata d'issue `active_step` (rôle + périmètre). Le Tech Lead la **lit dès la Phase 0** ([`stages/initialisation/concurrency-lock-read.md`](../stages/initialisation/concurrency-lock-read.md)) et avant chaque nouvelle délégation, la **pose** à la délégation et l'**efface** au retour contrôlé du spécialiste. Deux demandes concurrentes visant la même stack sont **sérialisées** (la seconde attend un point stable : livrable contrôlé, `in_review`, ou clôture). Aucun livrable concurrent divergent n'est produit sur la même stack.
+Le verrou « un seul traitement par stack » se lit **par artefact / livrable** : un **même artefact** d'une stack n'a **qu'un seul traitement actif**, matérialisé par une clé de metadata d'issue `active_step` **par artefact** (rôle + périmètre, ex. `specialiste-docker:compose`, `specialiste-terraform:tfvars`), lue dès la Phase 0 ([`stages/initialisation/concurrency-lock-read.md`](../stages/initialisation/concurrency-lock-read.md)), posée à la délégation et **effacée** au retour contrôlé. Deux traitements **disjoints** (compose **vs** `.tfvars`) progressent **en parallèle** sur la même stack — typiquement via **deux sous-issues `--stage 1`** (barrière de stage → réveil du Tech Lead → QA) — car ils ne portent pas sur le même livrable. Deux demandes visant le **même artefact** sont **sérialisées** (la seconde attend un point stable : livrable contrôlé, `in_review`, ou clôture). **Aucun livrable concurrent divergent sur le même artefact.**
 
 ## Contrôle sécurité systématique
 
@@ -41,6 +41,16 @@ Dès qu'un stage **produit ou modifie une surface de sécurité** (compose, Terr
 
 Ce contrôle est **hors du périmètre automatisable** (SG-3) : aucun gate / sensor advisory ne peut le porter, le remplacer, le conditionner ni le court-circuiter.
 
+### Séquence `new-stack` (flux A2A)
+
+Dès qu'une surface de sécurité est touchée (cas de `new-stack`), le flux est :
+
+1. **Terraform et Docker en parallèle** — deux livrables disjoints (`.tfvars` et compose) produits concurremment via **deux sous-issues `--stage 1`** ; la barrière de stage réveille le Tech Lead quand les deux sont prêts. Cohérence `.tfvars` ↔ compose **réconciliée par l'Analyste QA**.
+2. **Contrôle QA technique** (Analyste QA) ; sur `RENVOI`, **boucle courte directe QA ↔ spécialiste créateur** (le spécialiste corrige et mentionne la QA en retour), sans passer par le Tech Lead. QA `OK` → l'Analyste QA mentionne le Tech Lead.
+3. **Contrôle qualité central** (Tech Lead) sur le **travail finalisé** — advisory, GO / RENVOI macro.
+4. **Délégation sécurité** Tech Lead → **Architecte de sécurité Homelab** ([`stages/production/security-delegation.md`](../stages/production/security-delegation.md)), **après** le contrôle qualité central et **avant** la validation humaine. Branchement par gravité : **critique / majeur** → escalade humaine via la validation granulaire (la « Gate renforcée » **est** cette validation granulaire, pas un gate distinct) ; **non critique** → retour au Tech Lead par mention valide.
+5. **Validation humaine granulaire** — unique gate contraignant (invariant).
+
 ## Invariants non contournables
 
 Aucun scope, aucune règle apprise, aucun gate / sensor advisory ne peut affaiblir :
@@ -49,7 +59,7 @@ Aucun scope, aucune règle apprise, aucun gate / sensor advisory ne peut affaibl
 2. **Sélection automatique du type d'authentification** (`oidc → forwardauth → local`) ; en cas de doute → humain.
 3. **Validation humaine granulaire** — chaque choix validé / rejeté séparément.
 4. **Aucune action à impact** (dépôt de fichiers, flux Kestra, application n8n / Home Assistant) sans validation humaine explicite.
-5. **Terraform ne déploie JAMAIS** ; **aucun secret en clair** ; **jamais `${SNI}`** en Terraform livré ; **un seul traitement par stack**.
+5. **Terraform ne déploie JAMAIS** ; **aucun secret en clair** ; **jamais `${SNI}`** en Terraform livré ; **un seul traitement par stack** (verrou lu **par artefact** : compose et `.tfvars`, livrables disjoints, peuvent être produits en parallèle ; jamais deux agents sur le même artefact).
 6. **Piste d'audit** sur l'issue ; **décision structurante tracée** en ADR ; contrôle sécurité minimal systématique.
 
 ## Garde-fous des scopes (plancher sécurité)

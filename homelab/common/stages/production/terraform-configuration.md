@@ -23,13 +23,13 @@ outputs: "Fichiers .tf / .tfvars de la stack, téléchargeables (jamais d'apply)
 
 ## Objectif
 
-Préparer les variables Terraform de la stack, sans jamais déployer. **Ce stage passe avant le docker-compose** : les valeurs des variables Terraform proviennent des **paramètres collectés en Cadrage (§2.4)**, jamais d'une déduction depuis un docker-compose (qui n'existe pas encore à ce stade).
+Préparer les variables Terraform de la stack, sans jamais déployer. Ce stage s'exécute **en parallèle** du docker-compose ([`docker-compose-creation.md`](docker-compose-creation.md)) : les valeurs proviennent des **paramètres collectés en Cadrage (§2.4)**, jamais d'une déduction depuis un docker-compose.
 
 ## Steps
 
 ### Step 1 — Déléguer après le walking skeleton
 
-Après le walking skeleton validé ([`autonomy-mode.md`](autonomy-mode.md)), le Tech Lead ordonne au **Spécialiste Terraform** (mission + mention valide) de créer / modifier les **variables Terraform** de la stack (skill `configuration-applications`), cohérentes avec les **paramètres collectés en Cadrage (§2.4)** — auth, `cloudflare_dns_nb`, domaine / FQDN d'exposition, etc. — et non plus déduites d'un docker-compose en aval.
+Après le walking skeleton validé ([`autonomy-mode.md`](autonomy-mode.md)), le Tech Lead ordonne au **Spécialiste Terraform** (mission + mention valide) — **en parallèle** de la délégation au Spécialiste Docker (deux sous-issues `--stage 1` ; verrou par artefact, cf. [`../../protocols/governance-security.md`](../../protocols/governance-security.md) § concurrence) — de créer / modifier les **variables Terraform** de la stack (skill `configuration-applications`), cohérentes avec les **paramètres collectés en Cadrage (§2.4)** (auth, `cloudflare_dns_nb`, domaine / FQDN d'exposition, etc.).
 
 Sur scope `new-stack` / `infra-terraform`, ce stage est **obligatoire et inconditionnel** : le Tech Lead ne peut ni le sauter ni le déclarer « non requis ». Ne pas produire le livrable `.tfvars` sur ces scopes est un **écart bloquant** (frontière `phase3-phase4`), non une décision légitime d'un coordinateur (invariant — SEC-1).
 

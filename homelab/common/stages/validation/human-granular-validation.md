@@ -25,6 +25,13 @@ outputs: "Validation humaine explicite (ou demande de modifications → retour e
 
 Obtenir la validation explicite, choix par choix, avant toute action à impact.
 
+> **Validation humaine granulaire.** L'escalade sécurité critique/majeure
+> est levée par la **délégation sécurité** ([`../production/security-delegation.md`](../production/security-delegation.md)).
+> Sur un constat critique/majeur, le Tech Lead présente l'élément à l'humain, qui tranche choix par choix :
+>
+> - **Modify** → le Tech Lead mentionne les spécialistes concernés ;
+> - **Redo / refus** → téléchargement du fichier pour validation granulaire élément par élément.
+
 ## Steps
 
 ### Step 1 — Soumettre la configuration complète

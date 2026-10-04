@@ -26,13 +26,13 @@ outputs: "Rapport QA JSON par livrable (compose : syntaxe, Swarm, hardening, Tra
 
 Vérifier et durcir (par le contrôle) chaque livrable de la stack avant toute suite — **docker-compose ET configuration Terraform** — vérification jamais sautée. **L'Analyste QA ne modifie jamais le livrable** : sur défaut, il émet un RENVOI vers l'agent **créateur** (Spécialiste Docker pour le compose, Spécialiste Terraform pour le `.tfvars`) via le rapport JSON.
 
-> **Périmètre par scope.** Sur `new-stack` / `stack-update` / `security-patch` : l'Analyste QA vérifie le Terraform (produit en premier) **puis** le compose. Sous `infra-terraform` : il vérifie **uniquement le Terraform** (aucun compose n'est produit). Sous `config-change` : au juste nécessaire selon les livrables présents.
+> **Périmètre par scope.** Sur `new-stack` / `stack-update` / `security-patch` : l'Analyste QA vérifie le Terraform **et** le compose, et — ces deux livrables étant produits **en parallèle** — porte explicitement la **réconciliation de leur cohérence croisée** (domaine / FQDN, auth, réseau Traefik) ; tout désaccord est renvoyé directement au(x) spécialiste(s) (boucle courte, cf. Step 4). Sous `infra-terraform` : il vérifie **uniquement le Terraform** (aucun compose n'est produit). Sous `config-change` : au juste nécessaire selon les livrables présents.
 
 ## Steps
 
 ### Step 1 — Déléguer à l'Analyste QA
 
-Le Tech Lead délègue à l'**Analyste QA** (mission + mention valide). Ordre imposé : **tout livrable (compose ou Terraform) passe par l'Analyste QA avant l'aiguillage du Tech Lead** ([`central-quality-control.md`](central-quality-control.md)). Le Terraform étant produit avant le compose, il est vérifié en premier.
+Le Tech Lead délègue à l'**Analyste QA** (mission + mention valide). Ordre imposé : **tout livrable (compose ou Terraform) passe par l'Analyste QA avant l'aiguillage du Tech Lead** ([`central-quality-control.md`](central-quality-control.md)). Compose et `.tfvars` étant produits en parallèle, l'Analyste QA les reçoit tous deux à la clôture de la barrière de stage.
 
 ### Step 2 — Vérifier le Terraform (volet `.tfvars`, skill `terraform-qa`)
 
@@ -44,7 +44,11 @@ Sur les scopes produisant un compose, analyser syntaxe, compatibilité Swarm, r�
 
 ### Step 4 — Cohérence Traefik
 
-Vérifier via **`traefik-manager-read`** que services, middlewares et entrypoints sont cohérents (aucune `configErrors`). Présenter la conformité et, le cas échéant, le verdict `RENVOI` avec les `id` des points à corriger, puis **rendre compte au Tech Lead** (l'Analyste QA construit lui-même son lien de retour — cf. Point 1). L'Analyste QA **ne présente aucun livrable modifié** : il ne produit qu'un rapport.
+Vérifier via **`traefik-manager-read`** que services, middlewares et entrypoints sont cohérents (aucune `configErrors`). Présenter la conformité et, le cas échéant, le verdict `RENVOI` avec les `id` des points à corriger.
+
+**Routage des `RENVOI` — boucle courte QA ↔ spécialiste.** Sur `verdict = RENVOI`, l'Analyste QA **mentionne directement l'agent créateur** (Spécialiste Docker pour le compose, Spécialiste Terraform pour le `.tfvars`), sans passer par le Tech Lead, avec mention valide + rapport JSON joint. Le spécialiste corrige puis **mentionne l'Analyste QA en retour** pour re-contrôle ; le livrable corrigé ne repasse pas par le Tech Lead. La boucle itère jusqu'à `verdict = OK`. Le Tech Lead est tenu informé (piste d'audit) mais n'aiguille plus les `RENVOI` techniques.
+
+Lorsque le(s) livrable(s) sont `OK`, l'Analyste QA **rend compte au Tech Lead** (l'Analyste QA construit lui-même son lien de retour — cf. Point 1) : la phase QA est passée, le travail finalisé est prêt pour le contrôle qualité central. L'Analyste QA **ne présente aucun livrable modifié** : il ne produit qu'un rapport.
 
 ## Sensors
 
