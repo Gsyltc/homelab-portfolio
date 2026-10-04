@@ -40,20 +40,11 @@ constats.
 
 ### Step 1 — Déléguer après le contrôle qualité central
 
-Une fois le contrôle qualité central en `GO` (travail finalisé, cf.
-[`central-quality-control.md`](central-quality-control.md)), le Tech Lead délègue à
-l'**Architecte de sécurité Homelab** (mission + mention valide, UUID résolu via
-`multica agent list --output json` — jamais figé) : jugement de posture sécurité sur les
-livrables, périmètre « sécurité de base d'un homelab ». (Le contrôle sécurité **précède
-toujours** la validation humaine sur toute surface de sécurité — règle normative portée par
-[`governance-security.md` § Contrôle sécurité systématique](../../protocols/governance-security.md#contrôle-sécurité-systématique).)
+Une fois le contrôle qualité central en `GO` (travail finalisé, cf. [`central-quality-control.md`](central-quality-control.md)), le Tech Lead délègue à l'**Architecte de sécurité Homelab** (mission + mention valide, UUID résolu via `multica agent list --output json` — jamais figé) : jugement de posture sécurité sur les livrables, périmètre « sécurité de base d'un homelab ». (Ordre normatif contrôle sécurité → validation humaine : [`governance-security.md` § Contrôle sécurité systématique](../../protocols/governance-security.md#contrôle-sécurité-systématique).)
 
 ### Step 2 — Jugement de posture et classification
 
-L'Architecte de sécurité Homelab juge la posture et **classe** les constats par gravité
-(**critique / majeur** vs **non critique / mineur**), chaque point rédigé de façon
-autosuffisante (`constat` / `cause` / `correction` / `domaine_correction`), puis **rend
-compte au Tech Lead** par mention valide (lien de retour construit par l'Architecte).
+L'Architecte de sécurité Homelab juge la posture et **classe** les constats par gravité (**critique / majeur** vs **non critique / mineur**), chaque point rédigé de façon autosuffisante (`constat` / `cause` / `correction` / `domaine_correction`), puis **rend compte au Tech Lead** par mention valide (lien de retour construit par l'Architecte).
 
 ### Step 3 — Branchement par gravité
 

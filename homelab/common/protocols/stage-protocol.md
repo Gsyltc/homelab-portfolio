@@ -67,7 +67,7 @@ Quand un stage délègue son travail via des **sous-issues** (cas des stages de 
 
 ## Contrôle sécurité — non contournable
 
-Dès qu'un stage **produit ou modifie une surface de sécurité** (compose, Terraform, hardening, exposition, Traefik, secrets), le contrôle sécurité intervient **avant** la validation humaine ; l'autonomie (Production) ne le court-circuite ni ne le diffère jamais. Règle normative et répartition des rôles (Analyste QA technique / Architecte de sécurité Homelab posture) : [`governance-security.md` § Contrôle sécurité systématique](governance-security.md#contrôle-sécurité-systématique) et [`reviewer.md`](reviewer.md).
+Dès qu'un stage **produit ou modifie une surface de sécurité** (compose, Terraform, hardening, exposition, Traefik, secrets), le contrôle sécurité s'applique selon la **règle normative unique** [`governance-security.md` § Contrôle sécurité systématique](governance-security.md#contrôle-sécurité-systématique) (répartition des rôles Analyste QA technique / Architecte de sécurité Homelab posture : même source et [`reviewer.md`](reviewer.md)). Point propre à l'exécution : l'autonomie (Production) ne le court-circuite ni ne le diffère jamais.
 
 ## Halt-and-ask
 
