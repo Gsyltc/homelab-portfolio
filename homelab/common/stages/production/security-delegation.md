@@ -44,8 +44,9 @@ Une fois le contrôle qualité central en `GO` (travail finalisé, cf.
 [`central-quality-control.md`](central-quality-control.md)), le Tech Lead délègue à
 l'**Architecte de sécurité Homelab** (mission + mention valide, UUID résolu via
 `multica agent list --output json` — jamais figé) : jugement de posture sécurité sur les
-livrables, périmètre « sécurité de base d'un homelab ». Le contrôle sécurité **précède
-toujours** la validation humaine sur toute surface de sécurité.
+livrables, périmètre « sécurité de base d'un homelab ». (Le contrôle sécurité **précède
+toujours** la validation humaine sur toute surface de sécurité — règle normative portée par
+[`governance-security.md` § Contrôle sécurité systématique](../../protocols/governance-security.md#contrôle-sécurité-systématique).)
 
 ### Step 2 — Jugement de posture et classification
 
@@ -66,9 +67,8 @@ compte au Tech Lead** par mention valide (lien de retour construit par l'Archite
 - **Éléments non critiques / mineurs.** **Retour explicite au Tech Lead par mention valide** ;
   le Tech Lead intègre, puis poursuit vers la validation humaine granulaire.
 
-Quel que soit le branchement, les invariants restent pleins : validation humaine granulaire
-unique gate contraignant, Terraform ne déploie jamais, aucun secret en clair, jamais
-`${SNI}`, un seul traitement par stack (verrou lu par artefact), piste d'audit sur l'issue.
+Quel que soit le branchement, les **invariants non contournables** restent pleins (liste
+autoritaire : [`governance-security.md` § Invariants non contournables](../../protocols/governance-security.md#invariants-non-contournables)).
 
 ## Sensors
 
