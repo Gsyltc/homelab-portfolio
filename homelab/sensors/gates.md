@@ -64,10 +64,15 @@ boundaries:
       - livrable_compose_present           # docker-compose téléchargeable (§3.3, produit en parallèle du Terraform)
       - qa_passe                           # vérification QA (Analyste QA) rendue et contrôlée — Terraform ET compose (§3.4)
       - controle_qualite_central_go        # aiguillage GO du Tech Lead (§3.6)
+      - controle_securite_posture          # jugement de posture de l'Architecte de sécurité Homelab (stage security-delegation) — trace la délégation sécurité réalisée AVANT la Validation ; conditionnel : requis dès qu'un livrable touche une surface de sécurité (voir conditional_on_scope)
     checks: [artefacts-presents, liaison-tracabilite, absence-orphelin]
     blocking_on_scope:                     # écart bloquant (non advisory) pour ces couples artefact × scope
       - artifact: livrable_tfvars_present
         scopes: [new-stack, infra-terraform]
+    conditional_on_scope:                  # artefact requis sur ces scopes (surface de sécurité) ; sans objet si aucun livrable ne touche la sécurité
+      - artifact: controle_securite_posture
+        scopes: [stack-update, new-stack, config-change, security-patch, infra-terraform]
+        source_stage: security-delegation  # produit par homelab/common/stages/production/security-delegation.md
     sensors: [yaml-validity, swarm-deploy-section, plaintext-secret, terraform-no-sni, traefik-coherence]
     prerequis_40:                          # prérequis de déploiement anticipés (§4.0)
       - repertoire_travail_defini          # variable [répertoire de travail] définie et non vide
@@ -92,6 +97,7 @@ Le contrôle `phase3-phase4` **anticipe** les prérequis de déploiement du §4.
 
 - Advisory (cas général) : le Tech Lead Homelab **ne bloque pas** ; il **signale l'écart** dans le « Rapport de vérification » et **propose de revenir corriger** avant de présenter le contenu à l'humain.
 - Bloquant : un `livrable_tfvars_present` manquant sur `new-stack` / `infra-terraform` (voir `blocking_on_scope`) **arrête l'avancée** jusqu'à correction ou levée humaine explicite tracée.
+- Trace sécurité : sur surface de sécurité (voir `conditional_on_scope`), un `controle_securite_posture` manquant signale que la **délégation sécurité n'est pas tracée** à la frontière — écart **advisory** (la garantie que le contrôle sécurité précède la validation humaine est portée **en amont** par le séquencement de la Phase 3 : `central-quality-control` → `security-delegation` ; le gate ne fait qu'en **attester la trace**, il ne la remplace pas). Le Tech Lead signale l'écart et propose de revenir le consigner avant de présenter à l'humain.
 - L'humain reste seul décideur : demander la correction, ou valider en connaissance de cause en actant l'écart sur l'issue.
 - Le gate automatique ne remplace, n'abaisse ni ne court-circuite jamais la validation humaine granulaire, le contrôle QA systématique ni les garde-fous absolus (invariants non négociables — SG-3).
 
@@ -105,5 +111,6 @@ Rapport de vérification — <frontière>   (source : homelab/sensors/gates.md @
 - liaison-tracabilite : ✅ | ⚠️ <paramètre / décision sans amont ni ADR> | ⛔ <indisponible>
 - absence-orphelin : ✅ | ⚠️ <livrable / décision orphelin> | ⛔ <indisponible>
 - livrable_tfvars (new-stack / infra-terraform) : ✅ présent | ⛔ MANQUANT (écart bloquant) | ⚠️ conditionnel hors scope
+- controle_securite_posture (surface de sécurité) : ✅ présent (délégation sécurité réalisée) | ⚠️ MANQUANT (contrôle sécurité non tracé) | ⚠️ sans objet (aucune surface de sécurité)
 - prérequis §4.0 (frontière Phase 3 → Phase 4) : ✅ | ⚠️ <[répertoire de travail] / Kestra> | ⛔ <indisponible>
 ```
