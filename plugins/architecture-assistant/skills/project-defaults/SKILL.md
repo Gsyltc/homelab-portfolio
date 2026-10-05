@@ -133,6 +133,17 @@ Chaque projet doit contenir un fichier `README.md` à sa racine avec les métado
 - Version de la DAS : V1.0
 ```
 
+## Détermination de l'auteur par défaut d'un ADR
+
+Cette règle **fait autorité** et s'applique à **tout** ADR du workflow : l'auteur par défaut d'un ADR est **toujours l'architecte de solution (humain) du projet**, et il doit être **déduit automatiquement**, dans l'ordre suivant, **sans solliciter l'humain tant qu'une source répond** :
+
+1. **README du projet** — section `## Équipe`, ligne « Architecte de solution : <nom> » (voir [Métadonnées du projet](#métadonnées-du-projet)) ;
+2. **sinon** l'arrimage du document `001-document-architecture-solution.md` — matrice RACI, rôle « Architecte de solution », colonne « Nom ».
+
+**Ne demander le ou les noms des auteurs à l'humain que si l'information est absente des deux sources.** Ne jamais inscrire le nom d'un agent comme auteur. Un auteur supplémentaire explicitement fourni par l'humain complète ou remplace ce défaut.
+
+> La skill `create-architecture-decision-record` applique cette règle ; elle ne la duplique pas comme source : cette section de `project-defaults` est la **source unique de vérité**.
+
 ## Table de correspondance des agents
 
 Cette table est la **source unique de vérité** de la correspondance **nom ↔ fonction** des agents du workflow `core` (architecture de solution & intégration). Elle sert à :
