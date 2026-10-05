@@ -17,7 +17,7 @@ requires_stage: [deliverables-breakdown]
 sensors: [required-sections, upstream-coverage, diagram-validity, data-lifecycle]
 scopes: [standard, feature, infra, security-patch, mvp, enterprise]
 inputs: "Besoins tracés + découpage en livrables"
-outputs: "Conception cible + décisions structurantes validées granulairement par l'humain, après contrôle sécurité ; propagation évaluée (révision des patrons d'architecture ; mise à jour des spécifications si projet OpenSpec)"
+outputs: "Conception cible + décisions structurantes validées granulairement par l'humain, après contrôle sécurité"
 ---
 
 # Conception d'architecture, décisions structurantes et contrôle sécurité
@@ -53,17 +53,6 @@ Présenter **chaque choix séparément** (choix, justification, alternative) ; b
 ### Step 5 — Analyse de dette technique (Architecte de solution)
 
 Évaluer le potentiel de réduction de dette et consigner des recommandations justifiées avec la décision (ou un registre de dette en annexe si aucune décision).
-
-### Step 6 — Propagation de la décision structurante (patrons d'architecture + spécifications)
-
-À **chaque ajout de décision structurante (ADR)**, le coordinateur évalue et propage ses conséquences avant de clore le stage. Deux contrôles, non omissibles (garde-fou — voir [`../../conductor.md`](../../conductor.md), « Propagation obligatoire d'une décision structurante ») :
-
-1. **Révision des patrons d'architecture (inconditionnel).** Vérifier si la décision impose de **réviser les patrons d'architecture** du projet — **ajout** d'un nouveau patron, **suppression** d'un patron devenu caduc, ou **modification** d'un patron existant.
-   - Si une révision est nécessaire → créer **une tâche dédiée « Révision des patrons d'architecture »** (déléguée à l'**Architecte de solution**), rattachée au gate ADR au même titre que les autres tâches de livrable (parent = sous-tâche ADR, démarrage au feu vert ADR `done`). Cette tâche met à jour la documentation d'architecture décrivant les patrons retenus.
-   - Si aucune révision n'est nécessaire → **consigner explicitement « patrons d'architecture inchangés »** sur l'issue (piste d'audit). Ne jamais laisser ce contrôle implicite.
-2. **Mise à jour des spécifications — uniquement si projet OpenSpec.** **Si et seulement si** la méthodologie **OpenSpec est activée** pour le projet (voir [`../../conductor.md`](../../conductor.md), « Activation conditionnelle d'une méthodologie ») → créer **une tâche dédiée de mise à jour des spécifications**, déléguée à l'**OpenSpec Expert** et **taguée `OpenSpec`** (contexte Multica), rattachée au gate ADR. Cette tâche répercute la décision structurante dans la proposition / les specs vivantes (deltas EARS `## ADDED/MODIFIED/REMOVED Requirements`). **Hors projet OpenSpec, cette étape est N/A** : aucune tâche OpenSpec n'est créée, la décision est répercutée dans la DAS par les architectes.
-
-> Ces tâches de propagation suivent la même règle de gate que les autres tâches de livrable : créées au besoin, elles **ne démarrent qu'au feu vert de l'ADR** (`done`) et sont propagées en `cancelled` si l'ADR est rejetée (voir « Reflet du cycle de vie de l'ADR » ci-dessous).
 
 > Si OpenSpec activé : cette phase se matérialise par une **proposition OpenSpec** créée par l'OpenSpec Expert, qui notifie le coordinateur à `in_review`.
 
