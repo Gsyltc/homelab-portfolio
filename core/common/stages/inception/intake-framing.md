@@ -29,15 +29,19 @@ Reprendre la demande approuvée et clarifier le besoin d'affaires sans deviner.
 
 ### Step 1 — Passer l'issue en `in_progress`
 
-### Step 2 — Reprendre l'entrée brute, confirmer le répertoire et **analyser la méthodologie**
+### Step 2 — Confirmer le répertoire du projet
 
-Confirmer le répertoire du projet (détecté en Initialization). **Analyser la méthodologie du projet pour statuer sur son activation** selon la règle « Activation conditionnelle d'une méthodologie » de [`../../conductor.md`](../../conductor.md) (**source unique** — ne pas la redéfinir ici) : lire la **description du projet** (ex. `Méthodologie: OpenSpec`, `Méthodologie: BMAD` ; variantes `OpenSpec: Oui/Non`), le **tag de méthodologie** éventuel de l'issue, ou une **demande explicite** de l'humain. Produire un **verdict de méthodologie explicite** (méthodologie active + laquelle, ou aucune), **tracé sur l'issue** (piste d'audit). Si c'est **non déclaré / ambigu**, **demander à l'humain** s'il faut en activer une (et laquelle), puis **l'inscrire dans la description du projet** (`multica project update`) — ne jamais deviner. Ce verdict conditionne la suite (ex. « si OpenSpec activé » au découpage [`deliverables-breakdown`](deliverables-breakdown.md)).
+Confirmer le répertoire du projet (détecté en Initialization).
 
-### Step 3 — Clarifier le besoin d'affaires
+### Step 3 — Analyser la méthodologie du projet (activation)
+
+**Analyser la méthodologie du projet pour statuer sur son activation** selon la règle « Activation conditionnelle d'une méthodologie » de [`../../conductor.md`](../../conductor.md) (**source unique** — ne pas la redéfinir ici) : lire la **description du projet** (ex. `Méthodologie: OpenSpec`, `Méthodologie: BMAD` ; variantes `OpenSpec: Oui/Non`), le **tag de méthodologie** éventuel de l'issue, ou une **demande explicite** de l'humain. Produire un **verdict de méthodologie explicite** (méthodologie active + laquelle, ou aucune), **tracé sur l'issue** (piste d'audit). Si c'est **non déclaré / ambigu**, **demander à l'humain** s'il faut en activer une (et laquelle), puis **l'inscrire dans la description du projet** (`multica project update`) — ne jamais deviner. Ce verdict conditionne la suite (ex. « si OpenSpec activé » au découpage [`deliverables-breakdown`](deliverables-breakdown.md)).
+
+### Step 4 — Clarifier le besoin d'affaires
 
 Objectifs, exigences fonctionnelles et non fonctionnelles, contraintes. **Ne poser que les questions qui changent réellement la conception.** Ne jamais deviner une information manquante.
 
-### Step 4 — Évaluer l'impact structurant (déclencheur ADR obligatoire)
+### Step 5 — Évaluer l'impact structurant (déclencheur ADR obligatoire)
 
 Dès qu'une issue est ajoutée par l'humain, le coordinateur **statue explicitement** sur son **impact structurant** : la demande modifie-t-elle une décision d'architecture (choix technologique, frontière de système, modèle de données, intégration, sécurité, infrastructure, pattern transverse) ou en introduit-elle une nouvelle ? Le verdict (`impact structurant : Oui / Non`, avec justification) est **tracé sur l'issue** (piste d'audit).
 
