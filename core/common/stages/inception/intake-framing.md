@@ -10,13 +10,13 @@ summary_confirmation: required
 reviewer: null
 review_class: none
 human_gate: none
-produces: [cadrage_confirme, verdict_impact_structurant]
+produces: [cadrage_confirme, verdict_methodologie, verdict_impact_structurant]
 consumes: [{artifact: intention_perimetre_approuves, required: true}]
 requires_stage: [intent-scope-approval]
 sensors: []
 scopes: [standard, feature, infra, security-patch, mvp, poc, express, enterprise]
 inputs: "Intention et périmètre approuvés, contexte projet initialisé"
-outputs: "Demande cadrée, répertoire confirmé, activation OpenSpec éventuelle confirmée, verdict d'impact structurant (déclencheur ADR obligatoire)"
+outputs: "Demande cadrée, répertoire confirmé, verdict de méthodologie (active + laquelle, ou aucune) analysé et tracé, verdict d'impact structurant (déclencheur ADR obligatoire)"
 ---
 
 # Réception et cadrage
@@ -29,9 +29,9 @@ Reprendre la demande approuvée et clarifier le besoin d'affaires sans deviner.
 
 ### Step 1 — Passer l'issue en `in_progress`
 
-### Step 2 — Reprendre l'entrée brute et l'intention approuvée
+### Step 2 — Reprendre l'entrée brute, confirmer le répertoire et **analyser la méthodologie**
 
-Confirmer le répertoire du projet (détecté en Initialization) et l'activation éventuelle d'OpenSpec.
+Confirmer le répertoire du projet (détecté en Initialization). **Analyser la méthodologie du projet pour statuer sur son activation** selon la règle « Activation conditionnelle d'une méthodologie » de [`../../conductor.md`](../../conductor.md) (**source unique** — ne pas la redéfinir ici) : lire la **description du projet** (ex. `Méthodologie: OpenSpec`, `Méthodologie: BMAD` ; variantes `OpenSpec: Oui/Non`), le **tag de méthodologie** éventuel de l'issue, ou une **demande explicite** de l'humain. Produire un **verdict de méthodologie explicite** (méthodologie active + laquelle, ou aucune), **tracé sur l'issue** (piste d'audit). Si c'est **non déclaré / ambigu**, **demander à l'humain** s'il faut en activer une (et laquelle), puis **l'inscrire dans la description du projet** (`multica project update`) — ne jamais deviner. Ce verdict conditionne la suite (ex. « si OpenSpec activé » au découpage [`deliverables-breakdown`](deliverables-breakdown.md)).
 
 ### Step 3 — Clarifier le besoin d'affaires
 
@@ -47,7 +47,7 @@ Dès qu'une issue est ajoutée par l'humain, le coordinateur **statue explicitem
 
 ## Sensors
 
-Outputs: cadrage confirmé + verdict d'impact structurant tracés sur l'issue.
+Outputs: cadrage confirmé + verdict de méthodologie + verdict d'impact structurant tracés sur l'issue.
 Imports: none.
 
 ## Learn
