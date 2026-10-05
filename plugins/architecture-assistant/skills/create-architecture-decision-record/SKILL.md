@@ -30,7 +30,7 @@ Si l'une des entrées requises n'est pas fournie ou ne peut pas être détermin�
 - **Statuts en anglais.** Les valeurs de statut (front matter et section Status) restent en anglais (`Proposed`, `Accepted`, `Rejected`, `Superseded`, `Deprecated`) pour rester compatibles avec des outils d'architecture tels que Structurizr
 - **Titre de section Status en anglais.** Le titre de la section statut doit être `Status` (en anglais) et non `Statut`, pour la compatibilité avec des outils tels que Structurizr
 - **Statut unique.** La section Status ne doit pas lister toutes les valeurs possibles : ne conserver que le statut retenu
-- **Auteurs : demander à l'humain.** Ne jamais mettre le nom des agents dans les auteurs. Demander à l'humain les noms des auteurs de l'ADR avant de générer le document
+- **Auteurs : par défaut, l'architecte de solution (humain) du projet.** L'auteur par défaut d'une ADR est le **nom réel de l'humain tenant le rôle « Architecte de solution » dans les Arrimages du projet** (matrice RACI, colonne « Nom » du document `001-document-architecture-solution.md` — voir la règle « Noms de responsables » dans [`core/rules/workspace.md`](../../../../core/rules/workspace.md)). **Ne jamais mettre le nom d'un agent dans les auteurs.** Si l'arrimage « Architecte de solution » du projet n'est pas renseigné (colonne « Nom » vide ou DAS absent), **demander le ou les noms des auteurs à l'humain** avant de générer le document. Un auteur supplémentaire explicitement fourni par l'humain complète ou remplace ce défaut.
 - **Pas d'issues en référence.** Ne jamais ajouter d'issues (tickets) dans la section Références
 - **Liens markdown.** Toute référence à d'autres ADR ou à la documentation du projet doit utiliser le format de lien markdown `[texte](chemin)`
 - **URL pour les liens externes.** Toute référence à un lien externe (internet) doit inclure l'URL complète, au format `[texte](https://...)`
@@ -46,7 +46,7 @@ Le fichier de documentation doit suivre le modèle ci-dessous, en veillant à ce
 # [Titre de la décision]
 
 ---
-auteurs: [Noms des auteurs fournis par l'humain]  
+auteurs: [Par défaut l'architecte de solution (humain) du projet — Arrimages / RACI « Nom » du `001` ; sinon noms fournis par l'humain]  
 accepté par : [Nom du client ayant accepté l'ADR]  
 accepté le : [Date de l'acceptation par le client]  
 supersedes: ""  
