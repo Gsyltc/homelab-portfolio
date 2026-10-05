@@ -10,13 +10,13 @@ summary_confirmation: required
 reviewer: null
 review_class: none
 human_gate: none
-produces: [cadrage_confirme]
+produces: [cadrage_confirme, verdict_impact_structurant]
 consumes: [{artifact: intention_perimetre_approuves, required: true}]
 requires_stage: [intent-scope-approval]
 sensors: []
 scopes: [standard, feature, infra, security-patch, mvp, poc, express, enterprise]
 inputs: "Intention et périmètre approuvés, contexte projet initialisé"
-outputs: "Demande cadrée, répertoire confirmé, activation OpenSpec éventuelle confirmée"
+outputs: "Demande cadrée, répertoire confirmé, activation OpenSpec éventuelle confirmée, verdict d'impact structurant (déclencheur ADR obligatoire)"
 ---
 
 # Réception et cadrage
@@ -37,9 +37,17 @@ Confirmer le répertoire du projet (détecté en Initialization) et l'activation
 
 Objectifs, exigences fonctionnelles et non fonctionnelles, contraintes. **Ne poser que les questions qui changent réellement la conception.** Ne jamais deviner une information manquante.
 
+### Step 4 — Évaluer l'impact structurant (déclencheur ADR obligatoire)
+
+Dès qu'une issue est ajoutée par l'humain, le coordinateur **statue explicitement** sur son **impact structurant** : la demande modifie-t-elle une décision d'architecture (choix technologique, frontière de système, modèle de données, intégration, sécurité, infrastructure, pattern transverse) ou en introduit-elle une nouvelle ? Le verdict (`impact structurant : Oui / Non`, avec justification) est **tracé sur l'issue** (piste d'audit).
+
+- **Impact structurant = Oui** ⇒ le **flux de création d'ADR est obligatoire** : le découpage ([`deliverables-breakdown`](deliverables-breakdown.md), Step 3) **crée une sous-tâche dédiée portant l'ADR** (déléguée à l'Architecte de solution), que le stage [`design-and-decisions`](design-and-decisions.md) conduit jusqu'au bout de son cycle (production mob → revue de cohérence → revue de sécurité → **ADR Proposée** → décision humaine granulaire). Cette obligation est un **garde-fou non contournable** (voir [`../../conductor.md`](../../conductor.md), « Garde-fous ») : aucun scope, aucune règle apprise, aucun gate advisory ne peut la lever. Un impact structurant **ne peut jamais être traité sans ADR**.
+- **Impact structurant = Non** ⇒ pas d'ADR imposée ; le flux `design-and-decisions` reste disponible si une décision structurante émerge en cours de conception.
+- **Doute** ⇒ ne jamais deviner : demander l'arbitrage de l'humain (halt-and-ask) et, par défaut prudent, traiter comme un impact structurant (plancher, jamais plafond).
+
 ## Sensors
 
-Outputs: cadrage confirmé sur l'issue.
+Outputs: cadrage confirmé + verdict d'impact structurant tracés sur l'issue.
 Imports: none.
 
 ## Learn

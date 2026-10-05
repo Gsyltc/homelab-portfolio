@@ -12,7 +12,7 @@ review_class: adversarial
 review_artifact: decisions/<NNNN>-<titre>.md
 human_gate: granular
 produces: [decision_conception, diagramme_principal, conception_cible_validee]
-consumes: [{artifact: besoins_traces, required: true}, {artifact: decoupage_livrables, required: true}]
+consumes: [{artifact: besoins_traces, required: true}, {artifact: decoupage_livrables, required: true}, {artifact: verdict_impact_structurant, required: true}]
 requires_stage: [deliverables-breakdown]
 sensors: [required-sections, upstream-coverage, diagram-validity, data-lifecycle]
 scopes: [standard, feature, infra, security-patch, mvp, enterprise]
@@ -25,6 +25,8 @@ outputs: "Conception cible + décisions structurantes validées granulairement p
 ## Objectif
 
 Produire la conception cible et les décisions structurantes, contrôlées en sécurité et validées granulairement.
+
+> **ADR obligatoire sur impact structurant (non contournable).** Lorsque le verdict d'impact structurant établi au cadrage ([`intake-framing`](intake-framing.md), Step 4) vaut **`Oui`**, une **sous-tâche dédiée portant l'ADR** a été créée au découpage ([`deliverables-breakdown`](deliverables-breakdown.md), Step 3) et déléguée à l'Architecte de solution. Ce stage **conduit cette ou ces sous-tâches ADR jusqu'au bout de leur cycle** (production mob → revue de cohérence → revue de sécurité → **ADR Proposée** → décision humaine granulaire). Aucun scope, aucune règle apprise, aucun gate/sensor advisory ne peut lever cette obligation (garde-fou — voir [`../../conductor.md`](../../conductor.md) et [`../../protocols/governance-security.md`](../../protocols/governance-security.md)). Un impact structurant **ne peut jamais être traité sans ADR**. Si le verdict vaut `Oui` mais qu'aucune sous-tâche ADR n'existe, le coordinateur est en **halt-and-ask** (ne pas franchir le gate humain).
 
 ## Steps
 
@@ -72,6 +74,9 @@ Lorsqu'une **décision structurante (ADR)** est traitée **sous Multica**, le st
 
 - Cette correspondance **ne remplace jamais** la validation humaine granulaire ni le contrôle sécurité : passer en `ADR Proposée` **signale** qu'une décision humaine est attendue, sans l'anticiper (le statut `ADR Proposée` relève de la catégorie `in_progress` — l'acceptation reste un acte humain, jamais écrit automatiquement). L'écriture du champ `## Status` à `Accepted` (issue `done`) ou `Rejected` (issue `annulé`) suit l'arbitrage humain de l'étape 4 (Keep / Modify / Redo) et seulement lui.
 - Les boucles de correction (demande de la revue de cohérence, Redo / Modify du gate humain, recommandations de la revue de sécurité à intégrer) **ramènent l'issue en `in_progress`** (retour en production).
+- **Gate bloquant sur les tâches des spécialistes / architectes.** Lorsque l'ADR est la **sous-tâche parente bloquante** des tâches de livrable (créée au découpage sur impact structurant — voir [`deliverables-breakdown`](deliverables-breakdown.md), Step 3), le statut de l'ADR **commande le démarrage** de ces tâches :
+  - ADR **`done`** (Accepted) ⇒ **feu vert** : le coordinateur **lance en parallèle** toutes les tâches des spécialistes / architectes dépendantes. Avant ce feu vert, elles restent non démarrées, quelle que soit la phase intermédiaire (`in_progress` / `in_review` / `ADR Proposée`).
+  - ADR **`cancelled`** (Rejected) ⇒ **propagation** : toutes les tâches des spécialistes / architectes dépendantes passent **aussi à `cancelled`** (`multica issue status <id> cancelled`), leur condition indispensable n'étant pas satisfaite ; la propagation est tracée sur l'issue.
 - Les **autres invariants restent intacts** : décision structurante tracée dans `decisions/`, piste d'audit sur l'issue, mention humaine obligatoire sur blocage — voir [`../../protocols/governance-security.md`](../../protocols/governance-security.md).
 
 ## Sensors
