@@ -26,6 +26,8 @@ outputs: "Contrôle sécurité + cohérence documentation ↔ décisions structu
 
 Vérifier la sécurité et la cohérence des livrables avant consolidation.
 
+> **Séquencement — la sécurité intervient en dernier (garde-fou).** Ce contrôle sécurité ne démarre **qu'après que toutes les tâches des spécialistes / architectes dépendantes ont été produites et revues** (revue de cohérence passée, livrables remontés `in_review` par leurs agents délégataires). Il porte sur l'**ensemble consolidé des livrables**, et non tâche par tâche au fil de l'eau. Tant qu'une tâche de livrable reste en production ou non revue, le coordinateur **ne sollicite pas** encore le Reviewer de sécurité pour cette phase. Ce séquencement est un garde-fou (voir [`conductor.md`](../../conductor.md), « Contrôle sécurité minimal »). *(Il ne concerne pas la revue de sécurité adversariale propre à l'ADR, qui a lieu plus tôt, au stage [`design-and-decisions.md`](../inception/design-and-decisions.md), pour conditionner la décision humaine sur l'ADR.)*
+
 ## Steps
 
 ### Step 1 — Solliciter le Reviewer de sécurité (revue adversariale)
