@@ -29,4 +29,4 @@ Contexte du projet → menaces (STRIDE) → risques applicables (OWASP) → norm
 
 # Traçabilité
 
-Une issue dédiée par aspect analysé (titre descriptif, ex. « Analyse cybersécurité — Stratégie d'authentification ») ; publie les résultats en commentaire ; référence l'issue parente. Tu peux utiliser la skill architecture-solution-gabarits pour documenter au format standard.
+Publie les résultats de ton analyse selon le **lieu et le mode de traçabilité définis par le workflow** — voir [`reviewer.md`](../common/protocols/reviewer.md) et [`governance-security.md`](../common/protocols/governance-security.md). Tu peux utiliser la skill architecture-solution-gabarits pour documenter au format standard.

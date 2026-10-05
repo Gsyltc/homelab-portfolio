@@ -58,18 +58,20 @@ Présenter **chaque choix séparément** (choix, justification, alternative) ; b
 
 > **Source unique.** Cette correspondance ADR → statut d'issue est **spécifique à Multica** (elle s'appuie sur le statut d'issue comme machine à états du run et sur le statut personnalisé `ADR Proposée`). Elle fait **autorité ici** et n'est **pas dupliquée** ailleurs : les autres fichiers du workflow s'y réfèrent. **Hors contexte Multica, cette étape est sautée** (aucun statut d'issue à refléter) — le cycle de vie de l'ADR reste porté par le seul champ `## Status` du document de décision.
 
-Lorsqu'une **décision structurante (ADR)** est traitée **sous Multica**, le statut de l'issue qui la porte **reflète le cycle de vie de l'ADR** (champ `## Status` du document `decisions/<NNNN>-<titre>.md`). L'agent qui fait évoluer le champ `## Status` de l'ADR **met à jour le statut de l'issue dans le même temps** (`multica issue status <id> <statut>`), de sorte que le tableau montre l'ADR là où elle en est :
+Lorsqu'une **décision structurante (ADR)** est traitée **sous Multica**, le statut de l'issue qui la porte **reflète la phase du flux** (production → revues → proposition → décision humaine). L'agent qui fait évoluer l'ADR **met à jour le statut de l'issue dans le même temps** (`multica issue status <id> <statut>`), de sorte que le tableau montre l'ADR là où elle en est :
 
-| Statut de l'ADR (`## Status`) | Statut de l'issue Multica | Catégorie | Déclencheur |
-| --- | --- | --- | --- |
-| `Proposed` (Proposée) | **`ADR Proposée`** (`adr_propos_e`) | `in_progress` | L'ADR est posée en proposition et **nécessite une décision humaine** : déplacer l'issue dans `ADR Proposée`. |
-| — (en cours de traitement par un agent) | **`in_progress`** | `in_progress` | Un agent **traite l'ADR** (production / révision / instruction de la décision) : déplacer l'issue dans `in_progress`. |
-| `Accepted` (Acceptée) | **`in_review`** | `in_review` | L'ADR est acceptée et le livrable attend la revue / l'acceptation : déplacer l'issue dans `in_review`. |
+| Phase du flux | Statut de l'ADR (`## Status`) | Statut de l'issue Multica | Catégorie | Déclencheur |
+| --- | --- | --- | --- | --- |
+| Production de la conception (mob) | `Proposed` (en cours de rédaction) | **`in_progress`** | `in_progress` | Le lead et les support_agents produisent / corrigent l'ADR : issue en `in_progress`. |
+| Revues des agents (cohérence puis sécurité) | `Proposed` | **`in_review`** | `in_review` | L'ADR est remise aux revues (Reviewer de cohérence, puis Reviewer de sécurité) : issue en `in_review`. |
+| ADR proposée à l'humain (après revue de sécurité) | `Proposed` | **`ADR Proposée`** (`adr_propos_e`) | `in_progress` | La revue de sécurité est intégrée ; l'ADR est posée en proposition et **nécessite une décision humaine** : issue en `ADR Proposée`. |
+| Acceptation humaine (Keep) | `Accepted` | **`done`** | `done` | L'humain accepte l'ADR au gate granulaire : issue en `done`. |
+| Rejet humain | `Rejected` | **`annulé`** (`cancelled`) | `cancelled` | L'humain rejette l'ADR au gate granulaire : issue en `annulé`. |
 
 **Règles d'application** :
 
-- Cette correspondance **ne remplace jamais** la validation humaine granulaire ni le contrôle sécurité : passer en `ADR Proposée` **signale** qu'une décision humaine est attendue, sans l'anticiper (le statut `ADR Proposée` relève de la catégorie `in_progress` — l'acceptation reste un acte humain, jamais écrit automatiquement). L'écriture du champ `## Status` à `Accepted` suit l'arbitrage humain de l'étape 4 (Keep / Modify / Redo) et seulement lui.
-- Le passage à `in_review` est **cohérent avec le retour A2A** : l'agent délégataire qui remet le livrable passe déjà l'issue en `in_review` (voir la « Checklist de sortie de stage » de [`../../protocols/stage-protocol.md`](../../protocols/stage-protocol.md)). Pour une issue portant une ADR, `in_review` correspond donc à l'ADR `Accepted` remise pour acceptation.
+- Cette correspondance **ne remplace jamais** la validation humaine granulaire ni le contrôle sécurité : passer en `ADR Proposée` **signale** qu'une décision humaine est attendue, sans l'anticiper (le statut `ADR Proposée` relève de la catégorie `in_progress` — l'acceptation reste un acte humain, jamais écrit automatiquement). L'écriture du champ `## Status` à `Accepted` (issue `done`) ou `Rejected` (issue `annulé`) suit l'arbitrage humain de l'étape 4 (Keep / Modify / Redo) et seulement lui.
+- Les boucles de correction (demande de la revue de cohérence, Redo / Modify du gate humain, recommandations de la revue de sécurité à intégrer) **ramènent l'issue en `in_progress`** (retour en production).
 - Les **autres invariants restent intacts** : décision structurante tracée dans `decisions/`, piste d'audit sur l'issue, mention humaine obligatoire sur blocage — voir [`../../protocols/governance-security.md`](../../protocols/governance-security.md).
 
 ## Sensors

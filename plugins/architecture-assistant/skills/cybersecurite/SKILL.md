@@ -65,16 +65,8 @@ Cette skill référence 8 principes fondamentaux en cybersécurité. Chaque prin
 3. **Appliquer les principes activés** : lire uniquement les fichiers correspondant aux principes activés et suivre la méthodologie d'analyse décrite.
 4. **Croiser les résultats** : identifier les chevauchements et prioriser les recommandations.
 5. **Documenter** : produire un rapport d'analyse clair avec les risques identifiés, les recommandations et les priorités.
-6. **Créer une issue par aspect** : pour chaque aspect à analyser, créer une issue dédiée avec un titre descriptif.
+6. **Tracer selon le workflow** : publier le rapport d'analyse à l'endroit et selon le mode **définis par le workflow** (voir les protocoles `core/common/protocols/reviewer.md` et `governance-security.md`). La skill ne porte pas le flux de travail.
 7. **Notifier** : informer celui qui a sollicité l'analyse (coordinateur ou humain) du résultat en fin de traitement.
-
-## Workflow — Une issue par aspect
-
-Pour chaque aspect à analyser, créer une issue dédiée :
-- Titre descriptif (ex. « Analyse cybersécurité — Stratégie d'authentification »)
-- Réaliser l'analyse dans cette issue
-- Publier les résultats en commentaire
-- Référencer l'issue parente si applicable
 
 ## Notification obligatoire en fin de traitement
 
