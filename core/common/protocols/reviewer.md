@@ -18,7 +18,7 @@ Portée : analyse des risques (OWASP / STRIDE toujours actifs ; NIST / COBIT si 
 - **Portée par une fonction « review-only » distincte** : le **Reviewer de sécurité** (persona `security-reviewer-agent`).
 - **Déclenchée systématiquement** dès qu'un stage produit ou modifie une architecture ou une **surface de sécurité** (instructions exécutables, frontières de délégation, contrôle de sécurité).
 - Procédure : le coordinateur poste un commentaire mentionnant le **Reviewer de sécurité** (UUID résolu via `multica agent list --output json`) avec le contexte et le résumé des modifications ; **attend l'analyse** ; intègre les recommandations **avant** la validation humaine.
-- Le Reviewer de sécurité crée une **issue dédiée par aspect** analysé, y publie ses conclusions, puis notifie l'assigneur (le coordinateur) ou l'humain demandeur.
+- Le Reviewer de sécurité **poste ses conclusions et recommandations directement dans la tâche** (l'issue qui porte le livrable / l'ADR), sans créer d'issue dédiée, puis notifie l'assigneur (le coordinateur) ou l'humain demandeur.
 - **Plancher SG-3** : aucune revue de cohérence, aucun gate / sensor advisory ne peut porter, remplacer, conditionner ni court-circuiter la revue de sécurité. Un « vert » de gate ne dispense jamais de la revue de sécurité.
 
 ## Articulation des deux revues et du gate humain
