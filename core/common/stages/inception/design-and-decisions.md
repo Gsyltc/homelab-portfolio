@@ -12,7 +12,7 @@ review_class: adversarial
 review_artifact: decisions/<NNNN>-<titre>.md
 human_gate: granular
 produces: [decision_conception, diagramme_principal, conception_cible_validee]
-consumes: [{artifact: besoins_traces, required: true}, {artifact: decoupage_livrables, required: true}, {artifact: verdict_impact_structurant, required: true}]
+consumes: [{artifact: besoins_traces, required: true}, {artifact: decoupage_livrables, required: true}, {artifact: verdict_impact_structurant, required: true}, {artifact: verdict_methodologie, required: false}]
 requires_stage: [deliverables-breakdown]
 sensors: [required-sections, upstream-coverage, diagram-validity, data-lifecycle]
 scopes: [standard, feature, infra, security-patch, mvp, enterprise]
