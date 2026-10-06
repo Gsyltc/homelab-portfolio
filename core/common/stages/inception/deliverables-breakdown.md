@@ -16,7 +16,7 @@ requires_stage: [requirements-analysis]
 sensors: []
 scopes: [standard, feature, infra, mvp, enterprise]
 inputs: "Besoins tracés + verdict d'impact structurant"
-outputs: "Impact structurant Oui ⇒ issue ADR parente créée en premier (déléguée à l'Architecte de solution) ; ses sous-issues de livrable (une par spécialiste/architecte, hors revues, agent assigné, backlog) ne sont créées qu'après acceptation humaine de l'ADR. Impact structurant Non ⇒ issues de livrable créées directement en backlog, sans ADR parente."
+outputs: "Impact structurant Oui ⇒ issue ADR parente créée en premier (déléguée à l'Architecte de solution), issue d'origine passée en blocked ; ses sous-issues de livrable (une par spécialiste/architecte, hors revues, agent assigné, backlog) ne sont créées qu'après acceptation humaine de l'ADR, puis l'ADR passe en blocked. ADR refusée ⇒ ADR et issue d'origine annulées (cancelled) en cascade. Toutes les sous-issues done ⇒ ADR done puis issue d'origine done (dérivé). Impact structurant Non ⇒ issues de livrable créées directement en backlog ; si enfants de l'issue d'origine, celle-ci est blocked jusqu'à leur achèvement."
 ---
 
 # Planification et découpage en livrables
@@ -46,32 +46,34 @@ Dès que le **verdict d'impact structurant** établi au cadrage ([`intake-framin
 ```mermaid
 flowchart TD
     Start([Impact structurant = Oui]) --> A1
-    A1["1 · Création de l'issue ADR<br/>par l'Architecte de solution — issue parente"] --> A2
+    A1["1 · Création de l'issue ADR<br/>par l'Architecte de solution — issue parente<br/>issue d'origine → blocked"] --> A2
     A2["2 · Revue de cohérence"] --> A3
     A3["3 · Revue de sécurité"] --> Prop["ADR Proposée"]
     Prop --> Gate{"4 · Gate humaine"}
-    Gate -->|Refusée| KO["ADR → cancelled<br/>flux clôturé — aucun livrable"]
-    Gate -->|Acceptée| Issues["Création des sous-issues de livrables<br/>enfants de l'ADR · 1 spécialiste / architecte par issue<br/>backlog · agent assigné · puis lancées"]
+    Gate -->|Refusée| KO["ADR → cancelled<br/>issue d'origine → cancelled (cascade)<br/>flux clôturé — aucun livrable"]
+    Gate -->|Acceptée| Issues["Création des sous-issues de livrables<br/>enfants de l'ADR · 1 spécialiste / architecte par issue<br/>backlog · agent assigné · puis lancées<br/>ADR (parente) → blocked"]
     Issues --> Run["Sous-issues : todo → in_progress → done"]
     Run --> Check{"Toutes les sous-issues done ?"}
     Check -->|Non| Run
-    Check -->|Oui| Done["L'issue ADR passe à done"]
+    Check -->|Oui| Done["ADR → done, puis issue d'origine → done (dérivé)"]
 ```
 
 #### Step 3.1 — Créer l'issue ADR (parente), déléguée à l'Architecte de solution
 
 Le coordinateur crée l'**issue ADR**, déléguée à l'**Architecte de solution**, qui conduit son cycle au stage [`design-and-decisions`](design-and-decisions.md) : production mob → revue de cohérence → revue de sécurité → **ADR Proposée** → décision humaine granulaire. C'est un **garde-fou non contournable** (voir [`conductor.md`](../../conductor.md), « Garde-fous ») : un impact structurant ne peut jamais être traité sans son issue ADR.
 
+> **L'issue d'origine est bloquée dès la création de l'issue ADR.** L'issue ADR étant une **sous-issue de l'issue d'origine** (celle que l'humain a ajoutée et qui a déclenché le flux), le coordinateur passe l'**issue d'origine en `blocked`** (`multica issue status <id-origine> blocked`) dès qu'il crée et lance l'issue ADR. L'issue d'origine **ne reprend jamais** tant que le flux ADR n'est pas terminé : son déblocage est **dérivé** (voir Step 3.2 pour le refus et Step 3.4 pour la clôture). C'est le garde-fou « Issue parente bloquée tant que ses sous-issues ne sont pas terminées » ([`conductor.md`](../../conductor.md), « Garde-fous »).
+
 > **Tout le cycle de revue se déroule sur l'issue ADR.** Les deux revues de l'ADR (cohérence puis sécurité) sont **sollicitées et postées sur cette issue ADR**, jamais sur l'issue d'origine qui a déclenché le flux : la piste d'audit de la décision reste entière sur l'issue qui la porte (voir l'encadré d'ouverture de [`../../protocols/reviewer.md`](../../protocols/reviewer.md) et [`design-and-decisions`](design-and-decisions.md), Steps 2–3).
 
 #### Step 3.2 — Gate humaine : accepter ou refuser
 
 - **ADR acceptée (Keep)** ⇒ le coordinateur crée les **sous-issues de livrable** (Step 3.3), puis les lance.
-- **ADR refusée** ⇒ l'issue ADR passe à **`cancelled`** ; aucun livrable n'est créé, le flux se clôt. Si l'humain reformule la décision, relancer une nouvelle issue ADR.
+- **ADR refusée** ⇒ l'issue ADR passe à **`cancelled`** ; aucun livrable n'est créé, le flux se clôt. **L'issue d'origine qui a déclenché le flux est annulée en cascade** : le coordinateur la passe également à **`cancelled`** (`multica issue status <id-origine> cancelled`) — un refus d'ADR ne laisse jamais l'issue d'origine ouverte ou bloquée en suspens. Si l'humain reformule la décision, c'est une **nouvelle** issue d'origine (et une nouvelle issue ADR) qui est relancée.
 
 #### Step 3.3 — Sous-issues de livrable, créées **seulement après acceptation** (enfants de l'ADR)
 
-Pour chaque délégation, le coordinateur crée une **sous-issue** rattachée à l'ADR (`--parent <id-ADR>`), en **`backlog`** avec son **agent délégataire assigné** (`--assignee-id`, UUID résolu, jamais deviné), puis la lance (`multica issue status <id> todo`, qui démarre l'agent) avec mention A2A.
+Pour chaque délégation, le coordinateur crée une **sous-issue** rattachée à l'ADR (`--parent <id-ADR>`), en **`backlog`** avec son **agent délégataire assigné** (`--assignee-id`, UUID résolu, jamais deviné), puis la lance (`multica issue status <id> todo`, qui démarre l'agent) avec mention A2A. **Une fois toutes les sous-issues de livrable créées et lancées, le coordinateur passe l'issue ADR (parente) en `blocked`** (`multica issue status <id-ADR> blocked`) : elle le reste tant que ses sous-issues ne sont pas toutes terminées (garde-fou « Issue parente bloquée », voir Step 3.4 pour le déblocage dérivé).
 
 > **Directives complètes, dérivées de l'ADR acceptée.** L'agent délégataire démarre « à froid » : il **ne voit pas** le fil de l'ADR ni le contexte du coordinateur. Chaque sous-issue doit donc être **autosuffisante** et **reporter explicitement les décisions de l'ADR acceptée** qui conditionnent le livrable — sans quoi l'agent ne peut pas exécuter correctement. Le coordinateur **puise ces directives dans l'ADR tranchée** (`decisions/<NNNN>-<titre>.md`) et les inscrit dans la description de la sous-issue : voir [« Mission déléguée — contenu obligatoire »](#mission-déléguée--contenu-obligatoire) ci-dessous. En cas d'information manquante dans l'ADR pour cadrer un livrable, halt-and-ask plutôt que deviner.
 
@@ -81,11 +83,13 @@ Voir aussi la [règle « une sous-issue par agent »](#une-issue-par-spécialist
 
 #### Step 3.4 — Clôture de l'ADR quand tous les livrables sont terminés
 
-L'issue ADR reste **ouverte comme parente** tant que ses sous-issues tournent. Dès que **toutes** ses sous-issues sont `done`, le coordinateur passe l'**issue ADR à `done`** (`multica issue status <id-ADR> done`) : clôture **dérivée** de l'état des enfants, **sans acte humain supplémentaire**.
+L'issue ADR reste **`blocked` comme parente** tant que ses sous-issues tournent. Dès que **toutes** ses sous-issues sont `done`, le coordinateur passe l'**issue ADR à `done`** (`multica issue status <id-ADR> done`) : clôture **dérivée** de l'état des enfants, **sans acte humain supplémentaire**. L'issue ADR étant elle-même une sous-issue de l'**issue d'origine** (restée `blocked` depuis Step 3.1), sa clôture **débloque l'issue d'origine en cascade** : le coordinateur passe l'**issue d'origine à `done`** (`multica issue status <id-origine> done`) — le flux ne se poursuit sur l'issue d'origine qu'**après** la fin complète du flux ADR et de ses livrables, jamais avant.
 
 ### Step 4 — Sans décision structurante (`verdict Non`) : livrables directs en backlog
 
 Pas d'ADR : le coordinateur crée directement les **issues de livrable** (une par spécialiste / architecte), en **`backlog`** avec agent assigné (`--assignee-id`, UUID résolu), **sans parent ADR**, puis les promeut selon le séquencement du stage. **Uniquement si OpenSpec activé**, ajouter de même l'issue du cycle spec-driven OpenSpec.
+
+> **Issue d'origine bloquée tant que ses livrables tournent.** Lorsque ces issues de livrable sont créées comme **sous-issues de l'issue d'origine** (`--parent <id-origine>`), le coordinateur passe l'**issue d'origine en `blocked`** une fois les livrables lancés et ne la débloque (`done`) que lorsque **tous** sont `done` — même garde-fou que sur le flux ADR (« Issue parente bloquée tant que ses sous-issues ne sont pas terminées », [`conductor.md`](../../conductor.md), « Garde-fous »). Déblocage **dérivé** de l'état des enfants, sans acte humain supplémentaire.
 
 #### <a id="une-issue-par-spécialiste--architecte-hors-revues--règle-de-délégation"></a>Une issue par spécialiste / architecte (hors revues) — règle de délégation
 
@@ -103,7 +107,7 @@ Chaque mission déléguée inclut **obligatoirement** :
 
 ## Sensors
 
-Outputs: impact structurant Oui ⇒ issue ADR parente d'abord, ses sous-issues de livrable (backlog, agents assignés) créées et lancées après acceptation humaine, ADR `done` quand toutes ses sous-issues sont `done` ; impact structurant Non ⇒ issues de livrable directes en backlog.
+Outputs: impact structurant Oui ⇒ issue ADR parente d'abord (issue d'origine → `blocked`), ses sous-issues de livrable (backlog, agents assignés) créées et lancées après acceptation humaine puis l'ADR → `blocked` ; ADR refusée ⇒ ADR et issue d'origine → `cancelled` (cascade) ; ADR `done` quand toutes ses sous-issues sont `done`, puis issue d'origine → `done` (dérivé) ; impact structurant Non ⇒ issues de livrable directes en backlog (issue d'origine → `blocked` si elles en sont les enfants, jusqu'à leur achèvement).
 Imports: none.
 
 ## Learn
