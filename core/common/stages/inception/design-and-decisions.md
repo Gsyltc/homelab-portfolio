@@ -38,15 +38,21 @@ Les `support_agents` désignés travaillent **en parallèle contre le brouillon 
 
 > **Données** : le lead (Architecte de solution) **délègue à l'Architecte de données** les tâches relatives aux données au besoin. L'Architecte de données produit le document **Cycle de vie des données** (`documentation/10-cycle_vie_donnees.md`) — cycle de vie, gouvernance, classification, renseigné selon les données du projet — puis le remet à l'Architecte de solution. L'**Architecte de solution valide** ce livrable ; le sensor `data-lifecycle` (advisory) **assiste** cette validation en factualisant la présence et le renseignement du document, mais **ne la bloque pas** — l'Architecte de solution reste seul juge et peut demander une correction sur la base d'un écart.
 
-### Step 2 — Contrôle sécurité obligatoire (revue adversariale)
+### Step 2 — Revues (sécurité et cohérence)
 
-À chaque modification d'architecture, le coordinateur sollicite le **Reviewer de sécurité**, **attend son analyse** (OWASP / STRIDE), intègre ses recommandations avant toute validation. Revue **adversariale, non substituable** (plancher SG-3). Normes spécifiques uniquement si explicitement demandées. Voir [`../../protocols/reviewer.md`](../../protocols/reviewer.md).
+Communs aux deux revues :
 
-> **Lieu de la revue : l'issue ADR.** Sur impact structurant, la revue de sécurité se tient **dans l'issue ADR dédiée** (l'issue parente de la décision, [`deliverables-breakdown`](deliverables-breakdown.md), Step 3.1) — sollicitation par mention A2A et post des conclusions **sur cette issue ADR**, jamais sur l'issue d'origine qui a déclenché le flux (voir l'encadré d'ouverture de [`protocols/reviewer.md`](../../protocols/reviewer.md)).
+- **Où** : sur l'issue qui porte l'artefact revu. Pour une **modification documentaire standard** (livrable de documentation non porté par une décision), c'est l'**issue du livrable**. Sur **impact structurant** (artefact = ADR), c'est l'**issue ADR dédiée** ([`deliverables-breakdown`](deliverables-breakdown.md), Step 3.1), **jamais** l'issue d'origine.
+- **Qui** : **tout spécialiste ou architecte** peut solliciter le reviewer dédié par mention A2A — pas seulement le coordinateur (source unique : [`../../protocols/reviewer.md`](../../protocols/reviewer.md), « Qui peut solliciter une revue ») ; le reviewer **analyse et poste lui-même** son verdict sur l'issue. L'**auteur de l'artefact n'est jamais son relecteur** : une revue signée de l'auteur (pour une ADR, y compris via sa section `## Review`) est **nulle**.
+- **Conduite** : attendre l'analyse, intégrer les recommandations **avant** la validation humaine ; si une revue requise manque, elle est **sollicitée auprès du reviewer** — l'auteur ne la supplée jamais. Voir [`../../protocols/reviewer.md`](../../protocols/reviewer.md).
 
-### Step 3 — Contrôle de cohérence
+#### Revue de sécurité (obligatoire, non substituable)
 
-Vérifier la correspondance documentation ↔ décisions structurantes, l'absence de conflits ; demander les corrections aux agents responsables. Sur impact structurant, la **revue de cohérence se tient dans l'issue ADR dédiée** (comme la revue de sécurité, Step 2), jamais dans l'issue d'origine.
+Déclenchée à **chaque modification d'architecture**. `security-reviewer-agent` analyse les risques (OWASP / STRIDE ; normes spécifiques uniquement si explicitement demandées). Revue **adversariale, plancher SG-3** : aucun autre contrôle ne peut la porter, la remplacer ni la court-circuiter.
+
+#### Revue de cohérence
+
+`consistency-reviewer-agent` vérifie la correspondance documentation ↔ décisions structurantes, l'absence de conflits et d'artefact orphelin ; demande les corrections aux agents responsables.
 
 ### Step 4 — Validation granulaire humaine
 
@@ -75,6 +81,7 @@ Lorsqu'une **décision structurante (ADR)** est traitée **sous Multica**, le st
 
 **Règles d'application** :
 
+- **Garde-fou de séparation des rôles au passage en `ADR Proposée` (non contournable).** Le coordinateur ne pose l'issue en `ADR Proposée` (ni ne ferme la boucle A2A) **que si l'issue ADR porte deux commentaires de revue distincts** — une revue de cohérence **postée par** `consistency-reviewer-agent` et une revue de sécurité **postée par** `security-reviewer-agent` — **dont l'auteur n'est, dans aucun des deux cas, le lead `Architecte de solution` auteur de l'ADR**. Une revue rédigée par le lead, ou intégrée uniquement dans la section `## Review` de l'ADR sans commentaire indépendant du reviewer sur l'issue, **ne satisfait pas** cette condition : le coordinateur est en **halt-and-ask** et sollicite le(s) reviewer(s) manquant(s) avant tout passage de phase. Ce garde-fou **complète** le plancher SG-3 (la revue de sécurité ne peut être ni portée ni remplacée par un autre contrôle) et ne le remplace pas.
 - Cette correspondance **ne remplace jamais** la validation humaine granulaire ni le contrôle sécurité : passer en `ADR Proposée` **signale** qu'une décision humaine est attendue, sans l'anticiper (le statut `ADR Proposée` relève de la catégorie `in_progress` — l'acceptation reste un acte humain, jamais écrit automatiquement). L'écriture du champ `## Status` à `Accepted` ou `Rejected` suit l'arbitrage humain de l'étape 4 (Keep / Modify / Redo) et seulement lui. L'**acceptation ne passe pas l'issue ADR à `done`** : elle débloque la création des sous-issues puis passe l'issue ADR en `blocked` ; le passage de l'issue ADR à `done` est **dérivé** (tous les livrables `done`), celui à `annulé` suit un rejet.
 - Les boucles de correction (demande de la revue de cohérence, Redo / Modify du gate humain, recommandations de la revue de sécurité à intégrer) **ramènent l'issue en `in_progress`** (retour en production).
 - **ADR parente des sous-issues de livrable, elle-même sous-issue de l'issue d'origine.** L'issue ADR est l'**issue parente** des livrables (voir [`deliverables-breakdown`](deliverables-breakdown.md), Step 3) et l'**enfant de l'issue d'origine** qui a déclenché le flux (bloquée dès la création de l'ADR, Step 3.1). L'issue de la gate humaine commande la suite :
