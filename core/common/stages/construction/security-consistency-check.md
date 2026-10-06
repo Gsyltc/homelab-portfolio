@@ -20,21 +20,23 @@ inputs: "Livrables détaillés"
 outputs: "Contrôle sécurité + cohérence documentation ↔ décisions structurantes, corrections demandées le cas échéant"
 ---
 
-# Contrôle sécurité et cohérence
+# Contrôle cohérence et sécurité
 
 ## Objectif
 
-Vérifier la sécurité et la cohérence des livrables avant consolidation.
+Vérifier la cohérence et la sécurité des livrables avant consolidation.
 
 ## Steps
 
-### Step 1 — Solliciter le Reviewer de sécurité (revue adversariale)
+Les revues sont **séquentielles** (**cohérence puis sécurité**) et transitent par le spécialiste auteur du livrable (mécanique OK/RENVOI : [`../../protocols/reviewer.md`](../../protocols/reviewer.md), encadré « Le reviewer retourne toujours au spécialiste »).
 
-Pour tout livrable modifiant l'architecture (mêmes règles que `design-and-decisions`), le coordinateur sollicite le **Reviewer de sécurité** ; l'Architecte cybersécurité (voix adoptée `inline`) pilote l'analyse de posture. Plancher SG-3 : aucun gate / sensor advisory, aucune revue de cohérence ne remplace ce contrôle adversarial.
+### Step 1 — Revue de cohérence
 
-### Step 2 — Vérifier structure, complétude, qualité, format et cohérence avec les décisions structurantes
+Le `consistency-reviewer-agent` vérifie structure, complétude, qualité, format et cohérence des livrables avec les décisions structurantes.
 
-### Step 3 — Demander les corrections aux agents responsables le cas échéant
+### Step 2 — Revue de sécurité (revue adversariale)
+
+Pour tout livrable modifiant l'architecture (mêmes règles que `design-and-decisions`), le **Reviewer de sécurité** mène l'analyse de posture ; l'Architecte cybersécurité (voix adoptée `inline`) la pilote. Plancher SG-3 : aucun gate / sensor advisory, aucune revue de cohérence ne remplace ce contrôle adversarial.
 
 ## Sensors
 

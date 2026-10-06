@@ -2,6 +2,42 @@
 
 Cycle standard qu'un stage suit, quel que soit sa phase. Il ne se substitue jamais aux instructions propres de la fiche de stage ; il en fixe l'ossature commune, adaptée au moteur A2A Multica (mentions UUID, statut d'issue, piste d'audit sur l'issue).
 
+## Cycle de livrable d'un spécialiste — 3 stages (cadre macro)
+
+Tout livrable confié à un spécialiste (architecte ou expert de domaine) suit **trois stages**, le **spécialiste étant le pivot unique** qui fait avancer son artefact d'un stage/step au suivant par mention A2A. Ce cadre macro structure la production d'un livrable ; le « Cycle en 6 temps » ci-dessous reste la mécanique interne d'exécution d'un stage délégué.
+
+```mermaid
+flowchart TB
+    subgraph S1[Stage 1 - Production]
+      M[Step 1 - Expert de methodologie<br/>OpenSpec / BMAD... OPTIONNEL] --> SP[Step 2 - Specialiste produit le livrable]
+    end
+    subgraph S2[Stage 2 - Review sequentiel]
+      RC[Step 1 - Revue de coherence]
+      RS[Step 2 - Revue de securite]
+    end
+    subgraph S3[Stage 3 - Finalisation par le specialiste]
+      CR[Step 1 - Compte rendu, prose optimisee] --> FI[Step 2 - Finalisation de l issue, gate si requis]
+    end
+    SP -->|mention| RC
+    RC -->|verdict au specialiste| SP
+    RS -->|verdict au specialiste| SP
+    SP -->|coherence OK : sollicite securite| RS
+    SP -->|securite OK| CR
+    FI -->|mention| CO[Coordinateur]
+```
+
+- **Stage 1 — Production.**
+  - *Step 1 (optionnel)* : l'**Expert de méthodologie** (OpenSpec, BMAD, etc.) intervient **selon la méthodologie activée** ; **sauté** s'il n'y a pas de méthodologie explicite.
+  - *Step 2* : le **spécialiste** produit le livrable. En fin de stage, il mentionne le **Reviewer de cohérence**.
+- **Stage 2 — Review (séquentiel).** Les deux revues transitent **toutes par le spécialiste** (voir [`reviewer.md`](reviewer.md), encadré « Le reviewer retourne toujours au spécialiste »).
+  - *Step 1 — Revue de cohérence* : le reviewer mentionne le spécialiste. **OK** ⇒ le spécialiste enchaîne le Step 2 (sollicite le reviewer de sécurité). **RENVOI** ⇒ le spécialiste corrige puis re-sollicite le reviewer de cohérence.
+  - *Step 2 — Revue de sécurité* : le reviewer mentionne le spécialiste. **OK** ⇒ le spécialiste passe au Stage 3. **RENVOI** ⇒ le spécialiste corrige puis re-sollicite le reviewer de sécurité.
+- **Stage 3 — Finalisation (par le spécialiste).**
+  - *Step 1* : compte rendu, prose optimisée.
+  - *Step 2* : finalisation de l'issue (gate humain si requis), puis mention du coordinateur (lien de retour actif).
+
+> **Décision structurante : ADR d'abord (garde-fou inchangé).** Sur impact **structurant**, le flux **ADR d'abord** s'applique en premier (ADR produite → revue de cohérence → revue de sécurité → `ADR Proposée` → gate humaine — voir [`../stages/inception/design-and-decisions.md`](../stages/inception/design-and-decisions.md), « Flux ADR — impact structurant = Oui », et l'orchestration des issues dans [`../stages/inception/deliverables-breakdown.md`](../stages/inception/deliverables-breakdown.md)). Les livrables aval ne suivent le présent cycle à 3 stages qu'**après acceptation de l'ADR**.
+
 ## Cycle en 6 temps
 
 ```mermaid
@@ -53,7 +89,7 @@ Dès qu'un stage **produit ou modifie une architecture** (ou une surface de séc
 Un stage délégué n'est considéré **terminé** QUE lorsque les trois cases sont cochées, **dans cet ordre** — c'est le **point de passage unique** que tout agent délégué franchit, quelle que soit sa fonction :
 
 1. ☑ **Livrable produit et contrôlé** — artefacts `produces` écrits, décision structurante tracée, piste d'audit posée sur l'issue.
-2. ☑ **Issue en `in_review` + lien de retour ACTIF posé** — le commentaire de retour se termine par `[@<Nom assigneur>](mention://agent/<uuid>)` vers le coordinateur, UUID résolu via `multica agent list --output json` (jamais copié / codé en dur), jamais une auto-mention. C'est ce lien qui enqueue le run de reprise du coordinateur.
+2. ☑ **Issue en `in_review` + lien de retour ACTIF posé** — le commentaire de retour se termine par `[@<Nom assigneur>](mention://agent/<uuid>)`, UUID résolu via `multica agent list --output json` (jamais copié / codé en dur), jamais une auto-mention. C'est ce lien qui enqueue le run de reprise. **Cible du retour** : le coordinateur pour un agent de production délégué ; le **spécialiste** (auteur du livrable) pour un **reviewer** — jamais un autre reviewer ni le coordinateur (voir [`reviewer.md`](reviewer.md), encadré « Le reviewer retourne toujours au spécialiste »).
 3. ☑ **`trigger_outcomes` vérifié** — la mention a bien déclenché le run attendu ; sinon (`blocked` / `coalesced` / `deferred`) → **halt-and-ask** sur l'issue, ne pas conclure.
 
 Tant que 2 ou 3 manque, la tâche est **incomplète** : ne jamais rendre la main comme si le stage était clos. Cette checklist est l'**unique endroit non contournable** de l'obligation de retour A2A ; les fiches d'agent ne la répètent pas, elles s'y réfèrent.

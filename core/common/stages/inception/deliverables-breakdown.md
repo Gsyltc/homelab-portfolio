@@ -52,7 +52,7 @@ flowchart TD
     Prop --> Gate{"4 · Gate humaine"}
     Gate -->|Refusée| KO["ADR → cancelled<br/>issue d'origine → cancelled (cascade)<br/>flux clôturé — aucun livrable"]
     Gate -->|Acceptée| Issues["Création des sous-issues de livrables<br/>enfants de l'ADR · 1 spécialiste / architecte par issue<br/>backlog · agent assigné · puis lancées<br/>ADR (parente) → blocked"]
-    Issues --> Run["Sous-issues : todo → in_progress → done"]
+    Issues --> Run["Sous-issues : cycle de livrable a 3 stages<br/>(statut todo → in_progress → done)"]
     Run --> Check{"Toutes les sous-issues done ?"}
     Check -->|Non| Run
     Check -->|Oui| Done["ADR → done, puis issue d'origine → done (dérivé)"]
@@ -60,11 +60,11 @@ flowchart TD
 
 #### Step 3.1 — Créer l'issue ADR (parente), déléguée à l'Architecte de solution
 
-Le coordinateur crée l'**issue ADR**, déléguée à l'**Architecte de solution**, qui conduit son cycle au stage [`design-and-decisions`](design-and-decisions.md) : production mob → revue de cohérence → revue de sécurité → **ADR Proposée** → décision humaine granulaire. C'est un **garde-fou non contournable** (voir [`conductor.md`](../../conductor.md), « Garde-fous ») : un impact structurant ne peut jamais être traité sans son issue ADR.
+Le coordinateur crée l'**issue ADR**, déléguée à l'**Architecte de solution**, qui la conduit au stage [`design-and-decisions`](design-and-decisions.md) (production, revues cohérence puis sécurité, `ADR Proposée`, décision humaine). C'est un **garde-fou non contournable** (voir [`conductor.md`](../../conductor.md), « Garde-fous ») : un impact structurant ne peut jamais être traité sans son issue ADR.
 
 > **L'issue d'origine est bloquée dès la création de l'issue ADR.** L'issue ADR étant une **sous-issue de l'issue d'origine** (celle que l'humain a ajoutée et qui a déclenché le flux), le coordinateur passe l'**issue d'origine en `blocked`** (`multica issue status <id-origine> blocked`) dès qu'il crée et lance l'issue ADR. L'issue d'origine **ne reprend jamais** tant que le flux ADR n'est pas terminé : son déblocage est **dérivé** (voir Step 3.2 pour le refus et Step 3.4 pour la clôture). C'est le garde-fou « Issue parente bloquée tant que ses sous-issues ne sont pas terminées » ([`conductor.md`](../../conductor.md), « Garde-fous »).
 
-> **Tout le cycle de revue se déroule sur l'issue ADR.** Les deux revues de l'ADR (cohérence puis sécurité) sont **sollicitées et postées sur cette issue ADR**, jamais sur l'issue d'origine qui a déclenché le flux : la piste d'audit de la décision reste entière sur l'issue qui la porte (voir l'encadré d'ouverture de [`../../protocols/reviewer.md`](../../protocols/reviewer.md) et [`design-and-decisions`](design-and-decisions.md), Steps 2–3).
+> **Tout le cycle de revue se déroule sur l'issue ADR**, jamais sur l'issue d'origine (conduite détaillée : [`design-and-decisions`](design-and-decisions.md), « Flux ADR » ; [`../../protocols/reviewer.md`](../../protocols/reviewer.md)).
 
 #### Step 3.2 — Gate humaine : accepter ou refuser
 
@@ -79,6 +79,8 @@ Pour chaque délégation, le coordinateur crée une **sous-issue** rattachée à
 
 Voir aussi la [règle « une sous-issue par agent »](#une-issue-par-spécialiste--architecte-hors-revues--règle-de-délégation) ci-dessous.
 
+> **Chaque sous-issue de livrable suit le cycle de livrable à 3 stages.** Une fois lancée, toute sous-issue de livrable (post-acceptation ADR) parcourt le **cycle standard d'un livrable de spécialiste** — Stage 1 Production (expert de méthodologie optionnel puis spécialiste) → Stage 2 Review (revue de cohérence puis revue de sécurité, chacune transitant par le spécialiste) → Stage 3 Finalisation (compte rendu puis clôture de l'issue) — défini comme **source unique** dans [`../../protocols/stage-protocol.md`](../../protocols/stage-protocol.md), « Cycle de livrable d'un spécialiste ». Le `todo → in_progress → done` de l'issue n'est que le **reflet de statut** de ce cycle, pas un raccourci qui en dispenserait.
+
 **Uniquement si OpenSpec activé** : ajouter de même une sous-issue dédiée au cycle spec-driven OpenSpec (création / modification / suppression de spécifications), déléguée à l'OpenSpec Expert.
 
 #### Step 3.4 — Clôture de l'ADR quand tous les livrables sont terminés
@@ -87,7 +89,7 @@ L'issue ADR reste **`blocked` comme parente** tant que ses sous-issues tournent.
 
 ### Step 4 — Sans décision structurante (`verdict Non`) : livrables directs en backlog
 
-Pas d'ADR : le coordinateur crée directement les **issues de livrable** (une par spécialiste / architecte), en **`backlog`** avec agent assigné (`--assignee-id`, UUID résolu), **sans parent ADR**, puis les promeut selon le séquencement du stage. **Uniquement si OpenSpec activé**, ajouter de même l'issue du cycle spec-driven OpenSpec.
+Pas d'ADR : le coordinateur crée directement les **issues de livrable** (une par spécialiste / architecte), en **`backlog`** avec agent assigné (`--assignee-id`, UUID résolu), **sans parent ADR**, puis les promeut selon le séquencement du stage. **Uniquement si OpenSpec activé**, ajouter de même l'issue du cycle spec-driven OpenSpec. Comme sur le flux ADR, **chaque issue de livrable suit le cycle de livrable à 3 stages** (Production → Review cohérence+sécurité → Finalisation — [`../../protocols/stage-protocol.md`](../../protocols/stage-protocol.md), « Cycle de livrable d'un spécialiste »).
 
 > **Issue d'origine bloquée tant que ses livrables tournent.** Lorsque ces issues de livrable sont créées comme **sous-issues de l'issue d'origine** (`--parent <id-origine>`), le coordinateur passe l'**issue d'origine en `blocked`** une fois les livrables lancés et ne la débloque (`done`) que lorsque **tous** sont `done` — même garde-fou que sur le flux ADR (« Issue parente bloquée tant que ses sous-issues ne sont pas terminées », [`conductor.md`](../../conductor.md), « Garde-fous »). Déblocage **dérivé** de l'état des enfants, sans acte humain supplémentaire.
 
