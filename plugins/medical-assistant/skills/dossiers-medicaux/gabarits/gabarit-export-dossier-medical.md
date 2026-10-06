@@ -85,12 +85,12 @@ Reporter les données morphologiques clés du patient. Le DÉTAIL (poids, IMC, I
 
 ## 2. Problèmes actifs
 
-<!-- Liste numérotée. Indiquer le code CIM-10 quand disponible. Classer par gravité si connue. -->
+<!-- Liste numérotée. Indiquer le code CIM-10 quand disponible. Classer par gravité si connue. Pour une pathologie déclarée, ne reporter que les derniers éléments en cours et renvoyer à son suivi détaillé `pathologies/<slug>/suivi.md`. -->
 
-| #   | Problème actif           | Code CIM-10 | Depuis      | Statut      |
-| --- | ------------------------ | ----------- | ----------- | ----------- |
-| 1   | [libellé du problème]    | [CIM-10]    | [date]      | Actif       |
-| 2   |                          |             |             |             |
+| #   | Problème actif           | Code CIM-10 | Depuis      | Statut      | Suivi détaillé                       |
+| --- | ------------------------ | ----------- | ----------- | ----------- | ------------------------------------ |
+| 1   | [libellé du problème]    | [CIM-10]    | [date]      | Actif       | `pathologies/<slug>/suivi.md` (si déclarée) |
+| 2   |                          |             |             |             |                                      |
 
 **Tableau 4. Problèmes actifs**
 
