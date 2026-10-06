@@ -42,8 +42,8 @@ Les `support_agents` désignés travaillent **en parallèle contre le brouillon 
 
 Communs aux deux revues :
 
-- **Où** : sur l'issue qui porte l'artefact revu. Pour une **modification documentaire standard** (livrable de documentation non porté par une décision), c'est l'**issue du livrable**. Sur **impact structurant** (artefact = ADR), c'est l'**issue ADR dédiée** ([`deliverables-breakdown`](deliverables-breakdown.md), Step 3.1), **jamais** l'issue d'origine.
-- **Qui** : **tout spécialiste ou architecte** peut solliciter le reviewer dédié par mention A2A — pas seulement le coordinateur (source unique : [`../../protocols/reviewer.md`](../../protocols/reviewer.md), « Qui peut solliciter une revue ») ; le reviewer **analyse et poste lui-même** son verdict sur l'issue. L'**auteur de l'artefact n'est jamais son relecteur** : une revue signée de l'auteur (pour une ADR, y compris via sa section `## Review`) est **nulle**.
+- **Où** : sur l'issue qui porte l'artefact revu — **issue du livrable** pour une modification documentaire standard, **issue ADR dédiée** sur impact structurant, **jamais** l'issue d'origine (détail et faute de flux : [`../../protocols/reviewer.md`](../../protocols/reviewer.md), encadré d'ouverture).
+- **Qui** : **tout spécialiste ou architecte** peut solliciter le reviewer dédié par mention A2A — pas seulement le coordinateur ; le reviewer **analyse et poste lui-même** son verdict sur l'issue. L'**auteur de l'artefact n'est jamais son relecteur** (source unique : [`../../protocols/reviewer.md`](../../protocols/reviewer.md), encadrés « Qui peut solliciter une revue » et « Séparation des rôles »).
 - **Conduite** : attendre l'analyse, intégrer les recommandations **avant** la validation humaine ; si une revue requise manque, elle est **sollicitée auprès du reviewer** — l'auteur ne la supplée jamais. Voir [`../../protocols/reviewer.md`](../../protocols/reviewer.md).
 
 #### Revue de sécurité (obligatoire, non substituable)
