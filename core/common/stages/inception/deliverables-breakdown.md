@@ -31,10 +31,13 @@ Découper le travail en livrables et désigner l'agent responsable de chacun.
 
 ### Step 2 — Découper et désigner l'agent responsable
 
+Le coordinateur **identifie la nature de chaque travail** (architecture solution / logicielle, infrastructure, sécurité, données, AWS, etc.) et effectue **toutes les délégations adéquates** — une par spécialiste concerné —, y compris lorsque les travaux proviennent d'une passation amont (p. ex. descriptions de passation remontées par l'OpenSpec Expert après approbation d'une spécification). Un même lot de travaux peut relever de **plusieurs natures** et donc de **plusieurs délégations** parallèles.
+
 - Documentation d'architecture / décisions structurantes / Patrons d'architecture / diagrammes → **Architecte de solution**.
 - Analyse et cycle de vie des données (modélisation, gouvernance, classification, `10-cycle_vie_donnees.md`) → **Architecte de données** (délégué par l'Architecte de solution, qui valide le livrable — critère : sensor `data-lifecycle`).
 - Choix AWS, diagrammes AWS, coûts → **Architecte AWS** (si AWS requis).
 - Administration / infrastructure Windows → **Infrastructure Windows** (si concerné).
+- Sécurité (surface de sécurité, menaces, conformité : OWASP, STRIDE, ISO 27001, NIST, etc.) → **Architecte Cybersécurité** (si une surface de sécurité est produite ou modifiée).
 - Cycle spec-driven → **OpenSpec Expert** (uniquement si OpenSpec activé).
 
 > **Pré-requis — verdict de méthodologie.** Toute condition « **si OpenSpec activé** » de ce stage (Steps 3.3 et 4, délégation à l'OpenSpec Expert) s'appuie sur le **verdict de méthodologie** analysé et tracé au cadrage ([`intake-framing`](intake-framing.md), Step 3 ; règle « Activation conditionnelle d'une méthodologie » de [`conductor.md`](../../conductor.md)). Le coordinateur **lit ce verdict** avant de découper ; s'il est **absent ou ambigu**, il ne devine pas et ne traite pas OpenSpec comme inactif par défaut : **halt-and-ask** (faire statuer l'humain, puis l'inscrire dans la description du projet). Le même principe vaut pour toute autre méthodologie déclarée.

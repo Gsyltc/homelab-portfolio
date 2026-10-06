@@ -35,9 +35,21 @@ De chaque livrable / choix restant à approuver (boucle Keep / Modify / Redo). L
 
 Confier à l'**Experte d'archivage** le téléversement, la visualisation, le téléchargement et l'archivage des documents validés dans le répertoire du projet ; fournir à l'humain un récapitulatif accessible.
 
-### Step 3 — Archivage OpenSpec (si activé)
+### Step 3 — Archivage OpenSpec
 
-L'OpenSpec Expert archive le changement (fusion des deltas dans les specs vivantes) et passe l'issue à Done après approbation.
+L'**OpenSpec Expert** archive le changement après approbation : fusion des deltas dans les specs vivantes (`openspec/specs/<capability>/spec.md`) et déplacement du change vers `openspec/changes/archive/`. Il **ne crée pas de sous-issue** et **ne produit pas** les mises à jour d'architecture.
+
+### Step 4 — Description des travaux de passation
+
+L'**Expert OpenSpec** identifie, dans le `design.md` et les specs, les travaux d'architecture à réaliser (DAS, décision structurante, diagrammes, et au-delà). Pour chacun, il rédige une **description de passation auto-portante** : objet, **nature pressentie du travail** (solution / logicielle, infrastructure, sécurité, données, AWS, etc. — indicatif), **renvoi vers les fichiers pertinents** (chemins relatifs : `proposal.md`, `design.md`, `specs/<capability>/spec.md`, ADR concernés) plutôt qu'une recopie exhaustive, et les décisions / contraintes amont héritées. Ces descriptions constituent les **intrants** des travaux des spécialistes.
+
+### Step 5 — Remontée au coordinateur
+
+L'**Expert OpenSpec** passe l'issue en `done` et **remonte au coordinateur** par lien de mention actif, en lui transmettant les descriptions de passation du Step 4 (checklist de sortie de stage — [`../../protocols/stage-protocol.md`](../../protocols/stage-protocol.md)). Il ne poursuit pas lui-même le flux de production.
+
+### Step 6 — Délégation des travaux par le coordinateur
+
+Le **coordinateur** reçoit les descriptions de passation, **identifie la nature de chaque travail** et **délègue** aux spécialistes adéquats (solution / logicielle, infrastructure, sécurité, données, AWS, etc.) selon le « Cycle de livrable d'un spécialiste » ([`../../protocols/stage-protocol.md`](../../protocols/stage-protocol.md)) et le découpage de [`../inception/deliverables-breakdown.md`](../inception/deliverables-breakdown.md). Un même lot peut relever de **plusieurs natures** et donc de **plusieurs délégations**. Le coordinateur **ne produit pas** lui-même les livrables.
 
 ## Sensors
 
