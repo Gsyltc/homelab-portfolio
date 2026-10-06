@@ -8,13 +8,15 @@ Deux natures de revue coexistent dans le workflow, distinctes et non substituabl
 
 > **Séparation des rôles (non contournable).** L'**auteur d'un artefact n'en est jamais le relecteur**. Une revue (cohérence, sécurité ou autre) signée de l'auteur de l'artefact revu — pour une ADR, y compris via sa section `## Review` — est **nulle** : l'indépendance est perdue. Si une revue requise manque, elle est sollicitée auprès du reviewer dédié ; l'auteur ne la supplée jamais.
 
+> **Le reviewer retourne toujours au spécialiste (pivot unique, non contournable).** Quel que soit son verdict — **OK comme RENVOI** —, un reviewer **mentionne toujours le spécialiste** (auteur du livrable revu) par lien de mention actif, et **jamais** un autre reviewer ni le coordinateur en remontée de verdict. Le spécialiste est le pivot : lui seul fait avancer l'artefact d'une revue à la suivante (sur OK) ou corrige puis re-sollicite le même reviewer (sur RENVOI). Enchaînement complet des stages : [`stage-protocol.md`](stage-protocol.md), « Cycle de livrable d'un spécialiste ».
+
 ## 1. Revue de cohérence (Reviewer de cohérence)
 
 Portée : cohérence **documentation ↔ décisions structurantes**, absence de conflits entre décisions, complétude / structure / format des livrables.
 
 - **Portée par une fonction « review-only » distincte** : le **Reviewer de cohérence** (persona `consistency-reviewer-agent`), sollicité par mention A2A (par le coordinateur ou tout spécialiste/architecte — voir « Qui peut solliciter une revue ») à réception d'un livrable d'un agent spécialiste (temps 5-6 du [`stage-protocol.md`](stage-protocol.md)). Sur impact structurant, cette sollicitation et le post de la revue se font **sur l'issue ADR dédiée** (voir l'encadré d'ouverture), jamais sur l'issue d'origine.
 - Vérifie : correspondance documentation ↔ décisions, absence de décision structurante non tracée, absence d'artefact orphelin, respect des conventions (langue, diagrammes en code, aucun secret).
-- Verdict : demande de correction à l'agent responsable (via le coordinateur), ou passage à l'étape suivante (revue de sécurité si surface concernée, sinon validation humaine).
+- Verdict : **retour systématique au spécialiste** par lien de mention actif, OK comme RENVOI — jamais au reviewer de sécurité, au coordinateur ou à l'humain (voir l'encadré « Le reviewer retourne toujours au spécialiste »).
 - **Classe** `review_class: advisory` ou `granular` selon le stage. La revue de cohérence **ne remplace jamais** le contrôle sécurité ni la validation humaine.
 
 ## 2. Revue de sécurité (Reviewer de sécurité) — obligatoire, non substituable
@@ -24,23 +26,29 @@ Portée : analyse des risques (OWASP / STRIDE toujours actifs ; NIST / COBIT si 
 - **Portée par une fonction « review-only » distincte** : le **Reviewer de sécurité** (persona `security-reviewer-agent`).
 - **Déclenchée systématiquement** dès qu'un stage produit ou modifie une architecture ou une **surface de sécurité** (instructions exécutables, frontières de délégation, contrôle de sécurité).
 - Procédure : un demandeur (le coordinateur, ou tout spécialiste/architecte — voir « Qui peut solliciter une revue ») poste un commentaire mentionnant le **Reviewer de sécurité** (UUID résolu via `multica agent list --output json`) avec le contexte et le résumé des modifications ; **attend l'analyse** ; intègre les recommandations **avant** la validation humaine.
-- Le Reviewer de sécurité **poste ses conclusions et recommandations directement dans la tâche qui porte l'artefact revu** — **l'issue ADR dédiée** sur impact structurant (voir l'encadré d'ouverture), l'issue du livrable sinon —, sans créer d'issue dédiée, puis notifie l'assigneur (le coordinateur) ou l'humain demandeur.
+- Le Reviewer de sécurité **poste ses conclusions et recommandations directement dans la tâche qui porte l'artefact revu** — **l'issue ADR dédiée** sur impact structurant (voir l'encadré d'ouverture), l'issue du livrable sinon —, sans créer d'issue dédiée, puis **retourne son verdict au spécialiste** (OK comme RENVOI — voir l'encadré « Le reviewer retourne toujours au spécialiste »).
 - **Plancher SG-3** : aucune revue de cohérence, aucun gate / sensor advisory ne peut porter, remplacer, conditionner ni court-circuiter la revue de sécurité. Un « vert » de gate ne dispense jamais de la revue de sécurité.
 
 ## Articulation des deux revues et du gate humain
 
 ```mermaid
 flowchart LR
-    L[Livrable produit] --> RC[Revue coherence - Reviewer de coherence]
-    RC --> RS[Revue securite - Reviewer de securite si archi/securite]
-    RS --> VH[Validation humaine granulaire]
-    VH -.->|Redo / Modify| L
+    S[Specialiste produit le livrable] --> RC[Revue coherence - Reviewer de coherence]
+    RC -->|verdict| S2[Specialiste]
+    S2 -->|OK : sollicite| RS[Revue securite - Reviewer de securite si archi/securite]
+    S2 -.->|RENVOI : corrige puis re-sollicite| RC
+    RS -->|verdict| S3[Specialiste]
+    S3 -->|OK : compte rendu puis mention| CO[Coordinateur]
+    S3 -.->|RENVOI : corrige puis re-sollicite| RS
+    CO --> VH[Validation humaine granulaire si requise]
+    VH -.->|Redo / Modify| S
 ```
 
+- Les deux revues sont **séquentielles** (cohérence puis sécurité) et transitent par le spécialiste (encadré « Le reviewer retourne toujours au spécialiste »).
 - La revue de cohérence **prépare** la revue de sécurité et le gate humain ; elle ne les remplace pas.
 - La revue de sécurité **précède toujours** la validation humaine sur toute modification d'architecture.
 - La **validation humaine granulaire** reste l'unique gate décisionnel contraignant (invariant).
 
 ## Fin de revue
 
-Une revue n'est jamais close sans un **retour A2A par lien de mention actif** vers l'assigneur (le coordinateur) ou l'humain demandeur, avec un résumé clair des conclusions et recommandations. Les mécanismes de ce retour (passage de statut, lien actif posé par l'agent de revue lui-même, vérification `trigger_outcomes`, anti-wake parasite) sont définis **une seule fois** dans la « Checklist de sortie de stage » de [`stage-protocol.md`](stage-protocol.md) et la « Règle A2A » de [`governance-security.md`](governance-security.md) — non redéfinis ici.
+Une revue n'est jamais close sans un **retour A2A par lien de mention actif vers le spécialiste** (auteur du livrable revu), avec un résumé clair des conclusions — jamais directement vers un autre reviewer, le coordinateur ou l'humain (encadré « Le reviewer retourne toujours au spécialiste »). Les mécanismes de ce retour (passage de statut, lien actif posé par l'agent lui-même, vérification `trigger_outcomes`, anti-wake parasite) sont définis **une seule fois** dans la « Checklist de sortie de stage » de [`stage-protocol.md`](stage-protocol.md) et la « Règle A2A » de [`governance-security.md`](governance-security.md) — non redéfinis ici.

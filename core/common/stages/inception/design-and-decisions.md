@@ -26,7 +26,7 @@ outputs: "Conception cible + décisions structurantes validées granulairement p
 
 Produire la conception cible et les décisions structurantes, contrôlées en sécurité et validées granulairement.
 
-> **ADR obligatoire sur impact structurant (non contournable).** Lorsque le verdict d'impact structurant établi au cadrage ([`intake-framing`](intake-framing.md), Step 5) vaut **`Oui`**, l'**issue ADR a été créée en premier** au découpage ([`deliverables-breakdown`](deliverables-breakdown.md), Step 3) comme **issue parente** de la décision, déléguée à l'Architecte de solution — **avant** toute création de livrable. Ce stage **conduit cette ou ces issues ADR jusqu'au bout de leur cycle** (production mob → revue de cohérence → revue de sécurité → **ADR Proposée** → décision humaine granulaire). Les livrables n'existent qu'**après acceptation humaine**, en **sous-issues** de l'ADR. Aucun scope, aucune règle apprise, aucun gate/sensor advisory ne peut lever cette obligation (garde-fou — voir [`../../conductor.md`](../../conductor.md) et [`../../protocols/governance-security.md`](../../protocols/governance-security.md)). Un impact structurant **ne peut jamais être traité sans ADR**. Si le verdict vaut `Oui` mais qu'aucune issue ADR n'existe, le coordinateur est en **halt-and-ask** (ne pas franchir le gate humain).
+> **ADR obligatoire sur impact structurant (non contournable).** Lorsque le verdict d'impact structurant ([`intake-framing`](intake-framing.md), Step 5) vaut **`Oui`**, l'**issue ADR a été créée en premier**, comme **issue parente** de la décision, au découpage ([`deliverables-breakdown`](deliverables-breakdown.md), Step 3) — **avant** tout livrable. Ce stage **conduit cette ou ces issues ADR** (production mob → revues → `ADR Proposée` → décision humaine granulaire) ; l'orchestration des issues (blocage de l'origine, gate, sous-issues de livrable après acceptation, clôture dérivée) est détaillée dans [`deliverables-breakdown`](deliverables-breakdown.md) et n'est pas redite ici. Garde-fou non contournable (voir [`../../conductor.md`](../../conductor.md) et [`../../protocols/governance-security.md`](../../protocols/governance-security.md)) : un impact structurant **ne peut jamais être traité sans ADR**. Si le verdict vaut `Oui` sans issue ADR, le coordinateur est en **halt-and-ask**.
 
 ## Steps
 
@@ -38,31 +38,43 @@ Les `support_agents` désignés travaillent **en parallèle contre le brouillon 
 
 > **Données** : le lead (Architecte de solution) **délègue à l'Architecte de données** les tâches relatives aux données au besoin. L'Architecte de données produit le document **Cycle de vie des données** (`documentation/10-cycle_vie_donnees.md`) — cycle de vie, gouvernance, classification, renseigné selon les données du projet — puis le remet à l'Architecte de solution. L'**Architecte de solution valide** ce livrable ; le sensor `data-lifecycle` (advisory) **assiste** cette validation en factualisant la présence et le renseignement du document, mais **ne la bloque pas** — l'Architecte de solution reste seul juge et peut demander une correction sur la base d'un écart.
 
-### Step 2 — Revues (sécurité et cohérence)
+### Step 2 — Revues (cohérence puis sécurité)
+
+Les deux revues sont **séquentielles** (**cohérence puis sécurité**) et transitent par le spécialiste — ici le lead Architecte de solution, auteur de l'ADR (mécanique OK/RENVOI et enchaînement : [`../../protocols/reviewer.md`](../../protocols/reviewer.md), encadré « Le reviewer retourne toujours au spécialiste », et [`../../protocols/stage-protocol.md`](../../protocols/stage-protocol.md), « Cycle de livrable d'un spécialiste »).
 
 Communs aux deux revues :
 
 - **Où** : sur l'issue qui porte l'artefact revu — **issue du livrable** pour une modification documentaire standard, **issue ADR dédiée** sur impact structurant, **jamais** l'issue d'origine (détail et faute de flux : [`../../protocols/reviewer.md`](../../protocols/reviewer.md), encadré d'ouverture).
-- **Qui** : **tout spécialiste ou architecte** peut solliciter le reviewer dédié par mention A2A — pas seulement le coordinateur ; le reviewer **analyse et poste lui-même** son verdict sur l'issue. L'**auteur de l'artefact n'est jamais son relecteur** (source unique : [`../../protocols/reviewer.md`](../../protocols/reviewer.md), encadrés « Qui peut solliciter une revue » et « Séparation des rôles »).
+- **Qui** : **tout spécialiste ou architecte** peut solliciter le reviewer dédié par mention A2A — pas seulement le coordinateur ; le reviewer **analyse et poste lui-même** son verdict. L'**auteur de l'artefact n'est jamais son relecteur** (source unique : [`../../protocols/reviewer.md`](../../protocols/reviewer.md), encadrés « Qui peut solliciter une revue » et « Séparation des rôles »).
 - **Conduite** : attendre l'analyse, intégrer les recommandations **avant** la validation humaine ; si une revue requise manque, elle est **sollicitée auprès du reviewer** — l'auteur ne la supplée jamais. Voir [`../../protocols/reviewer.md`](../../protocols/reviewer.md).
 
-#### Revue de sécurité (obligatoire, non substituable)
+#### Step 2.1 — Revue de cohérence
+
+`consistency-reviewer-agent` vérifie la correspondance documentation ↔ décisions structurantes, l'absence de conflits et d'artefact orphelin.
+
+#### Step 2.2 — Revue de sécurité (obligatoire, non substituable)
 
 Déclenchée à **chaque modification d'architecture**. `security-reviewer-agent` analyse les risques (OWASP / STRIDE ; normes spécifiques uniquement si explicitement demandées). Revue **adversariale, plancher SG-3** : aucun autre contrôle ne peut la porter, la remplacer ni la court-circuiter.
 
-#### Revue de cohérence
+### Step 3 — Analyse de dette technique (Architecte de solution)
 
-`consistency-reviewer-agent` vérifie la correspondance documentation ↔ décisions structurantes, l'absence de conflits et d'artefact orphelin ; demande les corrections aux agents responsables.
+Évaluer le potentiel de réduction de dette et consigner des recommandations justifiées avec la décision (ou un registre de dette en annexe si aucune décision).
+
+> Si OpenSpec activé : cette phase se matérialise par une **proposition OpenSpec** créée par l'OpenSpec Expert, qui notifie le coordinateur à `in_review`.
 
 ### Step 4 — Validation granulaire humaine
 
 Présenter **chaque choix séparément** (choix, justification, alternative) ; boucle Keep / Modify / Redo. Ne pas avancer sur un élément non validé.
 
-### Step 5 — Analyse de dette technique (Architecte de solution)
+## Flux ADR — impact structurant = Oui
 
-Évaluer le potentiel de réduction de dette et consigner des recommandations justifiées avec la décision (ou un registre de dette en annexe si aucune décision).
+Sur **impact structurant**, l'orchestration d'ensemble (création de l'issue ADR parente, blocage de l'issue d'origine, gate humaine accept/refus, création des sous-issues de livrable, clôture dérivée) est **la propriété de [`deliverables-breakdown`](deliverables-breakdown.md) (Step 3)** et n'est pas redécrite ici. Ce stage conduit la **partie qui lui est propre** — la production puis les **deux revues de l'ADR**, sur l'**issue ADR** :
 
-> Si OpenSpec activé : cette phase se matérialise par une **proposition OpenSpec** créée par l'OpenSpec Expert, qui notifie le coordinateur à `in_review`.
+- **Production** (Step 1 — mob) par le lead Architecte de solution ; issue en `in_progress`.
+- **Revue de cohérence** puis **revue de sécurité** (Step 2), postées **sur l'issue ADR** ; issue en `in_review`. Chaque reviewer retourne son verdict au **lead de l'issue ADR** (OK comme RENVOI) — jamais entre eux ni au coordinateur ([`../../protocols/reviewer.md`](../../protocols/reviewer.md)). Sur **RENVOI**, le lead corrige puis re-sollicite le même reviewer ; l'issue repasse en `in_progress`.
+- Après la revue de sécurité et sous le garde-fou de séparation des rôles, le passage en **`ADR Proposée`** puis la **gate humaine** sont conduits selon le cycle de vie ci-dessous et [`deliverables-breakdown`](deliverables-breakdown.md).
+
+Le reflet de ces phases sur le statut d'issue est détaillé dans la section suivante.
 
 ### Reflet du cycle de vie de l'ADR sur le statut d'issue (contexte Multica uniquement)
 
