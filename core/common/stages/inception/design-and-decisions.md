@@ -42,9 +42,11 @@ Les `support_agents` désignés travaillent **en parallèle contre le brouillon 
 
 À chaque modification d'architecture, le coordinateur sollicite le **Reviewer de sécurité**, **attend son analyse** (OWASP / STRIDE), intègre ses recommandations avant toute validation. Revue **adversariale, non substituable** (plancher SG-3). Normes spécifiques uniquement si explicitement demandées. Voir [`../../protocols/reviewer.md`](../../protocols/reviewer.md).
 
+> **Lieu de la revue : l'issue ADR.** Sur impact structurant, la revue de sécurité se tient **dans l'issue ADR dédiée** (l'issue parente de la décision, [`deliverables-breakdown`](deliverables-breakdown.md), Step 3.1) — sollicitation par mention A2A et post des conclusions **sur cette issue ADR**, jamais sur l'issue d'origine qui a déclenché le flux (voir l'encadré d'ouverture de [`protocols/reviewer.md`](../../protocols/reviewer.md)).
+
 ### Step 3 — Contrôle de cohérence
 
-Vérifier la correspondance documentation ↔ décisions structurantes, l'absence de conflits ; demander les corrections aux agents responsables.
+Vérifier la correspondance documentation ↔ décisions structurantes, l'absence de conflits ; demander les corrections aux agents responsables. Sur impact structurant, la **revue de cohérence se tient dans l'issue ADR dédiée** (comme la revue de sécurité, Step 2), jamais dans l'issue d'origine.
 
 ### Step 4 — Validation granulaire humaine
 
