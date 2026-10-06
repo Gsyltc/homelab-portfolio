@@ -62,6 +62,8 @@ flowchart TD
 
 Le coordinateur crée l'**issue ADR**, déléguée à l'**Architecte de solution**, qui conduit son cycle au stage [`design-and-decisions`](design-and-decisions.md) : production mob → revue de cohérence → revue de sécurité → **ADR Proposée** → décision humaine granulaire. C'est un **garde-fou non contournable** (voir [`conductor.md`](../../conductor.md), « Garde-fous ») : un impact structurant ne peut jamais être traité sans son issue ADR.
 
+> **Tout le cycle de revue se déroule sur l'issue ADR.** Les deux revues de l'ADR (cohérence puis sécurité) sont **sollicitées et postées sur cette issue ADR**, jamais sur l'issue d'origine qui a déclenché le flux : la piste d'audit de la décision reste entière sur l'issue qui la porte (voir l'encadré d'ouverture de [`../../protocols/reviewer.md`](../../protocols/reviewer.md) et [`design-and-decisions`](design-and-decisions.md), Steps 2–3).
+
 #### Step 3.2 — Gate humaine : accepter ou refuser
 
 - **ADR acceptée (Keep)** ⇒ le coordinateur crée les **sous-issues de livrable** (Step 3.3), puis les lance.
@@ -89,7 +91,7 @@ Pas d'ADR : le coordinateur crée directement les **issues de livrable** (une pa
 
 Chaque **délégation de livrable** donne lieu à **une issue dédiée par agent** (Architecte de solution, Architecte de données, Architecte AWS, Infrastructure Windows, OpenSpec Expert) — **jamais** une issue fourre-tout partagée. Chaque issue porte un périmètre, des critères d'acceptation et l'agent de retour (le coordinateur, en texte clair) propres à l'agent délégataire.
 
-**Les revues ne sont pas des issues.** Les **revues** (Reviewer de cohérence, Reviewer de sécurité) sont des fonctions *review-only* **sollicitées en place par le coordinateur** sur l'issue qui porte le livrable / l'ADR (voir [`protocols/reviewer.md`](../../protocols/reviewer.md)) ; elles postent leurs conclusions dans cette issue, **sans issue dédiée**. La règle « une issue par agent » ne vaut donc **que** pour les délégations de production de livrable.
+**Les revues ne sont pas des issues.** Les **revues** (Reviewer de cohérence, Reviewer de sécurité) sont des fonctions *review-only* **sollicitées en place par le coordinateur** sur l'issue qui porte l'artefact revu — l'**issue ADR dédiée** sur impact structurant (jamais l'issue d'origine), l'issue du livrable sinon (voir [`protocols/reviewer.md`](../../protocols/reviewer.md)) ; elles postent leurs conclusions dans cette issue, **sans issue dédiée**. La règle « une issue par agent » ne vaut donc **que** pour les délégations de production de livrable.
 
 #### <a id="mission-déléguée--contenu-obligatoire"></a>Mission déléguée — contenu obligatoire
 
