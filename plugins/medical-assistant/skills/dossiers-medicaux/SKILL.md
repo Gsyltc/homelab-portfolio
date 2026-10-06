@@ -50,6 +50,7 @@ Toute mise à jour ou exportation du dossier d'un patient respecte OBLIGATOIREME
 2. **Actualiser le résumé patient après** — après chaque modification de `synthese.md`, mettre à jour `resume-patient.md` avec les nouvelles données.
 3. **Exporter à la demande, avec gabarit obligatoire** — lorsqu'une demande d'exportation du dossier est faite, demander d'abord si l'exportation est destinée à un professionnel de la santé.
    - **Si oui** → exporter `synthese.md` (fichier pro). L'export utilise **OBLIGATOIREMENT** le gabarit `gabarits/gabarit-export-dossier-medical.md` (voir la section « Gabarit d'exportation du dossier médical »). Remplir le gabarit à partir de `synthese.md`, puis générer le document. **Format PDF par défaut** ; format **Word (`.docx`) uniquement si l'humain le demande explicitement**. Télécharger le fichier.
+     - **Export complet** : si l'humain demande un export **complet** du dossier, produire un document unique qui place **la synthèse en tête**, puis **en annexes** (A) le **détail de chaque pathologie** (contenu des `pathologies/<slug>/suivi.md`) et (B) les **résultats des derniers examens** (dernier bilan de `laboratoire/synthese-bilans.md` et derniers examens de `examens/synthese-examens.md`). Voir « Export complet — synthèse + annexes ».
    - **Si non** → exporter `resume-patient.md` (synthèse patient) au format PDF et télécharger le fichier. Le gabarit ne s'applique **pas** à ce cas (il est réservé à `synthese.md`).
 
 ## Gabarit d'exportation du dossier médical
@@ -78,6 +79,24 @@ Toute exportation de `synthese.md` (dossier destiné aux professionnels de sant�
 3. Télécharger le fichier généré.
 
 <!-- Le format par défaut est PDF. Ne produire un `.docx` que si l'humain le demande explicitement. Le gabarit reste obligatoire dans les deux cas. -->
+
+### Export complet — synthèse + annexes
+
+Lorsque l'humain demande un **export complet** du dossier médical (et non le seul export de synthèse), produire **un document unique** structuré ainsi :
+
+1. **Corps — Synthèse (en tête).** La synthèse remplie à partir de `synthese.md` via le gabarit `gabarit-export-dossier-medical.md` (page de garde, sommaire, sections cliniques), exactement comme pour l'export standard. C'est le corps du document.
+2. **Annexe A — Détail des pathologies.** Pour **chaque** pathologie déclarée, reprendre le contenu de `pathologies/<slug>/suivi.md` (structure du gabarit `gabarit-suivi-pathologie.md`). Une sous-section par pathologie, dans l'ordre des « Problèmes actifs » puis « Problèmes résolus ».
+3. **Annexe B — Résultats des derniers examens.** Reprendre les **derniers** résultats : le dernier bilan de `laboratoire/synthese-bilans.md` (skill `analyse-laboratoire`) et les derniers examens de `examens/synthese-examens.md` (skill `analyse-examens`). Ne pas reproduire tout l'historique : seulement les éléments récents/pertinents, avec renvoi aux synthèses dédiées pour le détail complet.
+
+Règles de l'export complet :
+
+- **Sommaire** mis à jour pour inclure les annexes A et B.
+- **Ordre fixe** : Synthèse → Annexe A (pathologies) → Annexe B (examens).
+- **Mêmes garde-fous** que l'export standard : gabarit obligatoire pour la partie synthèse, avertissement consultatif en page de garde et pied de page, **PDF par défaut** (`.docx` uniquement sur demande explicite).
+- **Aucune donnée inventée** : si une annexe est vide (aucune pathologie déclarée, aucun examen), l'indiquer explicitement (« Aucune pathologie déclarée », « Aucun examen disponible ») plutôt que l'omettre.
+- Assemblage puis génération via `pandoc` (même procédure PDF/`.docx` que ci-dessus), à partir du document assemblé `export-complet-<patient>-<date>.md`.
+
+
 
 ## Pathologies déclarées — suivi déporté — OBLIGATOIRE
 

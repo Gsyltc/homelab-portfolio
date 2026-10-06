@@ -47,6 +47,10 @@ La source est TOUJOURS `synthese.md` (source de vérité, destinée aux professi
 6. Chronologie
 7. Questions ouvertes
 
+<!-- Annexes présentes UNIQUEMENT en cas d'export complet (voir SKILL.md « Export complet — synthèse + annexes ») : -->
+- Annexe A. Détail des pathologies (un bloc par `pathologies/<slug>/suivi.md`)
+- Annexe B. Résultats des derniers examens (dernier labo + derniers examens)
+
 ---
 
 ## 1. Démographie
@@ -217,6 +221,57 @@ Signaler les anomalies avec ↑ (au-dessus) / ↓ (en-dessous). Toujours indique
 ---
 
 <!--
+ANNEXES — UNIQUEMENT pour un EXPORT COMPLET (voir SKILL.md « Export complet — synthèse + annexes »).
+Pour un export standard (synthèse seule), ne pas inclure ces annexes.
+Ordre fixe : Synthèse (sections 1-7 ci-dessus) → Annexe A → Annexe B.
+-->
+
+## Annexe A — Détail des pathologies
+
+<!--
+Un bloc par pathologie déclarée, repris de `pathologies/<slug>/suivi.md` (structure du gabarit
+`gabarit-suivi-pathologie.md`). Ordre : Problèmes actifs d'abord, puis Problèmes résolus.
+Si aucune pathologie déclarée, écrire explicitement « Aucune pathologie déclarée ».
+-->
+
+### A.[n] — [Nom de la pathologie]  <!-- répéter par pathologie -->
+
+<!-- Reprendre Identification, Historique, Traitements, Suivi spécialisé, Éléments en cours / archivés, Points de vigilance, Questions ouvertes depuis le `suivi.md`. -->
+
+> Source : `pathologies/[slug]/suivi.md` — Consultatif, validation médicale requise.
+
+---
+
+## Annexe B — Résultats des derniers examens
+
+<!--
+Derniers résultats uniquement (pas tout l'historique).
+Labo : dernier bilan de `laboratoire/synthese-bilans.md` (skill `analyse-laboratoire`).
+Examens : derniers examens de `examens/synthese-examens.md` (skill `analyse-examens`).
+Si aucun examen disponible, écrire explicitement « Aucun examen disponible ».
+-->
+
+### B.1 — Derniers résultats de laboratoire
+
+| Date         | Type d'analyse         | Résultat / Conclusion sommaire | Signalement |
+| ------------ | ---------------------- | ------------------------------ | ----------- |
+| [YYYY-MM-DD] | [NFS / ionogramme / …] | [conclusion]                   | ↑ / ↓ / —   |
+|              |                        |                                |             |
+
+> Détail complet : `laboratoire/synthese-bilans.md` (skill `analyse-laboratoire`).
+
+### B.2 — Derniers examens
+
+| Date         | Type d'examen             | Résultat / Conclusion sommaire | Signalement |
+| ------------ | ------------------------- | ------------------------------ | ----------- |
+| [YYYY-MM-DD] | [IRM / ECG / endoscopie…] | [conclusion]                   | ↑ / ↓ / —   |
+|              |                           |                                |             |
+
+> Détail complet : `examens/synthese-examens.md` (skill `analyse-examens`).
+
+---
+
+<!--
 PIED DE PAGE
 Reproduire l'avertissement consultatif et la pagination sur chaque page lors du rendu (PDF/Word).
 Avec pandoc, la pagination du PDF est gérée par le moteur LaTeX ; l'avertissement peut être placé en pied de page via un en-tête/pied personnalisé.
@@ -224,4 +279,4 @@ Avec pandoc, la pagination du PDF est gérée par le moteur LaTeX ; l'avertissem
 
 ---
 
-*⚕️ Consultatif — validation médicale requise. — Source : `synthese.md` — Export : YYYY-MM-DD_hh-mm — Page X / Y*
+*⚕️ Consultatif — validation médicale requise. — Source : `synthese.md` (+ annexes : `suivi.md`, synthèses labo/examens pour l'export complet) — Export : YYYY-MM-DD_hh-mm — Page X / Y*
