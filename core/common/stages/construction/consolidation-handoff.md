@@ -47,9 +47,13 @@ L'**Expert OpenSpec** identifie, dans le `design.md` et les specs, les travaux d
 
 L'**Expert OpenSpec** passe l'issue en `done` et **remonte au coordinateur** par lien de mention actif, en lui transmettant les descriptions de passation du Step 4 (checklist de sortie de stage — [`../../protocols/stage-protocol.md`](../../protocols/stage-protocol.md)). Il ne poursuit pas lui-même le flux de production.
 
+> **L'issue OpenSpec est un livrable terminal, pas une parente.** Une fois sa spécification approuvée, archivée et sa passation remontée, l'issue OpenSpec **reste `done`** : la remontée des descriptions de passation **ne la rouvre pas** et **n'en fait pas l'issue parente** des travaux d'architecture aval. Les sous-issues que le coordinateur crée au Step 6 ne sont **jamais** rattachées à l'issue OpenSpec (voir Step 6 pour le parent correct).
+
 ### Step 6 — Délégation des travaux par le coordinateur
 
 Le **coordinateur** reçoit les descriptions de passation, **identifie la nature de chaque travail** et **délègue** aux spécialistes adéquats (solution / logicielle, infrastructure, sécurité, données, AWS, etc.) selon le « Cycle de livrable d'un spécialiste » ([`../../protocols/stage-protocol.md`](../../protocols/stage-protocol.md)) et le découpage de [`../inception/deliverables-breakdown.md`](../inception/deliverables-breakdown.md). Un même lot peut relever de **plusieurs natures** et donc de **plusieurs délégations**. Le coordinateur **ne produit pas** lui-même les livrables.
+
+> **Rattachement correct des sous-issues de livrable.** Les sous-issues créées à partir de la passation sont des **livrables d'architecture aval**, au **même niveau** que l'issue OpenSpec dans la hiérarchie : elles se rattachent à l'**issue parente du découpage** — l'**issue ADR** sur impact structurant (`--parent <id-ADR>`), sinon l'**issue d'origine** —, **jamais à l'issue OpenSpec** (qui est elle-même une sous-issue de livrable, terminale et `done`). Prendre l'issue OpenSpec comme parent est une faute de flux : elle crée une hiérarchie livrable-sous-livrable incorrecte et peut rouvrir indûment l'issue OpenSpec via le garde-fou « issue parente bloquée ». Le coordinateur résout le bon parent (ADR / origine) avant de créer les sous-issues.
 
 ## Sensors
 
