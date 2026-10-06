@@ -7,7 +7,7 @@ description: "Vérifie que les rubriques obligatoires de l'ADR et les fichiers/s
 category: document-shape
 fire_on: gate
 matches: "{decisions/[0-9][0-9][0-9][0-9]-*.md,documentation/*.md}"
-origine: ALI-188 (durcissement volet DAS : ALI-218)
+origine: ALI-218
 ---
 
 # Sensor `required-sections` — sections requises *(prioritaire)*
@@ -22,6 +22,7 @@ checks:
     entete_meta: [auteurs, "accepté par", "accepté le", supersedes, superseded_by]
     sections:
       - Status                 # titre en anglais (compat Structurizr), statut unique retenu
+      - "Date de création"      # date de création de l'ADR au format YYYY-MM-DD, sous Status
       - Contexte
       - Décision
       - "Conséquences"        # sous-rubriques obligatoires : Positives / Négatives

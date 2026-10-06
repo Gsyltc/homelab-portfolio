@@ -26,10 +26,13 @@ Si l'une des entrées requises n'est pas fournie ou ne peut pas être détermin�
 - Documenter les alternatives avec la justification de leur rejet
 - Structurer pour l'analyse automatique (machine) et la consultation humaine
 - Utiliser des puces codées (codes de 3-4 lettres + numéros à 3 chiffres) pour les sections à éléments multiples
+- **Jamais de référence au workflow.** L'ADR documente une décision d'architecture **produit**, pas le processus qui l'a produite. Ne jamais mentionner, dans aucune section ni le front matter, un élément du workflow qui a généré l'ADR : noms ou rôles d'agents (Architecte de solution, Reviewer de sécurité, OpenSpec Expert, coordinateur…), stages ou phases (ideation, inception, construction, cadrage, découpage…), sensors, gates, scopes, protocoles, statuts d'issue Multica (`in_progress`, `ADR Proposée`, `cancelled`…), branches git du workflow, ou tout autre artefact de pilotage. L'ADR se lit seule, par un lecteur qui ignore tout du workflow. Seul le champ `## Status` de l'ADR (valeur en anglais) décrit l'état de la décision — il ne fait pas référence au workflow.
+- **Concision stricte — prose au minimum.** Les sections **Décision**, **Conséquences** et **Alternatives étudiées** doivent être **claires et immédiatement compréhensibles**, avec la prose réduite au strict minimum nécessaire à la compréhension. Préférer les puces courtes aux paragraphes ; une idée par puce ; pas de redite, pas de remplissage, pas de contexte déjà couvert ailleurs. Chaque conséquence et chaque alternative tient en une à deux phrases factuelles ; la Décision énonce le choix et sa justification sans développement superflu.
 - **Langue par défaut : le français.** La documentation ADR doit être rédigée en français par défaut, sauf demande explicite contraire de l'utilisateur
 - **Statuts en anglais.** Les valeurs de statut (front matter et section Status) restent en anglais (`Proposed`, `Accepted`, `Rejected`, `Superseded`, `Deprecated`) pour rester compatibles avec des outils d'architecture tels que Structurizr
 - **Titre de section Status en anglais.** Le titre de la section statut doit être `Status` (en anglais) et non `Statut`, pour la compatibilité avec des outils tels que Structurizr
 - **Statut unique.** La section Status ne doit pas lister toutes les valeurs possibles : ne conserver que le statut retenu
+- **Date de création obligatoire.** Immédiatement **sous la section `## Status`**, l'ADR porte une section `## Date de création` renseignée avec la date de création de l'ADR au format **`YYYY-MM-DD`** (ex. `2026-10-06`). Cette date est fixée à la création du document et n'est pas modifiée ensuite (distincte de « accepté le » du front matter, qui est la date d'acceptation par le client).
 - **Auteurs : toujours déduits de l'architecte de solution (humain) du projet.** L'auteur par défaut d'une ADR est le **nom réel de l'humain tenant le rôle « Architecte de solution » du projet**. Le déterminer **systématiquement dans cet ordre**, sans solliciter l'humain tant qu'une source répond :
   1. **README du projet** — section `## Équipe`, ligne « Architecte de solution : <nom> » (voir [Métadonnées du projet](../project-defaults/SKILL.md) de la skill `project-defaults`, source unique de vérité) ;
   2. **sinon** l'arrimage du document `001-document-architecture-solution.md` — matrice RACI, rôle « Architecte de solution », colonne « Nom » (voir aussi la règle « Noms de responsables » dans [`core/rules/workspace.md`](../../../../core/rules/workspace.md)).
@@ -58,9 +61,13 @@ superseded_by: ""
 
 ---
 
-## Statut
+## Status
 
 Proposed
+
+## Date de création
+
+YYYY-MM-DD
 
 ## Contexte
 
@@ -68,23 +75,27 @@ Proposed
 
 ## Décision
 
-[Solution retenue avec une justification claire du choix.]
+[Solution retenue + justification du choix, en une à trois phrases. Prose au strict minimum : énoncer le choix et pourquoi, sans développement superflu. Structuré le texte avec des éléments de styles si cela aide à la clarté du texte (exemple: Puces et numéros, paragraphe, et autre éléments de style)]
 
 ## Conséquences
 
+<!-- Une conséquence par puce, une à deux phrases factuelles. Pas de prose de liaison. -->
+
 ### Positives
 
-- **POS-001** : [Résultats bénéfiques et avantages]
-- **POS-002** : [Améliorations de performance, de maintenabilité et de scalabilité]
+- **POS-001** : [Résultat bénéfique ou avantage]
+- **POS-002** : [Gain de performance, maintenabilité ou scalabilité]
 - **POS-003** : [Alignement avec les principes d'architecture]
 
 ### Négatives
 
-- **NEG-001** : [Compromis, limitations, inconvénients]
+- **NEG-001** : [Compromis, limitation ou inconvénient]
 - **NEG-002** : [Dette technique ou complexité introduite]
-- **NEG-003** : [Risques et défis futurs]
+- **NEG-003** : [Risque ou défi futur]
 
 ## Alternatives étudiées
+
+<!-- Chaque alternative : description et raison du rejet en une à deux phrases chacune. -->
 
 ### ALT-001 - [Nom de l'alternative 1]
 
