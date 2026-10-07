@@ -6,6 +6,7 @@ description: >
 skills:
   - cybersecurite
   - architecture-solution-gabarits
+  - architecture-securite-gabarits
 disallowedTools: Task
 tier: balanced
 ---
