@@ -16,7 +16,7 @@ consumes: [{artifact: arbitrage_swarm_proxmox, required: true}, {artifact: param
 requires_stage: [autonomy-mode, swarm-proxmox-arbitration]
 sensors: [plaintext-secret]
 scopes: [new-stack, infra-terraform]
-inputs: "Arbitrage Proxmox confirmé (branche = proxmox) + paramètres requis (Cadrage §2.4) + walking skeleton validé + specs cibles LXC/VM du service"
+inputs: "Arbitrage Proxmox confirmé (branche = proxmox) + paramètres requis (Cadrage §2.4) + walking skeleton validé + paramètres par défaut LXC/VM du service (fiche proxmox-script-helper = les recommandations)"
 outputs: "Recommandation de serveur (bob / stuart / kevin) + raison concise + script de déploiement LXC/VM affiché, jamais exécuté"
 ---
 
@@ -36,7 +36,7 @@ Le Tech Lead délègue au **Spécialiste Proxmox** (agent `proxmox-specialist-ag
 
 ### Step 2 — Lire les métriques cluster (lecture seule) et comparer aux recommandations
 
-Via la skill **`proxmox-cluster-access`** (créée en HOM-240), le Spécialiste Proxmox **lit** (lecture seule, aucune action à impact) les métriques par serveur `bob` / `stuart` / `kevin` : **RAM moyenne utilisée**, **CPU moyen + load**, **espace disque restant**. Il collecte les **specs cibles** (CPU, RAM, taille disque) du LXC/VM à déployer et les **compare aux recommandations de déploiement** standard du service, issues de `proxmox-script-helper`. Les seuils de marge (headroom RAM / disque, load CPU max) proviennent des références d'environnement de l'agent, jamais devinés.
+Via la skill **`proxmox-cluster-access`** (créée en HOM-240), le Spécialiste Proxmox **lit** (lecture seule, aucune action à impact) les métriques par serveur `bob` / `stuart` / `kevin` : **RAM moyenne utilisée**, **CPU moyen + load**, **espace disque restant**. Il collecte les **specs cibles** (CPU, RAM, taille disque) du LXC/VM à déployer en lisant les **paramètres par défaut** du service sur sa **fiche** dans `proxmox-script-helper` — le **site web catalogue des stacks**, où chaque stack a une fiche décrivant ces defaults. Ces **paramètres par défaut SONT les recommandations** : il n'y a pas de moteur de calcul, on lit les defaults publiés du service et on les **confronte** aux métriques réelles du cluster. Les seuils de marge (headroom RAM / disque, load CPU max) proviennent des références d'environnement de l'agent, jamais devinés.
 
 ### Step 3 — Produire la recommandation et le script (jamais d'exécution)
 

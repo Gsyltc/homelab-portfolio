@@ -40,10 +40,18 @@ Demande de l'humain (multica.gaston, verbatim résumé — issue HOM-237 / HOM-2
   - RAM moyenne utilisée sur le serveur ;
   - CPU moyen utilisé + load CPU ;
   - espace disque restant.
-- **Comparer** aux recommandations de déploiement (valeurs standard LXC/VM du service),
-  disponibles via `proxmox-script-helper`.
+- **Comparer** aux **recommandations de déploiement** du service — c'est-à-dire ses
+  **paramètres par défaut** de LXC / VM (CPU, RAM, taille disque), tels que décrits sur sa
+  **fiche** dans `proxmox-script-helper`.
 - Restituer à la gate humaine : **serveur recommandé**, **raison concise**, et **script de
   déploiement affiché**.
+
+> **Précision `proxmox-script-helper` (humain, 2026-10-07).** `proxmox-script-helper` est le
+> **site web catalogue des stacks** : chaque stack y a une **fiche** décrivant ses **paramètres
+> par défaut** de LXC ou de VM. Dans tout cet ADR et la fiche de stage, **« recommandations » ≡
+> « paramètres par défaut du LXC/VM du service » lus sur cette fiche** — ce ne sont pas des
+> valeurs calculées par un moteur, mais les **defaults publiés** du service, confrontés aux
+> métriques réelles du cluster pour choisir le serveur.
 
 > **Note de nommage (reprise de HOM-237).** `bob` / `stuart` / `kevin` désignent **exclusivement
 > des serveurs** (hostnames réels du cluster Proxmox), à utiliser tels quels dans les livrables.
@@ -87,8 +95,8 @@ s'appuie sur la skill `proxmox-cluster-access` (HOM-240). Il :
 
 1. **lit** (lecture seule) les métriques des serveurs `bob` / `stuart` / `kevin` : RAM moyenne
    utilisée, CPU moyen + load, espace disque restant ;
-2. **compare** aux recommandations de déploiement LXC/VM du service, issues de
-   `proxmox-script-helper` ;
+2. **compare** aux **paramètres par défaut** du LXC/VM du service — ses **recommandations**, lues
+   sur sa **fiche** dans `proxmox-script-helper` (site catalogue des stacks) ;
 3. **produit** une **recommandation de serveur** (serveur recommandé + raison concise) et le
    **script de déploiement affiché**, présentés à l'humain à la gate granulaire ;
 4. **ne déclenche jamais** le déploiement : l'exécution du script reste **manuelle, par
