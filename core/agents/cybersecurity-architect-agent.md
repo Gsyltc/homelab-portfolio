@@ -5,6 +5,7 @@ description: >
     Architecte cybersécurité expert OWASP, STRIDE, ISO 27001, NIST, COBIT, ISO 42001/23894 et PCI DSS pour les projets financiers.
 skills:
   - architecture-solution-gabarits
+  - architecture-securite-gabarits
   - create-architectural-decision-record
   - cybersecurite
 disallowedTools: Task
