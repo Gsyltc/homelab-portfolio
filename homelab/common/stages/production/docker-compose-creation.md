@@ -2,7 +2,7 @@
 slug: docker-compose-creation
 phase: production
 execution: CONDITIONAL
-condition: "Stack Docker (Swarm) — ignoré sous infra-terraform et branches autonomes. Produit en parallèle de terraform-configuration."
+condition: "Stack Docker (Swarm) — branche Docker retenue à l'arbitrage (arbitrage_swarm_proxmox = docker), EXCLUSIF de proxmox-server-selection. Ignoré sous infra-terraform et branches autonomes. Produit en parallèle de terraform-configuration."
 lead_agent: Spécialiste Docker
 support_agents: []
 mode: subagent
@@ -42,6 +42,7 @@ Produire le fichier (skill `docker-composer`), conserver les commentaires `#` de
 Outputs: livrable compose téléchargeable. Gate humain granulaire (via `quality-assurance` puis `central-quality-control` puis Validation).
 Imports: `yaml-validity` (write), `plaintext-secret` (write — **bloquant sur `security-patch` / `new-stack`**).
 Upstream targets: `parametres_requis_complets` (required), `walking_skeleton_valide` (required). Plus de dépendance `livrable_tfvars` : le compose est produit en parallèle du `.tfvars`.
+Exclusivité: mutuellement exclusif de [`proxmox-server-selection`](proxmox-server-selection.md) (Docker XOR Proxmox — branche fixée à [`swarm-proxmox-arbitration`](../cadrage/swarm-proxmox-arbitration.md), voir ADR [`0040`](../../../../decisions/0040-branche-proxmox-new-stack-xor-docker.md)) ; sans effet sur [`terraform-configuration`](terraform-configuration.md), toujours produit.
 
 ## Learn
 

@@ -52,7 +52,7 @@ Les valeurs par défaut ci-dessous sont la **projection lisible** des champs `de
 
 ## Matrice stage × scope
 
-Légende : ✅ activé · ➖ allégé / au juste nécessaire · ❌ ignoré · 🔒 renforcé · ⏭ branche autonome (ne passe pas par ce flux). Stages nommés par leur slug (voir [`../stages/`](../stages/)).
+Légende : ✅ activé · ➖ allégé / au juste nécessaire · ❌ ignoré · 🔒 renforcé · ⏭ branche autonome (ne passe pas par ce flux) · ⊕ branche de déploiement **exclusive** Docker XOR Proxmox (voir note ci-dessous). Stages nommés par leur slug (voir [`../stages/`](../stages/)).
 
 | Stage                            | `stack-update` | `new-stack` | `config-change` | `security-patch` | `infra-terraform` | `n8n`       | `home-assistant` |
 | -------------------------------- | -------------- | ----------- | --------------- | ---------------- | ----------------- | ----------- | ---------------- |
@@ -65,7 +65,8 @@ Légende : ✅ activé · ➖ allégé / au juste nécessaire · ❌ ignoré · 
 | `required-parameters-collection` | ✅              | ✅           | ➖               | ✅                | ➖                 | ⏭           | ⏭                |
 | `autonomy-mode`                  | ✅              | ✅           | ➖               | ✅                | ✅                 | ⏭           | ⏭                |
 | `terraform-configuration`        | ➖              | ✅           | ❌               | ➖                | ✅                 | ⏭           | ⏭                |
-| `docker-compose-creation`        | ✅              | ✅           | ➖               | ✅                | ❌                 | ⏭           | ⏭                |
+| `docker-compose-creation`        | ✅              | ✅ ⊕         | ➖               | ✅                | ❌                 | ⏭           | ⏭                |
+| `proxmox-server-selection`       | ❌              | ✅ ⊕         | ❌               | ❌                | ✅ ⊕               | ⏭           | ⏭                |
 | `quality-assurance`              | ✅              | ✅ 🔒         | ➖               | ✅ 🔒              | ✅                 | ⏭           | ⏭                |
 | `n8n-branch`                     | ❌              | ❌           | ❌               | ❌                | ❌                 | ✅           | ❌                |
 | `home-assistant-branch`          | ❌              | ❌           | ❌               | ❌                | ❌                 | ❌           | ✅                |
@@ -73,5 +74,7 @@ Légende : ✅ activé · ➖ allégé / au juste nécessaire · ❌ ignoré · 
 | Validation (4.x)                 | ✅              | ✅           | ✅               | ✅                | ✅                 | ✅           | ✅                |
 
 **Ce que change chaque scope.** Un scope allégé (`config-change`) réduit le **nombre d'étapes** (Idéation resserrée, cadrage resserré, moins de contrôles intermédiaires) ; les scopes complets appliquent l'intégralité des phases 0 à 4. Dans tous les cas, la validation humaine avant toute action à impact et la répartition des rôles restent inchangées. **Un scope joue sur le nombre d'étapes, jamais sur qui les exécute** : alléger ne transfère jamais la responsabilité d'un spécialiste vers le Tech Lead.
+
+**Branche de déploiement exclusive (⊕) — Docker XOR Proxmox.** Sur `new-stack` / `infra-terraform`, la cellule `⊕` signale que `docker-compose-creation` et `proxmox-server-selection` sont **mutuellement exclusifs** : la branche est fixée au stage [`swarm-proxmox-arbitration`](../stages/cadrage/swarm-proxmox-arbitration.md) (valeur de `arbitrage_swarm_proxmox` : `docker` | `proxmox`) et **exactement un** des deux stages s'exécute en Production (l'autre est `SKIP`). On ne produit **jamais** un `docker-compose` **et** un script Proxmox pour une même stack. Cette exclusivité **n'affecte pas** `terraform-configuration`, qui reste **toujours** exécuté (livrable `.tfvars` non abaissable). Décision tracée en ADR [`0040`](../../../decisions/0040-branche-proxmox-new-stack-xor-docker.md).
 
 Affectation des agents par scope, renforcements sécurité (`security-patch` / `new-stack` plancher renforcé + sensors bloquants, branches autonomes n8n / Home Assistant) : voir [`governance-security.md`](governance-security.md).

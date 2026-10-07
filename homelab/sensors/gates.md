@@ -60,12 +60,17 @@ boundaries:
   - id: phase3-phase4
     frontiere: "Phase 3 → Phase 4 (Production → Validation)"
     artefacts_requis:
-      - livrable_tfvars_present            # config Terraform .tfvars (§3.2) — produit en parallèle du compose — bloquant sur new-stack / infra-terraform (voir blocking_on_scope) ; conditionnel sinon
-      - livrable_compose_present           # docker-compose téléchargeable (§3.3, produit en parallèle du Terraform)
-      - qa_passe                           # vérification QA (Analyste QA) rendue et contrôlée — Terraform ET compose (§3.4)
+      - livrable_tfvars_present            # config Terraform .tfvars (§3.2) — produit en parallèle — bloquant sur new-stack / infra-terraform (voir blocking_on_scope) ; conditionnel sinon ; TOUJOURS requis quelle que soit la branche Docker/Proxmox
+      - livrable_deploiement_present       # branche de déploiement EXCLUSIVE (Docker XOR Proxmox) : livrable_compose_present (§3.3, branche Docker) OU livrable_script_proxmox_present (branche Proxmox) — exactement un des deux (voir branch_exclusive)
+      - qa_passe                           # vérification QA (Analyste QA) rendue et contrôlée — Terraform ET livrable de déploiement (§3.4)
       - controle_qualite_central_go        # aiguillage GO du Tech Lead (§3.6)
       - controle_securite_posture          # jugement de posture de l'Architecte de sécurité Homelab (stage security-delegation) — trace la délégation sécurité réalisée AVANT la Validation ; conditionnel : requis dès qu'un livrable touche une surface de sécurité (voir conditional_on_scope)
     checks: [artefacts-presents, liaison-tracabilite, absence-orphelin]
+    branch_exclusive:                      # Docker XOR Proxmox : exactement un livrable de déploiement selon arbitrage_swarm_proxmox (ADR-0040)
+      - selector: arbitrage_swarm_proxmox
+        when_docker: livrable_compose_present      # branche Docker → compose requis, script Proxmox interdit
+        when_proxmox: livrable_script_proxmox_present  # branche Proxmox → script requis (affiché, jamais exécuté), compose interdit
+        scopes: [new-stack, infra-terraform]
     blocking_on_scope:                     # écart bloquant (non advisory) pour ces couples artefact × scope
       - artifact: livrable_tfvars_present
         scopes: [new-stack, infra-terraform]
@@ -111,6 +116,7 @@ Rapport de vérification — <frontière>   (source : homelab/sensors/gates.md @
 - liaison-tracabilite : ✅ | ⚠️ <paramètre / décision sans amont ni ADR> | ⛔ <indisponible>
 - absence-orphelin : ✅ | ⚠️ <livrable / décision orphelin> | ⛔ <indisponible>
 - livrable_tfvars (new-stack / infra-terraform) : ✅ présent | ⛔ MANQUANT (écart bloquant) | ⚠️ conditionnel hors scope
+- livrable_deploiement (Docker XOR Proxmox) : ✅ compose présent (branche Docker) | ✅ script Proxmox présent (branche Proxmox, affiché jamais exécuté) | ⚠️ les deux présents (exclusivité violée) | ⚠️ aucun des deux
 - controle_securite_posture (surface de sécurité) : ✅ présent (délégation sécurité réalisée) | ⚠️ MANQUANT (contrôle sécurité non tracé) | ⚠️ sans objet (aucune surface de sécurité)
 - prérequis §4.0 (frontière Phase 3 → Phase 4) : ✅ | ⚠️ <[répertoire de travail] / Kestra> | ⛔ <indisponible>
 ```

@@ -29,5 +29,18 @@ bloquant** à la frontière Production → Validation (voir `gates.md`, frontiè
 cohérent avec le sensor `terraform-no-sni` déjà bloquant sur `new-stack`. Le domaine / FQDN
 d'exposition y est écrit **en clair**, jamais via `${SNI}`.
 
+**Branche de déploiement exclusive — Docker XOR Proxmox.** La cible de déploiement est tranchée
+au stage `swarm-proxmox-arbitration` (Cadrage) et porte sur **une seule** branche :
+
+- **Docker Swarm** → `docker-compose-creation` produit le `docker-compose` ;
+  `proxmox-server-selection` est **ignoré**.
+- **Proxmox** → `proxmox-server-selection` (Spécialiste Proxmox) produit la **recommandation de
+  serveur** (parmi les hostnames réels `bob` / `stuart` / `kevin`) et le **script de déploiement
+  LXC/VM affiché** — **jamais exécuté automatiquement** ; `docker-compose-creation` est **ignoré**.
+
+On ne produit **jamais** les deux pour une même stack. Cette exclusivité **n'affecte pas** le
+livrable Terraform ci-dessus, toujours produit dans les deux branches. Décision structurante
+tracée en ADR `0040` (`decisions/0040-branche-proxmox-new-stack-xor-docker.md`).
+
 Appartenance : voir la matrice scope × phase de `scopes-and-axes.md` et le champ `scopes:`
 des fiches de stage (`homelab/common/stages/`, livrées au Stage 7).

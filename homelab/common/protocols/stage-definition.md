@@ -37,7 +37,7 @@ outputs: "<description libre des sorties>"
 | `mode`, `for_each`, `summary_confirmation` | topologie de communication, itération éventuelle, confirmation de résumé |
 | `produces`, `consumes`, `requires_stage` | flux d'artefacts et dépendances (le graphe émerge de ces déclarations) |
 | `sensors`, `scopes`, `inputs`, `outputs` | sensors importés, scopes actifs, entrées / sorties |
-| `lead_agent`, `support_agents`, `reviewer` | **fonctions** de l'équipe : Tech Lead Homelab (coordinateur), Spécialiste Docker, Analyste QA, Spécialiste Terraform, Expert n8n, Expert Home Assistant, Architecte de sécurité Homelab, Agent de notifications — validées contre [`homelab/agents/`](../../agents/README.md) |
+| `lead_agent`, `support_agents`, `reviewer` | **fonctions** de l'équipe : Tech Lead Homelab (coordinateur), Spécialiste Docker, Analyste QA, Spécialiste Terraform, Spécialiste Proxmox, Expert n8n, Expert Home Assistant, Architecte de sécurité Homelab, Agent de notifications — validées contre [`homelab/agents/`](../../agents/README.md) |
 | `review_class`, `review_artifact` | nature de la revue et livrable qui porte sa section `## Review` |
 | `human_gate` | matérialise les gates du workflow : `none` (Initialisation), `light` (Idéation), `granular` (Cadrage / Production), `explicit` (Validation) |
 
