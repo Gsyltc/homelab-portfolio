@@ -16,7 +16,7 @@ requires_stage: [requirements-analysis]
 sensors: []
 scopes: [standard, feature, infra, mvp, enterprise]
 inputs: "Besoins tracés + verdict d'impact structurant"
-outputs: "Impact structurant Oui ⇒ issue ADR parente créée en premier (déléguée à l'Architecte de solution), issue d'origine passée en blocked ; ses sous-issues de livrable (une par spécialiste/architecte, hors revues, agent assigné, backlog) ne sont créées qu'après acceptation humaine de l'ADR, puis l'ADR passe en blocked. ADR refusée ⇒ ADR et issue d'origine annulées (cancelled) en cascade. Toutes les sous-issues done ⇒ ADR done puis issue d'origine done (dérivé). Impact structurant Non ⇒ issues de livrable créées directement en backlog ; si enfants de l'issue d'origine, celle-ci est blocked jusqu'à leur achèvement."
+outputs: "Impact structurant Oui ⇒ issue ADR parente créée en premier (déléguée à l'Architecte de solution), issue d'origine passée en blocked ; ses sous-issues de livrable (une par spécialiste/architecte, hors revues, agent assigné, backlog) ne sont créées qu'après acceptation humaine de l'ADR, puis l'ADR passe en blocked. ADR refusée ⇒ ADR et issue d'origine annulées (cancelled) en cascade. Toutes les sous-issues done ⇒ ADR `ADR Acceptée` (`adr_accept_e`, catégorie `done`) puis issue d'origine done (dérivé). Impact structurant Non ⇒ issues de livrable créées directement en backlog ; si enfants de l'issue d'origine, celle-ci est blocked jusqu'à leur achèvement."
 ---
 
 # Planification et découpage en livrables
@@ -58,7 +58,7 @@ flowchart TD
     Issues --> Run["Sous-issues : cycle de livrable a 3 stages<br/>(statut todo → in_progress → done)"]
     Run --> Check{"Toutes les sous-issues done ?"}
     Check -->|Non| Run
-    Check -->|Oui| Done["ADR → done, puis issue d'origine → done (dérivé)"]
+    Check -->|Oui| Done["ADR → ADR Acceptée (adr_accept_e), puis issue d'origine → done (dérivé)"]
 ```
 
 #### Step 3.1 — Créer l'issue ADR (parente), déléguée à l'Architecte de solution
@@ -88,7 +88,7 @@ Voir aussi la [règle « une sous-issue par agent »](#une-issue-par-spécialist
 
 #### Step 3.4 — Clôture de l'ADR quand tous les livrables sont terminés
 
-L'issue ADR reste **`blocked` comme parente** tant que ses sous-issues tournent. Dès que **toutes** ses sous-issues sont `done`, le coordinateur passe l'**issue ADR à `done`** (`multica issue status <id-ADR> done`) : clôture **dérivée** de l'état des enfants, **sans acte humain supplémentaire**. L'issue ADR étant elle-même une sous-issue de l'**issue d'origine** (restée `blocked` depuis Step 3.1), sa clôture **débloque l'issue d'origine en cascade** : le coordinateur passe l'**issue d'origine à `done`** (`multica issue status <id-origine> done`) — le flux ne se poursuit sur l'issue d'origine qu'**après** la fin complète du flux ADR et de ses livrables, jamais avant.
+L'issue ADR reste **`blocked` comme parente** tant que ses sous-issues tournent. Dès que **toutes** ses sous-issues sont `done`, le coordinateur passe l'**issue ADR à `ADR Acceptée`** (`multica issue status <id-ADR> adr_accept_e`) : clôture **dérivée** de l'état des enfants, **sans acte humain supplémentaire**. Le statut `ADR Acceptée` (`adr_accept_e`) relève de la catégorie `done` — il clôt l'issue ADR tout en marquant explicitement qu'il s'agit d'une ADR acceptée et menée à terme. L'issue ADR étant elle-même une sous-issue de l'**issue d'origine** (restée `blocked` depuis Step 3.1), sa clôture **débloque l'issue d'origine en cascade** : le coordinateur passe l'**issue d'origine à `done`** (`multica issue status <id-origine> done`) — le flux ne se poursuit sur l'issue d'origine qu'**après** la fin complète du flux ADR et de ses livrables, jamais avant.
 
 ### Step 4 — Sans décision structurante (`verdict Non`) : livrables directs en backlog
 
@@ -114,7 +114,7 @@ Chaque mission déléguée inclut **obligatoirement** :
 
 ## Sensors
 
-Outputs: impact structurant Oui ⇒ issue ADR parente d'abord (issue d'origine → `blocked`), ses sous-issues de livrable (backlog, agents assignés) créées et lancées après acceptation humaine puis l'ADR → `blocked` ; ADR refusée ⇒ ADR et issue d'origine → `cancelled` (cascade) ; ADR `done` quand toutes ses sous-issues sont `done`, puis issue d'origine → `done` (dérivé) ; impact structurant Non ⇒ issues de livrable directes en backlog (issue d'origine → `blocked` si elles en sont les enfants, jusqu'à leur achèvement).
+Outputs: impact structurant Oui ⇒ issue ADR parente d'abord (issue d'origine → `blocked`), ses sous-issues de livrable (backlog, agents assignés) créées et lancées après acceptation humaine puis l'ADR → `blocked` ; ADR refusée ⇒ ADR et issue d'origine → `cancelled` (cascade) ; ADR `ADR Acceptée` (`adr_accept_e`, catégorie `done`) quand toutes ses sous-issues sont `done`, puis issue d'origine → `done` (dérivé) ; impact structurant Non ⇒ issues de livrable directes en backlog (issue d'origine → `blocked` si elles en sont les enfants, jusqu'à leur achèvement).
 Imports: none.
 
 ## Learn
