@@ -16,6 +16,7 @@ Portée : cohérence **documentation ↔ décisions structurantes**, absence de 
 
 - **Portée par une fonction « review-only » distincte** : le **Reviewer de cohérence** (persona `consistency-reviewer-agent`), sollicité par mention A2A (par le coordinateur ou tout spécialiste/architecte — voir « Qui peut solliciter une revue ») à réception d'un livrable d'un agent spécialiste (temps 5-6 du [`stage-protocol.md`](stage-protocol.md)). Sur impact structurant, cette sollicitation et le post de la revue se font **sur l'issue ADR dédiée** (voir l'encadré d'ouverture), jamais sur l'issue d'origine.
 - Vérifie : correspondance documentation ↔ décisions, absence de décision structurante non tracée, absence d'artefact orphelin, respect des conventions (langue, diagrammes en code, aucun secret).
+- **Analyse la longueur de prose du livrable** et **demande sa réduction lorsqu'elle ne nuit pas au contenu** (verbosité, redites, remplissage) ; le reviewer **précise dans son retour les éléments exacts à réduire** (section, paragraphe, tableau). Voir « Forme de la revue — prose réduite ».
 - Verdict : **retour systématique au spécialiste** par lien de mention actif, OK comme RENVOI — jamais au reviewer de sécurité, au coordinateur ou à l'humain (voir l'encadré « Le reviewer retourne toujours au spécialiste »).
 - **Classe** `review_class: advisory` ou `granular` selon le stage. La revue de cohérence **ne remplace jamais** le contrôle sécurité ni la validation humaine.
 
@@ -57,6 +58,7 @@ S'applique à **toute revue** (cohérence comme sécurité), sur n'importe quel 
 - **Tableaux : réduits au maximum.** Un tableau n'est conservé que lorsqu'il porte une structure réellement comparative ; sinon, préférer une liste à puces. Les tableaux retenus gardent le **minimum de colonnes** utiles, des **cellules télégraphiques** (pas de phrases), et aucune colonne redondante avec le texte voisin.
 - Objectif : un retour **dense et sans ambiguïté**. La concision ne justifie jamais d'omettre un écart, une référence de norme (OWASP / STRIDE…) ou une condition de levée d'un RENVOI.
 - **Qui applique la réduction.** Le reviewer rédige lui-même sa revue en prose réduite — c'est **sa propre production**, pas une modification du livrable. L'invariant de séparation des rôles reste entier : le reviewer **ne réécrit jamais** la prose de l'artefact de l'auteur ; s'il juge la prose du livrable trop verbeuse, il **le signale comme écart** (RENVOI / demande de correction) et c'est le **spécialiste auteur** qui corrige.
+- **Analyse de la prose du livrable (obligatoire).** Le reviewer **évalue la longueur de la prose** du livrable revu et **demande sa réduction dès qu'elle peut l'être sans nuire au contenu** (sans perte d'information, de nuance ni de traçabilité). Sa demande est **précise et localisée** : il **énumère dans son retour les éléments exacts à réduire** (section / paragraphe / puce / tableau visés) avec, pour chacun, le motif (redite, remplissage, verbosité) — jamais une injonction vague « réduire la prose ». Si la longueur est justifiée par le contenu, il **ne demande aucune réduction**.
 
 ## Fin de revue
 

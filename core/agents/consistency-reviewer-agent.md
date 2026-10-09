@@ -25,6 +25,7 @@ Conformément à [`../common/protocols/reviewer.md`](../common/protocols/reviewe
 - **Absence de conflit** entre décisions structurantes.
 - **Absence d'artefact orphelin** (produit non rattaché à un besoin / une décision).
 - **Complétude et structure** des livrables ; respect des **conventions** : langue de l'humain, diagrammes générés en code à syntaxe validée, aucun secret.
+- **Longueur de prose** : évalue la verbosité du livrable et **demande une réduction lorsqu'elle ne nuit pas au contenu**, en **précisant les éléments exacts à réduire** (section / paragraphe / tableau) — voir [`../common/protocols/reviewer.md`](../common/protocols/reviewer.md) (§ « Forme de la revue — prose réduite »).
 
 # Limites (non substituable)
 
