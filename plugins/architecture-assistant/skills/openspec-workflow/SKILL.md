@@ -162,25 +162,47 @@ The system SHALL <autre comportement>.
 
 ## Template : tasks.md
 
+> **Approbation ≠ archivage.** L'approbation d'une proposition correspond à l'**achèvement de la Phase 2** (specs relues et validées) : elle n'archive rien. Les phases d'implémentation sont **conditionnées à l'approbation humaine**. L'**archivage** est la **toute dernière tâche** de la phase finale « Validation et archivage » et n'intervient qu'une fois le changement **réellement implémenté ET déployé**.
+>
+> Dès la **création** de la proposition, le `tasks.md` contient **au minimum les Phases 1 et 2** (ce qui doit être réalisé pour rédiger la spec, puis ce qui doit être contrôlé pour la valider). Les phases d'implémentation et la phase finale sont ajoutées selon la nature du changement.
+
 ```markdown
 # Tasks: <nom-du-changement>
 
-## Phase 1: <nom de la phase>
+> Aucune implémentation n'est entreprise avant **validation** de la proposition (gate OpenSpec = fin de Phase 2). Les phases d'implémentation (3+) sont conditionnées à l'approbation humaine.
 
-- [ ] 1.1 <Tâche descriptive>
-- [ ] 1.2 <Tâche descriptive>
-- [ ] 1.3 <Tâche descriptive>
+## Phase 1 : Proposition et deltas de specs
 
-## Phase 2: <nom de la phase>
+> Ce qui doit être **réalisé** pour rédiger la spécification.
 
-- [ ] 2.1 <Tâche descriptive>
-- [ ] 2.2 <Tâche descriptive>
+- [ ] 1.1 Rédiger `proposal.md` (Summary / Motivation / Scope / Impact / Open Questions)
+- [ ] 1.2 Rédiger `design.md` (approche, alternatives, décisions techniques, dépendances, risques)
+- [ ] 1.3 Rédiger les deltas `specs/<capability>/spec.md` (`ADDED` / `MODIFIED` / `REMOVED Requirements`)
+- [ ] 1.4 Rédiger `tasks.md` (le présent découpage par phases)
 
-## Phase 3: Validation
+## Phase 2 : Revues et validation de la proposition (gate OpenSpec)
 
-- [ ] 3.1 Vérifier que les specs sont respectées
-- [ ] 3.2 Mettre à jour les specs principales si nécessaire
-- [ ] 3.3 Archiver le changement
+> Ce qui doit être **contrôlé et vérifié** pour valider la spécification. **L'achèvement de cette phase vaut approbation** — aucun archivage ici.
+
+- [ ] 2.1 Vérifier la structure OpenSpec (présence `proposal.md` + `design.md` + `tasks.md` + `specs/<capability>/spec.md` ; EARS en MAJUSCULES ; `#### Scenario:` ; `MODIFIED` strictement cohérent)
+- [ ] 2.2 Revue de cohérence (correspondance deltas ↔ décisions amont, absence de conflit avec les specs vivantes et les autres changements)
+- [ ] 2.3 Revue de sécurité (aucun invariant abaissé, surface d'impact maîtrisée)
+- [ ] 2.4 Validation humaine granulaire (acceptation du gate OpenSpec) — **approbation = fin de Phase 2**
+
+## Phase 3 : Implémentation (post-approbation)
+
+> Entreprise **uniquement après** l'approbation de la Phase 2.
+
+- [ ] 3.1 <Tâche d'implémentation>
+- [ ] 3.2 <Tâche d'implémentation>
+
+## Phase 4 : Validation et archivage
+
+> **Dernière phase.** L'archivage (dernière tâche) est **explicitement conditionné à l'implémentation ET au déploiement effectifs** du changement.
+
+- [ ] 4.1 Vérifier que l'implémentation respecte les specs approuvées
+- [ ] 4.2 Mettre à jour les specs principales si des ajustements ont été nécessaires en cours d'implémentation
+- [ ] 4.3 **Archiver le changement** — **uniquement après implémentation ET déploiement effectifs** : fusionner les deltas dans `openspec/specs/<capability>/spec.md` et déplacer le change vers `openspec/changes/archive/AAAA-MM-JJ-<nom>/`
 ```
 
 ## Procédures
@@ -201,20 +223,25 @@ The system SHALL <autre comportement>.
 3. Rédiger `proposal.md` — décrire le pourquoi et le quoi
 4. Identifier les capacités impactées et créer `specs/<capability>/spec.md` dans le dossier du changement
 5. Rédiger `design.md` — documenter l'approche technique
-6. Rédiger `tasks.md` — découper en phases et tâches concrètes
-7. **Faire valider le plan avant toute implémentation**
+6. Rédiger `tasks.md` — **avec au minimum les Phases 1 et 2** (Proposition et deltas de specs ; Revues et validation de la proposition), puis les phases d'implémentation et la phase finale « Validation et archivage » selon la nature du changement
+7. **Faire relire et valider la proposition avant toute implémentation** — l'**approbation correspond à l'achèvement de la Phase 2** (specs relues/validées, fichiers présents et conformes) ; **elle n'archive rien**
 
 ### Appliquer un changement
 
-1. Suivre les tâches de `tasks.md` dans l'ordre des phases
-2. Cocher chaque tâche au fur et à mesure (`- [x]`)
-3. Mettre à jour les specs si des ajustements sont nécessaires en cours de route
+1. **Précondition : la proposition est approuvée** (Phase 2 achevée). L'implémentation n'est entreprise qu'après ce feu vert.
+2. Suivre les tâches de `tasks.md` dans l'ordre des phases
+3. Cocher chaque tâche au fur et à mesure (`- [x]`)
+4. Mettre à jour les specs si des ajustements sont nécessaires en cours de route
+5. **Ne pas archiver à ce stade** : l'archivage relève de la phase finale, après implémentation **et** déploiement effectifs
 
 ### Archiver un changement terminé
 
-1. Déplacer le dossier du changement vers `openspec/changes/archive/YYYY-MM-DD-<nom>/`
-2. Fusionner les deltas de specs dans les specs principales (`openspec/specs/`)
-3. Vérifier la cohérence globale des specs
+> **L'archivage est découplé de l'approbation.** Il n'intervient qu'une fois le changement **réellement implémenté ET déployé** (dernière tâche de la phase finale « Validation et archivage »). Approuver une proposition ne déclenche **jamais** l'archivage.
+
+1. **Vérifier les préconditions** : le changement a été **implémenté** et **déployé** effectivement
+2. Fusionner les deltas de specs dans les specs principales (`openspec/specs/<capability>/spec.md`)
+3. Déplacer le dossier du changement vers `openspec/changes/archive/YYYY-MM-DD-<nom>/`
+4. Vérifier la cohérence globale des specs
 
 ## Conventions de nommage
 

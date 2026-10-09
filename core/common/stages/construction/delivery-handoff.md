@@ -25,6 +25,8 @@ outputs: "Livrables mis à disposition : commit + PR si accord humain explicite,
 
 Mettre à disposition les livrables validés — par archivage ou par Git (commit + PR) — puis notifier dès cette mise à disposition.
 
+> **« Archivage par dossier » ≠ « archivage OpenSpec ».** L'archivage évoqué dans ce stage est le **fallback de mise à disposition** des livrables (zip + téléversement) quand il n'y a pas de commit/PR. Il ne faut pas le confondre avec l'**archivage OpenSpec** (fusion des deltas dans les specs vivantes + déplacement vers `openspec/changes/archive/`), qui est **découplé de l'approbation** et n'intervient qu'**après déploiement effectif**, en phase Operation ([`../operation/deployment-under-validation.md`](../operation/deployment-under-validation.md), Step 5). Aucun archivage OpenSpec n'a lieu dans ce stage.
+
 ## Steps
 
 > **La logique de ce stage est portée par le workflow** : le **coordinateur** décide, pose la question de PR, résout la branche cible et déclenche la notification. L'**Experte d'archivage** ne porte **aucune** de ces décisions — elle **exécute** la tâche technique confiée (archivage par dossier, ou commit + PR). L'**Agent de notifications** porte seulement le canal, sur sollicitation du coordinateur.

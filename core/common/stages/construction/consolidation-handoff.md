@@ -16,7 +16,7 @@ requires_stage: [security-consistency-check]
 sensors: [required-sections]
 scopes: [standard, feature, infra, security-patch, mvp, poc, express, enterprise]
 inputs: "Livrables contrôlés"
-outputs: "Livrables validés granulairement par l'humain ; archivage OpenSpec si activé. La mise à disposition (archivage / commit + PR) est portée par le stage suivant delivery-handoff."
+outputs: "Livrables validés granulairement par l'humain ; attestation OpenSpec (specs relues/validées, fichiers présents et conformes) si activé — l'archivage OpenSpec est découplé de l'approbation et relève de l'après-déploiement (operation/deployment-under-validation). La mise à disposition (archivage par dossier / commit + PR) est portée par le stage suivant delivery-handoff."
 ---
 
 # Consolidation et validation humaine
@@ -31,9 +31,11 @@ Valider granulairement les livrables restants ; la mise à disposition est port�
 
 De chaque livrable / choix restant à approuver (boucle Keep / Modify / Redo). Le `human_gate: granular` porte la force du gate ; aucune revue indépendante n'est déclarée à ce stade (`review_class: none`) — le contrôle sécurité a eu lieu au stage précédent. Une fois les livrables validés, la **mise à disposition** (archivage par dossier ou commit + PR) et la **notification de fin de réalisation** sont portées par le stage suivant [`delivery-handoff`](delivery-handoff.md).
 
-### Step 2 — Archivage OpenSpec
+### Step 2 — Attestation OpenSpec (approbation = validation, pas archivage)
 
-L'**OpenSpec Expert** archive le changement après approbation : fusion des deltas dans les specs vivantes (`openspec/specs/<capability>/spec.md`) et déplacement du change vers `openspec/changes/archive/`. Il **ne crée pas de sous-issue** et **ne produit pas** les mises à jour d'architecture.
+> **L'approbation d'une spécification = achèvement de la Phase 2 (revue et validation), pas archivage.** À ce stade, l'**OpenSpec Expert n'archive pas** le changement.
+
+L'**OpenSpec Expert** **atteste** que les specs sont **relues et validées** et que les **fichiers du change sont présents et conformes** (structure OpenSpec : `proposal.md` + `design.md` + `tasks.md` + `specs/<capability>/spec.md` ; EARS en MAJUSCULES ; `#### Scenario:`). Il **ne crée pas de sous-issue**, **ne produit pas** les mises à jour d'architecture et **n'archive pas**. L'**archivage OpenSpec est découplé de l'approbation** : fusion des deltas dans les specs vivantes (`openspec/specs/<capability>/spec.md`) et déplacement vers `openspec/changes/archive/`, il n'intervient qu'**après implémentation ET déploiement effectifs**, en phase Operation ([`../operation/deployment-under-validation.md`](../operation/deployment-under-validation.md)).
 
 ### Step 3 — Description des travaux de passation
 
@@ -43,7 +45,7 @@ L'**Expert OpenSpec** recense, dans le `design.md` et les specs, les éléments 
 
 L'**Expert OpenSpec** passe l'issue en `done` et **remonte au coordinateur** par lien de mention actif, en lui transmettant les descriptions de passation du Step 3 (checklist de sortie de stage — [`../../protocols/stage-protocol.md`](../../protocols/stage-protocol.md)). Il ne poursuit pas lui-même le flux de production.
 
-> **L'issue OpenSpec est un livrable terminal, pas une parente.** Une fois sa spécification approuvée, archivée et sa passation remontée, l'issue OpenSpec **reste `done`** : la remontée des descriptions de passation **ne la rouvre pas** et **n'en fait pas l'issue parente** des travaux d'architecture aval. Les sous-issues que le coordinateur crée au Step 5 ne sont **jamais** rattachées à l'issue OpenSpec (voir Step 5 pour le parent correct).
+> **L'issue OpenSpec est un livrable terminal, pas une parente.** Une fois sa spécification approuvée (Phase 2 achevée : specs relues/validées, fichiers présents et conformes) et sa passation remontée, l'issue OpenSpec **reste `done`** : la remontée des descriptions de passation **ne la rouvre pas** et **n'en fait pas l'issue parente** des travaux d'architecture aval. L'**archivage OpenSpec n'a pas lieu ici** — il est découplé de l'approbation et relève de l'après-déploiement ([`../operation/deployment-under-validation.md`](../operation/deployment-under-validation.md)). Les sous-issues que le coordinateur crée au Step 5 ne sont **jamais** rattachées à l'issue OpenSpec (voir Step 5 pour le parent correct).
 
 ### Step 5 — Délégation des travaux par le coordinateur
 
