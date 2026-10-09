@@ -21,7 +21,7 @@ ${ROOT_DIRECTORY}/<nom-client>/<nom-projet>/
 ├── decisions/              # ADR (Architecture Decision Records)
 ├── documentation/          # Documentation d'architecture de solution
 │   ├── architecture-logicielle/    # Architecture détaillée logicielle
-│   ├── architecture-donnee/        # Architecture détaillée des données
+│   ├── architecture-donnees/        # Architecture détaillée des données
 │   ├── architecture-infra/         # Architecture détaillée infrastructure
 │   └── architecture-securite/      # Architecture détaillée sécurité
 ├── models/                 # Modèles de diagrammes (C4, PlantUML, etc.)
@@ -66,18 +66,35 @@ ${ROOT_DIRECTORY}/<nom-client>/<nom-projet>/
 **Conventions** :
 - Formats supportés : PlantUML (`.puml`), Mermaid (`.mmd`), Structurizr DSL (`.dsl`), CALM, Archimate
 - Nommage : `<type>-<description>.<extension>` (ex. `c4-context-systeme-principal.dsl`)
-- Les modèles C4 doivent être dans un fichier unique en respectant le DSL de Structurizr
+- **Lorsque C4 est le format retenu** (voir la règle de sélection ci-dessous), les modèles C4 sont dans un **fichier unique** respectant le DSL de Structurizr
 - Les diagrammes **réutilisent le thème du projet** (répertoire `theme/`, p. ex. `theme/0000-default-styles.dsl`) **lorsqu'il est disponible** (Structurizr, PlantUML, etc.) ; ne pas réinventer ni approximer un style quand le thème existe
-- Toujours demander le format souhaité avant de générer
+- **Format de modélisation par défaut (règle de sélection)** : la norme **par défaut** d'un projet est **C4** (modélisé en Structurizr DSL). Si un **autre format est explicitement précisé** pour le projet — **ArchiMate** ou **CALM** — dans la **description du projet** (workspace Multica) **ou** le **`README.md` du projet**, alors **C4 n'est pas utilisé** : on utilise **le format défini**. Ordre de résolution :
+  1. Format explicitement nommé dans la **description du projet** ou le **`README.md`** (`ArchiMate` ou `CALM`) → ce format fait foi, **C4 est écarté**.
+  2. **Sinon → C4 par défaut** (Structurizr DSL).
+
+  Mode opératoire du format retenu : [`references/structurizr.md`](references/structurizr.md) (C4), [`references/archimate.md`](references/archimate.md) (ArchiMate), [`references/calm.md`](references/calm.md) (CALM). Ne pas mélanger les formats pour un même projet ; en cas d'ambiguïté (plusieurs formats cités, mention contradictoire), demander l'arbitrage humain avant de générer.
 
 ### `views/`
 
-**Contient** : Les vues de diagrammes (représentations visuelles).
+**Contient** : Les vues de diagrammes (représentations visuelles), définies en **Structurizr DSL** (`views/000X-*.dsl`) et incluses (`!include`) depuis `workspace.dsl`.
 
 **Conventions** :
-- Les vues C4 suivent la hiérarchie : Contexte → Conteneurs → Composants → Code
-- Chaque vue référence le modèle correspondant dans `models/`
-- Nommage : `<niveau>-<description>.<extension>` (ex. `contexte-systeme-principal.png`)
+- Les vues C4 suivent la hiérarchie : Contexte → Conteneurs → Composants → Code.
+- Chaque vue référence le modèle correspondant dans `models/`.
+- Nommage : `<ordre>-<description>.dsl` (préfixe numérique à 4 chiffres, ex. `0001-contexte.dsl`, `0008-lignage-donnees.dsl`) ; une **table de correspondance** à jour dans `views/README.md`.
+- Le **modèle reste la source de vérité** : toute évolution d'une vue passe par les fichiers `views/000X-*.dsl` ; les définitions de modèle (acteurs, systèmes, conteneurs, liens) vivent sous `models/`.
+
+#### Diagrammes : fichiers de référence à charger au besoin
+
+L'intégration des diagrammes dans la DAS suit la convention **« vue `image` Structurizr rendue par kroki + `embed:` »**. Les instructions détaillées sont **déportées** dans des fichiers de référence **chargés uniquement au besoin** (production, intégration ou révision d'un diagramme) :
+
+- ➡️ **[`references/kroki-diagrammes.md`](references/kroki-diagrammes.md)** — intégration des diagrammes à la DAS : règle `image`+kroki+`embed:`, proscription du `![](….svg)`, renderers par type de source, câblage `theme/0002-external-tools.dsl`, regroupement par famille et numérotation fixe (`0001`–`0006`+), validation DSL, traçabilité.
+- ➡️ **[`references/structurizr.md`](references/structurizr.md)** — modèle C4 et vues : arborescence `workspace.dsl` / `models/` / `views/` / `theme/`, modèle = source de vérité, hiérarchie C4, validation (`structurizr.sh validate`), export / Structurizr Lite.
+- ➡️ **[`references/archify.md`](references/archify.md)** — diagrammes HTML/SVG **pour les présentations client** (skill `archify`, agent « Présentation client ») : 5 types, flux `finalize`, garde d'authenticité ; **distinct** de l'intégration DAS.
+- ➡️ **[`references/archimate.md`](references/archimate.md)** — modélisation **d'entreprise** ArchiMate (The Open Group / TOGAF) : couches Motivation/Stratégie/Métier/Application/Technologie, production en code (Archi `.archimate` ou PlantUML-Archimate), intégration DAS via `kroki plantuml`.
+- ➡️ **[`references/calm.md`](references/calm.md)** — **CALM** (Common Architecture Language Model, FINOS, architecture-as-code JSON) : nodes/relationships/interfaces/controls/flows, validation CLI, toolchain (CALM Hub / CalmStudio / VS Code).
+
+Règle minimale à retenir : tout diagramme (PlantUML, Mermaid, BPMN, …) est intégré à la DAS **exclusivement** via une vue `image` kroki référencée par `![…](embed:<clé>)` ; jamais de SVG inclus directement. Archify ne sert que la restitution (présentations), pas l'intégration DAS.
 
 ### `presentations/`
 
@@ -176,6 +193,7 @@ Les agents sont créés — et doivent être recréés — sous le format :
 | Fabien | OpenSpec Expert | [`openspec-agent.md`](../../../../core/agents/openspec-agent.md) |
 | Nina | Experte d'archivage | [`archiving-agent.md`](../../../../core/agents/archiving-agent.md) |
 | Michel | Vente & Appels d'Offres | [`sales-proposals-agent.md`](../../../../core/agents/sales-proposals-agent.md) |
+| Camille | Présentation client | [`client-presentation-agent.md`](../../../../core/agents/client-presentation-agent.md) |
 | Sami | Reviewer de cohérence | [`consistency-reviewer-agent.md`](../../../../core/agents/consistency-reviewer-agent.md) |
 | Benoit | Reviewer de sécurité | [`security-reviewer-agent.md`](../../../../core/agents/security-reviewer-agent.md) |
 | Admin | Infrastructure Windows | [`windows-infrastructure-admin-agent.md`](../../../../core/agents/windows-infrastructure-admin-agent.md) |
@@ -221,7 +239,7 @@ Les agents sont créés — et doivent être recréés — sous le format :
 
 | Skill / Agent | Relation avec cette skill |
 |---------------|---------------------------|
-| `architecture-solution-gabarits` | Les gabarits documentés dans cette skill doivent être placés dans `documentation/` |
+| `architecture-solution-gabarits` | Les gabarits documentés dans cette skill doivent être placés dans `documentation/` ; les **diagrammes générés en code** (règle d'or 9) sont intégrés à la DAS selon la convention « vues `image` kroki + `embed:` » de la section [`views/`](#views) ci-dessus |
 | `create-architectural-decision-record` | Les ADR créés doivent être placés dans `decisions/` |
 | Manuel - Architecte de solution | Doit respecter la structure de répertoire définie ici |
 | Florian - Architecte AWS | Les diagrammes AWS doivent suivre les conventions `models/` et `views/` |
