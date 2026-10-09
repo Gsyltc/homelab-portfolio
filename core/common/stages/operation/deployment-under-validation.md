@@ -13,7 +13,7 @@ review_artifact: plan-deploiement.md
 human_gate: explicit
 produces: [plan_ou_configuration_valide, rollback_si_action_destructive]
 consumes: [{artifact: livrables_valides_mis_a_disposition, required: true}]
-requires_stage: [consolidation-handoff]
+requires_stage: [delivery-handoff]
 sensors: []
 scopes: [standard, feature, infra, security-patch, mvp, express, enterprise]
 inputs: "Livrables validés"

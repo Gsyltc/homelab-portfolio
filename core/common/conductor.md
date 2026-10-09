@@ -57,7 +57,7 @@ flowchart TD
 | **Initialization** | 0 | [`directory-check`](stages/initialization/directory-check.md) · [`git-detection`](stages/initialization/git-detection.md) · [`brownfield-greenfield-detection`](stages/initialization/brownfield-greenfield-detection.md) · [`audit-trail-init`](stages/initialization/audit-trail-init.md) | Non (bootstrap déterministe) |
 | **Ideation** | 1 | [`intent-capture`](stages/ideation/intent-capture.md) · [`feasibility-constraints`](stages/ideation/feasibility-constraints.md) · [`scope-definition`](stages/ideation/scope-definition.md) · [`mockups`](stages/ideation/mockups.md) · [`intent-scope-approval`](stages/ideation/intent-scope-approval.md) | Approbation intention + périmètre (léger) |
 | **Inception** | 2 | [`intake-framing`](stages/inception/intake-framing.md) · [`existing-context-loading`](stages/inception/existing-context-loading.md) · [`requirements-analysis`](stages/inception/requirements-analysis.md) · [`cdae-ai-eligibility`](stages/inception/cdae-ai-eligibility.md) *(à la demande)* · [`deliverables-breakdown`](stages/inception/deliverables-breakdown.md) · [`design-and-decisions`](stages/inception/design-and-decisions.md) | Validation granulaire humaine |
-| **Construction** | 3 | [`walking-skeleton`](stages/construction/walking-skeleton.md) · [`detailed-deliverables`](stages/construction/detailed-deliverables.md) · [`security-consistency-check`](stages/construction/security-consistency-check.md) · [`consolidation-handoff`](stages/construction/consolidation-handoff.md) | Validation granulaire humaine |
+| **Construction** | 3 | [`walking-skeleton`](stages/construction/walking-skeleton.md) · [`detailed-deliverables`](stages/construction/detailed-deliverables.md) · [`security-consistency-check`](stages/construction/security-consistency-check.md) · [`consolidation-handoff`](stages/construction/consolidation-handoff.md) · [`delivery-handoff`](stages/construction/delivery-handoff.md) | Validation granulaire humaine |
 | **Operation** | 4 | [`deployment-under-validation`](stages/operation/deployment-under-validation.md) · [`completion-notification`](stages/operation/completion-notification.md) · [`maintenance-support`](stages/operation/maintenance-support.md) | Validation humaine explicite |
 
 ---
@@ -218,11 +218,14 @@ sequenceDiagram
     A-->>S: Livrables detailles (halt-and-ask sur echec)
     S->>X: Controle securite
     S->>H: Validation granulaire (au point de synchronisation si autonome)
-    S->>N: Mise a disposition des livrables valides
+    S->>N: Mise a disposition des livrables valides (archivage ou commit + PR)
+    N-->>S: Archive / lien de PR + recapitulatif
+    S->>AL: Demande notification de fin de realisation (fichiers / PR en attente) - des la mise a disposition
+    AL-->>H: Notification de fin de realisation (canal porte par l Agent de notifications)
     S->>H: Validation deploiement (OPERATION)
     H-->>S: Validation explicite (+ rollback si destructif)
-    S->>AL: Demande notification de fin
-    AL-->>H: Notification (canal porte par l Agent de notifications)
+    S->>AL: Demande notification de fin de deploiement (si deploiement)
+    AL-->>H: Notification de fin de deploiement (canal porte par l Agent de notifications)
 ```
 
 ---

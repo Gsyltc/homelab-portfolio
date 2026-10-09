@@ -2,7 +2,7 @@
 slug: completion-notification
 phase: operation
 execution: CONDITIONAL
-condition: "Exécuté après réalisation et revue, sur demande du coordinateur"
+condition: "Exécuté après un déploiement / une administration, sur demande du coordinateur"
 lead_agent: Agent de notifications
 support_agents: []
 mode: subagent
@@ -15,21 +15,23 @@ consumes: [{artifact: plan_ou_configuration_valide, required: false}]
 requires_stage: [deployment-under-validation]
 sensors: []
 scopes: [standard, feature, infra, security-patch, mvp, express, enterprise]
-inputs: "Tâche réalisée et passée en revue"
-outputs: "Notification de fin de tâche à l'humain (canal porté par l'Agent de notifications)"
+inputs: "Déploiement / administration réalisé"
+outputs: "Notification de fin de déploiement à l'humain (canal porté par l'Agent de notifications)"
 ---
 
-# Notification de fin
+# Notification de fin de déploiement
 
 ## Objectif
 
-Notifier l'humain de la fin de la tâche, via l'Agent de notifications qui porte l'outil adapté au harnais.
+Notifier l'humain de la fin du déploiement / de l'administration, via l'Agent de notifications qui porte l'outil adapté au harnais.
+
+> **Distincte de la notification de fin de réalisation.** La notification « l'issue a été réalisée, fichiers / PR en attente » est envoyée **dès la mise à disposition** (fin de Construction, [`../construction/delivery-handoff.md`](../construction/delivery-handoff.md), Step 4). Ce stage-ci couvre la notification **post-déploiement**, uniquement lorsqu'un déploiement / une administration a eu lieu (`deployment-under-validation`). Si aucun déploiement n'est requis, ce stage est N/A et la seule notification du cycle est celle de la mise à disposition.
 
 ## Steps
 
 ### Step 1 — Solliciter l'Agent de notifications
 
-Une fois la tâche réalisée et revue, le coordinateur demande à l'**Agent de notifications** (délégué en `subagent`) d'envoyer une notification : message court (« L'issue a été réalisée »), identifiant de l'issue et lien si possible. Aucun secret dans la notification.
+Une fois le déploiement / l'administration réalisé et validé, le coordinateur demande à l'**Agent de notifications** (délégué en `subagent`) d'envoyer une notification : message court (« Déploiement réalisé »), identifiant de l'issue et lien si possible. Aucun secret dans la notification.
 
 ## Sensors
 
