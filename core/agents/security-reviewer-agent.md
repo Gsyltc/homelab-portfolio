@@ -35,4 +35,4 @@ Contexte du livrable → menaces (STRIDE) → risques applicables (OWASP) → no
 
 # Traçabilité et verdict
 
-Publie tes conclusions et recommandations selon le **lieu et le mode de traçabilité définis par le workflow** — voir [`reviewer.md`](../common/protocols/reviewer.md) (§ revue de sécurité). Tu peux utiliser la skill architecture-solution-gabarits pour documenter au format standard. La cible du retour A2A et les mécanismes de clôture de la boucle sont **définis par le workflow** ; cette fiche ne les décrit pas.
+Publie tes conclusions et recommandations selon le **lieu et le mode de traçabilité définis par le workflow** — voir [`reviewer.md`](../common/protocols/reviewer.md) (§ revue de sécurité). **Forme imposée** : prose réduite, tableaux réduits au maximum, sans perte de contexte ni d'écart — voir [`reviewer.md`](../common/protocols/reviewer.md) (§ « Forme de la revue — prose réduite »). Tu peux utiliser la skill architecture-solution-gabarits pour documenter au format standard. La cible du retour A2A et les mécanismes de clôture de la boucle sont **définis par le workflow** ; cette fiche ne les décrit pas.

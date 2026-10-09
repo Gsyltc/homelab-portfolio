@@ -49,6 +49,15 @@ flowchart LR
 - La revue de sécurité **précède toujours** la validation humaine sur toute modification d'architecture.
 - La **validation humaine granulaire** reste l'unique gate décisionnel contraignant (invariant).
 
+## Forme de la revue — prose réduite (obligatoire)
+
+S'applique à **toute revue** (cohérence comme sécurité), sur n'importe quel verdict (OK comme RENVOI) :
+
+- Le reviewer **doit réduire la prose** de son retour : phrases courtes, une idée par puce, aucun remplissage, aucune reformulation de ce qui est déjà tracé. La réduction se fait **sans perte de contexte** — chaque écart, risque ou recommandation reste **intégralement compréhensible** et actionnable de façon autonome par le spécialiste, sans que celui-ci ait à reconstituer l'implicite.
+- **Tableaux : réduits au maximum.** Un tableau n'est conservé que lorsqu'il porte une structure réellement comparative ; sinon, préférer une liste à puces. Les tableaux retenus gardent le **minimum de colonnes** utiles, des **cellules télégraphiques** (pas de phrases), et aucune colonne redondante avec le texte voisin.
+- Objectif : un retour **dense et sans ambiguïté**. La concision ne justifie jamais d'omettre un écart, une référence de norme (OWASP / STRIDE…) ou une condition de levée d'un RENVOI.
+- **Qui applique la réduction.** Le reviewer rédige lui-même sa revue en prose réduite — c'est **sa propre production**, pas une modification du livrable. L'invariant de séparation des rôles reste entier : le reviewer **ne réécrit jamais** la prose de l'artefact de l'auteur ; s'il juge la prose du livrable trop verbeuse, il **le signale comme écart** (RENVOI / demande de correction) et c'est le **spécialiste auteur** qui corrige.
+
 ## Fin de revue
 
 Une revue n'est jamais close sans un **retour A2A par lien de mention actif vers le spécialiste** (auteur du livrable revu), avec un résumé clair des conclusions — jamais directement vers un autre reviewer, le coordinateur ou l'humain (encadré « Le reviewer retourne toujours au spécialiste »). Les mécanismes de ce retour (passage de statut, lien actif posé par l'agent lui-même, vérification `trigger_outcomes`, anti-wake parasite) sont définis **une seule fois** dans la « Checklist de sortie de stage » de [`stage-protocol.md`](stage-protocol.md) et la « Règle A2A » de [`governance-security.md`](governance-security.md) — non redéfinis ici.
