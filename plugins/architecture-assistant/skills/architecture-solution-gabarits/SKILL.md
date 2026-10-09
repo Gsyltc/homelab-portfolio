@@ -69,7 +69,11 @@ ordre_presentation: <n|null>
    - Toute modification doit être **approuvée par l'humain** lors de la phase de revue.
 5. Conserver le découpage des fichiers, les noms de fichiers et la structure des sections.
 6. Maintenir la **numérotation globale et continue** des tableaux ainsi que l'index du fichier `001` (liste des tableaux et des diagrammes) à chaque changement.
-7. Mettre à jour l'**historique du document** (`001`) à chaque modification (version, date, statut, motif, auteur, approbateur). La **description / motif du changement** reste **concise** et limitée à l'essentiel (une à deux lignes factuelles, sans prose superflue).
+7. Mettre à jour l'**historique du document** (`001`) à chaque modification (version, date, statut, motif, auteur, approbateur). La colonne **« Description / Motif du changement »** du Tableau 2 (Historique) tient en **une ligne factuelle** (style de référence V1.0–V1.6), jamais en paragraphes multi-phrases :
+   - Conserver le **strict essentiel** : objet du changement + identifiant de traçabilité (`ORIG-xxx` / `ADR-xxxx`) + fichier(s) touché(s) quand c'est le cœur du changement.
+   - Retirer la **prose explicative** et les **énumérations détaillées** (listes de composants/vues, justifications, « non-régression attestée », etc.) — elles vivent dans le corps du DAS et les ADR, pas dans l'historique.
+   - **Zéro doublon** entre lignes d'historique ; la **traçabilité** (IDs) reste toujours préservée.
+   - **Colonne « Statut » — cycle de revue** : à chaque mise à jour, la **dernière version** (ligne la plus récente) passe à **`Revue en cours`** et **toutes les versions précédentes** passent à **`Revue`**. Le statut **`Approuvé`** n'est inscrit qu'**après validation humaine explicite**.
 8. Utiliser des **identifiants codés** cohérents pour les articles (ex. `RISQ-001`, `UC-001`, `CT-001`).
 9. Les diagrammes sont générés en **code** (PlantUML, Mermaid, Structurizr, BPMN, C4) et référencés dans l'index du `001`.
 10. Les **décisions d'architecture** sont tracées dans des ADR (voir la skill `create-architectural-decision-record`) et référencées dans les fichiers concernés.

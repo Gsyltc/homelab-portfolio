@@ -30,7 +30,7 @@ Ce fichier est le point d'entrée de la documentation d'architecture et reste st
 | ----------------------------- | ----------------------------------- |
 | **Titre**                     | Document d'architecture de solution |
 | **Version**                   | V1.0                                |
-| **Statut**                    | Brouillon / En revue / Approuvé     |
+| **Statut**                    | Revue en cours / Revue / Approuvé   |
 | **Date de la dernière revue** | YYYY-MM-DD                          |
 | **Propriétaire**              | Architecte de solution intégrateur  |
 | **Approbateur**               | Responsable produit / Client        |
@@ -40,11 +40,11 @@ Ce fichier est le point d'entrée de la documentation d'architecture et reste st
 
 ## Historique du document
 
-<!-- Mettre à jour cet historique à **chaque** modification de la documentation. La version la plus récente figure en première ligne. La description / motif du changement reste **concise** : une à deux lignes factuelles, sans prose superflue. -->
+<!-- Mettre à jour cet historique à **chaque** modification de la documentation. La version la plus récente figure en première ligne. La colonne « Description / Motif du changement » tient en **une ligne factuelle** (style V1.0–V1.6) : objet + identifiant de traçabilité (ORIG-xxx / ADR-xxxx) + fichier(s) touché(s) si c'est le cœur du changement ; aucune prose explicative ni énumération, zéro doublon. Colonne « Statut » : à chaque mise à jour, la dernière version passe à `Revue en cours` et les versions précédentes à `Revue` ; `Approuvé` seulement après validation humaine explicite. Voir la règle d'or 7 de la skill `architecture-solution-gabarits`. -->
 
 | **Version** | **Date**   | **Statut** | **Description / Motif du changement** | **Auteurs**                                 | **Approbateur**            |
 | ----------- | ---------- | ---------- | ------------------------------------- | ------------------------------------------- | -------------------------- |
-| V1.0        | YYYY-MM-DD | Approuvé   | Version initiale                      | Nom de l'Architecte de Solution Intégrateur | Nom du Responsable produit |
+| V1.0        | YYYY-MM-DD | Revue en cours | Version initiale                      | Nom de l'Architecte de Solution Intégrateur | Nom du Responsable produit |
 
 **Tableau 2. Historique des modifications**
 
