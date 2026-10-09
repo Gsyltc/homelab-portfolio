@@ -65,6 +65,7 @@ Légende : ✅ activé · ➖ allégé / optionnel · ❌ ignoré · 🔒 renfor
 | `detailed-deliverables` | ✅ | ✅ | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ |
 | `security-consistency-check` | ✅ | ✅ | ✅ | 🔒 | ✅ | ➖ | ➖ | ✅ 🔒 |
 | `consolidation-handoff` | ✅ | ✅ | ✅ | ✅ | ✅ | ➖ | ✅ | ✅ |
+| `delivery-handoff` | ✅ | ✅ | ✅ | ✅ | ✅ | ➖ | ✅ | ✅ |
 | Operation (4.x) | *cond.* | *cond.* | ✅ | *cond.* | *cond.* | ❌ | *cond.* | ✅ |
 | Validation humaine granulaire | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 
