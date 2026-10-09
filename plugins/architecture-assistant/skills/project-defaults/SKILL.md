@@ -59,6 +59,18 @@ ${ROOT_DIRECTORY}/<nom-client>/<nom-projet>/
 - Chaque document d'architecture détaillée est dans un sous-répertoire dédié par système logiciel
 - La DAS principale (fichiers `001` à `15`) se trouve à la racine de `documentation/`
 
+#### Répartition `!docs` / `!adrs` en DSL (Structurizr) : documentation globale ↔ détaillée
+
+Dans les fichiers DSL Structurizr, répartir les directives `!docs` / `!adrs` selon le **niveau** de la documentation, sans doublon :
+
+| Directive | Niveau | Attachement |
+|-----------|--------|-------------|
+| `!docs documentation` (racine de `documentation/`) | Documentation d'architecture de solution **globale** | **workspace** (`workspace.dsl`) |
+| `!adrs decisions` | Décisions d'architecture **globales** | **workspace** (`workspace.dsl`) |
+| `!docs documentation/<sous-répertoire>` (ex. `architecture-securite/`) | Documentation **détaillée** | **`softwareSystem` concerné** (ex. `origin`), jamais le workspace |
+
+Rappels Structurizr : `!docs <dir>` importe le Markdown du répertoire indiqué **uniquement** (non récursif pour le Markdown) — racine et sous-répertoire ne se recouvrent donc pas (pas de doublon) ; `!docs` / `!adrs` s'attachent au **contexte parent** (workspace, software system ou container). **Zéro doublon** : une directive à un seul endroit.
+
 ### `models/`
 
 **Contient** : Les modèles de diagrammes (fichiers source).
