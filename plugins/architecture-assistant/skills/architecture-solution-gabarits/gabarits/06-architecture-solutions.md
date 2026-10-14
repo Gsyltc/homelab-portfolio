@@ -23,7 +23,13 @@ ordre_presentation: 6
 
 <!-- 
 Cette section décrit **l'architecture de solution** : la solution dans son écosystème global (systèmes logiciels, acteurs, systèmes externes, intégrations), **à haut niveau**.
-**L'architecture logicielle** de chaque système logiciel est documentée **séparément** dans `architecture-detaillee/<software_system>/` (un document d'architecture détaillée par système logiciel : composants, données, infrastructure, sécurité, défauts).
+**L'architecture détaillée** de chaque système logiciel est documentée **séparément** sous `architecture-detaillee/<software_system>/`, répertoire organisé en **quatre sous-répertoires** (ordre NON NÉGOCIABLE) :
+  - `architecture-logicielle/` — architecture logicielle détaillée (composants, séquences, défauts) ;
+  - `architecture-infra/` — architecture infrastructure et DevOps détaillée ;
+  - `architecture-donnees/` — architecture de données détaillée ;
+  - `architecture-securite/` — architecture de sécurité détaillée.
+**Ce qui relève du détail logiciel.** Passent en architecture détaillée logicielle (fichiers dédiés sous `architecture-detaillee/<software_system>/architecture-logicielle/`), **hors** de cette vue solution haut niveau : les éléments `conteneurs / sous-systèmes` de l'architecture ayant une documentation détaillée. Exemple : un `softwareSystem` possède un conteneur/sous-système `SYS-001` avec une documentation dédiée → c'est de l'architecture détaillée.
+**Le modèle reste la source de vérité.** L'architecture détaillée d'un `softwareSystem` (ou conteneur de 1er rang) doit **être portée dans le modèle C4/Structurizr** (`models/`, `views/`) — conteneurs et composants modélisés comme éléments de 1er ordre, pas en simple prose Markdown. Cette DAS (table des conteneurs, renvois, `architecture-detaillee/<software_system>/`) **reflète** ce modèle.
 Les diagrammes de cette section restent **à haut niveau** ; les diagrammes détaillés (composants, séquences, données, déploiement) sont **ajoutés à la demande** dans les documents d'architecture détaillée. Chaque décision d'architecture est tracée dans un ADR et chaque patron retenu est référencé dans la matrice de suivi du `02-objectifs.md`.
 -->
 
@@ -33,7 +39,7 @@ Les diagrammes de cette section restent **à haut niveau** ; les diagrammes dét
 
 ### Liste des diagrammes d'architecture
 
-<!-- Les diagrammes de cette section sont **à haut niveau** (écosystème, contexte des systèmes logiciels). Les diagrammes détaillés sont ajoutés **à la demande** dans les documents d'architecture détaillée (`architecture-detaillee/<software_system>/`) et référencés ici. -->
+<!-- Les diagrammes de cette section sont **à haut niveau** (écosystème, contexte des systèmes logiciels). Les diagrammes détaillés sont ajoutés **à la demande** dans les documents d'architecture détaillée (`architecture-detaillee/<software_system>/`) et référencés ici. **Index des diagrammes exhaustif** : l'index des diagrammes du `001` (Tab. 7) doit couvrir **à la fois** les diagrammes de l'architecture de solution **et** ceux des architectures détaillées, la colonne « Fichier » pointant la bonne vue (`06` pour la solution, `architecture-detaillee/<software_system>/…` pour le détail). -->
 
 | ID      | Type                          | Niveau | Description                                                          |
 | ------- | ----------------------------- | ------ | -------------------------------------------------------------------- |
@@ -63,17 +69,42 @@ Les diagrammes de cette section restent **à haut niveau** ; les diagrammes dét
 
 **Tableau 22. Liste des acteurs**
 
-#### Liste des systèmes
+#### Liste des systèmes / conteneurs logiques
 
-<!-- Un système logiciel par ligne. Le document d'architecture détaillée de chaque système est référencé dans la dernière colonne. -->
+<!--
+**Chapeau de lecture (obligatoire, à conserver au-dessus de la table).** Expliquer au lecteur humain, avant la table :
+(a) **ce qu'est la table** : le catalogue des **conteneurs de 1er rang** de la solution (systèmes logiciels et conteneurs logiques du diagramme système / de contexte) ;
+(b) **la granularité** : une ligne par **conteneur de 1er rang**. Les **composants C4** d'un conteneur composite n'ont **pas** de ligne propre : ils redescendent au rang de composant **sous la ligne de leur conteneur**, tout en restant référencés par identifiant (`SYS-xxx`) pour la traçabilité ;
+(c) **comment trouver la doc détaillée** : le **nom** d'un conteneur disposant d'une architecture détaillée est un **lien Markdown** vers le document correspondant (`architecture-detaillee/<software_system>/architecture-logicielle/…`) — la table est le **pont unique** solution ↔ détaillé ;
+(d) **l'index complet des sujets non-conteneur** : les sujets transverses d'architecture détaillée sans conteneur dédié sont listés dans la section « Architecture détaillée — renvois » juste sous la table ;
+(e) **les absences volontaires** : signaler ici les conteneurs volontairement non documentés en détail (ex. `SYS-020`) pour qu'aucune absence ne soit prise pour un oubli.
+Cette table remplace tout « sommaire des conteneurs » séparé (pas de table-sommaire doublon).
+-->
 
-| ID      | Nom du système             | Description                         | Architecture détaillée                                                              |
-| ------- | -------------------------- | ----------------------------------- | ----------------------------------------------------------------------------------- |
-| SYS-001 | Application 1              | Système logiciel permettant         | `architecture-detaillee/software_system_1/0000-document-architecture-detatillee.md` |
-| SYS-002 | Application 2              | Système logiciel                    | `architecture-detaillee/software_system_2/0000-document-architecture-detatillee.md` |
-| SYS-003 | Active Directory - Alithya | Gestionnaire d'identités et d'accès | —                                                                                   |
+| ID | Nom du conteneur / système | Description | Architecture détaillée |
+| ------- | -------------------------- | ----------- | ---------------------- |
+| SYS-001 | [Application 1](../architecture-detaillee/software_system_1/architecture-logicielle/01-application-1.md) | Système logiciel permettant | Oui — nom = lien |
+| SYS-002 | [Application 2](../architecture-detaillee/software_system_2/architecture-logicielle/01-application-2.md) | Système logiciel | Oui — nom = lien |
+| SYS-003 | Active Directory - Alithya | Gestionnaire d'identités et d'accès | — (système externe, pas de détail) |
 
-**Tableau 23. Liste des systèmes applicatifs**
+<!--
+**Composants C4 sous leur conteneur.** Lorsqu'un conteneur de 1er rang est composite, lister ses composants C4 **sous** sa ligne (sous-liste ou lignes indentées), jamais comme lignes de 1er rang de la table. Exemple de forme :
+- SYS-001 — Application 1
+  - SYS-005 — Composant A (composant C4 de SYS-001)
+  - SYS-006 — Composant B (composant C4 de SYS-001)
+Vérifier la **complétude** : chaque conteneur de 1er rang présent ; aucun composant promu en ligne de 1er rang.
+-->
+
+**Tableau 23. Liste des systèmes / conteneurs logiques**
+
+#### Architecture détaillée — renvois
+
+<!--
+Section **compacte** de renvois vers l'architecture détaillée, placée **directement sous la table des conteneurs**. Elle complète les liens de nom de la table pour les **sujets transverses d'architecture détaillée sans conteneur dédié** (ex. externalisation d'un gateway, routeur IA local, registre d'interfaces/API, mémoire par couple). Aucun document d'architecture détaillée ne doit être **orphelin** de la navigation : il est atteignable soit par un lien de nom dans la table (conteneurs), soit par un renvoi ici (sujets transverses). Lorsque les paragraphes de renvoi des sections migrées existaient dans ce fichier, les **retirer** : la navigation vers le détail passe exclusivement par la table (liens de nom) et cette section de renvois.
+
+- [`architecture-detaillee/<software_system>/architecture-logicielle/02-sujet-transverse-1.md`](../architecture-detaillee/software_system_1/architecture-logicielle/02-sujet-transverse-1.md) — <description courte du sujet transverse>
+- [`architecture-detaillee/<software_system>/architecture-logicielle/03-sujet-transverse-2.md`](../architecture-detaillee/software_system_1/architecture-logicielle/03-sujet-transverse-2.md) — <description courte du sujet transverse>
+-->
 
 ### Software System 1 (SYS-001) — Diagramme de contexte (DIA-002)
 
@@ -88,7 +119,7 @@ Les diagrammes de cette section restent **à haut niveau** ; les diagrammes dét
 #### Architecture détaillée — Software System 1 (SYS-001)
 
 <!-- 
-Les composants, le modèle de données, l'infrastructure et la sécurité du Software System 1 sont documentés dans `architecture-detaillee/software_system_1/` (introduction `0001-introduction.md`, composants `0005-composants.md`, base de données `0006-database.md`, infrastructure `0007-infrastructure.md`, sécurité `0008-securite.md`). Les diagrammes détaillés sont ajoutés à la demande dans ces documents.
+L'architecture détaillée du Software System 1 est documentée sous `architecture-detaillee/software_system_1/`, répartie dans ses quatre sous-répertoires : `architecture-logicielle/` (composants, séquences), `architecture-infra/` (infrastructure et DevOps), `architecture-donnees/` (modèle de données), `architecture-securite/` (sécurité). Le **nom** du conteneur dans la table « Liste des systèmes / conteneurs logiques » (Tab. 23) est un **lien** vers la doc logicielle détaillée. Les diagrammes détaillés sont ajoutés à la demande dans ces documents et indexés dans le `001`. Rappel : l'architecture détaillée est portée dans le modèle C4/Structurizr (`models/`, `views/`), source de vérité.
 -->
 
 ### Software System 2 (SYS-002) — Diagramme de contexte (DIA-003)
@@ -104,13 +135,13 @@ Les composants, le modèle de données, l'infrastructure et la sécurité du Sof
 #### Architecture détaillée — Software System 2 (SYS-002)
 
 <!-- 
-Les composants, le modèle de données, l'infrastructure et la sécurité du Software System 2 sont documentés dans `architecture-detaillee/software_system_2/` (introduction `0001-introduction.md`, composants `0005-composants.md`, base de données `0006-database.md`, infrastructure `0007-infrastructure.md`, sécurité `0008-securite.md`). Les diagrammes détaillés sont ajoutés à la demande dans ces documents.
+L'architecture détaillée du Software System 2 est documentée sous `architecture-detaillee/software_system_2/`, répartie dans ses quatre sous-répertoires : `architecture-logicielle/` (composants, séquences), `architecture-infra/` (infrastructure et DevOps), `architecture-donnees/` (modèle de données), `architecture-securite/` (sécurité). Le **nom** du conteneur dans la table « Liste des systèmes / conteneurs logiques » (Tab. 23) est un **lien** vers la doc logicielle détaillée. Les diagrammes détaillés sont ajoutés à la demande dans ces documents et indexés dans le `001`. Rappel : l'architecture détaillée est portée dans le modèle C4/Structurizr (`models/`, `views/`), source de vérité.
 -->
 
 ### Scénarios d'exécution (Runtime View)
 
 <!-- 
-Décrire les **scénarios d'exécution critiques** de la solution : comment les systèmes logiciels, les acteurs et les systèmes externes interagissent à l'exécution pour produire les principaux comportements attendus. Cette vue correspond au Runtime View (arc42 §6) au niveau solution ; les séquences détaillées au niveau composants sont ajoutées à la demande dans `architecture-detaillee/<software_system>/`.
+Décrire les **scénarios d'exécution critiques** de la solution : comment les systèmes logiciels, les acteurs et les systèmes externes interagissent à l'exécution pour produire les principaux comportements attendus. Cette vue correspond au Runtime View (arc42 §6) au niveau solution ; les séquences détaillées au niveau composants sont ajoutées à la demande dans `architecture-detaillee/<software_system>/architecture-logicielle/`.
 
 - SC-001 — <Nom du scénario 1 : <description de l'enchaînement à l'exécution, acteurs et systèmes impliqués>
 - SC-002 — <Nom du scénario 2 : <description de l'enchaînement à l'exécution, acteurs et systèmes impliqués>
@@ -132,7 +163,7 @@ Décrire les **scénarios d'exécution critiques** de la solution : comment les 
 
 ### Défauts d'architecture
 
-<!-- Faire la liste des **défauts d'architecture de la solution** (niveau solution). Les défauts logiciels (détaillés) sont documentés dans `architecture-detaillee/<software_system>/0010-defaut-architecture.md`. -->
+<!-- Faire la liste des **défauts d'architecture de la solution** (niveau solution). Les défauts logiciels (détaillés) sont documentés sous `architecture-detaillee/<software_system>/architecture-logicielle/`. -->
 
 | ID      | Liste des défauts | Description |
 | ------- | ----------------- | ----------- |
@@ -211,18 +242,18 @@ Cette section documente l'**évaluation de l'architecture de la solution** (conf
 ### Satisfaction exigences → composants/vues
 
 <!-- 
-Cette section établit la **matrice de satisfaction** des exigences par l'architecture : pour chaque exigence fonctionnelle (`UC-xxx` du `03-besoins_affaires_exigences.md`) et non-fonctionnelle (`NFR-xxx` du `02-objectifs.md`), identifier le ou les **composants** (`SYS-xxx` du `06` et composants d'`architecture-detaillee/`) et les **vues** où elle est traitée, avec un **statut de couverture**. Elle complète la matrice de suivi du `02-objectifs.md` (patrons ↔ exigences), la traçabilité exigences/UC → tests du `13-plan-qualite.md` et le mappage préoccupations → vues du `001`. La traçabilité est **bidirectionnelle** (exigence → composant/vue, et composant → exigences satisfaites).
+Cette section établit la **matrice de satisfaction** des exigences par l'architecture : pour chaque exigence fonctionnelle (`UC-xxx` du `03-besoins_affaires_exigences.md`) et non-fonctionnelle (`NFR-xxx` du `02-objectifs.md`), identifier le ou les **composants** (`SYS-xxx` du `06` et composants d'`architecture-detaillee/<software_system>/architecture-logicielle/`) et les **vues** où elle est traitée, avec un **statut de couverture**. Elle complète la matrice de suivi du `02-objectifs.md` (patrons ↔ exigences), la traçabilité exigences/UC → tests du `13-plan-qualite.md` et le mappage préoccupations → vues du `001`. La traçabilité est **bidirectionnelle** (exigence → composant/vue, et composant → exigences satisfaites).
 -->
 
 #### Matrice de satisfaction exigences → composants/vues
 
 <!-- 
-Une ligne par exigence. Le **composant** est référencé par son système (`SYS-xxx`) et/ou son composant détaillé (`architecture-detaillee/<software_system>/`). La **vue** précise où l'exigence est traitée (vue contexte `DIA-xxx`, vue composants `0004-architecture-applicative.md`, vue exécution `SC-xxx`, vue sécurité `11-securite.md`, vue données `10-cycle_vie_donnees.md`, vue infrastructure `09-deploiement.md`). Statut : **Couvert / Partiel / Non couvert**.
+Une ligne par exigence. Le **composant** est référencé par son système (`SYS-xxx`) et/ou son composant détaillé (`architecture-detaillee/<software_system>/architecture-logicielle/`). La **vue** précise où l'exigence est traitée (vue contexte `DIA-xxx`, vue composants d'`architecture-logicielle/`, vue exécution `SC-xxx`, vue sécurité `architecture-securite/` ou `11-securite.md`, vue données `architecture-donnees/` ou `10-cycle_vie_donnees.md`, vue infrastructure `architecture-infra/` ou `09-deploiement.md`). Statut : **Couvert / Partiel / Non couvert**.
 -->
 | Exigence | Composant(s) satisfaisant(s) | Vue(s) où traitée | Statut de couverture |
 | ---------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- | -------------------- |
-| UC-001 | SYS-001 — `software_system_1` (composants `web_apps`, `database` du `0005-composants.md`) | Vue contexte (DIA-002) ; vue composants (`0004-architecture-applicative.md`) | Couvert |
-| NFR-001 | SYS-001 — `09-deploiement.md` (INF-001) ; `11-securite.md` | Vue infrastructure (`0007-infrastructure.md`) ; vue sécurité (`11-securite.md`) | Partiel |
+| UC-001 | SYS-001 — Application 1 (composants détaillés sous `architecture-detaillee/software_system_1/architecture-logicielle/`) | Vue contexte (DIA-002) ; vue composants (`architecture-logicielle/`) | Couvert |
+| NFR-001 | SYS-001 — `09-deploiement.md` (INF-001) ; `11-securite.md` | Vue infrastructure (`architecture-detaillee/software_system_1/architecture-infra/`) ; vue sécurité (`architecture-securite/`, `11-securite.md`) | Partiel |
 | ... | ... | ... | ... |
 
 **Tableau 73. Matrice de satisfaction exigences → composants/vues**
@@ -230,16 +261,16 @@ Une ligne par exigence. Le **composant** est référencé par son système (`SYS
 #### Traçabilité inverse — composant → exigences satisfaites
 
 <!-- 
-Vue inversée : pour chaque composant (`SYS-xxx` / composant d'`architecture-detaillee/`), lister les exigences (`UC-xxx` / `NFR-xxx`) qu'il satisfait. Toute exigence en statut **Non couvert** (aucun composant, aucune vue) constitue un **écart** à traiter dans l'évaluation de l'architecture (`06`) et le plan de qualité (`13-plan-qualite.md`).
+Vue inversée : pour chaque composant (`SYS-xxx` / composant d'`architecture-detaillee/<software_system>/architecture-logicielle/`), lister les exigences (`UC-xxx` / `NFR-xxx`) qu'il satisfait. Toute exigence en statut **Non couvert** (aucun composant, aucune vue) constitue un **écart** à traiter dans l'évaluation de l'architecture (`06`) et le plan de qualité (`13-plan-qualite.md`).
 -->
 
 | Composant                                              | Exigences satisfaites | Statut de couverture |
 | ------------------------------------------------------ | --------------------- | -------------------- |
-| SYS-001 — `software_system_1` (`web_apps`, `database`) | UC-001, NFR-001       | Couvert              |
+| SYS-001 — Application 1 (composants détaillés sous `architecture-detaillee/software_system_1/architecture-logicielle/`) | UC-001, NFR-001       | Couvert              |
 | ...                                                    | ...                   | ...                  |
 
 **Tableau 74. Traçabilité inverse — composant → exigences satisfaites**
 
 <!-- 
-Maintenir cette matrice à chaque évolution des exigences (`02`, `03`), de l'architecture (`06`, `architecture-detaillee/`) ou du plan de qualité (`13`). Référencer les écarts de couverture dans les critères d'évaluation (`EVAL-xxx` du `06`) et les ADR concernés.
+Maintenir cette matrice à chaque évolution des exigences (`02`, `03`), de l'architecture (`06`, `architecture-detaillee/<software_system>/`) ou du plan de qualité (`13`). Référencer les écarts de couverture dans les critères d'évaluation (`EVAL-xxx` du `06`) et les ADR concernés.
 -->

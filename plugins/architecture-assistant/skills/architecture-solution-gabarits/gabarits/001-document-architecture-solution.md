@@ -154,7 +154,7 @@ La documentation d'architecture de solution est découpée en fichiers Markdown 
 ## Liste des images et diagrammes
 
 <!--
-Index des diagrammes de la documentation avec le fichier et la section où ils se trouvent. À maintenir à chaque ajout ou modification d'un diagramme. Les diagrammes sont générés en code (PlantUML, Mermaid, Structurizr, BPMN, C4), réutilisent le thème du projet (répertoire `theme/`) lorsqu'il est disponible, et sont référencés ici. Ne pas inscrire de mention de génération d'outil (p. ex. « généré avec … ») dans la documentation.
+Index des diagrammes de la documentation avec le fichier et la section où ils se trouvent. À maintenir à chaque ajout ou modification d'un diagramme. **Couverture exhaustive** : cet index couvre **à la fois** les diagrammes de l'architecture de **solution** (`06`) **et** ceux des **architectures détaillées** (`architecture-detaillee/<software_system>/…`), la colonne « Fichier » pointant la bonne vue. Les diagrammes sont générés en code (PlantUML, Mermaid, Structurizr, BPMN, C4), réutilisent le thème du projet (répertoire `theme/`) lorsqu'il est disponible, et sont référencés ici. Ne pas inscrire de mention de génération d'outil (p. ex. « généré avec … ») dans la documentation. Ne pas inscrire de SHA de commit ni d'identifiant de tâche de suivi dans la documentation (conserver versions et références OpenSpec).
 -->
 
 | Fichier                        | Section                           | Diagramme                 | Description                       |

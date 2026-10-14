@@ -129,7 +129,7 @@ Préciser les **exigences techniques d'archivage** : stockage **WORM** (write on
 ### Modèle d'information de la solution
 
 <!-- 
-Cette section décrit le **modèle d'information de la solution** à haut niveau : les entités métier clés (`ENT-001`, …), leurs relations et les flux de données entre entités et systèmes. Elle se relie au **cycle de vie des données** (`DON-xxx` : classification, conservation, épuration, archivage), aux **volumétries** (`12-volumetries.md`) et aux modèles de données détaillés (`architecture-detaillee/<software_system>/0006-database.md`).
+Cette section décrit le **modèle d'information de la solution** à haut niveau : les entités métier clés (`ENT-001`, …), leurs relations et les flux de données entre entités et systèmes. Elle se relie au **cycle de vie des données** (`DON-xxx` : classification, conservation, épuration, archivage), aux **volumétries** (`12-volumetries.md`) et aux modèles de données détaillés (sous `architecture-detaillee/<software_system>/architecture-donnees/`).
 -->
 ![Diagramme du modèle d'information](embed:information_model)
 
