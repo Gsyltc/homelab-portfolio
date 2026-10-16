@@ -148,7 +148,7 @@ La documentation d'architecture de solution est découpée en fichiers Markdown 
 | `13-plan-qualite.md`                    | Plan de qualité                                                                                                              |
 | `14-preventions-et-resilience.md`       | Prévention, reprise après sinistre, résilience                                                                               |
 | `15-concepts-transverses.md`            | Concepts transverses (communication, erreurs, transactions, cache, persistance, observabilité, configuration, accessibilité) |
-| `16-questions-decisions.md`             | Questions en attente et décisions attendues (sous-sections par domaine : logiciel, sécurité, données, infrastructure) ; **dernier fichier de la liste**  |
+| `16-questions-decisions.md`             | Invariants hérités, questions en attente et décisions attendues (sous-sections par domaine : logiciel, sécurité, données, infrastructure) ; **dernier fichier de la liste**  |
 
 **Tableau 6. Structure de la documentation**
 
