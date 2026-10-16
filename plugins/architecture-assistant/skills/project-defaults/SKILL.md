@@ -57,7 +57,7 @@ ${ROOT_DIRECTORY}/<nom-client>/<nom-projet>/
 **Conventions** :
 - Utiliser les gabarits de la skill `architecture-solution-gabarits` pour la structure des documents
 - Chaque document d'architecture détaillée est dans un sous-répertoire dédié par système logiciel
-- La DAS principale (fichiers `001` à `15`) se trouve à la racine de `documentation/`
+- La DAS principale (fichiers `001` à `16`) se trouve à la racine de `documentation/`
 
 #### Répartition `!docs` / `!adrs` en DSL (Structurizr) : documentation globale ↔ détaillée
 

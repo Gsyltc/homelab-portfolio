@@ -21,7 +21,7 @@ ordre_presentation: null
 
 <!--
 Page de garde du document d'architecture de solution.
-Ce fichier est le point d'entrée de la documentation d'architecture et reste stable : les contenus détaillés vivent dans les fichiers thématiques `01-` à `15-`. Conserver le découpage des fichiers et la structure des sections.
+Ce fichier est le point d'entrée de la documentation d'architecture et reste stable : les contenus détaillés vivent dans les fichiers thématiques `01-` à `16-`. Conserver le découpage des fichiers et la structure des sections.
 -->
 
 ## Métadonnées du document
@@ -66,7 +66,7 @@ L'architecte de solution intégrateur assure la cohérence globale de l'ensemble
 | Rôles                              | Nom | Implication (R/A/C/I) | Documents concernés          |
 | ---------------------------------- | --- | --------------------- | ---------------------------- |
 | Architecte de solution intégrateur |     | R                     | DAS complet, arrimage global |
-| Architecte de solution             |     | R / C                 | Thématiques `01` à `15`      |
+| Architecte de solution             |     | R / C                 | Thématiques `01` à `16`      |
 | Architecte logiciel                |     | C                     | `06`, `09`, `14`             |
 | Architecte de données              |     | C                     | `10`, `13`                   |
 | Architecte de sécurité             |     | C                     | `08`, `11`, `15`             |
@@ -148,6 +148,7 @@ La documentation d'architecture de solution est découpée en fichiers Markdown 
 | `13-plan-qualite.md`                    | Plan de qualité                                                                                                              |
 | `14-preventions-et-resilience.md`       | Prévention, reprise après sinistre, résilience                                                                               |
 | `15-concepts-transverses.md`            | Concepts transverses (communication, erreurs, transactions, cache, persistance, observabilité, configuration, accessibilité) |
+| `16-questions-decisions.md`             | Questions en attente et décisions attendues (sous-sections par domaine : logiciel, sécurité, données, infrastructure) ; **dernier fichier de la liste**  |
 
 **Tableau 6. Structure de la documentation**
 
