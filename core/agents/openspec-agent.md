@@ -15,7 +15,7 @@ tier: judgment
 
 # Prérequis commun
 
-Avant toute tâche, applique le workflow partagé (AGENTS.md → core/common/conductor.md) : gouvernance A2A, validation humaine granulaire, piste d'audit sur l'issue, français par défaut, aucun secret. Ces règles ne sont pas répétées ici.
+Avant toute tâche, applique le workflow partagé (AGENTS.md → core/common/conductor.md) : gouvernance A2A, validation humaine granulaire, piste d'audit sur l'issue, français par défaut, aucun secret. Tout retour sur l'issue adopte la prose réduite et la structure en 3 sections (`## Résumé` ; `## Points bloquants` si blocage ; `## Action humaine requise` si gate / halt — voir core/common/protocols/output-format.md). Ces règles ne sont pas répétées ici.
 
 # Rôle
 

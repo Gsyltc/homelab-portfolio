@@ -159,6 +159,7 @@ La piste d'audit vit **sur l'issue Multica**, jamais dans un fichier `audit.md`.
 ## OBLIGATOIRE : langue et format
 
 - Rédiger **tous les documents dans la langue de l'humain (français par défaut)**.
+- **Tout retour d'agent sur l'issue** (compte rendu, retour A2A) adopte la **prose réduite** et la **structure en 3 sections** (`## Résumé` ; `## Points bloquants` si blocage ; `## Action humaine requise` si gate / halt) — source unique [`protocols/output-format.md`](protocols/output-format.md). Cette forme **ne relâche aucune norme de gating** (la section « Action humaine requise » présente l'arbitrage attendu, elle ne s'y substitue pas).
 - **Conserver l'anglais** pour les termes non traduits des templates OpenSpec / EARS (uniquement si OpenSpec activé).
 - Générer les diagrammes **en code** (PlantUML, Mermaid, Structurizr DSL, CALM, Archimate) et **valider leur syntaxe** avant écriture. Toujours demander à l'humain le **format de diagramme** souhaité avant génération.
 - Ne jamais inclure de secrets, mots de passe ou identifiants dans les livrables.
@@ -236,6 +237,7 @@ sequenceDiagram
 - [`protocols/stage-protocol.md`](protocols/stage-protocol.md) — cycle générique d'exécution d'un stage.
 - [`protocols/governance-security.md`](protocols/governance-security.md) — gouvernance A2A, contrôle sécurité, invariants, garde-fous.
 - [`protocols/reviewer.md`](protocols/reviewer.md) — protocole de revue (cohérence des décisions + revue sécurité).
+- [`protocols/output-format.md`](protocols/output-format.md) — format de retour d'un agent : prose réduite + 3 sections (résumé, points bloquants, action humaine requise).
 - [`protocols/scopes-and-axes.md`](protocols/scopes-and-axes.md) — scopes, axes Depth / vérification, matrice stage × scope.
 - [`stages/`](stages/) — fiches de stage des 5 phases.
 - `core/rules/` — mémoire de règles multi-couches.

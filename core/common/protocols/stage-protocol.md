@@ -16,7 +16,7 @@ flowchart TB
       RS[Step 2 - Revue de securite]
     end
     subgraph S3[Stage 3 - Finalisation par le specialiste]
-      CR[Step 1 - Compte rendu, prose optimisee] --> FI[Step 2 - Finalisation de l issue, gate si requis]
+      CR[Step 1 - Compte rendu<br/>prose reduite - 3 sections] --> FI[Step 2 - Finalisation de l issue, gate si requis]
     end
     SP -->|mention| RC
     RC -->|verdict au specialiste| SP
@@ -33,7 +33,7 @@ flowchart TB
   - *Step 1 — Revue de cohérence* : le reviewer mentionne le spécialiste. **OK** ⇒ le spécialiste enchaîne le Step 2 (sollicite le reviewer de sécurité). **RENVOI** ⇒ le spécialiste corrige puis re-sollicite le reviewer de cohérence.
   - *Step 2 — Revue de sécurité* : le reviewer mentionne le spécialiste. **OK** ⇒ le spécialiste passe au Stage 3. **RENVOI** ⇒ le spécialiste corrige puis re-sollicite le reviewer de sécurité.
 - **Stage 3 — Finalisation (par le spécialiste).**
-  - *Step 1* : compte rendu, prose optimisée.
+  - *Step 1* : compte rendu en **prose réduite et 3 sections** (`## Résumé` · `## Points bloquants` *(si blocage)* · `## Action humaine requise` *(si gate / halt)*) — forme imposée par [`output-format.md`](output-format.md), source unique.
   - *Step 2* : finalisation de l'issue (gate humain si requis), puis mention du coordinateur (lien de retour actif).
 
 > **Fenêtre de pose du lien de retour vers le coordinateur (invariant, durcissement anti-wake parasite).** Un spécialiste (auteur du livrable) ne pose un **lien de mention actif** vers le coordinateur (`[@<Nom coordinateur>](mention://agent/<uuid>)`) qu'au **Stage 3**, une fois le **portail de revues du Stage 2 clos** — tous les verdicts requis au vert (cohérence puis sécurité) et réserves intégrées. Pendant les **Stages 1 et 2**, le coordinateur est désigné **en texte clair uniquement** (« reviens vers moi, Architecture Solution & Intégration »), **jamais par un lien actif**. Un lien actif vers le coordinateur posé **avant** la clôture des revues est un **réveil parasite** et constitue un **écart de flux A2A** (observé sur ORIG-176 et ORIG-177, où le commentaire de mise en revue réveillait prématurément le coordinateur). Cette fenêtre **prolonge** la règle « anti-wake parasite » (aucune auto-mention active ; lien de retour posé par l'agent délégataire, UUID résolu dynamiquement — voir [`governance-security.md`](governance-security.md), « Règle A2A ») : elle fixe le ***quand*** du lien de retour, sans en relâcher aucune autre condition.
@@ -90,7 +90,7 @@ Dès qu'un stage **produit ou modifie une architecture** (ou une surface de séc
 ## Checklist de sortie de stage (`mode: subagent | pipeline | mob`) — non contournable
 Un stage délégué n'est considéré **terminé** QUE lorsque les trois cases sont cochées, **dans cet ordre** — c'est le **point de passage unique** que tout agent délégué franchit, quelle que soit sa fonction :
 
-1. ☑ **Livrable produit et contrôlé** — artefacts `produces` écrits, décision structurante tracée, piste d'audit posée sur l'issue.
+1. ☑ **Livrable produit et contrôlé** — artefacts `produces` écrits, décision structurante tracée, piste d'audit posée sur l'issue. Le **compte rendu de retour** est rédigé en **prose réduite et 3 sections** (`## Résumé` ; `## Points bloquants` si blocage ; `## Action humaine requise` si gate / halt) — forme imposée par [`output-format.md`](output-format.md) (source unique), sans affaiblir aucune norme de gating.
 2. ☑ **Issue en `in_review` + lien de retour ACTIF posé** — le commentaire de retour se termine par `[@<Nom assigneur>](mention://agent/<uuid>)`, UUID résolu via `multica agent list --output json` (jamais copié / codé en dur), jamais une auto-mention. C'est ce lien qui enqueue le run de reprise. **Cible du retour** : le coordinateur pour un agent de production délégué ; le **spécialiste** (auteur du livrable) pour un **reviewer** — jamais un autre reviewer ni le coordinateur (voir [`reviewer.md`](reviewer.md), encadré « Le reviewer retourne toujours au spécialiste »). **Fenêtre de pose** : pour un spécialiste, le lien actif vers le **coordinateur** ne se pose qu'au **Stage 3**, portail de revues du Stage 2 clos — jamais à la mise en revue des Stages 1-2 (voir l'encadré « Fenêtre de pose du lien de retour vers le coordinateur » ci-dessus) ; pendant les revues, le spécialiste met l'issue en `in_review` et sollicite le reviewer suivant **sans** poser de lien actif vers le coordinateur.
 3. ☑ **`trigger_outcomes` vérifié** — la mention a bien déclenché le run attendu ; sinon (`blocked` / `coalesced` / `deferred`) → **halt-and-ask** sur l'issue, ne pas conclure.
 
