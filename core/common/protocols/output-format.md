@@ -25,17 +25,21 @@ Synthèse **concise** des tâches effectuées, en **puces**. Une puce = un résu
 
 ### `## Action humaine requise`
 
-**Conditionnelle — n'apparaît que si une action humaine est effectivement nécessaire.** Deux déclencheurs, l'un suffit :
+**Conditionnelle, et biconditionnelle — elle apparaît SI ET SEULEMENT SI une action humaine est effectivement nécessaire, et alors TOUJOURS avec un lien de mention actif de l'humain.** Deux déclencheurs, l'un suffit :
 
 - un **point bloquant** (de la section 2) qui **requiert un arbitrage humain** pour être levé (halt-and-ask) ; **et / ou**
 - un **gate de validation humaine** à franchir pour continuer le workflow.
 
-Sans point bloquant à arbitrer **ni** gate à franchir, **omettre entièrement cette section** (ne rien écrire de superflu). Cette section **n'affaiblit aucune norme de gating** : elle en est la **mise en forme**, pas une dérogation. Pour **chaque** action requise, détailler :
+> ⛔ **Un retour A2A n'est PAS une action humaine requise.** Rendre la main à un **agent** (retour de délégation vers le coordinateur, retour d'un reviewer vers le spécialiste, passation entre agents) est un échange **agent ↔ agent** : il **n'appelle aucune** section « Action humaine requise » et **aucune** mention de l'humain. N'inscris cette section **que** lorsque c'est bien l'**humain** — et pas un agent — qui doit intervenir. Mettre « Action humaine requise » alors que la main revient à un agent est un **écart de gouvernance** (il sollicite l'humain à tort et déclenche une notification injustifiée). Cas typique : un spécialiste qui termine son livrable **rend la main au coordinateur par retour A2A** (clôture par le lien `mention://agent/<uuid>`, **sans** cette section) ; c'est **ensuite le coordinateur**, porteur de la validation humaine granulaire, qui pose la section « Action humaine requise » **avec** la mention humaine s'il faut faire trancher l'humain.
+
+**Mention humaine obligatoire dans la section (non contournable).** Dès que cette section apparaît, elle **doit** porter un **lien de mention actif de l'humain demandeur** `[@Nom](mention://member/<user_id>)` (UUID résolu via `multica workspace member list --output json`, jamais deviné ni remplacé par un placeholder comme `@<humain>`). Une section « Action humaine requise » **sans** mention active de l'humain ne satisfait **pas** l'invariant 6 de [`governance-security.md`](governance-security.md) (« Mention humaine obligatoire dès qu'une action humaine est requise ») et déclenche aussi l'invariant 7 (notification). Réciproquement, **aucune** mention de l'humain hors d'une action humaine réellement attendue.
+
+Sans point bloquant à arbitrer **ni** gate à franchir — et **a fortiori sur un simple retour A2A** —, **omettre entièrement cette section** (ne rien écrire de superflu, ne mentionner aucun humain). Cette section **n'affaiblit aucune norme de gating** : elle en est la **mise en forme**, pas une dérogation. Pour **chaque** action requise, détailler :
 
 - **Problème** — ce qui bloque ou ce qui doit être tranché.
 - **Cause** — l'origine factuelle.
 - **Solutions possibles + recommandation** — les options, et **ta recommandation** explicitement désignée parmi elles.
-- **Gate / norme applicable** — le gate concerné (`light` / `granular` / `explicit`) et le rappel que l'avancée reste conditionnée à l'arbitrage humain ; sur blocage, la **mention humaine obligatoire** et le passage en `blocked` s'appliquent (source unique : [`governance-security.md`](governance-security.md) et la « Checklist de sortie de stage » / « Halt-and-ask » de [`stage-protocol.md`](stage-protocol.md)).
+- **Mention humaine active + Gate / norme applicable** — le lien `[@Nom](mention://member/<user_id>)` de l'humain à solliciter, le gate concerné (`light` / `granular` / `explicit`) et le rappel que l'avancée reste conditionnée à l'arbitrage humain ; sur blocage, la **mention humaine obligatoire** et le passage en `blocked` s'appliquent (source unique : [`governance-security.md`](governance-security.md) et la « Checklist de sortie de stage » / « Halt-and-ask » de [`stage-protocol.md`](stage-protocol.md)).
 
 ## 3. Ce que ce protocole ne change pas (garde-fous)
 
