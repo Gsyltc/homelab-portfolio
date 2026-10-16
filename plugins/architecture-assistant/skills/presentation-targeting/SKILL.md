@@ -9,13 +9,13 @@ Skill de **ciblage de l'information** pour préparer une présentation client à
 
 Le ciblage porte **exclusivement** sur les livrables d'architecture validés du projet, organisés selon `project-defaults` :
 
-- `documentation/` — la **Documentation d'Architecture de Solution (DAS)**, découpée en fichiers fixes `001` et `01`–`15` (gabarits `architecture-solution-gabarits`), plus les **sous-répertoires d'architecture détaillée** : `architecture-logicielle/`, `architecture-donnee/`, `architecture-infra/`, `architecture-securite/` (et d'autres sous-répertoires par domaine/système le cas échéant).
+- `documentation/` — la **Documentation d'Architecture de Solution (DAS)**, découpée en fichiers fixes `001` et `01`–`16` (gabarits `architecture-solution-gabarits`), plus les **sous-répertoires d'architecture détaillée** : `architecture-logicielle/`, `architecture-donnee/`, `architecture-infra/`, `architecture-securite/` (et d'autres sous-répertoires par domaine/système le cas échéant).
 - `decisions/` — les ADR (décisions structurantes).
 - `models/` et `views/` — modèles et vues de diagrammes.
 
 Ne jamais réinventer le contenu : partir de ces documents validés.
 
-> **Présentations techniques** : l'information détaillée se trouve **souvent dans les sous-répertoires de `documentation/`** (ex. `documentation/architecture-securite/` pour le détail sécurité, `architecture-logicielle/` pour le logiciel, `architecture-infra/` pour l'infrastructure). La DAS racine (`01`–`15`) donne la synthèse ; **descendre dans le sous-répertoire de domaine** pour le détail. Cibler d'abord la synthèse, puis le détail.
+> **Présentations techniques** : l'information détaillée se trouve **souvent dans les sous-répertoires de `documentation/`** (ex. `documentation/architecture-securite/` pour le détail sécurité, `architecture-logicielle/` pour le logiciel, `architecture-infra/` pour l'infrastructure). La DAS racine (`01`–`16`) donne la synthèse ; **descendre dans le sous-répertoire de domaine** pour le détail. Cibler d'abord la synthèse, puis le détail.
 
 ## Principe
 
@@ -33,7 +33,7 @@ Le ciblage peut être **granulaire** : sélectionner **un ou plusieurs élément
 
 ## Étape 2 — Repérer les sources par front-matter
 
-- Lire le **front-matter** de chaque fichier de la DAS (`documentation/001`, `01`–`15`) : champs `theme`, `types_presentation`, `domaine`, `sujets`, `sensibilite`, sans charger le corps.
+- Lire le **front-matter** de chaque fichier de la DAS (`documentation/001`, `01`–`16`) : champs `theme`, `types_presentation`, `domaine`, `sujets`, `sensibilite`, sans charger le corps.
 - Filtrer les documents dont `types_presentation` contient le type visé et dont `theme` / `sujets` recoupent les chapitres retenus. Le champ **`sujets` (titres H2/H3)** sert d'ancrage au niveau section/sous-section, pour cibler directement le passage utile.
 - Compléter avec les ADR (`decisions/`) pertinents et les diagrammes (`models/`, `views/`).
 - Construire une **carte de ciblage** thème → document(s) → section(s), en ne retenant que les sources pertinentes.

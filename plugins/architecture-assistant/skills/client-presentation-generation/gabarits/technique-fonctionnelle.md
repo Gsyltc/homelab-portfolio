@@ -6,7 +6,7 @@
 
 ## Sources : DAS racine + sous-répertoires détaillés de `documentation/`
 
-Pour une présentation technique, l'information détaillée se trouve **souvent dans les sous-répertoires de `documentation/`** (architecture détaillée par domaine), en complément des fichiers de synthèse de la DAS racine (`01`–`15`) :
+Pour une présentation technique, l'information détaillée se trouve **souvent dans les sous-répertoires de `documentation/`** (architecture détaillée par domaine), en complément des fichiers de synthèse de la DAS racine (`01`–`16`) :
 
 | Domaine | Synthèse (DAS racine) | Détail (sous-répertoire) |
 |---|---|---|
