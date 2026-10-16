@@ -8,7 +8,6 @@ sujets:
   - Socle normatif
   - Triangle CIA (Confidentialité, Intégrité, Disponibilité)
   - Table du chapitre
-  - Synthèse exécutive
 types_presentation: [securite]
 sensibilite: restreint
 togaf_layer: technology
@@ -17,8 +16,8 @@ ordre_presentation: 0
 ## Analyse de sécurité
 
 <!--
-Fichier d'entrée (`00`) du dossier d'architecture de sécurité détaillée (`documentation/architecture-securite/`). Il cadre la portée de l'analyse, rappelle le socle normatif activé, pose le triangle CIA, donne la table du chapitre (les fichiers `01`→`06`) et une synthèse exécutive.
-Ce dossier est l'**approfondissement** du `11-securite.md` de la DAS (synthèse courte). Renvoyer vers lui, ne pas le dupliquer. Les échelles de risque et les codes `VUL-xxx` / `RISQ-xxx` restent harmonisés avec le `04-risques.md` et le `11-securite.md`.
+Fichier d'entrée (`00`) du dossier d'architecture de sécurité détaillée (`documentation/architecture-securite/`). Il cadre la portée de l'analyse, rappelle le socle normatif activé, pose le triangle CIA et donne la table du chapitre (les fichiers `01`→`06`). **Pas de section « Synthèse exécutive »** (règle d'or 11 de la skill `architecture-securite-gabarits`) : la posture et les priorités sont portées par `06-recommandations-priorisees.md` et la synthèse de `11-securite.md`, atteints par renvoi.
+Ce dossier est l'**approfondissement** du `11-securite.md` de la DAS (synthèse courte). Renvoyer vers lui par **ancre Structurizr** (`documentation/<Software System>#<ancre>`, libellé = nom de section), ne pas le dupliquer. Les échelles de risque et les codes `VUL-xxx` / `RISQ-xxx` restent harmonisés avec le `04-risques.md` et le `11-securite.md`.
 -->
 
 ### Portée et objectifs
@@ -74,28 +73,17 @@ Relier ces propriétés aux catégories STRIDE (`02`) et aux actifs classés (`0
 ### Table du chapitre
 
 <!--
-Donner la table de navigation du dossier `architecture-securite/`. Conserver l'ordre et les noms de fichiers.
+Table de navigation du dossier `architecture-securite/`. Conserver l'ordre et les noms de fichiers du dossier.
+**Renvois au format Structurizr (règles d'or 10 et 11)** : le **Sujet** est un **lien par ancre Structurizr** `documentation/<Software System>#<ancre>` dont le **libellé est le nom de la section** visée (jamais un nom de fichier) ; **aucune** colonne « Fichier ». Remplacer `<Software System>` par le nom réel du système (URL-encodé) et l'ancre par le slug du titre visé (voir la règle de slug d'ancre).
 -->
 
-| Fichier | Contenu |
-| ------- | ------- |
-| `00-analyse-securite.md` | Portée, socle normatif, triangle CIA, table du chapitre, synthèse exécutive |
-| `01-surfaces-et-actifs.md` | Acteurs / identités, actifs classés CIA, frontières de confiance, surfaces `S1…Sn` |
-| `02-menaces-stride.md` | Matrice de synthèse STRIDE par surface + analyse détaillée par surface |
-| `03-risques-owasp.md` | Table OWASP Top 10 + fiche par risque `A01…A10` croisée avec les surfaces |
-| `04-identites-humaines-vs-agents.md` | Invariant de séparation des identités humaines / charges d'agents |
-| `05-gates-guardrails-escalade.md` | Analyse de la gouvernance (gates / guardrails / escalade) sous l'angle STRIDE / OWASP |
-| `06-recommandations-priorisees.md` | Recommandations consolidées, priorisées `P1`/`P2`/`P3`, à ID stable, sourcées |
+| Sujet | Contenu |
+| ----- | ------- |
+| [Surfaces et actifs](documentation/Software%20System#surfaces-et-actifs) | Acteurs / identités, actifs classés CIA, frontières de confiance, surfaces `S1…Sn` |
+| [Menaces (STRIDE) par surface](documentation/Software%20System#menaces-stride-par-surface) | Matrice de synthèse STRIDE par surface + analyse détaillée par surface |
+| [Risques OWASP Top 10](documentation/Software%20System#risques-owasp-top-10) | Table OWASP Top 10 + fiche par risque `A01…A10` croisée avec les surfaces |
+| [Identités humaines vs agents](documentation/Software%20System#identites-humaines-vs-agents) | Invariant de séparation des identités humaines / charges d'agents |
+| [Gates, guardrails et escalade](documentation/Software%20System#gates-guardrails-et-escalade) | Analyse de la gouvernance (gates / guardrails / escalade) sous l'angle STRIDE / OWASP |
+| [Recommandations priorisées](documentation/Software%20System#recommandations-priorisees) | Recommandations consolidées, priorisées `P1`/`P2`/`P3`, à ID stable, sourcées |
 
 **Tableau. Table du chapitre d'architecture de sécurité**
-
-### Synthèse exécutive
-
-<!--
-Résumer, en quelques paragraphes et sans jargon superflu :
-  - la **posture de sécurité** globale constatée (points forts, points de vigilance) ;
-  - les **surfaces** les plus exposées (renvoi `S1…Sn` du `01`) ;
-  - les **risques majeurs** (renvoi aux lignes `R01…` du `03` / registre `RISQ-xxx` du `04`) ;
-  - les **recommandations prioritaires** `P1` (renvoi au `06`).
-Cette synthèse est destinée à la lecture rapide ; le détail est dans les fichiers `01`→`06`.
--->

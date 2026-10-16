@@ -46,8 +46,8 @@ Les diagrammes de cette section restent **à haut niveau** ; les diagrammes dét
 | DIA-001 | Diagramme système (Landscape) | Élevé  | Diagramme représentant l'ensemble de l'éco-système global            |
 | DIA-002 | Diagramme de contexte         | Élevé  | Contexte du Software System 1 (SYS-001) et ses interactions directes |
 | DIA-003 | Diagramme de contexte         | Élevé  | Contexte du Software System 2 (SYS-002) et ses interactions directes |
-| DIA-004 | Diagramme de séquence         | Élevé  | Séquence du scénario d'exécution SC-001                              |
-| DIA-005 | Diagramme de séquence         | Élevé  | Séquence du scénario d'exécution SC-002                              |
+| DIA-004 | Diagramme de séquence         | Détaillé | Séquence du scénario SC-001 — **niveau composant, en architecture détaillée** (`architecture-detaillee/<software_system>/architecture-logicielle/`) ; renvoi depuis le `06` |
+| DIA-005 | Diagramme de séquence         | Détaillé | Séquence du scénario SC-002 — **niveau composant, en architecture détaillée** (`architecture-detaillee/<software_system>/architecture-logicielle/`) ; renvoi depuis le `06` |
 
 **Tableau 21. Liste des diagrammes d'architecture**
 
@@ -75,16 +75,17 @@ Les diagrammes de cette section restent **à haut niveau** ; les diagrammes dét
 **Chapeau de lecture (obligatoire, à conserver au-dessus de la table).** Expliquer au lecteur humain, avant la table :
 (a) **ce qu'est la table** : le catalogue des **conteneurs de 1er rang** de la solution (systèmes logiciels et conteneurs logiques du diagramme système / de contexte) ;
 (b) **la granularité** : une ligne par **conteneur de 1er rang**. Les **composants C4** d'un conteneur composite n'ont **pas** de ligne propre : ils redescendent au rang de composant **sous la ligne de leur conteneur**, tout en restant référencés par identifiant (`SYS-xxx`) pour la traçabilité ;
-(c) **comment trouver la doc détaillée** : le **nom** d'un conteneur disposant d'une architecture détaillée est un **lien Markdown** vers le document correspondant (`architecture-detaillee/<software_system>/architecture-logicielle/…`) — la table est le **pont unique** solution ↔ détaillé ;
-(d) **l'index complet des sujets non-conteneur** : les sujets transverses d'architecture détaillée sans conteneur dédié sont listés dans la section « Architecture détaillée — renvois » juste sous la table ;
+(c) **comment trouver la doc détaillée** : le **nom** d'un conteneur disposant d'une architecture détaillée est un **lien Markdown au format Structurizr** `documentation/<Software System>#<ancre>` (jamais un chemin de fichier, jamais une colonne « Fichier ») — la table est le **pont unique** solution ↔ détaillé ;
+(d) **l'index complet des sujets non-conteneur** : les sujets transverses de l'architecture détaillée **logicielle** sans conteneur dédié sont listés dans la section « Architecture détaillée — renvois » juste sous la table ; les volets **données / sécurité / infrastructure** s'atteignent via `10-cycle_vie_donnees.md`, `11-securite.md`, `09-deploiement.md` ;
 (e) **les absences volontaires** : signaler ici les conteneurs volontairement non documentés en détail (ex. `SYS-020`) pour qu'aucune absence ne soit prise pour un oubli.
 Cette table remplace tout « sommaire des conteneurs » séparé (pas de table-sommaire doublon).
+Format de renvoi : voir la skill `architecture-solution-gabarits`, « Renvois vers l'architecture détaillée (format Structurizr) » — slug d'ancre, URL-encodage du nom de système, libellé = nom de section.
 -->
 
 | ID | Nom du conteneur / système | Description | Architecture détaillée |
 | ------- | -------------------------- | ----------- | ---------------------- |
-| SYS-001 | [Application 1](../architecture-detaillee/software_system_1/architecture-logicielle/01-application-1.md) | Système logiciel permettant | Oui — nom = lien |
-| SYS-002 | [Application 2](../architecture-detaillee/software_system_2/architecture-logicielle/01-application-2.md) | Système logiciel | Oui — nom = lien |
+| SYS-001 | [Application 1](documentation/Software%20System%201#vue-ensemble-des-composants) | Système logiciel permettant | Oui — nom = lien (ancre Structurizr) |
+| SYS-002 | [Application 2](documentation/Software%20System%202#vue-ensemble-des-composants) | Système logiciel | Oui — nom = lien (ancre Structurizr) |
 | SYS-003 | Active Directory - Alithya | Gestionnaire d'identités et d'accès | — (système externe, pas de détail) |
 
 <!--
@@ -100,10 +101,14 @@ Vérifier la **complétude** : chaque conteneur de 1er rang présent ; aucun com
 #### Architecture détaillée — renvois
 
 <!--
-Section **compacte** de renvois vers l'architecture détaillée, placée **directement sous la table des conteneurs**. Elle complète les liens de nom de la table pour les **sujets transverses d'architecture détaillée sans conteneur dédié** (ex. externalisation d'un gateway, routeur IA local, registre d'interfaces/API, mémoire par couple). Aucun document d'architecture détaillée ne doit être **orphelin** de la navigation : il est atteignable soit par un lien de nom dans la table (conteneurs), soit par un renvoi ici (sujets transverses). Lorsque les paragraphes de renvoi des sections migrées existaient dans ce fichier, les **retirer** : la navigation vers le détail passe exclusivement par la table (liens de nom) et cette section de renvois.
+Section **compacte** de renvois vers l'architecture détaillée **logicielle**, placée **directement sous la table des conteneurs**. Elle complète les liens de nom de la table pour les **sujets transverses de l'architecture détaillée logicielle sans conteneur dédié** (ex. externalisation d'un gateway, routeur IA local, registre d'interfaces/API, mémoire par couple).
 
-- [`architecture-detaillee/<software_system>/architecture-logicielle/02-sujet-transverse-1.md`](../architecture-detaillee/software_system_1/architecture-logicielle/02-sujet-transverse-1.md) — <description courte du sujet transverse>
-- [`architecture-detaillee/<software_system>/architecture-logicielle/03-sujet-transverse-2.md`](../architecture-detaillee/software_system_1/architecture-logicielle/03-sujet-transverse-2.md) — <description courte du sujet transverse>
+**Périmètre (règle d'or 17).** Cette section ne liste **que** le volet **logiciel** (celui que porte l'architecture de solution désirée). Les autres volets **ne figurent pas ici** : l'architecture détaillée **de données** s'atteint via `10-cycle_vie_donnees.md`, la **sécurité** via `11-securite.md`, l'**infrastructure** via `09-deploiement.md` — chacun renvoyant ensuite vers son propre dossier détaillé (`architecture-detaillee/<software_system>/architecture-donnees|securite|infra/`).
+
+**Format (règle d'or 17 + « Renvois vers l'architecture détaillée (format Structurizr) »).** Chaque renvoi est un **lien Markdown par ancre Structurizr** `documentation/<Software System>#<ancre>` dont le **libellé est le nom de la section** visée — **jamais** un nom ni un chemin de fichier, et **pas** de colonne « Fichier ». Aucun document d'architecture détaillée logicielle ne doit être **orphelin** de la navigation : il est atteignable soit par un lien de nom dans la table (conteneurs), soit par un renvoi ici (sujets transverses). Lorsque des paragraphes de renvoi des sections migrées subsistaient dans ce fichier, les **retirer** : la navigation vers le détail passe exclusivement par la table (liens de nom) et cette section de renvois.
+
+- [Sujet transverse logiciel 1](documentation/Software%20System%201#sujet-transverse-1) — <description courte du sujet transverse>
+- [Sujet transverse logiciel 2](documentation/Software%20System%201#sujet-transverse-2) — <description courte du sujet transverse>
 -->
 
 ### Software System 1 (SYS-001) — Diagramme de contexte (DIA-002)
@@ -119,7 +124,9 @@ Section **compacte** de renvois vers l'architecture détaillée, placée **direc
 #### Architecture détaillée — Software System 1 (SYS-001)
 
 <!-- 
-L'architecture détaillée du Software System 1 est documentée sous `architecture-detaillee/software_system_1/`, répartie dans ses quatre sous-répertoires : `architecture-logicielle/` (composants, séquences), `architecture-infra/` (infrastructure et DevOps), `architecture-donnees/` (modèle de données), `architecture-securite/` (sécurité). Le **nom** du conteneur dans la table « Liste des systèmes / conteneurs logiques » (Tab. 23) est un **lien** vers la doc logicielle détaillée. Les diagrammes détaillés sont ajoutés à la demande dans ces documents et indexés dans le `001`. Rappel : l'architecture détaillée est portée dans le modèle C4/Structurizr (`models/`, `views/`), source de vérité.
+**Renvoi uniquement (règle d'or 5-bis).** Cette sous-section du `06` (vue solution haut niveau, C4 N1/N2) ne contient **que le renvoi** vers l'architecture détaillée logicielle du Software System 1 — **ni description détaillée, ni image embarquée**. Le contenu de niveau composant (C4 N3/N4) vit sous `architecture-detaillee/software_system_1/architecture-logicielle/` (page d'entrée `00-architecture-detaillee.md`), et dans les trois autres volets `architecture-infra/`, `architecture-donnees/`, `architecture-securite/`. Le **nom** du conteneur dans la table « Liste des systèmes / conteneurs logiques » (Tab. 23) est le **lien de nom** (ancre Structurizr) vers la doc logicielle détaillée. Les diagrammes détaillés sont ajoutés à la demande dans ces documents et indexés dans le `001`. Rappel : l'architecture détaillée est portée dans le modèle C4/Structurizr (`models/`, `views/`), source de vérité.
+
+- [Architecture logicielle détaillée](documentation/Software%20System%201#architecture-logicielle-detaillee) — composants, séquences au niveau composant, défauts logiciels
 -->
 
 ### Software System 2 (SYS-002) — Diagramme de contexte (DIA-003)
@@ -135,31 +142,21 @@ L'architecture détaillée du Software System 1 est documentée sous `architectu
 #### Architecture détaillée — Software System 2 (SYS-002)
 
 <!-- 
-L'architecture détaillée du Software System 2 est documentée sous `architecture-detaillee/software_system_2/`, répartie dans ses quatre sous-répertoires : `architecture-logicielle/` (composants, séquences), `architecture-infra/` (infrastructure et DevOps), `architecture-donnees/` (modèle de données), `architecture-securite/` (sécurité). Le **nom** du conteneur dans la table « Liste des systèmes / conteneurs logiques » (Tab. 23) est un **lien** vers la doc logicielle détaillée. Les diagrammes détaillés sont ajoutés à la demande dans ces documents et indexés dans le `001`. Rappel : l'architecture détaillée est portée dans le modèle C4/Structurizr (`models/`, `views/`), source de vérité.
+**Renvoi uniquement (règle d'or 5-bis).** Cette sous-section du `06` (vue solution haut niveau, C4 N1/N2) ne contient **que le renvoi** vers l'architecture détaillée logicielle du Software System 2 — **ni description détaillée, ni image embarquée**. Le contenu de niveau composant (C4 N3/N4) vit sous `architecture-detaillee/software_system_2/architecture-logicielle/` (page d'entrée `00-architecture-detaillee.md`), et dans les trois autres volets `architecture-infra/`, `architecture-donnees/`, `architecture-securite/`. Le **nom** du conteneur dans la table « Liste des systèmes / conteneurs logiques » (Tab. 23) est le **lien de nom** (ancre Structurizr) vers la doc logicielle détaillée. Les diagrammes détaillés sont ajoutés à la demande dans ces documents et indexés dans le `001`. Rappel : l'architecture détaillée est portée dans le modèle C4/Structurizr (`models/`, `views/`), source de vérité.
+
+- [Architecture logicielle détaillée](documentation/Software%20System%202#architecture-logicielle-detaillee) — composants, séquences au niveau composant, défauts logiciels
 -->
 
 ### Scénarios d'exécution (Runtime View)
 
 <!-- 
-Décrire les **scénarios d'exécution critiques** de la solution : comment les systèmes logiciels, les acteurs et les systèmes externes interagissent à l'exécution pour produire les principaux comportements attendus. Cette vue correspond au Runtime View (arc42 §6) au niveau solution ; les séquences détaillées au niveau composants sont ajoutées à la demande dans `architecture-detaillee/<software_system>/architecture-logicielle/`.
+**Renvoi uniquement pour le niveau composant (règle d'or 5-bis).** Au niveau **solution** (`06`), énumérer les scénarios d'exécution critiques (`SC-xxx`) par un **libellé + une phrase** d'intention — acteurs et systèmes de 1er rang impliqués, résultat attendu. Les **séquences détaillées au niveau composant** (diagrammes de séquence, enchaînements internes) **ne sont pas** décrites ni embarquées ici : elles vivent en architecture détaillée logicielle (`architecture-detaillee/<software_system>/architecture-logicielle/`) et sont atteintes par **renvoi** (ancre Structurizr). Le `06` **pointe**, il ne duplique pas.
 
-- SC-001 — <Nom du scénario 1 : <description de l'enchaînement à l'exécution, acteurs et systèmes impliqués>
-- SC-002 — <Nom du scénario 2 : <description de l'enchaînement à l'exécution, acteurs et systèmes impliqués>
+- SC-001 — <Nom du scénario 1> : <une phrase d'intention — acteurs et systèmes de 1er rang, résultat attendu>. Séquence détaillée → [Scénario d'exécution SC-001](documentation/Software%20System%201#scenario-dexecution-sc-001)
+- SC-002 — <Nom du scénario 2> : <une phrase d'intention — acteurs et systèmes de 1er rang, résultat attendu>. Séquence détaillée → [Scénario d'exécution SC-002](documentation/Software%20System%201#scenario-dexecution-sc-002)
 -->
 
-#### Scénario d'exécution — <Nom du scénario 1<!-- (SC-001)
-
-<!-- Décrire : déclencheur, acteurs et systèmes impliqués, principales étapes à l'exécution, données échangées, traitements en arrière-plan (le cas échéant). -->
-
-![Diagramme de séquence — SC-001](embed:sequence_SC-001)
-
-#### Scénario d'exécution — <Nom du scénario 2<!-- (SC-002)
-
-<!-- Décrire : déclencheur, acteurs et systèmes impliqués, principales étapes à l'exécution, données échangées, traitements en arrière-plan (le cas échéant). -->
-
-![Diagramme de séquence — SC-002](embed:sequence_SC-002)
-
-<!-- Lier chaque scénario aux **patrons d'intégration** utilisés (ex. Transactional Outbox/Inbox pour les événements d'intégration, publish/subscribe) et à la **matrice de suivi** du `02-objectifs.md` (patron retenu ↔ exigence/pilier). -->
+<!-- Lier chaque scénario aux **patrons d'intégration** utilisés (ex. Transactional Outbox/Inbox pour les événements d'intégration, publish/subscribe) et à la **matrice de suivi** du `02-objectifs.md` (patron retenu ↔ exigence/pilier). Le détail de l'enchaînement et le diagramme de séquence restent en architecture détaillée (renvoi ci-dessus) ; ne pas embarquer `embed:sequence_SC-xxx` dans le `06`. -->
 
 ### Défauts d'architecture
 

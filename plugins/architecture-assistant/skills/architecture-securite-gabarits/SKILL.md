@@ -18,7 +18,7 @@ Cette skill porte **deux jeux de gabarits** :
 
 | Fichier | Thème |
 |---|---|
-| `00-analyse-securite.md` | Portée, socle normatif, triangle CIA, table du chapitre, synthèse exécutive |
+| `00-analyse-securite.md` | Portée, socle normatif, triangle CIA, table du chapitre (renvois par ancre Structurizr). **Pas de « Synthèse exécutive »** (voir règle d'or 11) |
 | `01-surfaces-et-actifs.md` | Acteurs / identités, actifs classés CIA, frontières de confiance, surfaces d'attaque (`S1…Sn`) |
 | `02-menaces-stride.md` | Matrice de synthèse STRIDE par surface + analyse détaillée par surface |
 | `03-risques-owasp.md` | Table OWASP Top 10 + fiche par risque (`A01…A10`) croisée avec les surfaces |
@@ -56,6 +56,37 @@ ordre_presentation: <n|null>              # = préfixe numérique du fichier (0�
 
 > Le gabarit de **revue** (`revue/revue-securite.md`) ne porte **pas** de front-matter de ciblage : ce n'est pas un livrable d'architecture présentable, c'est un verdict de contrôle.
 
+## Renvois vers l'architecture détaillée (format Structurizr)
+
+> Reporté de la skill `architecture-solution-gabarits` (§ « Renvois vers l'architecture détaillée (format Structurizr) »), **adapté à la sécurité** — fichier de synthèse de référence : `11-securite.md` de la DAS.
+
+La documentation est rendue par **Structurizr**. Les **liens Markdown par chemin de fichier** (`../architecture-securite/….md`, `../../documentation/….md`) **ne résolvent pas** dans ce rendu : ils sont **proscrits** comme renvois de navigation. Le format de renvoi **unique** vers une section est le **lien d'ancre Structurizr** :
+
+```
+documentation/<Software System>#<ancre-de-section>
+```
+
+- `<Software System>` = **nom** du `SoftwareSystem` dans le modèle (`models/`), **URL-encodé** (espace → `%20`). Ex. : `documentation/Talent%20Match`.
+- `<ancre-de-section>` = **slug** du titre visé (voir « Règle de slug d'ancre »).
+- Exemple attendu : `documentation/Talent%20Match#surfaces-dattaque`. Contre-exemple **proscrit** : `architecture-securite/01-surfaces-et-actifs.md`.
+
+### Règle de slug d'ancre
+
+Le slug dérive du **texte du titre**, de façon déterministe : (1) **minuscules** ; (2) **apostrophes / guillemets retirés** ; (3) tout caractère non alphanumérique → **tiret** `-`, tirets multiples réduits à un, tirets de début/fin retirés ; (4) **accents** : **translittération** par défaut (`é`→`e`, `à`→`a`, `ç`→`c`…), car plusieurs instances translittèrent avant de slugifier — si l'instance cible **conserve** les accents, aligner le slug sur son rendu réel. **En cas de doute, vérifier l'ancre effectivement générée** avant de figer le renvoi.
+
+Exemples : « Surfaces d'attaque » → `surfaces-dattaque` ; « Menaces (STRIDE) par surface » → `menaces-stride-par-surface`.
+
+### Libellé du lien = nom de la section
+
+Dans **toute** table ou liste de renvoi (table du chapitre du `00`, renvois croisés entre fichiers, renvoi vers / depuis `11-securite.md`), le **libellé** du lien est le **nom de la section** visée (texte du titre), **jamais** un nom ni un chemin de fichier. Forme : `[Nom de la section](documentation/<Software System>#<ancre>)`. **Ne pas** ajouter de colonne « Fichier » : côté Structurizr, la donnée de navigation est l'**ancre**, pas le fichier.
+
+### Séparation `11-securite.md` ↔ dossier détaillé (renvoi, pas duplication) — adaptation sécurité des points 3 & 4
+
+- **`11-securite.md`** (DAS) est la **synthèse de sécurité de niveau solution** : posture, vulnérabilités de synthèse, GIA de haut niveau. Le **dossier `architecture-securite/`** (cette skill) en est l'**approfondissement** (surfaces, STRIDE, OWASP, identités, gouvernance, recommandations).
+- Le contenu de **niveau détaillé** (matrices STRIDE par surface, fiches OWASP, analyse de gouvernance) vit **dans le dossier détaillé** ; `11-securite.md` porte la **synthèse** et **renvoie** par ancre Structurizr — **sans** dupliquer les matrices ni embarquer les tableaux détaillés. Réciproquement, le dossier détaillé renvoie vers `11-securite.md` pour la synthèse de niveau solution plutôt que de la recopier.
+- **Périmètre d'une table de renvoi de ce dossier** : elle ne liste **que** les renvois de l'**architecture de sécurité détaillée** (le volet porté par `11-securite.md`). Les autres volets détaillés (logiciel, données, infrastructure) s'atteignent via leurs documents de niveau solution respectifs (`06-architecture-solutions.md`, `10-cycle_vie_donnees.md`, `09-deploiement.md`), pas depuis une table de ce dossier. Aucun fichier du dossier ne doit être **orphelin** de la navigation (atteignable par la table du chapitre du `00` ou un renvoi croisé).
+- **Échelles et codes** (`VUL-xxx` / `RISQ-xxx`, échelle `Faible…Critique`) restent **harmonisés** avec `04-risques.md` et `11-securite.md` : harmoniser par **renvoi**, jamais par copie.
+
 ## Quand utiliser
 
 - **Architecte cybersécurité** — pour **produire** le dossier de sécurité détaillé d'un projet : copier l'ensemble des fichiers de `gabarits/` dans `documentation/architecture-securite/` du projet (front-matter compris), puis remplir chaque section. L'analyse elle-même (STRIDE, OWASP, activation conditionnelle des normes) relève de la skill `cybersecurite`.
@@ -67,7 +98,7 @@ ordre_presentation: <n|null>              # = préfixe numérique du fichier (0�
 - **Échelle commune** : `Faible` / `Moyen` / `Élevé` / `Critique` pour la probabilité (vraisemblance) comme pour l'impact, **harmonisée** avec le `04-risques.md` de la DAS.
 - **Risque résiduel** : exprimé comme `P × I` (probabilité × impact), après contre-mesures.
 - **Liens ADR relatifs** : renvois vers les décisions sous la forme `../../decisions/NNNN-....md`.
-- **Renvois croisés** entre fichiers du chapitre (ex. une surface `S3` du `01` citée dans la matrice STRIDE du `02`, un risque OWASP du `03` lié à une recommandation du `06`) : **lier, ne pas dupliquer**.
+- **Renvois croisés** entre fichiers du chapitre (ex. une surface `S3` du `01` citée dans la matrice STRIDE du `02`, un risque OWASP du `03` lié à une recommandation du `06`) : **lier, ne pas dupliquer**. Les renvois **de navigation** (table du chapitre du `00`, renvois vers / depuis `11-securite.md`) utilisent le **format d'ancre Structurizr** (`documentation/<Software System>#<ancre>`), libellé = nom de section, **pas** de chemin de fichier ni de colonne « Fichier » — voir « Renvois vers l'architecture détaillée (format Structurizr) ».
 
 ## Règles d'or
 
@@ -80,6 +111,9 @@ ordre_presentation: <n|null>              # = préfixe numérique du fichier (0�
 7. **Décisions tracées en ADR** : chaque décision d'architecture de sécurité est tracée dans un ADR (skill `create-architectural-decision-record`) et référencée par un lien relatif `../../decisions/NNNN-....md`.
 8. **La revue est review-only** : le gabarit `revue/revue-securite.md` ne produit aucune architecture ; il structure un verdict. Il respecte le plancher SG-3 (revue obligatoire et non substituable, précédant la validation humaine granulaire).
 9. **Validation humaine** : toute production ou modification est soumise à la revue de sécurité puis à la validation humaine granulaire avant d'être considérée comme acceptée.
+10. **Renvois au format Structurizr (report point 1 & 2).** Les renvois de navigation (table du chapitre du `00`, renvois croisés de navigation, renvois vers / depuis `11-securite.md`) utilisent le format d'**ancre Structurizr** `documentation/<Software System>#<ancre>` avec **libellé = nom de section** ; la forme « chemin de fichier » et toute colonne « Fichier » sont **proscrites** (voir « Renvois vers l'architecture détaillée (format Structurizr) » et sa règle de slug d'ancre). *Les liens ADR relatifs `../../decisions/NNNN-….md` ne sont pas des renvois de navigation d'architecture détaillée et restent inchangés.*
+11. **Page d'entrée `00` sans « Synthèse exécutive » (report point 6).** Le `00-analyse-securite.md` est la **page d'entrée** du dossier : sections **Portée et objectifs**, **Socle normatif**, **Triangle CIA**, **Table du chapitre** — **sans** section « Synthèse exécutive » (la posture et les priorités sont portées par `06-recommandations-priorisees.md` et la synthèse de `11-securite.md`, atteints par renvoi). Titre de la page `00` en **`h2`** (`## Analyse de sécurité`).
+12. **Historique consolidé — une ligne = un livrable accepté (report point 8).** Lorsque la livraison du dossier de sécurité est consignée dans l'historique du `001` de la DAS, appliquer la politique de consolidation de la skill `architecture-solution-gabarits` (règle d'or 7) : **une seule ligne de version par lot de travail** (ex. « production du dossier d'architecture de sécurité ») décrivant le **livrable**, pas une ligne par micro-correction ; les itérations de revue mettent à jour **la même ligne** (motif consolidé, date réactualisée) tant que le lot est `Revue en cours`. Toute histoire/journal interne au dossier suit la même granularité.
 
 ## Arrimage avec les autres skills (éviter tout chevauchement)
 
