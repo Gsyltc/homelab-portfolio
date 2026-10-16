@@ -39,7 +39,7 @@ Les résultats vivent **sur l'issue** (piste d'audit existante), jamais dans un 
 
 ## Sensors définis
 
-Six sensors, alignés sur le contrat amont « Sensors » (schéma de manifeste `id` / `kind` / `command` / `default_severity` / `description` + `category` / `fire_on` / `matches`). Les `id` sont importés **par id nu** dans le champ `sensors:` des fiches de stage (pull-authoring).
+Sept sensors, alignés sur le contrat amont « Sensors » (schéma de manifeste `id` / `kind` / `command` / `default_severity` / `description` + `category` / `fire_on` / `matches`). Les `id` sont importés **par id nu** dans le champ `sensors:` des fiches de stage (pull-authoring).
 
 | Sensor | Manifeste | `category` | `fire_on` | `default_severity` | Objet |
 | --- | --- | --- | --- | --- | --- |
@@ -47,6 +47,7 @@ Six sensors, alignés sur le contrat amont « Sensors » (schéma de manifeste `
 | `data-lifecycle` | [`sensors/data-lifecycle.md`](sensors/data-lifecycle.md) | document-shape | gate | advisory | Document **Cycle de vie des données** (`10-cycle_vie_donnees.md`) présent et renseigné (cycle de vie, gouvernance, classification) **selon les données du projet**. **Advisory** : assiste la revue **Architecte de solution → Architecte de données** et alerte le coordinateur, **sans jamais bloquer** (origine ALI-231) |
 | `upstream-coverage` | [`sensors/upstream-coverage.md`](sensors/upstream-coverage.md) | document-shape | gate | advisory | Référence explicite à la demande amont (issue / ADR parent) |
 | `diagram-validity` | [`sensors/diagram-validity.md`](sensors/diagram-validity.md) | document-shape | write | advisory | Syntaxe des diagrammes en code (Mermaid / PlantUML / Structurizr) |
+| `detailed-arch-refs` | [`sensors/detailed-arch-refs.md`](sensors/detailed-arch-refs.md) | document-shape | write | advisory | Renvois vers l'architecture détaillée au format d'ancre Structurizr (`documentation/<SS>#<ancre>`, pas de chemin de fichier) et absence de suffixe de nom de système dans les titres du détail (origine ORIG-261) |
 | `claim-sources` | [`sensors/claim-sources.md`](sensors/claim-sources.md) | provenance | gate | advisory | Chaque affirmation retenue porte une source résoluble ; hypothèses = confirmation humaine explicite |
 | `traceability` | [`sensors/traceability.md`](sensors/traceability.md) | traceability | gate | advisory | Chaîne exigence → ADR → livrable cohérente, sans orphelin dérivé |
 

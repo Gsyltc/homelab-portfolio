@@ -21,6 +21,11 @@ ordre_presentation: 9
 
 <!-- Décrire l'écosystème de la solution. Il est possible d'ajouter des schémas d'implantation et de répartition afin de décrire l'environnement. Les décisions d'implantation sont tracées dans des ADR et vérifient la couverture d'un patron du répertoire `patron-architecture/`. -->
 
+<!--
+**Fournisseur d'hébergement / cloud — décision par projet, pas de défaut universel.** Le choix du fournisseur (AWS, Azure, GCP, sur site, hybride, etc.) est une **décision propre à chaque projet**. Ce gabarit **n'impose aucun fournisseur par défaut** et n'en **exclut** aucun : les mentions de fournisseurs dans les exemples ci-dessous (ex. « Amazon AWS » en `INF-001`, exemples Azure dans les coûts) sont **purement illustratives** et doivent être remplacées par le fournisseur réellement retenu pour le projet.
+Une **décision humaine explicite** sur l'hébergement **prime** sur toute hypothèse ou tout exemple du gabarit ; elle est **tracée dans un ADR** (`decisions/`, skill `create-architectural-decision-record`) et reportée ici comme invariant d'implantation. En l'absence de décision tranchée, le fournisseur est une **question en attente** (`16-questions-decisions.md`, § Infrastructure), jamais présumé. Le volet cloud/coûts est instruit avec l'Architecte AWS / cloud selon le fournisseur retenu (voir `core/agents/`).
+-->
+
 ![Exemple de diagramme d'implantation](embed:implantation)
 
 ### Description de l'environnement
