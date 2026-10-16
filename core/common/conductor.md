@@ -159,7 +159,7 @@ La piste d'audit vit **sur l'issue Multica**, jamais dans un fichier `audit.md`.
 ## OBLIGATOIRE : langue et format
 
 - Rédiger **tous les documents dans la langue de l'humain (français par défaut)**.
-- **Tout retour d'agent sur l'issue** (compte rendu, retour A2A) adopte la **prose réduite** et la **structure en 3 sections** (`## Résumé` ; `## Points bloquants` si blocage ; `## Action humaine requise` si gate / halt) — source unique [`protocols/output-format.md`](protocols/output-format.md). Cette forme **ne relâche aucune norme de gating** (la section « Action humaine requise » présente l'arbitrage attendu, elle ne s'y substitue pas).
+- **Tout retour d'agent sur l'issue** (compte rendu, retour A2A) adopte la **prose réduite** et la **structure en 3 sections** (`## Résumé` ; `## Points bloquants` si blocage ; `## Action humaine requise` uniquement si l'humain doit intervenir, avec mention humaine active (jamais sur un simple retour A2A)) — source unique [`protocols/output-format.md`](protocols/output-format.md). Cette forme **ne relâche aucune norme de gating** (la section « Action humaine requise » présente l'arbitrage attendu, elle ne s'y substitue pas).
 - **Conserver l'anglais** pour les termes non traduits des templates OpenSpec / EARS (uniquement si OpenSpec activé).
 - Générer les diagrammes **en code** (PlantUML, Mermaid, Structurizr DSL, CALM, Archimate) et **valider leur syntaxe** avant écriture. Toujours demander à l'humain le **format de diagramme** souhaité avant génération.
 - Ne jamais inclure de secrets, mots de passe ou identifiants dans les livrables.
