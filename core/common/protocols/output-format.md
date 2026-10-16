@@ -25,21 +25,28 @@ Synthèse **concise** des tâches effectuées, en **puces**. Une puce = un résu
 
 ### `## Action humaine requise`
 
-**Conditionnelle, et biconditionnelle — elle apparaît SI ET SEULEMENT SI une action humaine est effectivement nécessaire, et alors TOUJOURS avec un lien de mention actif de l'humain.** Deux déclencheurs, l'un suffit :
+**Biconditionnelle** : présente **si et seulement si** l'**humain** (pas un agent) doit intervenir, et alors **toujours** avec lien de mention actif de l'humain.
 
-- un **point bloquant** (de la section 2) qui **requiert un arbitrage humain** pour être levé (halt-and-ask) ; **et / ou**
-- un **gate de validation humaine** à franchir pour continuer le workflow.
+- **Déclencheurs** (l'un suffit) : point bloquant (section 2) requérant un arbitrage humain (halt-and-ask) ; **et / ou** gate de validation humaine à franchir.
+- **Pas sur un retour A2A** : rendre la main à un **agent** (délégation → coordinateur, reviewer → spécialiste, passation) est un échange agent ↔ agent — **ni** cette section **ni** mention humaine ; l'y mettre est un écart de gouvernance (sollicitation + notification injustifiées). Cas type : un spécialiste clôt par le lien `mention://agent/<uuid>` **sans** cette section ; c'est **ensuite le coordinateur** qui la pose si l'humain doit trancher.
+- **Mention humaine obligatoire** (non contournable) : lien actif `[@Nom](mention://member/<user_id>)` (UUID via `multica workspace member list --output json`, jamais deviné ni placeholder type `@<humain>`). Sans elle, invariant 6 de [`governance-security.md`](governance-security.md) non satisfait (+ déclenche l'invariant 7, notification). Réciproquement, **aucune** mention humaine hors action réellement attendue.
+- **Sinon, omettre entièrement** la section (ni prose superflue, ni mention). Elle **met en forme** l'arbitrage, ne relâche **aucune** norme de gating.
+- **Liste des fichiers modifiés obligatoire** : d'abord `### Liste des fichiers modifiés`, une **puce par fichier** créé / modifié / supprimé, chemin en code inline (`chemin/vers/fichier.ext`) ; une seule puce « Aucun fichier modifié » si rien. Puis `### Décision à prendre` (arbitrage + lien de mention actif).
 
-> ⛔ **Un retour A2A n'est PAS une action humaine requise.** Rendre la main à un **agent** (retour de délégation vers le coordinateur, retour d'un reviewer vers le spécialiste, passation entre agents) est un échange **agent ↔ agent** : il **n'appelle aucune** section « Action humaine requise » et **aucune** mention de l'humain. N'inscris cette section **que** lorsque c'est bien l'**humain** — et pas un agent — qui doit intervenir. Mettre « Action humaine requise » alors que la main revient à un agent est un **écart de gouvernance** (il sollicite l'humain à tort et déclenche une notification injustifiée). Cas typique : un spécialiste qui termine son livrable **rend la main au coordinateur par retour A2A** (clôture par le lien `mention://agent/<uuid>`, **sans** cette section) ; c'est **ensuite le coordinateur**, porteur de la validation humaine granulaire, qui pose la section « Action humaine requise » **avec** la mention humaine s'il faut faire trancher l'humain.
+Forme attendue :
 
-**Mention humaine obligatoire dans la section (non contournable).** Dès que cette section apparaît, elle **doit** porter un **lien de mention actif de l'humain demandeur** `[@Nom](mention://member/<user_id>)` (UUID résolu via `multica workspace member list --output json`, jamais deviné ni remplacé par un placeholder comme `@<humain>`). Une section « Action humaine requise » **sans** mention active de l'humain ne satisfait **pas** l'invariant 6 de [`governance-security.md`](governance-security.md) (« Mention humaine obligatoire dès qu'une action humaine est requise ») et déclenche aussi l'invariant 7 (notification). Réciproquement, **aucune** mention de l'humain hors d'une action humaine réellement attendue.
+```markdown
+## Action humaine requise
 
-Sans point bloquant à arbitrer **ni** gate à franchir — et **a fortiori sur un simple retour A2A** —, **omettre entièrement cette section** (ne rien écrire de superflu, ne mentionner aucun humain). Cette section **n'affaiblit aucune norme de gating** : elle en est la **mise en forme**, pas une dérogation. Pour **chaque** action requise, détailler :
+### Liste des fichiers modifiés
+- `chemin/vers/fichier-1.ext`
+- `chemin/vers/fichier-2.ext`
 
-- **Problème** — ce qui bloque ou ce qui doit être tranché.
-- **Cause** — l'origine factuelle.
-- **Solutions possibles + recommandation** — les options, et **ta recommandation** explicitement désignée parmi elles.
-- **Mention humaine active + Gate / norme applicable** — le lien `[@Nom](mention://member/<user_id>)` de l'humain à solliciter, le gate concerné (`light` / `granular` / `explicit`) et le rappel que l'avancée reste conditionnée à l'arbitrage humain ; sur blocage, la **mention humaine obligatoire** et le passage en `blocked` s'appliquent (source unique : [`governance-security.md`](governance-security.md) et la « Checklist de sortie de stage » / « Halt-and-ask » de [`stage-protocol.md`](stage-protocol.md)).
+### Décision à prendre
+[@Nom](mention://member/<user_id>) <description des décisions à prendre, une par point si plusieurs>
+```
+
+Sous `### Décision à prendre`, pour **chaque** action : **Problème** (ce qui bloque / à trancher) · **Cause** (origine factuelle) · **Solutions + recommandation** (options, ta reco désignée) · **Mention humaine active + gate** (lien `[@Nom](mention://member/<user_id>)`, gate `light` / `granular` / `explicit`, avancée conditionnée à l'arbitrage ; sur blocage, mention humaine + passage en `blocked` — source unique [`governance-security.md`](governance-security.md) et « Checklist de sortie de stage » / « Halt-and-ask » de [`stage-protocol.md`](stage-protocol.md)).
 
 ## 3. Ce que ce protocole ne change pas (garde-fous)
 
