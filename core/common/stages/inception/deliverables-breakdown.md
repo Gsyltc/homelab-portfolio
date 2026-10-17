@@ -31,12 +31,13 @@ Découper le travail en livrables et désigner l'agent responsable de chacun.
 
 ### Step 2 — Découper et désigner l'agent responsable
 
-Le coordinateur **identifie la nature de chaque travail** (architecture solution / logicielle, infrastructure, sécurité, données, AWS, etc.) et effectue **toutes les délégations adéquates** — une par spécialiste concerné —, y compris lorsque les travaux proviennent d'une passation amont (p. ex. descriptions de passation remontées par l'OpenSpec Expert après approbation d'une spécification). Un même lot de travaux peut relever de **plusieurs natures** et donc de **plusieurs délégations** parallèles.
+Le coordinateur **identifie la nature de chaque travail** (architecture solution / logicielle, infrastructure, sécurité, données, AWS, Azure, etc.) et effectue **toutes les délégations adéquates** — une par spécialiste concerné —, y compris lorsque les travaux proviennent d'une passation amont (p. ex. descriptions de passation remontées par l'OpenSpec Expert après approbation d'une spécification). Un même lot de travaux peut relever de **plusieurs natures** et donc de **plusieurs délégations** parallèles.
 
 - Documentation d'architecture / décisions structurantes / Patrons d'architecture / diagrammes → **Architecte de solution**.
 - Analyse et cycle de vie des données (modélisation, gouvernance, classification, `10-cycle_vie_donnees.md`) → **Architecte de données** (délégué par l'Architecte de solution, qui valide le livrable — critère : sensor `data-lifecycle`).
 - Choix AWS, diagrammes AWS, coûts → **Architecte AWS** (si AWS requis).
-- Administration / infrastructure Windows → **Infrastructure Windows** (si concerné).
+- Choix Azure, diagrammes Azure, coûts **et livrables d'infrastructure de déploiement Azure** (IaC, plans de déploiement / rollback lorsque le projet est déployé sur Azure) → **Architecte Azure** (si Azure requis).
+- Administration / infrastructure **Windows** (postes, VM, migration Win10→Win11, Intune, Autopilot, SCCM) → **Infrastructure Windows** (si concerné). Périmètre strictement Windows ; le cloud Azure relève de l'Architecte Azure.
 - Sécurité (surface de sécurité, menaces, conformité : OWASP, STRIDE, ISO 27001, NIST, etc.) → **Architecte Cybersécurité** (si une surface de sécurité est produite ou modifiée). Le livrable attendu couvre **l'analyse de sécurité ET la mise à jour de la documentation d'architecture de sécurité** (`documentation/architecture-securite/`), pas la seule analyse — même règle qu'à l'émergence en cours de production ([`../construction/detailed-deliverables.md`](../construction/detailed-deliverables.md), Step 1.1).
 - Cycle spec-driven → **OpenSpec Expert** (uniquement si OpenSpec activé).
 
@@ -101,7 +102,7 @@ Pas d'ADR : le coordinateur crée directement les **issues de livrable** (une pa
 
 #### <a id="une-issue-par-spécialiste--architecte-hors-revues--règle-de-délégation"></a>Une issue par spécialiste / architecte (hors revues) — règle de délégation
 
-Chaque **délégation de livrable** donne lieu à **une issue dédiée par agent** (Architecte de solution, Architecte de données, Architecte AWS, Infrastructure Windows, OpenSpec Expert) — **jamais** une issue fourre-tout partagée. Chaque issue porte un périmètre, des critères d'acceptation et l'agent de retour (le coordinateur, en texte clair) propres à l'agent délégataire.
+Chaque **délégation de livrable** donne lieu à **une issue dédiée par agent** (Architecte de solution, Architecte de données, Architecte AWS, Architecte Azure, Infrastructure Windows, OpenSpec Expert) — **jamais** une issue fourre-tout partagée. Chaque issue porte un périmètre, des critères d'acceptation et l'agent de retour (le coordinateur, en texte clair) propres à l'agent délégataire.
 
 **Les revues ne sont pas des issues.** Les **revues** (Reviewer de cohérence, Reviewer de sécurité) sont des fonctions *review-only* **sollicitées en place par le coordinateur** sur l'issue qui porte l'artefact revu — l'**issue ADR dédiée** sur impact structurant (jamais l'issue d'origine), l'issue du livrable sinon (voir [`protocols/reviewer.md`](../../protocols/reviewer.md)) ; elles postent leurs conclusions dans cette issue, **sans issue dédiée**. La règle « une issue par agent » ne vaut donc **que** pour les délégations de production de livrable.
 

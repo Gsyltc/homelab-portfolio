@@ -189,7 +189,7 @@ Le détail des garde-fous (plancher sécurité des scopes, SEC-1..5 du learning-
 sequenceDiagram
     participant H as Humain
     participant S as Coordinateur
-    participant A as Architecte de solution / AWS / Windows (ou OpenSpec Expert)
+    participant A as Architecte de solution / AWS / Azure / Microsoft (ou OpenSpec Expert)
     participant D as Architecte de donnees
     participant X as Architecte cybersecurite
     participant N as Experte d archivage
