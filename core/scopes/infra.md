@@ -2,15 +2,15 @@
 name: infra
 depth: standard
 verification: renforcé
-keywords: [infrastructure, infra, réseau, AWS, migration, Windows, plateforme, déploiement, network]
-description: "Infra / plateforme (AWS, réseau, Windows, migration) — accent architectes infra, rollback obligatoire"
+keywords: [infrastructure, infra, réseau, AWS, Azure, migration, Windows, Microsoft, plateforme, déploiement, network]
+description: "Infra / plateforme (AWS, Azure, réseau, Windows, migration) — accent architectes infra, rollback obligatoire"
 skeleton: on
 ---
 
 # Scope `infra`
 
-Travaux d'infrastructure ou de plateforme (AWS, réseau, administration Windows, migration).
-Accent sur l'**Architecte AWS** et l'**Administrateur infrastructure Windows** ; **rollback
+Travaux d'infrastructure ou de plateforme (AWS, Azure, réseau, administration Windows, migration).
+Accent sur l'**Architecte AWS**, l'**Architecte Azure** et l'**Infrastructure Windows** ; **rollback
 obligatoire** et Operation activée (action à impact).
 
 Axes par défaut : Depth `standard`, vérification **`renforcé`** (rigueur accrue du contrôle des
