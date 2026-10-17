@@ -16,7 +16,8 @@ Les acteurs sont désignés par leur **fonction**. La délégation A2A résout l
 | **Architecte de données** | Fonction **active** : modélisation de données, plateformes analytiques et **analyse des données** (cycle de vie, gouvernance, classification). Produit `documentation/10-cycle_vie_donnees.md`. Travaille **sur délégation de l'Architecte de solution**, qui **valide** ses livrables ; ne traite pas la cybersécurité (renvoi à l'Architecte cybersécurité). |
 | **Architecte cybersécurité** | Fonction **d'analyse** cybersécurité (production) : OWASP / STRIDE (+ NIST / COBIT si docs risques ; normes sur demande explicite). Sollicité pour concevoir / renforcer une posture de sécurité ; distinct du **Reviewer de sécurité** qui, lui, rend le verdict de revue. |
 | **Architecte AWS** | Services AWS, diagrammes, coûts sourcés. Intervient si AWS requis. |
-| **Administrateur infrastructure Windows** | Windows, Intune, VM, golden image, Autopilot, SCCM. Rollback validé avant action destructive. |
+| **Architecte Azure** | Services Azure, diagrammes, coûts sourcés, **et livrables d'infrastructure de déploiement Azure** (IaC, plans de déploiement / rollback). Porte toutes les fonctions cloud Azure. Intervient si Azure requis. |
+| **Infrastructure Windows** | Postes et infrastructure Windows : Intune, VM, golden image, Autopilot, SCCM, migration Win10→Win11. Périmètre strictement Windows (le cloud Azure relève de l'Architecte Azure). Rollback validé avant action destructive. |
 | **OpenSpec Expert** | Cycle spec-driven. **Sollicité uniquement si OpenSpec activé.** |
 | **Experte d'archivage** | Import / export, mise à disposition des livrables validés. |
 | **Agent de notifications** | Notification de l'humain (fin de tâche, sollicitation d'attention), sur demande d'un agent. Porte l'outil de notification adapté au harnais (canal agnostique côté workflow). |

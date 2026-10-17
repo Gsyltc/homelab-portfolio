@@ -9,6 +9,7 @@ Définitions conformes (front-matter YAML + corps Markdown) des agents du **work
 | Architecture Solution & Intégration (**coordinateur**) | [architecture-solution-integration-agent.md](architecture-solution-integration-agent.md) | Coordonne, supervise et valide les travaux ; vérifie la cohérence avec les ADR, demande les validations humaines, met les documents à disposition. Ne produit pas les livrables. |
 | Architecte de solution | [solution-architect-agent.md](solution-architect-agent.md) | Conçoit les solutions TI : documentation d'architecture (DAS), ADR, diagrammes C4 / Archimate / PlantUML / CALM. |
 | Architecte AWS | [aws-architect-agent.md](aws-architect-agent.md) | Définit les services AWS requis, produit les diagrammes d'architecture et optimise les coûts. |
+| Architecte Azure | [azure-architect-agent.md](azure-architect-agent.md) | Porte toutes les fonctions cloud Azure : services, diagrammes, coûts, et livrables d'infrastructure de déploiement Azure (IaC, plans de déploiement / rollback). |
 | Architecte Cybersécurité | [cybersecurity-architect-agent.md](cybersecurity-architect-agent.md) | Sécurité : OWASP, STRIDE, ISO 27001, NIST, COBIT, ISO 42001/23894, PCI DSS. Périmètre sécurité (hors production des livrables non sécurité). |
 | Architecte de données | [data-architect-agent.md](data-architect-agent.md) | Modélisation (dimensionnel, Data Vault), Data Warehouse / Lake / Lakehouse, virtualisation. Traduit les besoins de l'Architecte de solution en modèles de données. |
 | OpenSpec Expert | [openspec-agent.md](openspec-agent.md) | Méthode OpenSpec (SDD) : initialise, propose, applique et archive les spécifications. |
@@ -17,7 +18,7 @@ Définitions conformes (front-matter YAML + corps Markdown) des agents du **work
 | Présentation client | [client-presentation-agent.md](client-presentation-agent.md) | Présentations client de projet ciblées (Executive / Entreprise-Affaires TOGAF / Technique-Fonctionnelle / Sécurité-Conformité) ; HTML dynamique (Archify) et PowerPoint ; à partir des documents d'architecture validés. |
 | Reviewer de cohérence | [consistency-reviewer-agent.md](consistency-reviewer-agent.md) | Revue « review-only » de la cohérence (documentation ↔ décisions, absence de conflits, complétude, conventions). Ne produit aucun livrable. |
 | Reviewer de sécurité | [security-reviewer-agent.md](security-reviewer-agent.md) | Revue « review-only » de la sécurité (OWASP / STRIDE toujours actifs ; autres cadres selon surface). Non substituable dès qu'une surface de sécurité est produite ou modifiée. |
-| Infrastructure Windows | [windows-infrastructure-admin-agent.md](windows-infrastructure-admin-agent.md) | Administration Windows : migration Win10→Win11, Intune, VMs, golden image, Autopilot, SCCM. |
+| Infrastructure Windows | [windows-infrastructure-admin-agent.md](windows-infrastructure-admin-agent.md) | Administration Windows : migration Win10→Win11, Intune, VMs, golden image, Autopilot, SCCM. Périmètre strictement Windows (le cloud Azure relève de l'Architecte Azure). |
 | Agent de notifications | [notification-agent.md](notification-agent.md) | Notifications de fin de tâches. Utilitaire de workspace partagé (source unique de vérité de sa définition). |
 
 ## Correspondance nom ↔ fonction (source unique)
