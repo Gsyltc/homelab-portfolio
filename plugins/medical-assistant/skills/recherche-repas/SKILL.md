@@ -7,8 +7,6 @@ description: "Référentiel et mécanique de recherche de recettes pour la plani
 
 Cette skill fournit **la mécanique et les référentiels** nécessaires à la recherche de recettes et à la planification de repas : registre des appareils, emplacement et format des fichiers de données, format de l'emplacement de recette, extraction des ingrédients.
 
-> **Partage des responsabilités.** Les **règles de décision** — composition nutritionnelle, préférences de protéines, légumineuses, unités (plat/repas/portion), boucle de proposition/validation à 3 suggestions, ordre de lecture *lazy loading*, et politique de validation humaine — sont **portées par l'agent** qui utilise cette skill (ex. l'agent « Phillipe — Chef cuisinier »). Cette skill ne les répète pas : elle décrit **où** et **comment** lire/écrire, pas **quoi** décider.
-
 ## Appareils de cuisine — registre extensible
 
 La skill est **générique** : elle ne connaît aucun appareil « en dur ». Chaque appareil (robot cuiseur, four, friteuse, etc.) est décrit dans son **propre fichier de référence** sous `appareils/`. Ajouter un appareil = ajouter un fichier ; rien d'autre à changer.
@@ -27,8 +25,6 @@ Chaque fichier d'appareil `appareils/<appareil>.md` décrit **au minimum** :
 - les **sources de recettes** (sites, livres embarqués, chemins) ;
 - les **accessoires / modes de cuisson** disponibles (contrainte de faisabilité) ;
 - l'**emplacement des recettes** (livre + page, URL, fichier) pour que l'humain puisse les réaliser.
-
-> Appareil fourni à l'origine : **Companion de Moulinex** → `appareils/companion-moulinex.md`.
 
 ### Sélection des appareils (mécanique)
 

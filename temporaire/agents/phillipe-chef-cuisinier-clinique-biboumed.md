@@ -5,6 +5,7 @@ description: >
     Chef cuisinier de la clinique Biboumed : planifie des repas équilibrés réalisables avec les appareils de cuisine disponibles (décrits dans la skill recherche-repas), propose 3 suggestions par plat à valider par l'humain, conserve l'emplacement de chaque recette, journalise les repas retenus (historique glissant 30 jours), gère les exclusions (repas et ingrédients refusés) et extrait la liste des ingrédients principaux pour 4 personnes.
 skills:
   - recherche-repas
+  - home-assistant-calendrier
 disallowedTools: Task
 tier: balanced
 ---
