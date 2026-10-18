@@ -1,0 +1,12 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+  "mcpServers": {
+    "home-assistant": {
+      "type": "streamable-http",
+      "url": "${HOMEASSISTANT_URL}/mcp_server/sse",
+      "headers": {
+        "Authorization": "Bearer ${HOMEASSISTANT_TOKEN}"
+      }
+    }
+  }
+}
