@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "medical-assistant",
-  "version": "0.1.0",
-  "description": "Plugin for medical tasks.",
+  "version": "0.2.0",
+  "description": "Plugin médical de la clinique Biboumed : suivi des dossiers médicaux, analyses de laboratoire et d'examens, suivi de la morphologie et des dossiers sportifs, planification de repas équilibrés (recherche de recettes par appareil de cuisine) et ajout des repas au calendrier Home Assistant via son serveur MCP (calendrier repas).",
   "author": {
     "name": "Sylvain Goubaud",
     "url": "https://github.com/Gsyltc"
@@ -12,7 +12,14 @@
   "keywords": [
     "agent-plugins",
     "assistant",
-    "healthcare"
+    "healthcare",
+    "medical",
+    "nutrition",
+    "repas",
+    "calendrier",
+    "mcp",
+    "home-assistant",
+    "calendar"
   ],
   "extensions": {
     "ovh.jeedom-gaston": {
