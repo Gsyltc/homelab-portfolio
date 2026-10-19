@@ -1,6 +1,6 @@
 ---
 name: recherche-repas
-description: "Référentiel et mécanique de recherche de recettes pour la planification de repas avec les appareils de cuisine disponibles. Fournit le registre extensible des appareils (un fichier de référence par appareil sous appareils/ : sources, accessoires, livres de recettes, emplacement des recettes), l'emplacement et le FORMAT des fichiers de données (repas retenus, repas exclus, ingrédients refusés) avec leur front matter de résumé, le format de l'emplacement de recette à conserver, et la mécanique d'extraction des ingrédients pour 4 personnes. Les RÈGLES (composition nutritionnelle, unités, boucle de proposition/validation, lazy loading, validation humaine) sont portées par l'agent qui utilise cette skill. Se déclenche sur : repas, recette, menu, planification de repas, appareil de cuisine, robot cuiseur, Companion, Moulinex, cuisine, courses, ingrédients, plat équilibré."
+description: "Référentiel et mécanique de recherche de recettes pour la planification de repas avec les appareils de cuisine disponibles. Fournit le registre extensible des appareils (un fichier de référence par appareil sous appareils/ : sources, accessoires, livres de recettes, emplacement des recettes), la mécanique de diversification RANDOMISÉE des sources (répartir un lot de plats sur plusieurs sources différentes — ex. 3 plats d'un PDF, 1 d'un site, 1 d'un second site), l'emplacement et le FORMAT des fichiers de données (repas retenus, repas exclus, ingrédients refusés) avec leur front matter de résumé, le format de l'emplacement de recette à conserver, et la mécanique d'extraction des ingrédients pour 4 personnes. Les RÈGLES (composition nutritionnelle, unités, boucle de proposition/validation, lazy loading, validation humaine) sont portées par l'agent qui utilise cette skill. Se déclenche sur : repas, recette, menu, planification de repas, appareil de cuisine, robot cuiseur, Companion, Moulinex, cuisine, courses, ingrédients, plat équilibré, varier les sources, diversifier les recettes."
 ---
 
 # Recherche de repas — référentiel et mécanique
@@ -29,12 +29,30 @@ Chaque fichier d'appareil `appareils/<appareil>.md` décrit **au minimum** :
 ### Sélection des appareils (mécanique)
 
 - **Par défaut** : puiser dans **tous** les appareils décrits sous `appareils/`.
-- **Si un appareil précis est demandé** (ex. « 3 recettes pour le Companion ») : n'utiliser que les sources et accessoires de **cet appareil**, sans mélange.
+- **Si un appareil précis est demandé** (ex. « 5 recettes pour le Companion ») : n'utiliser que les sources et accessoires de **cet appareil**, sans mélange.
 - Si l'appareil demandé est absent de `appareils/`, le signaler et proposer de l'ajouter (nouveau fichier) plutôt que d'inventer ses capacités.
 
 ### Contrainte de faisabilité
 
 Ne retenir que des recettes réalisables avec les **accessoires / modes réellement listés** dans le fichier de l'appareil retenu. Sinon, écarter la recette ou proposer une adaptation compatible.
+
+### Diversification randomisée des sources (mécanique)
+
+Un appareil expose plusieurs **sources** de recettes (livre PDF embarqué, site officiel n°1, site officiel n°2, …). Pour un lot de `N` suggestions, **ne pas puiser toutes les recettes à la même source** : répartir les `N` plats sur **plusieurs sources différentes**, de façon **aléatoire** (la répartition change d'un lot à l'autre).
+
+Mécanique à appliquer à chaque lot de `N` suggestions :
+
+1. **Construire l'ensemble des sources disponibles** :
+   - Par défaut (tous appareils) : réunir les sources de **tous** les appareils de `appareils/` ; chaque source reste identifiée par son appareil (pour la faisabilité et l'emplacement de recette). La diversification porte alors aussi bien sur les **sources** que sur les **appareils**.
+   - Si un appareil précis est imposé : réunir uniquement les sources de **cet** appareil (PDF embarqué + ses sites). La diversification porte sur les sources de ce seul appareil.
+2. **Tirer une répartition aléatoire** des `N` plats sur les sources disponibles :
+   - Viser **au moins 2 sources distinctes** dès que `N ≥ 2` et qu'au moins 2 sources existent. Un plus grand nombre de sources distinctes est bienvenu mais non requis.
+   - Autoriser qu'une source fournisse **plusieurs** plats (ex. pour `N = 5` : 3 plats d'un PDF, 1 d'un site, 1 d'un second site), mais **éviter** qu'une seule source fournisse la **totalité** du lot si d'autres sources sont disponibles.
+   - La répartition exacte (quelle source fournit combien de plats) est **tirée au hasard** à chaque lot, dans le respect des contraintes ci-dessus.
+3. **Respecter les autres règles** pendant le tirage : faisabilité (accessoires de l'appareil de la source), exclusions (`repas-exclus.md`), ingrédients refusés (`ingredients-refuses.md`), historique glissant 30 j, et préférences de protéines portées par l'agent. Si une source ne peut fournir son quota sous ces contraintes, **reporter** le reliquat sur une autre source disponible (sans jamais retomber sur une source unique si l'évitement reste possible).
+4. **Tracer la source** de chaque suggestion via l'**emplacement de la recette** (livre + page, URL, ou chemin), comme déjà exigé : l'humain voit ainsi la variété des sources employées.
+
+> Cette diversification est une **mécanique de sélection** : elle n'assouplit aucune règle de faisabilité, d'exclusion ou nutritionnelle. En l'absence d'alternative compatible, mieux vaut une source unique qu'une recette non conforme.
 
 ## Emplacement des fichiers de données
 
