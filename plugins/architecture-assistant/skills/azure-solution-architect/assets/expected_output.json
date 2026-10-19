@@ -1,0 +1,55 @@
+{
+  "recommended_architecture": {
+    "pattern_name": "Modern Three-Tier Application",
+    "description": "Classic architecture with containers and managed services",
+    "estimated_monthly_cost": 1450,
+    "scaling_characteristics": {
+      "users_supported": "10k - 500k",
+      "requests_per_second": "1,000 - 50,000"
+    }
+  },
+  "services": {
+    "load_balancer": "Application Gateway (with WAF)",
+    "compute": "Container Apps",
+    "database": "Azure Database for PostgreSQL Flexible Server",
+    "cache": "Azure Cache for Redis",
+    "cdn": "Front Door",
+    "storage": "Blob Storage",
+    "authentication": "Entra External ID"
+  },
+  "cost_breakdown": {
+    "Application_Gateway": "20-30 USD",
+    "Container_Apps": "50-200 USD",
+    "PostgreSQL_Flexible_Server": "100-300 USD",
+    "Azure_Cache_for_Redis": "30-80 USD",
+    "Front_Door": "10-50 USD",
+    "Blob_Storage": "10-30 USD"
+  },
+  "implementation_phases": [
+    {
+      "phase": "Foundation",
+      "duration": "1 week",
+      "tasks": ["VNet setup", "Managed identities / RBAC", "Activity Log routing", "Azure Policy"]
+    },
+    {
+      "phase": "Core Services",
+      "duration": "2 weeks",
+      "tasks": ["Deploy Application Gateway", "Container Apps", "PostgreSQL Flexible Server", "Azure Cache for Redis"]
+    },
+    {
+      "phase": "Security & Monitoring",
+      "duration": "1 week",
+      "tasks": ["WAF rules", "Azure Monitor dashboards", "Metric alerts", "Application Insights"]
+    },
+    {
+      "phase": "CI/CD",
+      "duration": "1 week",
+      "tasks": ["Azure DevOps / GitHub Actions pipeline", "Blue/Green deployment", "Rollback procedures"]
+    }
+  ],
+  "iac_templates_generated": [
+    "Bicep modules",
+    "ARM template (JSON)",
+    "Terraform configuration (azurerm, HCL)"
+  ]
+}

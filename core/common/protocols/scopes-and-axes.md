@@ -10,7 +10,7 @@ Table partagée référencée par le [`conductor.md`](../conductor.md) et les fi
 | --- | --- | --- |
 | [`standard`](../../scopes/standard.md) *(défaut)* | Conception / évolution d'architecture « normale » | Parcours standard complet |
 | [`feature`](../../scopes/feature.md) | Ajout / évolution fonctionnelle | Inception ciblée + Construction, sécurité systématique |
-| [`infra`](../../scopes/infra.md) | Infra / plateforme (AWS, réseau, Windows, migration) | Accent Architecte AWS / Administrateur infrastructure Windows, rollback obligatoire |
+| [`infra`](../../scopes/infra.md) | Infra / plateforme (AWS, Azure, réseau, Windows, migration) | Accent Architecte AWS / Architecte Azure / Infrastructure Windows, rollback obligatoire |
 | [`security-patch`](../../scopes/security-patch.md) | Correction / durcissement de sécurité | **Architecte cybersécurité pilote**, périmètre resserré, traçabilité renforcée |
 | [`mvp`](../../scopes/mvp.md) | Produit minimum viable | Cœur de valeur, Depth standard, dette technique tracée |
 | [`poc`](../../scopes/poc.md) | Preuve de concept jetable | Allégé, Depth minimale, non promouvable tel quel |

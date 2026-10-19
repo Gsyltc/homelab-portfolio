@@ -4,7 +4,7 @@ phase: construction
 execution: ALWAYS
 condition: "Always executes — rythme selon le mode d'exécution choisi"
 lead_agent: Architecte de solution
-support_agents: [Architecte AWS, Infrastructure Windows, OpenSpec Expert, Architecte Cybersécurité]
+support_agents: [Architecte AWS, Architecte Azure, Infrastructure Windows, OpenSpec Expert, Architecte Cybersécurité]
 mode: mob
 for_each: unit-of-work
 summary_confirmation: required
@@ -18,7 +18,7 @@ requires_stage: [walking-skeleton]
 sensors: [required-sections, upstream-coverage, diagram-validity]
 scopes: [standard, feature, infra, security-patch, mvp, enterprise]
 inputs: "Walking skeleton validé + mode d'exécution"
-outputs: "Livrables détaillés (documentation, diagrammes définitifs, coûts AWS, config infra, ou implémentation OpenSpec)"
+outputs: "Livrables détaillés (documentation, diagrammes définitifs, coûts AWS / Azure, config infra, ou implémentation OpenSpec)"
 ---
 
 # Production des livrables détaillés
