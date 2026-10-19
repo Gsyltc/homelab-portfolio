@@ -16,7 +16,7 @@ requires_stage: [requirements-analysis]
 sensors: []
 scopes: [standard, feature, infra, mvp, enterprise]
 inputs: "Besoins tracés + verdict d'impact structurant"
-outputs: "Impact structurant Oui ⇒ issue ADR parente créée en premier (déléguée à l'Architecte de solution), issue d'origine passée en blocked ; ses sous-issues de livrable (une par spécialiste/architecte, hors revues, agent assigné, backlog) ne sont créées qu'après acceptation humaine de l'ADR, puis l'ADR passe en blocked. ADR refusée ⇒ ADR et issue d'origine annulées (cancelled) en cascade. Toutes les sous-issues done ⇒ mise à disposition via [`delivery-handoff`](../construction/delivery-handoff.md) (gate « commit + PR oui/non ? », Experte d'archivage, notification), puis ADR `ADR Acceptée` (`adr_accept_e`, catégorie `done`) et issue d'origine done (dérivé). Impact structurant Non ⇒ issues de livrable créées directement en backlog ; si enfants de l'issue d'origine, celle-ci est blocked jusqu'à leur achèvement."
+outputs: "Impact structurant Oui ⇒ si OpenSpec activé, une phase OpenSpec préalable conditionnelle (sous-issue déléguée à l'OpenSpec Expert, tag OpenSpec) précède la création de l'ADR, close par une gate humaine légère (human_gate: light) de confirmation d'intention avant le retour au coordinateur ; puis issue ADR parente créée en premier (déléguée à l'Architecte de solution), issue d'origine passée en blocked ; ses sous-issues de livrable (une par spécialiste/architecte, hors revues, agent assigné, backlog) ne sont créées qu'après acceptation humaine de l'ADR, puis l'ADR passe en blocked. ADR refusée ⇒ ADR et issue d'origine annulées (cancelled) en cascade. Toutes les sous-issues done ⇒ mise à disposition via [`delivery-handoff`](../construction/delivery-handoff.md) (gate « commit + PR oui/non ? », Experte d'archivage, notification), puis ADR `ADR Acceptée` (`adr_accept_e`, catégorie `done`) et issue d'origine done (dérivé). Impact structurant Non ⇒ issues de livrable créées directement en backlog ; si enfants de l'issue d'origine, celle-ci est blocked jusqu'à leur achèvement."
 ---
 
 # Planification et découpage en livrables
@@ -41,19 +41,27 @@ Le coordinateur **identifie la nature de chaque travail** (architecture solution
 - Sécurité (surface de sécurité, menaces, conformité : OWASP, STRIDE, ISO 27001, NIST, etc.) → **Architecte Cybersécurité** (si une surface de sécurité est produite ou modifiée). Le livrable attendu couvre **l'analyse de sécurité ET la mise à jour de la documentation d'architecture de sécurité** (`documentation/architecture-securite/`), pas la seule analyse — même règle qu'à l'émergence en cours de production ([`../construction/detailed-deliverables.md`](../construction/detailed-deliverables.md), Step 1.1).
 - Cycle spec-driven → **OpenSpec Expert** (uniquement si OpenSpec activé).
 
-> **Pré-requis — verdict de méthodologie.** Toute condition « **si OpenSpec activé** » de ce stage (Steps 3.3 et 4, délégation à l'OpenSpec Expert) s'appuie sur le **verdict de méthodologie** analysé et tracé au cadrage ([`intake-framing`](intake-framing.md), Step 3 ; règle « Activation conditionnelle d'une méthodologie » de [`conductor.md`](../../conductor.md)). Le coordinateur **lit ce verdict** avant de découper ; s'il est **absent ou ambigu**, il ne devine pas et ne traite pas OpenSpec comme inactif par défaut : **halt-and-ask** (faire statuer l'humain, puis l'inscrire dans la description du projet). Le même principe vaut pour toute autre méthodologie déclarée.
+> **Pré-requis — verdict de méthodologie.** Toute condition « **si OpenSpec activé** » de ce stage (Step 3.0 — phase OpenSpec préalable à l'ADR ; Steps 3.3 et 4 — sous-issue du cycle spec-driven ; délégation à l'OpenSpec Expert) s'appuie sur le **verdict de méthodologie** analysé et tracé au cadrage ([`intake-framing`](intake-framing.md), Step 3 ; règle « Activation conditionnelle d'une méthodologie » de [`conductor.md`](../../conductor.md)). Le coordinateur **lit ce verdict** avant de découper ; s'il est **absent ou ambigu**, il ne devine pas et ne traite pas OpenSpec comme inactif par défaut : **halt-and-ask** (faire statuer l'humain, puis l'inscrire dans la description du projet). Le même principe vaut pour toute autre méthodologie déclarée.
 
 ### Step 3 — Flux impact structurant (ADR d'abord, livrables en sous-issues)
 
 Dès que le **verdict d'impact structurant** établi au cadrage ([`intake-framing`](intake-framing.md), Step 5) vaut **`Oui`**, l'ordre est **inversé par rapport au reste du stage** : **rien n'est créé avant l'ADR**. L'**issue ADR est créée en premier** et devient l'**issue parente** de la décision ; les livrables n'existent qu'**après acceptation humaine**, en **sous-issues (enfants)** de cette ADR. S'il y a plusieurs décisions structurantes, appliquer ce flux **une fois par ADR**. En cas de doute sur le verdict, halt-and-ask.
 
+> **Phase OpenSpec préalable — conditionnelle et toujours en amont de l'ADR.** Lorsque la méthodologie **OpenSpec est activée** (verdict de méthodologie tracé au cadrage — [`intake-framing`](intake-framing.md), Step 3 ; règle « Activation conditionnelle d'une méthodologie » de [`conductor.md`](../../conductor.md)), une **phase OpenSpec précède la création de l'issue ADR** (Step 3.0). Cette analyse est **réalisée par l'OpenSpec Expert** dans le cadre de son cycle spec-driven — **il n'y a aucune phase d'analyse préalable distincte** menée par le coordinateur ou un architecte : **l'analyse EST le travail de l'OpenSpec Expert**. Elle est close par une **gate humaine légère** (`human_gate: light`) de **confirmation d'intention** — l'humain confirme que l'intention a bien été captée — **avant** tout retour au coordinateur. **Seulement après** cette validation, l'OpenSpec Expert retourne au coordinateur, qui **lance alors le flux ADR normal** (création de l'issue ADR, Step 3.1). **OpenSpec non activé** : le flux ADR démarre **directement** à la création de l'issue ADR (Step 3.1), sans étape OpenSpec ni gate légère d'intention. Cette phase OpenSpec **ne remplace jamais** l'ADR (obligatoire et non contournable) ni sa gate humaine **granulaire** (Step 3.4) : la gate légère porte sur l'**intention OpenSpec**, la gate granulaire sur la **décision ADR** — les deux coexistent.
+
 ```mermaid
 flowchart TD
-    Start([Impact structurant = Oui]) --> A1
+    Start([Impact structurant = Oui]) --> Meth{"OpenSpec activé ?<br/>(verdict de méthodologie)"}
+    Meth -->|Oui| OS["0 · Phase OpenSpec préalable<br/>sous-issue déléguée à l'OpenSpec Expert (tag OpenSpec)<br/>analyse spec-driven = travail de l'OpenSpec Expert<br/>(aucune analyse préalable distincte)"]
+    OS --> LGate{"0.bis · Gate humaine légère<br/>intention captée ?"}
+    LGate -->|Écart signalé| OS
+    LGate -->|Intention confirmée| Ret["Retour au coordinateur (A2A)<br/>in_review + lien de mention actif"]
+    Ret --> A1
+    Meth -->|Non| A1
     A1["1 · Création de l'issue ADR<br/>par l'Architecte de solution — issue parente<br/>issue d'origine → blocked"] --> A2
     A2["2 · Revue de cohérence"] --> A3
     A3["3 · Revue de sécurité"] --> Prop["ADR Proposée"]
-    Prop --> Gate{"4 · Gate humaine"}
+    Prop --> Gate{"4 · Gate humaine granulaire"}
     Gate -->|Refusée| KO["ADR → cancelled<br/>issue d'origine → cancelled (cascade)<br/>flux clôturé — aucun livrable"]
     Gate -->|Acceptée| Issues["Création des sous-issues de livrables<br/>enfants de l'ADR · 1 spécialiste / architecte par issue<br/>backlog · agent assigné · puis lancées<br/>ADR (parente) → blocked"]
     Issues --> Run["Sous-issues : cycle de livrable a 3 stages<br/>(statut todo → in_progress → done)"]
@@ -62,6 +70,16 @@ flowchart TD
     Check -->|Oui| DH["delivery-handoff<br/>gate « commit + PR : oui/non ? » · mise à disposition (Nina)<br/>notification de fin de réalisation (Alfred)"]
     DH --> Done["ADR → ADR Acceptée (adr_accept_e), puis issue d'origine → done (dérivé)"]
 ```
+
+#### Step 3.0 — Phase OpenSpec préalable (conditionnelle : **uniquement si OpenSpec activé**)
+
+**Si OpenSpec n'est pas activé**, ce step est **sauté** : passer directement au Step 3.1 (création de l'issue ADR). **Si OpenSpec est activé** (verdict de méthodologie tracé au cadrage ; en cas de verdict absent ou ambigu → **halt-and-ask**, voir le pré-requis du Step 2), le coordinateur crée **d'abord** une **sous-issue OpenSpec** déléguée à l'**OpenSpec Expert** (`Fabien - OpenSpec Expert`), taguée **`OpenSpec`** (`multica issue label add`, id résolu via `multica label list`, label créé via `multica label create` s'il n'existe pas ; contexte Multica uniquement), **avant** de créer l'issue ADR.
+
+- **L'analyse EST le travail de l'OpenSpec Expert.** Il n'y a **aucune phase d'analyse préalable distincte** menée par le coordinateur ou un architecte : l'OpenSpec Expert **réalise l'analyse** dans son cycle spec-driven (proposal / design / deltas EARS). Le coordinateur **ne produit pas** cette analyse.
+- **Gate humaine légère (`human_gate: light`) — AVANT tout retour au coordinateur.** À la fin de l'analyse, l'humain **confirme que l'intention a bien été captée** par l'analyse OpenSpec (la proposition / le design reflètent fidèlement le besoin exprimé). C'est une gate **légère** (confirmation d'intention : Keep / Modify / Redo), cohérente avec le gate léger d'Ideation ([`../ideation/intent-scope-approval.md`](../ideation/intent-scope-approval.md)) ; elle **ne remplace jamais** la gate humaine **granulaire** de l'ADR (Step 3.4), qui porte sur la décision d'architecture. Tant que l'humain **n'a pas confirmé**, l'OpenSpec Expert **ne retourne pas** au coordinateur ; en cas d'**écart signalé**, l'analyse est **ajustée** puis **re-soumise à cette même gate légère**.
+- **Retour au coordinateur — seulement après validation légère.** Une fois l'intention confirmée, l'OpenSpec Expert **retourne au coordinateur** (A2A, `in_review` + lien de mention actif), selon la **checklist de sortie de stage** ([`../../protocols/stage-protocol.md`](../../protocols/stage-protocol.md)). Le coordinateur **lance alors** le flux ADR (Step 3.1 et suivants).
+
+> **Ordre invariant : OpenSpec (le cas échéant) → ADR, jamais l'inverse.** La phase OpenSpec se place **toujours en amont** de la création de l'ADR ; OpenSpec n'arrive **jamais après** l'ADR. L'ADR **reste obligatoire et non contournable** : la phase OpenSpec ne la remplace pas, elle la **précède** quand la méthodologie est activée.
 
 #### Step 3.1 — Créer l'issue ADR (parente), déléguée à l'Architecte de solution
 
@@ -118,7 +136,7 @@ Chaque mission déléguée inclut **obligatoirement** :
 
 ## Sensors
 
-Outputs: impact structurant Oui ⇒ issue ADR parente d'abord (issue d'origine → `blocked`), ses sous-issues de livrable (backlog, agents assignés) créées et lancées après acceptation humaine puis l'ADR → `blocked` ; ADR refusée ⇒ ADR et issue d'origine → `cancelled` (cascade) ; toutes les sous-issues `done` ⇒ mise à disposition via [`delivery-handoff`](../construction/delivery-handoff.md), puis ADR `ADR Acceptée` (`adr_accept_e`, catégorie `done`), puis issue d'origine → `done` (dérivé) ; impact structurant Non ⇒ issues de livrable directes en backlog (issue d'origine → `blocked` si elles en sont les enfants, jusqu'à leur achèvement).
+Outputs: impact structurant Oui ⇒ **si OpenSpec activé, phase OpenSpec préalable d'abord** (sous-issue déléguée à l'OpenSpec Expert, tag `OpenSpec`, analyse réalisée par l'OpenSpec Expert) close par une **gate humaine légère** (`human_gate: light`) de confirmation d'intention **avant** le retour au coordinateur ; **puis** issue ADR parente d'abord (issue d'origine → `blocked`), ses sous-issues de livrable (backlog, agents assignés) créées et lancées après acceptation humaine granulaire puis l'ADR → `blocked` ; ADR refusée ⇒ ADR et issue d'origine → `cancelled` (cascade) ; toutes les sous-issues `done` ⇒ mise à disposition via [`delivery-handoff`](../construction/delivery-handoff.md), puis ADR `ADR Acceptée` (`adr_accept_e`, catégorie `done`), puis issue d'origine → `done` (dérivé) ; impact structurant Non ⇒ issues de livrable directes en backlog (issue d'origine → `blocked` si elles en sont les enfants, jusqu'à leur achèvement).
 Imports: none.
 
 ## Learn
