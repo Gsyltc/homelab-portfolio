@@ -4,7 +4,7 @@ phase: operation
 execution: CONDITIONAL
 condition: "Exécuté si le travail comporte un déploiement / une administration ; sinon N/A"
 lead_agent: Infrastructure Windows
-support_agents: [Architecte AWS, Architecture Solution & Intégration, OpenSpec Expert]
+support_agents: [Architecte AWS, Architecte Azure, Architecture Solution & Intégration, OpenSpec Expert]
 mode: subagent
 summary_confirmation: required
 reviewer: Reviewer de sécurité
@@ -36,7 +36,9 @@ Le coordinateur sollicite le **Reviewer de sécurité** sur le plan de déploiem
 
 ### Step 3 — Plan de rollback (conditionnel)
 
-Pour toute action destructive ou de migration (Administrateur infrastructure Windows), publier un **plan de rollback détaillé** et le faire **valider par l'humain avant exécution**.
+Pour toute action destructive ou de migration (Infrastructure Windows), publier un **plan de rollback détaillé** et le faire **valider par l'humain avant exécution**.
+
+> **Déploiement sur Azure.** Lorsque le projet est **déployé sur Azure**, c'est l'**Architecte Azure** qui produit les livrables d'infrastructure de déploiement Azure (configuration, IaC Bicep / ARM / Terraform, plan de déploiement et plan de rollback). Même principe que pour AWS (Architecte AWS), transposé à Azure. L'**Infrastructure Windows** n'intervient que sur le périmètre Windows (postes, VM, migration), **pas** sur le cloud Azure.
 
 ### Step 4 — Garde-fou
 

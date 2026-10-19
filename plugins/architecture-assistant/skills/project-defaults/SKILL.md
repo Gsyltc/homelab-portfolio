@@ -200,6 +200,7 @@ Les agents sont créés — et doivent être recréés — sous le format :
 | Sylvain | Architecture Solution & Intégration (**coordinateur**) | [`architecture-solution-integration-agent.md`](../../../../core/agents/architecture-solution-integration-agent.md) |
 | Manuel | Architecte de solution | [`solution-architect-agent.md`](../../../../core/agents/solution-architect-agent.md) |
 | Florian | Architecte AWS | [`aws-architect-agent.md`](../../../../core/agents/aws-architect-agent.md) |
+| Asma | Architecte Azure | [`azure-architect-agent.md`](../../../../core/agents/azure-architect-agent.md) |
 | Xavier | Architecte Cybersécurité | [`cybersecurity-architect-agent.md`](../../../../core/agents/cybersecurity-architect-agent.md) |
 | Diego | Architecte de données | [`data-architect-agent.md`](../../../../core/agents/data-architect-agent.md) |
 | Fabien | OpenSpec Expert | [`openspec-agent.md`](../../../../core/agents/openspec-agent.md) |
@@ -208,7 +209,7 @@ Les agents sont créés — et doivent être recréés — sous le format :
 | Camille | Présentation client | [`client-presentation-agent.md`](../../../../core/agents/client-presentation-agent.md) |
 | Sami | Reviewer de cohérence | [`consistency-reviewer-agent.md`](../../../../core/agents/consistency-reviewer-agent.md) |
 | Benoit | Reviewer de sécurité | [`security-reviewer-agent.md`](../../../../core/agents/security-reviewer-agent.md) |
-| Admin | Infrastructure Windows | [`windows-infrastructure-admin-agent.md`](../../../../core/agents/windows-infrastructure-admin-agent.md) |
+| Mathieu | Infrastructure Windows | [`windows-infrastructure-admin-agent.md`](../../../../core/agents/windows-infrastructure-admin-agent.md) |
 | Alfred | Agent de notifications | [`notification-agent.md`](../../../../core/agents/notification-agent.md) |
 
 > La définition conforme (front-matter + corps) de chaque agent vit dans [`agents/`](../../../../core/agents/). Pour (re)créer un agent, utiliser le `display_name` du fichier comme `<fonction>` et l'associer à son `<nom>` selon la table ci-dessus, au format `<nom> - <fonction>`.
@@ -255,4 +256,5 @@ Les agents sont créés — et doivent être recréés — sous le format :
 | `create-architectural-decision-record` | Les ADR créés doivent être placés dans `decisions/` |
 | Manuel - Architecte de solution | Doit respecter la structure de répertoire définie ici |
 | Florian - Architecte AWS | Les diagrammes AWS doivent suivre les conventions `models/` et `views/` |
+| Asma - Architecte Azure | Les diagrammes Azure doivent suivre les conventions `models/` et `views/` |
 | Sylvain - Architecture Solution & Intégration | Doit valider la structure avant de lancer les travaux et utilise cette skill comme source unique pour la correspondance des agents et la création de projet |

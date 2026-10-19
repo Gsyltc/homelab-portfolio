@@ -3,7 +3,7 @@
   "mcpServers": {
     "home-assistant": {
       "type": "streamable-http",
-      "url": "${HOMEASSISTANT_URL}/mcp_server/sse",
+      "url": "${HOMEASSISTANT_URL}/api/mcp",
       "headers": {
         "Authorization": "Bearer ${HOMEASSISTANT_TOKEN}"
       }
