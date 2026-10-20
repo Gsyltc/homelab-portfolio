@@ -67,7 +67,7 @@ flowchart TD
 Avant toute exécution, le coordinateur :
 
 1. **Vérifie le répertoire officiel du projet** — s'il n'existe pas ou en cas de doute, demander confirmation à l'humain ; ne pas lancer les travaux sans elle (voir [`stages/initialization/directory-check.md`](stages/initialization/directory-check.md)).
-2. **Détecte le contexte Git** — avant toute création de fichiers dans le répertoire projet, déterminer si le projet est sous Git (indicateur `Git : Oui` / `Git : Non` de la description du projet, sinon détection d'un `.git/` sur disque et enrichissement de la description) ; si projet Git, créer une branche `feature/<id-issue>-<slug-court>` dédiée à l'issue (voir [`stages/initialization/git-detection.md`](stages/initialization/git-detection.md)).
+2. **Détecte le contexte Git** — avant toute création de fichiers dans le répertoire projet, déterminer si le projet est sous Git (indicateur `Git : Oui` / `Git : Non` de la description du projet, sinon détection d'un `.git/` sur disque et enrichissement de la description) (voir [`stages/initialization/git-detection.md`](stages/initialization/git-detection.md)).
 3. **Charge le contexte existant** — documentation d'architecture, décisions structurantes, diagrammes, contraintes déjà tracées.
 4. **Applique les paramètres par défaut d'architecture** — structure de répertoire, conventions de nommage, emplacements des décisions et diagrammes.
 5. **Détermine si une méthodologie s'applique** (voir « Activation conditionnelle d'une méthodologie »).
