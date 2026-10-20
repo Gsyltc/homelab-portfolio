@@ -16,14 +16,14 @@ requires_stage: [directory-check]
 sensors: []
 scopes: [standard, feature, infra, security-patch, mvp, poc, express, enterprise]
 inputs: "Répertoire projet confirmé, description du projet"
-outputs: "Nature Git (Oui/Non) consignée + branche d'issue créée si projet Git"
+outputs: "Nature Git (Oui/Non) consignée"
 ---
 
-# Détection Git et création de branche
+# Détection Git
 
 ## Objectif
 
-Déterminer de façon déterministe si le projet est sous Git avant toute création de fichiers, et créer une branche dédiée à l'issue le cas échéant.
+Déterminer de façon déterministe si le projet est sous Git avant toute création de fichiers.
 
 ## Steps
 
@@ -31,7 +31,7 @@ Déterminer de façon déterministe si le projet est sous Git avant toute créat
 
 Lire la description du projet (champ description du projet Multica).
 
-- La description contient `Git : Oui` (variante tolérée : `Git: Oui`) → **projet Git** → passer au Step 3.
+- La description contient `Git : Oui` (variante tolérée : `Git: Oui`) → **projet Git** → consigner le fait et terminer le stage.
 - La description contient `Git : Non` (variante tolérée : `Git: Non`) → **pas de gestion Git** → ne créer aucune branche ; consigner le fait et terminer le stage.
 - L'information est **absente** → passer au Step 2.
 
@@ -39,18 +39,14 @@ Lire la description du projet (champ description du projet Multica).
 
 Vérifier la présence d'un répertoire `.git/` à la racine du répertoire projet.
 
-- `.git/` présent → **ajouter `Git: Oui`** à la description du projet (`multica project update`), puis passer au Step 3.
+- `.git/` présent → **ajouter `Git: Oui`** à la description du projet (`multica project update`), consigner le fait et terminer le stage.
 - `.git/` absent → **ajouter `Git: Non`** à la description du projet, ne créer aucune branche ; consigner le fait et terminer le stage.
 
 L'écriture dans la description est un simple enrichissement de fait détecté (même pattern que l'inscription d'une méthodologie) ; elle n'écrase pas la description existante et n'appelle pas de gate humain.
 
-### Step 3 — Créer la branche de l'issue (projet Git uniquement)
-
-Créer une nouvelle branche dédiée à l'issue en cours **avant toute création de fichiers** dans le répertoire projet. Nommage : `feature/<id-issue>-<slug-court>`. Consigner le nom de branche sur l'issue (piste d'audit). Ne jamais pousser ni ouvrir de PR à ce stade.
-
 ## Sensors
 
-Outputs: contexte Git (Oui/Non) et nom de branche éventuel consignés sur l'issue. Aucun gate humain (Initialization — bootstrap déterministe).
+Outputs: contexte Git (Oui/Non) consigné sur l'issue. Aucun gate humain (Initialization — bootstrap déterministe).
 Imports: none.
 
 ## Learn

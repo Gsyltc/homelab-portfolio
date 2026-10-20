@@ -42,13 +42,13 @@ Le **coordinateur pose toujours** à l'humain une **demande explicite et distinc
 Le coordinateur confie à l'**Experte d'archivage** la tâche technique suivante, dont il a résolu lui-même les paramètres :
 
 - **Commiter tous les fichiers liés à la tâche et à l'ensemble de ses sous-tâches** — pas seulement le dernier livrable validé, mais l'intégralité des fichiers produits par la tâche et ses sous-tâches.
-- **Créer une Pull Request** depuis la branche d'issue (`feature/<id-issue>-<slug-court>` créée en Initialization) vers la **branche cible**.
+- **Créer la branche de mise à disposition** (`feature/<id-issue>-<slug-court>`) puis **ouvrir une Pull Request** depuis cette branche vers la **branche cible**.
 - **Résolution de la branche cible par le coordinateur**, dans cet ordre de priorité :
   1. `branche GIT: <nom>` présent dans la **description du projet** (prioritaire) ;
   2. sinon `branche GIT: <nom>` présent dans le **README du projet** ;
   3. sinon **`integration`** par défaut.
 
-Le coordinateur transmet à l'Experte d'archivage la branche cible déjà résolue ; l'Experte exécute le commit + la PR via sa capacité Git ([`../../../agents/archiving-agent.md`](../../../agents/archiving-agent.md)) et remonte le **lien de PR** et un récapitulatif sur l'issue.
+Le coordinateur transmet à l'Experte d'archivage la branche cible déjà résolue ; l'Experte crée la branche de mise à disposition, exécute le commit + la PR via sa capacité Git ([`../../../agents/archiving-agent.md`](../../../agents/archiving-agent.md)) et remonte le **lien de PR** et un récapitulatif sur l'issue.
 
 ### Step 3 — Si NON : fallback archivage par dossier
 
