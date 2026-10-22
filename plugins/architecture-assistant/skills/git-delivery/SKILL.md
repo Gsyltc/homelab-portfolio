@@ -41,17 +41,27 @@ git checkout "<branche-source>"
 # 2. Vérifier l'intégrité des fichiers du périmètre (existence, contenu non vide)
 git status
 
-# 3. Stager explicitement les fichiers de la tâche + sous-tâches (éviter `git add .`
-#    si des fichiers hors périmètre sont présents)
-git add <fichiers-de-la-tache-et-sous-taches>
+# 3. Stager explicitement le PÉRIMÈTRE de l'issue + sous-tâches (éviter `git add .`).
+#    - Fichier modifié par cette seule issue → stage du fichier entier :
+git add <fichiers-propres-a-l-issue>
+#    - Fichier PARTAGÉ (modifié aussi par une autre issue dans le répertoire de
+#      travail partagé) → stage par HUNK, en ne retenant QUE les changements de
+#      cette issue et de ses sous-tâches :
+git add -p <fichier-partage>        # valider (y) uniquement les hunks de l'issue
+#      (alternative non interactive : git apply --cached sur un patch ciblé ne
+#       contenant que les hunks de l'issue)
 
-# 4. Commiter avec un message clair
+# 4. Relire l'index AVANT de commiter : il ne doit contenir QUE le périmètre de
+#    l'issue et de ses sous-tâches, aucun hunk d'une autre issue.
+git diff --cached --stat        # détail hunk par hunk : git diff --cached
+
+# 5. Commiter avec un message clair
 git commit -m "<type>(<scope>): <résumé de la mise à disposition>"
 
-# 5. Pousser la branche source avec suivi distant
+# 6. Pousser la branche source avec suivi distant
 git push -u origin "<branche-source>"
 
-# 6. Ouvrir la PR vers la branche cible fournie
+# 7. Ouvrir la PR vers la branche cible fournie
 gh pr create \
   --base "<branche-cible>" \
   --head "<branche-source>" \
@@ -69,7 +79,8 @@ gh pr create \
 - **Aucun commit, push ou PR sans l'accord humain explicite** transmis par le coordinateur.
 - **Ne jamais résoudre la branche cible** ni décider s'il faut faire la PR : ces décisions appartiennent au workflow (coordinateur).
 - **Ne pas pousser sur `main`/`master`** ni fusionner la PR : la PR est le livrable, la fusion reste humaine.
-- Préférer un stage explicite des fichiers du périmètre à `git add .` pour ne pas emporter de fichiers hors tâche.
+- Préférer un stage explicite du périmètre à `git add .` pour ne pas emporter de fichiers hors tâche.
+- **Fichier partagé entre issues** : ne jamais stager le fichier entier ; stager au **niveau hunk** (`git add -p` ou `git apply --cached` sur un patch ciblé) pour ne retenir que les changements de l'issue courante et de ses sous-tâches. Toujours relire l'index (`git diff --cached`) avant de commiter pour confirmer qu'aucun hunk d'une autre issue n'est embarqué. En cas de doute sur l'appartenance d'un hunk, signaler l'ambiguïté sur l'issue au lieu de commiter.
 - Ne jamais inclure de secret dans un commit (clé, `.env`, token).
 - **Ne pas attendre la CI** : une fois la PR ouverte, remonter le lien ; la CI/le gate de fusion ne sont pas des critères d'acceptation de ta tâche.
 
