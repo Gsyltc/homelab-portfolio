@@ -41,7 +41,7 @@ Le **coordinateur pose toujours** à l'humain une **demande explicite et distinc
 
 Le coordinateur confie à l'**Experte d'archivage** la tâche technique suivante, dont il a résolu lui-même les paramètres :
 
-- **Commiter tous les fichiers liés à la tâche et à l'ensemble de ses sous-tâches** — pas seulement le dernier livrable validé, mais l'intégralité des fichiers produits par la tâche et ses sous-tâches.
+- **Commiter tous les changements liés à la tâche et à l'ensemble de ses sous-tâches** — pas seulement le dernier livrable validé, mais l'intégralité des changements produits par la tâche et ses sous-tâches. **Périmètre au niveau changement** : si un fichier est partagé avec une autre issue dans le répertoire de travail, le commit ne retient que les **hunks** de cette tâche et de ses sous-tâches (stage par hunk — `git add -p` / `git apply --cached`), jamais le travail d'une autre issue présent dans le même fichier.
 - **Créer la branche de mise à disposition** (`feature/<id-issue>-<slug-court>`) puis **ouvrir une Pull Request** depuis cette branche vers la **branche cible**.
 - **Résolution de la branche cible par le coordinateur**, dans cet ordre de priorité :
   1. `branche GIT: <nom>` présent dans la **description du projet** (prioritaire) ;
