@@ -27,13 +27,15 @@ Un agent est déclenché par un **commentaire sur l'issue** qui porte deux chose
 | **Délégation SANS gate humaine** (handoff A2A pur) | `[@Agent](mention://agent/<uuid>)` **actif** | **Aucune prose.** Réduit à la mention + le **nom du fichier YAML joint**. Ex. `[@Matcher Profils](mention://agent/<uuid>) — scores prêts → classement-final.yaml` |
 | **Gate humaine REQUISE** | mention de **l'humain** | **Présentation Markdown DÉTAILLÉE** du contenu à décider (profils, scores, détail par critère, justifications, exclusions/raisons…) **reprise en clair** dans le commentaire, close par l'action à effectuer. La **présentation finale reste très détaillée**. Le YAML joint est la source/audit, pas un substitut à la présentation. Ex. `[@Humain](mention://member/<uuid>) : 3 profils à valider — Keep/Modify/Redo` suivi du détail par profil. |
 
-> **Anti-wake parasite (règle générale, tous agents)** : **aucun agent ne se mentionne lui-même** avec un lien de mention actif dans une consigne de délégation — un tel lien, posté dans son propre commentaire, déclenche un run parasite de cet agent (observé sur EXPE-54). L'assigneur **désigne l'agent de retour par son nom, en texte clair** (« reviens vers moi, <Nom de l'assigneur> ») ; la construction du lien de mention actif revient **toujours à l'agent délégataire**, jamais à l'assigneur.
+**Anti-wake parasite (règle générale, tous agents)** : **aucun agent ne se mentionne lui-même** avec un lien de mention actif dans une consigne de délégation — posté dans son propre commentaire, un tel lien déclenche un run parasite de cet agent (observé sur EXPE-54). L'assigneur **désigne l'agent de retour par son nom, en texte clair** (« reviens vers moi, <Nom de l'assigneur> ») ; la construction du lien de mention actif revient **toujours à l'agent délégataire**, jamais à l'assigneur.
 
 ## Schéma du message A2A (source unique)
 
 Tout échange agent↔agent — **délégation**, **retour de livrable**, **rapport de vérification** — est porté par un **fichier YAML joint à l'issue** conforme au schéma minimal ci-dessous. Il est **défini ici une seule fois** ; les fiches de stage et les sensors s'y **réfèrent par leur nom** (`message A2A`), sans le redéfinir.
 
-> **Format = YAML compact** (décision [ADR-0033](../../../decisions/0033-format-yaml-compact-message-a2a.md), EXPE-79). Le YAML compact remplace le JSON pour la **seule enveloppe du message A2A** : mêmes champs, même sémantique, aucune perte d'information ni d'auditabilité, ~25 % de tokens en moins par handoff (mesure réelle, voir l'ADR). Les **schémas de données** portés par les skills (`cv-analyse`, `contexte-client`, `matching-scoring`) et les **présentations Markdown aux gates humaines** restent inchangés.
+**Format = YAML compact** : l'**enveloppe du message A2A** est portée en YAML compact (et non en JSON). Les **schémas de données** portés par les skills (`cv-analyse`, `contexte-client`, `matching-scoring`) et les **présentations Markdown aux gates humaines** restent inchangés.
+
+> Décision [ADR-0033](../../../decisions/0033-format-yaml-compact-message-a2a.md) (EXPE-79).
 
 ```yaml
 type: delegation | retour | rapport-verification
@@ -79,6 +81,25 @@ Aucun scope, aucune règle apprise, aucun gate/sensor advisory ne peut affaiblir
 4. **Ne jamais inventer une grille d'évaluation** — la demander si absente.
 5. **Boucle Keep/Modify/Redo bornée** — la boucle de validation granulaire est **bornée** (`max_iterations` + arbitrage humain au-delà) ; **aucun scope, aucune règle apprise ne la rend illimitée**.
 6. **Communication agent↔agent = fichier YAML joint** (schéma « message A2A » ci-dessus, format YAML compact — [ADR-0033](../../../decisions/0033-format-yaml-compact-message-a2a.md)), commentaire réduit à la mention active + nom du fichier. **Communication agent↔humain = Markdown DÉTAILLÉ aux gates humaines** : l'humain lit une présentation lisible et complète (la **présentation finale reste très détaillée**), jamais l'enveloppe brute ni un simple pointeur. La réduction de prose vaut **uniquement pour les échanges A2A**, jamais pour les présentations aux gates humaines.
+7. **Aucune note de génération / méta-production dans les livrables** — un livrable (CV, présentation, document) ne contient **que l'information métier**, jamais de texte décrivant *comment* il a été produit ; la traçabilité reste **sur l'issue** et dans les artefacts internes. Détail et périmètre : § [Aucune note de génération / méta-production dans les livrables](#aucune-note-de-génération--méta-production-dans-les-livrables-source-unique).
+
+## Aucune note de génération / méta-production dans les livrables (source unique)
+
+**Invariant transverse** (voir § Invariants non contournables, point 7) — [ADR-0040](../../../decisions/0040-aucune-note-de-generation-dans-les-livrables.md), origine EXPE-121. Défini **ici une seule fois** ; les fiches de stage, compétences et gabarits s'y **réfèrent par leur nom** (« Aucune note de génération / méta-production dans les livrables »), sans le redéfinir.
+
+Un **livrable** du workflow Matching — **CV livrable** (DOCX par défaut, Markdown sur demande), présentation, document remis à l'humain ou au client — ne contient **que l'information métier** (pour un CV : identité, compétences, expériences/mandats, responsabilités/réalisations/biens livrables, projets, formation/études, certifications, langues, contexte client). Il est **interdit** d'y inscrire toute **note de génération** ou de **méta-production**, c'est-à-dire tout texte décrivant *comment* le livrable a été produit plutôt que son contenu métier. Proscrire notamment :
+
+- toute mention de **méta-génération** — « généré/produit par l'agent », « généré par l'IA », « document produit automatiquement », notes d'outil, d'agent ou descripteur de rendu ;
+- tout **résumé de ce que l'agent a fait** inscrit dans le livrable ;
+- tout **lien ou identifiant de tâche / d'issue** — liens `mention://…`, numéros de tickets, références de suivi — dans le corps du livrable ;
+- tout **SHA de commit**, **horodatage de génération** ou **ligne de version-process** (« v2 — révisée… ») présenté comme note ;
+- tout commentaire de **processus de production** (« rien d'inventé », « fidélité stricte aux données… »), qu'il soit dans le corps, en pied de page ou en commentaire masqué.
+
+**« Ne rien inventer », le respect des gabarits et la validation humaine sont des disciplines de *production* appliquées en travaillant — jamais un texte inscrit dans le livrable.**
+
+La **traçabilité** (format produit, gabarit/type, version des données, validation humaine obtenue) est **légitime et requise** dans la **piste d'audit sur l'issue** (invariant 2) et dans les **artefacts internes / mémoire** — fiche d'analyse et YAML de `cv-analyse`, non livrables. Elle est **interdite dans le livrable** : ne jamais la déplacer du journal de l'issue ou de la mémoire interne vers le texte du livrable.
+
+> Même esprit que la règle 14 de `client-presentation-generation` et que l'interdiction des mentions de méta-génération, SHA de commit et identifiants de tâche de `architecture-solution-gabarits` (plugin `architecture-assistant`), ici portée en source unique côté Matching.
 
 ## Protection contre les entrées non fiables (UNTRUSTED DATA)
 

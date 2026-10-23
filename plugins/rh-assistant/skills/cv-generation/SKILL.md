@@ -27,6 +27,12 @@ La fiche d'analyse Markdown et le YAML restent la **source de données** (mémoi
 - **Par défaut : DOCX** — produit à partir d'un des **gabarits fournis** (CV long / CV court / format client spécifique). C'est le format retenu en l'absence de demande contraire.
 - **Markdown : uniquement sur demande explicite de l'humain** — lorsque l'humain **demande explicitement** un CV livrable au format Markdown, produire un **document Markdown présentable** (distinct de la fiche d'analyse : c'est un livrable mis en forme pour l'humain, pas la mémoire interne) à partir des données du YAML courant, nommé `<YYYY-mm-dd>-<nom>-cv.md` à la racine de `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv` (sans écraser l'historique ni la fiche d'analyse). Le Markdown livrable **ne s'appuie pas sur un gabarit DOCX** ; il n'est produit **que** sur demande explicite — jamais par défaut, jamais en substitution silencieuse d'un gabarit DOCX manquant (gabarit DOCX manquant ⇒ halt-and-ask, pas de repli Markdown automatique).
 
+## Règle d'or — aucune note de génération / méta-production dans le CV livrable
+
+Cet invariant est défini **une seule fois** dans le protocole de gouvernance — [`governance-security.md`, invariant 7](../../../../matching-cv-ao/common/protocols/governance-security.md#aucune-note-de-génération--méta-production-dans-les-livrables-source-unique) (ADR-0040, EXPE-121) — et **ne doit pas être redupliqué ici** : s'y référer pour le périmètre et les proscriptions.
+
+Appliqué au **CV livrable** (DOCX par défaut, Markdown sur demande) : le CV ne contient **que l'information métier du candidat** ; aucune note de génération / méta-production (« généré par l'agent / l'IA », résumé de ce que l'agent a fait, liens/identifiants `mention://…` ou de tickets, SHA de commit, horodatages, descripteur d'outil, ligne de version-process). « Ne rien inventer », le respect des gabarits et la validation humaine restent des disciplines de production — jamais un texte écrit dans le CV. La **traçabilité** (format, gabarit, version YAML, validation) se **journalise sur l'issue** et dans la mémoire interne (`cv-analyse`), **jamais dans le CV**.
+
 ## Gabarits fournis (jamais inventés)
 
 La production DOCX s'appuie **exclusivement** sur les **gabarits fournis par l'humain**. Trois types de gabarits sont pris en charge :
@@ -91,6 +97,7 @@ Le **schéma des données CV (YAML)** (compétences, expérience, `etudes[]` —
 
 - **Format du livrable : DOCX par défaut, Markdown sur demande explicite** — par défaut le CV livrable est un **DOCX** produit à partir d'un des gabarits fournis (CV long / CV court / format client). Le **Markdown** n'est produit **que** sur **demande explicite de l'humain**, jamais par défaut ni comme repli d'un gabarit DOCX manquant. **Ne jamais inventer** de gabarit ni de mise en page ; gabarit DOCX absent ⇒ halt-and-ask.
 - **Validation humaine obligatoire** avant toute écriture d'un CV produit/mis à jour.
+- **Aucune note de génération / méta-production dans le CV livrable** — invariant source unique (gouvernance, invariant 7 ; voir § Règle d'or) : le CV ne porte **que l'information métier du candidat** ; la traçabilité (format, gabarit, version YAML, validation) se journalise **sur l'issue** et en mémoire interne, jamais dans le CV.
 - **Ne rien inventer** — une donnée absente (durée, date, ville, MIFI) se demande via mention humaine ; jamais fabriquée.
 - **Versionnage** — ne jamais écraser une version YAML antérieure, un CV livrable antérieur (DOCX ou Markdown) ni la fiche archivée ; l'historique est conservé.
 - **Non-transmission des CV** — comme pour l'analyse, ne pas faire circuler les CV complets en A2A ; seuls le verdict d'éligibilité et la référence `analyse_yaml` remontent au coordinateur (voir la compétence `cv-analyse`, § Garde-fou).
