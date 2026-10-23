@@ -9,6 +9,21 @@ ce fichier en donne la lecture chronologique côté produit.
 ## [Non publié]
 
 ### Added
+- **Invariant « Aucune note de génération / méta-production dans les livrables » — source unique `matching-cv-ao`**
+  (réf. EXPE-121, [ADR-0040](decisions/0040-aucune-note-de-generation-dans-les-livrables.md) ; évolution
+  **documentaire**, invariants et schéma de données préservés). Un **livrable** du workflow Matching — en premier
+  lieu le **CV livrable** produit par le Gestionnaire CV (DOCX par défaut, Markdown sur demande) — ne contient
+  **que l'information métier** : interdiction d'y inscrire toute **note de génération / méta-production**
+  (mentions « généré par l'agent / l'IA », résumé de ce que l'agent a fait, liens/identifiants de tâche ou
+  d'issue `mention://…`, numéros de tickets, SHA de commit, horodatages de génération, descripteurs d'outil,
+  lignes de version-process). La **traçabilité** (format, gabarit, version, validation) reste **légitime sur la
+  piste d'audit de l'issue et dans la mémoire interne** (fiche d'analyse + YAML de `cv-analyse`), **jamais**
+  inscrite dans le livrable. Option **source unique + ADR** retenue par l'humain (sylvain.rodgers) : l'invariant
+  est défini **une seule fois** dans `matching-cv-ao/common/protocols/governance-security.md` (nouvelle section
+  dédiée + **invariant non contournable n° 7**) ; les compétences `cv-generation` (règle d'or + garde-fou) et
+  `cv-analyse` (renvoi, artefact interne hors périmètre) **y renvoient sans dupliquer** la règle. Aligné sur le
+  précédent `architecture-assistant` (règle 14 de `client-presentation-generation` ; `architecture-solution-gabarits`),
+  ici **remonté en source unique** côté Matching.
 - **Type de collaborateur `pigiste` (freelance) + rémunération (taux horaire / salaire annuel) — `matching-cv-ao`**
   (réf. EXPE-104 ; évolution **documentaire**, invariants et poids de scoring préservés). Ajout d'une **5ᵉ valeur**
   `pigiste` à l'`enum` `type_collaborateur` (travailleur autonome / freelance), avec une nouvelle **transition**
