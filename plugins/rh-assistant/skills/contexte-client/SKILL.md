@@ -21,8 +21,25 @@ Le référentiel `clients/` est **transverse aux collaborateurs** et **partagé 
 ## Stockage et nommage
 
 - **Emplacement** : `${ROOT_DIRECTORY}/clients/<nom-client>.yaml` — **un fichier par client**. Créer le répertoire `clients/` s'il est absent.
-- **`<nom-client>`** = **slug** du nom du client (minuscules, tirets ; sans accents ni caractères spéciaux). Exemples : « Santé Québec » → `sante-quebec.yaml` ; « Réseau de Transport de la Capitale » → `reseau-de-transport-de-la-capitale.yaml`.
+- **`<nom-client>`** = **slug** du nom du client (minuscules, tirets ; sans accents ni caractères spéciaux). Exemples (valeurs fictives) : « Marée Boréale » → `maree-boreale.yaml` ; « Institut Zéphyr & Associés » → `institut-zephyr-associes.yaml`.
 - **Un client = un fichier** : ne jamais créer de doublon pour un même client. Rapprocher les **variantes de libellé** d'un même client vers un seul fichier (le `slug` fait foi).
+
+## Résolution d'un nom de mandat/client vers son fichier
+
+Le **nom du client/mandat** tel qu'il apparaît dans un CV ou dans les données d'analyse comporte souvent des **variantes de libellé** (casse, accents, alias historiques entre parenthèses, ponctuation). Pour retrouver — ou créer — le fichier `clients/<slug>.yaml` correspondant **sans échec silencieux**, appliquer la **règle de normalisation → slug** suivante, dans l'ordre :
+
+1. **Minuscules** — passer tout le libellé en minuscules.
+2. **Retrait des alias entre parenthèses** — supprimer les segments entre parenthèses, en particulier les alias historiques du type « (ex …) » / « (anciennement …) ». Exemple (valeur fictive) : `Orbitech Solutions (ex Nébulys)` → `orbitech solutions`. Si le choix du libellé canonique est ambigu (deux noms concurrents sans parenthèses), conserver le libellé principal et **poser une mention humaine** plutôt que de deviner.
+3. **Suppression des accents et caractères diacritiques** — `é`→`e`, `è`→`e`, `à`→`a`, `ô`→`o`, `ç`→`c`, etc.
+4. **Remplacement des séparateurs par des tirets** — espaces, apostrophes, `&`, `/`, points et autres caractères non alphanumériques → `-` ; réduire les tirets consécutifs à un seul et retirer les tirets de début/fin.
+
+Exemples (valeurs fictives) : `Orbitech Solutions (ex Nébulys)` → `orbitech-solutions` → `clients/orbitech-solutions.yaml` (retrait de l'alias entre parenthèses) ; `Marée Boréale` → `maree-boreale` → `clients/maree-boreale.yaml` (accents) ; `Fabrica Nova` → `fabrica-nova` → `clients/fabrica-nova.yaml` (simple) ; `Institut Zéphyr & Associés` → `institut-zephyr-associes` → `clients/institut-zephyr-associes.yaml` (accents + séparateur « & »).
+
+> **Repli explicite si aucun fichier ne correspond** : si, après normalisation, **aucun** `clients/<slug>.yaml` n'existe, ne pas échouer en silence.
+> - **Côté producteur** (Gestionnaire CV, lors d'une maintenance déclenchée par un CV contenant un contexte client) : **créer** le fichier `clients/<slug>.yaml` (cf. § Maintenance).
+> - **Côté consommateur** (lecture seule — `cv-generation`, `rfp-analyse`) : traiter l'information comme **indisponible** (pour `cv-generation` : marqueur « à compléter » + signalement humain ; pour `rfp-analyse` : critère `non_couvert`/`indeterminable`), **sans** fabriquer ni créer de fichier.
+>
+> Le `slug` ainsi calculé est le **seul identifiant de rapprochement** : il doit être **cohérent** entre la création (producteur) et la lecture (consommateurs) pour éviter qu'un même client donne deux fichiers ou qu'une correspondance échoue silencieusement.
 
 ## Schéma `clients/<nom-client>.yaml`
 
@@ -87,7 +104,9 @@ Lorsqu'un AO exige une **expertise/expérience de firme** (mandats similaires, s
 
 ### cv-generation — bloc « Contexte de l'organisation » du CV long
 
-Lors de la génération d'un **CV long**, le bloc « Contexte de l'organisation » de chaque mandat est renseigné à partir du `contexte` du client correspondant dans `clients/<nom-client>.yaml` s'il est disponible (voir la compétence `cv-generation`). Lecture **seule**, **ne rien inventer** (contexte indisponible ⇒ marqueur « à compléter »), sans modifier le référentiel `clients/` ni la charte du gabarit.
+Lors de la génération d'un **CV long**, le bloc « Contexte de l'organisation » de chaque mandat — matérialisé dans le gabarit DOCX par le jeton `{{CONTEXTE_ORGANISATION}}` — est renseigné à partir du `contexte` du client correspondant dans `clients/<slug>.yaml` s'il est disponible (voir la compétence `cv-generation`, § Contrat de remplissage du jeton). Le rapprochement du nom de mandat vers son fichier suit la **règle de résolution nom → fichier** ci-dessus (§ Résolution d'un nom de mandat/client vers son fichier). Lecture **seule**, **ne rien inventer** (contexte indisponible, ou aucun fichier après résolution ⇒ marqueur « à compléter » + signalement humain), sans modifier le référentiel `clients/` ni la charte du gabarit.
+
+> **Deux niveaux distincts — ne jamais confondre** : le champ **`contexte`** (niveau racine du fichier) est le contexte de la **société** et alimente **uniquement** le bloc « Contexte de l'organisation » au niveau **mandat**. Le champ **`contexte_projet`** (porté par chaque entrée de `mandats[]`) est le contexte d'un **projet** et relève du **niveau projet** du CV — il ne doit **jamais** servir à remplir `{{CONTEXTE_ORGANISATION}}`, ni l'inverse. Cardinalité : un mandat = un client = **un seul** `contexte` d'organisation ; un mandat peut porter **plusieurs** projets, chacun avec son propre `contexte_projet` (voir `cv-generation`, § Distinction des niveaux).
 
 ## Garde-fous
 
