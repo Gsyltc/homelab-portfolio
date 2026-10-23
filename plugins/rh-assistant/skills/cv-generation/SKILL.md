@@ -59,6 +59,19 @@ Dans les gabarits DOCX de CV long, le bloc « Contexte de l'organisation » de c
 
 > **Correspondance silencieuse interdite** : si la résolution nom → fichier n'aboutit à **aucun** fichier `clients/<slug>.yaml`, ne pas laisser le bloc vide ou le jeton en place sans trace — appliquer le repli « à compléter » **et** signaler le mandat à l'humain, afin que l'absence soit visible et non une omission silencieuse.
 
+### Distinction des niveaux — contexte d'organisation (mandat) vs contexte de projet (projet)
+
+Le CV distingue **deux niveaux** qu'il ne faut **jamais confondre** lors du remplissage des blocs de contexte :
+
+| Niveau | Donnée source | Bloc du CV long | Cardinalité |
+| --- | --- | --- | --- |
+| **Mandat** = une entrée `experience[]` rattachée à **un client** | champ **`contexte`** (niveau racine) de `clients/<slug>.yaml` — contexte de la **société** | bloc **« Contexte de l'organisation »** (`{{CONTEXTE_ORGANISATION}}`) | **un mandat = un client = un seul bloc** « Contexte de l'organisation » |
+| **Projet** = une entrée `experience[].projets[]` (un mandat peut en porter **plusieurs**) | champ **`contexte_projet`** (porté par `mandats[]` dans `clients/<slug>.yaml`, et au niveau projet côté données CV) | contexte au **niveau projet** | **un mandat → 0..n projets**, chacun avec son **propre** `contexte_projet` |
+
+- **Ne jamais substituer l'un à l'autre** : le `contexte` (société) alimente **uniquement** le bloc « Contexte de l'organisation » au niveau **mandat** ; le `contexte_projet` alimente **uniquement** le contexte au niveau **projet**. N'utilisez jamais le contexte de projet pour remplir `{{CONTEXTE_ORGANISATION}}`, ni l'inverse.
+- **Cardinalité** : pour un mandat, il y a **un seul** bloc « Contexte de l'organisation » (le client) ; les éventuels **projets** du mandat portent chacun **leur** contexte de projet. Ne pas fusionner les contextes de plusieurs projets dans le bloc d'organisation.
+- **Ne rien inventer** (aux deux niveaux) : contexte indisponible (société **ou** projet) ⇒ marqueur « à compléter » + signalement humain ; jamais un contexte fabriqué, jamais un repli silencieux de l'un vers l'autre.
+
 ## Responsabilités, réalisations et biens livrables par mandat (section du CV livrable)
 
 Le CV livrable restitue, **pour chaque expérience/mandat**, une section **« Responsabilités, réalisations et biens livrables »** alimentée par l'unique liste `experience[].responsabilites_realisations_livrables` des données CV (champ **au niveau de l'expérience**, regroupant les trois axes de la rubrique source du même nom). Ces informations décrivent la **contribution concrète** du collaborateur sur le mandat (ce dont il avait la charge, ce qu'il a accompli et les biens livrables produits) et doivent **impérativement figurer** dans le CV.
@@ -86,9 +99,11 @@ Le CV livrable restitue, **pour chaque expérience/mandat**, une section **« Re
 2. **Déterminer le format et le gabarit** — **par défaut : DOCX** → sélectionner le type demandé (CV long / CV court / format client) et **charger le gabarit fourni** depuis `${ROOT_DIRECTORY}/gabarits/cv/` (**absent ⇒ halt-and-ask**, mention humaine, ne rien inventer, **pas de repli Markdown automatique**). **Si l'humain a explicitement demandé un CV Markdown** → produire le livrable Markdown depuis les données du YAML, sans gabarit DOCX.
 3. **Appliquer la modification / le remplissage** sur une copie de travail : en DOCX, injecter les données du YAML dans les emplacements prévus par le gabarit (sans altérer sa charte) — **y compris la substitution, mandat par mandat, du jeton `{{CONTEXTE_ORGANISATION}}`** du bloc « Contexte de l'organisation » du CV long (voir § Contrat de remplissage du jeton `{{CONTEXTE_ORGANISATION}}`) ; en Markdown (sur demande), mettre en forme les données du YAML en un document présentable — sans écraser l'historique.
 4. **Vérification post-génération (obligatoire, avant présentation)** — sur la copie de travail produite :
-   - **Aucun jeton résiduel** : vérifier qu'il ne subsiste **aucun** marqueur `{{…}}` non substitué (en particulier `{{CONTEXTE_ORGANISATION}}`). Un jeton résiduel ⇒ corriger la substitution ; si la donnée est réellement absente, appliquer le repli « à compléter » (jamais fabriqué) et signaler à l'humain.
+   - **Aucun jeton résiduel (niveaux mandat ET projet)** : vérifier qu'il ne subsiste **aucun** marqueur `{{…}}` non substitué, ni au niveau **mandat** (en particulier `{{CONTEXTE_ORGANISATION}}`) ni au niveau **projet** (contexte de projet). Un jeton résiduel ⇒ corriger la substitution ; si la donnée est réellement absente, appliquer le repli « à compléter » (jamais fabriqué) et signaler à l'humain.
+   - **Bon niveau de contexte** : vérifier que le bloc « Contexte de l'organisation » a été rempli depuis le `contexte` (société) et **non** depuis un `contexte_projet`, et réciproquement que les contextes de projet proviennent bien du niveau projet — aucune substitution croisée des deux niveaux (voir § Distinction des niveaux).
    - **Blocs « Contexte de l'organisation » du CV long** : pour **chaque mandat**, vérifier que le bloc est rempli lorsqu'un `contexte` existe au référentiel `clients/<slug>.yaml` (après résolution nom → fichier) ou dans les données d'analyse ; sinon qu'il porte le marqueur **« à compléter »** et que le mandat concerné est **signalé à l'humain** (mention). Aucun bloc ne doit rester vide ni conserver un jeton non substitué.
-   - Consigner dans la présentation à l'humain le résultat de cette vérification (mandats remplis depuis le référentiel, mandats en « à compléter » signalés).
+   - **Contextes de projet** : pour **chaque projet** d'un mandat, vérifier de même que le contexte de projet est rempli quand un `contexte_projet` existe, sinon « à compléter » + signalement humain.
+   - Consigner dans la présentation à l'humain le résultat de cette vérification (mandats remplis depuis le référentiel, projets remplis, blocs en « à compléter » signalés).
 5. **Présenter la production à l'humain** (Markdown pour la conversation : diff clair avant/après des données injectées + format et, en DOCX, type de gabarit utilisé) et **attendre la validation explicite**. Aucune écriture avant accord.
 6. **Écrire les livrables versionnés** une fois validé :
    - **CV livrable** — en **DOCX** (défaut) : `<YYYY-mm-dd>-<nom>-<type-gabarit>.docx` (ex. `2026-09-15-dupont-jean-cv-long.docx`) ; en **Markdown** (sur demande explicite) : `<YYYY-mm-dd>-<nom>-cv.md` — à la racine de `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv`, sans écraser l'historique ni la fiche d'analyse ;
