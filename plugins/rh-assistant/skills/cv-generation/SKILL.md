@@ -59,6 +59,17 @@ Le CV livrable restitue, **pour chaque expérience/mandat**, une section **« Re
 - **Alimentation** : à partir de la liste `responsabilites_realisations_livrables[]` de chaque expérience du YAML courant ; **ne rien inventer** — une liste vide (`[]`) ne produit aucune ligne fabriquée. Rendre les entrées sous forme de puces, **par mandat/expérience** (et non par projet : ce champ est porté au niveau de l'expérience).
 - **Cohérence avec les gabarits (`${ROOT_DIRECTORY}/gabarits/cv/`)** : n'écrire que dans les emplacements prévus par le gabarit, sans altérer sa charte. Si le gabarit dispose déjà d'un emplacement « Responsabilités, réalisations et biens livrables » (ou équivalent), l'utiliser ; sinon, placer la section au plus près de la description du mandat concerné. **Si le gabarit n'offre aucun emplacement adapté** pour restituer cette liste, **ne pas inventer de mise en page** : **le signaler à l'humain** (mention) et attendre son arbitrage, plutôt que de forcer la charte.
 
+## Rendu des projets/mandats dans le CV long (format « <client> - <projet> » en puces)
+
+Dans le **CV long uniquement**, les projets/mandats se rendent en **puces** (bullet points), **une puce par projet**, au format **« <client> - <projet> »** — jamais une puce agrégée au niveau du client. Le couple provient des données CV : `<client>` = `experience[].client`, `<projet>` = `experience[].projets[].nom` (voir le schéma `experience[].projets[]` de `cv-analyse`). Cette règle s'applique à **deux endroits** du CV long :
+
+- **Sommaire des réalisations** — dans le tableau/bloc « sommaire des réalisations », lister les projets/mandats en **puces** dès qu'il y en a **plusieurs**, chaque puce au format **« <client> - <projet> »**. Lorsqu'**un même client porte plusieurs projets**, produire **une puce par projet** (jamais une seule puce agrégée pour le client) : p. ex. `- Banque X - Refonte du portail`, `- Banque X - Migration cloud`.
+- **Champ « projet » de chaque description de réalisation professionnelle** — dans la section par mandat/expérience, le champ **« projet »** suit la **même règle** : une **puce par projet** au format **« <client> - <projet> »** ; plusieurs projets d'un même client ⇒ une puce par projet.
+
+- **Projet unique** : une expérience ne portant qu'un seul projet peut rester sur une **seule puce** au même format « <client> - <projet> » (la mise en puces devient obligatoire dès qu'il y en a plusieurs).
+- **Ne rien inventer** : `experience[].projets[]` vide (`[]`) ou `client`/`projet` absent ⇒ **comportement existant préservé** — aucune puce fabriquée, pas de couple inventé (mention humaine si une donnée manque, conformément aux garde-fous), jamais de « <client> - » ou « - <projet> » tronqué.
+- **Respect strict du gabarit** : n'écrire les puces que dans l'emplacement prévu par le gabarit `cv-long.docx` (sommaire des réalisations, champ « projet » du mandat). Si le gabarit n'offre aucun emplacement adapté, **ne pas inventer de mise en page** : le signaler à l'humain (mention) et attendre son arbitrage.
+
 ## Prérequis
 
 - Une **analyse existante** du collaborateur (dernière version YAML à la racine de `${ROOT_DIRECTORY}/collaborateurs/<nom-prenom>/cv`). Si aucune analyse n'existe, exécuter d'abord `cv-analyse` sur un CV source.
@@ -97,6 +108,7 @@ Le **schéma des données CV (YAML)** (compétences, expérience, `etudes[]` —
 
 - **Format du livrable : DOCX par défaut, Markdown sur demande explicite** — par défaut le CV livrable est un **DOCX** produit à partir d'un des gabarits fournis (CV long / CV court / format client). Le **Markdown** n'est produit **que** sur **demande explicite de l'humain**, jamais par défaut ni comme repli d'un gabarit DOCX manquant. **Ne jamais inventer** de gabarit ni de mise en page ; gabarit DOCX absent ⇒ halt-and-ask.
 - **Validation humaine obligatoire** avant toute écriture d'un CV produit/mis à jour.
+- **CV long — projets/mandats en puces « <client> - <projet> »** — dans le CV long, rendre les projets en **puces**, **une puce par projet** au format **« <client> - <projet> »** (jamais une puce agrégée par client), à la fois dans le **sommaire des réalisations** et dans le champ **« projet »** de chaque réalisation professionnelle (voir § Rendu des projets/mandats dans le CV long). Donnée absente ⇒ comportement existant préservé, aucune puce fabriquée.
 - **Aucune note de génération / méta-production dans le CV livrable** — invariant source unique (gouvernance, invariant 7 ; voir § Règle d'or) : le CV ne porte **que l'information métier du candidat** ; la traçabilité (format, gabarit, version YAML, validation) se journalise **sur l'issue** et en mémoire interne, jamais dans le CV.
 - **Ne rien inventer** — une donnée absente (durée, date, ville, MIFI) se demande via mention humaine ; jamais fabriquée.
 - **Versionnage** — ne jamais écraser une version YAML antérieure, un CV livrable antérieur (DOCX ou Markdown) ni la fiche archivée ; l'historique est conservé.
