@@ -2,7 +2,7 @@
 name: cv-analyse
 description: >
     Analyse d'un CV source (PDF/DOCX fourni en pièce jointe d'issue) du workflow Matching : extraction structurée vers livrables versionnés (fiche Markdown du jour + YAML des données CV), archivage, traçabilité, équivalence MIFI, localisation, disponibilité, sélection d'éligibilité amont (Études, Localisation et Certifications requises STRICTES/éliminatoires) vis-à-vis d'un AO, et maintenance du référentiel des contextes clients (sociétés) `${ROOT_DIRECTORY}/clients/<nom-client>.yaml` lorsqu'un CV long en contient (contexte + mandats réalisés — complète/enrichit, jamais d'écrasement aveugle). Charger avant toute extraction de CV ou classement d'éligibilité.
-keywords: [analyse cv, extraction cv, eligibilite, mifi, localisation, disponibilite, type collaborateur, type de collaborateur, cycle de vie collaborateur, machine a etats, transition type collaborateur, alithya, recrutement, offre conditionnelle, pigiste, freelance, non disponible, remuneration, taux horaire, salaire annuel, cad, versionnage cv, format yaml cv, filtre eligibilite, certifications, certification requise, prerequis, contexte client, clients json, mandats, expertise firme, referentiel clients]
+keywords: [analyse cv, extraction cv, eligibilite, mifi, localisation, disponibilite, type collaborateur, type de collaborateur, cycle de vie collaborateur, machine a etats, transition type collaborateur, alithya, recrutement, offre conditionnelle, pigiste, freelance, non disponible, remuneration, taux horaire, salaire annuel, coutant, coutant horaire, cout interne, cad, versionnage cv, format yaml cv, filtre eligibilite, certifications, certification requise, prerequis, contexte client, clients json, mandats, expertise firme, referentiel clients]
 ---
 
 # Analyse de CV
@@ -134,6 +134,12 @@ collaborateurs:
       taux_horaire_cad: 0        # $CAD/heure — renseigné UNIQUEMENT si type_collaborateur = pigiste (sinon null)
       salaire_annuel_cad: 0      # $CAD/an — renseigné pour alithya / offre_conditionnelle (sinon null)
       source: cv | humain | null
+    coutant:                                     # COÛTANT = coût interne horaire ($CAD/h) — DISTINCT de remuneration (ADR-0041)
+      type: coutant_horaire                      # seul type à ce jour
+      coutant_horaire_cad: 0                     # $CAD/heure — coût interne du collaborateur ; null si non connu (ne rien inventer)
+      source: cv | humain | null
+      date_saisie: "<AAAA-MM-JJ>"                # date de saisie/màj du coûtant (quotée)
+      commentaire: <provenance / précision, ou omis>
     disponibilite: {date_disponibilite: "<AAAA-MM-JJ>", taux_utilisation: 0}      # pigiste ⇒ toujours 0 (disponible à 100 %)
     localisation: {ville: <OBLIGATOIRE>, region: <province/région ou null>, pays: <pays ou null>, source: cv | humain}
     langues: [<langue>]
@@ -157,6 +163,7 @@ Le YAML des données CV **doit rester parsable sans ambiguïté de type**. Règl
 1. **Dates ISO complètes `AAAA-MM-JJ` → toujours entre guillemets** (`date_derniere_modification`, `disponibilite.date_disponibilite`) : non quotées, elles sont interprétées comme des **objets date** par le parseur, pas comme des chaînes. Ex. `date_derniere_modification: "2026-09-29"`.
 2. **Dates partielles `AAAA-MM` et `present` → entre guillemets** (`date_debut`, `date_fin`, `derniere_utilisation`, `certifications[].date_expiration`) : par cohérence et pour éviter toute coercition. Ex. `date_fin: "2023-06"`, `date_fin: "present"`.
 3. **Valeurs numériques restant des chaînes → entre guillemets** (`annee_obtention: "2015"`, `certifications[].reference: "AWS-SAA-12345"` ou purement numérique) : sinon interprétées comme des entiers. Les vrais nombres (`mois_experience`, `duree_mois`, `jours_personnes`, `taux_utilisation`) restent **non quotés**.
+   - **Montants monétaires** (`remuneration.taux_horaire_cad`, `remuneration.salaire_annuel_cad`, `coutant.coutant_horaire_cad`) : **vrais nombres non quotés**, **point décimal** (jamais la virgule). Une saisie humaine en virgule décimale FR (ex. « 12,34 ») est **normalisée en `12.34`** ; ne jamais écrire `12,34` (interprété comme deux valeurs / chaîne).
 4. **Booléens réservés** : `conserve: false` est un vrai booléen (correct). En revanche, les valeurs d'énum `oui`/`non` de `mifi.equivalence_requise` restent des **chaînes** (sûres) ; **ne jamais** employer `yes/no/on/off` comme valeur libre (ils deviendraient des booléens).
 5. **Notation *flow* (`[...]` / `{...}`)** : mettre entre guillemets toute valeur contenant `${...}`, `:` suivi d'un espace, une virgule, `{` ou `}`. `null` (ou champ omis) pour l'absence. **Au moindre doute, guillemeter.**
 
@@ -217,6 +224,7 @@ Le YAML des données CV **doit rester parsable sans ambiguïté de type**. Règl
   - **`recrutement`** / **`non_disponible`** → mode de rémunération **non encore fixé** par défaut : `type: null` et montants `null` tant que l'humain ne tranche pas (le type cible — pigiste vs salarié — détermine le mode à l'issue du recrutement).
   - `source` : `cv` (si le montant figure explicitement dans le CV / le dossier) ou `humain` (fourni par l'humain).
   - **Ne rien inventer** : montant/mode non connus ⇒ `null` + **mention humaine** demandant, selon le type, le **taux horaire** (pigiste) ou le **salaire annuel** (alithya / offre conditionnelle). Un montant de rémunération n'est **jamais** supposé ni déduit. **Aucun secret** : la rémunération est une donnée métier (pas un secret), mais rester factuel et ne jamais la fabriquer.
+- **`coutant`** (objet — **coûtant horaire = coût interne**, $CAD/heure) : porte le **coût interne horaire** du collaborateur, concept **distinct de `remuneration`** et **indépendant du `type_collaborateur`** (un `alithya` a un salaire annuel *et* un coûtant horaire). **Ne jamais** écrire le coûtant dans `remuneration.taux_horaire_cad` (réservé aux pigistes) ni le confondre avec un salaire annuel. Structure : `type: coutant_horaire` (seul type à ce jour) ; `coutant_horaire_cad` (**$CAD/heure**) ; `source` (`cv` | `humain` | `null`) ; `date_saisie` (`AAAA-MM-JJ`, **quotée**) ; `commentaire` optionnel (provenance). **Ne rien inventer** : coûtant non connu ⇒ objet omis ou `coutant_horaire_cad: null` + mention humaine. **Aucun secret** : donnée métier, à garder factuelle, jamais fabriquée. Décision de schéma : **[ADR-0041](../../../../decisions/0041-champ-coutant-horaire-donnees-cv.md)** (EXPE-129).
 - **`localisation`** (obligatoire — ville) : `ville` requise, `region`/`pays` optionnels. **Si absente du CV, ne rien inventer** : poser une **mention humaine** demandant la ville, laisser `null` en attendant ; après réponse → renseigner `ville`, `source: "humain"`. Base du critère de proximité (70 km) pour AO `sur_site`/`hybride`. Présence contrôlée par le sensor advisory `localisation-complete`.
 - **`mifi`** (équivalence MIFI — contexte gouvernemental Québec) — 4 états d'`equivalence_requise` :
   - `non_requise` — diplôme canadien : `niveau_equivalent_qc` = niveau tel quel.
