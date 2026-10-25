@@ -33,7 +33,7 @@ boundaries:
       - diagramme_principal
       - scope_et_axes_confirmes
     checks: [artefacts-presents, liaison-tracabilite, absence-orphelin]
-    sensors: [diagram-validity, data-lifecycle]   # data-lifecycle : advisory pour tous (assiste l'Architecte de solution, alerte le coordinateur — jamais bloquant)
+    sensors: [diagram-validity, data-lifecycle, claim-sources]   # data-lifecycle : advisory pour tous (assiste l'Architecte de solution, alerte le coordinateur — jamais bloquant) ; claim-sources : chaque affirmation de la conception porte une source résoluble
 
   - id: construction-operation
     frontiere: "Construction → Operation"
@@ -42,7 +42,7 @@ boundaries:
       - adr_a_jour
       - coherence_doc_adr
     checks: [artefacts-presents, liaison-tracabilite, absence-orphelin]
-    sensors: [required-sections]
+    sensors: [required-sections, claim-sources, traceability]   # traceability : chaîne exigence → ADR → livrable cohérente, sans orphelin dérivé ; claim-sources : chaque affirmation retenue porte une source résoluble
 
   - id: operation-fin
     frontiere: "Operation → Fin"

@@ -13,7 +13,7 @@ human_gate: granular
 produces: [livrables_valides_mis_a_disposition]
 consumes: [{artifact: livrables_valides, required: true}]
 requires_stage: [consolidation-handoff]
-sensors: [required-sections]
+sensors: [required-sections, traceability]
 scopes: [standard, feature, infra, security-patch, mvp, poc, express, enterprise]
 inputs: "Livrables validés granulairement (consolidation-handoff)"
 outputs: "Livrables mis à disposition : commit + PR si accord humain explicite, sinon archivage par dossier ; notification de fin de réalisation (fichiers / PR en attente) envoyée dès la mise à disposition"

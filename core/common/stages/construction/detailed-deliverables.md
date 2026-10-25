@@ -15,7 +15,7 @@ human_gate: granular
 produces: [livrables_detailles]
 consumes: [{artifact: walking_skeleton_valide, required: true}, {artifact: mode_execution_choisi, required: true}]
 requires_stage: [walking-skeleton]
-sensors: [required-sections, upstream-coverage, diagram-validity]
+sensors: [required-sections, upstream-coverage, diagram-validity, claim-sources]
 scopes: [standard, feature, infra, security-patch, mvp, enterprise]
 inputs: "Walking skeleton validé + mode d'exécution"
 outputs: "Livrables détaillés (documentation, diagrammes définitifs, coûts AWS / Azure, config infra, ou implémentation OpenSpec)"

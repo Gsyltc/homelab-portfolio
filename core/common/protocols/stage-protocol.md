@@ -8,22 +8,22 @@ Tout livrable confié à un spécialiste (architecte ou expert de domaine) suit 
 
 ```mermaid
 flowchart TB
-    subgraph S1[Stage 1 - Production]
-      M[Step 1 - Expert de methodologie<br/>OpenSpec / BMAD... OPTIONNEL] --> SP[Step 2 - Specialiste produit le livrable]
+    subgraph S1["Stage 1 - Production"]
+        M["Step 1 - Expert de méthodologie<br/>(OpenSpec / BMAD...) - OPTIONNEL"] --> SP["Step 2 - Spécialiste produit, le livrable"]
     end
-    subgraph S2[Stage 2 - Review sequentiel]
-      RC[Step 1 - Revue de coherence]
-      RS[Step 2 - Revue de securite]
+    subgraph S2["Stage 2 - Review séquentiel"]
+        RC["Step 1 - Revue de cohérence"]
+        RS["Step 2 - Revue de sécurité"]
     end
-    subgraph S3[Stage 3 - Finalisation par le specialiste]
-      CR[Step 1 - Compte rendu<br/>prose reduite - 3 sections] --> FI[Step 2 - Finalisation de l issue, gate si requis]
+    subgraph S3["Stage 3 - Finalisation par le spécialiste"]
+        CR["Step 1 - Compte rendu<br/>prose réduite - 4 sections"] --> FI["Step 2 - Finalisation de l'issue, gate si requis"]
     end
-    SP -->|mention| RC
-    RC -->|verdict au specialiste| SP
-    RS -->|verdict au specialiste| SP
-    SP -->|coherence OK : sollicite securite| RS
-    SP -->|securite OK| CR
-    FI -->|mention| CO[Coordinateur]
+    SP -->|"mention"| RC
+    RC -->|"verdict au spécialiste"| SP
+    RS -->|"verdict au spécialiste"| SP
+    SP -->|"cohérence OK : sollicite sécurité"| RS
+    SP -->|"sécurité OK"| CR
+    FI -->|"mention"| CO["Coordinateur"]
 ```
 
 - **Stage 1 — Production.**
@@ -33,7 +33,7 @@ flowchart TB
   - *Step 1 — Revue de cohérence* : le reviewer mentionne le spécialiste. **OK** ⇒ le spécialiste enchaîne le Step 2 (sollicite le reviewer de sécurité). **RENVOI** ⇒ le spécialiste corrige puis re-sollicite le reviewer de cohérence.
   - *Step 2 — Revue de sécurité* : le reviewer mentionne le spécialiste. **OK** ⇒ le spécialiste passe au Stage 3. **RENVOI** ⇒ le spécialiste corrige puis re-sollicite le reviewer de sécurité.
 - **Stage 3 — Finalisation (par le spécialiste).**
-  - *Step 1* : compte rendu en **prose réduite et 3 sections** (`## Résumé` · `## Points bloquants` *(si blocage)* · `## Action humaine requise` *(uniquement si l'humain doit intervenir, avec mention humaine active — jamais sur un retour A2A vers un agent)*) — forme imposée par [`output-format.md`](output-format.md), source unique.
+  - *Step 1* : compte rendu en **prose réduite et 4 sections** (`## Résumé` · `## Sensors` *(si sensors déclarés dans le stage)* · `## Points bloquants` *(si blocage)* · `## Action humaine requise` *(uniquement si l'humain doit intervenir, avec mention humaine active — jamais sur un retour A2A vers un agent)*) — forme imposée par [`output-format.md`](output-format.md), source unique.
   - *Step 2* : finalisation de l'issue (gate humain si requis), puis mention du coordinateur (lien de retour actif).
 
 > **Fenêtre de pose du lien de retour vers le coordinateur (invariant, durcissement anti-wake parasite).** Un spécialiste (auteur du livrable) ne pose un **lien de mention actif** vers le coordinateur (`[@<Nom coordinateur>](mention://agent/<uuid>)`) qu'au **Stage 3**, une fois le **portail de revues du Stage 2 clos** — tous les verdicts requis au vert (cohérence puis sécurité) et réserves intégrées. Pendant les **Stages 1 et 2**, le coordinateur est désigné **en texte clair uniquement** (« reviens vers moi, Architecture Solution & Intégration »), **jamais par un lien actif**. Un lien actif vers le coordinateur posé **avant** la clôture des revues est un **réveil parasite** et constitue un **écart de flux A2A** (observé sur ORIG-176 et ORIG-177, où le commentaire de mise en revue réveillait prématurément le coordinateur). Cette fenêtre **prolonge** la règle « anti-wake parasite » (aucune auto-mention active ; lien de retour posé par l'agent délégataire, UUID résolu dynamiquement — voir [`governance-security.md`](governance-security.md), « Règle A2A ») : elle fixe le ***quand*** du lien de retour, sans en relâcher aucune autre condition.
@@ -75,10 +75,39 @@ flowchart LR
 - **Vérification `trigger_outcomes`** : après le post, l'agent vérifie les `trigger_outcomes` de son commentaire. Si la mention n'a pas déclenché le run attendu (`blocked` / `coalesced` / `deferred`), il le signale sur l'issue (halt-and-ask) plutôt que de considérer la tâche terminée.
 
 ### 4. Sensors à l'écriture
-- À l'écriture d'un artefact, les `sensors` déclarés se déclenchent (`required-sections`, `upstream-coverage`, `diagram-validity`) et leur verdict est consigné en commentaire (`✅` / `⚠️` / `⛔ indisponible`). **Advisory** — n'autorise aucun raccourci, ne vaut pas validation (SG-1..6).
+
+> ⛔ **Les sensors ne se contournent pas.** Une vérification équivalente faite en prose, un commentaire ad hoc, ou une affirmation « conforme » sans rapport de sensor **ne satisfont pas** le temps 4. L'absence de rapport de sensor pour un sensor déclaré est un **écart à signaler** (SG-2 : indisponible ≠ conforme, silence = écart).
+
+Pour chaque artefact produit ou modifié, l'agent **auteur** exécute, à l'écriture, **tous les sensors déclarés dans le champ `sensors:` de la fiche de stage** et poste sur l'issue un **rapport de sensor** structuré, par sensor :
+
+```
+**Sensor `<id-du-sensor>`** (`fire_on: write` | `fire_on: gate`) — <artefact concerné>
+Verdict : ✅ conforme | ⚠️ écart mineur | ⛔ indisponible
+<une ligne : fait vérifié, ou motif d'indisponibilité / écart>
+```
+
+Règles non contournables :
+
+- **Chaque sensor déclaré fait l'objet d'un rapport distinct** — aucun regroupement ni omission.
+- **`⛔ indisponible`** s'applique lorsque le sensor n'est pas encore exécutable (nature déclarative du mécanisme — voir `sensors/README.md`) : l'agent indique le motif et poste le rapport avec ce verdict. Un sensor non exécuté est toujours un rapport `⛔`, **jamais un silence**.
+- **`⚠️ écart`** : l'agent décrit l'écart et continue (advisory) ; il **ne devance pas** la décision humaine mais la documente pour la validation humaine granulaire (temps 6).
+- Le rapport est **advisory** — n'autorise aucun raccourci, ne vaut pas validation (SG-1..6).
+- Les sensors `fire_on: write` (ex. `diagram-validity`, `detailed-arch-refs`) sont invoqués **à chaque écriture** de l'artefact concerné, pas seulement en fin de stage.
 
 ### 5. Verification gate à la frontière de phase
-- À la sortie de la phase, le coordinateur exécute le gate de traçabilité ([`core/sensors/gates.md`](../../sensors/gates.md)) et poste le **« Rapport de vérification »** *avant* la validation humaine. Un écart est signalé, jamais bloquant ; `⛔ indisponible ≠ conforme`.
+
+> ⛔ **Le rapport de gate ne se contourne pas.** Le coordinateur **poste le rapport de vérification** ([`core/sensors/gates.md`](../../sensors/gates.md)) *avant* la validation humaine, même si les sensors sont encore déclaratifs. L'absence de rapport est un écart de piste d'audit.
+
+Le coordinateur exécute le gate de traçabilité et poste le **« Rapport de vérification »** structuré pour la frontière franchie :
+
+```
+**Rapport de vérification — <id-frontière>** (`<Frontière : Phase A → Phase B>`)
+Checks : artefacts-présents ✅/⚠️/⛔ | liaison-traçabilité ✅/⚠️/⛔ | absence-orphelin ✅/⚠️/⛔
+Sensors de gate :
+- `<sensor-id>` : ✅/⚠️/⛔ <fait ou motif>
+```
+
+Un écart est signalé, jamais bloquant ; `⛔ indisponible ≠ conforme` (SG-2).
 
 ### 6. Validation humaine granulaire
 - Selon `human_gate` : `none` (aucune — Initialization), `light` (approbation intention/périmètre — Ideation), `granular` (choix par choix — Inception / Construction), `explicit` (validation explicite + rollback si destructif — Operation).
@@ -90,7 +119,7 @@ Dès qu'un stage **produit ou modifie une architecture** (ou une surface de séc
 ## Checklist de sortie de stage (`mode: subagent | pipeline | mob`) — non contournable
 Un stage délégué n'est considéré **terminé** QUE lorsque les trois cases sont cochées, **dans cet ordre** — c'est le **point de passage unique** que tout agent délégué franchit, quelle que soit sa fonction :
 
-1. ☑ **Livrable produit et contrôlé** — artefacts `produces` écrits, décision structurante tracée, piste d'audit posée sur l'issue. Le **compte rendu de retour** est rédigé en **prose réduite et 3 sections** (`## Résumé` ; `## Points bloquants` si blocage ; `## Action humaine requise` **uniquement si l'humain doit réellement intervenir**, et alors **toujours** avec un lien de mention actif de l'humain) — forme imposée par [`output-format.md`](output-format.md) (source unique), sans affaiblir aucune norme de gating. **Un retour A2A vers un agent (coordinateur, spécialiste) n'est pas une sollicitation humaine : il ne porte jamais la section « Action humaine requise » ni de mention de l'humain** (voir `output-format.md`, § `## Action humaine requise`, et [`governance-security.md`](governance-security.md), « Réciproque (exclusivité) »).
+1. ☑ **Livrable produit, sensors rapportés, et contrôlé** — artefacts `produces` écrits, **section `## Sensors` postée dans le compte rendu de retour pour chaque sensor déclaré** (format imposé par [`output-format.md`](output-format.md) — aucun sensor ne peut être omis ni remplacé par une vérification en prose), décision structurante tracée, piste d'audit posée sur l'issue. Le **compte rendu de retour** est rédigé en **prose réduite et 4 sections** (`## Résumé` ; `## Sensors` si sensors déclarés ; `## Points bloquants` si blocage ; `## Action humaine requise` **uniquement si l'humain doit réellement intervenir**, et alors **toujours** avec un lien de mention actif de l'humain) — forme imposée par [`output-format.md`](output-format.md) (source unique), sans affaiblir aucune norme de gating. **Un retour A2A vers un agent (coordinateur, spécialiste) n'est pas une sollicitation humaine : il ne porte jamais la section « Action humaine requise » ni de mention de l'humain** (voir `output-format.md`, § `## Action humaine requise`, et [`governance-security.md`](governance-security.md), « Réciproque (exclusivité) »).
 2. ☑ **Issue en `in_review` + lien de retour ACTIF posé** — le commentaire de retour se termine par `[@<Nom assigneur>](mention://agent/<uuid>)`, UUID résolu via `multica agent list --output json` (jamais copié / codé en dur), jamais une auto-mention. C'est ce lien qui enqueue le run de reprise. **Cible du retour** : le coordinateur pour un agent de production délégué ; le **spécialiste** (auteur du livrable) pour un **reviewer** — jamais un autre reviewer ni le coordinateur (voir [`reviewer.md`](reviewer.md), encadré « Le reviewer retourne toujours au spécialiste »). **Fenêtre de pose** : pour un spécialiste, le lien actif vers le **coordinateur** ne se pose qu'au **Stage 3**, portail de revues du Stage 2 clos — jamais à la mise en revue des Stages 1-2 (voir l'encadré « Fenêtre de pose du lien de retour vers le coordinateur » ci-dessus) ; pendant les revues, le spécialiste met l'issue en `in_review` et sollicite le reviewer suivant **sans** poser de lien actif vers le coordinateur.
 3. ☑ **`trigger_outcomes` vérifié** — la mention a bien déclenché le run attendu ; sinon (`blocked` / `coalesced` / `deferred`) → **halt-and-ask** sur l'issue, ne pas conclure.
 
