@@ -52,7 +52,7 @@ flowchart LR
 
 ## Forme de la revue — prose réduite (obligatoire)
 
-> La **prose réduite** décrite ci-dessous est la déclinaison, pour la revue, de l'exigence commune à **tout retour d'agent** — source unique [`output-format.md`](output-format.md). La revue garde ici ses règles propres (analyse de la prose du livrable, retour localisé) ; elle n'a pas de structure en 3 sections imposée (`## Résumé` / `## Points bloquants` / `## Action humaine requise`), son verdict (avis favorable / demande de correction) primant.
+> La **prose réduite** décrite ci-dessous est la déclinaison, pour la revue, de l'exigence commune à **tout retour d'agent** — source unique [`output-format.md`](output-format.md). La revue garde ici ses règles propres (analyse de la prose du livrable, retour localisé) ; elle n'a pas de structure en 4 sections imposée (`## Résumé` / `## Sensors` / `## Points bloquants` / `## Action humaine requise`), son verdict (avis favorable / demande de correction) primant.
 
 S'applique à **toute revue** (cohérence comme sécurité), sur n'importe quel verdict (OK comme RENVOI) :
 

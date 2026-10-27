@@ -67,7 +67,7 @@ Cette notification est **avancée au moment de la mise à disposition** (fin de 
 ## Sensors
 
 Outputs: livrables mis à disposition (archive par dossier ou commit + PR) + notification de fin de réalisation envoyée. Frontière **Construction → Operation** : gate `artefacts-presents` + `liaison-tracabilite` + `absence-orphelin`.
-Imports: `required-sections`.
+Imports: `required-sections`, `traceability`.
 
 ## Learn
 

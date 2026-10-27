@@ -56,7 +56,7 @@ Le **coordinateur** reçoit les descriptions de passation, **identifie la nature
 ## Sensors
 
 Outputs: livrables validés granulairement par l'humain (mise à disposition portée par le stage suivant [`delivery-handoff`](delivery-handoff.md)). Gate humain granulaire.
-Imports: `required-sections`.
+Imports: `required-sections`, `traceability`.
 
 ## Learn
 

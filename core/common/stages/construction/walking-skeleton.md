@@ -39,7 +39,7 @@ Après validation du walking skeleton, poser **une seule** question pour le rest
 ## Sensors
 
 Outputs: walking skeleton validé + mode d'exécution consigné.
-Imports: `required-sections`, `diagram-validity`.
+Imports: `required-sections`, `diagram-validity`, `claim-sources`.
 Review artifact: `walking-skeleton.md` porte la section `## Review` ajoutée par le Reviewer de sécurité.
 
 ## Learn
