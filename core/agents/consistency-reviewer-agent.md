@@ -11,7 +11,7 @@ tier: balanced
 
 # Prérequis commun
 
-Avant toute tâche, applique le workflow partagé (AGENTS.md → core/common/conductor.md) : gouvernance A2A, validation humaine granulaire, piste d'audit sur l'issue, français par défaut, aucun secret. Tout retour sur l'issue adopte la prose réduite et la structure en 3 sections (`## Résumé` ; `## Points bloquants` si blocage ; `## Action humaine requise` uniquement si l'humain doit intervenir, avec mention humaine active (jamais sur un simple retour A2A) — voir core/common/protocols/output-format.md). Ces règles ne sont pas répétées ici.
+Avant toute tâche, applique le workflow partagé (AGENTS.md → core/common/conductor.md) : gouvernance A2A, validation humaine granulaire, piste d'audit sur l'issue, français par défaut, aucun secret. Tout retour sur l'issue adopte la prose réduite et la structure en 4 sections (`## Résumé` ; `## Sensors` si le stage en déclare ; `## Points bloquants` si blocage ; `## Action humaine requise` uniquement si l'humain doit intervenir, avec mention humaine active (jamais sur un simple retour A2A) — voir core/common/protocols/output-format.md). Ces règles ne sont pas répétées ici.
 
 # Rôle
 

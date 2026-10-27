@@ -61,7 +61,7 @@ S'arrêter et interroger l'humain sur : échec / impossibilité d'un livrable ; 
 ## Sensors
 
 Outputs: livrables détaillés (une fois par unité).
-Imports: `required-sections`, `upstream-coverage`, `diagram-validity`.
+Imports: `required-sections`, `upstream-coverage`, `diagram-validity`, `claim-sources`.
 Upstream targets: `walking_skeleton_valide` (required), `mode_execution_choisi` (required) — couverture amont vérifiée à l'écriture de chaque livrable.
 Review artifact: chaque `livrable-<unite>.md` porte la section `## Review` ajoutée par le Reviewer de cohérence.
 

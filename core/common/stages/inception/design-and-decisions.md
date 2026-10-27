@@ -103,7 +103,7 @@ Lorsqu'une **décision structurante (ADR)** est traitée **sous Multica**, le st
 ## Sensors
 
 Outputs: conception + décisions validées. Frontière **Inception → Construction** : gate `artefacts-presents` + `liaison-tracabilite` + `absence-orphelin`.
-Imports: `required-sections`, `upstream-coverage`, `diagram-validity`, `data-lifecycle`.
+Imports: `required-sections`, `upstream-coverage`, `diagram-validity`, `data-lifecycle`, `claim-sources`.
 Upstream targets: `besoins_traces` (required), `decoupage_livrables` (required) — couverture amont vérifiée à l'écriture de la décision / conception.
 Données : `data-lifecycle` vérifie `documentation/10-cycle_vie_donnees.md` (présent + renseigné selon les données du projet). **Advisory pour tous** : il **assiste** la revue **Architecte de solution → Architecte de données** et **alerte** le coordinateur au verification gate, **sans jamais bloquer** ni la validation de l'Architecte de solution ni le gate humain.
 Review artifact: la **décision structurante** (`decisions/<NNNN>-<titre>.md`) porte la section `## Review` ajoutée par le Reviewer de sécurité.
