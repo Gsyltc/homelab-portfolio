@@ -7,6 +7,7 @@ skills:
   - architecture-solution-gabarits
   - create-architectural-decision-record
   - project-defaults
+  - structurizr-diagrams
   - cdae-ai-eligibilite
 disallowedTools: Task
 tier: judgment

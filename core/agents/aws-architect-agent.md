@@ -8,6 +8,7 @@ skills:
   - aws-solution-architect
   - create-architectural-decision-record
   - project-defaults
+  - structurizr-diagrams
 disallowedTools: Task
 tier: judgment
 ---
