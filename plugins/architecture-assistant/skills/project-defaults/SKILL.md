@@ -80,8 +80,8 @@ Rappels Structurizr : `!docs <dir>` importe le Markdown du répertoire indiqué 
 - Nommage : `<type>-<description>.<extension>` (ex. `c4-context-systeme-principal.dsl`)
 - **Lorsque C4 est le format retenu**, les modèles C4 sont dans un **fichier unique** respectant le DSL de Structurizr.
 - Les diagrammes **réutilisent le thème du projet** lorsqu'il est disponible.
-- **Format par défaut** : C4 (Structurizr DSL). Si un autre format est explicitement précisé dans la description du projet ou le `README.md` (`ArchiMate` ou `CALM`), utiliser ce format. Ordre : 1) format explicite → 2) sinon C4.
-- Voir la skill `structurizr-diagrams` pour les règles C4. Références : [`references/archimate.md`](references/archimate.md), [`references/calm.md`](references/calm.md). Ne pas mélanger les formats.
+- **Format par défaut** : C4 (Structurizr DSL). Si un autre format est explicitement précisé dans la description du projet ou le `README.md` (`ArchiMate` ou `CALM`), utiliser ce format.
+- Règles C4/Structurizr : [`references/structurizr.md`](references/structurizr.md). Références : [`references/archimate.md`](references/archimate.md), [`references/calm.md`](references/calm.md). Ne pas mélanger les formats.
 
 ### `views/`
 
