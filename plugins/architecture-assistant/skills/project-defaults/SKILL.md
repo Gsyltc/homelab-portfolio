@@ -78,13 +78,10 @@ Rappels Structurizr : `!docs <dir>` importe le Markdown du répertoire indiqué 
 **Conventions** :
 - Formats supportés : PlantUML (`.puml`), Mermaid (`.mmd`), Structurizr DSL (`.dsl`), CALM, Archimate
 - Nommage : `<type>-<description>.<extension>` (ex. `c4-context-systeme-principal.dsl`)
-- **Lorsque C4 est le format retenu** (voir la règle de sélection ci-dessous), les modèles C4 sont dans un **fichier unique** respectant le DSL de Structurizr
-- Les diagrammes **réutilisent le thème du projet** (répertoire `theme/`, p. ex. `theme/0000-default-styles.dsl`) **lorsqu'il est disponible** (Structurizr, PlantUML, etc.) ; ne pas réinventer ni approximer un style quand le thème existe
-- **Format de modélisation par défaut (règle de sélection)** : la norme **par défaut** d'un projet est **C4** (modélisé en Structurizr DSL). Si un **autre format est explicitement précisé** pour le projet — **ArchiMate** ou **CALM** — dans la **description du projet** (workspace Multica) **ou** le **`README.md` du projet**, alors **C4 n'est pas utilisé** : on utilise **le format défini**. Ordre de résolution :
-  1. Format explicitement nommé dans la **description du projet** ou le **`README.md`** (`ArchiMate` ou `CALM`) → ce format fait foi, **C4 est écarté**.
-  2. **Sinon → C4 par défaut** (Structurizr DSL).
-
-  Mode opératoire du format retenu : [`references/structurizr.md`](references/structurizr.md) (C4), [`references/archimate.md`](references/archimate.md) (ArchiMate), [`references/calm.md`](references/calm.md) (CALM). Ne pas mélanger les formats pour un même projet ; en cas d'ambiguïté (plusieurs formats cités, mention contradictoire), demander l'arbitrage humain avant de générer.
+- **Lorsque C4 est le format retenu**, les modèles C4 sont dans un **fichier unique** respectant le DSL de Structurizr.
+- Les diagrammes **réutilisent le thème du projet** lorsqu'il est disponible.
+- **Format par défaut** : C4 (Structurizr DSL). Si un autre format est explicitement précisé dans la description du projet ou le `README.md` (`ArchiMate` ou `CALM`), utiliser ce format. Ordre : 1) format explicite → 2) sinon C4.
+- Voir la skill `structurizr-diagrams` pour les règles C4. Références : [`references/archimate.md`](references/archimate.md), [`references/calm.md`](references/calm.md). Ne pas mélanger les formats.
 
 ### `views/`
 
@@ -101,7 +98,7 @@ Rappels Structurizr : `!docs <dir>` importe le Markdown du répertoire indiqué 
 L'intégration des diagrammes dans la DAS suit la convention **« vue `image` Structurizr rendue par kroki + `embed:` »**. Les instructions détaillées sont **déportées** dans des fichiers de référence **chargés uniquement au besoin** (production, intégration ou révision d'un diagramme) :
 
 - ➡️ **[`references/kroki-diagrammes.md`](references/kroki-diagrammes.md)** — intégration des diagrammes à la DAS : règle `image`+kroki+`embed:`, proscription du `![](….svg)`, renderers par type de source, câblage `theme/0002-external-tools.dsl`, regroupement par famille et numérotation fixe (`0001`–`0006`+), validation DSL, traçabilité.
-- ➡️ **[`references/structurizr.md`](references/structurizr.md)** — modèle C4 et vues : arborescence `workspace.dsl` / `models/` / `views/` / `theme/`, modèle = source de vérité, hiérarchie C4, validation (`structurizr.sh validate`), export / Structurizr Lite.
+- ➡️ **[`structurizr-diagrams`](../../../../plugins/architecture-assistant/skills/structurizr-diagrams/SKILL.md)** — règles C4/Structurizr.
 - ➡️ **[`references/archify.md`](references/archify.md)** — diagrammes HTML/SVG **pour les présentations client** (skill `archify`, agent « Présentation client ») : 5 types, flux `finalize`, garde d'authenticité ; **distinct** de l'intégration DAS.
 - ➡️ **[`references/archimate.md`](references/archimate.md)** — modélisation **d'entreprise** ArchiMate (The Open Group / TOGAF) : couches Motivation/Stratégie/Métier/Application/Technologie, production en code (Archi `.archimate` ou PlantUML-Archimate), intégration DAS via `kroki plantuml`.
 - ➡️ **[`references/calm.md`](references/calm.md)** — **CALM** (Common Architecture Language Model, FINOS, architecture-as-code JSON) : nodes/relationships/interfaces/controls/flows, validation CLI, toolchain (CALM Hub / CalmStudio / VS Code).
