@@ -4,7 +4,7 @@ phase: validation
 execution: CONDITIONAL
 condition: "Uniquement sur « oui » explicite de l'humain pour lancer le déploiement Kestra"
 lead_agent: Tech Lead Homelab
-support_agents: []
+support_agents: [Spécialiste Déploiement Kestra]
 mode: inline
 summary_confirmation: required
 reviewer: null

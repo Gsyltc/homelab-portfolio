@@ -28,6 +28,7 @@ Le workflow désigne les acteurs par rôle générique. Pour toute délégation 
 | Spécialiste Docker        | Bob - Spécialiste Docker        | 3d114282-1047-4d38-a1d4-eed674c37c95   |
 | Analyste QA               | Kevin - Analyste QA             | f20d1bca-ec23-422c-8cea-2558fea5eac4   |
 | Spécialiste Terraform     | André - Spécialiste Terraform   | f8a096eb-a68d-49ef-915a-8cec36afa1b6   |
+| Spécialiste Déploiement Kestra | Spécialiste Déploiement Kestra | (à créer via `multica agent create` ou import)   |
 | Expert n8n                | Marilyne - Expert n8n           | 16b5e0f8-81c4-49c4-973d-5d43e48ce3a0   |
 | Expert Home Assistant     | Hugo - Expert Home Assistant    | f26bfd2b-dffa-4734-b6b0-59bd1ae6ef92   |
 | Agent de notifications    | Alfred - Agent de notifications | 254d9349-1eb3-4f50-a4cd-b18a7043a7c0   |
