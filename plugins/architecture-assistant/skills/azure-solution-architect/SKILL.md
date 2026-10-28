@@ -369,22 +369,22 @@ Provide these details for architecture design:
 
 ---
 
-## C4 Diagrams — Azure service tagging and theming (mandatory)
+## C4 Diagrams — component tagging and theming (mandatory)
 
-When Azure services appear in the project's C4 model (Structurizr DSL) — including the deployment elements `deploymentNode` and `infrastructureNode` — each Azure service element MUST carry a **dedicated tag** (PascalCase, e.g. `AzureDevOps` for *Azure DevOps*) and a matching **themed style** in `theme/0001-project-styles.dsl` that uses the **official Structurizr Microsoft Azure theme icon** and Azure colours:
+When Azure services appear in the project's C4 model (Structurizr DSL) — including the deployment elements `deploymentNode` and `infrastructureNode` — each service element MUST carry a **dedicated tag** (PascalCase, e.g. `AzureDevOps` for *Azure DevOps*) and a matching **themed style** in `theme/0001-project-styles.dsl` that uses the **official logo** found on the `dashboard-icons` repository, plus Azure colours:
 
 ```dsl
 element AzureDevOps {
-    icon https://static.structurizr.com/themes/microsoft-azure-2024.07.15/azure-devops.png
+    icon https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/azure-devops.png
     stroke #509aeb
     color #509aeb
 }
 ```
 
-- Icon base URL: `https://static.structurizr.com/themes/microsoft-azure-2024.07.15/<service>.png` (official theme — <https://github.com/structurizr/themes>). Use the real icon file name; never invent one.
-- Never leave an Azure service without its `element <Tag>` style — add it if missing.
+- Logo base URL: `https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/<name>.png` (kebab-case). Find the right logo (URL must return `200`); never invent a name.
+- **Fallback**: if the logo does not exist (URL `404`), then **no theme and no tag** for that element — leave it at the default style.
 
-**Single source of truth** (full rule, examples, validation): [`project-defaults/references/structurizr.md`](../project-defaults/references/structurizr.md), section « Services cloud Azure : tag dédié + style thématisé ». This skill does not duplicate it.
+**Single source of truth** (full rule, examples, validation): [`project-defaults/references/structurizr.md`](../project-defaults/references/structurizr.md), section « Style des composants : tag dédié + logo thématisé ». This skill does not duplicate it.
 
 ---
 
