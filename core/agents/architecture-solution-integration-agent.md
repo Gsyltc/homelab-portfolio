@@ -6,7 +6,6 @@ description: >
 skills:
   - architecture-solution-gabarits
   - create-architectural-decision-record
-  - structurizr-diagrams
   - cybersecurite
   - project-defaults
 disallowedTools: Task
