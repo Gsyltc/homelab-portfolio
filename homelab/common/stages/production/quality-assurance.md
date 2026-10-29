@@ -36,7 +36,7 @@ Le Tech Lead délègue à l'**Analyste QA** (mission + mention valide). Ordre im
 
 ### Step 2 — Vérifier le Terraform (volet `.tfvars`, skill `terraform-qa`)
 
-Sur les scopes produisant du Terraform, analyser le livrable `.tfvars` (skill `terraform-qa`) : structure HCL, conformité au template de configuration de stack, cohérence des variables (dont `cloudflare_dns_nb`), **absence de `${SNI}`** (domaines / URLs en clair — critique), **absence de secret en clair** (critique), absence de toute exécution Terraform. Classer les problèmes (critical / warning / info), rédiger chaque point de façon **autosuffisante** (`constat` / `cause` / `correction` / `domaine_correction`) dans le rapport YAML (`report-format.schema.json`) : sur au moins un défaut `critical` / `warning`, `verdict = RENVOI` vers le **Spécialiste Terraform** (agent créateur) ; sinon `verdict = OK`.
+Sur les scopes produisant du Terraform, analyser le livrable `.tfvars` (skill `terraform-qa`) : structure HCL, conformité au template de configuration de stack, cohérence des variables (dont `cloudflare_dns_nb`), **absence de `${SNI}`** (domaines / URLs en clair — critique), **absence de secret en clair** (critique), absence de toute exécution Terraform. Classer les problèmes (critical / warning / info), rédiger chaque point de façon **autosuffisante** (`constat` / `cause` / `correction` / `domaine_correction`) dans le rapport YAML (`report-format.schema.yaml`) : sur au moins un défaut `critical` / `warning`, `verdict = RENVOI` vers le **Spécialiste Terraform** (agent créateur) ; sinon `verdict = OK`.
 
 ### Step 3 — Analyser et classer le compose (revue adversariale — plancher SG-3)
 

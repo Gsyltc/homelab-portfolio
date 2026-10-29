@@ -1,10 +1,10 @@
 # Protocole — format de compte-rendu A2A (Homelab)
 
-Source unique du **compte-rendu structuré** qu'un spécialiste / reviewer remonte au Tech Lead Homelab en fin de mission. Ce protocole et le schéma [`report-format.schema.json`](report-format.schema.json) font foi : les fiches d'agent et de stage **référencent** ce format, elles ne le redupliquent pas (source unique — SG-1 / SEC-5).
+Source unique du **compte-rendu de revue** qu'un reviewer remonte au Tech Lead Homelab en fin de mission. Ce protocole et le schéma [`report-format.schema.yaml`](report-format.schema.yaml) font foi ; les fiches d'agent et de stage le **référencent**, sans le redupliquer (source unique — SG-1 / SEC-5).
 
-> **Sérialisation : YAML.** Le fichier de rapport est écrit en **YAML** (`review-<agent>-<stack>.yaml`), pas en JSON. Le schéma [`report-format.schema.json`](report-format.schema.json) reste un **JSON Schema** (outil standard de description du contrat) et **valide le document YAML** : YAML et JSON partagent le même modèle de données, le schéma s'applique à l'identique. Seule la **sérialisation du rapport** est YAML ; le fichier de schéma, lui, demeure du JSON Schema.
+> **Sérialisation : YAML.** Rapport et schéma sont en **YAML**. Le rapport conforme est écrit dans `review-<agent>-<stack>.yaml` et déposé en pièce jointe.
 
-Objectif : **minimiser** le retour d'information des spécialistes et le rendre **uniforme et déterministe**, pour que le Tech Lead route/arbitre sans relire de la prose. Le Tech Lead reste le **seul** à composer la communication en langage naturel vers l'humain.
+Objectif : un retour **minimal, uniforme et déterministe**, pour que le Tech Lead route sans relire de la prose. Lui seul compose la communication en langage naturel vers l'humain.
 
 ## Geste de fin de mission (obligatoire)
 
@@ -54,14 +54,14 @@ report:
 
 ## Contrat des champs
 
-Le contrat complet (types, enums, obligations) est porté par [`report-format.schema.json`](report-format.schema.json). Points saillants :
+Le contrat complet (types, enums, obligations) est porté par [`report-format.schema.yaml`](report-format.schema.yaml). Points saillants :
 
 - `verdict` — `OK` | `RENVOI` | `BLOQUE`, lu directement par le Tech Lead pour l'aiguillage macro.
 - `points[]` — **trié par gravité décroissante (`critical` en tête)**. Plafond : **3 par défaut, 5 sur `security-patch` / `new-stack`**. Tableau vide = RAS.
-- `sensors[]` — **verdict de chaque sensor déclaré** dans le champ `sensors:` de la fiche de stage exécutée : c'est ce qui **rend visible dans le compte-rendu que les sensors ont bien été vérifiés**. Un élément `{ id, fire_on, verdict, note }` **par sensor déclaré** — aucune omission (SG-2 : un sensor déclaré non exécuté est `indisponible`, jamais absent ; silence = écart). `verdict` ∈ `conforme` (✅) | `ecart` (⚠️) | `indisponible` (⛔) ; `note` = une ligne factuelle (fait vérifié, écart, ou motif d'indisponibilité), **jamais de valeur de secret ni de `${SNI}`**. Ce tableau est le **miroir déterministe** des rapports de sensor postés à l'écriture ([`stage-protocol.md`](stage-protocol.md) § 4). **Advisory** : il factualise la vérification, ne vaut pas validation (SG-1..6). Tableau vide **uniquement** si le stage ne déclare aucun sensor.
-- Chaque `point` porte `constat` (quoi), `cause` (pourquoi) et `correction` (comment corriger — autosuffisant pour un autre agent), plus un `id` stable (`P1`, `P2`…).
-- `domaine_correction` — indice du rôle correcteur (**`null` autorisé** quand l'agent ne sait pas) ; c'est une **suggestion**, le Tech Lead tranche.
-- `arbitrage_requis` — l'agent **signale** qu'un choix non purement technique existe ; il **ne décide pas** de l'escalade. **Seul le Tech Lead** détecte l'arbitrage et décide de remonter à l'humain. `arbitrage_motif` (non-`null` **uniquement** si `arbitrage_requis = true`) est rédigé pour que **le Tech Lead l'explique tel quel à l'humain** : il énonce le **choix en jeu**, les **options** (au moins deux) et le **compromis / l'impact** de chacune. Assez détaillé pour éclairer la décision, **concis** pour autant : 1 à 3 phrases, factuel, sans jargon interne ni rappel du workflow.
+- `sensors[]` — **verdict de chaque sensor déclaré** dans le champ `sensors:` du stage : c'est ce qui **rend visible que les sensors ont bien été vérifiés**. Un élément `{ id, fire_on, verdict, note }` par sensor — aucune omission (SG-2 : non exécuté = `indisponible`, jamais absent). `verdict` ∈ `conforme` (✅) | `ecart` (⚠️) | `indisponible` (⛔). **Advisory** : miroir des rapports à l'écriture ([`stage-protocol.md`](stage-protocol.md) § 4), ne vaut pas validation. Tableau vide **uniquement** si le stage ne déclare aucun sensor.
+- Chaque `point` porte `constat` (quoi), `cause` (pourquoi), `correction` (autosuffisante) et un `id` stable (`P1`, `P2`…).
+- `domaine_correction` — rôle correcteur suggéré (**`null` si inconnu**) ; le Tech Lead tranche.
+- `arbitrage_requis` — l'agent **signale** un choix non purement technique ; **seul le Tech Lead** décide d'escalader. `arbitrage_motif` (non-`null` **uniquement** si `arbitrage_requis = true`) énonce le choix, les options et le compromis, en 1 à 3 phrases, pour que le Tech Lead l'explique tel quel à l'humain.
 - `blocage` — non-`null` **uniquement** si `verdict = BLOQUE`.
 
 ## Traitement par le Tech Lead

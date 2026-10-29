@@ -2,9 +2,9 @@
 
 Source unique du **geste de fin de mission** d'un agent **producteur** (stages `review_class: none`) : livrable seul, corps minimal, zéro prose. Les fiches de stage et d'agent producteur **référencent** ce protocole, elles ne le redupliquent pas (source unique — SG-1 / SEC-5).
 
-Distinct du compte-rendu structuré des **reviewers** ([`report-format.md`](report-format.md) / [`report-format.schema.json`](report-format.schema.json), **inchangé** — rapport **YAML** `review-<agent>-<stack>.yaml`) : un producteur ne joint **aucun fichier de rapport** (ni YAML ni JSON).
+Distinct du compte-rendu structuré des **reviewers** ([`report-format.md`](report-format.md) / [`report-format.schema.yaml`](report-format.schema.yaml), rapport **YAML** `review-<agent>-<stack>.yaml`) : un producteur ne joint **aucun fichier de rapport**.
 
-> **Les sensors déclarés restent visibles même sans fichier de rapport.** Un producteur n'attache aucun fichier de rapport, mais il **ne contourne pas** l'obligation de surface des sensors : à l'écriture de son livrable, il poste **sur l'issue** (piste d'audit) le **rapport de sensor par sensor déclaré**, selon [`stage-protocol.md`](stage-protocol.md) § 4 (temps 4 « Sensors à l'écriture »). C'est ce rapport sur l'issue — et non le thread minimal de fin de mission — qui **montre que chaque sensor déclaré a été vérifié**. Aucun sensor déclaré ne reste silencieux (SG-2 : `⛔ indisponible ≠ conforme`, silence = écart).
+> **Sensors visibles même sans fichier de rapport.** Un producteur n'attache aucun rapport, mais poste **sur l'issue**, à l'écriture de son livrable, le **verdict par sensor déclaré** ([`stage-protocol.md`](stage-protocol.md) § 4). Aucun sensor déclaré ne reste silencieux (SG-2).
 
 ## Geste de fin de mission (obligatoire)
 

@@ -55,12 +55,12 @@ Verdict : ✅ conforme | ⚠️ écart mineur | ⛔ indisponible
 Règles non contournables :
 
 - **Chaque sensor déclaré fait l'objet d'un rapport distinct** — aucun regroupement ni omission (SG-2 : silence = écart).
-- **`⛔ indisponible`** s'applique lorsque le sensor n'est pas encore exécutable (nature déclarative du mécanisme — voir [`../../sensors/README.md`](../../sensors/README.md)) : l'agent indique le motif et poste le rapport avec ce verdict. Un sensor non exécuté est toujours un rapport `⛔`, **jamais un silence**.
+- **`⛔ indisponible`** : sensor non encore exécutable (mécanisme déclaratif — voir [`../../sensors/README.md`](../../sensors/README.md)) ; indiquer le motif. Jamais un silence.
 - **`⚠️ écart`** : l'agent décrit l'écart en une ligne et continue (advisory) ; il **ne devance pas** la décision humaine mais la documente pour la validation humaine granulaire (temps 6).
 - **Advisory par défaut** — n'autorise aucun raccourci, ne vaut pas validation (SG-1..6). **Exception** : `plaintext-secret` / `terraform-no-sni` sont **bloquants sur `security-patch` / `new-stack`** (ALI-204) — une détection arrête l'avancée jusqu'à correction ou levée humaine explicite tracée.
 - Les sensors `fire_on: write` (ex. `yaml-validity`, `plaintext-secret`, `terraform-no-sni`) sont invoqués **à chaque écriture** de l'artefact concerné, pas seulement en fin de stage.
 
-Ce rapport par sensor sur l'issue est **repris en synthèse** dans le compte-rendu de fin de mission de l'agent : le **reviewer** (Analyste QA) le surface dans le champ `sensors[]` de son rapport YAML ([`report-format.md`](report-format.md) / [`report-format.schema.json`](report-format.schema.json)) ; le **producteur** le consigne sur l'issue selon [`producer-report.md`](producer-report.md). Dans les deux cas, le retour d'agent **montre explicitement que chaque sensor déclaré a été vérifié** — aucun sensor déclaré ne reste silencieux.
+Ce rapport par sensor est **repris en synthèse** en fin de mission : par le **reviewer** dans le champ `sensors[]` du rapport YAML ([`report-format.md`](report-format.md)), par le **producteur** sur l'issue ([`producer-report.md`](producer-report.md)).
 
 ### 5. Verification gate à la frontière de phase
 
