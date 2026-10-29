@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/Gsyltc/homelab-portfolio/homelab/common/protocols/report-format.schema.json",
   "title": "Compte-rendu de revue Homelab (A2A)",
-  "description": "Source unique du contrat de compte-rendu structuré remonté par un spécialiste/reviewer au Tech Lead Homelab. Le JSON conforme est déposé en pièce jointe (review-<agent>-<stack>.json) ; le commentaire déclencheur ne porte que la mention valide du Leader + le verdict + « rapport JSON en pièce jointe ». Voir report-format.md.",
+  "description": "Source unique du contrat de compte-rendu structuré remonté par un spécialiste/reviewer au Tech Lead Homelab. Ce fichier reste un JSON Schema (outil standard) mais valide un document YAML : le rapport est écrit en YAML et déposé en pièce jointe (review-<agent>-<stack>.yaml) ; le commentaire déclencheur ne porte que la mention valide du Leader + le verdict + « rapport YAML en pièce jointe ». Voir report-format.md.",
   "type": "object",
   "additionalProperties": false,
   "required": ["report"],
@@ -10,7 +10,7 @@
     "report": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["agent", "verdict", "livrable", "points", "blocage"],
+      "required": ["agent", "verdict", "livrable", "points", "sensors", "blocage"],
       "properties": {
         "agent": {
           "type": "string",
@@ -32,6 +32,11 @@
           "maxItems": 5,
           "items": { "$ref": "#/$defs/point" }
         },
+        "sensors": {
+          "type": "array",
+          "description": "Verdict de CHAQUE sensor déclaré dans le champ sensors: de la fiche de stage exécutée (surface que les sensors ont bien été vérifiés). Un élément par sensor déclaré — aucune omission (SG-2 : silence = écart). Tableau vide UNIQUEMENT si le stage ne déclare aucun sensor. Advisory : ne vaut pas validation (SG-1..6).",
+          "items": { "$ref": "#/$defs/sensor" }
+        },
         "blocage": {
           "type": ["string", "null"],
           "description": "Une phrase décrivant le blocage. Non-null UNIQUEMENT si verdict = BLOQUE (voir la contrainte conditionnelle)."
@@ -47,6 +52,34 @@
     }
   },
   "$defs": {
+    "sensor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "fire_on", "verdict", "note"],
+      "description": "Verdict d'un sensor déclaré dans la fiche de stage. Miroir déterministe du rapport de sensor posté à l'écriture (stage-protocol.md § 4). Jamais de valeur de secret, jamais de ${SNI}.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Id nu du sensor, tel que déclaré dans le champ sensors: de la fiche de stage (ex. yaml-validity, plaintext-secret).",
+          "enum": ["yaml-validity", "swarm-deploy-section", "plaintext-secret", "terraform-no-sni", "traefik-coherence", "vault-secret-exists"]
+        },
+        "fire_on": {
+          "type": "string",
+          "description": "Moment de déclenchement du sensor, repris du manifeste (homelab/sensors/).",
+          "enum": ["write", "gate"]
+        },
+        "verdict": {
+          "type": "string",
+          "description": "Verdict advisory du sensor. conforme (✅) | ecart (⚠️ écart mineur) | indisponible (⛔ non exécuté / en erreur / hors périmètre — jamais lu comme conforme, SG-2). Un sensor déclaré non exécuté est 'indisponible', jamais omis.",
+          "enum": ["conforme", "ecart", "indisponible"]
+        },
+        "note": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Une ligne factuelle : fait vérifié (si conforme), description de l'écart (si ecart), ou motif d'indisponibilité (si indisponible). Jamais de valeur de secret ni de ${SNI}."
+        }
+      }
+    },
     "point": {
       "type": "object",
       "additionalProperties": false,

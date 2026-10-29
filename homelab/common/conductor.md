@@ -210,7 +210,7 @@ sequenceDiagram
 - [`protocols/stage-protocol.md`](protocols/stage-protocol.md) — cycle générique d'exécution d'un stage.
 - [`protocols/governance-security.md`](protocols/governance-security.md) — gouvernance A2A, contrôle sécurité, invariants, garde-fous, concurrence par stack.
 - [`protocols/reviewer.md`](protocols/reviewer.md) — protocole de revue (Analyste QA + sécurité Homelab).
-- [`protocols/report-format.md`](protocols/report-format.md) — format unique du compte-rendu A2A (JSON en pièce jointe + mention valide), schéma [`protocols/report-format.schema.json`](protocols/report-format.schema.json).
+- [`protocols/report-format.md`](protocols/report-format.md) — format unique du compte-rendu A2A (YAML en pièce jointe + mention valide), schéma [`protocols/report-format.schema.json`](protocols/report-format.schema.json).
 - [`protocols/scopes-and-axes.md`](protocols/scopes-and-axes.md) — scopes, axes Depth / vérification, matrice stage × scope.
 - [`stages/`](stages/) — fiches de stage des 5 phases.
 - [`homelab/rules/`](../rules/README.md) — mémoire de règles multi-couches (`global > stack > phase > scope`).
