@@ -10,7 +10,7 @@ summary_confirmation: none
 reviewer: null
 review_class: none
 human_gate: none
-produces: [repertoire_projet_confirme]
+produces: [repertoire_projet_confirme, checklist_architecture_initialisee]
 consumes: []
 requires_stage: []
 sensors: []
@@ -35,9 +35,13 @@ Vérifier le répertoire officiel du projet et les emplacements conventionnels (
 
 Répertoire introuvable ou ambigu → demander confirmation à l'humain et **ne pas lancer les travaux** sans elle. Ce n'est **pas** un gate de validation : c'est une garde déterministe.
 
+### Step 3 — Initialiser la checklist d'architecture
+
+Si `documentation/00-checklist-architecture.md` n'existe pas dans le répertoire projet confirmé, le créer en copiant le gabarit [`../../protocols/gabarits/00-checklist-architecture.md`](../../protocols/gabarits/00-checklist-architecture.md) (tous les éléments à `non débuté`, % à 0). Idempotent : ne **jamais** écraser un fichier d'état existant. Le cycle de lecture / écriture de la checklist a sa **source unique** dans [`../../protocols/architecture-checklist.md`](../../protocols/architecture-checklist.md).
+
 ## Sensors
 
-Outputs: répertoire confirmé consigné sur l'issue. Aucun gate humain (bootstrap déterministe).
+Outputs: répertoire confirmé consigné sur l'issue ; checklist d'architecture initialisée (`documentation/00-checklist-architecture.md`) le cas échéant. Aucun gate humain (bootstrap déterministe).
 Imports: none.
 
 ## Learn
