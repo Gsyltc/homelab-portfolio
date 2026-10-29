@@ -47,15 +47,13 @@ Les trois termes :
 - **+10 % — acceptation humaine** : le terme vaut `1` si un **membre humain** de l'espace (auteur de type `member`) a **explicitement accepté** l'élément (gate granulaire « Keep / Modify / Redo » — source unique [`../conductor.md`](../conductor.md)), rattaché à la version courante (section 4). Un commentaire d'agent, **même cité par un humain**, ne compte pas ; aucun agent ne s'auto-accepte. **Pour les éléments de la section Livrables et pour Besoins → Sécurité, l'acceptation humaine ne se crédite qu'après le verdict de sécurité favorable sur la même version** (jamais en parallèle — SG-3).
 
 - **% section** : moyenne arithmétique des `% élément` de la section ; **% global** : moyenne de **tous** les `% élément`. Les deux sont arrondis à l'entier **pour l'affichage uniquement**.
-- **Arrondi** : toute **comparaison** (conformité complète du gate, section 7) se fait sur les **valeurs non arrondies** (ex. un élément à 17/18 sections n'est **pas** complet, quel que soit l'affichage).
+- **Arrondi** : l'arrondi est **un affichage**. Le gate ne compare **aucun pourcentage** : il teste `sections conformes / total = 1` (section 7).
 
-### Total dynamique (instantané recalculé)
+### Total dynamique, anti-abaissement, double comptage
 
-Le `total sections` est **toujours lu dans `required-sections` au moment du calcul**. Toute évolution du contrat (section/fichier mandatory ajouté ou retiré) **recalcule** le total et le terme 80 % **sans** modifier ce protocole. Le fichier d'état porte un **instantané recalculé à chaque mise à jour** (section 5) ; il ne constitue jamais une source concurrente du contrat.
-
-> **Garde-fou anti-abaissement (SG-3).** Un **retrait** ou un **assouplissement** d'une section mandatory **de sécurité** ferait **monter** mécaniquement les pourcentages. Un tel changement n'est recevable que sur **validation humaine explicite et tracée** (un contrôle lié à la sécurité ne s'abaisse jamais sans validation humaine tracée). Cette décision relève de `required-sections` (source unique) et d'un contrôle sécurité, pas de la checklist.
-
-> **Double comptage.** Un même fichier peut alimenter deux éléments : les sections de `11-securite.md` comptent dans le DAS **et** dans « Architecture de sécurité détaillée » ; celles de `10-cycle_vie_donnees.md` dans le DAS **et** dans « Architecture de données détaillée ». C'est **assumé** (le DAS mesure la complétude d'ensemble, l'élément détaillé la profondeur du volet) ; les deux éléments restent jugés séparément.
+- **Total dynamique** : le `total sections` est **toujours lu dans `required-sections` au moment du calcul** ; le fichier d'état n'est qu'un **instantané recalculé** à chaque mise à jour, jamais une source concurrente.
+- **Anti-abaissement (SG-3)** : retirer ou assouplir une section mandatory **de sécurité** fait monter les % ; recevable **uniquement sur validation humaine tracée** (décision relevant de `required-sections` + contrôle sécurité, pas de la checklist).
+- **Double comptage** : les sections de `11-securite.md` et `10-cycle_vie_donnees.md` comptent à la fois dans le DAS et dans l'élément détaillé correspondant (assumé ; cf. NEG-004 de l'ADR).
 
 ## 4. Mise à jour (écriture) — conformité objective, revue favorable versionnée, acceptation humaine
 
@@ -82,7 +80,8 @@ Avant de créditer les sections conformes d'un élément, le coordinateur vérif
 | Élément | Document(s) attendu(s) dans `documentation/` | Contrat de sections (décompte du 80 %) | Total sections |
 | --- | --- | --- | --- |
 | Cadrage | jugé sur l'issue (pas de document mandatory propre) | **aucun contrat** — convention `total = 1` | 1 |
-| Besoins → Entreprises et affaires · Solutions · Technologique · 🔒 Sécurité | jugés sur l'issue (pas de document mandatory propre) | **aucun contrat** — convention `total = 1` par élément | 1 |
+| Besoins → Entreprises et affaires · Solutions · Technologique | jugés sur l'issue (pas de document mandatory propre) | **aucun contrat** — convention `total = 1` ; jugé par la **cohérence** | 1 |
+| 🔒 Besoins → Sécurité | jugé sur l'issue | **aucun contrat** — convention `total = 1` ; jugé par le **Reviewer de sécurité** | 1 |
 | Architecture de solution (DAS) | fichiers mandatory du DAS (`001`,`01`,`02`,`06`,`08`,`10`,`11`) | `required-sections`, volet `das:` | **18** |
 | Architecture Logicielle détaillée | `00-architecture-detaillee.md` (volet logiciel) | gabarit DAS `00-architecture-detaillee` (**non mandatory** → convention `total = 1`) | 1 |
 | Architecture de données détaillée | `10-cycle_vie_donnees.md` + modèles | sensor `data-lifecycle` (**advisory, non mandatory** → convention `total = 1`) | 1 |
@@ -90,21 +89,33 @@ Avant de créditer les sections conformes d'un élément, le coordinateur vérif
 | Architecture infrastructure détaillée | `09-deploiement.md` + diagrammes | gabarit DAS `09-deploiement` (**non mandatory** → convention `total = 1`) | 1 |
 | Projets → Planification · Coûts · Risques · Exploitation · Arrimages | jugés sur l'issue (pas de document mandatory propre) | **aucun contrat** — convention `total = 1` par élément | 1 |
 
-> **Éléments sans contrat de sections mandatory.** Pour tout élément dont la colonne « Total sections » vaut `1` **par convention** (Cadrage, les quatre Besoins, Logiciel, Données, Infrastructure, les cinq Projets), il n'existe **pas de base objective** de décompte section par section. Leur **conformité** (« présent et conforme ») est jugée par la **revue de cohérence** (qui juge, sur quelle base) ; en l'absence de base objective, le coordinateur **ne devine pas** et informe l'humain. Seuls le **DAS** (18) et l'**Architecture de sécurité détaillée** (2) ont un contrat de sections mandatory lu dans `required-sections`. En cas d'écart de nommage/découpage, **ces sources font foi**.
+> **Éléments sans contrat de sections mandatory.** Pour tout élément dont « Total sections » vaut `1` **par convention** (Cadrage, les quatre Besoins, Logiciel, Données, Infrastructure, les cinq Projets), il n'existe **pas de base objective** de décompte section par section. Leur **conformité** (terme 80 %) est jugée par la revue de la nature de l'élément — **cohérence** pour la plupart, **Reviewer de sécurité** pour **Besoins → Sécurité** (comme son terme `(revue)`). En l'absence de base objective, le coordinateur **ne devine pas** et informe l'humain.
+>
+> **Un verdict crédite deux termes — voulu.** Pour ces éléments `total = 1`, le **même verdict de revue favorable** atteste à la fois la **conformité** (80 %) **et** le terme `(revue)` (+10 %) : un élément passe donc de 0 à 90 % sur un seul verdict favorable, puis à 100 % sur acceptation humaine. C'est **assumé** (absence de sections à décompter) ; le détail (document attendu, reviewer, version) reste tracé sur l'issue.
+>
+> Seuls le **DAS** (18) et l'**Architecture de sécurité détaillée** (2) ont un contrat de sections lu dans `required-sections` ; en cas d'écart de nommage/découpage, **ces sources font foi**. La **remise à zéro** (section 4) s'applique à ces éléments comme aux autres, sur **tout changement du ou des documents attendus**.
 
-## 7. Gate de conformité de la checklist (alimente le gate humain de phase)
+## 7. Gate de conformité de la checklist
 
-Ce gate est le **critère de conformité** que la checklist apporte au **gate humain existant** à la **transition de phase `Inception → Construction`** (passage de la conception/décisions à la réalisation des livrables détaillés — [`../conductor.md`](../conductor.md), « Les 5 phases » et « Verification gates aux frontières de phases »). Il **n'ajoute aucun gate bloquant** et **ne remplace pas** la validation humaine : comme les autres vérifications de frontière, il est **advisory** et **informe** la décision humaine.
+Le gate s'applique **par élément**, jamais sur une moyenne. Un élément est **conforme au gate** uniquement si **toutes** ces conditions sont réunies :
 
-Le gate s'applique **par élément**, jamais sur une moyenne : un `% global` ou `% section` élevé **ne débloque jamais** à lui seul.
+1. **Conformité complète** — **toutes** les sections mandatory de l'élément sont conformes (`sections conformes / total = 1`, ex. DAS 18/18). Une seule section manquante ⇒ non conforme, quel que soit le %.
+2. **Revue de sécurité (SG-3)** — pour **tout élément de la section Livrables** et pour **Besoins → Sécurité**, le **verdict favorable du Reviewer de sécurité** (version courante) **précède** la conformité au gate **et** l'acceptation humaine.
 
-Un élément est **conforme au gate** uniquement si **toutes** les conditions suivantes sont réunies :
+### Deux frontières de phase (chaque élément est jugé où il est produit)
 
-1. **Conformité complète** — **toutes** les sections mandatory de l'élément sont conformes (`sections conformes / total = 1`, ex. DAS 18/18), comparaison sur les **valeurs non arrondies**. Le pourcentage reste un **indicateur** ; le critère est la **conformité complète**, **pas** un seuil `≥ 80 %`. Une seule section mandatory manquante ⇒ **non conforme au gate**, même si les `+10 %` portent le total à 80 % ou plus.
-2. **Revue de sécurité pour les architectures (SG-3)** — pour **tout élément de la section Livrables** (architecture de solution et architectures détaillées) et pour **Besoins → Sécurité**, le **verdict favorable du Reviewer de sécurité** sur la version courante **précède** la conformité au gate **et** l'acceptation humaine. Le gate ne remplace ni ne conditionne cette revue.
-3. **Décision humaine** — la conformité au gate **informe** la validation humaine granulaire à la frontière `Inception → Construction` ; le passage reste **soumis à la décision humaine**, jamais automatisé.
+Le gate ne peut exiger un élément avant la phase qui le produit. Les éléments sont donc rattachés à la **frontière** qu'ils conditionnent :
 
-Pour les **éléments d'architecture (section Livrables) et Besoins → Sécurité**, l'acceptation humaine ne se crédite **qu'après** le verdict de sécurité favorable (même version) — **jamais en parallèle**. Seuls les éléments **hors architecture** (Cadrage, autres Besoins, Projets) peuvent voir l'acceptation humaine et la revue de cohérence intervenir **en parallèle**. Au moment où l'état est présenté à l'humain, le coordinateur **affiche la conformité complète (✓/✗) et la revue de sécurité (✓/✗)** de chaque élément (section 5), pour qu'aucun écart ne reste invisible.
+| Frontière | Éléments exigés conformes | Produits en |
+| --- | --- | --- |
+| **`Inception → Construction`** | Cadrage · Besoins (les 4) · Architecture de solution (DAS) | Inception |
+| **`Construction → Operation`** | Architectures détaillées (Logicielle · Données · 🔒 Sécurité · Infrastructure) · Projets (les 5) | Construction |
+
+### Portée du gate (bloquant) — **point de décision humaine, cf. ADR-0043**
+
+Conformément à la demande initiale (`< seuil ⇒ bloqué`) et à SG-3 (un contrôle lié à la sécurité ne s'abaisse pas sans validation humaine tracée), le gate est **bloquant** : tant que la **conformité complète** d'un élément et, pour les architectures et Besoins → Sécurité, le **verdict de sécurité favorable** ne sont pas réunis, le coordinateur **ne présente pas** le passage de la frontière concernée comme possible. La **décision humaine granulaire** reste libre ensuite (Keep / Modify / Redo — [`../conductor.md`](../conductor.md)) et n'est jamais automatisée. Au gate, le coordinateur **affiche** la conformité complète (✓/✗) et la revue de sécurité (✓/✗) de chaque élément (section 5).
+
+> Le caractère **bloquant** du gate (vs advisory) et son **ancrage aux deux frontières** sont soumis à l'arbitrage de l'humain demandeur ; l'ADR portant cette décision est en statut `Proposed` (proposition, non acquise) tant que la décision n'est pas tracée.
 
 ## 8. Ce que ce protocole ne change pas (garde-fous)
 

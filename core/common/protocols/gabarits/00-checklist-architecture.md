@@ -21,7 +21,7 @@ Processus, barème, unité de décompte, gate et garde-fous : source unique dans
 
 **% global :** 0 %
 
-> Le `%` est un **indicateur d'avancement** (instantané recalculé). Le **gate** d'un élément (frontière `Inception → Construction`, advisory) exige la **conformité complète** (`Conf. complète = ✓`) — jamais une moyenne. Pour **tout élément d'architecture (section Livrables) et Besoins → Sécurité** (🔒), le **verdict favorable du Reviewer de sécurité** (`Revue (nature) = sécurité`) **précède** le gate **et** l'acceptation humaine (jamais en parallèle — SG-3). Toute modification du ou des documents attendus (mandatory ou non) **remet revue et acceptation à zéro** (nouvelle version). Détail : protocole §3, §4, §6, §7.
+> Le `%` est un **indicateur d'avancement** (instantané recalculé). Le **gate** (bloquant) et ses deux frontières (`Inception → Construction` : Cadrage, Besoins, DAS ; `Construction → Operation` : architectures détaillées, Projets), le rôle de la **revue de sécurité** (🔒) et la **remise à zéro versionnée** sont définis en **source unique** dans le protocole §3-§7. Colonnes : `Conf. complète` (dérivée de `Sections conformes / total`, affichée pour le gate) ; `Revue (nature)` = reviewer dédié (🔒 = Reviewer de sécurité, requis **avant** gate et acceptation).
 
 ## Cadrage — 0 %
 
@@ -56,14 +56,14 @@ Le terme **80 %** est proportionnel aux **sections mandatory présentes et non v
 
 Instantané du contrat au moment de la copie ; recalculé si le contrat évolue (ne pas figer une liste divergente).
 
-| Fichier mandatory | Sections mandatory | Conformes / total |
+| Fichier mandatory | Sections mandatory (titres exacts du contrat) | Conformes / total |
 | --- | --- | --- |
-| `001-document-architecture-solution.md` | Métadonnées · Historique · Arrimages · Structure | 0 / 4 |
+| `001-document-architecture-solution.md` | Métadonnées du document · Historique du document · Arrimages · Structure de la documentation | 0 / 4 |
 | `01-introduction.md` | Contexte · Périmètre · Parties prenantes | 0 / 3 |
-| `02-objectifs.md` | Objectifs · NFRs · Matrice de suivi | 0 / 3 |
-| `06-architecture-solutions.md` | Description · Liste des diagrammes | 0 / 2 |
+| `02-objectifs.md` | Objectifs de la solution · Exigences non-fonctionnelles (NFRs) · Matrice de suivi | 0 / 3 |
+| `06-architecture-solutions.md` | Description de l'architecture de solution · Liste des diagrammes d'architecture | 0 / 2 |
 | `08-contraintes.md` | Lois et règlementations · Conformités | 0 / 2 |
-| `10-cycle_vie_donnees.md` | Gouvernance de données · Classification | 0 / 2 |
+| `10-cycle_vie_donnees.md` | Gouvernance de données · Classification des données | 0 / 2 |
 | `11-securite.md` 🔒 | Modélisation des menaces (STRIDE) · Sécurité applicative | 0 / 2 |
 
 > Mapping des autres livrables (documents attendus, contrats, conventions `total = 1`) et double comptage de `11-securite.md` / `10-cycle_vie_donnees.md` : voir protocole §6. Non redupliqué ici.
