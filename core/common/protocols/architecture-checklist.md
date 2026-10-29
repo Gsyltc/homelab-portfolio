@@ -23,7 +23,7 @@ Quatre sections, éléments **fixes** ; aucun ajout / retrait d'élément sans d
 
 Chaque élément listé est une **unité suivie** et porte un **pourcentage d'avancement** (0 à 100 %), calculé selon le barème de la section 3.
 
-**Revue de sécurité (SG-3).** **Tout élément de la section Livrables** (architecture de solution et architectures détaillées) ainsi que **Besoins → Sécurité** sont des **architectures** : leur terme `(revue)` exige le **verdict du Reviewer de sécurité**, qui **précède** le gate et l'acceptation (sections 3, 7). Parmi eux, **Besoins → Sécurité** et **Architecture de sécurité détaillée** sont en outre les **surfaces de sécurité au sens strict** (volet sécurité du produit) ; le marquage 🔒 du gabarit signale tous les éléments soumis à la revue de sécurité.
+**Éléments d'architecture (revue de sécurité SG-3).** On appelle **élément d'architecture** tout élément **soumis à la revue de sécurité** : les **cinq éléments de la section Livrables** (architecture de solution et architectures détaillées) **et** **Besoins → Sécurité**. Pour eux, le terme `(revue)` exige le **verdict du Reviewer de sécurité**, qui **précède** le gate et l'acceptation (sections 3, 7). Le marquage **🔒** (gabarit et tableaux de ce protocole) signale **exactement** ces éléments d'architecture — un seul sens. Les autres éléments (Cadrage, autres Besoins, Projets) relèvent de la revue de **cohérence**.
 
 ## 3. Calcul du pourcentage (barème 80/10/10)
 
@@ -60,10 +60,10 @@ Les trois termes :
 L'avancement d'un élément évolue uniquement par **faits vérifiables**, jamais par estimation :
 
 1. **Terme 80 %** — recalculé à chaque vérification de conformité (section 6) : sections mandatory présentes et non vides / total (contrat `required-sections`). Un doute sur la conformité d'une section ⇒ elle **ne compte pas** (« ne jamais deviner »).
-2. **Terme +10 % revue** — passe à `1` uniquement quand le **verdict du reviewer dédié** (Reviewer de sécurité pour les surfaces de sécurité) est **posté, favorable et sans point bloquant ouvert**, **et** rattaché à la **version courante**. Un verdict « demande de corrections » ou portant un point bloquant **ne crédite pas** le terme.
+2. **Terme +10 % revue** — passe à `1` uniquement quand le **verdict du reviewer dédié** (le **Reviewer de sécurité** pour les **éléments d'architecture**, section 2) est **posté, favorable et sans point bloquant ouvert**, **et** rattaché à la **version courante**. Un verdict « demande de corrections » ou portant un point bloquant **ne crédite pas** le terme.
 3. **Terme +10 % acceptation humaine** — passe à `1` **uniquement** sur **annonce explicite d'un membre humain** (auteur `member`, cité par identifiant), rattachée à la **version courante**.
 
-**Rattachement à une version (anti-falsification, OWASP A08).** Les deux `+10 %` sont crédités **pour une version précise** du livrable (commit / révision d'issue tracée). **Dès que le ou les documents attendus de l'élément changent — quelle qu'en soit la partie, mandatory ou non (annexe, diagramme, paragraphe ajouté) : nouvelle référence de version**, les **deux** termes **retombent à `0`** ; la remise à zéro est **tracée sur l'issue** et le crédit ne se rétablit que par une nouvelle revue favorable et une nouvelle acceptation sur la version modifiée.
+**Rattachement à une version (anti-falsification, OWASP A08).** Les deux `+10 %` sont crédités **pour une version précise** du **support** de l'élément (commit / révision d'issue tracée). Le support est : pour les éléments **avec document(s) attendu(s)**, ce ou ces documents ; pour les éléments **sans document** (Cadrage, Besoins, Projets), le **support versionné qui les porte** — le **commentaire d'issue** décrivant l'élément (identifiant + révision) ou, s'il y figure, le **paragraphe du DAS** qui le consigne. **Dès que ce support change — quelle qu'en soit la partie, mandatory ou non : nouvelle référence de version**, les **deux** termes **retombent à `0`** ; la remise à zéro est **tracée sur l'issue** et le crédit ne se rétablit que par une nouvelle revue favorable et une nouvelle acceptation sur la version modifiée.
 
 Doute sur la conformité, le sens d'un verdict ou l'intention humaine ⇒ **ne jamais deviner** ; ne pas créditer ; informer l'humain (garde-fou « ne jamais deviner » + validation humaine granulaire — [`governance-security.md`](governance-security.md)). Chaque évolution de % est tracée sur l'issue **avant** report dans le fichier d'état, avec sa **preuve** et la **version** concernée.
 
@@ -73,7 +73,7 @@ Sur demande, le coordinateur affiche, en **prose réduite** (source unique [`out
 
 ## 6. Vérification de conformité (préalable au terme 80 %)
 
-Avant de créditer les sections conformes d'un élément, le coordinateur vérifie que le ou les **documents attendus existent**, sont **au bon format**, **clairs**, **sans note de génération d'agent** (décision [`0040`](../../../decisions/0040-aucune-note-de-generation-dans-les-livrables.md)), **sans doublon ni incohérence** ; et que, pour la section **Livrables**, les **sections mandatory** sont **présentes et non vides** selon `required-sections` (**source unique** — advisory, n'autorise jamais à se passer de la validation humaine ni de la revue). « Présent et non vide » est un **critère de forme** ; le **fond** relève de la **revue** (section 3-4) — pour les surfaces de sécurité, la **revue de sécurité** (SG-3). Échec ou ambiguïté ⇒ **la section ne compte pas** ; informer l'humain.
+Avant de créditer les sections conformes d'un élément, le coordinateur vérifie que le ou les **documents attendus existent**, sont **au bon format**, **clairs**, **sans note de génération d'agent** (décision [`0040`](../../../decisions/0040-aucune-note-de-generation-dans-les-livrables.md)), **sans doublon ni incohérence** ; et que, pour la section **Livrables**, les **sections mandatory** sont **présentes et non vides** selon `required-sections` (**source unique** — advisory, n'autorise jamais à se passer de la validation humaine ni de la revue). « Présent et non vide » est un **critère de forme** ; le **fond** relève de la **revue** (section 3-4) — pour les **éléments d'architecture**, la **revue de sécurité** (SG-3). Échec ou ambiguïté ⇒ **la section ne compte pas** ; informer l'humain.
 
 ### Mapping élément → document(s) attendu(s) et contrat de sections
 
@@ -82,45 +82,45 @@ Avant de créditer les sections conformes d'un élément, le coordinateur vérif
 | Cadrage | jugé sur l'issue (pas de document mandatory propre) | **aucun contrat** — convention `total = 1` | 1 |
 | Besoins → Entreprises et affaires · Solutions · Technologique | jugés sur l'issue (pas de document mandatory propre) | **aucun contrat** — convention `total = 1` ; jugé par la **cohérence** | 1 |
 | 🔒 Besoins → Sécurité | jugé sur l'issue | **aucun contrat** — convention `total = 1` ; jugé par le **Reviewer de sécurité** | 1 |
-| Architecture de solution (DAS) | fichiers mandatory du DAS (`001`,`01`,`02`,`06`,`08`,`10`,`11`) | `required-sections`, volet `das:` | **18** |
-| Architecture Logicielle détaillée | `00-architecture-detaillee.md` (volet logiciel) | gabarit DAS `00-architecture-detaillee` (**non mandatory** → convention `total = 1`) | 1 |
-| Architecture de données détaillée | `10-cycle_vie_donnees.md` + modèles | sensor `data-lifecycle` (**advisory, non mandatory** → convention `total = 1`) | 1 |
+| 🔒 Architecture de solution (DAS) | fichiers mandatory du DAS (`001`,`01`,`02`,`06`,`08`,`10`,`11`) | `required-sections`, volet `das:` | **18** |
+| 🔒 Architecture Logicielle détaillée | `00-architecture-detaillee.md` (volet logiciel) | gabarit DAS `00-architecture-detaillee` (**non mandatory** → convention `total = 1`) | 1 |
+| 🔒 Architecture de données détaillée | `10-cycle_vie_donnees.md` + modèles | sensor `data-lifecycle` (**advisory, non mandatory** → convention `total = 1`) | 1 |
 | 🔒 Architecture de sécurité détaillée | `11-securite.md` (STRIDE / OWASP) | `required-sections`, fichier `11-securite.md` | **2** |
-| Architecture infrastructure détaillée | `09-deploiement.md` + diagrammes | gabarit DAS `09-deploiement` (**non mandatory** → convention `total = 1`) | 1 |
+| 🔒 Architecture infrastructure détaillée | `09-deploiement.md` + diagrammes | gabarit DAS `09-deploiement` (**non mandatory** → convention `total = 1`) | 1 |
 | Projets → Planification · Coûts · Risques · Exploitation · Arrimages | jugés sur l'issue (pas de document mandatory propre) | **aucun contrat** — convention `total = 1` par élément | 1 |
 
 > **Éléments sans contrat de sections mandatory.** Pour tout élément dont « Total sections » vaut `1` **par convention** (Cadrage, les quatre Besoins, Logiciel, Données, Infrastructure, les cinq Projets), il n'existe **pas de base objective** de décompte section par section. Leur **conformité** (terme 80 %) est jugée par la revue de la nature de l'élément — **cohérence** pour la plupart, **Reviewer de sécurité** pour **Besoins → Sécurité** (comme son terme `(revue)`). En l'absence de base objective, le coordinateur **ne devine pas** et informe l'humain.
 >
 > **Un verdict crédite deux termes — voulu.** Pour ces éléments `total = 1`, le **même verdict de revue favorable** atteste à la fois la **conformité** (80 %) **et** le terme `(revue)` (+10 %) : un élément passe donc de 0 à 90 % sur un seul verdict favorable, puis à 100 % sur acceptation humaine. C'est **assumé** (absence de sections à décompter) ; le détail (document attendu, reviewer, version) reste tracé sur l'issue.
 >
-> Seuls le **DAS** (18) et l'**Architecture de sécurité détaillée** (2) ont un contrat de sections lu dans `required-sections` ; en cas d'écart de nommage/découpage, **ces sources font foi**. La **remise à zéro** (section 4) s'applique à ces éléments comme aux autres, sur **tout changement du ou des documents attendus**.
+> Seuls le **DAS** (18) et l'**Architecture de sécurité détaillée** (2) ont un contrat de sections lu dans `required-sections` ; en cas d'écart de nommage/découpage, **ces sources font foi**. La **remise à zéro** (section 4) s'applique à ces éléments comme aux autres, sur tout changement de leur **support versionné** — document(s) attendu(s), ou, pour les éléments sans document, le **commentaire d'issue** (ou paragraphe du DAS) qui les porte.
 
 ## 7. Gate de conformité de la checklist
 
 Le gate s'applique **par élément**, jamais sur une moyenne. Un élément est **conforme au gate** uniquement si **toutes** ces conditions sont réunies :
 
 1. **Conformité complète** — **toutes** les sections mandatory de l'élément sont conformes (`sections conformes / total = 1`, ex. DAS 18/18). Une seule section manquante ⇒ non conforme, quel que soit le %.
-2. **Revue de sécurité (SG-3)** — pour **tout élément de la section Livrables** et pour **Besoins → Sécurité**, le **verdict favorable du Reviewer de sécurité** (version courante) **précède** la conformité au gate **et** l'acceptation humaine.
+2. **Revue de sécurité (SG-3)** — pour tout **élément d'architecture** (les cinq Livrables et Besoins → Sécurité, section 2), le **verdict favorable du Reviewer de sécurité** (version courante) **précède** la conformité au gate **et** l'acceptation humaine.
 
 ### Deux frontières de phase (chaque élément est jugé où il est produit)
 
-Le gate ne peut exiger un élément avant la phase qui le produit. Les éléments sont donc rattachés à la **frontière** qu'ils conditionnent :
+Le gate ne peut exiger un élément avant la phase qui le produit. Les éléments sont donc rattachés à la **frontière** qu'ils conditionnent (🔒 = élément d'architecture soumis à la revue de sécurité) :
 
 | Frontière | Éléments exigés conformes | Produits en |
 | --- | --- | --- |
-| **`Inception → Construction`** | Cadrage · Besoins (les 4) · Architecture de solution (DAS) | Inception |
-| **`Construction → Operation`** | Architectures détaillées (Logicielle · Données · 🔒 Sécurité · Infrastructure) · Projets (les 5) | Construction |
+| **`Inception → Construction`** | Cadrage · Besoins (🔒 Sécurité + 3 autres) · 🔒 Architecture de solution (DAS) | Inception |
+| **`Construction → Operation`** | 🔒 Architectures détaillées (Logicielle · Données · Sécurité · Infrastructure) · Projets (les 5) | Construction |
 
 ### Portée du gate (bloquant) — **point de décision humaine, cf. ADR-0043**
 
-Conformément à la demande initiale (`< seuil ⇒ bloqué`) et à SG-3 (un contrôle lié à la sécurité ne s'abaisse pas sans validation humaine tracée), le gate est **bloquant** : tant que la **conformité complète** d'un élément et, pour les architectures et Besoins → Sécurité, le **verdict de sécurité favorable** ne sont pas réunis, le coordinateur **ne présente pas** le passage de la frontière concernée comme possible. La **décision humaine granulaire** reste libre ensuite (Keep / Modify / Redo — [`../conductor.md`](../conductor.md)) et n'est jamais automatisée. Au gate, le coordinateur **affiche** la conformité complète (✓/✗) et la revue de sécurité (✓/✗) de chaque élément (section 5).
+Conformément à la demande initiale (`< seuil ⇒ bloqué`) et à SG-3, le gate est **bloquant** : tant que la **conformité complète** d'un élément et, pour les **éléments d'architecture**, le **verdict de sécurité favorable** ne sont pas réunis, le coordinateur **ne présente pas** le passage de la frontière concernée comme possible. La **décision humaine granulaire** reste libre ensuite (Keep / Modify / Redo) et n'est jamais automatisée. Au gate, le coordinateur **affiche** la conformité complète (✓/✗) et la revue de sécurité (✓/✗) de chaque élément (section 5).
 
 > Le caractère **bloquant** du gate (vs advisory) et son **ancrage aux deux frontières** sont soumis à l'arbitrage de l'humain demandeur ; l'ADR portant cette décision est en statut `Proposed` (proposition, non acquise) tant que la décision n'est pas tracée.
 
 ## 8. Ce que ce protocole ne change pas (garde-fous)
 
 - **Validation humaine granulaire** — le `+10 %` d'acceptation n'est crédité que sur annonce explicite d'un **membre humain** ; aucun scope, aucune règle apprise, aucun sensor advisory, aucun seuil de % ni gate ne peut s'y substituer (invariants [`../conductor.md`](../conductor.md), [`governance-security.md`](governance-security.md)).
-- **Revue de sécurité non substituable (SG-3)** — sur toute architecture ou surface de sécurité, la **revue de sécurité précède** la validation humaine ; **ni le gate ni le pourcentage ne la remplacent** ni ne conditionnent son déclenchement. Un contrôle lié à la sécurité ne s'abaisse jamais sans validation humaine tracée.
+- **Revue de sécurité non substituable (SG-3)** — sur tout **élément d'architecture** (section 2), la **revue de sécurité précède** la validation humaine ; **ni le gate ni le pourcentage ne la remplacent** ni ne conditionnent son déclenchement. Un contrôle lié à la sécurité ne s'abaisse jamais sans validation humaine tracée.
 - **Piste d'audit sur l'issue** — chaque évolution de % y est tracée avec preuve et version ; le fichier d'état ne porte aucune méta-production (décision [`0040`](../../../decisions/0040-aucune-note-de-generation-dans-les-livrables.md)).
 - **Sensors advisory** — `required-sections` et `data-lifecycle` **assistent** le décompte sans jamais bloquer ni remplacer la validation humaine ni la revue (SG-1..6).
 - **Ne jamais deviner** — un % ne résulte que d'une vérification objective ; doute ⇒ ne pas créditer, informer l'humain.

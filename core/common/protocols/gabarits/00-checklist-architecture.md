@@ -38,11 +38,11 @@ Processus, barème, unité de décompte, gate et garde-fous : source unique dans
 | Technologique | 0 / 1 *(convention)* | ✗ | ✗ (cohérence) | ✗ | — | 0 % |
 | 🔒 Sécurité | 0 / 1 *(convention)* | ✗ | ✗ (**sécurité** SG-3) | ✗ | — | 0 % |
 
-🔒 = revue de sécurité (SG-3) requise pour le terme `(revue)` : **précède** le gate **et** l'acceptation humaine (jamais en parallèle). Concerne **Besoins → Sécurité** et **tout élément de la section Livrables** (architectures). `*(convention)*` = élément sans contrat de sections mandatory, `total = 1` par convention, conformité documentaire jugée par la revue de cohérence (protocole §6) ; la revue de sécurité reste requise pour les architectures.
+🔒 = **élément d'architecture** soumis à la revue de sécurité (SG-3) : son `(revue)` — et, pour Besoins → Sécurité, aussi sa **conformité** — relève du **Reviewer de sécurité**, dont le verdict favorable **précède** le gate et l'acceptation (jamais en parallèle). Concerne **Besoins → Sécurité** et les **cinq éléments de la section Livrables**. `*(convention)*` = élément sans contrat de sections mandatory (`total = 1`), conformité jugée par la revue de sa nature (cohérence, ou sécurité pour 🔒 Besoins → Sécurité) — protocole §6.
 
 ## Livrables — 0 %
 
-Le terme **80 %** est proportionnel aux **sections mandatory présentes et non vides**, décomptées **à la section** (contrat `required-sections`, source unique ; total **dynamique**). `Conf. complète = ✓` seulement si **toutes** les sections mandatory sont conformes. **Tout élément de cette section est une architecture : le `(revue)` exige le verdict du Reviewer de sécurité (SG-3), qui précède le gate et l'acceptation.**
+Le terme **80 %** est proportionnel aux **sections mandatory présentes et non vides**, décomptées **à la section** (contrat `required-sections`, source unique ; total **dynamique**). `Conf. complète = ✓` seulement si **toutes** les sections mandatory sont conformes. **Les cinq éléments sont des éléments d'architecture (🔒) : leur `(revue)` exige le verdict du Reviewer de sécurité (SG-3), qui précède le gate et l'acceptation.**
 
 | Élément | Sections conformes / total | Conf. complète | Revue (nature) | Acceptation humaine | Version évaluée | % |
 | --- | --- | --- | --- | --- | --- | --- |
