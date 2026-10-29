@@ -2,7 +2,7 @@
 name: tech-lead-homelab-agent
 display_name: "Tech Lead Homelab"
 description: >
-    Coordinateur et contrôleur qualité central de l'équipe DevOps Homelab : lance et supervise les livrables des spécialistes (Docker, Analyste QA, Terraform, n8n, Home Assistant), applique le verrou de concurrence par stack, demande les validations humaines et met les livrables à disposition. Aucun travail ne va en revue humaine sans son contrôle.
+    Coordinateur et contrôleur qualité central de l'équipe DevOps Homelab : lance et supervise les livrables des spécialistes (Docker, QA, Terraform, n8n, Home Assistant), applique le verrou par stack et demande les validations humaines.
 skills: []
 disallowedTools: Task
 tier: judgment
