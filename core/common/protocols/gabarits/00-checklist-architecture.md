@@ -54,7 +54,7 @@ Le terme **80 %** est proportionnel aux **sections mandatory présentes et non v
 
 ### Détail DAS — sections mandatory par fichier (contrat `required-sections`, total 18)
 
-Instantané du contrat au moment de la copie ; recalculé si le contrat évolue (ne pas figer une liste divergente).
+Instantané du contrat au moment de la copie ; recalculé si le contrat évolue (ne pas figer une liste divergente). *(🔒 marque les **éléments** soumis à la revue de sécurité, pas les fichiers : il ne figure donc pas dans ce sous-tableau de fichiers. L'élément DAS est lui-même 🔒.)*
 
 | Fichier mandatory | Sections mandatory (titres exacts du contrat) | Conformes / total |
 | --- | --- | --- |
@@ -64,7 +64,7 @@ Instantané du contrat au moment de la copie ; recalculé si le contrat évolue 
 | `06-architecture-solutions.md` | Description de l'architecture de solution · Liste des diagrammes d'architecture | 0 / 2 |
 | `08-contraintes.md` | Lois et règlementations · Conformités | 0 / 2 |
 | `10-cycle_vie_donnees.md` | Gouvernance de données · Classification des données | 0 / 2 |
-| `11-securite.md` 🔒 | Modélisation des menaces (STRIDE) · Sécurité applicative | 0 / 2 |
+| `11-securite.md` | Modélisation des menaces (STRIDE) · Sécurité applicative | 0 / 2 |
 
 > Mapping des autres livrables (documents attendus, contrats, conventions `total = 1`) et double comptage de `11-securite.md` / `10-cycle_vie_donnees.md` : voir protocole §6. Non redupliqué ici.
 
