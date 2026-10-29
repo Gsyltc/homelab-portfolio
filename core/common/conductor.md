@@ -158,12 +158,13 @@ La piste d'audit vit **sur l'issue Multica**, jamais dans un fichier `audit.md`.
 
 ## Checklist d'architecture (état d'avancement)
 
-Le coordinateur tient une **checklist d'architecture** qui suit l'avancement de l'architecture le long des 5 phases. C'est un **processus à part** : son cycle complet (structure imposée, calcul du %, écriture sur approbation humaine après vérification de conformité, lecture sur demande, mapping élément Livrables → document attendu) a sa **source unique** dans [`protocols/architecture-checklist.md`](protocols/architecture-checklist.md) — le conductor **pointe** vers ce protocole, sans redéfinir sa logique.
+Le coordinateur tient une **checklist d'architecture** qui suit l'avancement de l'architecture le long des 5 phases. C'est un **processus à part** : son cycle complet (structure imposée, **calcul du % par élément selon le barème 80/10/10**, décompte par section mandatory, écriture sur vérification de conformité et approbation humaine, lecture sur demande, mapping élément Livrables → document attendu, **gate ≥ 80 %**) a sa **source unique** dans [`protocols/architecture-checklist.md`](protocols/architecture-checklist.md) — le conductor **pointe** vers ce protocole, sans redéfinir sa logique.
 
 - **État** : fichier livrable `documentation/00-checklist-architecture.md`, copié du gabarit [`protocols/gabarits/00-checklist-architecture.md`](protocols/gabarits/00-checklist-architecture.md) à l'initialisation du répertoire projet ([`stages/initialization/directory-check.md`](stages/initialization/directory-check.md)).
-- **Écriture** : un élément ne passe à `validé` que sur **annonce humaine explicite** (gate granulaire « Keep / Modify / Redo ») **et** après **vérification de conformité** (dont le sensor advisory [`required-sections`](../sensors/sensors/required-sections.md) pour les Livrables). En cas de doute : ne pas valider, informer l'humain.
-- **Traçabilité** : chaque changement de statut est tracé sur l'issue (piste d'audit ci-dessus) ; le fichier d'état reste un livrable sans note de méta-production (décision [`../../decisions/0040-aucune-note-de-generation-dans-les-livrables.md`](../../decisions/0040-aucune-note-de-generation-dans-les-livrables.md)).
-- **Garde-fous préservés** : la checklist **ne remplace jamais** la validation humaine granulaire ni le contrôle sécurité ; les sensors qui assistent sa vérification restent **advisory**.
+- **Avancement en %** : chaque élément porte un **pourcentage** (barème homogène `% = 80 × (sections conformes / total sections) + 10·(revue pair) + 10·(acceptation humaine)`). Le terme **80 %** s'appuie sur les sections mandatory présentes et non vides (sensor advisory [`required-sections`](../sensors/sensors/required-sections.md), **source unique** du contrat ; total **dynamique**). Les deux **+10 %** ne sont crédités que sur **revue pair postée** et **acceptation humaine explicite**. En cas de doute : ne pas créditer, informer l'humain.
+- **Gate planification / réalisation** : `< 80 % ⇒ bloqué` ; `≥ 80 % ⇒ déblocage possible` (lancement **soumis à décision humaine** ; revue pair + acceptation possibles en parallèle). Détail en source unique dans le protocole.
+- **Traçabilité** : chaque évolution de % est tracée sur l'issue (piste d'audit ci-dessus) ; le fichier d'état reste un livrable sans note de méta-production (décision [`../../decisions/0040-aucune-note-de-generation-dans-les-livrables.md`](../../decisions/0040-aucune-note-de-generation-dans-les-livrables.md)).
+- **Garde-fous préservés** : la checklist **ne remplace jamais** la validation humaine granulaire ni le contrôle sécurité ; aucun seuil de % ne s'y substitue ; les sensors qui assistent sa vérification restent **advisory**.
 
 ---
 
@@ -249,7 +250,7 @@ sequenceDiagram
 - [`protocols/governance-security.md`](protocols/governance-security.md) — gouvernance A2A, contrôle sécurité, invariants, garde-fous.
 - [`protocols/reviewer.md`](protocols/reviewer.md) — protocole de revue (cohérence des décisions + revue sécurité).
 - [`protocols/output-format.md`](protocols/output-format.md) — format de retour d'un agent : prose réduite + 4 sections (résumé, sensors si déclarés, points bloquants, action humaine requise).
-- [`protocols/architecture-checklist.md`](protocols/architecture-checklist.md) — checklist d'architecture : état d'avancement (`documentation/00-checklist-architecture.md`), structure imposée, calcul du %, écriture sur approbation humaine après vérification de conformité, lecture sur demande.
+- [`protocols/architecture-checklist.md`](protocols/architecture-checklist.md) — checklist d'architecture : état d'avancement (`documentation/00-checklist-architecture.md`), structure imposée, **calcul du % par élément (barème 80/10/10)** et décompte par section mandatory, écriture sur vérification de conformité et approbation humaine, lecture sur demande, **gate ≥ 80 %**.
 - [`protocols/scopes-and-axes.md`](protocols/scopes-and-axes.md) — scopes, axes Depth / vérification, matrice stage × scope.
 - [`stages/`](stages/) — fiches de stage des 5 phases.
 - `core/rules/` — mémoire de règles multi-couches.
