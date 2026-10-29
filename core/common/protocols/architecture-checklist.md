@@ -82,20 +82,21 @@ Avant de créditer les sections conformes d'un élément, le coordinateur vérif
 | Cadrage | jugé sur l'issue (pas de document mandatory propre) | **aucun contrat** — convention `total = 1` | 1 |
 | Besoins → Entreprises et affaires · Solutions · Technologique | jugés sur l'issue (pas de document mandatory propre) | **aucun contrat** — convention `total = 1` ; jugé par la **cohérence** | 1 |
 | 🔒 Besoins → Sécurité | jugé sur l'issue | **aucun contrat** — convention `total = 1` ; jugé par le **Reviewer de sécurité** | 1 |
-| 🔒 Architecture de solution (DAS) | fichiers mandatory du DAS (`001`,`01`,`02`,`06`,`08`,`10`,`11`) | `required-sections`, volet `das:` ; conformité par **cohérence**, `(revue)` par **sécurité** | **18** |
+| 🔒 Architecture de solution (DAS) | fichiers mandatory du DAS (`001`,`01`,`02`,`06`,`08`,`10`,`11`) | `required-sections`, volet `das:` ; conformité = **décompte objectif** des sections (pas de reviewer), `(revue)` par **sécurité** | **18** |
 | 🔒 Architecture Logicielle détaillée | `00-architecture-detaillee.md` (volet logiciel) | gabarit DAS `00-architecture-detaillee` (**non mandatory** → `total = 1`) ; conformité par **cohérence**, `(revue)` par **sécurité** | 1 |
 | 🔒 Architecture de données détaillée | `10-cycle_vie_donnees.md` + modèles | sensor `data-lifecycle` (**advisory, non mandatory** → `total = 1`) ; conformité par **cohérence** (Architecte de données en appui), `(revue)` par **sécurité** | 1 |
-| 🔒 Architecture de sécurité détaillée | `11-securite.md` (STRIDE / OWASP) | `required-sections`, fichier `11-securite.md` ; conformité **et** `(revue)` par **sécurité** | **2** |
+| 🔒 Architecture de sécurité détaillée | `11-securite.md` (STRIDE / OWASP) | `required-sections`, fichier `11-securite.md` ; conformité = **décompte objectif** des sections, `(revue)` par **sécurité** | **2** |
 | 🔒 Architecture infrastructure détaillée | `09-deploiement.md` + diagrammes | gabarit DAS `09-deploiement` (**non mandatory** → `total = 1`) ; conformité par **cohérence**, `(revue)` par **sécurité** | 1 |
 | Projets → Planification · Coûts · Risques · Exploitation · Arrimages | jugés sur l'issue (pas de document mandatory propre) | **aucun contrat** — convention `total = 1` par élément | 1 |
 
 > **Éléments sans contrat de sections mandatory.** Pour tout élément dont « Total sections » vaut `1` **par convention** (Cadrage, les quatre Besoins, Logiciel, Données, Infrastructure, les cinq Projets), il n'existe **pas de base objective** de décompte section par section. Leur **conformité** (terme 80 %) est jugée par la revue de la nature de l'élément — **cohérence** pour la plupart, **Reviewer de sécurité** pour **Besoins → Sécurité** (comme son terme `(revue)`). En l'absence de base objective, le coordinateur **ne devine pas** et informe l'humain.
 >
-> **Combien de verdicts créditent conformité + `(revue)` ?** Cela dépend du reviewer :
-> - **Un seul verdict** (0 → 90 %) pour les éléments dont **le même reviewer** juge la conformité (80 %) **et** `(revue)` : **Cadrage, Besoins hors Sécurité, Projets** (cohérence) et **Besoins → Sécurité** (Reviewer de sécurité).
-> - **Deux verdicts, de deux reviewers**, pour **Architecture Logicielle / Données / Infrastructure détaillées** : la **conformité (80 %)** est jugée par la **cohérence**, mais `(revue)` (+10 %) exige le **verdict du Reviewer de sécurité** (élément d'architecture). Ces éléments ne sautent pas à 90 % sur un seul verdict : 80 % sur le verdict de conformité (cohérence), +10 % sur le verdict de sécurité favorable, +10 % sur acceptation humaine.
+> **Combien de verdicts créditent conformité (80 %) + `(revue)` (+10 %) ?** Selon qui juge chaque terme :
+> - **Un seul verdict** (0 → 90 %), même reviewer pour les deux termes : **Cadrage, Besoins hors Sécurité, Projets** (cohérence) et **Besoins → Sécurité** (Reviewer de sécurité).
+> - **Conformité par décompte objectif + un verdict de sécurité** : **DAS** (18 sections) et **Architecture de sécurité détaillée** (2 sections). Le 80 % vient du **décompte des sections** (`required-sections`, pas de reviewer) ; `(revue)` (+10 %) vient du **verdict du Reviewer de sécurité**.
+> - **Deux verdicts, de deux reviewers** : **Architecture Logicielle / Données / Infrastructure détaillées** — conformité (80 %) jugée par la **cohérence**, `(revue)` (+10 %) par le **Reviewer de sécurité**.
 >
-> Le détail (document attendu, reviewer de conformité, reviewer de `(revue)`, version) reste tracé sur l'issue.
+> Dans tous les cas, le dernier `+10 %` vient de l'**acceptation humaine**. Le détail (reviewer de conformité, reviewer de `(revue)`, version) reste tracé sur l'issue.
 >
 > Seuls le **DAS** (18) et l'**Architecture de sécurité détaillée** (2) ont un contrat de sections lu dans `required-sections` ; en cas d'écart de nommage/découpage, **ces sources font foi**. La **remise à zéro** (section 4) s'applique à ces éléments comme aux autres, sur tout changement de leur **support versionné** — document(s) attendu(s), ou, pour les éléments sans document, le **commentaire d'issue** (ou paragraphe du DAS) qui les porte.
 
@@ -117,7 +118,7 @@ Le gate ne peut exiger un élément avant la phase qui le produit. Les élément
 
 ### Portée du gate — **proposé bloquant, cf. ADR-0043 `DEC-HUM-001`**
 
-Conformément à la demande initiale (`< seuil ⇒ bloqué`) et à SG-3, le gate est **proposé bloquant**. **« Bloquant » signifie que le coordinateur n'ouvre pas la sollicitation de validation humaine de la frontière** tant que la **conformité complète** d'un élément et, pour les **éléments d'architecture**, le **verdict de sécurité favorable** ne sont pas réunis. Ce n'est pas un verrou technique : l'humain **peut déroger** et franchir la frontière malgré un écart, mais par une **décision explicite tracée sur l'issue, mentionnant l'écart** (élément non conforme / verdict de sécurité manquant) — jamais un contournement silencieux. Au gate, le coordinateur **affiche** la conformité complète (✓/✗) et la revue de sécurité (✓/✗) de chaque élément (section 5).
+Conformément à la demande initiale (`< seuil ⇒ bloqué`) et à SG-3, le gate est **proposé bloquant**. **« Bloquant » signifie que le coordinateur n'ouvre pas la sollicitation de validation humaine de la frontière** tant que la **conformité complète** d'un élément et, pour les **éléments d'architecture**, le **verdict de sécurité favorable** ne sont pas réunis. Ce n'est pas un verrou technique : même si le coordinateur n'ouvre pas la sollicitation, l'humain **peut déroger de sa propre initiative** et franchir la frontière malgré un écart, mais par une **décision explicite tracée sur l'issue, mentionnant l'écart** (élément non conforme / verdict de sécurité manquant) — jamais un contournement silencieux. Au gate, le coordinateur **affiche** la conformité complète (✓/✗) et la revue de sécurité (✓/✗) de chaque élément (section 5).
 
 > **Arbitrage `DEC-HUM-001` (ADR-0043).** Le caractère **bloquant** (vs advisory) et l'**ancrage aux deux frontières** sont soumis à l'humain demandeur ; `Proposed` vaut proposition. Un gate bloquant **s'écarte** de la règle « les gates de frontière sont advisory » du [`../conductor.md`](../conductor.md) (« Verification gates aux frontières de phases ») : l'exception (ou le rebascule en advisory) est à **acter dans `DEC-HUM-001`**.
 
