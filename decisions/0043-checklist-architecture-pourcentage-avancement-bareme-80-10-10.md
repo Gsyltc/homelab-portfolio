@@ -37,8 +37,8 @@ L'humain demandeur (sylvain.rodgers) a cadré un **pourcentage d'avancement par 
 - **Total dynamique** : le total est lu dans `required-sections` au moment du calcul ; toute évolution du contrat recalcule le `80 %` sans modifier la checklist. Le fichier d'état est un **instantané recalculé** à chaque mise à jour.
 - **Éléments sans contrat de sections mandatory** (Cadrage, Besoins, Projets, Architecture Logicielle / Données / Infrastructure détaillées) : `total = 1` **par convention** ; leur conformité est jugée par la **revue de cohérence**, faute de base objective (« ne jamais deviner »).
 - **Gate de conformité par élément, advisory** : le gate s'applique **par élément** (jamais sur une moyenne) et alimente, à la frontière **`Inception → Construction`**, la validation humaine granulaire existante sans la remplacer ni ajouter de blocage. Un élément est conforme au gate seulement si **toutes** ses sections mandatory sont conformes (conformité complète, comparaison **non arrondie**) — **pas** un seuil `≥ 80 %`. Les éléments de **surface de sécurité** (Besoins → Sécurité, Architecture de sécurité détaillée) sont requis individuellement et ne se compensent jamais.
-- **Revue de sécurité non substituable (SG-3)** : pour toute surface de sécurité ou d'architecture, le **gate ne remplace pas la revue de sécurité** et ne conditionne pas son déclenchement ; le verdict **favorable** du Reviewer de sécurité précède la conformité au gate. Le terme `(revue)` d'une surface de sécurité n'est crédité que sur verdict du Reviewer de sécurité (la cohérence s'ajoute, jamais à la place). L'état de la revue de sécurité (✓/✗) est affiché au gate.
-- **Revue et acceptation rattachées à une version (anti-falsification, OWASP A08)** : les deux `+10 %` ne sont crédités que sur **verdict favorable sans point bloquant ouvert** (revue) et **acceptation d'un membre humain** (auteur `member`, cité par identifiant), **rattachés à une référence de version** ; tout changement d'un contenu mandatory **remet les deux termes à zéro**, tracé sur l'issue.
+- **Revue de sécurité non substituable, étendue à toute architecture (SG-3)** : pour **tout élément de la section Livrables** (architecture de solution et architectures détaillées) et pour **Besoins → Sécurité**, le **verdict favorable du Reviewer de sécurité** sur la version courante **précède** la conformité au gate **et** l'acceptation humaine (**jamais en parallèle**). Le terme `(revue)` de ces éléments n'est crédité que sur ce verdict (la cohérence s'ajoute, jamais à la place). Les autres éléments (Cadrage, autres Besoins, Projets) relèvent de la revue de cohérence. L'état de la revue de sécurité (✓/✗) est affiché au gate.
+- **Revue et acceptation rattachées à une version (anti-falsification, OWASP A08)** : les deux `+10 %` ne sont crédités que sur **verdict favorable sans point bloquant ouvert** (revue) et **acceptation d'un membre humain** (auteur `member`, cité par identifiant), **rattachés à une référence de version** ; **tout changement du ou des documents attendus de l'élément — partie mandatory ou non (annexe, diagramme, paragraphe) : nouvelle version — remet les deux termes à zéro**, tracé sur l'issue.
 - **Garde-fous préservés** : l'acceptation (`+10 %`) ne provient que d'une annonce explicite d'un membre humain ; aucun agent ne s'auto-valide. Les sensors (`required-sections`, `data-lifecycle`) restent **advisory** ; « présent et non vide » est un plancher de forme, **jamais** un niveau de sécurité. Un retrait/assouplissement d'une section mandatory de sécurité exige une validation humaine tracée (SG-3). Le fichier d'état reste un livrable sans note de méta-production (décision [`0040`](0040-aucune-note-de-generation-dans-les-livrables.md)).
 
 ### Périmètre
@@ -54,7 +54,7 @@ L'humain demandeur (sylvain.rodgers) a cadré un **pourcentage d'avancement par 
 - **POS-002** : barème homogène 80/10/10 lisible d'un coup d'œil sur toutes les sections ; la qualité (revue, acceptation) est explicitement valorisée.
 - **POS-003** : adossement au contrat unique `required-sections` — le décompte des sections conformes ne duplique aucun contrat et suit automatiquement ses évolutions (dénominateur dynamique).
 - **POS-004** : gate par élément objectivable — le déblocage est conditionné par la **conformité complète** de l'élément (toutes sections mandatory) et, pour les surfaces de sécurité, par la revue de sécurité ; la moyenne ne compense jamais un élément faible, la décision de lancement restant humaine.
-- **POS-005** : intégrité dans le temps — revue et acceptation sont rattachées à une version et remises à zéro à tout changement de contenu mandatory ; un livrable modifié ne conserve pas un crédit obtenu sur une version antérieure.
+- **POS-005** : intégrité dans le temps — revue et acceptation sont rattachées à une version et remises à zéro à **tout changement du ou des documents attendus** (mandatory ou non) ; un livrable modifié ne conserve pas un crédit obtenu sur une version antérieure.
 
 ### Négatives
 
@@ -62,7 +62,8 @@ L'humain demandeur (sylvain.rodgers) a cadré un **pourcentage d'avancement par 
 - **NEG-002** : tenue plus fine — le coordinateur doit décompter les sections conformes par livrable (assisté par le sensor advisory), au lieu d'un simple statut ; charge de tenue accrue, compensée par la granularité gagnée.
 - **NEG-003** : lecture d'un % non entier possible — l'arrondi à l'entier sert à l'affichage ; la comparaison au seuil se fait sur la valeur non arrondie (ex. 79,5 % reste bloqué). Choix assumé, le détail par section restant consultable.
 - **NEG-004** : double comptage assumé — `11-securite.md` alimente le DAS et « Architecture de sécurité détaillée », `10-cycle_vie_donnees.md` le DAS et « Architecture de données détaillée » ; les éléments restent jugés séparément (complétude d'ensemble vs profondeur du volet).
-- **NEG-005** : remise à zéro des `+10 %` à chaque changement de contenu mandatory — protège l'intégrité mais impose de re-solliciter revue et acceptation après modification ; charge assumée, tracée sur l'issue.
+- **NEG-005** : remise à zéro des `+10 %` à **tout changement du ou des documents attendus** de l'élément — protège l'intégrité mais impose de re-solliciter revue et acceptation après modification ; charge assumée, tracée sur l'issue.
+- **NEG-006** : revue de sécurité requise pour **tous** les éléments d'architecture (section Livrables) avant l'acceptation — allonge le circuit de ces éléments, mais aligne la checklist sur SG-3 (revue de sécurité avant la validation humaine sur toute architecture) ; compromis assumé en faveur de la sécurité.
 
 ## Alternatives étudiées
 
@@ -83,6 +84,12 @@ Laisser le coordinateur estimer un % d'avancement par élément.
 Pondérer différemment chaque section (ex. Livrables plus lourds que Cadrage).
 
 **Raison du rejet** : complexité et arbitraire ; l'humain a cadré un barème **homogène** 80/10/10 pour une lecture tout-en-% cohérente (option : chaque élément listé = une unité suivie).
+
+### ALT-004 - Gate au seuil `≥ 80 %` seul
+
+Débloquer un élément dès que son pourcentage atteint `≥ 80 %`, sans autre condition.
+
+**Raison du rejet** : la formule additive permet aux deux `+10 %` (revue, acceptation) de **compenser** une conformité documentaire incomplète. Un élément à 80 % peut avoir une section mandatory manquante (y compris de sécurité), ou atteindre 89 % avec une section manquante. Le gate retient donc la **conformité complète par élément** ; le pourcentage reste un indicateur d'avancement, jamais le critère de déblocage.
 
 ## Notes d'implémentation
 

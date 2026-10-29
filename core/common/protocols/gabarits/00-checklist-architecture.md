@@ -21,7 +21,7 @@ Processus, barème, unité de décompte, gate et garde-fous : source unique dans
 
 **% global :** 0 %
 
-> Le `%` est un **indicateur d'avancement** (instantané recalculé). Le **gate** d'un élément (frontière `Inception → Construction`, advisory) exige la **conformité complète** (`Conf. complète = ✓`) et, pour les surfaces de sécurité (🔒), le **verdict favorable du Reviewer de sécurité** (`Revue sécu = ✓`) — jamais une moyenne. Détail : protocole §3, §6, §7.
+> Le `%` est un **indicateur d'avancement** (instantané recalculé). Le **gate** d'un élément (frontière `Inception → Construction`, advisory) exige la **conformité complète** (`Conf. complète = ✓`) — jamais une moyenne. Pour **tout élément d'architecture (section Livrables) et Besoins → Sécurité** (🔒), le **verdict favorable du Reviewer de sécurité** (`Revue (nature) = sécurité`) **précède** le gate **et** l'acceptation humaine (jamais en parallèle — SG-3). Toute modification du ou des documents attendus (mandatory ou non) **remet revue et acceptation à zéro** (nouvelle version). Détail : protocole §3, §4, §6, §7.
 
 ## Cadrage — 0 %
 
@@ -38,19 +38,19 @@ Processus, barème, unité de décompte, gate et garde-fous : source unique dans
 | Technologique | 0 / 1 *(convention)* | ✗ | ✗ (cohérence) | ✗ | — | 0 % |
 | 🔒 Sécurité | 0 / 1 *(convention)* | ✗ | ✗ (**sécurité** SG-3) | ✗ | — | 0 % |
 
-🔒 = surface de sécurité : revue de sécurité (SG-3) **précède** le gate ; non compensable par la moyenne. `*(convention)*` = élément sans contrat de sections mandatory, `total = 1` par convention, conformité jugée par la revue de cohérence (protocole §6).
+🔒 = revue de sécurité (SG-3) requise pour le terme `(revue)` : **précède** le gate **et** l'acceptation humaine (jamais en parallèle). Concerne **Besoins → Sécurité** et **tout élément de la section Livrables** (architectures). `*(convention)*` = élément sans contrat de sections mandatory, `total = 1` par convention, conformité documentaire jugée par la revue de cohérence (protocole §6) ; la revue de sécurité reste requise pour les architectures.
 
 ## Livrables — 0 %
 
-Le terme **80 %** est proportionnel aux **sections mandatory présentes et non vides**, décomptées **à la section** (contrat `required-sections`, source unique ; total **dynamique**). `Conf. complète = ✓` seulement si **toutes** les sections mandatory sont conformes.
+Le terme **80 %** est proportionnel aux **sections mandatory présentes et non vides**, décomptées **à la section** (contrat `required-sections`, source unique ; total **dynamique**). `Conf. complète = ✓` seulement si **toutes** les sections mandatory sont conformes. **Tout élément de cette section est une architecture : le `(revue)` exige le verdict du Reviewer de sécurité (SG-3), qui précède le gate et l'acceptation.**
 
 | Élément | Sections conformes / total | Conf. complète | Revue (nature) | Acceptation humaine | Version évaluée | % |
 | --- | --- | --- | --- | --- | --- | --- |
-| Architecture de solution (DAS) | 0 / 18 | ✗ | ✗ (cohérence) | ✗ | — | 0 % |
-| Architecture Logicielle détaillée | 0 / 1 *(convention)* | ✗ | ✗ (cohérence) | ✗ | — | 0 % |
-| Architecture de données détaillée | 0 / 1 *(convention)* | ✗ | ✗ (cohérence) | ✗ | — | 0 % |
+| 🔒 Architecture de solution (DAS) | 0 / 18 | ✗ | ✗ (**sécurité** SG-3) | ✗ | — | 0 % |
+| 🔒 Architecture Logicielle détaillée | 0 / 1 *(convention)* | ✗ | ✗ (**sécurité** SG-3) | ✗ | — | 0 % |
+| 🔒 Architecture de données détaillée | 0 / 1 *(convention)* | ✗ | ✗ (**sécurité** SG-3) | ✗ | — | 0 % |
 | 🔒 Architecture de sécurité détaillée | 0 / 2 | ✗ | ✗ (**sécurité** SG-3) | ✗ | — | 0 % |
-| Architecture infrastructure détaillée | 0 / 1 *(convention)* | ✗ | ✗ (cohérence) | ✗ | — | 0 % |
+| 🔒 Architecture infrastructure détaillée | 0 / 1 *(convention)* | ✗ | ✗ (**sécurité** SG-3) | ✗ | — | 0 % |
 
 ### Détail DAS — sections mandatory par fichier (contrat `required-sections`, total 18)
 
