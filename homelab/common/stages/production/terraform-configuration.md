@@ -39,7 +39,7 @@ Préparer uniquement les fichiers `.tf` / `.tfvars` — **JAMAIS** `terraform in
 
 ### Step 3 — Vérification QA en aval
 
-Le livrable `.tfvars` produit passe **obligatoirement** par l'**Analyste QA** ([`quality-assurance.md`](quality-assurance.md), volet Terraform, skill `terraform-qa`) avant l'aiguillage du Tech Lead ([`central-quality-control.md`](central-quality-control.md)) : vérification systématique, jamais sautée. Sur défaut, l'Analyste QA émet un `RENVOI` vers le **Spécialiste Terraform** (agent créateur) via le rapport JSON ; il ne modifie jamais le livrable.
+Le livrable `.tfvars` produit passe **obligatoirement** par l'**Analyste QA** ([`quality-assurance.md`](quality-assurance.md), volet Terraform, skill `terraform-qa`) avant l'aiguillage du Tech Lead ([`central-quality-control.md`](central-quality-control.md)) : vérification systématique, jamais sautée. Sur défaut, l'Analyste QA émet un `RENVOI` vers le **Spécialiste Terraform** (agent créateur) via le rapport YAML ; il ne modifie jamais le livrable.
 
 ## Sensors
 

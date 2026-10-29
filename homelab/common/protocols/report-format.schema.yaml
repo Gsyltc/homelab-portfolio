@@ -1,0 +1,202 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://github.com/Gsyltc/homelab-portfolio/homelab/common/protocols/report-format.schema.yaml
+title: Compte-rendu de revue Homelab (A2A)
+description: Source unique du contrat du compte-rendu de revue remonté par un reviewer au Tech Lead Homelab.
+  Schéma sérialisé en YAML (JSON Schema draft 2020-12) ; le rapport conforme est écrit en YAML et déposé
+  en pièce jointe (review-<agent>-<stack>.yaml). Voir report-format.md.
+type: object
+additionalProperties: false
+required:
+- report
+properties:
+  report:
+    type: object
+    additionalProperties: false
+    required:
+    - agent
+    - verdict
+    - livrable
+    - points
+    - sensors
+    - blocage
+    properties:
+      agent:
+        type: string
+        description: Rôle générique de l'agent émetteur (kebab-case, aligné sur les rôles du workflow).
+        enum:
+        - docker
+        - analyste-qa
+        - securite
+        - terraform
+        - n8n
+        - home-assistant
+      verdict:
+        type: string
+        description: 'Aiguillage macro lu directement par le Tech Lead : OK (conforme), RENVOI (corrections
+          attendues), BLOQUE (impossible de produire/poursuivre).'
+        enum:
+        - OK
+        - RENVOI
+        - BLOQUE
+      livrable:
+        type:
+        - string
+        - 'null'
+        description: Nom du fichier livré (attaché à l'issue), ou null si aucun livrable produit.
+      points:
+        type: array
+        description: 'Points remontés, TRIÉS par gravité décroissante (critical d''abord). Plafond : 3
+          par défaut, 5 sur security-patch / new-stack (voir report-format.md). Tableau vide = RAS.'
+        maxItems: 5
+        items:
+          $ref: '#/$defs/point'
+      sensors:
+        type: array
+        description: 'Verdict de CHAQUE sensor déclaré dans le champ sensors: de la fiche de stage exécutée
+          (surface que les sensors ont bien été vérifiés). Un élément par sensor déclaré — aucune omission
+          (SG-2 : silence = écart). Tableau vide UNIQUEMENT si le stage ne déclare aucun sensor. Advisory
+          : ne vaut pas validation (SG-1..6).'
+        items:
+          $ref: '#/$defs/sensor'
+      blocage:
+        type:
+        - string
+        - 'null'
+        description: Une phrase décrivant le blocage. Non-null UNIQUEMENT si verdict = BLOQUE (voir la
+          contrainte conditionnelle).
+    allOf:
+    - if:
+        properties:
+          verdict:
+            const: BLOQUE
+      then:
+        properties:
+          blocage:
+            type: string
+            minLength: 1
+      else:
+        properties:
+          blocage:
+            type: 'null'
+$defs:
+  sensor:
+    type: object
+    additionalProperties: false
+    required:
+    - id
+    - fire_on
+    - verdict
+    - note
+    description: Verdict d'un sensor déclaré dans la fiche de stage. Miroir déterministe du rapport de
+      sensor posté à l'écriture (stage-protocol.md § 4). Jamais de valeur de secret, jamais de ${SNI}.
+    properties:
+      id:
+        type: string
+        description: 'Id nu du sensor, tel que déclaré dans le champ sensors: de la fiche de stage (ex.
+          yaml-validity, plaintext-secret).'
+        enum:
+        - yaml-validity
+        - swarm-deploy-section
+        - plaintext-secret
+        - terraform-no-sni
+        - traefik-coherence
+        - vault-secret-exists
+      fire_on:
+        type: string
+        description: Moment de déclenchement du sensor, repris du manifeste (homelab/sensors/).
+        enum:
+        - write
+        - gate
+      verdict:
+        type: string
+        description: Verdict advisory du sensor. conforme (✅) | ecart (⚠️ écart mineur) | indisponible
+          (⛔ non exécuté / en erreur / hors périmètre — jamais lu comme conforme, SG-2). Un sensor déclaré
+          non exécuté est 'indisponible', jamais omis.
+        enum:
+        - conforme
+        - ecart
+        - indisponible
+      note:
+        type: string
+        minLength: 1
+        description: 'Une ligne factuelle : fait vérifié (si conforme), description de l''écart (si ecart),
+          ou motif d''indisponibilité (si indisponible). Jamais de valeur de secret ni de ${SNI}.'
+  point:
+    type: object
+    additionalProperties: false
+    required:
+    - id
+    - gravite
+    - constat
+    - cause
+    - correction
+    - domaine_correction
+    - arbitrage_requis
+    - arbitrage_motif
+    properties:
+      id:
+        type: string
+        description: Référence courte et stable du point (ex. P1, P2) pour que le Leader et l'agent correcteur
+          le désignent sans ambiguïté.
+        pattern: ^P[0-9]+$
+      gravite:
+        type: string
+        description: 'Gravité du point (sert au tri : critical en tête).'
+        enum:
+        - critical
+        - warning
+        - info
+      constat:
+        type: string
+        minLength: 1
+        description: 'QUOI : le problème observé, factuel, une phrase.'
+      cause:
+        type: string
+        minLength: 1
+        description: 'POURQUOI : la cause racine, une phrase.'
+      correction:
+        type: string
+        minLength: 1
+        description: 'COMMENT CORRIGER : instruction actionnable et autosuffisante, exploitable par un
+          autre agent sans relire tout le contexte.'
+      domaine_correction:
+        type:
+        - string
+        - 'null'
+        description: Indice du rôle capable de corriger (une suggestion, pas une affectation ; le Leader
+          tranche). null si l'agent ne sait pas.
+        enum:
+        - docker
+        - analyste-qa
+        - securite
+        - terraform
+        - n8n
+        - home-assistant
+        - null
+      arbitrage_requis:
+        type: boolean
+        description: 'L''agent SIGNALE qu''un choix non purement technique existe (true). Il ne décide
+          pas de l''escalade : le Tech Lead lit ce drapeau et décide s''il remonte à l''humain (validation
+          humaine granulaire, invariant).'
+      arbitrage_motif:
+        type:
+        - string
+        - 'null'
+        description: 'Motif d''arbitrage rédigé pour que le Tech Lead l''explique tel quel à l''humain
+          : énonce le choix en jeu, les options (au moins deux) et le compromis / l''impact de chacune.
+          Concis — 1 à 3 phrases, factuel, sans jargon interne ni rappel du workflow. Non-null UNIQUEMENT
+          si arbitrage_requis = true (voir la contrainte conditionnelle).'
+    allOf:
+    - if:
+        properties:
+          arbitrage_requis:
+            const: true
+      then:
+        properties:
+          arbitrage_motif:
+            type: string
+            minLength: 1
+      else:
+        properties:
+          arbitrage_motif:
+            type: 'null'

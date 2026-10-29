@@ -2,7 +2,9 @@
 
 Source unique du **geste de fin de mission** d'un agent **producteur** (stages `review_class: none`) : livrable seul, corps minimal, zéro prose. Les fiches de stage et d'agent producteur **référencent** ce protocole, elles ne le redupliquent pas (source unique — SG-1 / SEC-5).
 
-Distinct du compte-rendu structuré des **reviewers** ([`report-format.md`](report-format.md) / [`report-format.schema.json`](report-format.schema.json), **inchangé**) : un producteur ne joint **aucun fichier de rapport JSON**.
+Distinct du compte-rendu structuré des **reviewers** ([`report-format.md`](report-format.md) / [`report-format.schema.yaml`](report-format.schema.yaml), rapport **YAML** `review-<agent>-<stack>.yaml`) : un producteur ne joint **aucun fichier de rapport**.
+
+> **Sensors visibles même sans fichier de rapport.** Un producteur n'attache aucun rapport, mais poste **sur l'issue**, à l'écriture de son livrable, le **verdict par sensor déclaré** ([`stage-protocol.md`](stage-protocol.md) § 4). Aucun sensor déclaré ne reste silencieux (SG-2).
 
 ## Geste de fin de mission (obligatoire)
 
@@ -10,7 +12,7 @@ En toute dernière action (livré, ou bloqué), le producteur :
 
 - ne joint **que son livrable** (le fichier produit) — **aucun fichier de rapport** ;
 - réduit le corps au **strict minimum** : mention valide du Tech Lead + **une** ligne de statut (`livré` / `proposé` / `appliqué` / `bloqué : <raison en une phrase>`) ;
-- **aucune prose, aucun relevé fin, aucune liste de points, aucun bloc technique** dans le thread ;
+- **aucune prose, aucun relevé fin, aucune liste de points, aucun bloc technique** dans le **thread de fin de mission** (le rapport de sensor par sensor déclaré, lui, est posté **sur l'issue** à l'écriture — temps 4 de [`stage-protocol.md`](stage-protocol.md) — et n'est pas concerné par cette réduction) ;
 - publie **en réponse dans le thread** de la mission ; après publication, **lire
   obligatoirement `trigger_outcomes`** dans la réponse de la CLI. La tâche n'est
   **PAS terminée** tant que `trigger_outcomes` ne confirme pas un run enfilé pour le

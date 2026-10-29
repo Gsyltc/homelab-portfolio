@@ -42,11 +42,32 @@ flowchart LR
 
 ### 4. Sensors à l'écriture
 
-- À l'écriture d'un artefact (compose, `.tfvars`), les `sensors` déclarés `fire_on: write` se déclenchent et leur verdict est consigné en commentaire (`✅` / `⚠️` / `⛔ indisponible`). **Advisory par défaut** — n'autorise aucun raccourci, ne vaut pas validation (SG-1..6). **Exception** : `plaintext-secret` / `terraform-no-sni` sont **bloquants sur `security-patch` / `new-stack`** (ALI-204).
+> ⛔ **Les sensors ne se contournent pas.** Une vérification équivalente faite en prose, un commentaire ad hoc, ou une affirmation « conforme » sans rapport de sensor **ne satisfont pas** le temps 4. L'absence de rapport pour un sensor déclaré est un **écart à signaler** (SG-2 : `⛔ indisponible ≠ conforme`, silence = écart).
+
+À l'écriture d'un artefact (compose, `.tfvars`), l'agent **auteur** exécute **tous les sensors déclarés dans le champ `sensors:` de la fiche de stage** et poste sur l'issue (piste d'audit) un **rapport de sensor structuré, un par sensor** :
+
+```
+**Sensor `<id-du-sensor>`** (`fire_on: write` | `fire_on: gate`) — <artefact concerné>
+Verdict : ✅ conforme | ⚠️ écart mineur | ⛔ indisponible
+<une ligne : fait vérifié, ou motif d'indisponibilité / écart>
+```
+
+Règles non contournables :
+
+- **Chaque sensor déclaré fait l'objet d'un rapport distinct** — aucun regroupement ni omission (SG-2 : silence = écart).
+- **`⛔ indisponible`** : sensor non encore exécutable (mécanisme déclaratif — voir [`../../sensors/README.md`](../../sensors/README.md)) ; indiquer le motif. Jamais un silence.
+- **`⚠️ écart`** : l'agent décrit l'écart en une ligne et continue (advisory) ; il **ne devance pas** la décision humaine mais la documente pour la validation humaine granulaire (temps 6).
+- **Advisory par défaut** — n'autorise aucun raccourci, ne vaut pas validation (SG-1..6). **Exception** : `plaintext-secret` / `terraform-no-sni` sont **bloquants sur `security-patch` / `new-stack`** (ALI-204) — une détection arrête l'avancée jusqu'à correction ou levée humaine explicite tracée.
+- Les sensors `fire_on: write` (ex. `yaml-validity`, `plaintext-secret`, `terraform-no-sni`) sont invoqués **à chaque écriture** de l'artefact concerné, pas seulement en fin de stage.
+
+Ce rapport par sensor est **repris en synthèse** en fin de mission : par le **reviewer** dans le champ `sensors[]` du rapport YAML ([`report-format.md`](report-format.md)), par le **producteur** sur l'issue ([`producer-report.md`](producer-report.md)).
 
 ### 5. Verification gate à la frontière de phase
 
-- À la sortie de la phase, le Tech Lead exécute le gate de traçabilité ([`homelab/sensors/gates.md`](../../sensors/gates.md)) et poste le **« Rapport de vérification »** *avant* la validation humaine. Un écart est signalé, jamais bloquant (advisory) ; `⛔ indisponible ≠ conforme`.
+> ⛔ **Le rapport de gate ne se contourne pas.** Le Tech Lead **poste le « Rapport de vérification »** ([`homelab/sensors/gates.md`](../../sensors/gates.md)) *avant* la validation humaine, même si les sensors sont encore déclaratifs. L'absence de rapport est un écart de piste d'audit.
+
+- À la sortie de la phase, le Tech Lead exécute le gate de traçabilité et poste le **« Rapport de vérification »** structuré pour la frontière franchie — checks `artefacts-presents` / `liaison-tracabilite` / `absence-orphelin` **et** la ligne **par sensor de gate** déclaré à cette frontière (verdict `✅` / `⚠️` / `⛔` + fait ou motif), selon le format fixé par [`homelab/sensors/gates.md`](../../sensors/gates.md) § « Rapport de gate ».
+- Un écart est signalé, jamais bloquant (advisory) — **sauf** l'exception bloquante par scope (`livrable_tfvars_present` sur `new-stack` / `infra-terraform`, cf. `gates.md`) ; `⛔ indisponible ≠ conforme` (SG-2). **Chaque sensor de gate déclaré figure dans le rapport** — aucune omission.
 
 ### 6. Validation humaine granulaire
 

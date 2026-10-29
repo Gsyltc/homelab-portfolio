@@ -113,4 +113,8 @@ Rapport de vérification — <frontière>   (source : homelab/sensors/gates.md @
 - livrable_tfvars (new-stack / infra-terraform) : ✅ présent | ⛔ MANQUANT (écart bloquant) | ⚠️ conditionnel hors scope
 - controle_securite_posture (surface de sécurité) : ✅ présent (délégation sécurité réalisée) | ⚠️ MANQUANT (contrôle sécurité non tracé) | ⚠️ sans objet (aucune surface de sécurité)
 - prérequis §4.0 (frontière Phase 3 → Phase 4) : ✅ | ⚠️ <[répertoire de travail] / Kestra> | ⛔ <indisponible>
+Sensors de gate :   # une ligne par sensor du champ sensors: de la frontière — aucune omission (SG-2)
+- `<sensor-id>` : ✅ conforme | ⚠️ écart | ⛔ indisponible — <fait vérifié ou motif>
 ```
+
+> **Sensors de gate — non contournables.** La liste `Sensors de gate` reprend **chaque** id du champ `sensors:` de la frontière franchie (ex. `yaml-validity`, `swarm-deploy-section`, `plaintext-secret`, `terraform-no-sni`, `traefik-coherence` à `phase3-phase4` ; `vault-secret-exists` à `phase4-cloture`). Un sensor déclaré non exécuté est `⛔ indisponible`, **jamais omis ni lu comme conforme** (SG-2). C'est cette ligne qui **montre, au gate, que chaque sensor de gate a été vérifié** ; elle est le pendant, côté frontière de phase, du rapport de sensor à l'écriture (`protocols/stage-protocol.md` § 4).
