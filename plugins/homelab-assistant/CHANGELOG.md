@@ -6,6 +6,14 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/) ; versionnage
 ## [Non publié]
 
 ### Added
+- **Skill `homelab-vault-access` — écriture encadrée de la clé `VERSION`** (parcours
+  `service-version-update`, HOM-263). Nouvelle **Étape 3** : écriture en read-modify-write de la
+  **seule** clé `VERSION` du montage `env_variables/data/<service>`, préservant toutes les autres
+  clés ; corps POST via stdin (jamais en argument visible), vérification sans divulgation, token
+  révoqué en fin. C'est le **seul** cas d'écriture autorisé de la skill (jamais le montage
+  `services/`, jamais une autre clé), gardé par le **gate léger unique (A1)** du stage
+  `version-update-application`. `description` du front-matter mise à jour en conséquence ; règle
+  de sécurité ABSOLUE n° 7 ajoutée (écriture = exception unique). Voir `decisions/0044-…`.
 - Skill `terraform-qa` — vérification adversariale d'une configuration Terraform
   (`.tf`/`.tfvars`) : structure HCL, conformité au template de stack, cohérence
   des variables (dont `cloudflare_dns_nb`), absence de `${SNI}` et de secret en

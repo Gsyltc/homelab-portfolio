@@ -13,6 +13,7 @@ Table partagée référencée par le [`conductor.md`](../conductor.md) et les fi
 | [`config-change`](../../scopes/config-change.md)          | Variable existante, sans impact sécurité (≈ « allégé »)                      | Chemin court, Depth minimale, vérification advisory                                      |
 | [`security-patch`](../../scopes/security-patch.md)        | Tout impact sécurité (auth, réseau, exposition, secrets, hardening, Traefik) | **Architecte de sécurité Homelab pilote**, plancher renforcé, sensors sécurité bloquants |
 | [`infra-terraform`](../../scopes/infra-terraform.md)      | Infra Terraform / Proxmox                                                    | Accent Spécialiste Terraform, compose ignoré                                             |
+| [`service-version-update`](../../scopes/service-version-update.md) | Mise à jour d'un service existant sur une nouvelle version disponible | Analyse d'impact de version → gate léger unique → écriture Vault `VERSION` + déploiement Kestra |
 | [`n8n`](../../scopes/n8n.md)                              | Toute demande n8n — **branche autonome**                                     | Court-circuit immédiat → Expert n8n                                                      |
 | [`home-assistant`](../../scopes/home-assistant.md)        | Toute demande Home Assistant — **branche autonome**                          | Court-circuit immédiat → Expert Home Assistant                                           |
 
@@ -22,7 +23,9 @@ Défaut : `stack-update`. **Aucun scope ne désactive les invariants non contour
 
 Scope auto-détecté par mots-clés (FR / EN) puis **confirmé explicitement** avant démarrage (jamais de démarrage silencieux). Les mots-clés déclencheurs sont **déclarés en données** dans le champ `keywords:` de chaque fichier [`../../scopes/<name>.md`](../../scopes/README.md) (source d'identité). Ordre de priorité en cas de correspondances multiples (**le niveau le plus élevé l'emporte**, héritage direct de la règle « allégé vs complet ») :
 
-`n8n` = `home-assistant` (branches autonomes, court-circuit immédiat) > `security-patch` > `new-stack` > `infra-terraform` > `stack-update` > `config-change`
+`n8n` = `home-assistant` (branches autonomes, court-circuit immédiat) > `security-patch` > `new-stack` > `infra-terraform` > `service-version-update` > `stack-update` > `config-change`
+
+**`service-version-update` vs `stack-update`.** `service-version-update` est une **spécialisation ciblée** de `stack-update` : il l'emporte dès qu'un déclencheur « nouvelle version / montée de version / release » vise un service **existant**. Il reste **sous** `security-patch` : si la montée de version porte un enjeu sécurité (CVE, auth, exposition, secrets), `security-patch` l'emporte et impose son plancher renforcé.
 
 **Le doute ne bascule jamais vers `config-change`** : dès qu'un seul déclencheur d'un scope plus élevé s'applique — ou en cas de doute sur l'impact sécurité — le scope supérieur s'impose. L'auto-détection est un **plancher** : la confirmation humaine peut monter le contrôle, jamais le descendre sans trace.
 
@@ -45,6 +48,7 @@ Les valeurs par défaut ci-dessous sont la **projection lisible** des champs `de
 | `config-change`   | minimal       | advisory                               |
 | `security-patch`  | comprehensive | renforcé *(plancher — jamais abaissé)* |
 | `infra-terraform` | standard      | standard                               |
+| `service-version-update` | standard | standard                        |
 | `n8n`             | standard      | standard                               |
 | `home-assistant`  | standard      | standard                               |
 
@@ -54,23 +58,28 @@ Les valeurs par défaut ci-dessous sont la **projection lisible** des champs `de
 
 Légende : ✅ activé · ➖ allégé / au juste nécessaire · ❌ ignoré · 🔒 renforcé · ⏭ branche autonome (ne passe pas par ce flux). Stages nommés par leur slug (voir [`../stages/`](../stages/)).
 
-| Stage                            | `stack-update` | `new-stack` | `config-change` | `security-patch` | `infra-terraform` | `n8n`       | `home-assistant` |
-| -------------------------------- | -------------- | ----------- | --------------- | ---------------- | ----------------- | ----------- | ---------------- |
-| Initialisation (0.x)             | ✅              | ✅           | ✅               | ✅                | ✅                 | ✅           | ✅                |
-| Idéation (1.x)                   | ✅              | ✅           | ➖               | ✅                | ✅                 | ⏭           | ⏭                |
-| `n8n-absolute-rule`              | ✅              | ✅           | ✅               | ✅                | ✅                 | 🔒 déclenche | ✅                |
-| `domain-triage`                  | ❌              | ❌           | ❌               | ❌                | ❌                 | ✅ ambigu    | ✅ ambigu         |
-| `intake-framing`                 | ✅              | ✅           | ➖               | ✅                | ✅                 | ⏭           | ⏭                |
-| `swarm-proxmox-arbitration`      | ➖              | ✅           | ❌               | ➖                | ✅                 | ⏭           | ⏭                |
-| `required-parameters-collection` | ✅              | ✅           | ➖               | ✅                | ➖                 | ⏭           | ⏭                |
-| `autonomy-mode`                  | ✅              | ✅           | ➖               | ✅                | ✅                 | ⏭           | ⏭                |
-| `terraform-configuration`        | ➖              | ✅           | ❌               | ➖                | ✅                 | ⏭           | ⏭                |
-| `docker-compose-creation`        | ✅              | ✅           | ➖               | ✅                | ❌                 | ⏭           | ⏭                |
-| `quality-assurance`              | ✅              | ✅ 🔒         | ➖               | ✅ 🔒              | ✅                 | ⏭           | ⏭                |
-| `n8n-branch`                     | ❌              | ❌           | ❌               | ❌                | ❌                 | ✅           | ❌                |
-| `home-assistant-branch`          | ❌              | ❌           | ❌               | ❌                | ❌                 | ❌           | ✅                |
-| `central-quality-control`        | ✅              | ✅ 🔒         | ➖               | ✅ 🔒              | ✅                 | ✅           | ✅                |
-| Validation (4.x)                 | ✅              | ✅           | ✅               | ✅                | ✅                 | ✅           | ✅                |
+| Stage                            | `stack-update` | `new-stack` | `config-change` | `security-patch` | `infra-terraform` | `service-version-update` | `n8n`       | `home-assistant` |
+| -------------------------------- | -------------- | ----------- | --------------- | ---------------- | ----------------- | ------------------------ | ----------- | ---------------- |
+| Initialisation (0.x)             | ✅              | ✅           | ✅               | ✅                | ✅                 | ✅                        | ✅           | ✅                |
+| Idéation (1.x)                   | ✅              | ✅           | ➖               | ✅                | ✅                 | ➖                        | ⏭           | ⏭                |
+| `n8n-absolute-rule`              | ✅              | ✅           | ✅               | ✅                | ✅                 | ✅                        | 🔒 déclenche | ✅                |
+| `domain-triage`                  | ❌              | ❌           | ❌               | ❌                | ❌                 | ❌                        | ✅ ambigu    | ✅ ambigu         |
+| `intake-framing`                 | ✅              | ✅           | ➖               | ✅                | ✅                 | ➖                        | ⏭           | ⏭                |
+| `version-impact-analysis`        | ❌              | ❌           | ❌               | ❌                | ❌                 | ✅                        | ❌           | ❌                |
+| `swarm-proxmox-arbitration`      | ➖              | ✅           | ❌               | ➖                | ✅                 | ❌                        | ⏭           | ⏭                |
+| `required-parameters-collection` | ✅              | ✅           | ➖               | ✅                | ➖                 | ➖                        | ⏭           | ⏭                |
+| `autonomy-mode`                  | ✅              | ✅           | ➖               | ✅                | ✅                 | ❌                        | ⏭           | ⏭                |
+| `terraform-configuration`        | ➖              | ✅           | ❌               | ➖                | ✅                 | ❌                        | ⏭           | ⏭                |
+| `docker-compose-creation`        | ✅              | ✅           | ➖               | ✅                | ❌                 | ❌                        | ⏭           | ⏭                |
+| `quality-assurance`              | ✅              | ✅ 🔒         | ➖               | ✅ 🔒              | ✅                 | ❌                        | ⏭           | ⏭                |
+| `n8n-branch`                     | ❌              | ❌           | ❌               | ❌                | ❌                 | ❌                        | ✅           | ❌                |
+| `home-assistant-branch`          | ❌              | ❌           | ❌               | ❌                | ❌                 | ❌                        | ❌           | ✅                |
+| `central-quality-control`        | ✅              | ✅ 🔒         | ➖               | ✅ 🔒              | ✅                 | ➖                        | ✅           | ✅                |
+| Validation (4.x)                 | ✅              | ✅           | ✅               | ✅                | ✅                 | ✅                        | ✅           | ✅                |
+| `version-update-application`     | ❌              | ❌           | ❌               | ❌                | ❌                 | ✅ (gate léger unique)        | ❌           | ❌                |
+| `kestra-deployment`              | ✅              | ✅           | ✅               | ✅                | ✅                 | ✅                        | ❌           | ❌                |
+
+> **Lecture du parcours `service-version-update`.** Idéation et Cadrage sont **resserrés** (pas de création d'artefact de stack) : l'essentiel se joue dans le stage dédié [`version-impact-analysis`](../stages/ideation/version-impact-analysis.md) (analyse de la release, détection breaking change → `blocked` si enjeu) puis, en Validation, dans [`version-update-application`](../stages/validation/version-update-application.md) qui **porte le gate léger unique** et enchaîne, sur une **seule** acceptation humaine, l'écriture Vault de `VERSION` **et** le déploiement `kestra-deployment`. Les stages de production d'artefacts (`terraform-configuration`, `docker-compose-creation`, `quality-assurance`, `autonomy-mode`) sont **ignorés** : la mise à jour réutilise le fichier Terraform **existant** du service. Si la montée de version porte un enjeu sécurité, le scope bascule sur `security-patch` (report de priorité).
 
 **Ce que change chaque scope.** Un scope allégé (`config-change`) réduit le **nombre d'étapes** (Idéation resserrée, cadrage resserré, moins de contrôles intermédiaires) ; les scopes complets appliquent l'intégralité des phases 0 à 4. Dans tous les cas, la validation humaine avant toute action à impact et la répartition des rôles restent inchangées. **Un scope joue sur le nombre d'étapes, jamais sur qui les exécute** : alléger ne transfère jamais la responsabilité d'un spécialiste vers le Tech Lead.
 

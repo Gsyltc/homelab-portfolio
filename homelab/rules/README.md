@@ -10,7 +10,7 @@ Les règles capitalisent les **corrections humaines validées** afin qu'un agent
 | `global` | [`global.md`](global.md)                                                | Invariants et conventions Homelab valables partout    | Au démarrage (toujours actif)               |
 | `stack`  | `stacks/<stack>.md`                                                     | Spécifique à une stack (portainer, traefik, gitea, …) | Au démarrage, uniquement la stack courante  |
 | `phase`  | `phases/<phase>.md` (`ideation`, `cadrage`, `production`, `validation`) | Par phase du workflow                                 | À la demande, quand la phase est déclenchée |
-| `scope`  | `scopes/<scope>.md` (les 7 scopes Homelab)                              | Par scope                                             | À la demande, quand le scope est confirmé   |
+| `scope`  | `scopes/<scope>.md` (les 8 scopes Homelab)                              | Par scope                                             | À la demande, quand le scope est confirmé   |
 
 **Précédence** : `global` > `stack` > `phase` > `scope`. Une règle d'une couche **ne peut pas contredire** une règle d'une couche supérieure sans arbitrage humain (contrôle de conflit à l'admission). Cette précédence explicite **préserve et renforce** l'invariant amont « conflit réglé à l'écriture, jamais au runtime ».
 

@@ -22,7 +22,7 @@ Un scope se déclare en **deux endroits**, et cette séparation est l'idée maî
    d'**Initialisation** nomment **tous** les scopes (ils s'exécutent toujours).
 
 La liaison entre les deux est le **nom du scope**. L'appartenance est ainsi déclarée **une seule
-fois, sur le stage**, jamais redéclarée dans sept blocs de scope séparés.
+fois, sur le stage**, jamais redéclarée dans huit blocs de scope séparés.
 
 > **Ordre de livraison.** Les fiches de stage [`homelab/common/stages/`](../common/stages/) sont
 > **livrées** (Stage 7 — modèle conductor / stages / protocols). L'appartenance (quels stages
@@ -97,7 +97,12 @@ explicitement** avant démarrage (jamais de démarrage silencieux). En cas de co
 multiples, **le niveau le plus élevé l'emporte** ; ordre de priorité :
 
 `n8n` = `home-assistant` (branches autonomes, court-circuit immédiat) > `security-patch` >
-`new-stack` > `infra-terraform` > `stack-update` > `config-change`
+`new-stack` > `infra-terraform` > `service-version-update` > `stack-update` > `config-change`
+
+`service-version-update` est une **spécialisation ciblée** de `stack-update` : il l'emporte sur
+`stack-update` dès qu'un déclencheur « nouvelle version / montée de version / release » est détecté
+pour un service **existant**. Il reste **en dessous** de `security-patch` : si la montée de version
+porte un enjeu sécurité, `security-patch` l'emporte (plancher renforcé, sensors sécurité bloquants).
 
 **Le doute ne bascule jamais vers `config-change`** (héritage direct de la règle de départage
 « allégé vs complet »). Défaut : **`stack-update`** en l'absence de mot-clé détecté.
@@ -117,6 +122,7 @@ sécurité exige une **validation humaine explicite tracée** sur l'issue.
 | [`config-change`](config-change.md) | Modification d'une variable existante (≈ « allégé ») | minimal | advisory |
 | [`security-patch`](security-patch.md) | Tout impact sécurité (auth, réseau, secrets, hardening, Traefik) | comprehensive | renforcé |
 | [`infra-terraform`](infra-terraform.md) | Infra Terraform / Proxmox | standard | standard |
+| [`service-version-update`](service-version-update.md) | Mise à jour d'un service existant sur une nouvelle version disponible | standard | standard |
 | [`n8n`](n8n.md) | Toute demande n8n — branche autonome, délégation immédiate | standard | standard |
 | [`home-assistant`](home-assistant.md) | Toute demande Home Assistant — branche autonome | standard | standard |
 
