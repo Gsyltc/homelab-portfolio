@@ -31,6 +31,7 @@ Règles de tenue :
 - Ce fichier est un livrable : aucune note de génération / méta-production (réf. décision 0040).
 - Ne jamais deviner : une section ne compte conforme que si présente et non vide ; en cas de doute, ne pas compter, informer l'humain.
 - Les sous-tableaux par section mandatory des Livrables s'appuient sur le contrat required-sections (source unique) ; en cas d'écart, le sensor fait foi.
+- Arrimages (section Projets) est décomposé par rôles mandatory : part 80 % = 80 × (rôles présents et nommés / total). Total = 5 rôles, ou 6 si Loi 25 activée (Responsable Légal). Le couple Architecte de solution / intégrateur compte pour un seul rôle (l'un ou l'autre). Source de la liste : matrice RACI du DAS 001.
 -->
 
 **% global :** 0 %
@@ -146,10 +147,32 @@ Part 80 % = 80 × (sections conformes / total). Sections attendues : gabarit DAS
 
 ## Projets — 0 %
 
+Synthèse (Arrimages est décomposé par rôles mandatory — voir le sous-tableau dédié) :
+
 | Élément | Sections conformes | Part 80 % | Revue pair (+10) | Acceptation humaine (+10) | % |
 | --- | --- | --- | --- | --- | --- |
 | Planification | — (unité suivie) | 0 | 0 | 0 | 0 % |
 | Coûts | — (unité suivie) | 0 | 0 | 0 | 0 % |
 | Risques | — (unité suivie) | 0 | 0 | 0 | 0 % |
 | Exploitation | — (unité suivie) | 0 | 0 | 0 | 0 % |
-| Arrimages | — (unité suivie) | 0 | 0 | 0 | 0 % |
+| Arrimages | rôles mandatory (sous-tableau) | 0 | 0 | 0 | 0 % |
+
+### Arrimages — 0 %
+
+Part 80 % = 80 × (rôles mandatory conformes / total). Un rôle est **conforme** s'il est **présent et nommé** (colonne « Nom » renseignée) dans la matrice RACI « Arrimage des rôles » du DAS `documentation/001-document-architecture-solution.md` (source). Dénominateur : **5** rôles mandatory, **6** si la **Loi 25** est activée (le Responsable Légal entre alors au dénominateur).
+
+| Rôle mandatory | Présent et nommé ? |
+| --- | --- |
+| Architecte de solution **ou** Architecte de solution intégrateur (l'un ou l'autre) | non |
+| Chef de projet | non |
+| Responsable produit | non |
+| Responsable Affaires | non |
+| Lead Assurance Qualité | non |
+| Responsable Légal _(uniquement si Loi 25 activée — sinon hors dénominateur)_ | n/a |
+
+| Composante | Valeur |
+| --- | --- |
+| Part 80 % = 80 × (conformes / total) | 0 |
+| Revue pair (+10) | 0 |
+| Acceptation humaine (+10) | 0 |
+| **% élément** | **0 %** |

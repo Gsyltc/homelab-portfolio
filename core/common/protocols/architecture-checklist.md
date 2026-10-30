@@ -17,9 +17,28 @@ Quatre sections, éléments **fixes** ; aucun ajout / retrait sans décision tra
 - **Cadrage**
 - **Besoins (MoSCoW)** — Entreprises et affaires · Solutions · Technologique · Sécurité
 - **Livrables** — Architecture de solution (DAS) · Architecture Logicielle détaillée · Architecture de données détaillée · Architecture de sécurité détaillée · Architecture infrastructure détaillée
-- **Projets** — Planification · Coûts · Risques · Exploitation · Arrimages
+- **Projets** — Planification · Coûts · Risques · Exploitation · **Arrimages** (élément décomposé par **rôles mandatory**, section 2.1)
 
 Chaque élément est suivi **en pourcentage** selon le **barème 80/10/10** de la section 3. Un élément n'atteint **100 %** que lorsque sa part « sections conformes » est complète **et** que sa **revue par un pair** et son **acceptation humaine** sont réalisées.
+
+### 2.1 Arrimages — rôles mandatory
+
+L'élément **Arrimages** (section Projets) n'est **pas** une simple unité binaire : sa part 80 % se **décompte par rôle mandatory** (comme un livrable se décompte par section), à partir de la **matrice d'arrimage des rôles (RACI)** du fichier DAS `documentation/001-document-architecture-solution.md` (section « Arrimages » — « Arrimage des rôles », source de la liste des rôles ; ce fichier est l'un des 7 mandatory du volet `das:` du sensor [`required-sections`](../../sensors/sensors/required-sections.md)). Un rôle est **conforme** lorsqu'il est **présent et nommé** (colonne « Nom » renseignée) dans cette matrice.
+
+**Rôles mandatory :**
+
+| Rôle mandatory | Règle de décompte |
+| --- | --- |
+| Architecte de solution **ou** Architecte de solution intégrateur | **l'un ou l'autre** suffit — compte pour **un seul** rôle |
+| Chef de projet | présent et nommé |
+| Responsable produit | présent et nommé |
+| Responsable Affaires | présent et nommé |
+| Lead Assurance Qualité | présent et nommé |
+| Responsable Légal | **conditionnel** : mandatory **uniquement si la Loi 25 est activée** sur le projet — sinon **hors dénominateur** |
+
+- **Dénominateur** = nombre de rôles mandatory **applicables** : **5** par défaut, **6** lorsque la Loi 25 est activée (le Responsable Légal entre alors au dénominateur — application du **dénominateur dynamique**, section 3).
+- Le couple « Architecte de solution / intégrateur » compte pour **une** unité : nommer l'un **ou** l'autre le rend conforme.
+- La liste et la matrice RACI ont leur **source** dans le DAS `001` ; la checklist **ne redéfinit pas** la matrice, elle **décompte** les rôles mandatory présents et nommés.
 
 ## 3. Calcul du pourcentage (barème 80/10/10)
 
@@ -33,7 +52,10 @@ Chaque élément est noté **en pourcentage** selon un barème **homogène** à 
 
 où `revue pair réalisée` et `acceptation humaine` valent `0` ou `1`. Résultat arrondi à l'entier.
 
-- **Part 80 % — conformité des sections.** Pour un **livrable** (section Livrables), `sections conformes / total sections mandatory` est la proportion des **sections mandatory** du ou des documents attendus qui sont **présentes et conformes** (section 6), d'après le contrat **source unique** [`required-sections`](../../sensors/sensors/required-sections.md). Pour les éléments **sans sous-sections mandatory décomptées** (Cadrage, Besoins MoSCoW, Projets), la part 80 % est **binaire** : `0` tant que l'élément n'est pas présent et conforme, `80` dès qu'il l'est — l'élément est traité comme une **unité suivie**.
+- **Part 80 % — conformité des sections.** `sections conformes / total sections mandatory` est la proportion des **sous-éléments mandatory** présents et conformes (section 6) :
+  - pour un **livrable** (section Livrables) : ses **sections mandatory** d'après le contrat **source unique** [`required-sections`](../../sensors/sensors/required-sections.md) ;
+  - pour **Arrimages** (section Projets) : ses **rôles mandatory** d'après la matrice RACI du DAS `001` (section 2.1), avec dénominateur **5** (ou **6** si Loi 25 activée) ;
+  - pour les éléments **sans sous-éléments mandatory décomptés** (Cadrage, Besoins MoSCoW, et Projets **sauf Arrimages**), la part 80 % est **binaire** : `0` tant que l'élément n'est pas présent et conforme, `80` dès qu'il l'est — l'élément est traité comme une **unité suivie**.
 - **Part +10 % — revue par un pair.** Ajoutée **une fois** qu'une **revue par un pair** (peer review) de l'élément a été réalisée et tracée sur l'issue.
 - **Part +10 % — acceptation humaine.** Ajoutée **une fois** que l'humain a **explicitement accepté** l'élément (gate de validation humaine granulaire — source unique [`../conductor.md`](../conductor.md), « La boucle aux gates : Keep / Modify / Redo »). Aucun agent ne s'auto-accepte.
 
@@ -41,7 +63,7 @@ Les trois parts sont **indépendantes** : la revue pair et l'acceptation peuvent
 
 ### Dénominateur dynamique
 
-Le `total sections mandatory` d'un livrable est celui du contrat `required-sections` **au moment du calcul**. Toute **section ou fichier mandatory ajouté au fil de l'eau** s'ajoute au **dénominateur total** ; la part 80 % se **recalcule** sur le nouveau total (une section nouvellement requise non encore produite **abaisse** mécaniquement le %). La checklist ne redéfinit **aucun** contrat de sections : `required-sections` fait foi.
+Le `total sections mandatory` d'un livrable est celui du contrat `required-sections` **au moment du calcul**. Toute **section ou fichier mandatory ajouté au fil de l'eau** s'ajoute au **dénominateur total** ; la part 80 % se **recalcule** sur le nouveau total (une section nouvellement requise non encore produite **abaisse** mécaniquement le %). La checklist ne redéfinit **aucun** contrat de sections : `required-sections` fait foi. Le même principe vaut pour **Arrimages** : l'**activation de la Loi 25** fait entrer le **Responsable Légal** au dénominateur (5 → 6 rôles mandatory), recalculant d'autant la part 80 %.
 
 ### Agrégation (section et global)
 
@@ -84,7 +106,8 @@ Pour établir la **part 80 %** d'un élément (proportion `sections conformes / 
 
 - le ou les **documents attendus existent** et sont **au bon format** ;
 - ils sont **clairs**, **sans note de génération d'agent** (réf. décision [`0040`](../../../decisions/0040-aucune-note-de-generation-dans-les-livrables.md)), **sans doublon**, **sans incohérence** ;
-- pour la section **Livrables**, **chaque section mandatory** attendue du document est comptée **conforme** uniquement si elle est **présente et non vide**, selon le sensor [`required-sections`](../../sensors/sensors/required-sections.md) (**source unique** du contrat et du **total** servant de dénominateur — ne pas le redupliquer ici ; le sensor reste **advisory** et **n'autorise jamais** à se passer de la validation humaine).
+- pour la section **Livrables**, **chaque section mandatory** attendue du document est comptée **conforme** uniquement si elle est **présente et non vide**, selon le sensor [`required-sections`](../../sensors/sensors/required-sections.md) (**source unique** du contrat et du **total** servant de dénominateur — ne pas le redupliquer ici ; le sensor reste **advisory** et **n'autorise jamais** à se passer de la validation humaine) ;
+- pour l'élément **Arrimages** (section Projets), **chaque rôle mandatory** (section 2.1) est compté **conforme** uniquement s'il est **présent et nommé** (colonne « Nom » renseignée) dans la matrice RACI du DAS `001` ; le couple « Architecte de solution / intégrateur » est conforme dès que **l'un** des deux est nommé ; le **Responsable Légal** n'entre au dénominateur **que si la Loi 25 est activée**.
 
 Le **total** de sections mandatory (dénominateur) est celui du contrat `required-sections` **au moment du calcul** (dénominateur dynamique, section 3). Toute section en échec de vérification ou ambiguë **ne compte pas** comme conforme ⇒ elle **abaisse** la part 80 %. En cas de doute, **ne pas compter**, informer l'humain (section 4).
 
