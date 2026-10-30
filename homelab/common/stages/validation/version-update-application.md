@@ -16,10 +16,10 @@ requires_stage: [version-impact-analysis]
 sensors: [vault-secret-exists]
 scopes: [service-version-update]
 inputs: "Analyse d'impact de version OK (service, version visée, type de service, fichier Terraform existant)"
-outputs: "Clé VERSION écrite dans Vault (env_variables/data/<service>) + déploiement Kestra autorisé — sous une seule acceptation humaine (gate léger unique A1)"
+outputs: "Clé VERSION écrite dans Vault (env_variables/data/<service>) + déploiement Kestra autorisé — sous une seule acceptation humaine (gate léger unique)"
 ---
 
-# Application de la mise à jour de version (gate léger unique A1)
+# Application de la mise à jour de version (gate léger unique)
 
 ## Objectif
 
@@ -29,7 +29,7 @@ aller-retour ni double validation.
 
 ## Steps
 
-### Step 1 — Présenter l'analyse et demander le gate léger unique (A1)
+### Step 1 — Présenter l'analyse et demander le gate léger unique
 
 Le Tech Lead présente à l'humain, de façon concise : le service visé, l'écart de version (version
 actuelle → version visée, **sans** divulguer d'autres clés Vault), le résultat de l'analyse
@@ -41,7 +41,7 @@ acceptation autorise en une seule étape :
    service (`terraform/swarm/<service>` pour Docker Swarm, `terraform/services/<service>` pour
    Proxmox).
 
-C'est un gate **léger** (`human_gate: light`) et **unique** (décision A1) : **une seule**
+C'est un gate **léger** (`human_gate: light`) et **unique** : **une seule**
 acceptation couvre les deux actions. Il reste **non supprimable** — aucune action à impact n'est
 autonome (invariant du conductor). Rien n'est écrit ni déployé tant que l'humain n'a pas accepté.
 
@@ -61,23 +61,23 @@ C'est le **seul** cas d'écriture autorisé de la skill (voir son `SKILL.md` § 
 
 ### Step 3 — Enchaîner le déploiement Kestra (même acceptation)
 
-La **même** acceptation A1 autorise le déploiement : poursuivre en
+La **même** acceptation autorise le déploiement : poursuivre en
 [`kestra-deployment.md`](kestra-deployment.md) (flux `configure_service` à partir du fichier
-Terraform existant). Aucune **nouvelle** validation n'est demandée — le gate A1 couvre les temps 2
+Terraform existant). Aucune **nouvelle** validation n'est demandée — le gate léger unique couvre les temps 2
 et 3. L'artefact `depot_fichiers_confirme` produit ici matérialise l'autorisation attendue par
 `kestra-deployment` (le parcours `service-version-update` ne dépose pas de nouveaux fichiers : il
 réutilise le Terraform existant).
 
 ### Step 4 — Garde-fou absolu
 
-Aucune écriture Vault ni aucun lancement de `configure_service` **sans** l'acceptation humaine A1.
+Aucune écriture Vault ni aucun lancement de `configure_service` **sans** l'acceptation humaine légère unique.
 Un refus (ou une demande d'ajustement) n'écrit rien et ne déploie rien ; l'issue reste en
 `in_review` jusqu'à décision.
 
 ## Sensors
 
 Outputs: `VERSION` écrite (statut consigné, valeur jamais révélée) + déploiement Kestra lancé —
-sous la **seule** acceptation A1. Gate humain **léger unique** (décision A1) : c'est le point de
+sous la **seule** acceptation légère unique. Gate humain **léger unique** : c'est le point de
 validation du parcours `service-version-update`.
 Imports: `vault-secret-exists` (confirme l'existence du chemin `env_variables/data/<service>` avant
 écriture — voir [`homelab/sensors/README.md`](../../../sensors/README.md)).
@@ -86,6 +86,6 @@ Upstream targets: `analyse_impact_version` (analyse d'impact OK).
 ## Learn
 
 Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : ce stage **porte
-le gate léger unique (A1)** — le Tech Lead y remonte les candidats-règles capturés depuis
+le gate léger unique** — le Tech Lead y remonte les candidats-règles capturés depuis
 `version-impact-analysis`, formulés en règles courtes ; persistance des apprentissages **confirmés**
 dans `homelab/rules/` (jamais dans le run courant).

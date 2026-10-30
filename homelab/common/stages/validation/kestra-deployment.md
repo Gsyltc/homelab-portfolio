@@ -2,7 +2,7 @@
 slug: kestra-deployment
 phase: validation
 execution: CONDITIONAL
-condition: "Uniquement sur « oui » explicite de l'humain pour lancer le déploiement Kestra (gate explicite standard, ou gate léger unique A1 sur scope service-version-update)"
+condition: "Uniquement sur « oui » explicite de l'humain pour lancer le déploiement Kestra (gate explicite standard, ou gate léger unique sur scope service-version-update)"
 lead_agent: Tech Lead Homelab
 support_agents: [Spécialiste Déploiement Kestra]
 mode: inline
@@ -15,7 +15,7 @@ consumes: [{artifact: depot_fichiers_confirme, required: true}]
 requires_stage: [file-deposit, version-update-application]
 sensors: []
 scopes: [stack-update, new-stack, config-change, security-patch, infra-terraform, service-version-update]
-inputs: "Fichiers déposés et vérifiés (parcours standard) ou autorisation A1 + Terraform existant (service-version-update)"
+inputs: "Fichiers déposés et vérifiés (parcours standard) ou autorisation du gate léger unique + Terraform existant (service-version-update)"
 outputs: "Flux Kestra configure_service lancé (sur validation explicite uniquement)"
 ---
 
@@ -40,7 +40,7 @@ Le Tech Lead demande si l'humain souhaite lancer le déploiement via **Kestra**.
 Le pré-requis amont de ce stage dépend du scope et les deux voies sont **mutuellement exclusives** :
 
 - **Parcours standard** (`stack-update`, `new-stack`, `config-change`, `security-patch`, `infra-terraform`) → pré-requis [`file-deposit`](file-deposit.md), qui produit `depot_fichiers_confirme` après la validation humaine granulaire explicite.
-- **Parcours `service-version-update`** → pré-requis [`version-update-application`](version-update-application.md), dont le **gate léger unique (A1)** produit `depot_fichiers_confirme` et autorise, dans la même acceptation, l'écriture Vault `VERSION` **et** ce déploiement. Aucun nouveau dépôt de fichiers : le flux `configure_service` réutilise le **fichier Terraform existant** du service. Aucune **seconde** validation n'est demandée ici sur ce parcours — le gate A1 en amont fait foi.
+- **Parcours `service-version-update`** → pré-requis [`version-update-application`](version-update-application.md), dont le **gate léger unique** produit `depot_fichiers_confirme` et autorise, dans la même acceptation, l'écriture Vault `VERSION` **et** ce déploiement. Aucun nouveau dépôt de fichiers : le flux `configure_service` réutilise le **fichier Terraform existant** du service. Aucune **seconde** validation n'est demandée ici sur ce parcours — le gate léger unique en amont fait foi.
 
 ## Sensors
 

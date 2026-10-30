@@ -9,11 +9,9 @@ description: "Mise à jour d'un service existant sur une nouvelle version dispon
 # Scope `service-version-update`
 
 Mise à jour d'un **service existant** (stack Docker Swarm ou service Proxmox) vers une **nouvelle
-version disponible** — montée de version d'image, bump déclenché par une release amont. Ce scope
-reprend la logique d'**analyse d'impact de version** déjà éprouvée par l'autopilot `Service Update
-Webhook - DevOps` (webhook `{service, version, github}`) et illustrée par HOM-262 (mise à jour
-Traefik : détection d'une version non stable, recommandation d'une version stable, source GitHub
-Release).
+version disponible** — montée de version d'image, bump déclenché par une release amont. Le point
+d'entrée et le standard d'analyse d'impact de ce parcours sont tracés en
+[`decisions/0044`](../../decisions/0044-parcours-service-version-update-gate-leger-unique-ecriture-vault-version.md).
 
 C'est une **spécialisation ciblée** de `stack-update` : là où `stack-update` couvre toute
 modification structurante d'une stack existante, `service-version-update` couvre le cas précis
@@ -32,7 +30,19 @@ en **trois temps** :
    service (`terraform/swarm/<service>` pour Docker Swarm, `terraform/services/<service>` pour
    Proxmox).
 
-## Gate humain léger unique (A1)
+```mermaid
+flowchart TD
+    IA[version-impact-analysis - IDEATION] -->|enjeu : breaking change / version non stable / migration| BL[Issue blocked - arbitrage humain]
+    IA -->|impact securite| SP[Report de priorite - scope security-patch]
+    IA -->|analyse OK| VA[version-update-application - VALIDATION]
+    VA -->|gate leger unique - une seule acceptation| GATE{Humain accepte ?}
+    GATE -->|non| NO[Aucune ecriture - aucun deploiement]
+    GATE -->|oui| VW[Ecriture Vault VERSION - env_variables/data/service]
+    VW --> KD[kestra-deployment - configure_service sur Terraform existant]
+    KD --> DONE[Service deploye en nouvelle version]
+```
+
+## Gate humain léger unique
 
 Après une analyse d'impact **OK** (aucun breaking change, aucun enjeu de configuration), un **seul**
 point de validation **léger** gouverne les temps 2 et 3. Sur acceptation, l'écriture Vault de

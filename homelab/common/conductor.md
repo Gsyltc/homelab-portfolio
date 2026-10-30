@@ -54,39 +54,14 @@ flowchart TD
 | Phase | N° | Nom Homelab | Stages (fiches) | Gate humain |
 | --- | --- | --- | --- | --- |
 | **Initialisation** | 0 | Initialisation | [`stack-detection`](stages/initialisation/stack-detection.md) · [`concurrency-lock-read`](stages/initialisation/concurrency-lock-read.md) · [`deployment-prereqs-precheck`](stages/initialisation/deployment-prereqs-precheck.md) · [`labels-audit-init`](stages/initialisation/labels-audit-init.md) | Non (bootstrap déterministe) |
-| **Idéation** | 1 | Idéation | [`intent-capture`](stages/ideation/intent-capture.md) · [`feasibility-arbitration`](stages/ideation/feasibility-arbitration.md) · [`version-impact-analysis`](stages/ideation/version-impact-analysis.md) *(scope `service-version-update`)* · [`scope-detection`](stages/ideation/scope-detection.md) · [`auth-preselection`](stages/ideation/auth-preselection.md) · [`intent-scope-approval`](stages/ideation/intent-scope-approval.md) | Léger (intention + périmètre) |
+| **Idéation** | 1 | Idéation | [`intent-capture`](stages/ideation/intent-capture.md) · [`feasibility-arbitration`](stages/ideation/feasibility-arbitration.md) · [`version-impact-analysis`](stages/ideation/version-impact-analysis.md) · [`scope-detection`](stages/ideation/scope-detection.md) · [`auth-preselection`](stages/ideation/auth-preselection.md) · [`intent-scope-approval`](stages/ideation/intent-scope-approval.md) | Léger (intention + périmètre) |
 | **Cadrage et Paramètres** | 2 | Inception | [`n8n-absolute-rule`](stages/cadrage/n8n-absolute-rule.md) · [`domain-triage`](stages/cadrage/domain-triage.md) · [`intake-framing`](stages/cadrage/intake-framing.md) · [`swarm-proxmox-arbitration`](stages/cadrage/swarm-proxmox-arbitration.md) · [`required-parameters-collection`](stages/cadrage/required-parameters-collection.md) | Advisory (avant Production) |
 | **Production et Contrôle** | 3 | Construction | [`autonomy-mode`](stages/production/autonomy-mode.md) · [`terraform-configuration`](stages/production/terraform-configuration.md) · [`docker-compose-creation`](stages/production/docker-compose-creation.md) · [`quality-assurance`](stages/production/quality-assurance.md) · [`n8n-branch`](stages/production/n8n-branch.md) · [`home-assistant-branch`](stages/production/home-assistant-branch.md) · [`central-quality-control`](stages/production/central-quality-control.md) · [`security-delegation`](stages/production/security-delegation.md) | Granulaire |
-| **Validation et Déploiement** | 4 | Operation | [`deployment-prereqs-check`](stages/validation/deployment-prereqs-check.md) · [`review-and-notification`](stages/validation/review-and-notification.md) · [`human-granular-validation`](stages/validation/human-granular-validation.md) · [`file-deposit`](stages/validation/file-deposit.md) · [`version-update-application`](stages/validation/version-update-application.md) *(scope `service-version-update`, gate léger unique A1)* · [`kestra-deployment`](stages/validation/kestra-deployment.md) · [`closure`](stages/validation/closure.md) | Explicite (ou léger unique A1 sur `service-version-update`) |
+| **Validation et Déploiement** | 4 | Operation | [`deployment-prereqs-check`](stages/validation/deployment-prereqs-check.md) · [`review-and-notification`](stages/validation/review-and-notification.md) · [`human-granular-validation`](stages/validation/human-granular-validation.md) · [`file-deposit`](stages/validation/file-deposit.md) · [`version-update-application`](stages/validation/version-update-application.md) · [`kestra-deployment`](stages/validation/kestra-deployment.md) · [`closure`](stages/validation/closure.md) | Explicite |
 
 > **Compatibilité ascendante.** Les libellés Homelab historiques (`Cadrage et Paramètres`, `Production et Contrôle`, `Validation et Déploiement`) restent valides comme alias. Les couches de règles `phase` ([`homelab/rules/phases/<phase>.md`](../rules/README.md)) sont nommées par le **nom** de phase (pas le numéro) et restent inchangées.
 
----
-
-## Parcours `service-version-update` — mise à jour d'un service sur nouvelle version
-
-Un parcours **ciblé** gère la mise à jour d'un service **existant** (stack Docker Swarm ou service Proxmox) vers une **nouvelle version disponible**. Son point d'entrée est l'autopilot **`Service Update Webhook - DevOps`** (webhook `{service, version, github}`) : il détecte le type de service, lit la version actuelle dans Vault (`VERSION`, lecture seule), analyse la page Release GitHub, détecte les breaking changes, crée l'issue d'analyse et la passe `blocked` en cas d'enjeu. **L'autopilot n'exécute jamais la mise à jour** — il amorce l'analyse. Le standard de qualité attendu pour cette analyse est illustré par **HOM-262** (mise à jour Traefik : détection d'une version non stable, recommandation d'une version stable).
-
-Le parcours se déroule en **trois temps** gouvernés par un **gate léger unique (A1)** :
-
-1. **Analyse d'impact de version** ([`stages/ideation/version-impact-analysis.md`](stages/ideation/version-impact-analysis.md)) : type de service, version actuelle (Vault, **lecture**), analyse Release GitHub, détection breaking changes / enjeux de config. **Enjeu détecté → `blocked`**, pas de suite sans arbitrage humain. Impact sécurité détecté → report de priorité vers `security-patch`.
-2. **Écriture `VERSION` dans Vault** : via la skill `homelab-vault-access`, écriture **encadrée** de la **seule** clé `VERSION` du montage `env_variables/data/<service>` (read-modify-write préservant les autres clés ; jamais le montage `services/` ; valeur jamais divulguée ; statut tracé sur l'issue).
-3. **Déploiement Kestra** ([`stages/validation/kestra-deployment.md`](stages/validation/kestra-deployment.md)) : flux `configure_service` à partir du **fichier Terraform existant** du service (`terraform/swarm/<service>` pour Docker Swarm, `terraform/services/<service>` pour Proxmox).
-
-Les temps 2 et 3 sont portés par le stage [`version-update-application`](stages/validation/version-update-application.md) et gardés par le **même** gate léger unique (A1, `human_gate: light`) : **une seule** acceptation humaine les autorise **tous les deux** — pas d'aller-retour, pas de double validation. Ce gate reste **non supprimable** (aucune action à impact n'est autonome). L'**exception d'écriture Vault** ne déborde jamais de la clé `VERSION` / du montage `env_variables`, et est le **seul** cas d'écriture de la skill (décision tracée en ADR — voir [`decisions/0044-…`](../../decisions/0044-parcours-service-version-update-gate-leger-unique-ecriture-vault-version.md)).
-
-```mermaid
-flowchart TD
-    W[Autopilot Service Update Webhook - DevOps] -->|service, version, github| IA[version-impact-analysis - IDEATION]
-    IA -->|enjeu : breaking change / version non stable / migration| BL[Issue blocked - arbitrage humain]
-    IA -->|impact securite| SP[Report de priorite - scope security-patch]
-    IA -->|analyse OK| VA[version-update-application - VALIDATION]
-    VA -->|GATE LEGER UNIQUE A1 - une seule acceptation| GATE{Humain accepte ?}
-    GATE -->|non| NO[Aucune ecriture - aucun deploiement - issue in_review]
-    GATE -->|oui| VW[Ecriture Vault VERSION - env_variables/data/service]
-    VW --> KD[kestra-deployment - configure_service sur Terraform existant]
-    KD --> DONE[Service deploye en nouvelle version]
-```
+> **Parcours `service-version-update`.** La mise à jour d'un service existant sur une nouvelle version suit un parcours ciblé en trois temps (analyse d'impact de version → écriture Vault `VERSION` → déploiement Kestra), gouverné par un **gate léger unique** (`human_gate: light`). Son identité, son diagramme et ses garde-fous vivent dans [`../scopes/service-version-update.md`](../scopes/service-version-update.md) (source d'identité) ; la décision structurante est tracée en [`decisions/0044`](../../decisions/0044-parcours-service-version-update-gate-leger-unique-ecriture-vault-version.md).
 
 ---
 

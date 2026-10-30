@@ -32,9 +32,8 @@ enjeu (breaking change, version non stable, migration de configuration) qui doit
 
 Déterminer le type du service visé : **stack Docker Swarm** (fichier Terraform sous
 `terraform/swarm/<service>`) ou **service Proxmox** (fichier Terraform sous
-`terraform/services/<service>`). C'est la même détection que l'autopilot `Service Update Webhook -
-DevOps` (point d'entrée du parcours, webhook `{service, version, github}`). Le service **existe
-déjà** : aucun arbitrage Swarm / Proxmox n'est rejoué.
+`terraform/services/<service>`). Le service **existe déjà** : aucun arbitrage Swarm / Proxmox
+n'est rejoué.
 
 ### Step 2 — Lire la version actuelle dans Vault (lecture seule)
 
@@ -45,10 +44,10 @@ visée » est consigné (sans divulguer d'autres clés). Aucune écriture n'a li
 
 ### Step 3 — Analyser la page Release GitHub
 
-Analyser la **page Release GitHub** de la version visée (lien fourni dans l'intention / le webhook)
-selon le standard de qualité HOM-262 (mise à jour Traefik) : notes de version, **breaking changes**,
-migrations de configuration requises, et **stabilité de la version** (écarter les versions RC /
-beta / non stables — recommander la dernière version **stable** si la version visée ne l'est pas).
+Analyser la **page Release GitHub** de la version visée (lien fourni dans l'intention) : notes de
+version, **breaking changes**, migrations de configuration requises, et **stabilité de la version**
+(écarter les versions RC / beta / non stables — recommander la dernière version **stable** si la
+version visée ne l'est pas).
 
 ### Step 4 — Verdict et blocage
 
@@ -62,13 +61,13 @@ breaking changes détectés, enjeux de configuration, recommandation.
   demande relève de `security-patch` ; le signaler et re-router (plancher renforcé, sensors
   sécurité bloquants).
 - **Analyse OK** (aucun breaking change, aucun enjeu de configuration) → le parcours peut se
-  poursuivre vers la Validation, où le gate léger unique (A1) autorisera écriture Vault + Kestra.
+  poursuivre vers la Validation, où le gate léger unique autorisera écriture Vault + Kestra.
 
 ## Sensors
 
 Outputs: analyse d'impact de version consignée sur l'issue. Aucun gate humain à ce stage (analyse) ;
 un enjeu détecté **bloque** l'issue (`blocked`) jusqu'à arbitrage humain. Le seul gate du parcours
-est le gate léger unique (A1) porté par [`../validation/version-update-application.md`](../validation/version-update-application.md).
+est le gate léger unique porté par [`../validation/version-update-application.md`](../validation/version-update-application.md).
 Imports: none.
 Upstream targets: `intention_capturee` (intention : service + version visée).
 
