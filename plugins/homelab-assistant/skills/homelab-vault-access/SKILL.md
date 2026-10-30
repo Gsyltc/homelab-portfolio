@@ -1,6 +1,6 @@
 ---
 name: homelab-vault-access
-description: Accès HashiCorp Vault du Homelab (https://vault.jeedom-gaston.ovh) par authentification AppRole, conformément à l'API officielle. Récupération des secrets d'une stack (montage services/, chemin services/data/<stack>) et de ses variables d'environnement (montage env_variables/, chemin env_variables/data/<stack>). Lecture seule par défaut. UNIQUE exception d'écriture, étroitement encadrée : la clé VERSION du montage env_variables/data/<service> dans le cadre du parcours service-version-update (jamais un secret du montage services/, jamais une autre clé). Utiliser pour toute vérification ou récupération de secrets/variables liés aux stacks Docker, et pour l'écriture encadrée de VERSION. AUCUN secret ne doit jamais être affiché, loggé, copié ou transmis.
+description: "Accès Vault du Homelab (AppRole) pour lire secrets et variables des stacks (montages services/ et env_variables/). Lecture seule sauf écriture encadrée de la seule clé VERSION (env_variables, parcours service-version-update)."
 ---
 
 # homelab-vault-access
