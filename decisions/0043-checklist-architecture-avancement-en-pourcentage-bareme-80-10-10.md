@@ -2,8 +2,8 @@
 
 ---
 auteurs: Architecture Solution & Intégration (agent)
-accepté par : ""
-accepté le : ""
+accepté par : "multica.gaston"
+accepté le : "2026-10-30"
 supersedes: "0042-checklist-architecture-processus-protocole-gabarit.md"
 superseded_by: ""
 
@@ -11,7 +11,7 @@ superseded_by: ""
 
 ## Status
 
-Proposed
+Accepted
 
 ## Date de création
 

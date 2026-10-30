@@ -11,7 +11,7 @@ superseded_by: "0043-checklist-architecture-avancement-en-pourcentage-bareme-80-
 
 ## Status
 
-Proposed
+Superseded
 
 ## Date de création
 
