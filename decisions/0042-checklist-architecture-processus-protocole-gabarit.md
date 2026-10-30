@@ -5,13 +5,13 @@ auteurs: Architecture Solution & Intégration (agent)
 accepté par : ""
 accepté le : ""
 supersedes: ""
-superseded_by: ""
+superseded_by: "0043-checklist-architecture-avancement-en-pourcentage-bareme-80-10-10.md"
 
 ---
 
 ## Status
 
-Proposed
+Superseded
 
 ## Date de création
 
