@@ -3,7 +3,7 @@
 ---
 auteurs: Mika (agent)
 accepté par : sylvain.rodgers
-accepté le : ""
+accepté le : 2026-10-30
 supersedes: ""
 superseded_by: ""
 
@@ -11,9 +11,9 @@ superseded_by: ""
 
 ## Status
 
-Proposed
+Accepted
 
-> Statut **Proposed** — en attente de validation humaine granulaire explicite (sylvain.rodgers) en revue de PR. Au passage *Proposed → Accepted*, renseigner `accepté le`. Pas de merge autonome sur `main`. Ce changement est **documentaire** (contrat `homelab/common/`, scopes, skill `homelab-vault-access`) : les invariants de gouvernance-sécurité restent **préservés à l'identique** (voir § Conséquences / POS-005).
+> Statut **Accepted** — validation humaine granulaire explicite obtenue (sylvain.rodgers, 2026-10-30, acceptation de la PR #294). Ce changement est **documentaire** (contrat `homelab/common/`, scopes, skill `homelab-vault-access`) : les invariants de gouvernance-sécurité restent **préservés à l'identique** (voir § Conséquences / POS-005).
 
 ## Contexte
 
@@ -88,7 +88,7 @@ Autoriser l'écriture de n'importe quelle clé du montage `env_variables/` pour 
 - **IMP-004** : matrice stage × scope de `scopes-and-axes.md` : colonne `service-version-update` + lignes `version-impact-analysis` / `version-update-application` / `kestra-deployment` + note de lecture du parcours.
 - **IMP-005** : skill [`homelab-vault-access/SKILL.md`](../plugins/homelab-assistant/skills/homelab-vault-access/SKILL.md) : Étape 3 d'écriture encadrée, `description` front-matter, règle ABSOLUE n° 7 ; `plugin.json` `1.0.0` → `1.1.0` ; entrée `CHANGELOG.md` ; ligne mapping `README.md`.
 - **IMP-006** : [`conductor.md`](../homelab/common/conductor.md) : table des phases + note concise de renvoi vers le fichier de scope et l'ADR (pas de narration ni de diagramme dans le conductor), compteurs de scopes (7 → 8) propagés ; le diagramme Mermaid du parcours vit dans [`service-version-update.md`](../homelab/scopes/service-version-update.md).
-- **IMP-007** : validation humaine granulaire à obtenir en revue de PR (passage *Proposed* → *Accepted*, renseigner `accepté le`) ; pas de merge autonome sur `main` ; provisionnement de la policy AppRole d'écriture (NEG-002) à confirmer par le propriétaire du workspace.
+- **IMP-007** : validation humaine granulaire explicite obtenue (sylvain.rodgers, 2026-10-30) ; PR #294 mergée dans `main` ; skill workspace `homelab-vault-access` rafraîchie depuis `main`. Reste à confirmer par le propriétaire du workspace : provisionnement de la policy AppRole d'écriture sur `env_variables/data/<service>` (NEG-002).
 
 ## Références
 
