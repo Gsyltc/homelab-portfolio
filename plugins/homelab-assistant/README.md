@@ -39,7 +39,7 @@ correspond au nom du dossier.
 | `docker-composer` | Spécialiste Docker / Analyste QA — génération de `docker-compose.yml` | `references/` (network, template) |
 | `dockerfile-validator` | Analyste QA — lint/audit/scan de Dockerfile (stacks *build-from-source* uniquement) | `scripts/`, `references/`, `examples/`, `tests/` |
 | `terraform-qa` | Analyste QA — vérification adversariale d'une configuration Terraform (`.tf`/`.tfvars`) | `references/` (cloudflare-dns-nb) |
-| `homelab-vault-access` | Spécialiste Docker / Analyste QA / Spécialiste Terraform — accès Vault (AppRole) | — |
+| `homelab-vault-access` | Spécialiste Docker / Analyste QA / Spécialiste Terraform — accès Vault (AppRole), lecture seule sauf écriture encadrée de la clé `VERSION` (parcours `service-version-update`, gate A1) | — |
 | `traefik-manager-read` | Spécialiste Docker / Analyste QA / Architecte sécurité — lecture Traefik Manager | — |
 
 La skill de notifications (`ntfy-notifications`) est **mutualisée** : son porteur
