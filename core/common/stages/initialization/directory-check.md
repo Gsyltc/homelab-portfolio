@@ -37,7 +37,7 @@ Répertoire introuvable ou ambigu → demander confirmation à l'humain et **ne 
 
 ### Step 3 — Initialiser la checklist d'architecture
 
-Si `documentation/00-checklist-architecture.md` n'existe pas dans le répertoire projet confirmé, le créer en copiant le gabarit [`../../protocols/gabarits/00-checklist-architecture.md`](../../protocols/gabarits/00-checklist-architecture.md) (tous les éléments à `non débuté`, % à 0). Idempotent : ne **jamais** écraser un fichier d'état existant. Le cycle de lecture / écriture de la checklist a sa **source unique** dans [`../../protocols/architecture-checklist.md`](../../protocols/architecture-checklist.md).
+Si `documentation/00-checklist-architecture.md` n'existe pas dans le répertoire projet confirmé, le créer en copiant le gabarit [`../../protocols/gabarits/00-checklist-architecture.md`](../../protocols/gabarits/00-checklist-architecture.md) (tous les éléments à **0 %**). Idempotent : ne **jamais** écraser un fichier d'état existant. Le cycle de lecture / écriture de la checklist (barème 80/10/10, gate ≥ 80 %) a sa **source unique** dans [`../../protocols/architecture-checklist.md`](../../protocols/architecture-checklist.md).
 
 ## Sensors
 

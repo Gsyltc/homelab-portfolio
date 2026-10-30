@@ -158,12 +158,13 @@ La piste d'audit vit **sur l'issue Multica**, jamais dans un fichier `audit.md`.
 
 ## Checklist d'architecture (état d'avancement)
 
-Le coordinateur tient une **checklist d'architecture** qui suit l'avancement de l'architecture le long des 5 phases. C'est un **processus à part** : son cycle complet (structure imposée, calcul du %, écriture sur approbation humaine après vérification de conformité, lecture sur demande, mapping élément Livrables → document attendu) a sa **source unique** dans [`protocols/architecture-checklist.md`](protocols/architecture-checklist.md) — le conductor **pointe** vers ce protocole, sans redéfinir sa logique.
+Le coordinateur tient une **checklist d'architecture** qui suit l'avancement de l'architecture le long des 5 phases. C'est un **processus à part** : son cycle complet (structure imposée, **barème 80/10/10**, calcul du **%** par élément, écriture sur faits vérifiés, décompte par section mandatory des Livrables, recalcul dynamique du dénominateur, lecture en % sur demande, gate de planification / réalisation, mapping élément Livrables → document attendu) a sa **source unique** dans [`protocols/architecture-checklist.md`](protocols/architecture-checklist.md) — le conductor **pointe** vers ce protocole, sans redéfinir sa logique.
 
 - **État** : fichier livrable `documentation/00-checklist-architecture.md`, copié du gabarit [`protocols/gabarits/00-checklist-architecture.md`](protocols/gabarits/00-checklist-architecture.md) à l'initialisation du répertoire projet ([`stages/initialization/directory-check.md`](stages/initialization/directory-check.md)).
-- **Écriture** : un élément ne passe à `validé` que sur **annonce humaine explicite** (gate granulaire « Keep / Modify / Redo ») **et** après **vérification de conformité** (dont le sensor advisory [`required-sections`](../sensors/sensors/required-sections.md) pour les Livrables). En cas de doute : ne pas valider, informer l'humain.
-- **Traçabilité** : chaque changement de statut est tracé sur l'issue (piste d'audit ci-dessus) ; le fichier d'état reste un livrable sans note de méta-production (décision [`../../decisions/0040-aucune-note-de-generation-dans-les-livrables.md`](../../decisions/0040-aucune-note-de-generation-dans-les-livrables.md)).
-- **Garde-fous préservés** : la checklist **ne remplace jamais** la validation humaine granulaire ni le contrôle sécurité ; les sensors qui assistent sa vérification restent **advisory**.
+- **Avancement en %** : chaque élément porte un **pourcentage** selon le **barème 80/10/10** — `% = 80 × (sections conformes / total sections mandatory) + 10 × (revue pair) + 10 × (acceptation humaine)`. La part **+10 % acceptation** ne s'ajoute que sur **annonce humaine explicite** (gate granulaire « Keep / Modify / Redo ») et reste le **seul** chemin vers **100 %** ; la part 80 % s'appuie, pour les Livrables, sur le contrat **source unique** [`required-sections`](../sensors/sensors/required-sections.md) (dénominateur dynamique). En cas de doute : ne pas compter, informer l'humain.
+- **Gate planification / réalisation** : `< 80 %` ⇒ **bloqué** ; `≥ 80 %` ⇒ **déblocage possible**, **soumis à décision humaine** (seuil nécessaire, non suffisant ; ne remplace ni la validation humaine ni le contrôle sécurité). Détail : [`protocols/architecture-checklist.md`](protocols/architecture-checklist.md), section 3.
+- **Traçabilité** : chaque changement de % (et la composante qui l'a produit) est tracé sur l'issue (piste d'audit ci-dessus) ; le fichier d'état reste un livrable sans note de méta-production (décision [`../../decisions/0040-aucune-note-de-generation-dans-les-livrables.md`](../../decisions/0040-aucune-note-de-generation-dans-les-livrables.md)).
+- **Garde-fous préservés** : la checklist **ne remplace jamais** la validation humaine granulaire ni le contrôle sécurité ; les sensors qui assistent son décompte restent **advisory**.
 
 ---
 
@@ -249,7 +250,7 @@ sequenceDiagram
 - [`protocols/governance-security.md`](protocols/governance-security.md) — gouvernance A2A, contrôle sécurité, invariants, garde-fous.
 - [`protocols/reviewer.md`](protocols/reviewer.md) — protocole de revue (cohérence des décisions + revue sécurité).
 - [`protocols/output-format.md`](protocols/output-format.md) — format de retour d'un agent : prose réduite + 4 sections (résumé, sensors si déclarés, points bloquants, action humaine requise).
-- [`protocols/architecture-checklist.md`](protocols/architecture-checklist.md) — checklist d'architecture : état d'avancement (`documentation/00-checklist-architecture.md`), structure imposée, calcul du %, écriture sur approbation humaine après vérification de conformité, lecture sur demande.
+- [`protocols/architecture-checklist.md`](protocols/architecture-checklist.md) — checklist d'architecture : état d'avancement (`documentation/00-checklist-architecture.md`), structure imposée, barème 80/10/10, calcul du % par élément, écriture sur faits vérifiés, gate planification / réalisation (≥ 80 %), lecture en % sur demande.
 - [`protocols/scopes-and-axes.md`](protocols/scopes-and-axes.md) — scopes, axes Depth / vérification, matrice stage × scope.
 - [`stages/`](stages/) — fiches de stage des 5 phases.
 - `core/rules/` — mémoire de règles multi-couches.
