@@ -10,13 +10,13 @@ summary_confirmation: none
 reviewer: null
 review_class: none
 human_gate: none
-produces: [detection_stack_existante_vs_nouvelle]
+produces: [detection_stack_existante_vs_nouvelle, type_service_detecte]
 consumes: []
 requires_stage: []
 sensors: []
-scopes: [stack-update, new-stack, config-change, security-patch, infra-terraform, n8n, home-assistant]
+scopes: [stack-update, new-stack, config-change, security-patch, infra-terraform, service-version-update, n8n, home-assistant]
 inputs: "Demande brute"
-outputs: "Fait consigné : stack existante (modification) ou nouvelle (création)"
+outputs: "Nature consignée (mise à jour de version vs modification/correctif/patch vs nouvelle stack) ; pour une mise à jour de version : existence de la stack vérifiée et type consigné (Docker Swarm vs Proxmox), sinon issue blocked"
 ---
 
 # Détection « stack existante vs nouvelle »
@@ -36,15 +36,33 @@ existante se localise via ces emplacements, jamais dans le dépôt du workflow.
 
 ### Step 2 — Déterminer la nature
 
-Analyser la demande : modification / correctif / mise à jour d'une stack **existante**, ou **création** d'une nouvelle stack.
+Analyser la demande pour trancher sa **nature** :
 
-### Step 3 — Consigner (sans valider)
+- **mise à jour de version** d'une stack existante (`service-version-update`) ;
+- **modification** d'une stack existante — correctif / patch de sécurité (`stack-update` / `config-change` / `security-patch`) ;
+- **création** d'une nouvelle stack (`new-stack`).
 
-Consigner le fait en commentaire (piste d'audit). Il **oriente** l'auto-détection du scope en Idéation (`stack-update` / `config-change` / `security-patch` vs `new-stack`) sans figer la décision. Ce n'est **pas** un gate.
+### Step 3 — Mise à jour de version : vérifier l'existence et consigner le type
+
+**Uniquement si la nature est une mise à jour de version** : s'assurer que la stack **existe** dans
+le répertoire de travail `${WORK_DIRECTORY}`. La recherche se fait dans :
+
+- `${WORK_DIRECTORY}/terraform/swarm/<service>` → **stack Docker Swarm** ;
+- `${WORK_DIRECTORY}/terraform/services/<service>` → **service Proxmox**.
+
+Si le service **existe**, consigner qu'il s'agit d'un service **Docker Swarm** ou **Proxmox** (le
+type est tranché par la localisation du fichier, jamais supposé). Si le service **n'est pas
+détecté** des deux côtés → **halt-and-ask** : passer l'issue en **`blocked`** et **demander à
+l'humain** par une mention explicite (service introuvable sous ces chemins, confirmer
+l'emplacement). **Ne jamais deviner le type ni poursuivre** sans réponse.
+
+### Step 4 — Consigner (sans valider)
+
+Consigner le fait en commentaire (piste d'audit). Il **oriente** l'auto-détection du scope en Idéation (`stack-update` / `config-change` / `security-patch` / `service-version-update` vs `new-stack`) sans figer la décision. Ce n'est **pas** un gate.
 
 ## Sensors
 
-Outputs: fait de détection consigné sur l'issue. Aucun gate humain (bootstrap déterministe).
+Outputs: fait de détection consigné sur l'issue. Aucun gate humain (bootstrap déterministe). **Exception — halt-and-ask** : pour une mise à jour de version, si la stack est introuvable sous `${WORK_DIRECTORY}/terraform/swarm/<service>` et `${WORK_DIRECTORY}/terraform/services/<service>`, l'issue passe `blocked` et l'humain est interrogé par mention explicite ; aucune suite n'est engagée sans réponse.
 Imports: none.
 
 ## Learn
