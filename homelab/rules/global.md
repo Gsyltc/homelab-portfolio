@@ -42,4 +42,9 @@ Ces règles reprennent les **invariants non négociables** du workflow Homelab �
 - **RULE-GL-012** — Règle préalable universelle de documentation officielle : avant toute modification, la documentation officielle du composant est consultée et le lien est consigné sur l'issue.
   - _portée_ : global · _origine_ : homelab-workflow.md · _ajoutée le_ : 2026-09-03
 
+## Conventions déploiement Kestra
+
+- **RULE-GL-013** — Déploiement d'une stack Docker Swarm via le flux Kestra (`deploy_stack` / `configure_service`) : les inputs MCP `middleware` et `service_url` sont laissés à leur valeur par défaut et ne sont jamais renseignés ni modifiés. Le routage et le middleware d'authentification sont déjà portés par les labels Traefik du docker-compose (convention `docker-composer`, provider Swarm) ; les repasser en inputs Kestra est redondant et proscrit.
+  - _portée_ : global · _origine_ : HOM-269 · _ajoutée le_ : 2026-11-02
+
 > Les nouvelles règles apprises de portée `global` sont ajoutées ci-dessous, après confirmation humaine **et** contrôle sécurité.

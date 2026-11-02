@@ -31,6 +31,8 @@ Lancer le déploiement uniquement après un « oui » explicite de l'humain.
 
 Le Tech Lead demande si l'humain souhaite lancer le déploiement via **Kestra**. **Uniquement après un « oui » explicite** : lancer le flux Kestra `configure_service`. Les fichiers doivent rester téléchargeables pour vérification.
 
+> **Inputs MCP sur stack Docker Swarm (`deploy_stack` / `configure_service`).** Laisser `middleware` et `service_url` à leur valeur par défaut — ne jamais les renseigner ni les modifier. Le routage et le middleware d'authentification sont déjà portés par les labels Traefik du docker-compose (convention `docker-composer`, provider Swarm). Voir `RULE-GL-013` ([`../../../rules/global.md`](../../../rules/global.md)).
+
 ### Step 2 — Garde-fou absolu
 
 **Aucun lancement du flux `configure_service` sans validation humaine explicite de la configuration complète.** Action à impact → jamais autonome (invariant).
