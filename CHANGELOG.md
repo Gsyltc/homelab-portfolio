@@ -9,6 +9,12 @@ ce fichier en donne la lecture chronologique côté produit.
 ## [Non publié]
 
 ### Added
+- **Guide d'utilisation du workflow `core` v1.5 — section « Traçabilité des exigences d'affaires & MoSCoW »**
+  (réf. HOM-274 ; évolution **documentaire**). `docs/guide-utilisation-workflow-core.pdf` ajoute la section 9
+  (identifiants `BA-…`, priorités MoSCoW, chaîne besoin → exigence → scénario → ADR/livrable, matrice de
+  traçabilité MoSCoW, checklist d'architecture, sensor `traceability`, règles « pas d'orphelin » / « ne jamais
+  deviner »). L'annexe des scopes devient la section 10. PDF régénéré avec WeasyPrint depuis le gabarit de la skill
+  `guide-utilisation-workflow-generation`.
 - **Traçabilité MoSCoW des scénarios OpenSpec — chaîne spec ↔ besoin d'affaires ↔ exigence (workflow `core`)**
   (réf. HOM-272 ; évolution **documentaire**, invariants, barème de checklist et contrats de sections préservés).
   Chaque **scénario / cas d'utilisation** d'une spec OpenSpec devient **traçable selon la priorisation MoSCoW**
