@@ -61,11 +61,21 @@ openspec/
 
 ## Requirements
 
+> Chaque requirement porte sa **priorité MoSCoW** et le **besoin d'affaires amont** qu'il couvre ;
+> chaque scénario renvoie au besoin et à l'exigence tracés. Cette chaîne
+> **spec ↔ besoin d'affaires ↔ exigence** alimente la matrice de traçabilité MoSCoW du changement.
+
 ### Requirement: <Nom du requirement>
+
+- **Priorité MoSCoW** : <Must | Should | Could | Won't>
+- **Besoin d'affaires amont** : <BA-… — libellé court du besoin d'affaires couvert>
+- **Exigence amont** : <identifiant d'exigence amont le cas échéant, sinon « — »>
 
 The system SHALL <comportement attendu décrit de manière précise>.
 
 #### Scenario: <Nom du scénario>
+
+> Tracé vers : <BA-… / Requirement : Nom du requirement>
 
 - **GIVEN** <contexte initial / état du système>
 - **WHEN** <action ou événement déclencheur>
@@ -74,15 +84,23 @@ The system SHALL <comportement attendu décrit de manière précise>.
 
 ### Requirement: <Autre requirement>
 
+- **Priorité MoSCoW** : <Must | Should | Could | Won't>
+- **Besoin d'affaires amont** : <BA-… — libellé court du besoin d'affaires couvert>
+- **Exigence amont** : <identifiant d'exigence amont le cas échéant, sinon « — »>
+
 The system SHALL <autre comportement>.
 
 #### Scenario: <Cas nominal>
+
+> Tracé vers : <BA-… / Requirement : Autre requirement>
 
 - **GIVEN** <contexte>
 - **WHEN** <action>
 - **THEN** <résultat>
 
 #### Scenario: <Cas d'erreur>
+
+> Tracé vers : <BA-… / Requirement : Autre requirement>
 
 - **GIVEN** <contexte>
 - **WHEN** <action invalide>
@@ -121,6 +139,16 @@ The system SHALL <autre comportement>.
 ### Components affected
 
 - <Fichiers/modules/services impactés>
+
+## Matrice de traçabilité MoSCoW
+
+> **Élément récapitulatif** reliant **specs ↔ besoins d'affaires ↔ exigences**, priorisé MoSCoW.
+> Une ligne par scénario / cas d'utilisation de la spec. Alimente l'élément **Besoins (MoSCoW)**
+> de la checklist d'architecture (`documentation/00-checklist-architecture.md`).
+
+| Besoin d'affaires (amont) | Priorité MoSCoW | Exigence (spec) | Scénario / cas d'utilisation | Capacité (spec.md) |
+| --- | --- | --- | --- | --- |
+| BA-… — <libellé du besoin> | Must / Should / Could / Won't | <Nom de l'exigence> | <Nom du scénario> | `openspec/specs/<capability>/spec.md` |
 
 ## Open Questions
 

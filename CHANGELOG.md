@@ -9,6 +9,29 @@ ce fichier en donne la lecture chronologique côté produit.
 ## [Non publié]
 
 ### Added
+- **Traçabilité MoSCoW des scénarios OpenSpec — chaîne spec ↔ besoin d'affaires ↔ exigence (workflow `core`)**
+  (réf. HOM-272 ; évolution **documentaire**, invariants, barème de checklist et contrats de sections préservés).
+  Chaque **scénario / cas d'utilisation** d'une spec OpenSpec devient **traçable selon la priorisation MoSCoW**
+  (`Must` / `Should` / `Could` / `Won't`) et relié à son **besoin d'affaires amont** et à son **exigence**. Mise
+  en œuvre, en discipline source-unique :
+  - **Amont** — le stage `core/common/stages/inception/requirements-analysis.md` (Step 1b) **classe les besoins
+    d'affaires en MoSCoW** et leur attribue des **identifiants stables `BA-…`** (source amont de la chaîne ;
+    `besoins_traces` enrichis). La priorité MoSCoW (priorité de livraison) reste **distincte** du mot-clé EARS
+    `SHALL`/`SHOULD`/`MAY`.
+  - **Spec** — le gabarit `spec-delta.md` et le template `spec.md` de la skill OpenSpec portent, sur chaque
+    exigence, les annotations **Priorité MoSCoW** + **Besoin d'affaires amont** (`BA-…`) + **Exigence amont**, et,
+    sur chaque scénario, une ligne **« Tracé vers »** (besoin / exigence).
+  - **Élément récapitulatif** — la skill `openspec-proposal-creation` ajoute une **« Matrice de traçabilité
+    MoSCoW »** au `proposal.md` (nouveau **Step 6b** + contrôles de structure Step 7) : une ligne par scénario,
+    reliant `Besoin d'affaires | Priorité MoSCoW | Exigence | Scénario | Capacité`. Cette matrice est le
+    **récapitulatif** qui facilite le suivi de la checklist d'architecture.
+  - **Checklist** — le protocole `core/common/protocols/architecture-checklist.md` (sections 2 et 6) et son
+    gabarit `gabarits/00-checklist-architecture.md` **rattachent la conformité** de la section **Besoins (MoSCoW)**
+    à cette matrice récapitulative (sans redéfinir les quatre éléments ni le barème 80/10/10).
+  - **Sensor** — `core/sensors/sensors/traceability.md` **étend la chaîne** vérifiée à
+    `besoin (BA-…, MoSCoW) → exigence → scénario → ADR → livrable` (nouveaux `checks` `besoin_vers_exigence` et
+    `scenario_vers_besoin`, `BA-…` ajouté aux identifiants stables) ; reste **advisory**, recoupe sans remplacer
+    la validation humaine (SG-1..6). `core/sensors/README.md` mis à jour.
 - **Invariant « Aucune note de génération / méta-production dans les livrables » — source unique `matching-cv-ao`**
   (réf. EXPE-121, [ADR-0040](decisions/0040-aucune-note-de-generation-dans-les-livrables.md) ; évolution
   **documentaire**, invariants et schéma de données préservés). Un **livrable** du workflow Matching — en premier
