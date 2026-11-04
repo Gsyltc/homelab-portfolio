@@ -51,6 +51,10 @@ Règles de tenue :
 | Technologique | — (unité suivie) | 0 | 0 | 0 | 0 % |
 | Sécurité | — (unité suivie) | 0 | 0 | 0 | 0 % |
 
+<!--
+Élément récapitulatif : la priorisation MoSCoW des besoins d'affaires est tracée en amont (stage inception requirements-analysis, identifiants stables BA-…). Lorsqu'une méthodologie OpenSpec est active, elle est consolidée dans la « Matrice de traçabilité MoSCoW » du proposal.md (chaîne spec ↔ besoin ↔ exigence, un scénario / cas d'utilisation par ligne), qui sert de récapitulatif pour constater la conformité des éléments ci-dessus. Processus et règles de conformité : source unique dans core/common/protocols/architecture-checklist.md (sections 2 et 6). Ce gabarit ne redéfinit pas la matrice ; il en constate le résultat.
+-->
+
 ## Livrables — 0 %
 
 Synthèse (une ligne par livrable, % issu du sous-tableau correspondant) :

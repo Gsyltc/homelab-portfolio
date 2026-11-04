@@ -61,6 +61,14 @@ the system SHALL synchronize changes every 5 seconds.
 
 **Prefer SHALL** for all production requirements. Use SHOULD/MAY sparingly.
 
+### SHALL/SHOULD/MAY vs MoSCoW priority
+
+The EARS keyword (SHALL/SHOULD/MAY) states how **binding** a requirement's wording is. It is **distinct** from
+its **MoSCoW priority** (`Must` / `Should` / `Could` / `Won't`), which states its **delivery priority** relative
+to the business needs. Both are carried on each requirement: the EARS keyword in the requirement sentence, the
+MoSCoW priority in the `Priorité MoSCoW` annotation (see the spec-delta template). The MoSCoW priority and the
+upstream business need feed the **MoSCoW traceability matrix** of the proposal.
+
 ## Scenario Format
 
 Every requirement MUST have scenarios showing expected behavior.
@@ -300,10 +308,12 @@ AND displays message "Verification link expired. Request a new one."
 When writing requirements:
 
 - [ ] Use SHALL for binding requirements
+- [ ] Assign a MoSCoW priority (Must / Should / Could / Won't) and the upstream business need (`BA-…`)
 - [ ] Include trigger clause (WHEN/IF/WHERE/WHILE)
 - [ ] Write clear action and outcome
 - [ ] Include at least one positive scenario
 - [ ] Include error/edge case scenarios
 - [ ] Use Given/When/Then format for scenarios
+- [ ] Trace each scenario to its business need / requirement (`Tracé vers`)
 - [ ] Avoid implementation details
 - [ ] Make requirements testable

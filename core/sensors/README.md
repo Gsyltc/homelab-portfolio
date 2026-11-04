@@ -49,7 +49,7 @@ Sept sensors, alignés sur le contrat amont « Sensors » (schéma de manifeste 
 | `diagram-validity` | [`sensors/diagram-validity.md`](sensors/diagram-validity.md) | document-shape | write | advisory | Syntaxe des diagrammes en code (Mermaid / PlantUML / Structurizr) |
 | `detailed-arch-refs` | [`sensors/detailed-arch-refs.md`](sensors/detailed-arch-refs.md) | document-shape | write | advisory | Renvois vers l'architecture détaillée au format d'ancre Structurizr (`documentation/<SS>#<ancre>`, pas de chemin de fichier) et absence de suffixe de nom de système dans les titres du détail (origine ORIG-261) |
 | `claim-sources` | [`sensors/claim-sources.md`](sensors/claim-sources.md) | provenance | gate | advisory | Chaque affirmation retenue porte une source résoluble ; hypothèses = confirmation humaine explicite |
-| `traceability` | [`sensors/traceability.md`](sensors/traceability.md) | traceability | gate | advisory | Chaîne exigence → ADR → livrable cohérente, sans orphelin dérivé |
+| `traceability` | [`sensors/traceability.md`](sensors/traceability.md) | traceability | gate | advisory | Chaîne besoin (BA-…, MoSCoW) → exigence → scénario → ADR → livrable cohérente, sans orphelin dérivé |
 
 > `linter` et `type-check` (sensors AI-DLC de qualité de code) restent **N/A** tant que le dépôt ne produit ni code ni IaC ; ils seront ajoutés le jour où un livrable exécutable apparaît (repli « stratégie de tests » de l'axe de vérification.
 

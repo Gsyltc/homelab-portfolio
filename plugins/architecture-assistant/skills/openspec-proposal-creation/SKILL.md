@@ -28,6 +28,7 @@ Proposal Progress:
 - [ ] Step 4: Draft proposal.md (Why/What/Impact)
 - [ ] Step 5: Create tasks.md implementation checklist
 - [ ] Step 6: Write spec deltas with EARS format
+- [ ] Step 6b: Build the MoSCoW traceability matrix (specs ↔ business needs ↔ requirements)
 - [ ] Step 7: Validate proposal structure
 - [ ] Step 8: Present for user approval
 ```
@@ -139,6 +140,31 @@ AND redirects to the dashboard
 
 **For validation patterns**, see [reference/VALIDATION_PATTERNS.md](reference/VALIDATION_PATTERNS.md)
 
+### Step 6b: Build the MoSCoW traceability matrix (specs ↔ business needs ↔ requirements)
+
+Each scenario / use case MUST be traceable to a **business need** and prioritised with **MoSCoW**.
+This makes the chain **spec ↔ business need ↔ requirement** auditable and feeds the architecture
+checklist recap element.
+
+1. On every requirement of the spec deltas, fill the annotations introduced by the
+   [spec-delta template](templates/spec-delta.md):
+   - **Priorité MoSCoW** : `Must` / `Should` / `Could` / `Won't`
+   - **Besoin d'affaires amont** : stable identifier `BA-…` + short label (from the business needs
+     traced in the inception stage `requirements-analysis` — `besoins_traces`)
+   - **Exigence amont** : upstream requirement identifier when applicable
+2. On every scenario, fill the `> Tracé vers : {BA-… / Exigence : …}` line.
+3. Consolidate everything into the **« Matrice de traçabilité MoSCoW »** section of `proposal.md`
+   (one row per scenario / use case): `Besoin d'affaires | Priorité MoSCoW | Exigence | Scénario | Capacité`.
+
+> This matrix is the **recap element** read by the coordinator to keep the **Besoins (MoSCoW)** element of
+> the architecture checklist up to date (`core/common/protocols/architecture-checklist.md`), and it is cross-checked
+> by the `traceability` sensor (`core/sensors/sensors/traceability.md`). Keep the business-need identifiers (`BA-…`)
+> and requirement identifiers stable so the chain stays resolvable.
+
+**Rule — no orphans**: every scenario traces to a requirement; every requirement traces to a business need
+and carries a MoSCoW priority. A scenario without a `Tracé vers` line, or a requirement without a MoSCoW
+priority / business need, is an incomplete traceability chain and must be fixed before Step 7.
+
 ### Step 7: Validate proposal structure
 
 Run these checks before presenting to user:
@@ -147,10 +173,13 @@ Run these checks before presenting to user:
 Structure Checklist:
 - [ ] Directory exists: `openspec/changes/{change-id}/`
 - [ ] proposal.md has Why/What/Impact sections
+- [ ] proposal.md has a « Matrice de traçabilité MoSCoW » section (specs ↔ business needs ↔ requirements)
 - [ ] tasks.md has numbered task list (5-15 items)
 - [ ] Spec deltas have operation headers (ADDED/MODIFIED/REMOVED)
 - [ ] Requirements follow `### Requirement: <name>` format
+- [ ] Each requirement carries a MoSCoW priority + an upstream business need (`BA-…`)
 - [ ] Scenarios use `#### Scenario:` format (4 hashtags)
+- [ ] Each scenario carries a `Tracé vers` line (business need / requirement)
 ```
 
 **Automated checks**:

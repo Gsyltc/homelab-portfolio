@@ -19,6 +19,17 @@ Quatre sections, éléments **fixes** ; aucun ajout / retrait sans décision tra
 - **Livrables** — Architecture de solution (DAS) · Architecture Logicielle détaillée · Architecture de données détaillée · Architecture de sécurité détaillée · Architecture infrastructure détaillée
 - **Projets** — Planification · Coûts · Risques · Exploitation · **Arrimages** (élément décomposé par **rôles mandatory**, section 2.1)
 
+> **Élément récapitulatif de la section Besoins (MoSCoW).** La priorisation MoSCoW des besoins d'affaires
+> est **tracée en amont** par le stage [`../stages/inception/requirements-analysis.md`](../stages/inception/requirements-analysis.md)
+> (Step 1b : besoins d'affaires classés MoSCoW, identifiants stables `BA-…`). Lorsqu'une **méthodologie OpenSpec**
+> est active, cette priorisation est consolidée dans la **matrice de traçabilité MoSCoW** du `proposal.md`
+> (skill `openspec-proposal-creation`, Step 6b), qui relie **spec ↔ besoin d'affaires ↔ exigence** (chaque
+> scénario / cas d'utilisation renvoie à son besoin `BA-…` et à sa priorité). Cette matrice est l'**élément
+> récapitulatif** que le coordinateur lit pour suivre la conformité des éléments de la section **Besoins (MoSCoW)**
+> (section 6), et que le sensor [`../../sensors/sensors/traceability.md`](../../sensors/sensors/traceability.md)
+> recoupe (chaîne besoin ↔ exigence ↔ scénario sans orphelin). Elle ne **redéfinit pas** les quatre éléments de la
+> section ; elle en **établit la conformité** de façon traçable.
+
 Chaque élément est suivi **en pourcentage** selon le **barème 80/10/10** de la section 3. Un élément n'atteint **100 %** que lorsque sa part « sections conformes » est complète **et** que sa **revue par un pair** et son **acceptation humaine** sont réalisées.
 
 ### 2.1 Arrimages — rôles mandatory
@@ -108,6 +119,7 @@ Pour établir la **part 80 %** d'un élément (proportion `sections conformes / 
 - ils sont **clairs**, **sans note de génération d'agent** (réf. décision [`0040`](../../../decisions/0040-aucune-note-de-generation-dans-les-livrables.md)), **sans doublon**, **sans incohérence** ;
 - pour la section **Livrables**, **chaque section mandatory** attendue du document est comptée **conforme** uniquement si elle est **présente et non vide**, selon le sensor [`required-sections`](../../sensors/sensors/required-sections.md) (**source unique** du contrat et du **total** servant de dénominateur — ne pas le redupliquer ici ; le sensor reste **advisory** et **n'autorise jamais** à se passer de la validation humaine) ;
 - pour l'élément **Arrimages** (section Projets), **chaque rôle mandatory** (section 2.1) est compté **conforme** uniquement s'il est **présent et nommé** (colonne « Nom » renseignée) dans la matrice RACI du DAS `001` ; le couple « Architecte de solution / intégrateur » est conforme dès que **l'un** des deux est nommé ; le **Responsable Légal** n'entre au dénominateur **que si la Loi 25 est activée**.
+- pour les éléments de la section **Besoins (MoSCoW)**, la part 80 % (binaire) est comptée **conforme** uniquement lorsque le besoin est **tracé et priorisé MoSCoW** en amont (stage [`../stages/inception/requirements-analysis.md`](../stages/inception/requirements-analysis.md), identifiants stables `BA-…`) et, lorsqu'une méthodologie OpenSpec est active, **repris dans la matrice de traçabilité MoSCoW** du `proposal.md` (élément récapitulatif reliant spec ↔ besoin ↔ exigence, section 2). Un besoin sans priorité MoSCoW, ou un scénario / cas d'utilisation sans renvoi à son besoin `BA-…`, est une chaîne de traçabilité **incomplète** ⇒ **ne compte pas** comme conforme (recoupe le sensor [`traceability`](../../sensors/sensors/traceability.md)).
 
 Le **total** de sections mandatory (dénominateur) est celui du contrat `required-sections` **au moment du calcul** (dénominateur dynamique, section 3). Toute section en échec de vérification ou ambiguë **ne compte pas** comme conforme ⇒ elle **abaisse** la part 80 %. En cas de doute, **ne pas compter**, informer l'humain (section 4).
 
