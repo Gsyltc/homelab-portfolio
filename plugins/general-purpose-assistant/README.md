@@ -32,7 +32,7 @@ officiel `skills-ref` — `scripts/validate_skills.sh` à la racine du dépôt,
 |---|---|---|
 | `ntfy-notifications` | Agent de notifications (partagé `core/`) — envoi de notifications push via ntfy pour tout évènement à partager avec l'humain | — |
 | `guide-utilisation-workflow-generation` | Rédaction documentaire — production et mise à jour des guides d'utilisation des workflows (`core`, `homelab`, `matching-cv-ao`) au format PDF (trame éditoriale, conventions de diagrammes, charte graphique, gabarit HTML, régénération WeasyPrint) | `assets/` (gabarit HTML du guide) |
-| `skill-authoring` | Auteur de skills — création, modification et validation d'une Agent Skill conforme à agentskills.io (frontmatter autorisé, contraintes de nom/description, organisation `scripts/`/`references/`/`assets/`, validation via le validateur officiel `skills-ref`) | — |
+| `skill-authoring` | Auteur de skills — création, modification et validation d'une Agent Skill conforme à agentskills.io (frontmatter autorisé, contraintes de nom/description, organisation `scripts/`/`references/`/`assets/`, validation via le validateur officiel `skills-ref` ; mise à jour obligatoire du README et du CHANGELOG à chaque ajout/modification/retrait de skill) | — |
 
 La skill de notifications `ntfy-notifications` est **mutualisée** : son porteur
 est l'Agent de notifications, dont la définition est partagée (`core/`). C'est
