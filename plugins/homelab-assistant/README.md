@@ -29,7 +29,9 @@ plugins/homelab-assistant/
 Chaque dossier immédiat sous `skills/` contient un `SKILL.md` conforme à la
 spécification [Agent Skills](https://agentskills.io/specification) (frontmatter
 `name` + `description`, puis corps Markdown). Le champ `name` du frontmatter
-correspond au nom du dossier.
+correspond au nom du dossier. La conformité est vérifiée par le validateur
+officiel `skills-ref` — `scripts/validate_skills.sh` à la racine du dépôt,
+également exécuté par le hook `pre-commit` et la CI GitHub Actions.
 
 ## Skills exportés (mapping)
 

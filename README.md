@@ -11,7 +11,7 @@ Monorepo de **plugins d'agents** ([Agent Plugins](https://agent-plugins.org), sp
 Ce dépôt documente et outille une infrastructure réelle, prête pour la production — ce n'est pas un tutoriel. Il rassemble :
 
 - des **plugins d'agents** portables (manifestes conformes au schéma v1.0.0) ;
-- une **bibliothèque de skills** portées par les plugins, sous [`plugins/<nom>/skills/`](plugins/) ;
+- une **bibliothèque de skills** portées par les plugins, sous [`plugins/<nom>/skills/`](plugins/), conformes à la norme [Agent Skills](https://agentskills.io/specification) ;
 - trois **workflows A2A cloisonnés** qui pilotent la façon dont les agents collaborent, tracent leurs décisions et sollicitent une validation humaine.
 
 ## Les trois workflows
@@ -77,7 +77,7 @@ homelab-portfolio/
 ├── docs/                     # Guides d'utilisation (architecture, matching) + PDF + stub de redirection core-workflow
 └── plugins/                  # Packages de plugins d'agents (spec v1.0.0) — portent les skills
     ├── architecture-assistant/    #   OpenSpec, décision, gabarits, cybersécurité, AWS, Windows, supports de vente, présentations client
-    ├── general-purpose-assistant/ #   workflow de stack, notifications
+    ├── general-purpose-assistant/ #   workflow de stack, notifications, skill-authoring
     ├── homelab-assistant/         #   docker-composer, traefik
     ├── investment-assistant/      #   analyse, data provider, liste de titres
     └── medical-assistant/         #   dossiers médicaux
@@ -85,7 +85,20 @@ homelab-portfolio/
 
 ## Skills
 
-Les skills sont **portées par les plugins**, à l'emplacement canonique [`plugins/<nom>/skills/<skill>/SKILL.md`](plugins/) (conforme à la spécification Agent Plugins v1.0.0). Chaque skill est un répertoire contenant un `SKILL.md` avec un front-matter YAML (`name` + `description`).
+Les skills sont **portées par les plugins**, à l'emplacement canonique [`plugins/<nom>/skills/<skill>/SKILL.md`](plugins/). **Toute skill respecte la norme [Agent Skills](https://agentskills.io/specification)** — une skill est un répertoire contenant un `SKILL.md` dont le front-matter YAML :
+
+- a un `name` (obligatoire, 1–64 car., minuscules/chiffres/tirets) **identique au nom du répertoire** ;
+- a une `description` (obligatoire, ≤ 1024 car.) qui dit **ce que** fait la skill **et quand** l'utiliser ;
+- n'utilise que les champs autorisés — `name`, `description`, `license`, `compatibility`, `metadata`, `allowed-tools` — tout champ maison allant **sous `metadata:`**.
+
+La conformité est **vérifiée automatiquement** par le validateur officiel `skills-ref` :
+
+```bash
+scripts/validate_skills.sh                                   # toutes les skills
+scripts/validate_skills.sh plugins/<plugin>/skills/<skill>   # une seule
+```
+
+Il est aussi exécuté par un hook `pre-commit` versionné (à activer : `git config core.hooksPath .githooks`) et par la CI GitHub Actions ([`.github/workflows/validate-skills.yml`](.github/workflows/validate-skills.yml)). La skill [`skill-authoring`](plugins/general-purpose-assistant/skills/skill-authoring/SKILL.md) décrit la procédure de création/modification d'une skill conforme. Détails dans [`AGENTS.md`](AGENTS.md) et [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 > **Important** — sur Multica, un `SKILL.md` présent dans le dépôt n'est **pas** utilisé automatiquement. Une skill devient utilisable après avoir été **importée** dans le workspace (`multica skill import`) puis **assignée** à un agent (`multica agent skills add|set`). Voir [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
@@ -96,7 +109,7 @@ Chaque sous-répertoire de [`plugins/`](plugins/) est un plugin auto-contenu, av
 | Plugin | Rôle |
 | --- | --- |
 | `architecture-assistant` | Architecture de solution : OpenSpec, décision, gabarits DAS, cybersécurité, AWS, Windows, supports de vente, présentations client |
-| `general-purpose-assistant` | Skills transverses (workflow de stack, notifications) |
+| `general-purpose-assistant` | Skills transverses (workflow de stack, notifications, création de skills conformes `skill-authoring`) |
 | `homelab-assistant` | Homelab : `docker-compose`, Traefik |
 | `investment-assistant` | Domaine investissement |
 | `medical-assistant` | Domaine médical |
