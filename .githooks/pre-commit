@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# Versioned pre-commit hook: block commits that break Agent Skills conformance.
+#
+# Enable once per clone:
+#   git config core.hooksPath .githooks
+#
+# It validates only the skills touched by the staged changes (fast), and falls
+# back to validating every skill when it cannot map the change to a skill.
+set -euo pipefail
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+cd "$REPO_ROOT"
+
+# Collect skill directories affected by staged changes under plugins/*/skills/*.
+mapfile -t changed < <(
+  git diff --cached --name-only --diff-filter=ACMR \
+    | grep -E '^plugins/[^/]+/skills/[^/]+/' \
+    | sed -E 's#(^plugins/[^/]+/skills/[^/]+)/.*#\1#' \
+    | sort -u
+)
+
+if [[ ${#changed[@]} -eq 0 ]]; then
+  exit 0
+fi
+
+echo "pre-commit: validating Agent Skills conformance (agentskills.io)…"
+if ! scripts/validate_skills.sh "${changed[@]}"; then
+  echo >&2
+  echo "pre-commit: commit blocked — fix the skill(s) above or run 'scripts/validate_skills.sh'." >&2
+  exit 1
+fi

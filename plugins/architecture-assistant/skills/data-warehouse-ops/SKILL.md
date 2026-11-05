@@ -1,7 +1,8 @@
 ---
 name: data-warehouse-ops
 description: "Compétence d'exploitation du cycle de vie complet d'un entrepôt de données (data warehouse / big data). Couvre 9 modules : définition de la source unique de vérité (SSOT), construction de pipelines ETL/ELT, modélisation dimensionnelle (étoile / flocon / Data Vault), contrôle de la qualité des données, stratégies de partitionnement, optimisation des coûts/performances, gouvernance des données, traçabilité du lignage et supervision des SLA. Prend en charge les principaux entrepôts cloud (BigQuery / Snowflake / Redshift / Databricks / StarRocks / ClickHouse) et la chaîne d'outils open source (dbt / Airflow / Great Expectations / OpenLineage / DataHub). Déclencheurs : entrepôt de données, data warehouse, DW, ETL, ELT, modélisation dimensionnelle, schéma en étoile, qualité des données, stratégie de partitionnement, optimisation d'entrepôt, gouvernance des données, traçabilité du lignage, supervision SLA, pipeline de données."
-agent_created: true
+metadata:
+  agent-created: "true"
 ---
 
 # Compétence — Exploitation d'entrepôt de données (Data Warehouse Operations)

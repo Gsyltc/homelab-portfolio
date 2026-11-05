@@ -1,7 +1,8 @@
 ---
 name: home-assistant-calendrier
 description: "Ajoute les repas planifiés au calendrier Home Assistant (défaut calendar.repas) via le serveur MCP de HA ; pour chaque repas, crée deux évènements : le repas 19h-20h (description = ingrédients en puces) et un créneau le lendemain 10h-13h sans description. Adresse et jeton lus depuis l'environnement (secrets, jamais en clair). Se déclenche sur : calendrier, Home Assistant, repas au calendrier, planifier un repas dans l'agenda, ajouter un évènement, create_event, mcp home assistant."
-user-invocable: false
+metadata:
+  user-invocable: "false"
 allowed-tools: Bash(curl), Bash(jq)
 ---
 

@@ -2,7 +2,8 @@
 name: cv-analyse
 description: >
     Analyse d'un CV source (PDF/DOCX fourni en pièce jointe d'issue) du workflow Matching : extraction structurée vers livrables versionnés (fiche Markdown du jour + YAML des données CV), archivage, traçabilité, équivalence MIFI, localisation, disponibilité, sélection d'éligibilité amont (Études, Localisation et Certifications requises STRICTES/éliminatoires) vis-à-vis d'un AO, et maintenance du référentiel des contextes clients (sociétés) `${ROOT_DIRECTORY}/clients/<nom-client>.yaml` lorsqu'un CV long en contient (contexte + mandats réalisés — complète/enrichit, jamais d'écrasement aveugle). Charger avant toute extraction de CV ou classement d'éligibilité.
-keywords: [analyse cv, extraction cv, eligibilite, mifi, localisation, disponibilite, type collaborateur, type de collaborateur, cycle de vie collaborateur, machine a etats, transition type collaborateur, alithya, recrutement, offre conditionnelle, pigiste, freelance, non disponible, remuneration, taux horaire, salaire annuel, coutant, coutant horaire, cout interne, cad, versionnage cv, format yaml cv, filtre eligibilite, certifications, certification requise, prerequis, contexte client, clients json, mandats, expertise firme, referentiel clients]
+metadata:
+  keywords: "analyse cv, extraction cv, eligibilite, mifi, localisation, disponibilite, type collaborateur, type de collaborateur, cycle de vie collaborateur, machine a etats, transition type collaborateur, alithya, recrutement, offre conditionnelle, pigiste, freelance, non disponible, remuneration, taux horaire, salaire annuel, coutant, coutant horaire, cout interne, cad, versionnage cv, format yaml cv, filtre eligibilite, certifications, certification requise, prerequis, contexte client, clients json, mandats, expertise firme, referentiel clients"
 ---
 
 # Analyse de CV

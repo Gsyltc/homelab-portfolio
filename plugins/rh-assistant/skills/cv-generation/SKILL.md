@@ -2,7 +2,8 @@
 name: cv-generation
 description: >
     Génération et mise à jour d'un CV livrable du workflow Matching, **au format DOCX par défaut** (à partir des gabarits fournis : CV long, CV court, format client spécifique) — le **format Markdown reste possible uniquement sur demande explicite de l'humain**. Production à partir des données d'analyse extraites (YAML versionné). Charger avant toute production ou modification de CV. Un CV DOCX est produit à partir d'un gabarit fourni — jamais inventé — et toute écriture n'intervient qu'après validation humaine explicite.
-keywords: [generation cv, mise a jour cv, cv docx, cv markdown, gabarit cv, cv long, cv court, format client, ajout competences, mise a jour experience, versionnage cv, donnees cv yaml]
+metadata:
+  keywords: "generation cv, mise a jour cv, cv docx, cv markdown, gabarit cv, cv long, cv court, format client, ajout competences, mise a jour experience, versionnage cv, donnees cv yaml"
 ---
 
 # Génération / mise à jour de CV (DOCX à partir des gabarits fournis)

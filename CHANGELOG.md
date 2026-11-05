@@ -9,6 +9,21 @@ ce fichier en donne la lecture chronologique côté produit.
 ## [Non publié]
 
 ### Added
+- **Conformité Agent Skills imposée et automatisée** (réf. HOM-276). Toutes les skills du dépôt
+  respectent désormais la [norme Agent Skills](https://agentskills.io/specification), vérifiée par le
+  validateur officiel `skills-ref` :
+  - 16 `SKILL.md` mis en conformité : alignement de `name` sur le nom du répertoire
+    (`create-architecture-decision-record`, `investissement-analyse-fondamentale`,
+    `investissement-liste-titres`), déplacement des champs hors norme sous `metadata:`
+    (`user-invocable` ×7, `keywords` ×5, `agent_created`), et raccourcissement de la description
+    de `recherche-repas` sous 1024 caractères.
+  - Nouvelle skill `skill-authoring` (plugin `general-purpose-assistant`) : procédure de création,
+    modification et validation d'une skill conforme.
+  - Outillage de garde-fou : `scripts/validate_skills.sh`, hook `pre-commit` versionné
+    (`.githooks/pre-commit`, activé via `git config core.hooksPath .githooks`) et workflow GitHub
+    Actions `.github/workflows/validate-skills.yml`.
+  - `AGENTS.md` et `CONTRIBUTING.md` : la règle de conformité Agent Skills est écrite et liée aux guides.
+
 - **Guide d'utilisation du workflow `core` v1.5 — section « Traçabilité des exigences d'affaires & MoSCoW »**
   (réf. HOM-274 ; évolution **documentaire**). `docs/guide-utilisation-workflow-core.pdf` ajoute la section 9
   (identifiants `BA-…`, priorités MoSCoW, chaîne besoin → exigence → scénario → ADR/livrable, matrice de

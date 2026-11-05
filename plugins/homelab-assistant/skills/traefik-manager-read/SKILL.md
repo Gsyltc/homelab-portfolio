@@ -1,7 +1,8 @@
 ---
 name: traefik-manager-read
 description: "Skill permettant d'accéder au information de Traefik Manager"
-user-invocable: false
+metadata:
+  user-invocable: "false"
 allowed-tools: Bash(multica *)
 ---
 
