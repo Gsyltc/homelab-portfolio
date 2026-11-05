@@ -15,6 +15,9 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/) ; versionnage
   (HOM-278).
 
 ### Changed
+- Skill `skill-authoring` : mise à jour de `README.md` et `CHANGELOG.md` rendue
+  **obligatoire** à chaque ajout, modification ou retrait d'une skill (section
+  « Traçabilité obligatoire » + checklist) (HOM-280).
 - Alignement du plugin sur le standard du dépôt (modèle `homelab-assistant`) :
   `plugin.json` + `mcp.json` + `README.md` + `CHANGELOG.md` à la racine, skills
   conformes **Agent Skills** vérifiées par `scripts/validate_skills.sh`

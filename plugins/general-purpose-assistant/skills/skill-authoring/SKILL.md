@@ -26,6 +26,22 @@ uvx --from skills-ref agentskills validate plugins/<plugin>/skills/<skill>
 Un commit qui casse la conformité est bloqué par le hook `pre-commit`
 (`git config core.hooksPath .githooks`) et par la CI GitHub Actions.
 
+## Traçabilité obligatoire : README et CHANGELOG
+
+À chaque **ajout, mise à jour ou retrait** d'une skill, mets à jour **dans le
+même changement** les fichiers de traçabilité — c'est **obligatoire**, pas
+optionnel :
+
+- **`README.md` du plugin** (`plugins/<plugin>/README.md`) : arborescence et
+  tableau des skills (ajout, description modifiée ou ligne retirée). Si la
+  skill est citée dans le `README.md` racine, aligne-le aussi.
+- **`CHANGELOG.md` du plugin** (`plugins/<plugin>/CHANGELOG.md`) : une entrée
+  sous `## [Non publié]` (`Added` / `Changed` / `Removed`) avec la référence du
+  ticket. Si le changement est notable à l'échelle du dépôt, ajoute aussi une
+  entrée au `CHANGELOG.md` racine.
+
+Une livraison de skill sans mise à jour de ces fichiers est incomplète.
+
 ## Emplacement et structure
 
 ```
@@ -95,7 +111,7 @@ L'agent charge tout le corps à l'activation — déporte le volumineux dans
 3. Aucun champ hors norme (extras sous `metadata:`, valeurs en chaînes).
 4. `SKILL.md` < 500 lignes.
 5. `scripts/validate_skills.sh plugins/<plugin>/skills/<skill>` passe.
-6. Si la skill ajoute un comportement, mettre à jour `CHANGELOG.md`.
+6. `README.md` **et** `CHANGELOG.md` du plugin mis à jour (ajout, modification ou retrait de la skill) ; `CHANGELOG.md` racine si le changement est notable.
 
 ## Références
 
