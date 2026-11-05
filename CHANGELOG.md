@@ -23,6 +23,8 @@ ce fichier en donne la lecture chronologique côté produit.
     (`.githooks/pre-commit`, activé via `git config core.hooksPath .githooks`) et workflow GitHub
     Actions `.github/workflows/validate-skills.yml`.
   - `AGENTS.md` et `CONTRIBUTING.md` : la règle de conformité Agent Skills est écrite et liée aux guides.
+  - `README.md` (racine) et `plugins/homelab-assistant/README.md` : section Skills alignée sur la norme
+    Agent Skills (champs autorisés, validateur `skills-ref`, hook/CI, skill `skill-authoring`).
 
 - **Guide d'utilisation du workflow `core` v1.5 — section « Traçabilité des exigences d'affaires & MoSCoW »**
   (réf. HOM-274 ; évolution **documentaire**). `docs/guide-utilisation-workflow-core.pdf` ajoute la section 9
