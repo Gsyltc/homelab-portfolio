@@ -39,3 +39,4 @@ Comment référencer une recette pour que l'humain la réalise :
 | Appareil | Fichier |
 |---|---|
 | Companion de Moulinex | [companion-moulinex.md](companion-moulinex.md) |
+| Four | [four.md](four.md) |
