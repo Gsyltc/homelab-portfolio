@@ -2,7 +2,8 @@
 name: contexte-client
 description: >
     Gestion du référentiel des contextes clients (sociétés) du workflow Matching : source unique du schéma et des règles de `${ROOT_DIRECTORY}/clients/<nom-client>.yaml` (1 fichier par client — nom, contexte de la société, mandats réalisés par la firme). Décrit la maintenance côté producteur (Gestionnaire CV, lors de l'analyse d'un CV long contenant un contexte client : création/enrichissement sans écrasement aveugle, dédoublonnage des mandats) et le contrat de lecture côté consommateur (Analyste RFP, pour l'évaluation d'expertise de firme ; cv-generation, pour le bloc « Contexte de l'organisation » du CV long). Charger avant toute création, mise à jour ou lecture d'un fichier clients/<nom-client>.yaml.
-keywords: [contexte client, contextes clients, societe, referentiel clients, clients yaml, mandats, expertise firme, experience firme, capitalisation mandats, enrichissement contexte, dedoublonnage mandats, contexte organisation]
+metadata:
+  keywords: "contexte client, contextes clients, societe, referentiel clients, clients yaml, mandats, expertise firme, experience firme, capitalisation mandats, enrichissement contexte, dedoublonnage mandats, contexte organisation"
 ---
 
 # Gestion des contextes clients (référentiel `clients/`)

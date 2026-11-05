@@ -1,7 +1,8 @@
 ---
-name: analyse-fondamentale
+name: investissement-analyse-fondamentale
 description: "Analyse fondamentale des titres canadiens listés dans titres.md : lecture des news, tendances marché et géopolitiques, santé de l'entreprise, risques et points positifs. Horizons : 1 jour, 1 semaine, 1 mois. Utiliser pour toute analyse fondamentale demandée par Hector."
-user-invocable: false
+metadata:
+  user-invocable: "false"
 allowed-tools: Bash(multica *)
 ---
 

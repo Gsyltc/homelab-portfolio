@@ -1,0 +1,33 @@
+name: Validate Agent Skills
+
+# Enforce the Agent Skills specification (https://agentskills.io/specification)
+# on every SKILL.md using the official `skills-ref` reference library.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "plugins/**/SKILL.md"
+      - "plugins/**/skills/**"
+      - "scripts/validate_skills.sh"
+      - ".github/workflows/validate-skills.yml"
+  pull_request:
+    paths:
+      - "plugins/**/SKILL.md"
+      - "plugins/**/skills/**"
+      - "scripts/validate_skills.sh"
+      - ".github/workflows/validate-skills.yml"
+  workflow_dispatch:
+
+jobs:
+  validate-skills:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Validate all Agent Skills
+        run: ./scripts/validate_skills.sh

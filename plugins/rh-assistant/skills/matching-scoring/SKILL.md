@@ -2,7 +2,8 @@
 name: matching-scoring
 description: >
     Croisement et scoring des profils du workflow Matching : calcul du score pondéré IMMUABLE (Expérience 45 % / Compétences 30 % / Études 10 % / Certifications 5 % / Langues 5 % / Disponibilité 5 %) sur les seuls collaborateurs retenus par le filtre d'éligibilité amont, règle de fraîcheur des compétences (> 10 ans ignorée), double check de conformité du niveau d'études (AO gouvernemental / équivalence MIFI / compensation), classement, schéma YAML de sortie et garde-fous. Charger avant tout croisement ou calcul de score.
-keywords: [matching, scoring pondere, ponderation immuable, fraicheur competences, conformite etudes, mifi, equivalence diplomes, classement profils, forces ecarts, exclusion gouvernemental, certifications requises, prerequis certification, langues, certifications scoring]
+metadata:
+  keywords: "matching, scoring pondere, ponderation immuable, fraicheur competences, conformite etudes, mifi, equivalence diplomes, classement profils, forces ecarts, exclusion gouvernemental, certifications requises, prerequis certification, langues, certifications scoring"
 ---
 
 # Croisement et scoring des profils

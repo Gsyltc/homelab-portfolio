@@ -1,7 +1,8 @@
 ---
-name: titre-liste
+name: investissement-liste-titres
 description: "Liste des titres détenus et des titres suivis (titres.md) partagée par tous les agents de l'équipe d'analyse financière (Hector, Nestor, Victor, Leo). Utiliser pour connaître les titres à analyser, leurs identifiants marché, le type de compte associé (REER, CELI, Marge) et les titres suivis pour opportunités sur le compte marge."
-user-invocable: false
+metadata:
+  user-invocable: "false"
 allowed-tools: Bash(multica *)
 ---
 

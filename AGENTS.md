@@ -16,7 +16,13 @@ This is a monorepo of [Agent Plugins](https://agent-plugins.org) maintained by S
 - Plugin manifests (`plugin.json`) must conform to the [Agent Plugins v1.0.0 schema](https://agent-plugins.org/schemas/1.0.0/plugin.schema.json). The schema is closed — only `$schema`, `name`, `version`, `description`, `author`, `homepage`, `repository`, `license`, `keywords`, and `extensions` are allowed at the top level.
 - Plugin directory names must match the `name` field in their `plugin.json`.
 - Plugin names use lowercase alphanumeric characters with hyphens and dots (no consecutive `--` or `..`).
-- Skills are immediate child directories of `skills/` and must contain a `SKILL.md` with YAML front matter (`name` and `description` fields).
+- Skills are immediate child directories of `skills/` and must contain a `SKILL.md` with YAML front matter.
+- **Every skill MUST conform to the [Agent Skills specification](https://agentskills.io/specification).** This is non-negotiable and checked automatically (see below). A skill always lives inside an Agent Plugin (`plugins/<plugin>/skills/<skill>/`). Constraints:
+  - `name` (required): 1–64 chars, lowercase `a-z`, digits, hyphens; no leading/trailing or consecutive hyphen; **must equal the skill's directory name**.
+  - `description` (required): 1–1024 chars, non-empty; says **what** the skill does **and when** to use it, with trigger keywords.
+  - **Allowed frontmatter fields only**: `name`, `description`, `license`, `compatibility`, `metadata`, `allowed-tools`. Any other field (`user-invocable`, `keywords`, `agent_created`, …) goes **under `metadata:`** as string key/value pairs.
+  - Keep `SKILL.md` under 500 lines; move detail to `references/`.
+- **At every creation or modification of a skill, verify conformance before delivering**: run `scripts/validate_skills.sh` (official `skills-ref` validator). A `pre-commit` hook (`git config core.hooksPath .githooks`) and the `validate-skills` GitHub Actions workflow enforce this. Use the `skill-authoring` skill (plugin `general-purpose-assistant`) when creating or editing skills. Guides: [best practices](https://agentskills.io/skill-creation/best-practices), [optimizing descriptions](https://agentskills.io/skill-creation/optimizing-descriptions), [evaluating skills](https://agentskills.io/skill-creation/evaluating-skills), [using scripts](https://agentskills.io/skill-creation/using-scripts).
 - MCP server configuration goes in a root-level `mcp.json` per plugin, never inside `plugin.json`.
 - Client-specific extensions use reverse-domain namespaces (e.g., `com.vendor.client/`).
 

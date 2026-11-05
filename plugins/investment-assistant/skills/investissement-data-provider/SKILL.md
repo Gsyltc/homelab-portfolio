@@ -1,7 +1,8 @@
 ---
 name: investissement-data-provider
 description: "Collecte des données de marché et fondamentales pour les titres canadiens listés dans titres.md. Sources gratuites uniquement. Livrables : un fichier JSON par titre + une synthèse globale. Utiliser pour toute collecte de données quotidienne ou à la demande."
-user-invocable: false
+metadata:
+  user-invocable: "false"
 allowed-tools: Bash(multica *)
 ---
 

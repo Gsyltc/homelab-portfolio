@@ -1,7 +1,8 @@
 ---
 name: investissement-analyse-technique
 description: "Analyse technique des titres listés dans titres.md (actions canadiennes et cryptomonnaies BTC, ETH, DOT) : indicateurs (RSI, MACD, moyennes mobiles, Bollinger, volumes, supports/résistances), identification des risques, avis. Horizons : 1 jour, 1 semaine, 1 mois. Utiliser pour toute analyse technique"
-user-invocable: false
+metadata:
+  user-invocable: "false"
 allowed-tools: Bash(multica *)
 ---
 

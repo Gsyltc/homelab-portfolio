@@ -26,12 +26,24 @@ Avant toute contribution, lisez également [`AGENTS.md`](AGENTS.md) (standards d
 
 ### Skills
 
-Les skills sont **portées par les plugins**, à l'emplacement canonique [`plugins/<nom>/skills/<skill>/SKILL.md`](plugins/) (spécification Agent Plugins v1.0.0). Chaque skill :
+Les skills sont **portées par les plugins**, à l'emplacement canonique [`plugins/<nom>/skills/<skill>/SKILL.md`](plugins/). **Toute skill DOIT respecter la [norme Agent Skills](https://agentskills.io/specification)** — c'est obligatoire et vérifié automatiquement. Chaque skill :
 
 - est un répertoire contenant un `SKILL.md` avec un **front-matter YAML** (`name` et `description` obligatoires) ;
-- porte un `name` en minuscules alphanumériques avec tirets (cohérent avec le nom du répertoire) ;
+- porte un `name` en minuscules alphanumériques avec tirets (1–64 car., sans tiret en tête/fin ni `--`), **identique au nom du répertoire** ;
+- a une `description` non vide de **1024 caractères maximum** qui dit **ce que** fait la skill **et quand** l'utiliser, avec des mots-clés déclencheurs ;
+- n'utilise que les champs de front-matter **autorisés** : `name`, `description`, `license`, `compatibility`, `metadata`, `allowed-tools`. Tout champ maison (`user-invocable`, `keywords`, …) va **sous `metadata:`** en valeurs de type chaîne ;
+- garde son `SKILL.md` **sous 500 lignes** (détail déporté dans `references/`) ;
 - décrit une **seule préoccupation** — préférez plusieurs petits skills à un gros ;
 - utilise l'**impératif** dans sa description (« Résume le document », pas « Résumé du document »).
+
+> **Avant toute livraison d'une skill (création ou modification), validez la conformité :**
+>
+> ```
+> scripts/validate_skills.sh                 # toutes les skills
+> scripts/validate_skills.sh plugins/<plugin>/skills/<skill>   # une seule
+> ```
+>
+> Le validateur officiel `skills-ref` ([agentskills.io](https://agentskills.io/specification)) est aussi exécuté par le hook `pre-commit` (`git config core.hooksPath .githooks`) et par la CI GitHub Actions (`validate-skills`). La skill `skill-authoring` (plugin `general-purpose-assistant`) décrit la procédure complète.
 
 > **Utilisation sur Multica** — déposer un `SKILL.md` dans le dépôt **ne suffit pas** : la plateforme ne le découvre pas automatiquement. Une skill devient utilisable seulement après avoir été **importée** dans le workspace, puis **assignée** à un agent :
 >

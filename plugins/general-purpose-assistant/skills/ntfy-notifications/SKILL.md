@@ -1,7 +1,8 @@
 ---
 name: ntfy-notifications
 description: "Envoi de notifications push via ntfy. Utiliser pour notifier l'humain de tout évènement devant être partagé."
-user-invocable: false
+metadata:
+  user-invocable: "false"
 allowed-tools: Bash(curl), Bash(multica *)
 ---
 

@@ -2,7 +2,8 @@
 name: rfp-analyse
 description: >
     Analyse d'un appel d'offres (AO) du workflow Matching : parsing du PDF/DOCX fourni, extraction structurée des exigences (fonctionnelles, techniques, organisationnelles) et des profils recherchés, détection du caractère gouvernemental et de la politique d'équivalence des diplômes, détection du mode de travail et de la localisation du site (rayon de proximité), évaluation de l'expertise de firme face à une exigence d'expérience de firme (lecture du référentiel `${ROOT_DIRECTORY}/clients/<nom-client>.yaml` — non bloquante, gate humaine légère si les minimums ne sont pas atteints), production du résumé versionné en JSON et sauvegarde dans le répertoire de l'AO. Charger avant toute analyse d'appel d'offres.
-keywords: [analyse ao, appel d'offres, rfp, parse ao, exigences, profils recherches, scoring implicite, equivalence diplomes, client gouvernemental, localisation travail, rayon proximite, certifications requises, certification prerequis, expertise firme, experience firme, contexte client, clients yaml, gate humaine legere]
+metadata:
+  keywords: "analyse ao, appel d'offres, rfp, parse ao, exigences, profils recherches, scoring implicite, equivalence diplomes, client gouvernemental, localisation travail, rayon proximite, certifications requises, certification prerequis, expertise firme, experience firme, contexte client, clients yaml, gate humaine legere"
 ---
 
 # Analyse d'appel d'offres (AO)
