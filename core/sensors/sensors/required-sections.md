@@ -3,16 +3,16 @@ id: required-sections
 kind: deterministic
 command: "non-exécutable (advisory documentaire)"
 default_severity: advisory
-description: "Vérifie que les rubriques obligatoires de l'ADR et les fichiers/sections mandatory de la DAS sont présents et non vides."
+description: "Vérifie que les rubriques obligatoires de l'ADR, les fichiers/sections mandatory de la DAS et les sections requises du chapitre d'architecture de sécurité sont présents et non vides."
 category: document-shape
 fire_on: gate
-matches: "{decisions/[0-9][0-9][0-9][0-9]-*.md,documentation/*.md}"
+matches: "{decisions/[0-9][0-9][0-9][0-9]-*.md,documentation/*.md,documentation/**/*.md}"
 origine: ALI-218
 ---
 
 # Sensor `required-sections` — sections requises *(prioritaire)*
 
-Check déterministe déclenché **au gate de phase** (`fire_on: gate`) : vérifie que les **rubriques obligatoires** du gabarit sont présentes et non vides sur chaque **ADR** ou **DAS** livré. **Advisory** (`default_severity: advisory`).
+Check déterministe déclenché **au gate de phase** (`fire_on: gate`) : vérifie que les **rubriques obligatoires** du gabarit sont présentes et non vides sur chaque **ADR**, **DAS** ou **chapitre d'architecture de sécurité** livré. **Advisory** (`default_severity: advisory`).
 
 ## Contrat de vérification (`checks`)
 
@@ -62,9 +62,23 @@ checks:
           - "Classification des données"
       - fichier: "11-securite.md"
         sections:
-          - "Modélisation des menaces (STRIDE)"
           - "Sécurité applicative"
+          - "Frontières de confiance"
+          - "Sécurité Infrastructure"
+          - "Gestion des identités et des accès (GIA)"
     non_vide: true                             # une section présente mais vide (aucun contenu propre) = écart
+  securite:                                    # volet architecture de sécurité détaillée — chapitre `architecture-securite/` du répertoire documentation/
+    fichiers_mandatory:                        # fichiers du chapitre, où qu'il soit niché sous documentation/ (ex. documentation/architecture-securite/ ou documentation/architecture-detaillee/origin/architecture-securite/)
+      - fichier: "architecture-securite/01-surfaces-et-actifs.md"
+        sections:
+          - "Surfaces d'attaque"
+      - fichier: "architecture-securite/02-menaces-stride.md"
+        sections:
+          - "Matrice de synthèse STRIDE par surface"
+      - fichier: "architecture-securite/03-risques-owasp.md"
+        sections:
+          - "Table de couverture OWASP Top 10"
+    non_vide: true
 ```
 
 ## Sections mandatory de la DAS (Option A — manifeste autonome)
@@ -79,19 +93,31 @@ Sur le volet `das:`, le sensor vérifie qu'au gate de phase, chacun des **7 fich
 | `06-architecture-solutions.md` | Architecture de solution, diagrammes | Cœur du DAS : la solution dans son écosystème |
 | `08-contraintes.md` | Lois, conformités, contraintes technologiques | Contraintes réglementaires (Loi 25, normes) structurantes pour l'architecture |
 | `10-cycle_vie_donnees.md` | Cycle de vie et classification des données | Gouvernance et classification des données, requises par les contraintes du `08` |
-| `11-securite.md` | Modélisation des menaces, sécurité applicative | Volet sécurité de conception (STRIDE / OWASP), plancher de gouvernance |
+| `11-securite.md` | Sécurité applicative, frontières de confiance, sécurité infrastructure, gestion des identités et des accès | Volet sécurité de conception de la DAS : la section « Frontières de confiance » n'est conforme que si son diagramme est présent et valide |
 
 Les autres fichiers (`03`, `04`, `05`, `07`, `09`, `12`–`15`) restent **recommandés** mais **hors périmètre mandatory** de ce check ; leur absence n'est pas signalée par ce sensor.
 
+### Volet `securite:` — chapitre d'architecture de sécurité
+
+Le volet `securite:` porte les **trois sections du chapitre d'architecture de sécurité** qui ne vivent pas dans la DAS : surfaces d'attaque, modélisation STRIDE et modélisation OWASP. Il complète le volet `das:` (qui porte les quatre sections de `11-securite.md`) : ensemble, ils forment les **sept sections** de l'**architecture de sécurité détaillée** décomptées par la checklist.
+
+| Fichier du chapitre | Section mandatory | Pourquoi mandatory |
+| --- | --- | --- |
+| `architecture-securite/01-surfaces-et-actifs.md` | Surfaces d'attaque | Ancre de tout le chapitre : les menaces STRIDE et les fiches OWASP y renvoient par identifiant de surface |
+| `architecture-securite/02-menaces-stride.md` | Matrice de synthèse STRIDE par surface | Modélisation des menaces du socle toujours actif, appliquée à chaque surface |
+| `architecture-securite/03-risques-owasp.md` | Table de couverture OWASP Top 10 | Couverture du référentiel OWASP du socle toujours actif, risque par risque |
+
+Les fichiers sont attendus dans le **répertoire `architecture-securite/`** du répertoire `documentation/` du projet, **où qu'il soit niché** (par exemple `documentation/architecture-securite/` ou `documentation/architecture-detaillee/<système>/architecture-securite/`) : le contrat porte sur le nom du répertoire et le nom du fichier, pas sur sa profondeur. Un fichier absent, vide ou réduit au contenu du gabarit est un écart.
+
 ### Règle de cohérence gabarit ↔ manifeste (matérialisation NEG-004, ADR-0012)
 
-En **Option A**, la liste des fichiers et sections mandatory est portée **en propre par ce manifeste**, indépendamment des gabarits de la skill `architecture-solution-gabarits` (aucun couplage `core → plugin`). La contrepartie est une **cohérence à maintenir à deux endroits** : toute évolution du découpage ou du titre d'une section dans un gabarit mandatory (`gabarits/001`, `01`, `02`, `06`, `08`, `10`, `11`) **doit être répercutée ici** dans la même PR. Cette synchronisation est une modification de la surface de gouvernance : elle relève de SG-1 / SG-6 (versionnée, tracée, sous contrôle sécurité si elle affaiblit le check).
+En **Option A**, la liste des fichiers et sections mandatory est portée **en propre par ce manifeste**, indépendamment des gabarits des skills `architecture-solution-gabarits` et `architecture-securite-gabarits` (aucun couplage `core → plugin`). La contrepartie est une **cohérence à maintenir à deux endroits** : toute évolution du découpage ou du titre d'une section dans un gabarit mandatory (`gabarits/001`, `01`, `02`, `06`, `08`, `10`, `11` de la DAS ; `gabarits/01-surfaces-et-actifs`, `02-menaces-stride`, `03-risques-owasp` du chapitre sécurité) **doit être répercutée ici** dans la même PR. Cette synchronisation est une modification de la surface de gouvernance : elle relève de SG-1 / SG-6 (versionnée, tracée, sous contrôle sécurité si elle affaiblit le check).
 
 ## Sortie (piste d'audit)
 
 Verdicts : `✅` conforme · `⚠️` écart · `⛔` indisponible (SG-2, jamais lu comme conforme). Source tracée (SG-5).
 
-Sur le volet DAS, un **fichier mandatory absent** du répertoire `documentation/` du projet est un écart au même titre qu'une section manquante ou vide (SG-2 : l'absence d'un signal attendu est elle-même un écart).
+Sur le volet DAS, un **fichier mandatory absent** du répertoire `documentation/` du projet est un écart au même titre qu'une section manquante ou vide (SG-2 : l'absence d'un signal attendu est elle-même un écart). Il en va de même sur le volet `securite:` pour un fichier du chapitre `architecture-securite/`.
 
 ```
 Sensor required-sections — <fichier>   (source : core/sensors/sensors/required-sections.md @ <commit>)

@@ -99,6 +99,20 @@ ce fichier en donne la lecture chronologique côté produit.
   de runtime sous `${ROOT_DIRECTORY}/collaborateurs/`, **hors de ce dépôt**.
 
 ### Changed
+- **Checklist d'architecture — sections requises par livrable et suivi de l'architecture de sécurité**
+  (réf. ORIG-387, décision [ADR-0045](decisions/0045-checklist-architecture-sections-requises-securite.md) ;
+  évolution **documentaire**, barème 80/10/10, gates et sensors advisory préservés). L'**architecture de sécurité
+  détaillée** est désormais décomptée sur **sept sections** : surfaces d'attaque, STRIDE, OWASP (chapitre
+  `architecture-securite/`) et sécurité applicative, frontières de confiance **avec diagramme**, sécurité
+  infrastructure, gestion des identités et des accès (fichier `11-securite.md`). Le contrat
+  `required-sections` porte les quatre sections du fichier `11` et un nouveau volet `securite:` pour les trois
+  fichiers du chapitre ; le gabarit d'état de la checklist déploie les **tables de sections requises par
+  livrable** (dont les sept sections de sécurité) et le protocole `architecture-checklist` renvoie à la **source
+  unique** `required-sections` sans redupliquer la liste. La section « Frontières de confiance » n'est conforme
+  que si son diagramme est présent et valide ; le gabarit `11-securite` porte cette section sur le modèle du
+  `11-securite.md` de Talent Match (description des frontières et actifs, flux et points de contrôle, diagramme
+  obligatoire embarqué via `embed:`). La **checklist présente l'état, jamais le calcul** : plus aucun rappel de formule ou d'opération
+  (`Part 80 % = 80 × …` proscrit) — la mécanique du barème reste dans le protocole.
 - **Responsabilités, réalisations et biens livrables par expérience dans les données CV — `matching-cv-ao`**
   (réf. EXPE-95 / EXPE-94, décision [ADR-0037](decisions/0037-responsabilites-realisations-livrables-par-experience-cv.md) ;
   évolution **documentaire**, invariants et poids de scoring préservés). La rubrique source

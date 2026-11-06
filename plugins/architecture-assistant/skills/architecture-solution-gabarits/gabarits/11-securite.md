@@ -5,6 +5,7 @@ domaine: [securite]
 sujets:
   - Sécurité
   - Modélisation des menaces (STRIDE)
+  - Frontières de confiance
   - Sécurité applicative
   - Sécurité Infrastructure
   - Chiffrement
@@ -54,6 +55,39 @@ Règles de remplissage :
 | E (Elev. of privilege) | COMPOSANT / FLUX 1 | Autorisation         |                   |                    |                  |               |                   | - VUL-xxx                      | - RISQ-xxx                       |        |
 
 **Tableau 55. Matrice de traçabilité STRIDE**
+
+### Frontières de confiance
+
+<!--
+Vue d'ensemble des **frontières de confiance** (trust boundaries) de la solution : zones dont les hypothèses de confiance diffèrent, et points de franchissement (entrée / sortie de zone, changement de niveau de privilège, passage réseau). Tout flux qui traverse une frontière est soumis à **authentification, autorisation, chiffrement et/ou journalisation** au point de passage.
+Le détail par frontière (`FR-xxx`), les actifs classés (`ACTIF-xxx`) et les surfaces d'attaque (`S1…Sn`) restent portés par le chapitre de sécurité (`01-surfaces-et-actifs.md`) — y renvoyer, ne pas les dupliquer ici ; les identifiants `FR-xxx` sont ceux de ce fichier.
+-->
+
+Une **frontière de confiance** sépare deux zones dont les hypothèses de confiance diffèrent : tout flux qui la traverse est soumis à **authentification, autorisation, chiffrement et/ou journalisation** au point de passage.
+
+#### Description des frontières et des actifs protégés
+
+| Frontière (`FR-xxx`) | Périmètre / propriété | Actifs protégés (`ACTIF-xxx`) | Hypothèse de confiance |
+| --- | --- | --- | --- |
+| **FR-001 — FRONTIERE 1** | Zone / composant / propriétaire | ACTIF-xxx | Ce qui est tenu pour vrai de part et d'autre de la frontière ; ce que l'application ne décide **pas** elle-même |
+
+**Tableau 55-bis. Frontières de confiance et actifs protégés**
+
+#### Flux inter-frontières et points de contrôle
+
+| Flux | Franchissement (`FR-xxx`) | Point de contrôle au passage |
+| --- | --- | --- |
+| Composant A → Composant B | FR-001 → FR-002 | Protocole, authentification, autorisation, chiffrement et journalisation appliqués au point de passage |
+
+**Tableau 55-ter. Flux inter-frontières et points de contrôle**
+
+#### Diagramme — frontières de confiance
+
+<!--
+Le **diagramme des frontières de confiance est obligatoire** : une zone par niveau de confiance et les points de franchissement identifiés. Il est généré en **code** (Mermaid / PlantUML / C4 Structurizr), déclaré en **vue `image`** Structurizr et rendu par kroki, puis référencé **exclusivement** par `embed:` dans cette section — proscrire l'inclusion directe d'une source ou d'une image (règle d'or 19). Le diagramme est indexé dans l'index des diagrammes du `001`. La section n'est réputée documentée que si le diagramme est présent et lisible.
+-->
+
+![Frontières de confiance — zones de confiance et points de franchissement](embed:frontieres_confiance)
 
 ### Sécurité applicative
 
