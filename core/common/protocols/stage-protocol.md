@@ -28,7 +28,7 @@ flowchart TB
 
 - **Stage 1 — Production.**
   - *Step 1 (optionnel)* : l'**Expert de méthodologie** (OpenSpec, BMAD, etc.) intervient **selon la méthodologie activée** ; **sauté** s'il n'y a pas de méthodologie explicite.
-  - *Step 2* : le **spécialiste** produit le livrable. En fin de stage, il mentionne le **Reviewer de cohérence**.
+  - *Step 2* : le **spécialiste** produit le livrable. En fin de stage, il mentionne le **Reviewer de cohérence** puis **termine son tour** (il n'attend pas la revue dans son run) ; aucun lien actif vers le coordinateur (encadré « Fenêtre de pose » ci-dessous) — c'est le **verdict du reviewer** qui le réveille.
 - **Stage 2 — Review (séquentiel).** Les deux revues transitent **toutes par le spécialiste** (voir [`reviewer.md`](reviewer.md), encadré « Le reviewer retourne toujours au spécialiste »).
   - *Step 1 — Revue de cohérence* : le reviewer mentionne le spécialiste. **OK** ⇒ le spécialiste enchaîne le Step 2 (sollicite le reviewer de sécurité). **RENVOI** ⇒ le spécialiste corrige puis re-sollicite le reviewer de cohérence.
   - *Step 2 — Revue de sécurité* : le reviewer mentionne le spécialiste. **OK** ⇒ le spécialiste passe au Stage 3. **RENVOI** ⇒ le spécialiste corrige puis re-sollicite le reviewer de sécurité.
