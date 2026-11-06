@@ -1,7 +1,7 @@
 ---
 id: upstream-coverage
 kind: deterministic
-command: "python3 core/scripts/sensor.py fire upstream-coverage"
+command: "python3 core/scripts/sensors/upstream_coverage.py"
 default_severity: advisory
 description: "Vérifie que le livrable référence explicitement sa demande amont (issue d'origine, ADR parent le cas échéant)."
 category: document-shape

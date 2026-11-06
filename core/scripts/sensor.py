@@ -17,6 +17,7 @@ Indisponible ≠ conforme (SG-2) ; source = manifeste @ commit (SG-5) ; parsing 
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import json
 import os
 import re
@@ -26,7 +27,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from sensorlib.checks import CHECKS, Ctx, _blocks  # noqa: E402
+from sensorlib.context import Ctx  # noqa: E402
+from sensorlib.diagrams import blocks as diagram_blocks  # noqa: E402
 from sensorlib.common import (  # noqa: E402
     GAP, ICONS, OK, UNAVAILABLE, Manifest, Result, glob_match, list_files,
     parse_manifest, source_commit, worst,
@@ -36,6 +38,7 @@ SENSORS_DIR = Path(__file__).resolve().parents[1] / "sensors" / "sensors"
 GATES_FILE = Path(__file__).resolve().parents[1] / "sensors" / "gates.md"
 REPO_ANCHOR = Path(__file__).resolve().parents[2]  # racine du dépôt portant les manifestes
 SENSOR_REL = "core/sensors/sensors"
+SCRIPTS_DIR = Path(__file__).resolve().parent / "sensors"  # un script par sensor : sensors/<id avec _>.py
 WRITE_SKIP = (".aidlc-sensors/",)
 
 
@@ -46,6 +49,26 @@ WRITE_SKIP = (".aidlc-sensors/",)
 
 def load_manifests() -> dict[str, Manifest]:
     return {m.id: m for m in (parse_manifest(p) for p in sorted(SENSORS_DIR.glob("*.md")))}
+
+
+def script_path(sid: str) -> Path:
+    return SCRIPTS_DIR / (sid.replace("-", "_") + ".py")
+
+
+def load_check(sid: str):
+    """Charge le script du sensor `sid` ; None si absent ou sans `run` / `ID` conforme (=> ⛔, SG-2)."""
+    path = script_path(sid)
+    if not path.is_file():
+        return None
+    spec = importlib.util.spec_from_file_location(f"core_sensor_{path.stem}", path)
+    if spec is None or spec.loader is None:
+        return None
+    mod = importlib.util.module_from_spec(spec)
+    try:
+        spec.loader.exec_module(mod)
+    except Exception:  # noqa: BLE001 — un script illisible n'est jamais un vert
+        return None
+    return mod.run if getattr(mod, "ID", None) == sid and callable(getattr(mod, "run", None)) else None
 
 
 def resolve_commit() -> str | None:
@@ -61,8 +84,10 @@ def run_sensor(sid: str, root: Path, paths: list[str] | None, manifests: dict[st
     if not m.valid:
         why = f"champs manquants {m.missing}" if m.missing else "kind != deterministic"
         return [Result(sid, "-", UNAVAILABLE, f"indisponible : manifeste invalide ({why}) — provenance non traçable (SG-1)")]
-    if sid not in CHECKS:
-        return [Result(sid, "-", UNAVAILABLE, "indisponible : aucune implémentation exécutable pour ce manifeste")]
+    check = load_check(sid)
+    if check is None:
+        return [Result(sid, "-", UNAVAILABLE,
+                       f"indisponible : script absent ou invalide ({script_path(sid).relative_to(SCRIPTS_DIR.parent.parent.parent).as_posix()})")]
     results: list[Result] = []
     if paths is None:
         targets, explicit = list_files(root, m.matches), False
@@ -79,7 +104,7 @@ def run_sensor(sid: str, root: Path, paths: list[str] | None, manifests: dict[st
         if not targets:
             return results
     try:
-        results += CHECKS[sid](Ctx(root, targets, explicit))
+        results += check(Ctx(root, targets, explicit))
     except Exception as exc:  # noqa: BLE001 — un sensor en erreur n'est jamais un vert (SG-2)
         results.append(Result(sid, "-", UNAVAILABLE, f"indisponible : erreur d'exécution ({type(exc).__name__}: {exc})"))
     if commit is None:  # SG-5 : provenance non traçable => ⛔
@@ -150,7 +175,7 @@ def parse_boundaries() -> dict[str, dict]:
 
 def _has_diagram(root: Path) -> bool:
     for rel in list_files(root, "{documentation/**/*.md,**/*.puml,**/*.dsl}"):
-        if rel.endswith((".puml", ".dsl")) or _blocks((root / rel).read_text(encoding="utf-8", errors="replace")):
+        if rel.endswith((".puml", ".dsl")) or diagram_blocks((root / rel).read_text(encoding="utf-8", errors="replace")):
             return True
     return False
 
@@ -294,8 +319,9 @@ def main(argv: list[str] | None = None) -> int:
     manifests, commit = load_manifests(), resolve_commit()
     if args.cmd == "list":
         for m in manifests.values():
-            impl = "exécutable" if m.id in CHECKS and m.valid else "⛔ indisponible"
-            print(f"{m.id:20} fire_on={m.fire_on:5} {impl:15} {m.description[:90]}")
+            script = script_path(m.id)
+            impl = f"core/scripts/sensors/{script.name}" if load_check(m.id) and m.valid else "⛔ script absent/invalide"
+            print(f"{m.id:20} fire_on={m.fire_on:5} {impl:50} {m.description[:60]}")
         return 0
     if args.cmd == "describe":
         m = manifests.get(args.id)

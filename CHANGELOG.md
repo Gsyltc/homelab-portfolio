@@ -8,6 +8,13 @@ ce fichier en donne la lecture chronologique côté produit.
 
 ## [Non publié]
 
+### Changed
+- **Un script Python par sensor** (réf. HOM-283, [ADR-0046](decisions/0046-sensors-executables-python-et-hooks-agnostiques.md)).
+  Le fichier global `sensorlib/checks.py` est remplacé par `core/scripts/sensors/<id>.py` (8 scripts, dont le nouveau `style_concision.py`) :
+  - chaque script s'exécute seul et expose `ID` et `run(ctx)` ; le champ `command` des manifestes le désigne ;
+  - le dispatcher charge le script par son nom ; script absent ou invalide ⇒ `⛔` ;
+  - un test vérifie la correspondance 1 manifeste = 1 script, sans orphelin.
+
 ### Added
 - **Sensors du workflow `core` exécutables en Python** (réf. HOM-283, [ADR-0046](decisions/0046-sensors-executables-python-et-hooks-agnostiques.md), statut *Proposed*).
   Les sept sensors, jusqu'ici déclaratifs, sont exécutés de façon déterministe, comme dans le workflow amont AWS AI-DLC :

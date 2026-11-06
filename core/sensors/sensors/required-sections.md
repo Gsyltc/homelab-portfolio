@@ -1,7 +1,7 @@
 ---
 id: required-sections
 kind: deterministic
-command: "python3 core/scripts/sensor.py fire required-sections"
+command: "python3 core/scripts/sensors/required_sections.py"
 default_severity: advisory
 description: "Vérifie que les rubriques obligatoires de l'ADR, les fichiers/sections mandatory de la DAS et les sections requises du chapitre d'architecture de sécurité sont présents et non vides."
 category: document-shape
