@@ -52,6 +52,19 @@ boundaries:
     checks: [artefacts-presents]
 ```
 
+## Exécution
+
+```
+python3 core/scripts/sensor.py --root <projet> gate <id-frontière> [--attest <artefact>,...]
+```
+
+Le script produit le « Rapport de vérification » ci-dessous.
+
+- **`artefacts-presents`** — vérifié par fichier pour `adr_conception`, `adr_a_jour`, `livrables_detailles` et `diagramme_principal`. Les autres artefacts (ex. `demande_brute_consignee`) vivent sur l'issue : ils restent `⛔` tant que le coordinateur ne les atteste pas avec `--attest`.
+- **`liaison-tracabilite`** — verdict du sensor [`traceability`](sensors/traceability.md).
+- **`absence-orphelin`** — verdict du sensor [`upstream-coverage`](sensors/upstream-coverage.md).
+- **`sensors`** — chaque sensor listé pour la frontière est exécuté en balayage de gate.
+
 ## En cas d'écart (advisory)
 
 - Le coordinateur **ne bloque pas** : il **signale l'écart** dans le « Rapport de vérification » sur l'issue et **propose de revenir corriger** avant de présenter le contenu à l'humain.

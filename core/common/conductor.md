@@ -254,4 +254,4 @@ sequenceDiagram
 - [`protocols/scopes-and-axes.md`](protocols/scopes-and-axes.md) — scopes, axes Depth / vérification, matrice stage × scope.
 - [`stages/`](stages/) — fiches de stage des 5 phases.
 - `core/rules/` — mémoire de règles multi-couches.
-- `core/sensors/` — manifestes des verification gates & sensors.
+- `core/sensors/` — manifestes des verification gates & sensors, scripts Python d'exécution (`scripts/`) et hook d'écriture (`hooks/`).

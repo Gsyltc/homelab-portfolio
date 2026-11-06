@@ -7,9 +7,64 @@ Deux mécanismes complémentaires, **tous deux advisory** :
 - **Verification gates** — contrôle automatique de **traçabilité** aux **frontières de phases**, en amont du gate humain ([`gates.md`](gates.md)).
 - **Sensors** — checks **déterministes** déclenchés soit **à l'écriture d'un artefact** (`fire_on: write`), soit **au gate de phase** (`fire_on: gate`) ([`sensors/`](sensors/)).
 
-## Nature déclarative (non exécutable à ce stade)
+## Nature : manifeste déclaratif + exécutable Python
 
-Ces fichiers **décrivent le contrat** (périmètre de déclenchement, règles de contrôle, sortie attendue) de façon lisible et déterministe. Ce **ne sont pas des scripts exécutables** : ils fixent le fond pour qu'un outillage (script / CI) puisse être ajouté ultérieurement **sans redécider** la sémantique. Le passage à l'exécutable est une évolution future, hors périmètre du stage d'introduction.
+Chaque manifeste fixe le **contrat** (périmètre de déclenchement, règles, sortie). Un **dispatcher Python** l'exécute de façon déterministe ([ADR-0046](../../decisions/0046-sensors-executables-python-et-hooks-agnostiques.md)) :
+
+| Commande | Rôle |
+| --- | --- |
+| `python3 core/scripts/sensor.py list` | Sensors disponibles et état (exécutable / `⛔`) |
+| `python3 core/scripts/sensor.py --root <projet> fire <id> [--path <fichier>...]` | Exécute un sensor. Sans `--path` : balayage de gate sur le périmètre `matches` |
+| `python3 core/scripts/sensor.py --root <projet> gate <frontière> [--attest a,b]` | Rapport de vérification d'une frontière de [`gates.md`](gates.md) |
+| `python3 core/sensors/hooks/post_write.py` | Hook d'écriture : lit le JSON du harnais sur stdin, lance les sensors `fire_on: write` |
+
+Python 3.9+, bibliothèque standard uniquement. Tests : `python3 -m unittest discover -s core/scripts/tests`.
+
+Le code retour est **0** même en écart (advisory). `--strict` renvoie 1 en cas d'écart ou de `⛔` : usage CI uniquement. `--format json` donne une sortie exploitable par un script.
+
+Le dispatcher applique les clauses de sécurité dans le code :
+
+- **SG-1** — manifeste sans `origine` ou `kind` invalide ⇒ `⛔`.
+- **SG-2** — sensor inconnu, périmètre vide, fichier hors périmètre, erreur d'exécution ⇒ `⛔`.
+- **SG-4** — parsing statique seul ; une inclusion distante est signalée, jamais suivie.
+- **SG-5** — chaque rapport porte `manifeste @ commit` ; commit non traçable ⇒ `⛔` (surcharge : `SENSORS_SOURCE_COMMIT`).
+
+### Portée des contrôles
+
+Les contrôles sont des **faits de forme**, pas des jugements :
+
+- `diagram-validity` vérifie la structure (type de diagramme, délimiteurs, parenthésage), sans rendu.
+- `claim-sources` et `traceability` reposent sur des motifs : `ALI-/HOM-/ORIG-<n>`, `BA-<n>`, `FR-/NFR-<n>`, liens Markdown, ADR cités.
+- `traceability` échoue fermé (`⛔`) s'il ne trouve aucun identifiant amont.
+
+### Hooks
+
+Le hook lance, à chaque écriture de fichier, les sensors `fire_on: write` dont `matches` correspond. Il sort **toujours en 0**. `--sensors a,b` le restreint aux sensors déclarés par le stage actif. `--audit-file <fichier>` ajoute le rapport à un `audit.md` append-only (hors Multica, ADR-0038).
+
+Claude Code (`.claude/settings.json`) :
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          { "type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/core/sensors/hooks/post_write.py\" --format claude" }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Kiro CLI (agent, `hooks.postToolUse`) :
+
+```json
+{ "matcher": "fs_write", "command": "python3 core/sensors/hooks/post_write.py" }
+```
+
+Sous Multica, l'agent auteur lance `fire` lui-même au temps 4 du [`stage-protocol`](../common/protocols/stage-protocol.md) et poste le rapport sur l'issue. Le hook n'est qu'un filet supplémentaire.
 
 ## Garde-fou : advisory par décision
 
@@ -60,7 +115,7 @@ Le front-matter est un **descripteur de capacité pur** (ce qu'est le check et c
 ```yaml
 id: <identifiant>            # kebab-case, = stem du fichier (obligatoire)
 kind: deterministic          # seule valeur acceptée aujourd'hui (obligatoire)
-command: <préfixe d'invocation>   # (obligatoire) — voir divergence DIV-command ci-dessous
+command: <commande d'invocation>  # (obligatoire) — python3 core/scripts/sensor.py fire <id>
 default_severity: advisory   # advisory | blocking (obligatoire) — blocking = ADR + contrôle sécurité
 description: <une ligne>     # description humaine (obligatoire)
 category: <label libre>      # (optionnel) — document-shape | provenance | traceability
@@ -69,4 +124,4 @@ matches: <glob>              # (optionnel) filtre de chemin ; au gate, glob abse
 origine: ALI-<n>             # (maison, SG-1) provenance traçable — obligatoire côté gouvernance
 ```
 
-Le corps (après le front-matter) porte le **contrat de vérification** (`checks`), la forme de la **sortie** advisory et les **garde-fous** — lisible, déterministe, non exécutable.
+Le corps (après le front-matter) porte le **contrat de vérification** (`checks`), la forme de la **sortie** advisory et les **garde-fous** — lisible et déterministe ; son exécution est assurée par `core/scripts/sensor.py`.

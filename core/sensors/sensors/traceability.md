@@ -1,7 +1,7 @@
 ---
 id: traceability
 kind: deterministic
-command: "non-exécutable (advisory documentaire)"
+command: "python3 core/scripts/sensor.py fire traceability"
 default_severity: advisory
 description: "Vérifie la traçabilité amont↔aval : chaque besoin d'affaires BA-… est priorisé MoSCoW et relié à ses exigences, chaque exigence est reliée à un ADR / livrable, chaque scénario renvoie à son besoin / exigence, et chaque décision structurante est tracée, sans cible orpheline."
 category: traceability
@@ -14,7 +14,7 @@ origine: ALI-198
 
 Check déterministe déclenché **au gate de phase** (`fire_on: gate`) : valide la **chaîne de traçabilité** entre besoins d'affaires, exigences, scénarios, décisions (ADR) et livrables — identifiants amont stables, cibles déterministes reliées, et **absence d'orphelin dérivé** (une décision structurante sans exigence amont, une exigence sans ADR / livrable, un scénario sans besoin ni exigence). Inclut le maillon **MoSCoW** : chaque besoin d'affaires `BA-…` est priorisé (`Must` / `Should` / `Could` / `Won't`) et relié à au moins une exigence, et chaque scénario / cas d'utilisation d'une spec renvoie à son besoin et à son exigence. **Advisory** (`default_severity: advisory`).
 
-Adaptation doc-first du sensor amont `traceability` (qui valide un `traceability.json`) : ce dépôt n'a pas de fichier de matrice compilé (pas de moteur exécutable — exécution via Multica). La traçabilité est portée par les **références croisées** entre `documentation/`, `decisions/` et `livrables/` (issue d'origine, ADR liés, exigences), et recoupe le contrôle `liaison-tracabilite` du verification gate (`gates.md`). Complémentaire de `upstream-coverage` : là où ce dernier vérifie qu'un livrable **cite** son amont, `traceability` vérifie la **cohérence de la chaîne complète** exigence → décision → livrable.
+Adaptation doc-first du sensor amont `traceability` (qui valide un `traceability.json`) : ce dépôt n'a pas de fichier de matrice compilé (le contrôle est exécuté par `core/scripts/sensor.py`). La traçabilité est portée par les **références croisées** entre `documentation/`, `decisions/` et `livrables/` (issue d'origine, ADR liés, exigences), et recoupe le contrôle `liaison-tracabilite` du verification gate (`gates.md`). Complémentaire de `upstream-coverage` : là où ce dernier vérifie qu'un livrable **cite** son amont, `traceability` vérifie la **cohérence de la chaîne complète** exigence → décision → livrable.
 
 > **Maillon MoSCoW (spec ↔ besoin d'affaires ↔ exigence).** Lorsqu'une méthodologie OpenSpec est active, la
 > **matrice de traçabilité MoSCoW** du `proposal.md` (skill `openspec-proposal-creation`, Step 6b) est le support

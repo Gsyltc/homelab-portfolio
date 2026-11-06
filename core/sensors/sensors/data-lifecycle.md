@@ -1,7 +1,7 @@
 ---
 id: data-lifecycle
 kind: deterministic
-command: "non-exécutable (advisory documentaire)"
+command: "python3 core/scripts/sensor.py fire data-lifecycle"
 default_severity: advisory
 description: "Vérifie que le document Cycle de vie des données (10-cycle_vie_donnees.md) est présent et correctement renseigné (cycle de vie, gouvernance, classification) en fonction des données du projet."
 category: document-shape

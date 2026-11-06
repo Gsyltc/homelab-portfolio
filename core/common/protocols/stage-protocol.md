@@ -78,7 +78,7 @@ flowchart LR
 
 > ⛔ **Les sensors ne se contournent pas.** Une vérification équivalente faite en prose, un commentaire ad hoc, ou une affirmation « conforme » sans rapport de sensor **ne satisfont pas** le temps 4. L'absence de rapport de sensor pour un sensor déclaré est un **écart à signaler** (SG-2 : indisponible ≠ conforme, silence = écart).
 
-Pour chaque artefact produit ou modifié, l'agent **auteur** exécute, à l'écriture, **tous les sensors déclarés dans le champ `sensors:` de la fiche de stage** et poste sur l'issue un **rapport de sensor** structuré, par sensor :
+Pour chaque artefact produit ou modifié, l'agent **auteur** exécute, à l'écriture, **tous les sensors déclarés dans le champ `sensors:` de la fiche de stage** avec `python3 core/scripts/sensor.py --root <projet> fire <id> --path <artefact>` (les sensors `fire_on: gate` : sans `--path`, au gate) et poste sur l'issue un **rapport de sensor** structuré, par sensor :
 
 ```
 **Sensor `<id-du-sensor>`** (`fire_on: write` | `fire_on: gate`) — <artefact concerné>
@@ -89,14 +89,14 @@ Verdict : ✅ conforme | ⚠️ écart mineur | ⛔ indisponible
 Règles non contournables :
 
 - **Chaque sensor déclaré fait l'objet d'un rapport distinct** — aucun regroupement ni omission.
-- **`⛔ indisponible`** s'applique lorsque le sensor n'est pas encore exécutable (nature déclarative du mécanisme — voir `sensors/README.md`) : l'agent indique le motif et poste le rapport avec ce verdict. Un sensor non exécuté est toujours un rapport `⛔`, **jamais un silence**.
+- **`⛔ indisponible`** s'applique lorsque le script ne peut pas s'exécuter (Python absent, erreur, périmètre vide — voir `sensors/README.md`) : l'agent reprend le motif donné par le script et poste le rapport avec ce verdict. Un sensor non exécuté est toujours un rapport `⛔`, **jamais un silence** ni une vérification en prose. Le verdict affiché est celui du script, jamais réinterprété.
 - **`⚠️ écart`** : l'agent décrit l'écart et continue (advisory) ; il **ne devance pas** la décision humaine mais la documente pour la validation humaine granulaire (temps 6).
 - Le rapport est **advisory** — n'autorise aucun raccourci, ne vaut pas validation (SG-1..6).
 - Les sensors `fire_on: write` (ex. `diagram-validity`, `detailed-arch-refs`) sont invoqués **à chaque écriture** de l'artefact concerné, pas seulement en fin de stage.
 
 ### 5. Verification gate à la frontière de phase
 
-> ⛔ **Le rapport de gate ne se contourne pas.** Le coordinateur **poste le rapport de vérification** ([`core/sensors/gates.md`](../../sensors/gates.md)) *avant* la validation humaine, même si les sensors sont encore déclaratifs. L'absence de rapport est un écart de piste d'audit.
+> ⛔ **Le rapport de gate ne se contourne pas.** Le coordinateur **poste le rapport de vérification** ([`core/sensors/gates.md`](../../sensors/gates.md)) *avant* la validation humaine, avec `python3 core/scripts/sensor.py --root <projet> gate <id-frontière>`. L'absence de rapport est un écart de piste d'audit.
 
 Le coordinateur exécute le gate de traçabilité et poste le **« Rapport de vérification »** structuré pour la frontière franchie :
 

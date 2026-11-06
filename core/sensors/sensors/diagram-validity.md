@@ -1,7 +1,7 @@
 ---
 id: diagram-validity
 kind: deterministic
-command: "non-exécutable (advisory documentaire)"
+command: "python3 core/scripts/sensor.py fire diagram-validity"
 default_severity: advisory
 description: "Vérifie que la syntaxe d'un diagramme généré en code (Mermaid / PlantUML / Structurizr) parse sans erreur."
 category: document-shape
