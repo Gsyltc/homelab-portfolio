@@ -33,23 +33,47 @@ Découper le travail en livrables et désigner l'agent responsable de chacun.
 
 ### Step 2 — Découper et désigner l'agent responsable
 
-Le coordinateur **identifie la nature de chaque travail** (architecture solution / logicielle, infrastructure, sécurité, données, AWS, Azure, etc.) et effectue **toutes les délégations adéquates** — une par spécialiste concerné —, y compris lorsque les travaux proviennent d'une passation amont (p. ex. descriptions de passation remontées par l'OpenSpec Expert après approbation d'une spécification). Un même lot de travaux peut relever de **plusieurs natures** et donc de **plusieurs délégations** parallèles.
+Le coordinateur **identifie la nature de chaque travail** (architecture solution / logicielle, infrastructure, sécurité, données, AWS, Azure…) et effectue **une délégation par spécialiste concerné**.
 
-- Documentation d'architecture / décisions structurantes / Patrons d'architecture / diagrammes → **Architecte de solution**.
-- Analyse et cycle de vie des données (modélisation, gouvernance, classification, `10-cycle_vie_donnees.md`) → **Architecte de données** (délégué par l'Architecte de solution, qui valide le livrable — critère : sensor `data-lifecycle`).
-- Choix AWS, diagrammes AWS, coûts → **Architecte AWS** (si AWS requis).
-- Choix Azure, diagrammes Azure, coûts **et livrables d'infrastructure de déploiement Azure** (IaC, plans de déploiement / rollback lorsque le projet est déployé sur Azure) → **Architecte Azure** (si Azure requis).
-- Administration / infrastructure **Windows** (postes, VM, migration Win10→Win11, Intune, Autopilot, SCCM) → **Infrastructure Windows** (si concerné). Périmètre strictement Windows ; le cloud Azure relève de l'Architecte Azure.
-- Sécurité (surface de sécurité, menaces, conformité : OWASP, STRIDE, ISO 27001, NIST, etc.) → **Architecte Cybersécurité** (si une surface de sécurité est produite ou modifiée). Le livrable attendu couvre **l'analyse de sécurité ET la mise à jour de la documentation d'architecture de sécurité** (`documentation/architecture-securite/`), pas la seule analyse — même règle qu'à l'émergence en cours de production ([`../construction/detailed-deliverables.md`](../construction/detailed-deliverables.md), Step 1.1).
-- Cycle spec-driven → **OpenSpec Expert** (uniquement si OpenSpec activé).
+- Un même lot peut relever de plusieurs natures, donc de plusieurs délégations parallèles.
+- Cela vaut aussi pour les travaux issus d'une passation amont (ex. passation remontée par l'OpenSpec Expert après approbation d'une spécification).
 
-> **Pré-requis — verdict de méthodologie.** Toute condition « **si OpenSpec activé** » de ce stage (Step 3.0 — phase OpenSpec préalable à l'ADR ; Steps 3.3 et 4 — sous-issue du cycle spec-driven ; délégation à l'OpenSpec Expert) s'appuie sur le **verdict de méthodologie** analysé et tracé au cadrage ([`intake-framing`](intake-framing.md), Step 3 ; règle « Activation conditionnelle d'une méthodologie » de [`conductor.md`](../../conductor.md)). Le coordinateur **lit ce verdict** avant de découper ; s'il est **absent ou ambigu**, il ne devine pas et ne traite pas OpenSpec comme inactif par défaut : **halt-and-ask** (faire statuer l'humain, puis l'inscrire dans la description du projet). Le même principe vaut pour toute autre méthodologie déclarée.
+Répartition :
+
+- **Architecte de solution** : documentation d'architecture, décisions structurantes, patrons d'architecture, diagrammes.
+- **Architecte de données** : modélisation, gouvernance, classification, cycle de vie (`10-cycle_vie_donnees.md`).
+  - Délégué par l'Architecte de solution, qui valide le livrable (critère : sensor `data-lifecycle`).
+- **Architecte AWS** (si AWS requis) : choix, diagrammes, coûts.
+- **Architecte Azure** (si Azure requis) : choix, diagrammes, coûts, livrables d'infrastructure de déploiement (IaC, plans de déploiement / rollback).
+- **Infrastructure Windows** (si concerné) : postes, VM, migration Win10→Win11, Intune, Autopilot, SCCM.
+  - Périmètre strictement Windows ; le cloud Azure relève de l'Architecte Azure.
+- **Architecte Cybersécurité** (si une surface de sécurité est produite ou modifiée) : menaces, conformité (OWASP, STRIDE, ISO 27001, NIST…).
+  - Le livrable couvre l'**analyse de sécurité ET la mise à jour de la documentation d'architecture de sécurité** (`documentation/architecture-securite/`).
+  - Même règle qu'à l'émergence en cours de production ([`detailed-deliverables`](../construction/detailed-deliverables.md), Step 1.1).
+- **OpenSpec Expert** (uniquement si OpenSpec activé) : cycle spec-driven.
+
+> **Pré-requis — verdict de méthodologie.**
+> - Toute condition « si OpenSpec activé » de ce stage (Step 3.0, Steps 3.3 et 4, délégation à l'OpenSpec Expert) s'appuie sur le **verdict de méthodologie** tracé au cadrage ([`intake-framing`](intake-framing.md), Step 3 ; règle « Activation conditionnelle d'une méthodologie » de [`conductor`](../../conductor.md)).
+> - Le coordinateur **lit ce verdict** avant de découper.
+> - Verdict absent ou ambigu ⇒ **halt-and-ask** : faire statuer l'humain, puis l'inscrire dans la description du projet. Ne jamais traiter OpenSpec comme inactif par défaut.
+> - Même principe pour toute autre méthodologie déclarée.
 
 ### Step 3 — Flux impact structurant (ADR d'abord, livrables en sous-issues)
 
-Dès que le **verdict d'impact structurant** établi au cadrage ([`intake-framing`](intake-framing.md), Step 5) vaut **`Oui`**, l'ordre est **inversé par rapport au reste du stage** : **rien n'est créé avant l'ADR**. L'**issue ADR est créée en premier** et devient l'**issue parente** de la décision ; les livrables n'existent qu'**après acceptation humaine**, en **sous-issues (enfants)** de cette ADR. S'il y a plusieurs décisions structurantes, appliquer ce flux **une fois par ADR**. En cas de doute sur le verdict, halt-and-ask.
+Verdict d'impact structurant = **`Oui`** ([`intake-framing`](intake-framing.md), Step 5) ⇒ l'ordre est **inversé** : **rien n'est créé avant l'ADR**.
 
-> **Phase OpenSpec préalable — conditionnelle et toujours en amont de l'ADR.** Lorsque la méthodologie **OpenSpec est activée** (verdict de méthodologie tracé au cadrage — [`intake-framing`](intake-framing.md), Step 3 ; règle « Activation conditionnelle d'une méthodologie » de [`conductor.md`](../../conductor.md)), une **phase OpenSpec précède la création de l'issue ADR** (Step 3.0). Cette analyse est **réalisée par l'OpenSpec Expert** dans le cadre de son cycle spec-driven — **il n'y a aucune phase d'analyse préalable distincte** menée par le coordinateur ou un architecte : **l'analyse EST le travail de l'OpenSpec Expert**. Elle est close par une **gate humaine légère** (`human_gate: light`) de **confirmation d'intention** — l'humain confirme que l'intention a bien été captée — **avant** tout retour au coordinateur. **Seulement après** cette validation, l'OpenSpec Expert retourne au coordinateur, qui **lance alors le flux ADR normal** (création de l'issue ADR, Step 3.1). **OpenSpec non activé** : le flux ADR démarre **directement** à la création de l'issue ADR (Step 3.1), sans étape OpenSpec ni gate légère d'intention. Cette phase OpenSpec **ne remplace jamais** l'ADR (obligatoire et non contournable) ni sa gate humaine **granulaire** (Step 3.4) : la gate légère porte sur l'**intention OpenSpec**, la gate granulaire sur la **décision ADR** — les deux coexistent.
+- L'**issue ADR** est créée en premier ; elle devient l'**issue parente** de la décision.
+- Les livrables n'existent qu'**après acceptation humaine**, en **sous-issues (enfants)** de l'ADR.
+- Plusieurs décisions structurantes ⇒ ce flux s'applique **une fois par ADR**.
+- Doute sur le verdict ⇒ halt-and-ask.
+
+> **Phase OpenSpec préalable — conditionnelle, toujours en amont de l'ADR.**
+> - OpenSpec activé ⇒ une phase OpenSpec précède la création de l'issue ADR (Step 3.0).
+> - L'analyse est réalisée par l'**OpenSpec Expert** dans son cycle spec-driven : aucune analyse préalable distincte n'est menée par le coordinateur ou un architecte.
+> - Elle est close par une **gate humaine légère** (`human_gate: light`) de confirmation d'intention, **avant** tout retour au coordinateur.
+> - Ensuite seulement, le coordinateur lance le flux ADR (Step 3.1).
+> - OpenSpec non activé ⇒ le flux démarre directement à la création de l'issue ADR, sans gate légère.
+> - La phase OpenSpec ne remplace jamais l'ADR ni sa gate **granulaire** (Step 3.4) : la gate légère porte sur l'intention OpenSpec, la gate granulaire sur la décision ADR.
 
 ```mermaid
 flowchart TD
@@ -69,78 +93,162 @@ flowchart TD
     Issues --> Run["Sous-issues : cycle de livrable a 3 stages<br/>(statut todo → in_progress → done)"]
     Run --> Check{"Toutes les sous-issues done ?"}
     Check -->|Non| Run
-    Check -->|Oui| DH["delivery-handoff<br/>gate « commit + PR : oui/non ? » · mise à disposition (Nina)<br/>notification de fin de réalisation (Alfred)"]
+    Check -->|Oui| DH["delivery-handoff<br/>gate « commit + PR : oui/non ? » · mise à disposition (Experte d'archivage)<br/>notification de fin de réalisation (Agent de notifications)"]
     DH --> Done["ADR → ADR Acceptée (adr_accept_e), puis issue d'origine → done (dérivé)"]
 ```
 
-#### Step 3.0 — Phase OpenSpec préalable (conditionnelle : **uniquement si OpenSpec activé**)
 
-**Si OpenSpec n'est pas activé**, ce step est **sauté** : passer directement au Step 3.1 (création de l'issue ADR). **Si OpenSpec est activé** (verdict de méthodologie tracé au cadrage ; en cas de verdict absent ou ambigu → **halt-and-ask**, voir le pré-requis du Step 2), le coordinateur crée **d'abord** une **sous-issue OpenSpec** déléguée à l'**OpenSpec Expert** (`Fabien - OpenSpec Expert`), taguée **`OpenSpec`** (`multica issue label add`, id résolu via `multica label list`, label créé via `multica label create` s'il n'existe pas ; contexte Multica uniquement), **avant** de créer l'issue ADR.
+#### Step 3.0 — Phase OpenSpec préalable (conditionnelle : uniquement si OpenSpec activé)
 
-- **L'analyse EST le travail de l'OpenSpec Expert.** Il n'y a **aucune phase d'analyse préalable distincte** menée par le coordinateur ou un architecte : l'OpenSpec Expert **réalise l'analyse** dans son cycle spec-driven (proposal / design / deltas EARS). Le coordinateur **ne produit pas** cette analyse.
-- **Gate humaine légère (`human_gate: light`) — AVANT tout retour au coordinateur.** À la fin de l'analyse, l'humain **confirme que l'intention a bien été captée** par l'analyse OpenSpec (la proposition / le design reflètent fidèlement le besoin exprimé). C'est une gate **légère** (confirmation d'intention : Keep / Modify / Redo), cohérente avec le gate léger d'Ideation ([`../ideation/intent-scope-approval.md`](../ideation/intent-scope-approval.md)) ; elle **ne remplace jamais** la gate humaine **granulaire** de l'ADR (Step 3.4), qui porte sur la décision d'architecture. Tant que l'humain **n'a pas confirmé**, l'OpenSpec Expert **ne retourne pas** au coordinateur ; en cas d'**écart signalé**, l'analyse est **ajustée** puis **re-soumise à cette même gate légère**.
-- **Retour au coordinateur — seulement après validation légère.** Une fois l'intention confirmée, l'OpenSpec Expert **retourne au coordinateur** (A2A, `in_review` + lien de mention actif), selon la **checklist de sortie de stage** ([`../../protocols/stage-protocol.md`](../../protocols/stage-protocol.md)). Le coordinateur **lance alors** le flux ADR (Step 3.1 et suivants).
+OpenSpec non activé ⇒ step **sauté** : passer au Step 3.1.
 
-> **Ordre invariant : OpenSpec (le cas échéant) → ADR, jamais l'inverse.** La phase OpenSpec se place **toujours en amont** de la création de l'ADR ; OpenSpec n'arrive **jamais après** l'ADR. L'ADR **reste obligatoire et non contournable** : la phase OpenSpec ne la remplace pas, elle la **précède** quand la méthodologie est activée.
+OpenSpec activé (verdict tracé au cadrage ; absent ou ambigu ⇒ halt-and-ask, voir le pré-requis du Step 2) ⇒ le coordinateur crée **d'abord**, avant l'issue ADR, une **sous-issue OpenSpec** déléguée à l'OpenSpec Expert et taguée `OpenSpec` (voir « Mission déléguée », tag de méthodologie).
+
+- **L'analyse est le travail de l'OpenSpec Expert** :
+  - Il la réalise dans son cycle spec-driven (proposal / design / deltas EARS).
+  - Le coordinateur ne la produit pas.
+- **Gate humaine légère (`human_gate: light`) — avant tout retour au coordinateur** :
+  - L'humain confirme que l'analyse reflète fidèlement le besoin exprimé (Keep / Modify / Redo), comme au gate léger d'Ideation ([`intent-scope-approval`](../ideation/intent-scope-approval.md)).
+  - Elle ne remplace jamais la gate granulaire de l'ADR (Step 3.4).
+  - Tant que l'humain n'a pas confirmé, l'OpenSpec Expert ne retourne pas au coordinateur.
+  - Écart signalé ⇒ analyse ajustée, puis re-soumise à la même gate.
+- **Retour au coordinateur — seulement après validation légère** :
+  - Retour A2A (`in_review` + lien de mention actif) selon la « Checklist de sortie de stage » ([`stage-protocol`](../../protocols/stage-protocol.md)).
+  - Le coordinateur lance alors le flux ADR (Step 3.1).
+
+> **Ordre invariant : OpenSpec (le cas échéant) → ADR, jamais l'inverse.** L'ADR reste obligatoire et non contournable ; la phase OpenSpec la précède, ne la remplace pas.
 
 #### Step 3.1 — Créer l'issue ADR (parente), déléguée à l'Architecte de solution
 
-Le coordinateur crée l'**issue ADR**, déléguée à l'**Architecte de solution**, qui la conduit au stage [`design-and-decisions`](design-and-decisions.md) (production, revues cohérence puis sécurité, `ADR Proposée`, décision humaine). C'est un **garde-fou non contournable** (voir [`conductor.md`](../../conductor.md), « Garde-fous ») : un impact structurant ne peut jamais être traité sans son issue ADR.
+Le coordinateur crée l'issue ADR, déléguée à l'**Architecte de solution**. Celui-ci la conduit au stage [`design-and-decisions`](design-and-decisions.md) (production, revues cohérence puis sécurité, `ADR Proposée`, décision humaine).
 
-> **L'issue d'origine est bloquée dès la création de l'issue ADR.** L'issue ADR étant une **sous-issue de l'issue d'origine** (celle que l'humain a ajoutée et qui a déclenché le flux), le coordinateur passe l'**issue d'origine en `blocked`** (`multica issue status <id-origine> blocked`) dès qu'il crée et lance l'issue ADR. L'issue d'origine **ne reprend jamais** tant que le flux ADR n'est pas terminé : son déblocage est **dérivé** (voir Step 3.2 pour le refus et Step 3.4 pour la clôture). C'est le garde-fou « Issue parente bloquée tant que ses sous-issues ne sont pas terminées » ([`conductor.md`](../../conductor.md), « Garde-fous »).
+Garde-fou non contournable ([`conductor`](../../conductor.md), « Garde-fous ») : un impact structurant ne peut jamais être traité sans issue ADR.
 
-> **Tout le cycle de revue se déroule sur l'issue ADR**, jamais sur l'issue d'origine (conduite détaillée : [`design-and-decisions`](design-and-decisions.md), « Flux ADR » ; [`../../protocols/reviewer.md`](../../protocols/reviewer.md)).
+> **L'issue d'origine est bloquée dès la création de l'issue ADR.**
+> - L'issue ADR est une sous-issue de l'issue d'origine (celle que l'humain a ajoutée).
+> - Dès qu'il crée et lance l'issue ADR, le coordinateur passe l'**issue d'origine en `blocked`**.
+> - Son déblocage est **dérivé** : refus (Step 3.2) ou clôture (Step 3.4).
+> - Garde-fou « Issue parente bloquée tant que ses sous-issues ne sont pas terminées » ([`conductor`](../../conductor.md)).
+
+> **Tout le cycle de revue se déroule sur l'issue ADR**, jamais sur l'issue d'origine ([`design-and-decisions`](design-and-decisions.md), « Flux ADR » ; [`reviewer`](../../protocols/reviewer.md)).
 
 #### Step 3.2 — Gate humaine : accepter ou refuser
 
-- **ADR acceptée (Keep)** ⇒ le coordinateur crée les **sous-issues de livrable** (Step 3.3), puis les lance.
-- **ADR refusée** ⇒ l'issue ADR passe à **`cancelled`** ; aucun livrable n'est créé, le flux se clôt. **L'issue d'origine qui a déclenché le flux est annulée en cascade** : le coordinateur la passe également à **`cancelled`** (`multica issue status <id-origine> cancelled`) — un refus d'ADR ne laisse jamais l'issue d'origine ouverte ou bloquée en suspens. **Si OpenSpec était activé** (une phase OpenSpec préalable a eu lieu au Step 3.0), le coordinateur sollicite l'**OpenSpec Expert** pour **archiver les spécifications** produites par cette phase : le change OpenSpec est **déplacé vers `openspec/changes/archive/AAAA-MM-JJ-<nom>/`** afin de ne laisser aucun change orphelin et de conserver la trace du besoin exploré. **C'est un archivage de change abandonné, SANS fusion des deltas dans les specs vivantes** (`openspec/specs/<capability>/spec.md`) : la décision ayant été refusée, rien n'est déployé, donc les deltas ne sont **jamais** fusionnés — ce qui le distingue de l'archivage OpenSpec post-déploiement ([`../operation/deployment-under-validation.md`](../operation/deployment-under-validation.md), Step 5), lequel, lui, fusionne les deltas après déploiement effectif. Si l'humain reformule la décision, c'est une **nouvelle** issue d'origine (et une nouvelle issue ADR) qui est relancée.
+- **ADR acceptée (Keep)** ⇒ le coordinateur crée puis lance les sous-issues de livrable (Step 3.3).
+- **ADR refusée** :
+  - L'issue ADR passe à `cancelled` ; aucun livrable n'est créé.
+  - L'issue d'origine est **annulée en cascade** (`cancelled`) : un refus ne la laisse jamais ouverte ni bloquée.
+  - Si OpenSpec était activé (phase du Step 3.0) : le coordinateur sollicite l'OpenSpec Expert pour **archiver les spécifications** de cette phase.
+    - Le change est déplacé vers `openspec/changes/archive/AAAA-MM-JJ-<nom>/`.
+    - **Archivage de change abandonné, SANS fusion des deltas** dans les specs vivantes (`openspec/specs/<capability>/spec.md`) : rien n'est déployé.
+    - Différence avec l'archivage post-déploiement, qui fusionne les deltas ([`deployment-under-validation`](../operation/deployment-under-validation.md), Step 5).
+  - Si l'humain reformule la décision : **nouvelle** issue d'origine et nouvelle issue ADR.
 
-#### Step 3.3 — Sous-issues de livrable, créées **seulement après acceptation** (enfants de l'ADR)
+#### Step 3.3 — Sous-issues de livrable, créées seulement après acceptation (enfants de l'ADR)
 
-Pour chaque délégation, le coordinateur crée une **sous-issue** rattachée à l'ADR (`--parent <id-ADR>`), en **`backlog`** avec son **agent délégataire assigné** (`--assignee-id`, UUID résolu, jamais deviné), puis la lance (`multica issue status <id> todo`, qui démarre l'agent) avec mention A2A. **Une fois toutes les sous-issues de livrable créées et lancées, le coordinateur passe l'issue ADR (parente) en `blocked`** (`multica issue status <id-ADR> blocked`) : elle le reste tant que ses sous-issues ne sont pas toutes terminées (garde-fou « Issue parente bloquée », voir Step 3.4 pour le déblocage dérivé).
+Pour chaque délégation, le coordinateur :
 
-> **Directives complètes, dérivées de l'ADR acceptée.** L'agent délégataire démarre « à froid » : il **ne voit pas** le fil de l'ADR ni le contexte du coordinateur. Chaque sous-issue doit donc être **autosuffisante** et **reporter explicitement les décisions de l'ADR acceptée** qui conditionnent le livrable — sans quoi l'agent ne peut pas exécuter correctement. Le coordinateur **puise ces directives dans l'ADR tranchée** (`decisions/<NNNN>-<titre>.md`) et les inscrit dans la description de la sous-issue : voir [« Mission déléguée — contenu obligatoire »](#mission-déléguée--contenu-obligatoire) ci-dessous. En cas d'information manquante dans l'ADR pour cadrer un livrable, halt-and-ask plutôt que deviner.
+- crée une **sous-issue** rattachée à l'ADR, en `backlog`, avec son **agent délégataire assigné** (identifiant résolu, jamais deviné) ;
+- la **lance** (`todo`, ce qui démarre l'agent) avec mention A2A ;
+- une fois **toutes** les sous-issues créées et lancées, passe l'**issue ADR en `blocked`** : elle le reste tant qu'elles ne sont pas toutes terminées (déblocage dérivé : Step 3.4).
 
-Voir aussi la [règle « une sous-issue par agent »](#une-issue-par-spécialiste--architecte-hors-revues--règle-de-délégation) ci-dessous.
+Règle « une sous-issue par agent » : voir plus bas.
 
-> **Chaque sous-issue de livrable suit le cycle de livrable à 3 stages.** Une fois lancée, toute sous-issue de livrable (post-acceptation ADR) parcourt le **cycle standard d'un livrable de spécialiste** — Stage 1 Production (expert de méthodologie optionnel puis spécialiste) → Stage 2 Review (revue de cohérence puis revue de sécurité, chacune transitant par le spécialiste) → Stage 3 Finalisation (compte rendu puis clôture de l'issue) — défini comme **source unique** dans [`../../protocols/stage-protocol.md`](../../protocols/stage-protocol.md), « Cycle de livrable d'un spécialiste ». Le `todo → in_progress → done` de l'issue n'est que le **reflet de statut** de ce cycle, pas un raccourci qui en dispenserait.
+> **Directives complètes, dérivées de l'ADR acceptée.**
+> - L'agent délégataire démarre « à froid » : il ne voit ni le fil de l'ADR ni le contexte du coordinateur.
+> - Chaque sous-issue est donc **autosuffisante** et reporte les décisions de l'ADR qui conditionnent le livrable (`decisions/<NNNN>-<titre>.md`).
+> - Contenu requis : [« Mission déléguée — contenu obligatoire »](#mission-déléguée--contenu-obligatoire).
+> - Information manquante dans l'ADR ⇒ halt-and-ask, jamais deviner.
 
-**Uniquement si OpenSpec activé** : ajouter de même une sous-issue dédiée au cycle spec-driven OpenSpec (création / modification / suppression de spécifications), déléguée à l'OpenSpec Expert.
+> **Cycle de livrable à 3 stages.**
+> - Toute sous-issue lancée suit le cycle d'un livrable de spécialiste : Production (expert de méthodologie optionnel, puis spécialiste) → Review (cohérence puis sécurité, via le spécialiste) → Finalisation (compte rendu, clôture).
+> - Source unique : [`stage-protocol`](../../protocols/stage-protocol.md), « Cycle de livrable d'un spécialiste ».
+> - `todo → in_progress → done` n'est que le reflet de statut de ce cycle, jamais un raccourci.
+
+**Uniquement si OpenSpec activé** : ajouter une sous-issue dédiée au cycle spec-driven (création / modification / suppression de spécifications), déléguée à l'OpenSpec Expert.
 
 #### Step 3.4 — Mise à disposition puis clôture de l'ADR quand tous les livrables sont terminés
 
-L'issue ADR reste **`blocked` comme parente** tant que ses sous-issues tournent. Dès que **toutes** ses sous-issues sont `done`, les livrables sont **réalisés, revus et validés** : le coordinateur **ne clôt pas directement l'ADR**, il **achemine d'abord les livrables validés vers le stage [`../construction/delivery-handoff.md`](../construction/delivery-handoff.md)** (mise à disposition de fin de cycle). Ce stage, **source unique** de la mise à disposition, porte le **gate humain systématique « commit + PR : oui ou non ? »** (Step 1 — gate séparé de toute validation granulaire antérieure), la **mise à disposition** par l'**Experte d'archivage** (commit + PR si accord explicite, sinon fallback archivage par dossier — Steps 2-3) et la **notification de fin de réalisation** via l'**Agent de notifications** (Step 4). Sa logique n'est **pas redite ici** : seul le pont est établi.
+L'issue ADR reste `blocked` (parente) tant que ses sous-issues tournent.
 
-**Ce n'est qu'une fois `delivery-handoff` effectué** (livrables mis à disposition et notification envoyée) que le coordinateur passe l'**issue ADR à `ADR Acceptée`** (`multica issue status <id-ADR> adr_accept_e`) : clôture **dérivée** de l'état des enfants et de la mise à disposition, **sans acte humain supplémentaire au-delà du gate PR de `delivery-handoff`**. Le statut `ADR Acceptée` (`adr_accept_e`) relève de la catégorie `done` — il clôt l'issue ADR tout en marquant explicitement qu'il s'agit d'une ADR acceptée et menée à terme. L'issue ADR étant elle-même une sous-issue de l'**issue d'origine** (restée `blocked` depuis Step 3.1), sa clôture **débloque l'issue d'origine en cascade** : le coordinateur passe l'**issue d'origine à `done`** (`multica issue status <id-origine> done`) — le flux ne se poursuit sur l'issue d'origine qu'**après** la fin complète du flux ADR et de ses livrables, jamais avant.
+Toutes les sous-issues `done` ⇒ livrables réalisés, revus et validés. Le coordinateur **ne clôt pas directement l'ADR** : il les achemine d'abord vers [`delivery-handoff`](../construction/delivery-handoff.md), source unique de la mise à disposition :
+
+- gate humain systématique « commit + PR : oui ou non ? » (Step 1) ;
+- mise à disposition par l'Experte d'archivage (commit + PR si accord explicite, sinon archivage par dossier — Steps 2-3) ;
+- notification de fin de réalisation par l'Agent de notifications (Step 4).
+
+Une fois `delivery-handoff` effectué (mise à disposition faite, notification envoyée) :
+
+- Le coordinateur passe l'issue ADR à **`ADR Acceptée`** (`adr_accept_e`, catégorie `done`).
+  - Clôture dérivée, sans acte humain au-delà du gate PR.
+  - Le statut marque une ADR acceptée et menée à terme.
+- La clôture **débloque l'issue d'origine** (restée `blocked` depuis le Step 3.1) : le coordinateur la passe à `done`.
+  - Le flux ne reprend sur l'issue d'origine qu'après la fin complète du flux ADR et de ses livrables.
 
 ### Step 4 — Sans décision structurante (`verdict Non`) : livrables directs en backlog
 
-Pas d'ADR : le coordinateur crée directement les **issues de livrable** (une par spécialiste / architecte), en **`backlog`** avec agent assigné (`--assignee-id`, UUID résolu), **sans parent ADR**, puis les promeut selon le séquencement du stage. **Uniquement si OpenSpec activé**, ajouter de même l'issue du cycle spec-driven OpenSpec. Comme sur le flux ADR, **chaque issue de livrable suit le cycle de livrable à 3 stages** (Production → Review cohérence+sécurité → Finalisation — [`../../protocols/stage-protocol.md`](../../protocols/stage-protocol.md), « Cycle de livrable d'un spécialiste »).
+Pas d'ADR. Le coordinateur :
 
-> **Issue d'origine bloquée tant que ses livrables tournent.** Lorsque ces issues de livrable sont créées comme **sous-issues de l'issue d'origine** (`--parent <id-origine>`), le coordinateur passe l'**issue d'origine en `blocked`** une fois les livrables lancés et ne la débloque (`done`) que lorsque **tous** sont `done` — même garde-fou que sur le flux ADR (« Issue parente bloquée tant que ses sous-issues ne sont pas terminées », [`conductor.md`](../../conductor.md), « Garde-fous »). Déblocage **dérivé** de l'état des enfants, sans acte humain supplémentaire.
+- crée directement les **issues de livrable** (une par spécialiste / architecte), en `backlog`, agent assigné (identifiant résolu), **sans parent ADR** ;
+- les promeut selon le séquencement du stage ;
+- ajoute, uniquement si OpenSpec est activé, l'issue du cycle spec-driven.
 
-#### <a id="une-issue-par-spécialiste--architecte-hors-revues--règle-de-délégation"></a>Une issue par spécialiste / architecte (hors revues) — règle de délégation
+Comme sur le flux ADR, chaque issue de livrable suit le **cycle à 3 stages** ([`stage-protocol`](../../protocols/stage-protocol.md), « Cycle de livrable d'un spécialiste »).
 
-Chaque **délégation de livrable** donne lieu à **une issue dédiée par agent** (Architecte de solution, Architecte de données, Architecte AWS, Architecte Azure, Infrastructure Windows, OpenSpec Expert) — **jamais** une issue fourre-tout partagée. Chaque issue porte un périmètre, des critères d'acceptation et l'agent de retour (le coordinateur, en texte clair) propres à l'agent délégataire.
+> **Issue d'origine bloquée tant que ses livrables tournent.**
+> - Livrables créés comme sous-issues de l'issue d'origine ⇒ elle passe en `blocked` une fois les livrables lancés.
+> - Elle repasse à `done` seulement quand **tous** sont `done` (déblocage dérivé, sans acte humain).
+> - Même garde-fou que sur le flux ADR ([`conductor`](../../conductor.md), « Garde-fous »).
 
-**Les revues ne sont pas des issues.** Les **revues** (Reviewer de cohérence, Reviewer de sécurité) sont des fonctions *review-only* **sollicitées en place par le coordinateur** sur l'issue qui porte l'artefact revu — l'**issue ADR dédiée** sur impact structurant (jamais l'issue d'origine), l'issue du livrable sinon (voir [`protocols/reviewer.md`](../../protocols/reviewer.md)) ; elles postent leurs conclusions dans cette issue, **sans issue dédiée**. La règle « une issue par agent » ne vaut donc **que** pour les délégations de production de livrable.
+#### Une issue par spécialiste / architecte (hors revues) — règle de délégation
 
-> **Parent d'une sous-issue de livrable = l'ADR (ou l'issue d'origine), jamais une autre sous-issue de livrable.** Toute sous-issue de livrable se rattache à l'**issue parente du découpage** : l'**issue ADR** sur impact structurant (`--parent <id-ADR>`), sinon l'**issue d'origine** (`--parent <id-origine>`). Une sous-issue de livrable n'est **jamais** parente d'une autre sous-issue de livrable — elles sont **sœurs**, au même niveau. En particulier, lorsque les travaux d'architecture proviennent de la **passation remontée par l'OpenSpec Expert** après approbation d'une spécification ([`../construction/consolidation-handoff.md`](../construction/consolidation-handoff.md), Steps 4-5), les sous-issues correspondantes se rattachent à l'**ADR / issue d'origine**, **jamais à l'issue OpenSpec** (qui est elle-même une sous-issue de livrable, terminale et `done`). La prendre pour parent crée une hiérarchie livrable-sous-livrable incorrecte et peut la rouvrir indûment via le garde-fou « issue parente bloquée » ([`conductor.md`](../../conductor.md), « Garde-fous »).
+Chaque délégation de livrable donne **une issue dédiée par agent** (Architecte de solution, Architecte de données, Architecte AWS, Architecte Azure, Infrastructure Windows, OpenSpec Expert), jamais une issue fourre-tout partagée.
 
-#### <a id="mission-déléguée--contenu-obligatoire"></a>Mission déléguée — contenu obligatoire
+Chaque issue porte un périmètre, des critères d'acceptation et l'agent de retour (le coordinateur, en texte clair) propres à son délégataire.
+
+**Les revues ne sont pas des issues.**
+- Les Reviewers de cohérence et de sécurité sont des fonctions *review-only*, sollicitées en place par le coordinateur.
+- Elles interviennent sur l'issue qui porte l'artefact revu : issue ADR dédiée sur impact structurant (jamais l'issue d'origine), issue du livrable sinon ([`reviewer`](../../protocols/reviewer.md)).
+- Elles y postent leurs conclusions, sans issue dédiée.
+- La règle « une issue par agent » ne vaut donc que pour la production de livrable.
+
+> **Parent d'une sous-issue de livrable = l'ADR (ou l'issue d'origine), jamais une autre sous-issue de livrable.**
+> - Parent : l'issue ADR sur impact structurant, sinon l'issue d'origine.
+> - Les sous-issues de livrable sont **sœurs**, au même niveau.
+> - Travaux issus de la passation de l'OpenSpec Expert ([`consolidation-handoff`](../construction/consolidation-handoff.md), Steps 4-5) : rattachés à l'ADR ou à l'issue d'origine, **jamais à l'issue OpenSpec** (sous-issue de livrable terminale, `done`).
+> - Risque d'un mauvais parent : hiérarchie incorrecte et réouverture indue via le garde-fou « issue parente bloquée » ([`conductor`](../../conductor.md)).
+
+#### Mission déléguée — contenu obligatoire
 
 Chaque mission déléguée inclut **obligatoirement** :
 
-- Le **contexte de décision issu de l'ADR** (sur impact structurant) : la mission **reporte explicitement**, depuis l'ADR acceptée (`decisions/<NNNN>-<titre>.md`), les éléments qui cadrent le livrable — **option retenue et sa justification**, **contraintes et exigences** imposées (technologie, frontières de système, modèle de données, intégration, sécurité, infrastructure, patterns transverses), **périmètre précis** confié à cet agent et **ce qui en est explicitement exclu**, **critères d'acceptation**, **dépendances** vers d'autres livrables, et **référence à l'ADR parente** (lien / numéro). Objectif : l'agent délégataire, qui démarre sans le contexte du coordinateur, dispose de **toutes** les directives pour exécuter sans redemander ni deviner. (Hors impact structurant — Step 4 —, la mission reporte de même les décisions de cadrage pertinentes.)
-- Le **nom de l'agent de retour en texte clair** (le coordinateur), **sans lien de mention actif vers lui-même** : la pose du lien de retour actif et le passage en `in_review` reviennent à l'agent délégataire en fin de tâche. L'obligation de retour A2A a **une seule source non contournable** — la « Checklist de sortie de stage » de [`stage-protocol.md`](../../protocols/stage-protocol.md) — et n'est pas redéfinie ici (voir aussi [`governance-security.md`](../../protocols/governance-security.md), « Règle A2A »).
-- Le **tag de méthodologie** sur l'issue déléguée (**contexte Multica uniquement**) : toute issue confiée à l'**OpenSpec Expert** (cycle spec-driven, OpenSpec activé) est taguée **`OpenSpec`** — `multica issue label add <issue-id> <label-id>`, l'id du label résolu via `multica label list --output json` (créer le label `OpenSpec` via `multica label create` s'il n'existe pas). Ce tag rend visible, dès le découpage, quelles issues relèvent de la méthode OpenSpec. Les labels d'issue étant **propres à Multica**, l'étape est sautée hors Multica. L'**OpenSpec Expert pose aussi ce tag en première action** s'il traite une issue Multica (voir [`openspec-agent.md`](../../../agents/openspec-agent.md)) : le premier des deux qui agit suffit, l'autre est idempotent.
+- **Contexte de décision issu de l'ADR** (sur impact structurant), reporté depuis l'ADR acceptée (`decisions/<NNNN>-<titre>.md`) :
+  - option retenue et justification ;
+  - contraintes et exigences imposées (technologie, frontières de système, modèle de données, intégration, sécurité, infrastructure, patterns transverses) ;
+  - périmètre précis confié à l'agent, et ce qui en est exclu ;
+  - critères d'acceptation ;
+  - dépendances vers d'autres livrables ;
+  - référence à l'ADR parente (lien / numéro).
+  - Objectif : l'agent exécute sans redemander ni deviner.
+  - Hors impact structurant (Step 4) : reporter de même les décisions de cadrage pertinentes.
+- **Nom de l'agent de retour en texte clair** (le coordinateur), **sans lien de mention actif vers lui-même** :
+  - La pose du lien de retour actif et le passage en `in_review` reviennent au délégataire en fin de tâche.
+  - Source unique de l'obligation de retour A2A : « Checklist de sortie de stage » de [`stage-protocol`](../../protocols/stage-protocol.md) (voir aussi [`governance-security`](../../protocols/governance-security.md), « Règle A2A »).
+- **Tag de méthodologie** sur l'issue déléguée (**contexte Multica uniquement**) :
+  - Toute issue confiée à l'OpenSpec Expert (OpenSpec activé) est taguée `OpenSpec`, ce qui rend visible dès le découpage les issues relevant de cette méthode.
+  - Mise en œuvre : `multica issue label add <issue-id> <label-id>` ; id résolu via `multica label list --output json` ; label créé via `multica label create` s'il n'existe pas.
+  - Étape sautée hors Multica (labels propres à ce harnais).
+  - L'OpenSpec Expert pose aussi ce tag en première action sur une issue Multica : le premier qui agit suffit, l'autre est idempotent.
 
 ## Sensors
 
-Outputs: impact structurant Oui ⇒ **si OpenSpec activé, phase OpenSpec préalable d'abord** (sous-issue déléguée à l'OpenSpec Expert, tag `OpenSpec`, analyse réalisée par l'OpenSpec Expert) close par une **gate humaine légère** (`human_gate: light`) de confirmation d'intention **avant** le retour au coordinateur ; **puis** issue ADR parente d'abord (issue d'origine → `blocked`), ses sous-issues de livrable (backlog, agents assignés) créées et lancées après acceptation humaine granulaire puis l'ADR → `blocked` ; ADR refusée ⇒ ADR et issue d'origine → `cancelled` (cascade) ; si OpenSpec activé, archivage des specs de la phase préalable (change → `openspec/changes/archive/`, **sans** fusion des deltas) ; toutes les sous-issues `done` ⇒ mise à disposition via [`delivery-handoff`](../construction/delivery-handoff.md), puis ADR `ADR Acceptée` (`adr_accept_e`, catégorie `done`), puis issue d'origine → `done` (dérivé) ; impact structurant Non ⇒ issues de livrable directes en backlog (issue d'origine → `blocked` si elles en sont les enfants, jusqu'à leur achèvement).
+Outputs: voir le front-matter (`outputs`) ; impact structurant `Non` ⇒ issues de livrable directes en backlog.
 Imports: none.
 
 ## Learn
 
-Boucle d'apprentissage maison (voir [`core/rules/`](../../../rules/README.md)) : tracer sur l'issue les candidats-règles (motifs de découpage, affectation d'agents récurrente) ; les remonter au **gate humain granulaire** d'Inception ; persistance des apprentissages **confirmés** dans `core/rules/` via le cycle capture → confirmation humaine → contrôle de conflit.
+Boucle d'apprentissage maison (voir [`core/rules/`](../../../rules/README.md)) :
+
+- Tracer sur l'issue les candidats-règles (motifs de découpage, affectation d'agents récurrente).
+- Les remonter au **gate humain granulaire** d'Inception.
+- Persister les apprentissages **confirmés** dans `core/rules/` : capture → confirmation humaine → contrôle de conflit.

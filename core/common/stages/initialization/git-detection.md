@@ -29,7 +29,7 @@ Déterminer de façon déterministe si le projet est sous Git avant toute créat
 
 ### Step 1 — Lire l'indicateur Git de la description du projet
 
-Lire la description du projet (champ description du projet Multica).
+Lire la description du projet (champ description du projet du harnais ; sous Multica : description du projet).
 
 - La description contient `Git : Oui` (variante tolérée : `Git: Oui`) → **projet Git** → consigner le fait et terminer le stage.
 - La description contient `Git : Non` (variante tolérée : `Git: Non`) → **pas de gestion Git** → ne créer aucune branche ; consigner le fait et terminer le stage.
@@ -39,7 +39,7 @@ Lire la description du projet (champ description du projet Multica).
 
 Vérifier la présence d'un répertoire `.git/` à la racine du répertoire projet.
 
-- `.git/` présent → **ajouter `Git: Oui`** à la description du projet (`multica project update`), consigner le fait et terminer le stage.
+- `.git/` présent → **ajouter `Git: Oui`** à la description du projet (sous Multica : `multica project update`), consigner le fait et terminer le stage.
 - `.git/` absent → **ajouter `Git: Non`** à la description du projet, ne créer aucune branche ; consigner le fait et terminer le stage.
 
 L'écriture dans la description est un simple enrichissement de fait détecté (même pattern que l'inscription d'une méthodologie) ; elle n'écrase pas la description existante et n'appelle pas de gate humain.

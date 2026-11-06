@@ -48,7 +48,7 @@ Pour toute action destructive ou de migration (Infrastructure Windows), publier 
 
 > **Exécuté uniquement si le projet applique OpenSpec** (`OpenSpec : Oui`) **et** après que le changement a été **réellement implémenté ET déployé** (déploiement validé par l'humain, Steps 1-4). C'est le découplage approbation ≠ archivage : l'approbation de la spec (achevée en Construction, [`../construction/consolidation-handoff.md`](../construction/consolidation-handoff.md), Step 2) **n'a rien archivé** ; l'archivage n'a lieu qu'ici.
 
-Une fois le déploiement effectif et validé, le coordinateur sollicite l'**OpenSpec Expert** (délégué en `subagent`). Celui-ci **vérifie les préconditions** (implémentation et déploiement effectifs), puis **archive le changement** : fusion des deltas dans les specs vivantes (`openspec/specs/<capability>/spec.md`) et déplacement du change vers `openspec/changes/archive/AAAA-MM-JJ-<nom>/` ([`../../../agents/openspec-agent.md`](../../../agents/openspec-agent.md), « Archivage post-déploiement »). Il remonte le résultat sur l'issue. Si le projet n'applique pas OpenSpec, ce step est N/A.
+Une fois le déploiement effectif et validé, le coordinateur sollicite l'**OpenSpec Expert** (délégué en `subagent`). Celui-ci **vérifie les préconditions** (implémentation et déploiement effectifs), puis **archive le changement** : fusion des deltas dans les specs vivantes (`openspec/specs/<capability>/spec.md`) et déplacement du change vers `openspec/changes/archive/AAAA-MM-JJ-<nom>/` (procédure : « Archivage post-déploiement » de la fiche de l'OpenSpec Expert). Il remonte le résultat sur l'issue. Si le projet n'applique pas OpenSpec, ce step est N/A.
 
 ## Sensors
 
