@@ -171,6 +171,7 @@ Le coordinateur tient une **checklist d'architecture** qui suit l'avancement de 
 ## OBLIGATOIRE : langue et format
 
 - Rédiger **tous les documents dans la langue de l'humain (français par défaut)**.
+- **Tout document livrable** suit le **style concis** : information strictement nécessaire, puces à plusieurs niveaux, texte aéré — source unique [`protocols/document-style.md`](protocols/document-style.md) (règle `RULE-WS-007`) ; distinct du format des retours d'agent.
 - **Tout retour d'agent sur l'issue** (compte rendu, retour A2A) adopte la **prose réduite** et la **structure en 4 sections** (`## Résumé` ; `## Sensors` si le stage en déclare ; `## Points bloquants` si blocage ; `## Action humaine requise` uniquement si l'humain doit intervenir, avec mention humaine active (jamais sur un simple retour A2A)) — source unique [`protocols/output-format.md`](protocols/output-format.md). Cette forme **ne relâche aucune norme de gating** (la section « Action humaine requise » présente l'arbitrage attendu, elle ne s'y substitue pas).
 - **Conserver l'anglais** pour les termes non traduits des templates OpenSpec / EARS (uniquement si OpenSpec activé).
 - Générer les diagrammes **en code** (PlantUML, Mermaid, Structurizr DSL, CALM, Archimate) et **valider leur syntaxe** avant écriture. Toujours demander à l'humain le **format de diagramme** souhaité avant génération.
@@ -250,6 +251,7 @@ sequenceDiagram
 - [`protocols/governance-security.md`](protocols/governance-security.md) — gouvernance A2A, contrôle sécurité, invariants, garde-fous.
 - [`protocols/reviewer.md`](protocols/reviewer.md) — protocole de revue (cohérence des décisions + revue sécurité).
 - [`protocols/output-format.md`](protocols/output-format.md) — format de retour d'un agent : prose réduite + 4 sections (résumé, sensors si déclarés, points bloquants, action humaine requise).
+- [`protocols/document-style.md`](protocols/document-style.md) — style des documents livrables : concision, puces multi-niveaux, texte aéré, tableaux des gabarits.
 - [`protocols/architecture-checklist.md`](protocols/architecture-checklist.md) — checklist d'architecture : état d'avancement (`documentation/00-checklist-architecture.md`), structure imposée, barème 80/10/10, calcul du % par élément, écriture sur faits vérifiés, gate planification / réalisation (≥ 80 %), lecture en % sur demande.
 - [`protocols/scopes-and-axes.md`](protocols/scopes-and-axes.md) — scopes, axes Depth / vérification, matrice stage × scope.
 - [`stages/`](stages/) — fiches de stage des 5 phases.
