@@ -1,7 +1,7 @@
 ---
 id: traceability
 kind: deterministic
-command: "python3 core/scripts/sensor.py fire traceability"
+command: "python3 core/scripts/sensors/traceability.py"
 default_severity: advisory
 description: "Vérifie la traçabilité amont↔aval : chaque besoin d'affaires BA-… est priorisé MoSCoW et relié à ses exigences, chaque exigence est reliée à un ADR / livrable, chaque scénario renvoie à son besoin / exigence, et chaque décision structurante est tracée, sans cible orpheline."
 category: traceability

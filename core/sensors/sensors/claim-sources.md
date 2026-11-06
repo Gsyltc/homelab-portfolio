@@ -1,7 +1,7 @@
 ---
 id: claim-sources
 kind: deterministic
-command: "python3 core/scripts/sensor.py fire claim-sources"
+command: "python3 core/scripts/sensors/claim_sources.py"
 default_severity: advisory
 description: "Vérifie que chaque affirmation retenue à la capture d'intention porte une source résoluble et que les hypothèses conservées correspondent à une confirmation humaine explicite."
 category: provenance

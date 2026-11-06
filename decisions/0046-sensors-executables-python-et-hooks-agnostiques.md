@@ -27,10 +27,10 @@ L'humain (HOM-283) demande de reprendre ce mécanisme pour `core`, avec des scri
 
 ## Décision
 
-**Rendre les sept sensors de `core` exécutables par un dispatcher Python unique, branché sur un hook d'écriture et sur le verification gate, sans changer leur caractère advisory.**
+**Rendre les huit sensors de `core` exécutables par un dispatcher Python unique, branché sur un hook d'écriture et sur le verification gate, sans changer leur caractère advisory.**
 
 1. **Dispatcher** `core/scripts/sensor.py` (Python standard, aucune dépendance) : `list`, `describe`, `fire <id>`, `gate <frontière>`, `hook`.
-2. **Un contrôle par manifeste**, implémenté dans `core/scripts/sensorlib/checks.py` à partir du bloc `checks` du manifeste. Le champ `command` des manifestes pointe désormais vers `python3 core/scripts/sensor.py fire <id>`.
+2. **Un script par sensor** : `core/scripts/sensors/<id avec _>.py` (ex. `required_sections.py`), qui expose `ID` et `run(ctx)` et applique le bloc `checks` du manifeste. Chaque script s'exécute seul. Le code partagé vit dans `core/scripts/sensorlib/`. Un manifeste sans script, ou un script sans manifeste, est une erreur (test dédié) ; à l'exécution, un script absent donne `⛔`. Le champ `command` des manifestes pointe désormais vers `python3 core/scripts/sensor.py fire <id>`.
 3. **Hook d'écriture** `core/sensors/hooks/post_write.py` : lit le JSON du harnais sur stdin, lance les sensors `fire_on: write` dont `matches` correspond, sort **toujours en 0**. Il s'enregistre sur Claude Code, Kiro CLI ou tout harnais fournissant `tool_input.file_path`.
 4. **Gate** `sensor.py gate <frontière>` : exécute les sensors de la frontière déclarés dans `gates.md` et produit le « Rapport de vérification ». Les artefacts non vérifiables par fichier restent `⛔` tant que le coordinateur ne les atteste pas (`--attest`).
 5. **Garde-fous SG-1 à SG-6 appliqués par le code** :
@@ -59,7 +59,7 @@ L'humain (HOM-283) demande de reprendre ce mécanisme pour `core`, avec des scri
 - **NEG-001** — **Contrôles structurels, pas sémantiques** : `diagram-validity` vérifie la structure (type, délimiteurs, parenthésage), pas un rendu réel. `claim-sources` et `traceability` reposent sur des motifs (`BA-…`, `FR-…`, `ALI-…`). Les résultats restent des faits de forme.
 - **NEG-002** — **Écarts hérités révélés** : les ADR antérieurs à `Date de création` ressortent en `⚠️`. C'est un constat, pas une régression.
 - **NEG-003** — **Dépendance à Python 3.9+** sur le poste ou le runtime de l'agent.
-- **NEG-004** — **Maintenance double** : toute évolution d'un `checks` de manifeste doit être répercutée dans `checks.py` dans la même PR (SG-1 / SG-6).
+- **NEG-004** — **Maintenance double** : toute évolution d'un `checks` de manifeste doit être répercutée dans le script du sensor dans la même PR (SG-1 / SG-6).
 
 ## Alternatives étudiées
 
@@ -81,7 +81,7 @@ L'humain (HOM-283) demande de reprendre ce mécanisme pour `core`, avec des scri
 - Gate : `python3 core/scripts/sensor.py --root <projet> gate construction-operation --attest coherence_doc_adr`.
 - Tests : `python3 -m unittest discover -s core/scripts/tests`.
 - Enregistrement du hook : voir `core/sensors/README.md`, section Hooks.
-- `style-concision` (HOM-282) n'est pas encore sur `main` : son implémentation suivra son manifeste.
+- Exécution d'un sensor seul : `python3 core/scripts/sensors/<id>.py --root <projet> [--path <fichier>...]`.
 
 ## Références
 

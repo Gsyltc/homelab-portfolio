@@ -13,9 +13,10 @@ Chaque manifeste fixe le **contrat** (périmètre de déclenchement, règles, so
 
 | Commande | Rôle |
 | --- | --- |
-| `python3 core/scripts/sensor.py list` | Sensors disponibles et état (exécutable / `⛔`) |
+| `python3 core/scripts/sensor.py list` | Sensors, script associé et état (`⛔` si script absent ou invalide) |
 | `python3 core/scripts/sensor.py --root <projet> fire <id> [--path <fichier>...]` | Exécute un sensor. Sans `--path` : balayage de gate sur le périmètre `matches` |
 | `python3 core/scripts/sensor.py --root <projet> gate <frontière> [--attest a,b]` | Rapport de vérification d'une frontière de [`gates.md`](gates.md) |
+| `python3 core/scripts/sensors/<id avec _>.py --root <projet> [--path <fichier>...]` | Exécute un sensor seul (ex. `required_sections.py`) : un script par sensor |
 | `python3 core/sensors/hooks/post_write.py` | Hook d'écriture : lit le JSON du harnais sur stdin, lance les sensors `fire_on: write` |
 
 Python 3.9+, bibliothèque standard uniquement. Tests : `python3 -m unittest discover -s core/scripts/tests`.

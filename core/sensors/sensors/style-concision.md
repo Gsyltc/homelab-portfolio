@@ -1,7 +1,7 @@
 ---
 id: style-concision
 kind: deterministic
-command: "non-exécutable (advisory documentaire)"
+command: "python3 core/scripts/sensors/style_concision.py"
 default_severity: advisory
 description: "Vérifie que les documents livrables respectent le style concis : paragraphes courts, phrases courtes, puces limitées en profondeur, tableaux hors gabarit sobres."
 category: document-shape

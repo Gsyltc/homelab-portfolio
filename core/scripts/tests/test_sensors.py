@@ -80,8 +80,9 @@ class ManifestTests(unittest.TestCase):
     def test_all_manifests_valid_and_implemented(self) -> None:
         for sid, m in sensor.load_manifests().items():
             self.assertTrue(m.valid, f"{sid}: {m.missing}")
-            self.assertIn(sid, sensor.CHECKS)
+            self.assertIsNotNone(sensor.load_check(sid), f"{sid}: script absent/invalide")
             self.assertNotIn("non-exécutable", m.meta["command"])
+            self.assertTrue(sensor.script_path(sid).is_file(), f"{sid}: {sensor.script_path(sid)} manquant")
 
     def test_every_stage_sensor_is_executable(self) -> None:
         import re
@@ -89,7 +90,34 @@ class ManifestTests(unittest.TestCase):
         for f in stages.rglob("*.md"):
             m = re.search(r"^sensors:\s*\[(.*?)\]", f.read_text(encoding="utf-8"), re.M)
             for sid in [x.strip() for x in (m.group(1).split(",") if m else []) if x.strip()]:
-                self.assertIn(sid, sensor.CHECKS, f"{f.name}: sensor {sid} non exécutable")
+                self.assertIsNotNone(sensor.load_check(sid), f"{f.name}: sensor {sid} sans script exécutable")
+
+
+class OneScriptPerSensorTests(unittest.TestCase):
+    def test_bijection_manifest_script(self) -> None:
+        manifests = set(sensor.load_manifests())
+        scripts = {p.stem.replace("_", "-") for p in sensor.SCRIPTS_DIR.glob("*.py") if p.stem != "__init__"}
+        self.assertEqual(manifests, scripts, "chaque manifeste a un script et réciproquement")
+        self.assertEqual(len(scripts), 8)
+
+    def test_each_script_exposes_run_and_id(self) -> None:
+        for sid in sensor.load_manifests():
+            path = sensor.script_path(sid)
+            self.assertTrue(path.is_file(), f"{sid}: script manquant")
+            self.assertEqual(path.read_text(encoding="utf-8").count("def run("), 1, f"{sid}: un seul run attendu")
+            self.assertIsNotNone(sensor.load_check(sid), f"{sid}: run/ID invalide")
+
+    def test_script_runs_standalone(self) -> None:
+        import subprocess
+        with tempfile.TemporaryDirectory() as d:
+            for sid in sensor.load_manifests():
+                r = subprocess.run([sys.executable, str(sensor.script_path(sid)), "--root", d],
+                                   capture_output=True, text=True, env={**os.environ, "SENSORS_SOURCE_COMMIT": "t"})
+                self.assertEqual(r.returncode, 0, f"{sid}: {r.stderr}")
+                self.assertIn(f"Sensor {sid}", r.stdout, f"{sid}: {r.stdout}")
+
+    def test_missing_script_is_unavailable(self) -> None:
+        self.assertIsNone(sensor.load_check("inexistant"))
 
 
 class SensorTests(unittest.TestCase):
