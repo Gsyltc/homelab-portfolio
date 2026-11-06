@@ -27,6 +27,8 @@ outputs: "Livrables détaillés (documentation, diagrammes définitifs, coûts A
 
 Produire les livrables du lot cadré, au rythme fixé par le mode d'exécution — **une exécution par unité de travail** (`for_each: unit-of-work`).
 
+> **Style du livrable.** Tout document produit par ce stage suit le style concis (information strictement nécessaire, puces multi-niveaux, texte aéré ; tableaux des gabarits conservés) — source unique [`document-style`](../../protocols/document-style.md) (règle `RULE-WS-007`).
+
 ## Steps
 
 ### Step 1 — Produire par livrable / agent (une fois par unité)

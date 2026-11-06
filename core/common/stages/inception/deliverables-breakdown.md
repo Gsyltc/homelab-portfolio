@@ -25,6 +25,8 @@ outputs: "Impact structurant Oui ⇒ si OpenSpec activé, une phase OpenSpec pr�
 
 Découper le travail en livrables et désigner l'agent responsable de chacun.
 
+> **Style du livrable.** Tout document produit par ce stage suit le style concis (information strictement nécessaire, puces multi-niveaux, texte aéré ; tableaux des gabarits conservés) — source unique [`document-style`](../../protocols/document-style.md) (règle `RULE-WS-007`).
+
 ## Steps
 
 ### Step 1 — Déterminer phases, étapes et profondeur
