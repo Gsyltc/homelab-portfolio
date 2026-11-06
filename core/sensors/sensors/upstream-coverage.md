@@ -1,7 +1,7 @@
 ---
 id: upstream-coverage
 kind: deterministic
-command: "non-exécutable (advisory documentaire)"
+command: "python3 core/scripts/sensor.py fire upstream-coverage"
 default_severity: advisory
 description: "Vérifie que le livrable référence explicitement sa demande amont (issue d'origine, ADR parent le cas échéant)."
 category: document-shape

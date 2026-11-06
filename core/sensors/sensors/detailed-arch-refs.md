@@ -1,7 +1,7 @@
 ---
 id: detailed-arch-refs
 kind: deterministic
-command: "non-exécutable (advisory documentaire)"
+command: "python3 core/scripts/sensor.py fire detailed-arch-refs"
 default_severity: advisory
 description: "Vérifie que les renvois vers l'architecture détaillée utilisent le format d'ancre Structurizr (documentation/<SS>#<ancre>) et non un chemin de fichier, et qu'aucun titre d'architecture détaillée ne porte de suffixe de nom de système."
 category: document-shape

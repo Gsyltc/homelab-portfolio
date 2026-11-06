@@ -9,6 +9,16 @@ ce fichier en donne la lecture chronologique côté produit.
 ## [Non publié]
 
 ### Added
+- **Sensors du workflow `core` exécutables en Python** (réf. HOM-283, [ADR-0046](decisions/0046-sensors-executables-python-et-hooks-agnostiques.md), statut *Proposed*).
+  Les sept sensors, jusqu'ici déclaratifs, sont exécutés de façon déterministe, comme dans le workflow amont AWS AI-DLC :
+  - `core/scripts/sensor.py` : dispatcher (`list`, `describe`, `fire`, `gate`, `hook`), Python standard sans dépendance ;
+  - `core/sensors/hooks/post_write.py` : hook d'écriture agnostique du harnais (Claude Code, Kiro CLI…), toujours advisory (code 0) ;
+  - `gate <frontière>` produit le « Rapport de vérification » de `gates.md` ; les artefacts non vérifiables par fichier restent `⛔` jusqu'à attestation du coordinateur ;
+  - SG-1 à SG-5 appliqués par le code (manifeste sans `origine`, sensor en erreur, périmètre vide ou commit non traçable ⇒ `⛔`, jamais `✅`) ;
+  - champ `command` des manifestes aligné, `README.md`, `gates.md`, `stage-protocol`, `output-format` et `conductor` mis à jour ;
+  - tests : `python3 -m unittest discover -s core/scripts/tests`.
+
+### Added
 - **Conformité Agent Skills imposée et automatisée** (réf. HOM-276). Toutes les skills du dépôt
   respectent désormais la [norme Agent Skills](https://agentskills.io/specification), vérifiée par le
   validateur officiel `skills-ref` :

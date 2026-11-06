@@ -32,7 +32,7 @@ Synthèse **concise** des tâches effectuées, en **puces**. Une puce = un résu
 Règles :
 - **Chaque sensor déclaré figure dans la liste** — aucune omission (SG-2 : silence = écart).
 - **Pas de phrase, pas de tableau** — verdict + une ligne factuelle suffisent.
-- **`⛔ indisponible`** quand le sensor n'est pas encore exécutable (mécanisme déclaratif) : indiquer le motif en une ligne, **jamais omettre l'entrée**.
+- **`⛔ indisponible`** quand le script ne peut pas s'exécuter : indiquer le motif donné par le script en une ligne, **jamais omettre l'entrée**.
 - La section est **advisory** — ne vaut pas validation, n'autorise aucun raccourci (SG-1..6).
 - **En l'absence de sensor déclaré, omettre entièrement cette section.**
 
