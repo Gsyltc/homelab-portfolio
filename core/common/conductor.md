@@ -271,43 +271,43 @@ Détail (plancher sécurité des scopes, SEC-1..5, SG-1..6, entrées non fiables
 sequenceDiagram
     participant H as Humain
     participant S as Coordinateur
-    participant A as Architecte de solution / AWS / Azure / Microsoft (ou OpenSpec Expert)
-    participant D as Architecte de donnees
-    participant X as Architecte cybersecurite
-    participant N as Experte d archivage
+    participant A as Spécialiste (Architecte de solution, AWS, Azure…, OpenSpec Expert)
+    participant D as Architecte de données
+    participant R as Reviewers (cohérence, sécurité)
+    participant N as Experte d'archivage
     participant AL as Agent de notifications
 
     H->>S: Demande (issue)
-    S->>S: Bootstrap deterministe - repertoire + git (branche si projet Git) + brownfield/greenfield (INITIALIZATION)
-    S->>H: Approbation intention + perimetre/scope (IDEATION)
-    H-->>S: Intention et scope approuves
-    S->>S: Cadrage + besoins + decoupage (INCEPTION)
-    S->>A: Delegue livrables (mention + mission)
-    A->>D: Delegue les taches donnees au besoin (cycle de vie, gouvernance, classification)
-    D-->>A: Cycle de vie des donnees (10-cycle_vie_donnees.md) + modeles
-    A->>A: Valide le travail de l Architecte de donnees (sensor data-lifecycle advisory, non bloquant)
-    A-->>S: Livrable + decision structurante
-    S->>X: Sollicite controle securite
-    X-->>S: Analyse + recommandations
-    S->>S: Verification gate - data-lifecycle advisory (alerte humaine si document absent)
-    S->>H: Validation granulaire (choix par choix)
-    H-->>S: Validation / rejet par element
-    S->>A: Walking skeleton (premiere tranche de bout en bout)
+    S->>S: Initialisation déterministe (répertoire, Git, brownfield/greenfield)
+    S->>H: Approbation intention + périmètre (Ideation)
+    H-->>S: Intention et scope approuvés
+    S->>S: Cadrage, besoins, découpage (Inception)
+    S->>A: Délègue l'ADR, ou les livrables si impact non structurant (mention + mission)
+    A->>D: Délègue les tâches données au besoin
+    D-->>A: Cycle de vie des données + modèles
+    A->>R: Sollicite les revues, cohérence puis sécurité
+    R-->>A: Verdict OK ou RENVOI
+    A-->>S: Livrable ou ADR proposée (retour A2A)
+    S->>S: Verification gate (alerte humaine si écart, non bloquant)
+    S->>H: Validation granulaire, choix par choix
+    H-->>S: Keep / Modify / Redo par élément
+    S->>A: Sous-issues de livrable puis walking skeleton
     A-->>S: Walking skeleton
-    S->>H: Validation granulaire + question du mode d'execution (une fois)
-    H-->>S: Mode gated (defaut) ou autonome + validation
-    S->>A: Production detaillee (CONSTRUCTION - rythme selon mode)
-    A-->>S: Livrables detailles (halt-and-ask sur echec)
-    S->>X: Controle securite
-    S->>H: Validation granulaire (au point de synchronisation si autonome)
-    S->>N: Mise a disposition des livrables valides (archivage ou commit + PR)
-    N-->>S: Archive / lien de PR + recapitulatif
-    S->>AL: Demande notification de fin de realisation (fichiers / PR en attente) - des la mise a disposition
-    AL-->>H: Notification de fin de realisation (canal porte par l Agent de notifications)
-    S->>H: Validation deploiement (OPERATION)
+    S->>H: Validation granulaire + mode d'exécution (une fois)
+    H-->>S: Mode gated (défaut) ou autonome
+    S->>A: Production détaillée (Construction)
+    A->>R: Revues cohérence puis sécurité
+    R-->>A: Verdict OK ou RENVOI
+    A-->>S: Livrables détaillés (halt-and-ask sur échec)
+    S->>H: Validation granulaire + gate « commit + PR : oui/non ? »
+    S->>N: Mise à disposition des livrables validés (archivage ou commit + PR)
+    N-->>S: Archive ou lien de PR + récapitulatif
+    S->>AL: Notification de fin de réalisation
+    AL-->>H: Notification (canal porté par l'Agent de notifications)
+    S->>H: Validation du déploiement (Operation)
     H-->>S: Validation explicite (+ rollback si destructif)
-    S->>AL: Demande notification de fin de deploiement (si deploiement)
-    AL-->>H: Notification de fin de deploiement (canal porte par l Agent de notifications)
+    S->>AL: Notification de fin de déploiement (si déploiement)
+    AL-->>H: Notification (canal porté par l'Agent de notifications)
 ```
 
 ---
