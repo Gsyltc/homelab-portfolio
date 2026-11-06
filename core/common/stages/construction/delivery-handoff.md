@@ -48,11 +48,11 @@ Le coordinateur confie à l'**Experte d'archivage** la tâche technique suivante
   2. sinon `branche GIT: <nom>` présent dans le **README du projet** ;
   3. sinon **`integration`** par défaut.
 
-Le coordinateur transmet à l'Experte d'archivage la branche cible déjà résolue ; l'Experte crée la branche de mise à disposition, exécute le commit + la PR via sa capacité Git ([`../../../agents/archiving-agent.md`](../../../agents/archiving-agent.md)) et remonte le **lien de PR** et un récapitulatif sur l'issue.
+Le coordinateur transmet à l'Experte d'archivage la branche cible déjà résolue ; l'Experte crée la branche de mise à disposition, exécute le commit + la PR via sa capacité Git et remonte le **lien de PR** et un récapitulatif sur l'issue.
 
 ### Step 3 — Si NON : fallback archivage par dossier
 
-Pas de commit ni de PR. Le coordinateur confie à l'**Experte d'archivage** le téléversement, la visualisation, le téléchargement et l'archivage des documents validés dans le répertoire du projet (zip + `multica attachment upload`) ; fournir à l'humain un récapitulatif accessible.
+Pas de commit ni de PR. Le coordinateur confie à l'**Experte d'archivage** le téléversement, la visualisation, le téléchargement et l'archivage des documents validés dans le répertoire du projet (zip ; sous Multica : `multica attachment upload`) ; fournir à l'humain un récapitulatif accessible.
 
 ### Step 4 — Notification de fin de réalisation (dès la mise à disposition)
 

@@ -32,7 +32,7 @@ Les revues sont **séquentielles** (**cohérence puis sécurité**) et transiten
 
 ### Step 1 — Revue de cohérence
 
-Le `consistency-reviewer-agent` vérifie structure, complétude, qualité, format et cohérence des livrables avec les décisions structurantes.
+Le **Reviewer de cohérence** vérifie structure, complétude, qualité, format et cohérence des livrables avec les décisions structurantes.
 
 ### Step 2 — Revue de sécurité (revue adversariale)
 

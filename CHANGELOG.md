@@ -99,6 +99,15 @@ ce fichier en donne la lecture chronologique côté produit.
   de runtime sous `${ROOT_DIRECTORY}/collaborateurs/`, **hors de ce dépôt**.
 
 ### Changed
+- **Style des documents livrables et allègement du workflow `core`** (réf. HOM-282 ; évolution
+  **documentaire**, invariants, gates et sensors advisory préservés) :
+  - Nouveau protocole `document-style.md` (information strictement nécessaire, puces multi-niveaux,
+    texte aéré, tableaux de gabarit conservés), distinct du format des retours d'agent
+    (`output-format.md`), et règle `RULE-WS-007`.
+  - Nouveau sensor advisory `style-concision` (huit sensors désormais).
+  - Allègement de `conductor.md`, `governance-security.md`, `rules/README.md`,
+    `deliverables-breakdown.md` et `design-and-decisions.md` (redondances supprimées, noms d'agents
+    remplacés par les fonctions, commandes Multica isolées) ; diagramme A2A mis à jour.
 - **Checklist d'architecture — sections requises par livrable et suivi de l'architecture de sécurité**
   (réf. ORIG-387, décision [ADR-0045](decisions/0045-checklist-architecture-sections-requises-securite.md) ;
   évolution **documentaire**, barème 80/10/10, gates et sensors advisory préservés). L'**architecture de sécurité

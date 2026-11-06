@@ -24,3 +24,11 @@ Ces règles reprennent les **invariants non négociables** déjà en vigueur (el
   - **Noms de responsables** : lorsqu'un nom doit être renseigné, indiquer le **nom réel du responsable du projet** tel que défini dans les Arrimages (matrice RACI, colonne « Nom »), jamais un placeholder ni un nom d'agent.
   - _portée_ : workspace · _origine_ : demande workspace multica.gaston (chat) · _ajoutée le_ : 2026-09-10
 
+- **RULE-WS-007** — **OBLIGATOIRE.** Tout document livrable suit le style concis défini dans `core/common/protocols/document-style.md`. En résumé :
+  - **Strictement nécessaire** : information utile uniquement, sans remplissage ni reformulation.
+  - **Puces à plusieurs niveaux** plutôt que prose, quand c'est pertinent.
+  - **Texte aéré** : paragraphes courts, lignes vides, un sujet par section.
+  - **Tableaux** : ceux imposés par un gabarit sont **toujours utilisés** ; hors gabarit, seulement pour une structure comparative, cellules télégraphiques.
+  - **Précision** : chiffres, noms et décisions explicites ; un terme défini une fois, puis renvoyé.
+  - **Concision sans perte** : aucun risque, norme ou décision structurante omis.
+  - _portée_ : workspace · _origine_ : HOM-282 · _ajoutée le_ : 2026-11-06

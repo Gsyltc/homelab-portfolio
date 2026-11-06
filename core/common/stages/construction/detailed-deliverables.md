@@ -15,7 +15,7 @@ human_gate: granular
 produces: [livrables_detailles]
 consumes: [{artifact: walking_skeleton_valide, required: true}, {artifact: mode_execution_choisi, required: true}]
 requires_stage: [walking-skeleton]
-sensors: [required-sections, upstream-coverage, diagram-validity, claim-sources]
+sensors: [required-sections, upstream-coverage, diagram-validity, claim-sources, style-concision]
 scopes: [standard, feature, infra, security-patch, mvp, enterprise]
 inputs: "Walking skeleton validé + mode d'exécution"
 outputs: "Livrables détaillés (documentation, diagrammes définitifs, coûts AWS / Azure, config infra, ou implémentation OpenSpec)"
@@ -27,6 +27,8 @@ outputs: "Livrables détaillés (documentation, diagrammes définitifs, coûts A
 
 Produire les livrables du lot cadré, au rythme fixé par le mode d'exécution — **une exécution par unité de travail** (`for_each: unit-of-work`).
 
+> **Style du livrable.** Tout document produit par ce stage suit le style concis (information strictement nécessaire, puces multi-niveaux, texte aéré ; tableaux des gabarits conservés) — source unique [`document-style`](../../protocols/document-style.md) (règle `RULE-WS-007`).
+
 ## Steps
 
 ### Step 1 — Produire par livrable / agent (une fois par unité)
@@ -37,7 +39,7 @@ Le stage s'exécute **une fois par unité de travail** (`for_each: unit-of-work`
 
 **Déclencheur.** Dès qu'un livrable **a un impact sur la sécurité** — surface de sécurité, contrôle, posture, classification de données, frontière de délégation ou instruction exécutable — même émergé en cours de production, une **sous-tâche de sécurité dédiée** est créée. C'est le pendant Construction de la délégation « Sécurité » du découpage ([`../inception/deliverables-breakdown.md`](../inception/deliverables-breakdown.md), Step 2 — **source unique** du rattachement, de la règle « une sous-issue par agent » et du contenu obligatoire de la mission).
 
-**Qui signale, qui crée.** Le **lead de production (Architecte de solution) signale** l'impact ; il ne crée ni ne passe aucun statut. Le **coordinateur (Architecture Solution & Intégration)** crée la sous-tâche en **enfant de l'issue du livrable** et l'**assigne à l'Architecte Cybersécurité** (`--assignee-id`, UUID résolu via `multica agent list --output json`), avec mission cadrée et agent de retour en texte clair.
+**Qui signale, qui crée.** Le **lead de production (Architecte de solution) signale** l'impact ; il ne crée ni ne passe aucun statut. Le **coordinateur (Architecture Solution & Intégration)** crée la sous-tâche en **enfant de l'issue du livrable** et l'**assigne à l'Architecte Cybersécurité** (identifiant résolu, jamais deviné ; sous Multica : `multica agent list --output json`), avec mission cadrée et agent de retour en texte clair.
 
 **Objet.** L'Architecte Cybersécurité mène l'**analyse de sécurité** (OWASP / STRIDE toujours actifs ; normes spécifiques sur demande explicite seulement) **et met à jour la documentation d'architecture de sécurité** (`documentation/architecture-securite/`, format des gabarits `architecture-solution-gabarits`) — la mise à jour de la DAS est un **livrable attendu**, pas un sous-produit de l'analyse.
 
@@ -61,7 +63,7 @@ S'arrêter et interroger l'humain sur : échec / impossibilité d'un livrable ; 
 ## Sensors
 
 Outputs: livrables détaillés (une fois par unité).
-Imports: `required-sections`, `upstream-coverage`, `diagram-validity`, `claim-sources`.
+Imports: `required-sections`, `upstream-coverage`, `diagram-validity`, `claim-sources`, `style-concision`.
 Upstream targets: `walking_skeleton_valide` (required), `mode_execution_choisi` (required) — couverture amont vérifiée à l'écriture de chaque livrable.
 Review artifact: chaque `livrable-<unite>.md` porte la section `## Review` ajoutée par le Reviewer de cohérence.
 
