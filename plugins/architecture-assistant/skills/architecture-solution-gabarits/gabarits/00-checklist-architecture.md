@@ -15,18 +15,11 @@ ordre_presentation: 0
 # Checklist d'architecture — état d'avancement
 
 <!--
-Gabarit d'état de la checklist d'architecture. À copier en `documentation/00-checklist-architecture.md` au sein du répertoire d'un projet, lors de l'initialisation (Phase 0).
+Gabarit d'état de la checklist d'architecture. À copier en `documentation/00-checklist-architecture.md` au sein du répertoire d'un projet (fichier d'état de processus, non DAS).
 
-Processus et règles : source unique dans `core/common/protocols/architecture-checklist.md` (structure imposée, barème, écriture sur faits vérifiés).
+Processus et règles de tenue (structure imposée, barème 80/10/10, conformité constatée, revue pair / acceptation humaine, écriture sur faits vérifiés, piste d'audit) : source unique dans `core/common/protocols/architecture-checklist.md`. Ne pas les rediter ici.
 
-Règles de tenue :
-- Chaque élément porte un % d'avancement (0–100). Défaut : 0 %.
-- La conformité se constate : une section ne compte que si elle est présente, non vide et documentée pour le projet ; en cas de doute, ne pas compter et informer l'humain.
-- Revue pair et acceptation humaine : oui / non. L'acceptation ne s'ajoute que sur annonce humaine explicite.
-- Chaque changement de % est tracé sur l'issue (piste d'audit), avec la composante modifiée.
-- Ce fichier est un livrable : aucune note de génération / méta-production (réf. décision 0040).
-- Ce fichier présente l'état, jamais le calcul : ni formule, ni opération, ni rappel du barème.
-- Les sections requises par livrable sont portées par le contrat `required-sections` (source unique) ; ce gabarit en déploie les tables de suivi, sans redéfinir le contrat. En cas d'écart de nommage, `required-sections` fait foi.
+Usage du fichier : présenter l'ÉTAT, jamais le calcul — ni formule, ni opération, ni rappel du barème.
 -->
 
 **% global :** 0 %
@@ -47,7 +40,7 @@ Règles de tenue :
 | Sécurité | non conforme | non | non | 0 % |
 
 <!--
-Élément récapitulatif : la priorisation MoSCoW des besoins d'affaires est tracée en amont (stage inception requirements-analysis, identifiants stables BA-…). Lorsqu'une méthodologie OpenSpec est active, elle est consolidée dans la « Matrice de traçabilité MoSCoW » du proposal.md (chaîne spec ↔ besoin ↔ exigence, un scénario / cas d'utilisation par ligne), qui sert de récapitulatif pour constater la conformité des éléments ci-dessus. Processus et règles de conformité : source unique dans core/common/protocols/architecture-checklist.md (sections 2 et 6). Ce gabarit ne redéfinit pas la matrice ; il en constate le résultat.
+Conformité MoSCoW constatée via la priorisation amont (BA-…) et, si OpenSpec actif, la matrice de traçabilité du proposal.md. Processus et règles : source unique dans core/common/protocols/architecture-checklist.md (sections 2 et 6). Ce gabarit constate le résultat, il ne redéfinit pas la matrice.
 -->
 
 ## Livrables — 0 %

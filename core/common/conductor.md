@@ -203,7 +203,7 @@ La piste d'audit vit **sur l'issue**, jamais dans un fichier `audit.md`. Chaque 
 
 Le coordinateur tient une checklist qui suit l'avancement sur les 5 phases. **Processus à part** : sa logique complète (structure, barème 80/10/10, calcul du %, gate planification / réalisation, mapping Livrables → documents) a sa **source unique** dans [`protocols/architecture-checklist.md`](protocols/architecture-checklist.md). Le conductor n'y renvoie que.
 
-- **État** : `documentation/00-checklist-architecture.md`, copié du gabarit [`00-checklist-architecture`](protocols/gabarits/00-checklist-architecture.md) à l'initialisation du répertoire projet ([`directory-check`](stages/initialization/directory-check.md)).
+- **État** : `documentation/00-checklist-architecture.md`, fichier d'état initialisé (copie idempotente du gabarit, tous éléments à **0 %**) lors de la vérification de présence en Initialization ([`directory-check`](stages/initialization/directory-check.md)). Processus et règles de tenue : source unique [`protocols/architecture-checklist.md`](protocols/architecture-checklist.md).
 - **Avancement** : `% = 80 × (sections conformes / total sections mandatory) + 10 × (revue pair) + 10 × (acceptation humaine)`.
   - Les +10 % d'acceptation ne s'ajoutent que sur annonce humaine explicite (gate Keep / Modify / Redo) : seul chemin vers 100 %.
   - Pour les Livrables, les 80 % s'appuient sur le contrat [`required-sections`](../sensors/sensors/required-sections.md) (dénominateur dynamique).

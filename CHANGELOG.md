@@ -9,6 +9,21 @@ ce fichier en donne la lecture chronologique côté produit.
 ## [Non publié]
 
 ### Changed
+- **Gabarit d'état de la checklist d'architecture porté par la skill, sans couplage `core → plugin`**
+  (réf. HOM-286, [ADR-0047](decisions/0047-checklist-gabarit-porte-par-la-skill-sans-couplage-core-plugin.md), statut *Accepted*).
+  Le gabarit `00-checklist-architecture.md` est déplacé de `core/common/protocols/gabarits/` vers la skill
+  `architecture-solution-gabarits` (son propriétaire) ; `core` ne lit plus **aucun** chemin de plugin :
+  - la **présence** du fichier d'état est **vérifiée en Initialization** (stage Phase 0 `directory-check`, Step 3,
+    simple existence de fichier) ; **si absent**, l'initialisation (copie du gabarit, 0 %) est **déléguée au
+    propriétaire** (la skill / l'Architecte de solution intégrateur), **par propriétaire et non par chemin**
+    (`core` ne copie pas le gabarit et ne lit aucun chemin de plugin) ;
+  - `conductor.md` et `architecture-checklist.md` renvoient au gabarit **par propriétaire** ; le **protocole
+    reste la source unique** du processus (barème 80/10/10) dans `core` ;
+  - `SKILL.md` : ligne « gabarit d'état » au tableau des gabarits + règle d'or **3-bis** (fichier d'état de
+    processus, init idempotente à part, pas un fichier DAS) ;
+  - inverse l'invariant NEG-002 d'ADR-0042 (gabarit jadis self-contained dans `core`).
+
+### Changed
 - **Un script Python par sensor** (réf. HOM-283, [ADR-0046](decisions/0046-sensors-executables-python-et-hooks-agnostiques.md)).
   Le fichier global `sensorlib/checks.py` est remplacé par `core/scripts/sensors/<id>.py` (8 scripts, dont le nouveau `style_concision.py`) :
   - chaque script s'exécute seul et expose `ID` et `run(ctx)` ; le champ `command` des manifestes le désigne ;

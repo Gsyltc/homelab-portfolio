@@ -16,6 +16,21 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/) ; versionnage
   (HOM-278).
 
 ### Changed
+- **`architecture-solution-gabarits`** : porte désormais le **gabarit d'état de
+  la checklist d'architecture** (`gabarits/00-checklist-architecture.md`),
+  déplacé depuis `core/common/protocols/gabarits/`. C'est un **fichier d'état de
+  processus** (copié en `documentation/00-checklist-architecture.md`), **pas** un
+  fichier DAS : la **présence** est vérifiée en Initialization (stage
+  `directory-check`, Step 3) et, **si absente**, l'init idempotente (copie du
+  gabarit, 0 %) est **déléguée à la skill propriétaire** (par propriétaire,
+  **sans couplage `core → plugin`**) ; règles de tenue (barème 80/10/10) en
+  source unique dans `core/common/protocols/architecture-checklist.md`. Règle
+  d'or **3-bis** ajoutée au `SKILL.md` (ADR-0047, HOM-286).
+- **`architecture-solution-gabarits` — `SKILL.md` condensé** (HOM-286) : prose
+  réduite au minimum sans perte, puces multi-niveaux, retrait des apartés et
+  notes de processus, description resserrée. Les **20 règles d'or** et leurs
+  numéros (dont `3-bis`, `5-bis`, 16, 17, 19, 20) sont **préservés** pour ne pas
+  casser les renvois externes (gabarits, ADR). Objectif : économie de tokens.
 - Alignement du plugin sur le standard du dépôt (modèle `homelab-assistant`) :
   `plugin.json` + `mcp.json` + `README.md` + `CHANGELOG.md` à la racine, skills
   conformes **Agent Skills** vérifiées par `scripts/validate_skills.sh`

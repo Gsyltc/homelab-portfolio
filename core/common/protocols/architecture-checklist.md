@@ -6,8 +6,8 @@
 
 ## 1. État de la checklist (où il vit)
 
-- L'**état** est un **livrable versionné** du projet : `documentation/00-checklist-architecture.md`, copié depuis le gabarit [`gabarits/00-checklist-architecture.md`](gabarits/00-checklist-architecture.md) à l'initialisation du répertoire projet (Phase 0, [`../stages/initialization/directory-check.md`](../stages/initialization/directory-check.md)).
-- Chaque **changement de %** (et la composante qui l'a produit : sections conformes, revue pair, acceptation humaine) est **aussi tracé sur l'issue** (piste d'audit — source unique [`../conductor.md`](../conductor.md), « OBLIGATOIRE : piste d'audit sur l'issue ») : objet, ancien % → nouveau %, composante modifiée, référence du ou des documents, verdict de conformité.
+- L'**état** est un **livrable versionné** du projet : `documentation/00-checklist-architecture.md`, initialisé (copie idempotente du **gabarit d'état**, tous éléments à `0 %`). Ce protocole **reste la source unique du processus** (logique, barème 80/10/10).
+- Chaque **changement de %** (et la composante qui l'a produit : sections conformes, revue pair, acceptation humaine) est **aussi tracé sur l'issue** (piste d'audit — source unique [`conductor.md`](../conductor.md), « OBLIGATOIRE : piste d'audit sur l'issue ») : objet, ancien % → nouveau %, composante modifiée, référence du ou des documents, verdict de conformité.
 - Le fichier d'état est un **livrable** : il est soumis à l'invariant **« aucune note de génération / méta-production »** (réf. décision [`0040`](../../../decisions/0040-aucune-note-de-generation-dans-les-livrables.md)). La traçabilité (qui a accepté, quand, via quelle issue) vit **sur l'issue**, pas dans le fichier.
 
 ## 2. Structure imposée (sections et éléments)
@@ -19,20 +19,18 @@ Quatre sections, éléments **fixes** ; aucun ajout / retrait sans décision tra
 - **Livrables** — Architecture de solution (DAS) · Architecture Logicielle détaillée · Architecture de données détaillée · Architecture de sécurité détaillée · Architecture infrastructure détaillée
 - **Projets** — Planification · Coûts · Risques · Exploitation · **Arrimages** (élément décomposé par **rôles mandatory**, section 2.1)
 
-> **Élément récapitulatif de la section Besoins (MoSCoW).** La priorisation MoSCoW des besoins d'affaires
-> est **tracée en amont** par le stage [`../stages/inception/requirements-analysis.md`](../stages/inception/requirements-analysis.md)
-> (Step 1b : besoins d'affaires classés MoSCoW, identifiants stables `BA-…`). Lorsqu'une **méthodologie OpenSpec**
-> est active, cette priorisation est consolidée dans la **matrice de traçabilité MoSCoW** du `proposal.md`
-> (skill `openspec-proposal-creation`, Step 6b), qui relie **spec ↔ besoin d'affaires ↔ exigence** (chaque
-> scénario / cas d'utilisation renvoie à son besoin `BA-…` et à sa priorité). Cette matrice est l'**élément
-> récapitulatif** que le coordinateur lit pour suivre la conformité des éléments de la section **Besoins (MoSCoW)**
-> (section 6), et que le sensor [`../../sensors/sensors/traceability.md`](../../sensors/sensors/traceability.md)
-> recoupe (chaîne besoin ↔ exigence ↔ scénario sans orphelin). Elle ne **redéfinit pas** les quatre éléments de la
-> section ; elle en **établit la conformité** de façon traçable.
+> **Élément récapitulatif de la section Besoins (MoSCoW).** La priorisation MoSCoW des besoins d'affaires est
+> **tracée en amont** par le stage [`../stages/inception/requirements-analysis.md`](../stages/inception/requirements-analysis.md)
+> (Step 1b : besoins classés MoSCoW, identifiants stables `BA-…`). Lorsqu'une **méthodologie OpenSpec** est active,
+> elle est consolidée dans la **matrice de traçabilité MoSCoW** du `proposal.md` (Step 6b), reliant
+> **spec ↔ besoin ↔ exigence** (chaque scénario renvoie à son besoin `BA-…` et à sa priorité). Cette matrice est
+> l'**élément récapitulatif** que le coordinateur lit pour suivre la conformité de la section (section 6), recoupé
+> par le sensor [`traceability`](../../sensors/sensors/traceability.md). Elle n'**établit** la conformité des quatre
+> éléments que de façon traçable ; elle ne les **redéfinit pas**.
 
 Chaque élément est suivi **en pourcentage** selon le **barème 80/10/10** de la section 3. Un élément n'atteint **100 %** que lorsque sa part « sections conformes » est complète **et** que sa **revue par un pair** et son **acceptation humaine** sont réalisées.
 
-Les **sections requises** d'un livrable — celles qui composent sa part de conformité — ont leur **source unique** dans les contrats de sections : [`required-sections`](../../sensors/sensors/required-sections.md) (et, pour les données, [`data-lifecycle`](../../sensors/sensors/data-lifecycle.md)), ou les gabarits du livrable qu'il ne couvre pas. Ce protocole ne les **liste pas** et ne les reduplique pas : le **gabarit d'état** ([`gabarits/00-checklist-architecture.md`](gabarits/00-checklist-architecture.md)) en déploie seulement les **tables de suivi**, livrable par livrable, sans redéfinir le contrat.
+Les **sections requises** d'un livrable — celles qui composent sa part de conformité — ont leur **source unique** dans les contrats de sections : [`required-sections`](../../sensors/sensors/required-sections.md) (et, pour les données, [`data-lifecycle`](../../sensors/sensors/data-lifecycle.md)), ou les gabarits du livrable qu'il ne couvre pas. Ce protocole ne les **liste pas** : le **gabarit d'état** en déploie seulement les **tables de suivi**, livrable par livrable, sans redéfinir le contrat.
 
 ### 2.1 Arrimages — rôles mandatory
 
@@ -100,7 +98,7 @@ Le % d'un élément n'évolue que par la mise à jour de ses **trois composantes
 
 L'acceptation humaine (+10 %) est le **seul** chemin vers **100 %** : aucun scope, aucune règle apprise, aucun sensor advisory ne s'y substitue. Si l'humain **rejette** (❌ Redo) un élément ou son livrable, le motif est tracé sur l'issue et la part acceptation **reste à 0** jusqu'à reprise.
 
-En **cas de doute** sur la conformité d'une section ou sur l'intention humaine : **ne jamais deviner, ne pas compter la part concernée** ; informer l'humain et attendre (garde-fou « ne jamais deviner » + validation humaine granulaire — [`governance-security.md`](governance-security.md)). Chaque changement de % (et de la composante qui l'a produit) est tracé sur l'issue **avant** d'être reporté dans le fichier d'état : objet, ancien % → nouveau %, composante modifiée, verdict de conformité, référence du ou des documents.
+En **cas de doute** sur la conformité d'une section ou sur l'intention humaine : **ne pas compter la part concernée**, informer l'humain et attendre. Chaque changement de % (et sa composante) est tracé sur l'issue **avant** report dans le fichier d'état : objet, ancien % → nouveau %, composante modifiée, verdict de conformité, référence du ou des documents.
 
 ## 5. Lecture — sur demande humaine
 
@@ -123,9 +121,9 @@ Pour établir la **part 80 %** d'un élément (proportion `sections conformes / 
 - ils sont **clairs**, **sans note de génération d'agent** (réf. décision [`0040`](../../../decisions/0040-aucune-note-de-generation-dans-les-livrables.md)), **sans doublon**, **sans incohérence** ;
 - pour la section **Livrables**, **chaque section requise** est comptée **conforme** uniquement si elle est **présente et non vide**, selon le sensor [`required-sections`](../../sensors/sensors/required-sections.md) (**source unique** du contrat et du **total** servant de dénominateur — ne pas le redupliquer ici ; le sensor reste **advisory** et **n'autorise jamais** à se passer de la validation humaine). Pour l'**architecture de sécurité détaillée**, le décompte porte sur les sections des volets `das:` (fichier `11`) et `securite:` ; la section « Frontières de confiance » n'est conforme que si son **diagramme** est présent et valide ;
 - pour l'élément **Arrimages** (section Projets), **chaque rôle mandatory** (section 2.1) est compté **conforme** uniquement s'il est **présent et nommé** (colonne « Nom » renseignée) dans la matrice RACI du DAS `001` ; le couple « Architecte de solution / intégrateur » est conforme dès que **l'un** des deux est nommé ; le **Responsable Légal** n'entre au dénominateur **que si la Loi 25 est activée**.
-- pour les éléments de la section **Besoins (MoSCoW)**, la part 80 % (binaire) est comptée **conforme** uniquement lorsque le besoin est **tracé et priorisé MoSCoW** en amont (stage [`../stages/inception/requirements-analysis.md`](../stages/inception/requirements-analysis.md), identifiants stables `BA-…`) et, lorsqu'une méthodologie OpenSpec est active, **repris dans la matrice de traçabilité MoSCoW** du `proposal.md` (élément récapitulatif reliant spec ↔ besoin ↔ exigence, section 2). Un besoin sans priorité MoSCoW, ou un scénario / cas d'utilisation sans renvoi à son besoin `BA-…`, est une chaîne de traçabilité **incomplète** ⇒ **ne compte pas** comme conforme (recoupe le sensor [`traceability`](../../sensors/sensors/traceability.md)).
+- pour les éléments de la section **Besoins (MoSCoW)**, la part 80 % (binaire) n'est comptée **conforme** que si le besoin est **tracé et priorisé MoSCoW** en amont (mécanisme : section 2, identifiants `BA-…`, matrice de traçabilité du `proposal.md` si OpenSpec actif). Une chaîne de traçabilité **incomplète** (besoin sans priorité, scénario sans renvoi à son `BA-…`) **ne compte pas** (recoupe le sensor [`traceability`](../../sensors/sensors/traceability.md)).
 
-Le **total** de sections mandatory (dénominateur) est celui du contrat `required-sections` **au moment du calcul** (dénominateur dynamique, section 3). Toute section en échec de vérification ou ambiguë **ne compte pas** comme conforme ⇒ elle **abaisse** la part 80 %. En cas de doute, **ne pas compter**, informer l'humain (section 4).
+Le **total** de sections mandatory (dénominateur) suit le **dénominateur dynamique** (section 3). Toute section en échec de vérification ou ambiguë **ne compte pas** ⇒ elle **abaisse** la part 80 % ; en cas de doute, **ne pas compter** et informer l'humain (section 4).
 
 Les parts **+10 % (revue pair)** et **+10 % (acceptation humaine)** sont **indépendantes** de ce décompte : elles s'ajoutent sur réalisation effective (revue tracée) et sur annonce humaine explicite, sans attendre que les sections soient toutes conformes.
 
@@ -141,9 +139,7 @@ Le mapping **livrable → document(s) attendu(s)** et la **source du contrat de 
 | Architecture de sécurité détaillée | `documentation/11-securite.md` + chapitre `architecture-securite/` | sensor [`required-sections`](../../sensors/sensors/required-sections.md), volets `das:` (fichier `11`) et `securite:` |
 | Architecture infrastructure détaillée | `documentation/09-deploiement.md` + diagrammes d'infrastructure | gabarit DAS `09-deploiement` |
 
-Le **détail des sections requises** de chaque livrable n'est pas tenu ici : il a sa **source unique** dans ces contrats (et, pour les données, `data-lifecycle`). Le **gabarit d'état** en déploie les **tables de suivi**, livrable par livrable, sans redéfinir le contrat.
-
-> Le **total de sections mandatory** de chaque livrable — dénominateur de la part 80 % — provient de ces mêmes sources. En cas d'écart de nommage ou de découpage, **ces sources font foi** ; la checklist ne redéfinit aucun contrat de sections.
+Le **détail des sections requises** (et le **total** servant de dénominateur) n'est pas tenu ici : sa **source unique** est ces contrats (et, pour les données, `data-lifecycle`). En cas d'écart de nommage ou de découpage, **ces sources font foi**. Le **gabarit d'état** en déploie seulement les **tables de suivi**, sans redéfinir le contrat.
 
 ## 7. Ce que ce protocole ne change pas (garde-fous)
 

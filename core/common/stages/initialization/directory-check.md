@@ -10,7 +10,7 @@ summary_confirmation: none
 reviewer: null
 review_class: none
 human_gate: none
-produces: [repertoire_projet_confirme, checklist_architecture_initialisee]
+produces: [repertoire_projet_confirme, checklist_architecture_verifiee]
 consumes: []
 requires_stage: []
 sensors: []
@@ -35,13 +35,20 @@ Vérifier le répertoire officiel du projet et les emplacements conventionnels (
 
 Répertoire introuvable ou ambigu → demander confirmation à l'humain et **ne pas lancer les travaux** sans elle. Ce n'est **pas** un gate de validation : c'est une garde déterministe.
 
-### Step 3 — Initialiser la checklist d'architecture
+### Step 3 — Vérifier la présence de la checklist d'architecture (initialiser si absente)
 
-Si `documentation/00-checklist-architecture.md` n'existe pas dans le répertoire projet confirmé, le créer en copiant le gabarit [`../../protocols/gabarits/00-checklist-architecture.md`](../../protocols/gabarits/00-checklist-architecture.md) (tous les éléments à **0 %**). Idempotent : ne **jamais** écraser un fichier d'état existant. Le cycle de lecture / écriture de la checklist (barème 80/10/10, gate ≥ 80 %) a sa **source unique** dans [`../../protocols/architecture-checklist.md`](../../protocols/architecture-checklist.md).
+**Vérifier que le fichier d'état `documentation/00-checklist-architecture.md` est présent** dans le répertoire projet confirmé. La **vérification de présence** est une **simple vérification d'existence de fichier**, déterministe : elle ne connaît **aucun** gabarit et ne lit **aucun** chemin de plugin.
+
+- **Présent** ⇒ ne rien faire : la vérification est **idempotente**, on ne **réinitialise jamais** un fichier d'état existant.
+- **Absent** ⇒ **l'initialiser tel que défini dans le gabarit** (tous les éléments à **0 %**). L'initialisation est **déléguée à son propriétaire** (Architecte de solution intégrateur).
 
 ## Sensors
 
-Outputs: répertoire confirmé consigné sur l'issue ; checklist d'architecture initialisée (`documentation/00-checklist-architecture.md`) le cas échéant. Aucun gate humain (bootstrap déterministe).
+Outputs:
+
+- répertoire confirmé consigné sur l'issue ;
+- présence de la checklist d'architecture (`documentation/00-checklist-architecture.md`) vérifiée et, **si absente**, initialisée par délégation.
+Aucun gate humain (bootstrap déterministe).
 Imports: none.
 
 ## Learn
