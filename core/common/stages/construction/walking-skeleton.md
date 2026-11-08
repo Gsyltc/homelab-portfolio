@@ -14,7 +14,7 @@ human_gate: granular
 produces: [walking_skeleton_valide, mode_execution_choisi]
 consumes: [{artifact: conception_cible_validee, required: true}, {artifact: decision_conception, required: true}]
 requires_stage: [design-and-decisions]
-sensors: [required-sections, diagram-validity, claim-sources]
+sensors: [checklist-progress, required-sections, diagram-validity, claim-sources]
 scopes: [standard, feature, infra, security-patch, mvp, enterprise]
 inputs: "Conception cible et décisions structurantes validées"
 outputs: "Première tranche de bout en bout validée + mode d'exécution (gated / autonome) choisi une fois"
@@ -39,7 +39,7 @@ Après validation du walking skeleton, poser **une seule** question pour le rest
 ## Sensors
 
 Outputs: walking skeleton validé + mode d'exécution consigné.
-Imports: `required-sections`, `diagram-validity`, `claim-sources`.
+Imports: `checklist-progress`, `required-sections`, `diagram-validity`, `claim-sources`.
 Review artifact: `walking-skeleton.md` porte la section `## Review` ajoutée par le Reviewer de sécurité.
 
 ## Learn

@@ -95,7 +95,7 @@ Les résultats vivent **sur l'issue** (piste d'audit existante), jamais dans un 
 
 ## Sensors définis
 
-Huit sensors, alignés sur le contrat amont « Sensors » (schéma de manifeste `id` / `kind` / `command` / `default_severity` / `description` + `category` / `fire_on` / `matches`). Les `id` sont importés **par id nu** dans le champ `sensors:` des fiches de stage (pull-authoring).
+Neuf sensors, alignés sur le contrat amont « Sensors » (schéma de manifeste `id` / `kind` / `command` / `default_severity` / `description` + `category` / `fire_on` / `matches`). Les `id` sont importés **par id nu** dans le champ `sensors:` des fiches de stage (pull-authoring).
 
 | Sensor | Manifeste | `category` | `fire_on` | `default_severity` | Objet |
 | --- | --- | --- | --- | --- | --- |
@@ -107,6 +107,7 @@ Huit sensors, alignés sur le contrat amont « Sensors » (schéma de manifeste 
 | `claim-sources` | [`sensors/claim-sources.md`](sensors/claim-sources.md) | provenance | gate | advisory | Chaque affirmation retenue porte une source résoluble ; hypothèses = confirmation humaine explicite |
 | `style-concision` | [`sensors/style-concision.md`](sensors/style-concision.md) | document-shape | write | advisory | Style concis des documents livrables : paragraphes et phrases courts, puces limitées en profondeur, tableaux hors gabarit sobres (`RULE-WS-007`) |
 | `traceability` | [`sensors/traceability.md`](sensors/traceability.md) | traceability | gate | advisory | Chaîne besoin (BA-…, MoSCoW) → exigence → scénario → ADR → livrable cohérente, sans orphelin dérivé |
+| `checklist-progress` | [`sensors/checklist-progress.md`](sensors/checklist-progress.md) | progress | gate | advisory | **Restitue** l'avancement de la checklist d'architecture (`00-checklist-architecture.md`) — % global de la **solution**, du **cadrage**, des **besoins (MoSCoW)** et des **livrables** — lu par l'Architecte de solution intégrateur **avant chaque gate granulaire humaine en Construction**. Il **constate**, ne calcule ni n'écrit rien (barème 80/10/10 = source unique du protocole) ; aucun auto-accept (origine HOM-273) |
 
 > `linter` et `type-check` (sensors AI-DLC de qualité de code) restent **N/A** tant que le dépôt ne produit ni code ni IaC ; ils seront ajoutés le jour où un livrable exécutable apparaît (repli « stratégie de tests » de l'axe de vérification.
 
