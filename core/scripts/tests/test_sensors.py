@@ -306,5 +306,85 @@ class GateAndHookTests(unittest.TestCase):
         self.assertNotIn("diagram-validity", out)
 
 
+class ReportCheckTests(unittest.TestCase):
+    """Durcissement 2 (ORIG-418) : contrôle de gate du compte rendu — section `## Sensors` vs `sensors:`."""
+
+    def setUp(self) -> None:
+        self.p = Project()
+        self.addCleanup(self.p.tmp.cleanup)
+
+    def _stage(self, rel: str, sensors: str | None) -> Path:
+        body = "---\nslug: s\n"
+        if sensors is not None:
+            body += f"sensors: [{sensors}]\n"
+        body += "---\n# Stage\n"
+        self.p.write(rel, body)
+        return self.p.root / rel
+
+    def test_stage_sensors_parsing(self) -> None:
+        self.assertEqual(sensor.stage_sensors(self._stage("s.md", "a, b, c")), ["a", "b", "c"])
+        self.assertEqual(sensor.stage_sensors(self._stage("e.md", "")), [])
+        self.assertEqual(sensor.stage_sensors(self._stage("n.md", None)), [])
+        self.assertIsNone(sensor.stage_sensors(self.p.root / "absent.md"))
+
+    def test_report_has_sensors_section(self) -> None:
+        self.assertTrue(sensor.report_has_sensors_section("## Résumé\n- x\n## Sensors\n- `a` : ✅\n"))
+        self.assertFalse(sensor.report_has_sensors_section("## Résumé\n- x\n"))
+        self.assertFalse(sensor.report_has_sensors_section("## Résumé\n- x\n## Sensors\n\n## Fin\n- y\n"))
+
+    def test_declared_sensors_but_no_section_is_gap(self) -> None:
+        stage = self._stage("prod.md", "style-concision, claim-sources")
+        r = sensor.check_report(stage, "## Résumé\n- fait X\n")
+        self.assertEqual(r.verdict, GAP)
+        self.assertEqual(len(r.findings), 2)
+        self.assertTrue(any("style-concision" in f for f in r.findings))
+
+    def test_declared_sensors_with_section_is_ok(self) -> None:
+        stage = self._stage("prod.md", "style-concision")
+        r = sensor.check_report(stage, "## Résumé\n- x\n## Sensors\n- `style-concision` : ✅ conforme\n")
+        self.assertEqual(r.verdict, OK)
+
+    def test_no_declared_sensors_is_ok_even_without_section(self) -> None:
+        stage = self._stage("framing.md", "")
+        self.assertEqual(sensor.check_report(stage, "## Résumé\n- x\n").verdict, OK)
+        stage2 = self._stage("framing2.md", None)
+        self.assertEqual(sensor.check_report(stage2, "## Résumé\n- x\n").verdict, OK)
+
+    def test_missing_stage_is_unavailable(self) -> None:
+        r = sensor.check_report(self.p.root / "absent.md", "## Résumé\n- x\n")
+        self.assertEqual(r.verdict, UNAVAILABLE)
+
+    def test_report_check_cli_advisory_and_strict(self) -> None:
+        stage = self._stage("prod.md", "style-concision")
+        report = self.p.root / "r.md"
+        report.write_text("## Résumé\n- x\n", encoding="utf-8")
+        old = sys.stdin
+        try:
+            sys.stdin = io.StringIO("")
+            out = io.StringIO()
+            with redirect_stdout(out):
+                rc = sensor.main(["--root", str(self.p.root), "report-check", "--stage", str(stage),
+                                  "--report-file", str(report)])
+            self.assertEqual(rc, 0)  # advisory : code 0 même en écart
+            self.assertIn("⚠️", out.getvalue())
+            rc_strict = sensor.main(["--root", str(self.p.root), "--strict", "report-check",
+                                     "--stage", str(stage), "--report-file", str(report)])
+            self.assertEqual(rc_strict, 1)  # --strict : code 1 (CI uniquement)
+        finally:
+            sys.stdin = old
+
+    def test_report_check_json(self) -> None:
+        stage = self._stage("prod.md", "style-concision")
+        report = self.p.root / "r.md"
+        report.write_text("## Résumé\n- x\n## Sensors\n- `style-concision` : ✅\n", encoding="utf-8")
+        out = io.StringIO()
+        with redirect_stdout(out):
+            sensor.main(["--root", str(self.p.root), "report-check", "--stage", str(stage),
+                         "--report-file", str(report), "--format", "json"])
+        data = json.loads(out.getvalue())
+        self.assertEqual(data["verdict"], OK)
+        self.assertEqual(data["result"]["sensor"], "report-sensors-section")
+
+
 if __name__ == "__main__":
     unittest.main()

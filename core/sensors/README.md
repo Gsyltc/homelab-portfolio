@@ -16,6 +16,7 @@ Chaque manifeste fixe le **contrat** (périmètre de déclenchement, règles, so
 | `python3 core/scripts/sensor.py list` | Sensors, script associé et état (`⛔` si script absent ou invalide) |
 | `python3 core/scripts/sensor.py --root <projet> fire <id> [--path <fichier>...]` | Exécute un sensor. Sans `--path` : balayage de gate sur le périmètre `matches` |
 | `python3 core/scripts/sensor.py --root <projet> gate <frontière> [--attest a,b]` | Rapport de vérification d'une frontière de [`gates.md`](gates.md) |
+| `python3 core/scripts/sensor.py report-check --stage <fiche> [--report-file F]` | Contrôle de gate du compte rendu : section `## Sensors` absente alors que la fiche de stage déclare `sensors:` non vide ⇒ `⚠️` écart (advisory) |
 | `python3 core/scripts/sensors/<id avec _>.py --root <projet> [--path <fichier>...]` | Exécute un sensor seul (ex. `required_sections.py`) : un script par sensor |
 | `python3 core/sensors/hooks/post_write.py` | Hook d'écriture : lit le JSON du harnais sur stdin, lance les sensors `fire_on: write` |
 
@@ -65,7 +66,7 @@ Kiro CLI (agent, `hooks.postToolUse`) :
 { "matcher": "fs_write", "command": "python3 core/sensors/hooks/post_write.py" }
 ```
 
-Sous Multica, l'agent auteur lance `fire` lui-même au temps 4 du [`stage-protocol`](../common/protocols/stage-protocol.md) et poste le rapport sur l'issue. Le hook n'est qu'un filet supplémentaire.
+Sous Multica, l'agent auteur lance `fire` lui-même au temps 4 du [`stage-protocol`](../common/protocols/stage-protocol.md) et poste le rapport sur l'issue. Le hook est de plus **branché par défaut** sur les **agents de production de livrables** (champ `hooks.postToolUse` de leur fiche, matcher `fs_write`) comme **filet déterministe** : il déclenche les sensors `fire_on: write` à chaque écriture, sans dépendre de la discipline manuelle au temps 4 (durcissement ORIG-418 ; périmètre documenté dans [`../agents/README.md`](../agents/README.md), « Hook d'écriture des sensors »). Le hook **ne remplace pas** le lancement explicite ni le compte rendu `## Sensors` — il reste **advisory** (code 0, jamais bloquant).
 
 ## Garde-fou : advisory par décision
 
