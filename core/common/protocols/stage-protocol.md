@@ -103,6 +103,14 @@ Sensors de gate :
 
 Un écart est signalé, jamais bloquant ; `⛔ indisponible ≠ conforme` (SG-2).
 
+> ⛔ **Contrôle du compte rendu au gate** Au même point — **avant la validation humaine** — le coordinateur contrôle que le **compte rendu de l'agent auteur porte une section `## Sensors` renseignée** dès lors que la **fiche de stage active déclare un champ `sensors:` non vide**. Un compte rendu sans section `## Sensors` (ou avec une section vide) alors que le stage déclare des sensors est un **écart à signaler** (SG-2 : indisponible ≠ conforme, silence = écart) : il rend visible un temps 4 non rejoué, même si l'agent auteur a omis de lancer `fire`. Exécution :
+>
+> ```
+> python3 core/scripts/sensor.py report-check --stage <fiche-de-stage-active> --report-file <compte-rendu>
+> ```
+>
+> (ou le compte rendu sur stdin). Le contrôle est **advisory** — code retour 0 même en écart, il **ne bloque jamais** la validation humaine ; le coordinateur **signale** l'écart dans le Rapport de vérification et **propose de faire rejouer le temps 4** avant de présenter le contenu à l'humain. Si la fiche de stage déclare `sensors: []` (ou aucun champ), l'absence de section `## Sensors` est **légitime** et le contrôle renvoie `✅`. Rendre ce contrôle **bloquant** serait une décision structurante distincte (ADR + contrôle sécurité, SG-3).
+
 ### 6. Validation humaine granulaire
 - Selon `human_gate` : `none` (aucune — Initialization), `light` (approbation intention/périmètre — Ideation), `granular` (choix par choix — Inception / Construction), `explicit` (validation explicite + rollback si destructif — Operation).
 - Boucle **Keep / Modify / Redo** par élément (voir `conductor.md`). Sur `Modify` / `Redo`, retour au temps 3 pour l'élément concerné uniquement.

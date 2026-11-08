@@ -8,6 +8,9 @@ Sous-commandes (Python ≥ 3.9, bibliothèque standard uniquement) :
   fire <id> [--path P ...]              exécute un sensor (balayage de gate sans --path)
   gate <frontière> [--attest a,b]       rapport de vérification d'une frontière de phase
   hook [--sensors a,b]                  hook d'écriture (stdin JSON harnais) : sensors `fire_on: write`
+  report-check --stage <fiche>          contrôle de gate du compte rendu : section `## Sensors`
+                [--report-file F]       absente alors que la fiche de stage déclare `sensors:` non vide
+                                        (⚠️ écart advisory, SG-2 ; stdin si --report-file absent)
 
 Contrat (README.md) : **advisory**, code retour 0 même en écart (⚠️) ou ⛔, sauf erreur
 d'usage (2). `--strict` renvoie 1 s'il y a un écart ou un ⛔ (usage CI uniquement).
@@ -30,8 +33,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from sensorlib.context import Ctx  # noqa: E402
 from sensorlib.diagrams import blocks as diagram_blocks  # noqa: E402
 from sensorlib.common import (  # noqa: E402
-    GAP, ICONS, OK, UNAVAILABLE, Manifest, Result, glob_match, list_files,
-    parse_manifest, source_commit, worst,
+    GAP, ICONS, OK, UNAVAILABLE, Manifest, Result, body_without_headings_has_content,
+    find_section, glob_match, list_files, parse_manifest, sections, source_commit, worst,
 )
 
 SENSORS_DIR = Path(__file__).resolve().parents[1] / "sensors" / "sensors"
@@ -287,6 +290,72 @@ def _append_audit(path: str | None, text: str) -> None:
 
 
 # --------------------------------------------------------------------------- #
+# Contrôle de gate du compte rendu — section `## Sensors` vs `sensors:` du stage
+# (durcissement 2, ORIG-418) — advisory, ne bloque jamais (SG-2 : silence = écart)
+# --------------------------------------------------------------------------- #
+
+
+def stage_sensors(stage_file: Path) -> list[str] | None:
+    """Ids du champ `sensors:` d'une fiche de stage ; None si la fiche est introuvable (⛔, SG-2)."""
+    if not stage_file.is_file():
+        return None
+    text = stage_file.read_text(encoding="utf-8")
+    m = re.search(r"^sensors:\s*\[(.*?)\]", text, re.M)
+    if not m:
+        return []
+    return [x.strip() for x in m.group(1).split(",") if x.strip()]
+
+
+def report_has_sensors_section(report: str) -> bool:
+    """Vrai si le compte rendu porte une section `## Sensors` non vide (hors titres)."""
+    sec = find_section(sections(report), "Sensors")
+    return sec is not None and body_without_headings_has_content(sec)
+
+
+def check_report(stage_file: Path, report: str) -> Result:
+    """
+    Contrôle de gate advisory : la fiche de stage active déclare des sensors mais le
+    compte rendu n'en porte pas de section `## Sensors` renseignée (SG-2 : silence = écart).
+
+    - fiche de stage introuvable       ⇒ ⛔ indisponible (jamais lu comme conforme) ;
+    - `sensors:` vide / absent         ⇒ ✅ conforme (section légitimement absente) ;
+    - sensors déclarés + section OK     ⇒ ✅ conforme ;
+    - sensors déclarés + section absente ⇒ ⚠️ écart (advisory).
+    """
+    sid = "report-sensors-section"
+    declared = stage_sensors(stage_file)
+    rel = stage_file.name
+    if declared is None:
+        return Result(sid, rel, UNAVAILABLE,
+                      f"indisponible : fiche de stage introuvable ({stage_file})")
+    if not declared:
+        return Result(sid, rel, OK, "conforme : aucun sensor déclaré par le stage — section `## Sensors` non requise")
+    if report_has_sensors_section(report):
+        return Result(sid, rel, OK,
+                      f"conforme : section `## Sensors` présente pour {len(declared)} sensor(s) déclaré(s)")
+    return Result(sid, rel, GAP,
+                  f"écart : {len(declared)} sensor(s) déclaré(s) ({', '.join(declared)}) mais aucune section "
+                  "`## Sensors` renseignée dans le compte rendu (SG-2 : indisponible ≠ conforme, silence = écart)",
+                  [f"sensor déclaré non rapporté : {s}" for s in declared])
+
+
+def cmd_report_check(args: argparse.Namespace, commit: str | None) -> int:
+    report = Path(args.report_file).read_text(encoding="utf-8") if args.report_file else sys.stdin.read()
+    result = check_report(Path(args.stage), report)
+    if args.format == "json":
+        print(json.dumps({"source": f"core/scripts/sensor.py report-check @ {commit or 'indéterminé'}",
+                          "verdict": result.verdict, "result": result.to_dict()},
+                         ensure_ascii=False, indent=2))
+    else:
+        src = f"core/scripts/sensor.py report-check @ {commit or 'indéterminé'}"
+        print(f"Contrôle de compte rendu — {result.target}   (source : {src})")
+        print(f"- verdict : {ICONS[result.verdict]} {result.summary}")
+        for f in result.findings:
+            print(f"  - {f}")
+    return 1 if args.strict and result.verdict != OK else 0
+
+
+# --------------------------------------------------------------------------- #
 # CLI
 # --------------------------------------------------------------------------- #
 
@@ -311,12 +380,18 @@ def main(argv: list[str] | None = None) -> int:
     h.add_argument("--sensors", help="restreint aux ids déclarés par le stage actif (a,b)")
     h.add_argument("--format", choices=["text", "claude"], default="text")
     h.add_argument("--audit-file", help="ajoute le rapport à ce fichier (audit append-only hors Multica)")
+    rc = sub.add_parser("report-check")
+    rc.add_argument("--stage", required=True, help="fiche de stage active (lit son champ `sensors:`)")
+    rc.add_argument("--report-file", help="compte rendu à contrôler ; stdin si absent")
+    rc.add_argument("--format", choices=["text", "json"], default="text")
     args = ap.parse_args(argv)
     root = Path(args.root or os.getcwd())
 
     if args.cmd == "hook":
         return cmd_hook(args)
     manifests, commit = load_manifests(), resolve_commit()
+    if args.cmd == "report-check":
+        return cmd_report_check(args, commit)
     if args.cmd == "list":
         for m in manifests.values():
             script = script_path(m.id)

@@ -11,6 +11,10 @@ skills:
   - openspec-workflow
 disallowedTools: Task
 tier: judgment
+hooks:
+  postToolUse:
+    - matcher: fs_write
+      command: "python3 core/sensors/hooks/post_write.py"
 ---
 
 # Prérequis commun

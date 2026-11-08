@@ -5,7 +5,7 @@ Définitions conformes (front-matter YAML + corps Markdown) des agents du **work
 ## Rôles génériques → fichiers
 
 | Rôle générique (workflow) | Fichier | Objet |
-|---|---|---|
+| --- | --- | --- |
 | Architecture Solution & Intégration (**coordinateur**) | [architecture-solution-integration-agent.md](architecture-solution-integration-agent.md) | Coordonne, supervise et valide les travaux ; vérifie la cohérence avec les ADR, demande les validations humaines, met les documents à disposition. Ne produit pas les livrables. |
 | Architecte de solution | [solution-architect-agent.md](solution-architect-agent.md) | Conçoit les solutions TI : documentation d'architecture (DAS), ADR, diagrammes C4 / Archimate / PlantUML / CALM. |
 | Architecte AWS | [aws-architect-agent.md](aws-architect-agent.md) | Définit les services AWS requis, produit les diagrammes d'architecture et optimise les coûts. |
@@ -30,6 +30,23 @@ Les agents sont créés au format **`<nom> - <fonction>`** (ex. `Manuel - Archit
 ## Création / recréation des agents et création d'un nouveau projet
 
 La procédure de **création d'un nouveau projet** (projet workspace, liaison du dépôt, description complète, structure disque, création des agents et skills `core` manquants) et la **recréation de la liste des agents** sont décrites dans la skill [`project-defaults`](../../plugins/architecture-assistant/skills/project-defaults/SKILL.md).
+
+## Hook d'écriture des sensors — branché par défaut sur les agents de production
+
+Les **agents de production de livrables** portent, dans leur front-matter, le **hook d'écriture** `core/sensors/hooks/post_write.py` (champ `hooks.postToolUse`, matcher `fs_write`). À chaque `fs_write`, les sensors `fire_on: write` (`style-concision`, `diagram-validity`, `detailed-arch-refs`) se déclenchent **automatiquement** et émettent un signal **advisory** (jamais bloquant, code 0), sans dépendre de la discipline manuelle au temps 4 du [`stage-protocol`](../common/protocols/stage-protocol.md). Le hook est **agnostique du harnais** ([ADR-0038](../../decisions/0038-workflow-core-agnostique-du-harnais.md), [ADR-0046](../../decisions/0046-sensors-executables-python-et-hooks-agnostiques.md)) : la forme Claude Code (`PostToolUse` / `Write|Edit`) est documentée dans [`../sensors/README.md`](../sensors/README.md) (§ Hooks). Il **ne remplace pas** le lancement explicite des sensors au temps 4 ni le compte rendu `## Sensors` — il en est le **filet déterministe**.
+
+**Périmètre (choix documenté).** Le hook est branché sur les **sept agents qui produisent des livrables** matchés par les sensors `fire_on: write` (`matches: documentation/**/*.md`, `*.puml`, `*.dsl`) :
+
+- Architecte de solution · Architecte AWS · Architecte Azure · Architecte de données · Infrastructure Windows · Architecte Cybersécurité · OpenSpec Expert.
+
+**Hors périmètre (choix documenté).** Le hook n'est **pas** branché sur :
+
+- le **coordinateur** (Architecture Solution & Intégration) — il coordonne, ne produit pas de livrable ;
+- les **reviewers** (cohérence, sécurité) — « review-only », n'écrivent aucun livrable ;
+- **Vente & Appels d'Offres** et **Présentation client** — produisent des supports (Word / PDF / HTML / PPTX) hors du périmètre `matches` des sensors d'écriture ;
+- les **utilitaires** (Experte d'archivage, Agent de notifications).
+
+Reste **advisory par décision** : rendre un sensor bloquant est une décision structurante distincte (ADR + contrôle sécurité, SG-3) — voir [`../sensors/README.md`](../sensors/README.md), « Garde-fou : advisory par décision ».
 
 ## Garde-fous (rappel)
 
