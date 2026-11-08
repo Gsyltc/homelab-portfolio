@@ -92,7 +92,7 @@ N'enregistrer un candidat-règle que lorsque l'humain le demande explicitement.
 
 ## Notes d'implémentation
 
-- **IMP-001** : Mécanisme documenté dans la section « Règles & boucle d'apprentissage » de [`docs/core-workflow.md`](../docs/core-workflow.md).
+- **IMP-001** : Mécanisme documenté dans la section « Règles & boucle d'apprentissage » du workflow (triptyque `core/common/conductor.md` / `stages/` / `protocols/` ; mémoire de règles sous [`core/rules/`](../core/rules/README.md)). L'ancien document narratif `docs/core-workflow.md` a été supprimé (définitivement obsolète).
 - **IMP-002** : Structure scaffoldée dans `core/rules/` — [`README.md`](../core/rules/README.md), `workspace.md` (seedé avec les invariants existants), `projects/_template.md`, `phases/{inception,construction,operation}.md`, `scopes/_template.md`.
 - **IMP-003** : Une règle nouvellement écrite s'applique au **prochain** workflow ; l'exécution en cours n'est jamais altérée.
 - **IMP-004** : Contrôle sécurité (Architecte cybersécurité) réalisé sur le mécanisme (commit `c0d8268`, périmètre OWASP / STRIDE) — verdict **approuvé sous réserve**, 5 clauses **SEC-1 à SEC-5 intégrées** avant validation finale (section « Contrôle de conflit à l'admission », README `core/rules/`).

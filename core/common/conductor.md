@@ -11,7 +11,7 @@ Source unique des instructions du **coordinateur** du workflow d'architecture A2
 
 - Ce fichier décrit *comment le coordinateur exécute* le workflow.
 - Le *quoi* de chaque étape vit dans [`stages/`](stages/) ; les mécanismes transverses dans [`protocols/`](protocols/).
-- Le triptyque `conductor.md` / `stages/` / `protocols/` remplace le document narratif historique `docs/core-workflow.md`, conservé comme stub de redirection.
+- Le triptyque `conductor.md` / `stages/` / `protocols/` remplace le document narratif historique `docs/core-workflow.md` (supprimé, définitivement obsolète).
 
 ---
 

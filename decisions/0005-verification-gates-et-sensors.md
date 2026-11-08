@@ -90,7 +90,7 @@ Centrer les sensors sur le linting de code et le volume de tests.
 
 ## Notes d'implémentation
 
-- **IMP-001** : Mécanisme documenté dans la section « Verification gates & Sensors » de [`docs/core-workflow.md`](../docs/core-workflow.md).
+- **IMP-001** : Mécanisme documenté dans la section « Verification gates & Sensors » du workflow (triptyque `core/common/conductor.md` / `stages/` / `protocols/` ; manifestes sous [`core/sensors/`](../core/sensors/README.md)). L'ancien document narratif `docs/core-workflow.md` a été supprimé (définitivement obsolète).
 - **IMP-002** : Manifestes déclaratifs scaffoldés dans `core/sensors/` — [`README.md`](../core/sensors/README.md), [`gates.md`](../core/sensors/gates.md), `sensors/{required-sections,upstream-coverage,diagram-validity}.md`.
 - **IMP-003** : Frontières adossées à Inception / Construction / Operation ; la matrice suivra l'ossature à 5 phases au Stage 5 (voir [ADR-0003](0003-scopes-et-axes-depth-verification.md), IMP-003).
 - **IMP-004** : Advisory par défaut ; le passage à bloquant d'un sensor est une décision ADR + contrôle sécurité (Architecte cybersécurité).
