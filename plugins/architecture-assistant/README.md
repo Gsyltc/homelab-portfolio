@@ -51,7 +51,7 @@ officiel `skills-ref` — `scripts/validate_skills.sh` à la racine du dépôt,
 
 | Skill | Fonction (rôle utilisateur) | Contenu annexe |
 |---|---|---|
-| `architecture-solution-gabarits` | Architecte de solution — gabarits de DAS (découpée par thème) + catalogue de 45 patrons d'architecture cloud | `gabarits/`, `patron-architecture/` |
+| `architecture-solution-gabarits` | Architecte de solution — gabarits de DAS (découpée par thème) + catalogue de 45 patrons d'architecture cloud ; porte aussi le **gabarit d'état de la checklist d'architecture** (fichier d'état de processus, règles de tenue en source unique dans `core`) | `gabarits/`, `patron-architecture/` |
 | `create-architecture-decision-record` | Architecte de solution — rédaction d'un ADR (décision optimisée pour l'IA) | — |
 | `aws-solution-architect` | Architecte AWS — conception d'architectures serverless, templates CloudFormation, optimisation des coûts, CI/CD, migration | `assets/`, `references/`, `scripts/` |
 | `azure-solution-architect` | Architecte Azure — conception serverless, templates Bicep/ARM, optimisation des coûts, CI/CD, migration | `assets/`, `references/`, `scripts/` |
