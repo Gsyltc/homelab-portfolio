@@ -13,7 +13,7 @@ human_gate: granular
 produces: [livrables_valides_mis_a_disposition]
 consumes: [{artifact: livrables_valides, required: true}]
 requires_stage: [consolidation-handoff]
-sensors: [required-sections, traceability]
+sensors: [checklist-progress, required-sections, traceability]
 scopes: [standard, feature, infra, security-patch, mvp, poc, express, enterprise]
 inputs: "Livrables validés granulairement (consolidation-handoff)"
 outputs: "Livrables mis à disposition : commit + PR si accord humain explicite, sinon archivage par dossier ; notification de fin de réalisation (fichiers / PR en attente) envoyée dès la mise à disposition"
@@ -67,7 +67,7 @@ Cette notification est **avancée au moment de la mise à disposition** (fin de 
 ## Sensors
 
 Outputs: livrables mis à disposition (archive par dossier ou commit + PR) + notification de fin de réalisation envoyée. Frontière **Construction → Operation** : gate `artefacts-presents` + `liaison-tracabilite` + `absence-orphelin`.
-Imports: `required-sections`, `traceability`.
+Imports: `checklist-progress`, `required-sections`, `traceability`.
 
 ## Learn
 

@@ -98,7 +98,7 @@ class OneScriptPerSensorTests(unittest.TestCase):
         manifests = set(sensor.load_manifests())
         scripts = {p.stem.replace("_", "-") for p in sensor.SCRIPTS_DIR.glob("*.py") if p.stem != "__init__"}
         self.assertEqual(manifests, scripts, "chaque manifeste a un script et réciproquement")
-        self.assertEqual(len(scripts), 8)
+        self.assertEqual(len(scripts), 9)
 
     def test_each_script_exposes_run_and_id(self) -> None:
         for sid in sensor.load_manifests():
@@ -188,6 +188,30 @@ class SensorTests(unittest.TestCase):
         self.p.write("documentation/10-cycle_vie_donnees.md",
                      "## Cycle de vie des données\n<!-- x -->\n## Gouvernance de données\nPropriétaire\n## Classification des données\n| a | b |\n|---|---|\n| <x> | <y> |\n")
         self.assertEqual(self.p.verdict("data-lifecycle"), GAP)
+
+    def test_checklist_progress(self) -> None:
+        # Checklist absente ⇒ ⛔ indisponible (SG-2, jamais lu comme conforme).
+        self.assertEqual(self.p.verdict("checklist-progress"), UNAVAILABLE)
+        # Checklist renseignée ⇒ ✅ avec les quatre avancements restitués.
+        self.p.write(
+            "documentation/00-checklist-architecture.md",
+            "# Checklist d'architecture — état d'avancement\n\n"
+            "**% global :** 42 %\n\n"
+            "## Cadrage — 80 %\n\n"
+            "## Besoins (MoSCoW) — 35 %\n\n"
+            "## Livrables — 20 %\n\n"
+            "## Projets — 10 %\n",
+        )
+        r = self.p.fire("checklist-progress")[0]
+        self.assertEqual(r.verdict, OK)
+        joined = "\n".join([r.summary, *r.findings])
+        self.assertIn("solution 42 %", r.summary)
+        self.assertIn("avancement global de la solution : 42 %", joined)
+        self.assertIn("avancement du cadrage : 80 %", joined)
+        self.assertIn("avancement des besoins (MoSCoW) : 35 %", joined)
+        self.assertIn("avancement des livrables : 20 %", joined)
+        # Le sensor constate : il n'écrit rien, n'émet jamais ⚠️ (avancement bas = fait, pas écart).
+        self.assertNotEqual(r.verdict, GAP)
 
     def test_claim_sources(self) -> None:
         self.p.write("decisions/0001-x.md", ADR)
