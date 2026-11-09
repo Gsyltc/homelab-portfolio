@@ -9,16 +9,18 @@ Deux mécanismes complémentaires, **tous deux advisory** :
 
 ## Nature : manifeste déclaratif + exécutable Python
 
-Chaque manifeste fixe le **contrat** (périmètre de déclenchement, règles, sortie). Un **dispatcher Python** l'exécute de façon déterministe ([ADR-0046](../../decisions/0046-sensors-executables-python-et-hooks-agnostiques.md)) :
+Chaque manifeste fixe le **contrat** (périmètre de déclenchement, règles, sortie). Un **dispatcher Python** l'exécute de façon déterministe ([ADR-0046](../../decisions/0046-sensors-executables-python-et-hooks-agnostiques.md)).
+
+> **Convention d'invocation.** Le harnais (`sensor.py`, manifestes, hook) vit dans ce dépôt — le **checkout `homelab-portfolio`** (le dépôt `core`) — **jamais** dans le dépôt du projet vérifié. Les commandes ci-dessous se lancent **depuis ce checkout**, désignant le script par un **chemin ancré** sur sa racine (`$CORE_HOME` = racine du checkout `core`), tandis que `--root <projet>` pointe le dépôt du projet à vérifier. Un chemin **relatif** (`core/scripts/sensor.py`) ne se résout que si le répertoire courant est déjà ce checkout ; lancé depuis le dossier du projet, il échoue en « script introuvable » (origine ORIG-425/ORIG-426).
 
 | Commande | Rôle |
 | --- | --- |
-| `python3 core/scripts/sensor.py list` | Sensors, script associé et état (`⛔` si script absent ou invalide) |
-| `python3 core/scripts/sensor.py --root <projet> fire <id> [--path <fichier>...]` | Exécute un sensor. Sans `--path` : balayage de gate sur le périmètre `matches` |
-| `python3 core/scripts/sensor.py --root <projet> gate <frontière> [--attest a,b]` | Rapport de vérification d'une frontière de [`gates.md`](gates.md) |
-| `python3 core/scripts/sensor.py report-check --stage <fiche> [--report-file F]` | Contrôle de gate du compte rendu : section `## Sensors` absente alors que la fiche de stage déclare `sensors:` non vide ⇒ `⚠️` écart (advisory) |
-| `python3 core/scripts/sensors/<id avec _>.py --root <projet> [--path <fichier>...]` | Exécute un sensor seul (ex. `required_sections.py`) : un script par sensor |
-| `python3 core/sensors/hooks/post_write.py` | Hook d'écriture : lit le JSON du harnais sur stdin, lance les sensors `fire_on: write` |
+| `python3 "$CORE_HOME/core/scripts/sensor.py" list` | Sensors, script associé et état (`⛔` si script absent ou invalide) |
+| `python3 "$CORE_HOME/core/scripts/sensor.py" --root <projet> fire <id> [--path <fichier>...]` | Exécute un sensor. Sans `--path` : balayage de gate sur le périmètre `matches` |
+| `python3 "$CORE_HOME/core/scripts/sensor.py" --root <projet> gate <frontière> [--attest a,b]` | Rapport de vérification d'une frontière de [`gates.md`](gates.md) |
+| `python3 "$CORE_HOME/core/scripts/sensor.py" report-check --stage <fiche> [--report-file F]` | Contrôle de gate du compte rendu : section `## Sensors` absente alors que la fiche de stage déclare `sensors:` non vide ⇒ `⚠️` écart (advisory) |
+| `python3 "$CORE_HOME/core/scripts/sensors/<id avec _>.py" --root <projet> [--path <fichier>...]` | Exécute un sensor seul (ex. `required_sections.py`) : un script par sensor |
+| `python3 "$CORE_HOME/core/sensors/hooks/post_write.py"` | Hook d'écriture : lit le JSON du harnais sur stdin, lance les sensors `fire_on: write` |
 
 Python 3.9+, bibliothèque standard uniquement. Tests : `python3 -m unittest discover -s core/scripts/tests`.
 
@@ -60,11 +62,13 @@ Claude Code (`.claude/settings.json`) :
 }
 ```
 
-Kiro CLI (agent, `hooks.postToolUse`) :
+Kiro CLI (agent, `hooks.postToolUse`) — chemin **ancré** sur le checkout `core` (`$CORE_HOME`), afin que le hook se déclenche même quand le répertoire courant est le dépôt du projet vérifié (sinon « script introuvable », origine ORIG-425/ORIG-426) :
 
 ```json
-{ "matcher": "fs_write", "command": "python3 core/sensors/hooks/post_write.py" }
+{ "matcher": "fs_write", "command": "python3 \"${CORE_HOME:-.}/core/sensors/hooks/post_write.py\"" }
 ```
+
+> Le repli `${CORE_HOME:-.}` conserve le comportement historique (chemin relatif au cwd) quand `$CORE_HOME` n'est pas défini et que l'agent tourne déjà depuis le checkout `core`.
 
 Sous Multica, l'agent auteur lance `fire` lui-même au temps 4 du [`stage-protocol`](../common/protocols/stage-protocol.md) et poste le rapport sur l'issue. Le hook est de plus **branché par défaut** sur les **agents de production de livrables** (champ `hooks.postToolUse` de leur fiche, matcher `fs_write`) comme **filet déterministe** : il déclenche les sensors `fire_on: write` à chaque écriture, sans dépendre de la discipline manuelle au temps 4 (durcissement ORIG-418 ; périmètre documenté dans [`../agents/README.md`](../agents/README.md), « Hook d'écriture des sensors »). Le hook **ne remplace pas** le lancement explicite ni le compte rendu `## Sensors` — il reste **advisory** (code 0, jamais bloquant).
 

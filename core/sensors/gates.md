@@ -54,8 +54,10 @@ boundaries:
 
 ## Exécution
 
+Lancé **depuis le checkout `homelab-portfolio`** (le dépôt `core`), chemin ancré sur sa racine `$CORE_HOME`, `--root` pointant le projet vérifié (convention d'invocation : [`../common/protocols/stage-protocol.md`](../common/protocols/stage-protocol.md), temps 4) :
+
 ```
-python3 core/scripts/sensor.py --root <projet> gate <id-frontière> [--attest <artefact>,...]
+python3 "$CORE_HOME/core/scripts/sensor.py" --root <projet> gate <id-frontière> [--attest <artefact>,...]
 ```
 
 Le script produit le « Rapport de vérification » ci-dessous.

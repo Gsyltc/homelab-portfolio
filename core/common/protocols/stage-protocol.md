@@ -78,7 +78,9 @@ flowchart LR
 
 > ⛔ **Les sensors ne se contournent pas.** Une vérification équivalente faite en prose, un commentaire ad hoc, ou une affirmation « conforme » sans rapport de sensor **ne satisfont pas** le temps 4. L'absence de rapport de sensor pour un sensor déclaré est un **écart à signaler** (SG-2 : indisponible ≠ conforme, silence = écart).
 
-Pour chaque artefact produit ou modifié, l'agent **auteur** exécute, à l'écriture, **tous les sensors déclarés dans le champ `sensors:` de la fiche de stage** (ceux listés dans `sensors_a_executer` du message A2A de délégation) avec `python3 core/scripts/sensor.py --root <projet> fire <id> --path <artefact>` (les sensors `fire_on: gate` : sans `--path`, au gate). Le verdict est celui du script (`sensor.py`), jamais réinterprété. Le **support de restitution dépend du destinataire** :
+Pour chaque artefact produit ou modifié, l'agent **auteur** exécute, à l'écriture, **tous les sensors déclarés dans le champ `sensors:` de la fiche de stage** (ceux listés dans `sensors_a_executer` du message A2A de délégation) avec `python3 "$CORE_HOME/core/scripts/sensor.py" --root <projet> fire <id> --path <artefact>` (les sensors `fire_on: gate` : sans `--path`, au gate). Le verdict est celui du script (`sensor.py`), jamais réinterprété.
+
+> **Où se lance un sensor (convention d'invocation).** Le harnais (`core/scripts/sensor.py`, les manifestes `core/sensors/` et le hook `core/sensors/hooks/post_write.py`) vit dans le **checkout `homelab-portfolio`** (le dépôt `core`), **jamais** dans le dépôt du projet vérifié. Les sensors se lancent **depuis ce checkout** : le script est désigné par un **chemin ancré** sur sa racine — `$CORE_HOME` = racine du checkout `homelab-portfolio` — et `--root <projet>` pointe le dépôt du projet à vérifier. Un chemin **relatif** (`core/scripts/sensor.py`) ne se résout que si le répertoire courant est déjà ce checkout ; lancé depuis le dossier du projet, il échoue en « script introuvable » (origine ORIG-425/ORIG-426). Toute commande de sensor de ce protocole suppose `$CORE_HOME` défini et pointant le checkout `core`. Le **support de restitution dépend du destinataire** :
 
 - **Handoff A2A pur (agent → agent, sans gate humaine)** : les verdicts sont portés par le champ **`sensors_resultats`** du message A2A de `retour` joint à l'issue (une entrée par sensor : `{sensor, verdict: conforme | ecart | indisponible, detail, source}`), **pas en prose dans le fil**. Schéma : source unique dans [`governance-security.md`](governance-security.md).
 - **Gate humaine (OBLIGATOIRE)** : à **tout gate de validation humaine**, les verdicts de sensors **DOIVENT être présentés à l'humain en clair** dans la section `## Sensors` du compte rendu, au format imposé par [`output-format.md`](output-format.md) (une puce par sensor, `✅ conforme | ⚠️ écart mineur — <une ligne> | ⛔ indisponible — <motif>`). C'est une **information de décision destinée à l'humain**, jamais réduite ni masquée : le YAML joint ne s'y substitue **jamais**. Un gate humain présenté **sans** les sensors du stage est un **écart** (SG-2 : silence = écart ; contrôle coordinateur au gate ci-dessous). La réduction de prose A2A ne retire **rien** de ce que l'humain voit au gate.
@@ -93,7 +95,7 @@ Règles non contournables :
 
 ### 5. Verification gate à la frontière de phase
 
-> ⛔ **Le rapport de gate ne se contourne pas.** Le coordinateur **poste le rapport de vérification** ([`core/sensors/gates.md`](../../sensors/gates.md)) *avant* la validation humaine, avec `python3 core/scripts/sensor.py --root <projet> gate <id-frontière>`. L'absence de rapport est un écart de piste d'audit.
+> ⛔ **Le rapport de gate ne se contourne pas.** Le coordinateur **poste le rapport de vérification** ([`core/sensors/gates.md`](../../sensors/gates.md)) *avant* la validation humaine, avec `python3 "$CORE_HOME/core/scripts/sensor.py" --root <projet> gate <id-frontière>` (lancé depuis le checkout `core` — voir la convention d'invocation ci-dessus). L'absence de rapport est un écart de piste d'audit.
 
 Le coordinateur exécute le gate de traçabilité et poste le **« Rapport de vérification »** structuré pour la frontière franchie :
 
@@ -109,7 +111,7 @@ Un écart est signalé, jamais bloquant ; `⛔ indisponible ≠ conforme` (SG-2)
 > ⛔ **Contrôle du compte rendu au gate** Au même point — **avant la validation humaine** — le coordinateur contrôle que le **compte rendu de l'agent auteur porte une section `## Sensors` renseignée** dès lors que la **fiche de stage active déclare un champ `sensors:` non vide**. Un compte rendu sans section `## Sensors` (ou avec une section vide) alors que le stage déclare des sensors est un **écart à signaler** (SG-2 : indisponible ≠ conforme, silence = écart) : il rend visible un temps 4 non rejoué, même si l'agent auteur a omis de lancer `fire`. Exécution :
 >
 > ```
-> python3 core/scripts/sensor.py report-check --stage <fiche-de-stage-active> --report-file <compte-rendu>
+> python3 "$CORE_HOME/core/scripts/sensor.py" report-check --stage <fiche-de-stage-active> --report-file <compte-rendu>
 > ```
 >
 > (ou le compte rendu sur stdin). Le contrôle est **advisory** — code retour 0 même en écart, il **ne bloque jamais** la validation humaine ; le coordinateur **signale** l'écart dans le Rapport de vérification et **propose de faire rejouer le temps 4** avant de présenter le contenu à l'humain. Si la fiche de stage déclare `sensors: []` (ou aucun champ), l'absence de section `## Sensors` est **légitime** et le contrôle renvoie `✅`. Rendre ce contrôle **bloquant** serait une décision structurante distincte (ADR + contrôle sécurité, SG-3).
