@@ -25,7 +25,7 @@ flowchart LR
 
 ### 2. Délégation A2A (si `mode: subagent | pipeline | mob`)
 
-- Le Tech Lead poste un commentaire sur l'issue avec une **mention valide** `[@Label](mention://agent/<uuid>)` et une **mission claire** : objectif, périmètre, critères d'acceptation. La mission porte aussi **`core_home`** (racine du checkout du harnais = `$CORE_HOME`) et la (les) **fiche(s) de stage + protocole(s) à recharger** par le délégataire (temps 1), afin qu'il lance sensors/gates/hook et charge son contexte **de façon ciblée, sans re-chercher le harnais ni relire le workflow entier**.
+- Le Tech Lead poste un commentaire sur l'issue avec une **mention valide** `[@Label](mention://agent/<uuid>)` et le **nom d'un fichier YAML `delegation` joint** (message A2A — [`governance-security.md`](governance-security.md) § « Schéma du message A2A ») : **aucune prose de mission dans le fil**. Le YAML `delegation` porte l'objet, le périmètre, les critères d'acceptation, **`sensors_a_executer`** (les sensors à lancer), **`core_home`** (racine du checkout du harnais = `$CORE_HOME`) et **`fiches_a_recharger`** (la ou les fiches de stage + protocoles à recharger par le délégataire au temps 1), afin qu'il lance sensors/gates/hook et charge son contexte **de façon ciblée, sans re-chercher le harnais ni relire le workflow entier**.
 - **Ne jamais deviner un UUID** : le résoudre via `multica agent list --output json` (champ `id`) ou la table de [`tech-lead-homelab-agent.md`](../../agents/tech-lead-homelab-agent.md). Après chaque mention, **lire `trigger_outcomes`** dans la réponse de la CLI ; un statut `blocked` / `coalesced` / `deferred` signifie que le run n'est PAS enfilé.
 - La **topologie** dépend du `mode` : `subagent` = hub-and-spoke ; `pipeline` = supports chaînés dans l'ordre déclaré, chacun voyant tout le travail amont (ex. le stage `autonomy-mode` : Spécialiste Terraform → Spécialiste Docker → Analyste QA sur le walking skeleton) ; `mob` = supports en parallèle contre le brouillon du lead. `pipeline` / `mob` exigent `support_agents` non vide. ⚠️ Ne pas confondre avec les **stages de Production** où Docker et Terraform s'exécutent **en parallèle** (deux sous-issues `--stage 1`, voir [« Cycle de statut des sous-issues & barrière de stage »](#cycle-de-statut-des-sous-issues--barrière-de-stage)) : ce n'est pas un `pipeline` séquentiel Docker → Terraform.
 - **Statut de la sous-issue déléguée — `in_progress` au démarrage.** Quand la délégation ouvre une **sous-issue** confiée à une fonction spécialiste (ex. les deux sous-issues `--stage 1` de Production : compose et `.tfvars`), cette sous-issue passe en **`in_progress`** dès que son travail démarre (`multica issue status <sous-issue-id> in_progress`). Cf. [« Cycle de statut des sous-issues & barrière de stage »](#cycle-de-statut-des-sous-issues--barrière-de-stage).
@@ -43,27 +43,28 @@ flowchart LR
 
 ### 4. Sensors à l'écriture
 
-> ⛔ **Les sensors ne se contournent pas.** Une vérification équivalente faite en prose, un commentaire ad hoc, ou une affirmation « conforme » sans rapport de sensor **ne satisfont pas** le temps 4. L'absence de rapport pour un sensor déclaré est un **écart à signaler** (SG-2 : `⛔ indisponible ≠ conforme`, silence = écart).
+> ⛔ **Les sensors ne se contournent pas.** Une vérification équivalente faite en prose, un commentaire ad hoc, ou une affirmation « conforme » sans exécution de `sensor.py` **ne satisfont pas** le temps 4. L'absence de verdict pour un sensor déclaré est un **écart à signaler** (SG-2 : `⛔ indisponible ≠ conforme`, silence = écart).
 
-À l'écriture d'un artefact (compose, `.tfvars`), l'agent **auteur** exécute **tous les sensors déclarés dans le champ `sensors:` de la fiche de stage** avec `python3 "$CORE_HOME/homelab/scripts/sensor.py" --root <projet> fire <id> --path <artefact>` (les sensors `fire_on: gate` : sans `--path`, au gate — temps 5). Le verdict est celui du script (`sensor.py`), jamais réinterprété. Il poste sur l'issue (piste d'audit) un **rapport de sensor structuré, un par sensor** :
+À l'écriture d'un artefact (compose, `.tfvars`), l'agent **auteur** exécute **tous les sensors déclarés dans le champ `sensors:` de la fiche de stage** avec `python3 "$CORE_HOME/homelab/scripts/sensor.py" --root <projet> fire <id> --path <artefact>` (les sensors `fire_on: gate` : sans `--path`, au gate — temps 5). Le verdict est celui du script (`sensor.py`), jamais réinterprété. Il **collecte chaque verdict dans le champ `sensors_resultats` du message A2A `retour`** qu'il joindra en fin de mission ([`governance-security.md`](governance-security.md) § « Schéma du message A2A ») — **un élément par sensor déclaré**, structuré ainsi :
 
+```yaml
+sensors_resultats:
+  - {sensor: <id>, fire_on: write | gate, verdict: conforme | ecart | indisponible, detail: "<ligne factuelle>", source: "<manifeste @ commit>"}
 ```
-**Sensor `<id-du-sensor>`** (`fire_on: write` | `fire_on: gate`) — <artefact concerné>
-Verdict : ✅ conforme | ⚠️ écart mineur | ⛔ indisponible
-<une ligne : fait vérifié, ou motif d'indisponibilité / écart>
-```
+
+Les verdicts voyagent dans ce **YAML joint** (le reviewer les porte dans le champ `sensors[]` de son rapport `review-<agent>-<stack>.yaml`, [`report-format.md`](report-format.md)), **pas** en prose dans le fil de commentaires.
 
 > **Où se lance un sensor (convention d'invocation).** Le harnais (`homelab/scripts/sensor.py`, les manifestes `homelab/sensors/` et le hook `homelab/sensors/hooks/post_write.py`) vit dans le **checkout `homelab-portfolio`**, **jamais** dans le dépôt du projet vérifié. Les sensors se lancent **depuis ce checkout** : le script est désigné par un **chemin ancré** sur sa racine — `$CORE_HOME` = racine du checkout `homelab-portfolio` — et `--root <projet>` pointe le dépôt du projet à vérifier. Un chemin **relatif** (`homelab/scripts/sensor.py`) ne se résout que si le répertoire courant est déjà ce checkout. Détail et exemples : [`../../sensors/README.md`](../../sensors/README.md).
 
 Règles non contournables :
 
-- **Chaque sensor déclaré fait l'objet d'un rapport distinct** — aucun regroupement ni omission (SG-2 : silence = écart).
+- **Chaque sensor déclaré fait l'objet d'une entrée distincte dans `sensors_resultats`** — aucun regroupement ni omission (SG-2 : silence = écart).
 - **`⛔ indisponible`** s'applique lorsque le script ne peut pas s'exécuter (Python absent, erreur, périmètre vide — voir [`../../sensors/README.md`](../../sensors/README.md)) : l'agent reprend le motif donné par le script et le reporte avec ce verdict. Un sensor non exécuté est toujours un verdict `indisponible`, **jamais un silence** ni une vérification en prose.
 - **`⚠️ écart`** : l'agent décrit l'écart en une ligne et continue (advisory) ; il **ne devance pas** la décision humaine mais la documente pour la validation humaine granulaire (temps 6).
 - **Advisory par défaut** — n'autorise aucun raccourci, ne vaut pas validation (SG-1..6). **Exception** : `plaintext-secret` / `terraform-no-sni` sont **bloquants sur `security-patch` / `new-stack`** (ALI-204) — une détection arrête l'avancée jusqu'à correction ou levée humaine explicite tracée.
 - Les sensors `fire_on: write` (ex. `yaml-validity`, `plaintext-secret`, `terraform-no-sni`) sont invoqués **à chaque écriture** de l'artefact concerné, pas seulement en fin de stage.
 
-Ce rapport par sensor est **repris en synthèse** en fin de mission : par le **reviewer** dans le champ `sensors[]` du rapport YAML ([`report-format.md`](report-format.md)), par le **producteur** sur l'issue ([`producer-report.md`](producer-report.md)).
+Ce rapport par sensor est **repris en synthèse** dans le champ `sensors_resultats` du **message A2A `retour`** à la fin de mission ([`governance-security.md`](governance-security.md) § « Schéma du message A2A ») : par le **reviewer** via le rapport `review-<agent>-<stack>.yaml` (champ `sensors[]`, [`report-format.md`](report-format.md)), par le **producteur** via le YAML `retour-<agent>-<stack>.yaml` ([`producer-report.md`](producer-report.md)). Le fil de commentaires ne porte plus ces verdicts en prose — ils voyagent dans le YAML joint, exploitables pour les contrôles et la présentation au gate humain.
 
 ### 5. Verification gate à la frontière de phase
 

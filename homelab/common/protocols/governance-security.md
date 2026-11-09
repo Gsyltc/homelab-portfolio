@@ -22,11 +22,66 @@ Les acteurs sont désignés par leur **fonction**. La délégation A2A résout l
 
 ## Règle A2A
 
-Un agent est déclenché par un **commentaire sur l'issue avec une mention valide** `[@Label](mention://agent/<uuid>)` et une **mission claire** (objectif, périmètre, critères d'acceptation). **Ne jamais deviner un UUID** : le résoudre via `multica agent list --output json` avant chaque mention. **Écrire le nom d'un agent en texte brut ne déclenche RIEN** — seul le lien `mention://agent/<uuid>` enfile un run.
+Un agent est déclenché par un **commentaire sur l'issue** qui porte deux choses, et rien de plus :
 
-Le spécialiste appelé mentionne en retour le Tech Lead en fin de tâche (avec mention valide, sinon compte-rendu réputé non rendu). Après tout commentaire censé déclencher un agent, l'auteur **lit `trigger_outcomes`** dans la réponse de la CLI ; sur un statut `blocked` / `coalesced` / `deferred`, il **corrige la mention et retente une seule fois** ; si cette reprise échoue, il **passe l'issue en `blocked`**, **escalade à l'humain** et n'effectue aucune nouvelle reprise automatique.
+1. un **lien de mention ACTIF** `[@Label](mention://agent/<uuid>)` — **seul vecteur de déclenchement** d'un run ;
+2. le **nom du fichier YAML joint à l'issue** qui porte la mission (délégation) ou le retour de livrable.
+
+**La mission et le livrable voyagent dans le fichier YAML joint (message A2A), jamais en prose dans le fil.** À chaque délégation ou retour entre agents, l'agent **téléverse un fichier YAML** (via `multica attachment` — voir `multica attachment --help`) contenant l'objet, le périmètre, les critères d'acceptation, **la liste des sensors à exécuter** et **`core_home`** (délégation), ou **le résultat et les verdicts de sensors** (retour), puis poste un **commentaire minimal**. Le YAML joint est la **source unique** lue par l'agent suivant ; le commentaire ne fait que le référencer. **Plus de prose de mission, de livrable ni de rapport de sensors dans le fil A2A** — cette prose vit désormais dans le YAML, exploitable pour les contrôles.
+
+- **Ne jamais deviner un UUID** : le résoudre via `multica agent list --output json` (ou la table de [`tech-lead-homelab-agent.md`](../../agents/tech-lead-homelab-agent.md)) avant chaque mention. **Écrire le nom d'un agent en texte brut ne déclenche RIEN** — seul le lien `mention://agent/<uuid>` enfile un run.
+- La **réduction de prose ne touche qu'au texte AUTOUR du lien, jamais au lien de mention lui-même** : le lien reste **actif**, l'UUID résolu à chaque fois, jamais une auto-mention. Détail opératoire (résolution d'UUID, `trigger_outcomes`) : [`stage-protocol.md`](stage-protocol.md) (temps 2 et 3).
+- Le Tech Lead contrôle chaque livrable (le YAML joint + le fichier produit) avant la validation humaine.
+
+Après tout commentaire censé déclencher un agent, l'auteur **lit `trigger_outcomes`** dans la réponse de la CLI ; sur un statut `blocked` / `coalesced` / `deferred`, il **corrige la mention et retente une seule fois** ; si cette reprise échoue, il **passe l'issue en `blocked`**, **escalade à l'humain** et n'effectue aucune nouvelle reprise automatique.
+
+### Deux formes de commentaire — jamais confondues
+
+| Cas | Mention | Texte du commentaire |
+| --- | --- | --- |
+| **Délégation / retour SANS gate humaine** (handoff A2A pur) | `[@Agent](mention://agent/<uuid>)` **actif** | **Aucune prose.** Réduit à la mention + le **nom du fichier YAML joint**. Ex. `[@Analyste QA](mention://agent/<uuid>) — compose à contrôler → delegation-qa-<stack>.yaml` |
+| **Gate humaine REQUISE** | mention de **l'humain** `[@Nom](mention://member/<user_id>)` | **Présentation Markdown DÉTAILLÉE** du contenu à décider **reprise en clair**, close par l'action à effectuer. Elle **DOIT inclure les verdicts de sensors du stage** (section `## Sensors`, un sensor par puce — ou la ligne « Sensors de gate » du **Rapport de vérification**, [`../../sensors/gates.md`](../../sensors/gates.md)) — information de décision **obligatoire**, jamais réduite ni masquée. Le YAML joint est la source/audit, **jamais un substitut** à la présentation. |
+
+**Retour A2A (clôture de la boucle)**
+
+- En fin de tâche, l'agent délégataire passe sa sous-issue en `in_review` et **pose lui-même** le lien de mention actif de retour `[@<Nom assigneur>](mention://agent/<uuid>)` + le **nom du fichier YAML de retour joint** : ce lien enqueue le run de reprise.
+- Cible du retour : le **Tech Lead** pour un spécialiste producteur ; le **spécialiste auteur du livrable** pour l'Analyste QA en boucle courte `RENVOI` ([`reviewer.md`](reviewer.md)).
+- Une mention en texte clair, ou une simple réponse, n'enqueue aucun run : la chaîne A2A est alors rompue (compte-rendu réputé non rendu, le flux s'arrête).
 
 > **Anti-wake parasite (règle générale, tous agents).** **Aucun agent ne se mentionne lui-même** avec un lien de mention actif `mention://agent/<uuid>` dans une consigne de délégation : un tel lien, posté dans son propre commentaire, enfile un run parasite de cet agent. L'**assigneur désigne l'agent de retour par sa fonction, en TEXTE CLAIR** (« rends compte au Tech Lead »), **sans lien actif vers lui-même**. La construction du lien de mention actif de retour revient **toujours à l'agent délégataire** en fin de tâche — UUID résolu via `multica agent list --output json`, jamais copié depuis la consigne de délégation ni codé en dur. C'est ce lien, posé par l'agent qui termine, qui enfile le run de reprise de l'assigneur.
+
+### Schéma du message A2A (source unique)
+
+Tout échange agent↔agent — **délégation**, **retour de livrable**, **rapport de vérification** — est porté par un **fichier YAML joint à l'issue** conforme au schéma minimal ci-dessous. Il est **défini ici une seule fois** ; les fiches de stage, les sensors ([`../../sensors/gates.md`](../../sensors/gates.md)), les protocoles de compte-rendu ([`report-format.md`](report-format.md), [`producer-report.md`](producer-report.md)) et les fiches d'agent s'y **réfèrent par leur nom** (`message A2A`), sans le redéfinir.
+
+**Format = YAML compact** : l'**enveloppe du message A2A** est portée en YAML compact — aligné sur le front-matter des fiches de stage, les manifestes de sensors et le rapport reviewer (déjà en YAML). Les présentations Markdown détaillées aux gates humaines restent inchangées.
+
+```yaml
+type: delegation | retour | rapport-verification
+de: <nom de la fonction émettrice>
+vers: <nom de la fonction destinataire ou 'humain'>
+stage: <slug du stage concerné>
+core_home: "<chemin du checkout homelab-portfolio>"   # délégation : racine du harnais ($CORE_HOME), propagée (HOM-291)
+fiches_a_recharger: [<fiche de stage / protocole>, ...] # délégation : chargement paresseux ciblé par le délégataire
+objet: <phrase courte — ce qui est demandé ou livré>
+perimetre: [<élément de périmètre>, ...]
+criteres_acceptation: [<critère>, ...]
+sensors_a_executer: [<id-sensor>, ...]            # délégation : contrôles attendus (repris de la fiche de stage / frontière)
+sensors_resultats:                                 # retour / rapport-vérification : verdicts rendus par sensor.py
+  - {sensor: <id>, fire_on: write | gate, verdict: conforme | ecart | indisponible, detail: "<ligne factuelle>", source: "<manifeste @ commit>"}
+artefacts:
+  - {role: produit | consomme, nom: <fichier>, chemin: "${ROOT_DIRECTORY}/..."}
+resultat: {statut: ok | ecart | halt, detail: <optionnel>}
+gate_humaine: aucune | legere | granulaire | explicite
+reference_audit: <id de commentaire ou d'artefact>
+```
+
+- **`delegation`** : `objet`, `perimetre`, `criteres_acceptation`, `sensors_a_executer`, `core_home`, `fiches_a_recharger` renseignés ; `resultat` et `sensors_resultats` omis.
+- **`retour`** : `resultat` + `sensors_resultats` renseignés ; `artefacts` liste les livrables produits.
+- **`rapport-verification`** : `resultat.statut` + `sensors_resultats` structurés. Pour un **reviewer**, l'instance détaillée de ce retour est le rapport `review-<agent>-<stack>.yaml` conforme à [`report-format.schema.yaml`](report-format.schema.yaml) (points `critical/warning/info` + `sensors[]`) : [`report-format.md`](report-format.md) détaille ce contrat, il ne le contredit pas.
+- **Sensors (garde-fous SG-1..6 reconduits, non contournables)** : le `verdict` est celui rendu par `sensor.py` (`python3 "$CORE_HOME/homelab/scripts/sensor.py" …`), **jamais réinterprété** ; `indisponible ≠ conforme` ; un sensor présent dans `sensors_a_executer` mais **absent de `sensors_resultats` est un écart** (silence interdit) ; le message A2A reste **advisory** — il ne remplace ni la validation humaine granulaire ni le contrôle sécurité systématique (Analyste QA + Architecte de sécurité Homelab). L'exception bloquante `plaintext-secret` / `terraform-no-sni` sur `security-patch` / `new-stack` (ALI-204) demeure.
+- Champs non pertinents omis. **Aucun secret** dans le YAML ; **jamais `${SNI}`** dans un artefact Terraform référencé. La langue des valeurs libres suit celle de l'humain (français par défaut).
+- **Règle de validité YAML (obligatoire)** : en notation *flow* (`[...]` / `{...}`), **mettre entre guillemets** toute valeur contenant `${...}`, `{`, `}`, `:` suivi d'un espace, ou une **virgule** (ex. `chemin: "${ROOT_DIRECTORY}/..."`, `detail: "2 écarts, 1 indisponible"`). Un doute ⇒ guillemeter. Le fichier reste **YAML valide** de bout en bout (piste d'audit lisible).
 
 ## Concurrence — un seul traitement par stack (lecture **par artefact**)
 
