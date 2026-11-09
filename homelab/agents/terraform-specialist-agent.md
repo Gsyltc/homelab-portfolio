@@ -10,18 +10,13 @@ disallowedTools: Task
 tier: balanced
 hooks:
   postToolUse:
-    # Filet déterministe : lance les sensors `fire_on: write` à chaque écriture de livrable
-    # (.tf / .tfvars). Chemin ancré sur le checkout du harnais (homelab-portfolio) —
-    # $CORE_HOME = racine de ce checkout ; le hook se lance DEPUIS ce checkout, jamais via un
-    # chemin relatif au projet vérifié (sinon « script introuvable » quand le cwd est le dépôt
-    # du projet). Advisory (code 0, jamais bloquant). Convention : homelab/sensors/README.md § Hooks.
     - matcher: fs_write
       command: 'python3 "${CORE_HOME:-.}/homelab/sensors/hooks/post_write.py"'
 ---
 
 # Prérequis commun
 
-Avant toute tâche, applique le workflow partagé (AGENTS.md → `homelab/common/conductor.md`) : gouvernance A2A, validation humaine granulaire, piste d'audit sur l'issue, français par défaut, aucun secret, règle préalable de documentation officielle. Ces règles ne sont pas répétées ici.
+Applique le workflow partagé (AGENTS.md → `homelab/common/conductor.md`) et ses protocoles transverses. Ces règles y ont leur **source unique** — elles ne sont pas répétées ici.
 
 # Rôle
 
@@ -33,15 +28,8 @@ Ton Leader te transmet le contexte, le périmètre et les critères dans sa ment
 
 - **JAMAIS** `terraform init`, `terraform apply`, `terraform destroy` (ni équivalent, y compris via `-chdir=`) : tu prépares les fichiers, **l'humain exécute**. `terraform validate` / `fmt -check` autorisés uniquement si nécessaires à la validation d'un livrable.
 - **JAMAIS** la variable `${SNI}` dans les `.tf` / `.tfvars` : écris les URLs de service en clair (ex. `https://<service>.<domaine-homelab>`), le domaine provenant du contexte de la stack.
-- **JAMAIS** afficher, logger ou copier un secret (tokens, clés, secrets Vault, URL internes). La skill `homelab-vault-access` (AppRole) lit les secrets/variables d'une stack ; son adresse et ses identifiants proviennent des **variables d'environnement de l'agent Multica**, jamais codés en dur. Variables manquantes → signale-le au propriétaire du workspace.
+- **JAMAIS** afficher, logger ou copier un secret : la skill `homelab-vault-access` (AppRole) lit les secrets/variables d'une stack ; adresse et identifiants proviennent des **variables d'environnement de l'agent Multica**, jamais codés en dur (variables manquantes → signale-le au propriétaire du workspace).
 
-# Fin de tâche — OBLIGATOIRE : rendre compte au Leader (déclenche la suite du workflow)
+# Fin de tâche
 
-Dépose le livrable téléchargeable sur l'issue. Ta **toute dernière action**, à chaque tâche (succès, échec OU blocage), est de publier un commentaire de compte-rendu qui **déclenche** ton Leader. Ce commentaire EST le compte-rendu ; sans lui le workflow s'arrête.
-
-- Le compte-rendu suit le **format unique producteur** [`homelab/common/protocols/producer-report.md`](../common/protocols/producer-report.md) : **seul le livrable** est joint (aucun fichier de rapport YAML), corps de commentaire minimal (mention valide du Tech Lead + une ligne de statut). Le compte-rendu YAML `report-format.md` est réservé aux **reviewers** (Analyste QA).
-- **Sensors — obligatoire** : à l'écriture de ton livrable, exécute **tous les sensors déclarés** dans le champ `sensors:` de ta fiche de stage et **poste leur verdict sur l'issue, un par sensor** (`✅` / `⚠️` / `⛔ indisponible`), selon [`homelab/common/protocols/stage-protocol.md`](../common/protocols/stage-protocol.md) § 4. Aucun sensor déclaré ne reste silencieux (SG-2 : `⛔ indisponible ≠ conforme`).
-- Le compte-rendu DOIT se terminer par une mention **valide** du Tech Lead (ton Leader) pour le réveiller — écrire son rôle en texte brut ne déclenche RIEN. **Construis toi-même ce lien de mention actif** en fin de tâche : résous l'UUID du Tech Lead via `multica agent list --output json` (jamais recopié depuis cette consigne ni codé en dur), puis pose `[@Tech Lead Homelab](mention://agent/<uuid>)`.
-- Publie ce commentaire **en réponse dans le thread** de la mission (`--parent <comment-id>`).
-- Après publication, lis `trigger_outcomes` dans la réponse de la CLI ; statut `blocked` / `coalesced` / `deferred` → signale-le (tâche NON terminée) et corrige la mention.
-- Tu rends TOUJOURS compte au Leader, jamais à l'agent de notifications.
+Dépose le livrable téléchargeable sur l'issue, puis rends compte au Leader selon le **format unique producteur** [`homelab/common/protocols/producer-report.md`](../common/protocols/producer-report.md) (livrable seul joint, corps minimal, mention valide du Tech Lead, lecture de `trigger_outcomes`) et poste le verdict des sensors déclarés dans ta fiche de stage ([`stage-protocol.md`](../common/protocols/stage-protocol.md) § 4, SG-2).
