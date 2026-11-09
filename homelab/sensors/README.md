@@ -7,9 +7,41 @@ Deux mécanismes complémentaires, **tous deux advisory** :
 - **Verification gates** — contrôle automatique de **traçabilité** aux **frontières de phases**, en amont du gate humain ([`gates.md`](gates.md)).
 - **Sensors** — checks **déterministes** déclenchés soit **à l'écriture d'un artefact** (`fire_on: write`), soit **au gate de phase** (`fire_on: gate`) ([`sensors/`](sensors/)).
 
-## Nature déclarative (non exécutable à ce stade)
+## Nature : manifeste déclaratif + exécutable Python
 
-Ces fichiers **décrivent le contrat** (périmètre de déclenchement, règles de contrôle, sortie attendue) de façon lisible et déterministe. Ce **ne sont pas des scripts exécutables** : ils fixent le fond pour qu'un outillage (script / CI) puisse être ajouté ultérieurement **sans redécider** la sémantique. On garde la **forme déclarative** sans importer le moteur. Le passage à l'exécutable est une évolution future, hors périmètre du stage d'introduction.
+Chaque manifeste fixe le **contrat** (périmètre de déclenchement, règles, sortie). Un **dispatcher Python** l'exécute de façon déterministe, sur le modèle du workflow `core` ([ADR-0051](../../decisions/0051-sensors-homelab-executables-python-et-hooks.md), analogue de [ADR-0046](../../decisions/0046-sensors-executables-python-et-hooks-agnostiques.md) côté `core`). On garde la **forme déclarative** (le fond ne se redécide pas) **et** on l'exécute.
+
+> **Convention d'invocation.** Le harnais (`sensor.py`, manifestes, hook) vit dans ce dépôt — le **checkout `homelab-portfolio`** — **jamais** dans le dépôt du projet vérifié. Les commandes ci-dessous se lancent **depuis ce checkout**, en désignant le script par un **chemin ancré** sur sa racine (`$CORE_HOME` = racine du checkout), tandis que `--root <projet>` pointe le dépôt du projet à vérifier. Un chemin **relatif** (`homelab/scripts/sensor.py`) ne se résout que si le répertoire courant est déjà ce checkout ; lancé depuis le dossier du projet, il échoue en « script introuvable ».
+
+| Commande | Rôle |
+| --- | --- |
+| `python3 "$CORE_HOME/homelab/scripts/sensor.py" list` | Sensors, script associé, sévérité (et `override` par scope), état (`⛔` si script absent/invalide) |
+| `python3 "$CORE_HOME/homelab/scripts/sensor.py" --root <projet> fire <id> [--path <fichier>...] [--scope <scope>]` | Exécute un sensor. Sans `--path` : balayage de gate sur le périmètre `matches`. `--scope` résout la sévérité conditionnelle |
+| `python3 "$CORE_HOME/homelab/scripts/sensor.py" --root <projet> gate <frontière> [--scope <scope>] [--attest a,b]` | Rapport de vérification d'une frontière de [`gates.md`](gates.md) (gère `blocking_on_scope` / `conditional_on_scope` / `prerequis_40`) |
+| `python3 "$CORE_HOME/homelab/scripts/sensors/<id avec _>.py" --root <projet> [--path <fichier>...]` | Exécute un sensor seul (ex. `yaml_validity.py`) : un script par sensor |
+| `python3 "$CORE_HOME/homelab/sensors/hooks/post_write.py"` | Hook d'écriture : lit le JSON du harnais sur stdin, lance les sensors `fire_on: write` |
+
+Python 3.9+, bibliothèque standard uniquement (aucune dépendance ; le parsing YAML des composes est assuré par un mini-analyseur **statique** interne, pas PyYAML). Tests : `python3 -m unittest discover -s homelab/scripts/tests`.
+
+Le code retour est **0** même en écart (advisory). `--strict` renvoie 1 en cas d'écart ou de `⛔` : usage CI uniquement. `--format json` donne une sortie exploitable par un script.
+
+### Sévérité conditionnelle par scope (ALI-204)
+
+`plaintext-secret` et `terraform-no-sni` portent un bloc `severity_overrides` : **bloquants sur les scopes `security-patch` / `new-stack`**, advisory ailleurs. Le dispatcher résout la sévérité effective via `--scope <scope>` (ou la variable `SENSORS_SCOPE`) ; sur ces scopes, un écart est signalé **BLOQUANT** (à corriger ou lever explicitement et à tracer), conformément à la décision humaine + contrôle sécurité de l'Analyste QA (SG-1). La sévérité ne passe **jamais** par le code retour du dispatcher (toujours 0) : elle est portée par le rapport et le workflow.
+
+### Hooks
+
+Le hook lance, à chaque écriture de fichier, les sensors `fire_on: write` dont `matches` correspond. Il sort **toujours en 0**. `--sensors a,b` le restreint aux sensors déclarés par le stage actif ; `--scope <scope>` résout la sévérité conditionnelle.
+
+Kiro CLI (agent, `hooks.postToolUse`) — chemin **ancré** sur le checkout (`$CORE_HOME`), afin que le hook se déclenche même quand le répertoire courant est le dépôt du projet vérifié :
+
+```json
+{ "matcher": "fs_write", "command": "python3 \"${CORE_HOME:-.}/homelab/sensors/hooks/post_write.py\"" }
+```
+
+> Le repli `${CORE_HOME:-.}` conserve le comportement historique (chemin relatif au cwd) quand `$CORE_HOME` n'est pas défini et que l'agent tourne déjà depuis le checkout.
+
+Le hook est **branché par défaut** sur les **agents producteurs de livrables** homelab (champ `hooks.postToolUse`, matcher `fs_write`) comme **filet déterministe** : **Spécialiste Docker** (compose) et **Spécialiste Terraform** (`.tf`/`.tfvars`). Il déclenche les sensors `fire_on: write` à chaque écriture, sans dépendre de la discipline manuelle. Il **ne remplace pas** le lancement explicite des sensors au temps 4 du [`stage-protocol`](../common/protocols/stage-protocol.md) ni le compte rendu `## Sensors` — il reste **advisory** (code 0, jamais bloquant).
 
 ## Garde-fou : advisory par défaut, bloquant conditionnel (sécurité)
 
@@ -70,7 +102,7 @@ Le front-matter est un **descripteur de capacité pur** (ce qu'est le check et c
 ```yaml
 id: <identifiant>            # kebab-case, = stem du fichier (obligatoire)
 kind: deterministic          # seule valeur acceptée aujourd'hui (obligatoire)
-command: <préfixe d'invocation>   # (obligatoire) — non-exécutable à ce stade
+command: <commande d'invocation>  # (obligatoire) — python3 homelab/scripts/sensor.py fire <id>
 default_severity: advisory   # advisory | blocking (obligatoire) — blocking global = ADR + contrôle sécurité
 severity_overrides:          # (optionnel) sévérité conditionnelle par scope (ADR + contrôle sécurité)
   - scopes: [security-patch, new-stack]
@@ -82,4 +114,4 @@ matches: <glob>              # (optionnel) filtre de chemin ; au gate, glob abse
 origine: ALI-<n>             # (SG-1) provenance traçable — obligatoire côté gouvernance
 ```
 
-Le corps (après le front-matter) porte le **contrat de vérification** (`checks`), la forme de la **sortie** advisory et les **garde-fous** — lisible, déterministe, non exécutable.
+Le corps (après le front-matter) porte le **contrat de vérification** (`checks`), la forme de la **sortie** advisory et les **garde-fous** — lisible et déterministe ; son exécution est assurée par `homelab/scripts/sensor.py`.

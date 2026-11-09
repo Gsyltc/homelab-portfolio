@@ -1,7 +1,7 @@
 ---
 id: traefik-coherence
 kind: deterministic
-command: "non-exécutable (advisory documentaire — référence le check traefik-manager-read)"
+command: "python3 homelab/scripts/sensor.py fire traefik-coherence"  # contrôle de surface ; autorité : traefik-manager-read
 default_severity: advisory
 description: "Vérifie la cohérence Traefik du compose livré (labels, entrypoints, réseau) en s'appuyant sur le check traefik-manager-read existant."
 category: traefik
