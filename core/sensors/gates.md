@@ -75,6 +75,8 @@ Le script produit le « Rapport de vérification » ci-dessous.
 
 Posté en commentaire sur l'issue, avant la validation humaine. Verdicts : `✅` conforme · `⚠️` écart · `⛔` indisponible (non exécuté / en erreur / hors périmètre — **jamais lu comme conforme**, SG-2). Le rapport porte sa **source** (manifeste + commit) pour être non répudiable (SG-5).
 
+> **Destinataire = humain → présentation en clair (ci-dessous). Destinataire = agent → message A2A.** Le rapport de gate affiché ci-dessous est la **présentation destinée à l'humain**, avant sa validation. Lorsque les verdicts doivent être **transmis à un autre agent** (handoff A2A pur), ils voyagent dans un **message A2A `type: rapport-verification`** (champ `sensors_resultats`, verdicts `conforme | ecart | indisponible`) joint à l'issue — schéma source unique : [`../common/protocols/governance-security.md`](../common/protocols/governance-security.md), « Schéma du message A2A ». Ce fichier ne redéfinit pas le schéma.
+
 ```
 Rapport de vérification — <frontière>   (source : core/sensors/gates.md @ <commit>)
 - artefacts-presents : ✅ | ⚠️ <artefact manquant> | ⛔ <indisponible>

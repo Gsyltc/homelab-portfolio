@@ -9,6 +9,16 @@ ce fichier en donne la lecture chronologique côté produit.
 ## [Non publié]
 
 ### Changed
+- **Message A2A du workflow `core` porté par un fichier YAML joint, avec transmission des sensors**
+  (réf. ORIG-423, [ADR-0050](decisions/0050-message-a2a-core-fichier-yaml-joint-et-transmission-sensors.md), statut *Proposed*).
+  Transposition sur `core` du modèle « fichier YAML joint + commentaire minimal » de `matching-cv-ao` ([ADR-0033](decisions/0033-format-yaml-compact-message-a2a.md)), enrichi de la transmission des sensors :
+  - la **mission et le livrable voyagent dans un fichier YAML joint** (message A2A, enveloppe YAML compacte) ; le commentaire d'un handoff A2A pur est réduit à la **mention active + le nom du fichier joint**, sans prose ; la présentation Markdown détaillée reste réservée aux **gates humaines**, où les **verdicts de sensors du stage sont présentés à l'humain en clair** (section `## Sensors`, obligatoire, jamais masquée par le YAML) ;
+  - deux champs ajoutés au schéma : **`sensors_a_executer`** (délégation — liste des sensors à lancer) et **`sensors_resultats`** (retour / `rapport-verification` — verdicts `sensor.py` : `conforme | ecart | indisponible` + source) ;
+  - source unique du schéma dans `governance-security.md` (§ « Règle A2A » réécrite + « Deux formes de commentaire » + « Schéma du message A2A ») ; `stage-protocol.md` (temps 2/3/4), `output-format.md` (§ `## Sensors` réservée au gate humain), `sensors/gates.md` et `reviewer.md` alignés ;
+  - garde-fous intacts : mention active = seul vecteur de déclenchement, piste d'audit sur l'issue, verdict `sensor.py` jamais réinterprété, `indisponible ≠ conforme`, sensor déclaré absent des résultats = écart, message A2A advisory ;
+  - **périmètre strictement limité à `core`** (`homelab` et `matching-cv-ao` non touchés).
+
+### Changed
 - **Gabarit d'état de la checklist d'architecture porté par la skill, sans couplage `core → plugin`**
   (réf. HOM-286, [ADR-0047](decisions/0047-checklist-gabarit-porte-par-la-skill-sans-couplage-core-plugin.md), statut *Accepted*).
   Le gabarit `00-checklist-architecture.md` est déplacé de `core/common/protocols/gabarits/` vers la skill
