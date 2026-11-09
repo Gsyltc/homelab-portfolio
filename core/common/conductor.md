@@ -77,15 +77,28 @@ flowchart TD
 
 ---
 
-## OBLIGATOIRE : chargement du contexte au démarrage
+## OBLIGATOIRE : séquence d'amorçage au démarrage
 
-Avant toute exécution, le coordinateur :
+Ordre unique, non ambigu. Les étapes 0 et 1 sont la **seule** « première chose à faire » du coordinateur (elles priment sur toute autre lecture).
 
-1. **Vérifie le répertoire officiel du projet** : absent ou doute ⇒ confirmation humaine avant de lancer les travaux ([`directory-check`](stages/initialization/directory-check.md)).
-2. **Détecte le contexte Git** avant toute création de fichiers : indicateur `Git : Oui` / `Git : Non` de la description du projet, sinon détection d'un `.git/` sur disque et enrichissement de la description ([`git-detection`](stages/initialization/git-detection.md)).
-3. **Charge le contexte existant** : documentation d'architecture, décisions structurantes, diagrammes, contraintes tracées.
-4. **Applique les paramètres par défaut d'architecture** : structure de répertoire, nommage, emplacements des décisions et diagrammes.
-5. **Détermine si une méthodologie s'applique** (voir ci-dessous).
+```
+0. Checkout de homelab-portfolio (base main, à jour). RETENIR la racine du checkout
+   dans $CORE_HOME. Deux dépôts distincts, jamais confondus :
+     - workflow + harnais (conductor, stages, protocols, sensors) = $CORE_HOME ;
+     - livrables du projet = répertoire officiel du projet (étape 2).
+1. Lire AGENTS.md § « Architecture Flow » UNIQUEMENT (règle de routage) → confirmer que
+   la demande relève du workflow core. Ne pas lire AGENTS.md en entier : le reste est
+   de l'hygiène de dépôt et les invariants sont déjà dans conductor.md / protocols/.
+2. directory-check : vérifier le répertoire officiel du projet ; absent ou doute ⇒
+   confirmation humaine avant de lancer les travaux (stages/initialization/directory-check.md).
+3. git-detection : contexte Git (indicateur « Git : Oui/Non » de la description, sinon
+   détection d'un .git/ et enrichissement) (stages/initialization/git-detection.md).
+4. Charger le contexte existant en LÉGER (lazy loading, voir ci-dessous) : documentation,
+   décisions, diagrammes, contraintes — index/sommaires/descriptions, pas les corps.
+5. Déterminer si une méthodologie s'applique (sinon N/A — voir « Activation conditionnelle »).
+```
+
+> **Propagation de `$CORE_HOME`.** À chaque délégation, le coordinateur **transmet `$CORE_HOME`** dans le message A2A `delegation` (champ `core_home: <chemin du checkout>`), pour que le délégataire lance sensors, gates et hook d'écriture **sans re-chercher le harnais**. Le délégataire indique de plus la (les) **fiche(s) de stage et protocole(s)** à charger pour sa mission (chargement paresseux ciblé, pas de lecture intégrale).
 
 ### Chargement optimisé (lazy loading)
 
@@ -97,9 +110,9 @@ Objectif : préserver la fenêtre de contexte.
   - skills et descriptions ;
   - index / titres du registre de décisions ;
   - sommaire de la documentation d'architecture.
-- **Ne pas charger** : instructions détaillées d'un agent, règles / gabarits complets, specs vivantes intégrales, corps complet des documents de décision.
+- **Ne pas charger** : AGENTS.md hors § Architecture Flow, instructions détaillées d'un agent, règles / gabarits complets, specs vivantes intégrales, corps complet des documents de décision.
 - **À la demande** :
-  - Contenu complet d'un agent, skill, méthodologie, gabarit, document de décision ou spec : uniquement quand l'étape ou la délégation qui en a besoin est déclenchée.
+  - Contenu complet d'un agent, skill, méthodologie, gabarit, document de décision, spec, **fiche de stage ou protocole** : uniquement quand l'étape ou la délégation qui en a besoin est déclenchée.
   - Tracer sur l'issue ce qui a été chargé (piste d'audit).
 - **Règles conditionnelles** :
   - Normes PCI DSS / GDPR / Loi 25 / LPRPDE : chargées seulement si explicitement demandées ; par défaut, OWASP / STRIDE seules.
@@ -201,7 +214,7 @@ La piste d'audit vit **sur l'issue**, jamais dans un fichier `audit.md`. Chaque 
 
 ## Checklist d'architecture (état d'avancement)
 
-Le coordinateur tient une checklist qui suit l'avancement sur les 5 phases. **Processus à part** : sa logique complète (structure, barème 80/10/10, calcul du %, gate planification / réalisation, mapping Livrables → documents) a sa **source unique** dans [`protocols/architecture-checklist.md`](protocols/architecture-checklist.md). Le conductor n'y renvoie que.
+Le coordinateur est **responsable de la tenue à jour de la checklist du DAS** (`documentation/00-checklist-architecture.md`) : il la met à jour à chaque changement d'état, en s'appuyant sur le **passage du sensor [`checklist-progress`](../sensors/sensors/checklist-progress.md)** (qui restitue l'avancement ; advisory, il constate sans écrire). **Processus à part** : sa logique complète (structure, barème 80/10/10, calcul du %, gate planification / réalisation, mapping Livrables → documents) a sa **source unique** dans [`protocols/architecture-checklist.md`](protocols/architecture-checklist.md). Le conductor n'y renvoie que.
 
 - **État** : `documentation/00-checklist-architecture.md`, fichier d'état initialisé (copie idempotente du gabarit, tous éléments à **0 %**) lors de la vérification de présence en Initialization ([`directory-check`](stages/initialization/directory-check.md)). Processus et règles de tenue : source unique [`protocols/architecture-checklist.md`](protocols/architecture-checklist.md).
 - **Avancement** : `% = 80 × (sections conformes / total sections mandatory) + 10 × (revue pair) + 10 × (acceptation humaine)`.
@@ -219,15 +232,13 @@ Le coordinateur tient une checklist qui suit l'avancement sur les 5 phases. **Pr
 
 ## OBLIGATOIRE : langue et format
 
-- Rédiger **tous les documents dans la langue de l'humain** (français par défaut).
-- **Tout document livrable** : style concis (information strictement nécessaire, puces à plusieurs niveaux, texte aéré). Source unique : [`protocols/document-style.md`](protocols/document-style.md) (règle `RULE-WS-007`) ; distinct du format des retours d'agent.
-- **Tout retour d'agent sur l'issue** (compte rendu, retour A2A) : prose réduite et structure en 4 sections. Source unique : [`protocols/output-format.md`](protocols/output-format.md).
-  - `## Résumé` ; `## Sensors` si le stage en déclare ; `## Points bloquants` si blocage.
-  - `## Action humaine requise` uniquement si l'humain doit intervenir, avec mention humaine active (jamais sur un simple retour A2A).
-  - Cette forme ne relâche aucune norme de gating : la section « Action humaine requise » présente l'arbitrage attendu, elle ne s'y substitue pas.
-- **Conserver l'anglais** pour les termes non traduits des templates OpenSpec / EARS (si OpenSpec activé).
-- Générer les diagrammes **en code** (PlantUML, Mermaid, Structurizr DSL, CALM, Archimate) et **valider leur syntaxe** avant écriture. Demander à l'humain le format souhaité avant génération.
-- Ne jamais inclure de secret, mot de passe ou identifiant dans les livrables.
+Sources uniques, non répétées ici :
+
+- **Langue** : tous les documents dans la langue de l'humain (français par défaut) ; termes de templates OpenSpec / EARS conservés en anglais si OpenSpec activé.
+- **Documents livrables** → style concis : [`protocols/document-style.md`](protocols/document-style.md) (`RULE-WS-007`).
+- **Retours d'agent sur l'issue** (compte rendu, retour A2A) → prose réduite + 4 sections : [`protocols/output-format.md`](protocols/output-format.md).
+- **Diagrammes en code** (PlantUML, Mermaid, Structurizr DSL, CALM, Archimate), syntaxe validée avant écriture, format demandé à l'humain.
+- **Aucun secret** dans les livrables, commentaires ou notifications.
 
 ---
 
@@ -308,6 +319,24 @@ sequenceDiagram
     H-->>S: Validation explicite (+ rollback si destructif)
     S->>AL: Notification de fin de déploiement (si déploiement)
     AL-->>H: Notification (canal porté par l'Agent de notifications)
+```
+
+---
+
+## Checklist de tour du coordinateur
+
+Récapitulatif vérifiable à chaque tour (pas une règle neuve — les sources sont les sections ci-dessus et les protocoles) :
+
+```
+☑ Amorçage fait ($CORE_HOME posé, routage AGENTS.md confirmé, répertoire + Git OK)
+☑ Rapport de vérification (gate de phase) posté AVANT toute validation humaine
+☑ Validation humaine granulaire : chaque choix Keep / Modify / Redo séparément
+☑ Piste d'audit à jour sur l'issue (entrées brutes conservées, historique non écrasé)
+☑ Issue parente `blocked` tant qu'une sous-issue / ADR enfant est ouverte
+☑ Délégations : une issue par spécialiste, mission cadrée, UUID résolu, $CORE_HOME propagé
+☑ Sécurité systématique (OWASP / STRIDE) sur toute modification d'architecture
+☑ Checklist du DAS (`00-checklist-architecture.md`) mise à jour (passage du sensor
+   checklist-progress) — DERNIÈRE tâche du tour
 ```
 
 ---
