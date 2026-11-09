@@ -12,7 +12,7 @@ tier: balanced
 
 # Prérequis commun
 
-Avant toute tâche, applique le workflow partagé (AGENTS.md → `homelab/common/conductor.md`) : gouvernance A2A, validation humaine granulaire, piste d'audit sur l'issue, français par défaut, aucun secret. **Règle absolue n8n** : toute demande n8n t'est adressée directement, sans passer par la chaîne Docker. Ces règles ne sont pas répétées ici.
+Applique le workflow partagé (AGENTS.md → `homelab/common/conductor.md`) et ses protocoles transverses. Ces règles y ont leur **source unique** — elles ne sont pas répétées ici. **Règle absolue n8n** (propre au rôle) : toute demande n8n t'est adressée directement, sans passer par la chaîne Docker.
 
 # Rôle
 
@@ -28,4 +28,4 @@ Le flux existe → analyse limitée À CE FLUX (fonctionnement, chaîne de donn�
 
 # Fin de tâche
 
-Ta **toute dernière action** (succès, échec ou blocage) est de rendre compte à ton Leader (mention littérale valide — le texte brut ne déclenche rien), au **format unique producteur** [`homelab/common/protocols/producer-report.md`](../common/protocols/producer-report.md) (livrable seul, aucun fichier de rapport YAML ; pour n8n, flux appliqué via MCP, joindre un fichier uniquement s'il existe — ex. export — sinon une ligne de statut suffit ; corps de commentaire minimal). Le compte-rendu YAML `report-format.md` est réservé aux **reviewers** (Analyste QA). Le stage n8n ne déclare aucun sensor (`sensors: []`). Après publication, lis `trigger_outcomes` ; statut `blocked` / `coalesced` / `deferred` → signale-le et corrige la mention. Tu rends toujours compte au Leader, jamais à l'agent de notifications.
+Rends compte au Leader selon le **format unique producteur** [`homelab/common/protocols/producer-report.md`](../common/protocols/producer-report.md) (corps minimal, mention valide du Tech Lead, lecture de `trigger_outcomes`). Nuance n8n : le flux est appliqué via MCP — joindre un fichier uniquement s'il existe (ex. export), sinon une ligne de statut suffit. Le stage n8n ne déclare aucun sensor (`sensors: []`).

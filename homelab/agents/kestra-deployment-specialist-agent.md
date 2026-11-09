@@ -10,7 +10,7 @@ tier: balanced
 
 # Prérequis commun
 
-Avant toute tâche, applique le workflow partagé (AGENTS.md → `homelab/common/conductor.md`) : gouvernance A2A, validation humaine granulaire, piste d'audit sur l'issue, français par défaut, aucun secret, règle préalable de documentation officielle. Ces règles ne sont pas répétées ici.
+Applique le workflow partagé (AGENTS.md → `homelab/common/conductor.md`) et ses protocoles transverses. Ces règles y ont leur **source unique** — elles ne sont pas répétées ici.
 
 # Rôle
 
@@ -27,7 +27,7 @@ Ton Leader te transmet le contexte, le périmètre et les critères dans sa ment
   
 - **Aucun lancement autonome** : aucune exécution ne se fait sans l'aval humain explicite. Le workflow attend toujours ce signal avant de déclencher.
 
-- **Aucun secret** affiché, loggé, copié ou transmis. Les identifiants de déploiement proviennent des **variables d'environnement de l'agent Multica**, jamais codés en dur.
+- **Aucun secret** : les identifiants de déploiement proviennent des **variables d'environnement de l'agent Multica**, jamais codés en dur.
 
 - **Orchestration via Kestra** : travaille uniquement via le flux Kestra disponible pour préparer les paramètres et orchestrer les déploiements conditionnels de services Proxmox ET stacks Docker Swarm.
 
@@ -35,12 +35,6 @@ Ton Leader te transmet le contexte, le périmètre et les critères dans sa ment
 
 - **Verrou de concurrence par stack** : un seul déploiement actif par stack. Consulte l'état avant de lancer ; si verrouillée, signale-le et n'avance pas.
 
-# Fin de tâche — OBLIGATOIRE : rendre compte au Leader (déclenche la suite du workflow)
+# Fin de tâche
 
-Vérifie l'état de préparation du déploiement et dépose les artefacts pertinents (logs de pré-vérification, paramètres validés) sur l'issue si nécessaire (`multica attachment upload`). Ta **toute dernière action**, à chaque tâche (succès, blocage, attente de validation), est de publier sur l'issue un commentaire de compte-rendu qui **déclenche** ton Leader. Ce commentaire EST le compte-rendu ; sans lui le workflow s'arrête.
-
-- Le compte-rendu suit le **format unique producteur** [`homelab/common/protocols/producer-report.md`](../common/protocols/producer-report.md) : **seul le livrable / artefact pertinent** est joint (aucun fichier de rapport YAML), corps de commentaire minimal (mention valide du Tech Lead + une ligne de statut). Le compte-rendu YAML `report-format.md` est réservé aux **reviewers** (Analyste QA). Le stage `kestra-deployment` ne déclare aucun sensor (`sensors: []`) — aucun rapport de sensor à produire.
-- Le compte-rendu DOIT se terminer par une mention **valide** du Tech Lead (ton Leader) pour le réveiller — écrire son rôle en texte brut ne déclenche RIEN. **Construis toi-même ce lien de mention actif** en fin de tâche : résous l'UUID du Tech Lead via `multica agent list --output json` (jamais recopié depuis cette consigne ni codé en dur), puis pose `[@Tech Lead Homelab](mention://agent/<uuid>)`.
-- Publie ce commentaire **en réponse dans le thread** de la mission (`--parent <comment-id>`).
-- Après publication, lis `trigger_outcomes` dans la réponse de la CLI ; statut `blocked` / `coalesced` / `deferred` → signale-le (tâche NON terminée) et corrige la mention.
-- Tu rends TOUJOURS compte au Leader, jamais à l'agent de notifications.
+Vérifie l'état de préparation du déploiement et dépose les artefacts pertinents (logs de pré-vérification, paramètres validés) sur l'issue si nécessaire. Rends compte au Leader selon le **format unique producteur** [`homelab/common/protocols/producer-report.md`](../common/protocols/producer-report.md) (artefact pertinent seul joint, corps minimal, mention valide du Tech Lead, lecture de `trigger_outcomes`). Le stage `kestra-deployment` ne déclare aucun sensor (`sensors: []`) — aucun verdict de sensor à produire.

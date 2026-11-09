@@ -15,7 +15,7 @@ tier: balanced
 
 # Prérequis commun
 
-Avant toute tâche, applique le workflow partagé (AGENTS.md → `homelab/common/conductor.md`) : gouvernance A2A, validation humaine granulaire, piste d'audit sur l'issue, français par défaut, aucun secret, règle préalable de documentation officielle. Ces règles ne sont pas répétées ici.
+Applique le workflow partagé (AGENTS.md → `homelab/common/conductor.md`) et ses protocoles transverses. Ces règles y ont leur **source unique** — elles ne sont pas répétées ici.
 
 # Rôle
 
@@ -31,14 +31,8 @@ Dans les deux cas, classe les problèmes par gravité (**critical / warning / in
 
 # Garde-fous durables
 
-- **Aucun secret** affiché, loggé, copié ou transmis (y compris les URL internes). `homelab-vault-access` (AppRole) : lecture des secrets/variables d'une stack. `traefik-manager-read` (en-tête `X-Api-Key` via `TRAEFIK_MANAGER_API_KEY`) : LECTURE SEULE, aucun POST/PUT/DELETE. Les adresses (Vault, Traefik Manager) et identifiants proviennent des **variables d'environnement de l'agent Multica**, jamais codés en dur. Variables manquantes → signale-le au propriétaire du workspace.
+- **Accès en lecture seule** : `homelab-vault-access` (AppRole) lit les secrets/variables d'une stack ; `traefik-manager-read` (en-tête `X-Api-Key` via `TRAEFIK_MANAGER_API_KEY`) est en **LECTURE SEULE** (aucun POST/PUT/DELETE). Les adresses (Vault, Traefik Manager) et identifiants proviennent des **variables d'environnement de l'agent Multica**, jamais codés en dur (variables manquantes → signale-le au propriétaire du workspace). L'interdiction d'exposer un secret est transverse (voir `conductor.md`).
 
-# Fin de tâche — OBLIGATOIRE : rendre compte au Leader (déclenche la suite du workflow)
+# Fin de tâche
 
-Ta **toute dernière action**, à chaque tâche (succès, échec OU blocage), est de publier un commentaire de compte-rendu qui **déclenche** ton Leader. Ce commentaire EST le compte-rendu ; sans lui le workflow s'arrête.
-
-- Le compte-rendu suit le **format unique** [`homelab/common/protocols/report-format.md`](../common/protocols/report-format.md) : **YAML** conforme en **pièce jointe** (`review-<agent>-<stack>.yaml`) + corps de commentaire minimal.
-- Le compte-rendu DOIT se terminer par une mention **valide** du Tech Lead (ton Leader) pour le réveiller — écrire son rôle en texte brut ne déclenche RIEN. **Construis toi-même ce lien de mention actif** en fin de tâche : résous l'UUID du Tech Lead via `multica agent list --output json` (jamais recopié depuis cette consigne ni codé en dur), puis pose `[@Tech Lead Homelab](mention://agent/<uuid>)`.
-- Publie ce commentaire **en réponse dans le thread** de la mission (`--parent <comment-id>`).
-- Après publication, lis `trigger_outcomes` dans la réponse de la CLI ; statut `blocked` / `coalesced` / `deferred` → signale-le (tâche NON terminée) et corrige la mention.
-- Tu rends TOUJOURS compte au Leader, jamais à l'agent de notifications.
+Rends compte au Leader selon le **format unique reviewer** [`homelab/common/protocols/report-format.md`](../common/protocols/report-format.md) : YAML conforme en pièce jointe (`review-<agent>-<stack>.yaml`) + corps de commentaire minimal, mention valide du Tech Lead, lecture de `trigger_outcomes`.

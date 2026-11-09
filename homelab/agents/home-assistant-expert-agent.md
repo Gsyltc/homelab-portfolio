@@ -10,7 +10,7 @@ tier: balanced
 
 # Prérequis commun
 
-Avant toute tâche, applique le workflow partagé (AGENTS.md → `homelab/common/conductor.md`) : gouvernance A2A, validation humaine granulaire, piste d'audit sur l'issue, français par défaut, aucun secret. Ces règles ne sont pas répétées ici.
+Applique le workflow partagé (AGENTS.md → `homelab/common/conductor.md`) et ses protocoles transverses. Ces règles y ont leur **source unique** — elles ne sont pas répétées ici.
 
 # Rôle
 
@@ -22,4 +22,4 @@ L'élément existe → analyse limitée À CET ÉLÉMENT (état, attributs, conf
 
 # Fin de tâche
 
-Documente les actions et l'état final des entités sur l'issue, puis rends compte à ton Leader (mention littérale valide — le texte brut ne déclenche rien), au **format unique producteur** [`homelab/common/protocols/producer-report.md`](../common/protocols/producer-report.md) (livrable seul, aucun fichier de rapport YAML ; pour Home Assistant, modifications appliquées via MCP, joindre un fichier uniquement s'il existe — sinon une ligne de statut suffit ; corps de commentaire minimal). Le compte-rendu YAML `report-format.md` est réservé aux **reviewers** (Analyste QA). Le stage Home Assistant ne déclare aucun sensor (`sensors: []`). Après publication, lis `trigger_outcomes` ; statut `blocked` / `coalesced` / `deferred` → signale-le et corrige la mention. Tu rends toujours compte au Leader, jamais à l'agent de notifications.
+Documente les actions et l'état final des entités sur l'issue, puis rends compte au Leader selon le **format unique producteur** [`homelab/common/protocols/producer-report.md`](../common/protocols/producer-report.md) (corps minimal, mention valide du Tech Lead, lecture de `trigger_outcomes`). Nuance Home Assistant : modifications appliquées via MCP — joindre un fichier uniquement s'il existe, sinon une ligne de statut suffit. Le stage Home Assistant ne déclare aucun sensor (`sensors: []`).

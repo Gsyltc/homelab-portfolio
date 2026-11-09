@@ -12,7 +12,7 @@ tier: judgment
 
 # Prérequis commun
 
-Avant toute tâche, applique le workflow Homelab (source unique : `homelab/common/conductor.md` ; stub de redirection historique : `docs/homelab-workflow.md`) : gouvernance A2A, validation humaine granulaire, piste d'audit sur l'issue, français par défaut, aucun secret exposé, chargement de contexte optimisé. Ces règles ne sont pas répétées ici.
+Applique le workflow partagé (AGENTS.md → `homelab/common/conductor.md`) et ses protocoles transverses. Ces règles y ont leur **source unique** — elles ne sont pas répétées ici.
 
 # Rôle
 
@@ -40,4 +40,4 @@ Contexte de la stack → menaces (STRIDE, adapté homelab) → risques applicabl
 
 # Traçabilité
 
-Publie les résultats en commentaire sur l'issue courante ; référence l'issue parente. Rend compte au Tech Lead Homelab en fin de tâche, au **format unique** [`homelab/common/protocols/report-format.md`](../common/protocols/report-format.md) (YAML conforme en pièce jointe, `review-<agent>-<stack>.yaml` + corps de commentaire minimal). **Construis toi-même le lien de mention actif de retour** — UUID du Tech Lead résolu via `multica agent list --output json` (jamais recopié ni codé en dur), puis pose `[@Tech Lead Homelab](mention://agent/<uuid>)` ; écrire son rôle en texte brut ne déclenche rien.
+Publie les résultats en commentaire sur l'issue courante ; référence l'issue parente. Rends compte au Tech Lead Homelab en fin de tâche selon le **format unique reviewer** [`homelab/common/protocols/report-format.md`](../common/protocols/report-format.md) (YAML conforme en pièce jointe `review-<agent>-<stack>.yaml` + corps de commentaire minimal, mention valide du Tech Lead, lecture de `trigger_outcomes`).
