@@ -9,7 +9,16 @@ ce fichier en donne la lecture chronologique côté produit.
 ## [Non publié]
 
 ### Changed
-- **Lazy loading du workflow `homelab` aligné sur `core` : amorçage ancré `$CORE_HOME`, rechargement ciblé et checklist de tour**
+- **Message A2A du workflow `homelab` porté par un fichier YAML joint, avec transmission des sensors**
+  (réf. HOM-294, [ADR-0052](decisions/0052-message-a2a-homelab-fichier-yaml-joint-et-transmission-sensors.md), statut *Accepted* ; transposition de l'[ADR-0050](decisions/0050-message-a2a-core-fichier-yaml-joint-et-transmission-sensors.md) / PR #319 du workflow `core`).
+  Transposition sur `homelab` du modèle « fichier YAML joint + commentaire minimal » (`matching-cv-ao` / `core`, [ADR-0033](decisions/0033-format-yaml-compact-message-a2a.md)), enrichi de la transmission des sensors :
+  - la **mission et le livrable voyagent dans un fichier YAML joint** (message A2A, enveloppe YAML compacte) ; le commentaire d'un handoff A2A pur (délégation / retour du producteur) est réduit à la **mention active + le nom du fichier joint**, sans prose ; la présentation Markdown détaillée reste réservée aux **gates humaines**, où les **verdicts de sensors du stage sont présentés à l'humain en clair** (section `## Sensors` / ligne « Sensors de gate » du Rapport de vérification, obligatoire, jamais masquée par le YAML) ;
+  - deux champs ajoutés au schéma : **`sensors_a_executer`** (délégation — liste des sensors à lancer) et **`sensors_resultats`** (retour / `rapport-verification` — verdicts `sensor.py` : `conforme | ecart | indisponible` + source) ; le champ **`core_home`** (HOM-291) rejoint l'enveloppe `delegation` (propagation `$CORE_HOME` conservée) ;
+  - source unique du schéma dans `homelab/common/protocols/governance-security.md` (§ « Règle A2A » réécrite + « Deux formes de commentaire » + « Schéma du message A2A ») ; `stage-protocol.md` (temps 2/3/4), `producer-report.md` (retour producteur = YAML `retour` avec `sensors_resultats`), `report-format.md` (le rapport reviewer **est** l'instance `retour` / `rapport-verification` du message A2A), `conductor.md`, `tech-lead-homelab-agent.md`, `docker-compose-creation.md` et `terraform-configuration.md` alignés ;
+  - garde-fous intacts : mention active = seul vecteur de déclenchement, anti-wake parasite, piste d'audit sur l'issue, verdict `sensor.py` jamais réinterprété, `indisponible ≠ conforme`, sensor déclaré absent des résultats = écart, message A2A advisory, exception bloquante `plaintext-secret` / `terraform-no-sni` sur `security-patch` / `new-stack` (ALI-204) ;
+  - **périmètre strictement limité à `homelab`** (`core` et `matching-cv-ao` non touchés).
+
+### Changed
   (réf. HOM-291, transposition des mécanismes des PR #319 / #321 du workflow `core`, non portés jusqu'ici).
   Le workflow `homelab` disposait déjà du *principe* de chargement optimisé et, depuis HOM-292 (#322),
   du harnais de sensors exécutable + de l'invocation ancrée `$CORE_HOME` (README + hook `postToolUse`).

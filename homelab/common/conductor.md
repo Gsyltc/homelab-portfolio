@@ -101,7 +101,7 @@ Ordre unique, non ambigu. Les étapes 0 et 1 sont la **seule** « première chos
    sur l'issue (stages/initialisation/labels-audit-init.md).
 ```
 
-> **Propagation de `$CORE_HOME`.** À chaque délégation, le Tech Lead **transmet `$CORE_HOME`** dans le message A2A `delegation` (champ `core_home: <chemin du checkout>`), pour que le délégataire lance sensors, gates et hook d'écriture **sans re-chercher le harnais**. Le délégataire indique de plus la (les) **fiche(s) de stage et protocole(s)** à charger pour sa mission (chargement paresseux ciblé, pas de lecture intégrale — voir [`protocols/stage-protocol.md`](protocols/stage-protocol.md), temps 1 et 2). Convention d'invocation du harnais ancré sur `$CORE_HOME` : [`../sensors/README.md`](../sensors/README.md).
+> **Propagation de `$CORE_HOME`.** À chaque délégation, le Tech Lead **transmet `$CORE_HOME`** dans le **message A2A `delegation`** (fichier YAML joint, champ `core_home: "<chemin du checkout>"`), pour que le délégataire lance sensors, gates et hook d'écriture **sans re-chercher le harnais**. Le même YAML porte `fiches_a_recharger` — la (les) **fiche(s) de stage et protocole(s)** à charger pour sa mission (chargement paresseux ciblé, pas de lecture intégrale). **La mission voyage dans ce fichier joint, jamais en prose dans le fil** (voir [`protocols/governance-security.md`](protocols/governance-security.md) § « Règle A2A » et « Schéma du message A2A », et [`protocols/stage-protocol.md`](protocols/stage-protocol.md) temps 2). Convention d'invocation du harnais ancré sur `$CORE_HOME` : [`../sensors/README.md`](../sensors/README.md).
 
 ---
 
@@ -245,8 +245,10 @@ Récapitulatif vérifiable à chaque tour (pas une règle neuve — les sources 
 ☑ Piste d'audit à jour sur l'issue (entrées brutes conservées, historique non écrasé,
    label `Homelab` posé)
 ☑ Issue parente `blocked` tant qu'une sous-issue spécialiste est ouverte (barrière de stage)
-☑ Délégations : une mission par spécialiste, UUID résolu, verrou `active_step` par
-   artefact posé, $CORE_HOME propagé (champ `core_home` du message A2A)
+☑ Délégations : message A2A `delegation` en **fichier YAML joint** (une mission par
+   spécialiste, commentaire réduit à la mention active + nom du fichier — aucune prose),
+   UUID résolu, verrou `active_step` par artefact posé, `$CORE_HOME` + `fiches_a_recharger`
+   portés par le YAML
 ☑ Contrôle qualité central (Analyste QA) passé AVANT toute revue humaine
 ☑ Contrôle sécurité systématique sur toute surface de sécurité (secrets, exposition,
    durcissement Docker/Swarm, Traefik)

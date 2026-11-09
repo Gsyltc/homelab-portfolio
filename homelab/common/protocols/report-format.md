@@ -2,6 +2,8 @@
 
 Source unique du **compte-rendu de revue** qu'un reviewer remonte au Tech Lead Homelab en fin de mission. Ce protocole et le schéma [`report-format.schema.yaml`](report-format.schema.yaml) font foi ; les fiches d'agent et de stage le **référencent**, sans le redupliquer (source unique — SG-1 / SEC-5).
 
+> **Le rapport reviewer EST l'instance `retour` / `rapport-verification` du message A2A.** L'enveloppe commune à tous les handoffs (délégation, retour, rapport de vérification) est définie une seule fois dans [`governance-security.md`](governance-security.md) § « Schéma du message A2A » ; ce rapport en est la **forme détaillée pour un reviewer** — il porte le `verdict`, les `points[]` classés (`critical/warning/info`) et les `sensors[]` (équivalents du champ `sensors_resultats` de l'enveloppe). Les deux ne se contredisent pas : l'enveloppe A2A porte le contrat minimal commun, `report-format` détaille le retour reviewer.
+
 > **Sérialisation : YAML.** Rapport et schéma sont en **YAML**. Le rapport conforme est écrit dans `review-<agent>-<stack>.yaml` et déposé en pièce jointe.
 
 Objectif : un retour **minimal, uniforme et déterministe**, pour que le Tech Lead route sans relire de la prose. Lui seul compose la communication en langage naturel vers l'humain.
