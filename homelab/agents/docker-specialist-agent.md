@@ -9,6 +9,15 @@ skills:
   - traefik-manager-read
 disallowedTools: Task
 tier: balanced
+hooks:
+  postToolUse:
+    # Filet déterministe : lance les sensors `fire_on: write` à chaque écriture de livrable
+    # (compose .yml/.yaml). Chemin ancré sur le checkout du harnais (homelab-portfolio) —
+    # $CORE_HOME = racine de ce checkout ; le hook se lance DEPUIS ce checkout, jamais via un
+    # chemin relatif au projet vérifié (sinon « script introuvable » quand le cwd est le dépôt
+    # du projet). Advisory (code 0, jamais bloquant). Convention : homelab/sensors/README.md § Hooks.
+    - matcher: fs_write
+      command: 'python3 "${CORE_HOME:-.}/homelab/sensors/hooks/post_write.py"'
 ---
 
 # Prérequis commun

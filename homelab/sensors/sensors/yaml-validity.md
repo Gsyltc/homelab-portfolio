@@ -1,7 +1,7 @@
 ---
 id: yaml-validity
 kind: deterministic
-command: "non-exécutable (advisory documentaire)"
+command: "python3 homelab/scripts/sensor.py fire yaml-validity"
 default_severity: advisory
 description: "Vérifie que le docker-compose livré parse en YAML valide (syntaxe seule, sans rendu ni réseau)."
 category: compose-shape

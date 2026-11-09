@@ -1,7 +1,7 @@
 ---
 id: swarm-deploy-section
 kind: deterministic
-command: "non-exécutable (advisory documentaire)"
+command: "python3 homelab/scripts/sensor.py fire swarm-deploy-section"
 default_severity: advisory
 description: "Vérifie la présence d'une section deploy compatible Docker Swarm sur chaque service du compose livré."
 category: compose-shape

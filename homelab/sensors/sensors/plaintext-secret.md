@@ -1,7 +1,7 @@
 ---
 id: plaintext-secret
 kind: deterministic
-command: "non-exécutable (advisory documentaire)"
+command: "python3 homelab/scripts/sensor.py fire plaintext-secret"
 default_severity: advisory
 severity_overrides:
   # décision humaine (ALI-204, arbitrage 2 « Oui ») + contrôle sécurité Analyste QA : bloquant sur les scopes sécuritaires

@@ -1,7 +1,7 @@
 ---
 id: vault-secret-exists
 kind: deterministic
-command: "non-exécutable (advisory documentaire — existence seule, jamais la valeur)"
+command: "python3 homelab/scripts/sensor.py fire vault-secret-exists"  # existence/forme seule, jamais la valeur
 default_severity: advisory
 description: "Vérifie l'existence (jamais la valeur) des secrets Vault référencés par le livrable, via homelab-vault-access en lecture de présence."
 category: security
