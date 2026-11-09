@@ -21,10 +21,11 @@ flowchart LR
 - Vérifier que les `requires_stage` sont satisfaits et que les artefacts `consumes` (marqués `required: true`) existent. Sinon : **halt-and-ask** (ne jamais deviner).
 - Lire le verrou de concurrence `active_step` de la stack visée (un seul traitement par stack, lu **par artefact**) ; si un traitement est actif **sur le même artefact**, mettre en file et attendre la libération (deux artefacts disjoints — compose vs `.tfvars` — peuvent progresser en parallèle).
 - Charger, **à la demande**, uniquement le contexte nécessaire au stage (chargement optimisé — voir [`conductor.md`](../conductor.md)).
+- **À réception d'une délégation, le délégataire recharge sa fiche de stage (le *quoi* de son étape) et les protocoles qu'elle cite** — ceux listés dans le message A2A `delegation` —, rien d'autre. Chargement ciblé et paresseux ; ne pas relire le workflow en entier. Le message porte aussi `core_home` (racine du checkout `homelab-portfolio` = `$CORE_HOME`) pour lancer sensors, gates et hook **sans re-chercher le harnais** (convention d'invocation ancrée : [`../../sensors/README.md`](../../sensors/README.md)).
 
 ### 2. Délégation A2A (si `mode: subagent | pipeline | mob`)
 
-- Le Tech Lead poste un commentaire sur l'issue avec une **mention valide** `[@Label](mention://agent/<uuid>)` et une **mission claire** : objectif, périmètre, critères d'acceptation.
+- Le Tech Lead poste un commentaire sur l'issue avec une **mention valide** `[@Label](mention://agent/<uuid>)` et une **mission claire** : objectif, périmètre, critères d'acceptation. La mission porte aussi **`core_home`** (racine du checkout du harnais = `$CORE_HOME`) et la (les) **fiche(s) de stage + protocole(s) à recharger** par le délégataire (temps 1), afin qu'il lance sensors/gates/hook et charge son contexte **de façon ciblée, sans re-chercher le harnais ni relire le workflow entier**.
 - **Ne jamais deviner un UUID** : le résoudre via `multica agent list --output json` (champ `id`) ou la table de [`tech-lead-homelab-agent.md`](../../agents/tech-lead-homelab-agent.md). Après chaque mention, **lire `trigger_outcomes`** dans la réponse de la CLI ; un statut `blocked` / `coalesced` / `deferred` signifie que le run n'est PAS enfilé.
 - La **topologie** dépend du `mode` : `subagent` = hub-and-spoke ; `pipeline` = supports chaînés dans l'ordre déclaré, chacun voyant tout le travail amont (ex. le stage `autonomy-mode` : Spécialiste Terraform → Spécialiste Docker → Analyste QA sur le walking skeleton) ; `mob` = supports en parallèle contre le brouillon du lead. `pipeline` / `mob` exigent `support_agents` non vide. ⚠️ Ne pas confondre avec les **stages de Production** où Docker et Terraform s'exécutent **en parallèle** (deux sous-issues `--stage 1`, voir [« Cycle de statut des sous-issues & barrière de stage »](#cycle-de-statut-des-sous-issues--barrière-de-stage)) : ce n'est pas un `pipeline` séquentiel Docker → Terraform.
 - **Statut de la sous-issue déléguée — `in_progress` au démarrage.** Quand la délégation ouvre une **sous-issue** confiée à une fonction spécialiste (ex. les deux sous-issues `--stage 1` de Production : compose et `.tfvars`), cette sous-issue passe en **`in_progress`** dès que son travail démarre (`multica issue status <sous-issue-id> in_progress`). Cf. [« Cycle de statut des sous-issues & barrière de stage »](#cycle-de-statut-des-sous-issues--barrière-de-stage).
@@ -44,7 +45,7 @@ flowchart LR
 
 > ⛔ **Les sensors ne se contournent pas.** Une vérification équivalente faite en prose, un commentaire ad hoc, ou une affirmation « conforme » sans rapport de sensor **ne satisfont pas** le temps 4. L'absence de rapport pour un sensor déclaré est un **écart à signaler** (SG-2 : `⛔ indisponible ≠ conforme`, silence = écart).
 
-À l'écriture d'un artefact (compose, `.tfvars`), l'agent **auteur** exécute **tous les sensors déclarés dans le champ `sensors:` de la fiche de stage** et poste sur l'issue (piste d'audit) un **rapport de sensor structuré, un par sensor** :
+À l'écriture d'un artefact (compose, `.tfvars`), l'agent **auteur** exécute **tous les sensors déclarés dans le champ `sensors:` de la fiche de stage** avec `python3 "$CORE_HOME/homelab/scripts/sensor.py" --root <projet> fire <id> --path <artefact>` (les sensors `fire_on: gate` : sans `--path`, au gate — temps 5). Le verdict est celui du script (`sensor.py`), jamais réinterprété. Il poste sur l'issue (piste d'audit) un **rapport de sensor structuré, un par sensor** :
 
 ```
 **Sensor `<id-du-sensor>`** (`fire_on: write` | `fire_on: gate`) — <artefact concerné>
@@ -52,10 +53,12 @@ Verdict : ✅ conforme | ⚠️ écart mineur | ⛔ indisponible
 <une ligne : fait vérifié, ou motif d'indisponibilité / écart>
 ```
 
+> **Où se lance un sensor (convention d'invocation).** Le harnais (`homelab/scripts/sensor.py`, les manifestes `homelab/sensors/` et le hook `homelab/sensors/hooks/post_write.py`) vit dans le **checkout `homelab-portfolio`**, **jamais** dans le dépôt du projet vérifié. Les sensors se lancent **depuis ce checkout** : le script est désigné par un **chemin ancré** sur sa racine — `$CORE_HOME` = racine du checkout `homelab-portfolio` — et `--root <projet>` pointe le dépôt du projet à vérifier. Un chemin **relatif** (`homelab/scripts/sensor.py`) ne se résout que si le répertoire courant est déjà ce checkout. Détail et exemples : [`../../sensors/README.md`](../../sensors/README.md).
+
 Règles non contournables :
 
 - **Chaque sensor déclaré fait l'objet d'un rapport distinct** — aucun regroupement ni omission (SG-2 : silence = écart).
-- **`⛔ indisponible`** : sensor non encore exécutable (mécanisme déclaratif — voir [`../../sensors/README.md`](../../sensors/README.md)) ; indiquer le motif. Jamais un silence.
+- **`⛔ indisponible`** s'applique lorsque le script ne peut pas s'exécuter (Python absent, erreur, périmètre vide — voir [`../../sensors/README.md`](../../sensors/README.md)) : l'agent reprend le motif donné par le script et le reporte avec ce verdict. Un sensor non exécuté est toujours un verdict `indisponible`, **jamais un silence** ni une vérification en prose.
 - **`⚠️ écart`** : l'agent décrit l'écart en une ligne et continue (advisory) ; il **ne devance pas** la décision humaine mais la documente pour la validation humaine granulaire (temps 6).
 - **Advisory par défaut** — n'autorise aucun raccourci, ne vaut pas validation (SG-1..6). **Exception** : `plaintext-secret` / `terraform-no-sni` sont **bloquants sur `security-patch` / `new-stack`** (ALI-204) — une détection arrête l'avancée jusqu'à correction ou levée humaine explicite tracée.
 - Les sensors `fire_on: write` (ex. `yaml-validity`, `plaintext-secret`, `terraform-no-sni`) sont invoqués **à chaque écriture** de l'artefact concerné, pas seulement en fin de stage.
@@ -64,7 +67,7 @@ Ce rapport par sensor est **repris en synthèse** en fin de mission : par le **r
 
 ### 5. Verification gate à la frontière de phase
 
-> ⛔ **Le rapport de gate ne se contourne pas.** Le Tech Lead **poste le « Rapport de vérification »** ([`homelab/sensors/gates.md`](../../sensors/gates.md)) *avant* la validation humaine, même si les sensors sont encore déclaratifs. L'absence de rapport est un écart de piste d'audit.
+> ⛔ **Le rapport de gate ne se contourne pas.** Le Tech Lead **poste le « Rapport de vérification »** ([`homelab/sensors/gates.md`](../../sensors/gates.md)) *avant* la validation humaine, avec `python3 "$CORE_HOME/homelab/scripts/sensor.py" --root <projet> gate <frontière>` (lancé depuis le checkout `homelab-portfolio` — voir la convention d'invocation du temps 4). L'absence de rapport est un écart de piste d'audit.
 
 - À la sortie de la phase, le Tech Lead exécute le gate de traçabilité et poste le **« Rapport de vérification »** structuré pour la frontière franchie — checks `artefacts-presents` / `liaison-tracabilite` / `absence-orphelin` **et** la ligne **par sensor de gate** déclaré à cette frontière (verdict `✅` / `⚠️` / `⛔` + fait ou motif), selon le format fixé par [`homelab/sensors/gates.md`](../../sensors/gates.md) § « Rapport de gate ».
 - Un écart est signalé, jamais bloquant (advisory) — **sauf** l'exception bloquante par scope (`livrable_tfvars_present` sur `new-stack` / `infra-terraform`, cf. `gates.md`) ; `⛔ indisponible ≠ conforme` (SG-2). **Chaque sensor de gate déclaré figure dans le rapport** — aucune omission.

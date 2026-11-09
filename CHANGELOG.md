@@ -9,6 +9,28 @@ ce fichier en donne la lecture chronologique côté produit.
 ## [Non publié]
 
 ### Changed
+- **Lazy loading du workflow `homelab` aligné sur `core` : amorçage ancré `$CORE_HOME`, rechargement ciblé et checklist de tour**
+  (réf. HOM-291, transposition des mécanismes des PR #319 / #321 du workflow `core`, non portés jusqu'ici).
+  Le workflow `homelab` disposait déjà du *principe* de chargement optimisé et, depuis HOM-292 (#322),
+  du harnais de sensors exécutable + de l'invocation ancrée `$CORE_HOME` (README + hook `postToolUse`).
+  Cette évolution porte les mécanismes d'amorçage et de ciblage restants, sans changer aucune norme de gating :
+  - **`homelab/common/conductor.md`** : ajout d'une **séquence d'amorçage numérotée (0→5)** ancrée sur
+    `$CORE_HOME` (racine du checkout, deux dépôts distingués : workflow/harnais vs projet), lecture
+    d'**AGENTS.md § « Homelab Flow » uniquement** au démarrage, **propagation de `$CORE_HOME`** (`core_home`)
+    dans chaque délégation, et une **checklist de tour du coordinateur** ; section lazy loading complétée
+    (ne pas charger AGENTS.md hors routage ni les fiches/protocoles hors étape courante) ;
+  - **`homelab/agents/tech-lead-homelab-agent.md`** : contrat d'orchestration réécrit — `$CORE_HOME` retenu
+    et propagé, AGENTS.md § Homelab Flow *uniquement*, renvoi à la séquence d'amorçage et à la checklist de tour ;
+    champ `core_home` ajouté au savoir-faire de délégation A2A ;
+  - **`homelab/common/protocols/stage-protocol.md`** : **temps 1** — rechargement ciblé et paresseux de la
+    fiche de stage + protocoles cités, avec `core_home` ; **temps 2** — champ `core_home` + fiches/protocoles à
+    recharger dans le message de délégation ; **temps 4/5** — commandes sensor/gate **ancrées `$CORE_HOME`**
+    (`python3 "$CORE_HOME/homelab/scripts/sensor.py" --root <projet> fire|gate …`) et **retrait du vocabulaire
+    « mécanisme déclaratif / sensors encore déclaratifs »**, devenu faux depuis HOM-292 (harnais exécutable) ;
+  - **périmètre strictement limité à `homelab`** (`core` et `matching-cv-ao` non touchés) ; tests du harnais
+    `homelab/scripts/tests` au vert (38 tests).
+
+### Changed
 - **Message A2A du workflow `core` porté par un fichier YAML joint, avec transmission des sensors**
   (réf. ORIG-423, [ADR-0050](decisions/0050-message-a2a-core-fichier-yaml-joint-et-transmission-sensors.md), statut *Proposed*).
   Transposition sur `core` du modèle « fichier YAML joint + commentaire minimal » de `matching-cv-ao` ([ADR-0033](decisions/0033-format-yaml-compact-message-a2a.md)), enrichi de la transmission des sensors :
