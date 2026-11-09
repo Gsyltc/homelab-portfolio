@@ -24,19 +24,63 @@ Les acteurs sont désignés par leur **fonction**. Sous Multica, la délégation
 
 ## Règle A2A
 
-Un agent est déclenché par un **commentaire sur l'issue avec une mention valide** `[@Label](mention://agent/<uuid>)` et une **mission claire** (objectif, périmètre, critères d'acceptation).
+Un agent est déclenché par un **commentaire sur l'issue** qui porte deux choses, et rien de plus :
+
+1. un **lien de mention ACTIF** `[@Label](mention://agent/<uuid>)` — **seul vecteur de déclenchement** d'un run ;
+2. le **nom du fichier YAML joint à l'issue** qui porte la mission (ou le retour de livrable).
+
+**La mission et le livrable voyagent dans le fichier YAML joint (message A2A), jamais en prose dans le fil.** À chaque délégation ou retour entre agents, l'agent **téléverse un fichier YAML** (via `multica attachment` — voir `multica attachment --help`) contenant l'objet, le périmètre, les critères d'acceptation, **la liste des sensors à exécuter** (délégation) ou **le résultat et les verdicts de sensors** (retour), puis poste un **commentaire minimal**. Le YAML joint est la **source unique** lue par l'agent suivant ; le commentaire ne fait que le référencer. **Plus de prose de mission, de livrable ni de rapport de sensors dans le fil** — cette prose vit désormais dans le YAML, exploitable pour les contrôles.
 
 - **Jamais d'UUID deviné** : le résoudre via `multica agent list --output json` avant chaque mention.
-- Le coordinateur contrôle chaque livrable avant validation humaine.
+- La **réduction de prose ne touche qu'au texte AUTOUR du lien, jamais au lien de mention lui-même** : le lien reste **actif**, l'UUID résolu à chaque fois, jamais une auto-mention. Détail opératoire (résolution d'UUID, `trigger_outcomes`) : [`stage-protocol.md`](stage-protocol.md) (temps 2 et 3).
+- Le coordinateur contrôle chaque livrable (le YAML joint) avant validation humaine.
+
+### Deux formes de commentaire — jamais confondues
+
+| Cas | Mention | Texte du commentaire |
+| --- | --- | --- |
+| **Délégation / retour SANS gate humaine** (handoff A2A pur) | `[@Agent](mention://agent/<uuid>)` **actif** | **Aucune prose.** Réduit à la mention + le **nom du fichier YAML joint**. Ex. `[@Reviewer sécurité](mention://agent/<uuid>) — revue prête → securite-rapport.yaml` |
+| **Gate humaine REQUISE** | mention de **l'humain** `[@Nom](mention://member/<user_id>)` | **Présentation Markdown DÉTAILLÉE** du contenu à décider **reprise en clair**, close par l'action à effectuer. Elle **DOIT inclure les verdicts de sensors du stage** (section `## Sensors`, un sensor par puce) — information de décision **obligatoire**, jamais réduite ni masquée. La **présentation finale reste très détaillée**. Le YAML joint est la source/audit, **jamais un substitut** à la présentation. |
 
 **Retour A2A (clôture de la boucle)**
 
-- En fin de tâche, l'agent délégataire passe l'issue en `in_review` et **pose lui-même** le lien de mention actif de retour `[@<Nom assigneur>](mention://agent/<uuid>)` : ce lien enqueue le run de reprise.
+- En fin de tâche, l'agent délégataire passe l'issue en `in_review` et **pose lui-même** le lien de mention actif de retour `[@<Nom assigneur>](mention://agent/<uuid>)` + le **nom du fichier YAML de retour joint** : ce lien enqueue le run de reprise.
 - Cible du retour :
   - coordinateur pour un agent de production ;
   - spécialiste auteur du livrable pour un reviewer ([`reviewer.md`](reviewer.md)).
 - Une mention en texte clair, ou une simple réponse, n'enqueue aucun run : la chaîne A2A est alors rompue (écart constaté sur ORIG-62 / ORIG-63).
 - **Source unique non contournable** : « Checklist de sortie de stage » de [`stage-protocol.md`](stage-protocol.md) (temps 3 + checklist), non dupliquée dans les fiches d'agent.
+
+### Schéma du message A2A (source unique)
+
+Tout échange agent↔agent — **délégation**, **retour de livrable**, **rapport de vérification** — est porté par un **fichier YAML joint à l'issue** conforme au schéma minimal ci-dessous. Il est **défini ici une seule fois** ; les fiches de stage, les sensors (`sensors/gates.md`) et les fiches d'agent s'y **réfèrent par leur nom** (`message A2A`), sans le redéfinir.
+
+**Format = YAML compact** : l'**enveloppe du message A2A** est portée en YAML compact (et non en JSON) — aligné sur le front-matter des fiches de stage et les manifestes de sensors (déjà en YAML). Les présentations Markdown détaillées aux gates humaines restent inchangées.
+
+```yaml
+type: delegation | retour | rapport-verification
+de: <nom de l'agent émetteur>
+vers: <nom de l'agent destinataire ou 'humain'>
+stage: <slug du stage concerné>
+objet: <phrase courte — ce qui est demandé ou livré>
+perimetre: [<élément de périmètre>, ...]
+criteres_acceptation: [<critère>, ...]
+sensors_a_executer: [<id-sensor>, ...]            # délégation : contrôles attendus (repris de la fiche de stage / frontière)
+sensors_resultats:                                 # retour / rapport-vérification : verdicts rendus par sensor.py
+  - {sensor: <id>, verdict: conforme | ecart | indisponible, detail: "<ligne factuelle>", source: "<manifeste @ commit>"}
+artefacts:
+  - {role: produit | consomme, nom: <fichier>, chemin: "${ROOT_DIRECTORY}/..."}
+resultat: {statut: ok | ecart | halt, detail: <optionnel>}
+gate_humaine: aucune | legere | granulaire | explicite
+reference_audit: <id de commentaire ou d'artefact>
+```
+
+- **`delegation`** : `objet`, `perimetre`, `criteres_acceptation`, `sensors_a_executer` renseignés ; `resultat` et `sensors_resultats` omis.
+- **`retour`** : `resultat` + `sensors_resultats` renseignés ; `artefacts` liste les livrables produits.
+- **`rapport-verification`** : `resultat.statut` + `sensors_resultats` structurés (voir [`../../sensors/gates.md`](../../sensors/gates.md), qui ne redéfinit pas ce schéma).
+- **Sensors (garde-fous SG-1..6 reconduits, non contournables)** : le `verdict` est celui rendu par `sensor.py`, **jamais réinterprété** ; `indisponible ≠ conforme` ; un sensor présent dans `sensors_a_executer` mais **absent de `sensors_resultats` est un écart** (silence interdit) ; le message A2A reste **advisory** — il ne remplace ni la validation humaine granulaire ni le contrôle sécurité systématique.
+- Champs non pertinents omis. **Aucun secret** dans le YAML. La langue des valeurs libres suit celle de l'humain (français par défaut).
+- **Règle de validité YAML (obligatoire)** : en notation *flow* (`[...]` / `{...}`), **mettre entre guillemets** toute valeur contenant `${...}`, `{`, `}`, `:` suivi d'un espace, ou une **virgule** (ex. `chemin: "${ROOT_DIRECTORY}/..."`, `detail: "2 écarts, 1 indisponible"`). Un doute ⇒ guillemeter. Le fichier reste **YAML valide** de bout en bout (piste d'audit lisible).
 
 > **Anti-wake parasite (tous agents).**
 > - Aucun agent ne se mentionne lui-même avec un lien actif `mention://agent/<uuid>` : cela enfile un run parasite.
