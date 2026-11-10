@@ -27,7 +27,7 @@ plugins/medical-assistant/
     ├── dossiers-medicaux/            # SKILL.md + gabarits/ + references/
     ├── home-assistant-calendrier/    # SKILL.md
     ├── recherche-repas/              # SKILL.md + appareils/
-    ├── sportif-dossiers/             # SKILL.md
+    ├── sportif-dossiers/             # SKILL.md + references/ + scripts/
     └── suivi-morphologie/            # SKILL.md
 ```
 

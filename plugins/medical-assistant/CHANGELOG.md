@@ -5,6 +5,14 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/) ; versionnage
 
 ## [Non publié]
 
+### Changed
+- **`sportif-dossiers` allégée** : `SKILL.md` réduit à l'essentiel (rôle, fichiers, versionnage, garde-fous) ; le détail est déporté dans `references/` chargées à la demande (`construction-programme`, `adaptation-sep`, `suivi-et-progression`, `revue-hebdomadaire`, `export-pdf`). Ajouts : collecte des informations manquantes (2-3 questions max + hypothèses), phase/critères de passage, RPE/RIR/tempo/régression, suivi RPE et douleur EVA, progression ~10 %/semaine, gêne vs signal d'alarme, adaptations SEP. Script PDF corrigé (imports). Agent `coach-sportif-clinique-biboumed` aligné (HOM-295).
+- `sportif-dossiers` : le coach a le **rôle de physiothérapeute** (bilans Berg, TUG, Ashworth, FSS/MFIS réalisés et consignés) ; `adaptation-sep.md` fusionné avec les règles de rééducation neurologique SEP (HOM-295).
+
+### Added
+- `sportif-dossiers/references/sep-safety-precautions.md` (contre-indications, red flags) et `sep-edss-fatigue.md` (EDSS, fatigue, équilibre) (HOM-295).
+- `sportif-dossiers/scripts/check_sportif.py` : sensors Python (`conforme | ecart | indisponible`) vérifiant le format de `suivi-sportif.md` et l'archivage de `programme-sportif.md` ; format du suivi formalisé dans `references/suivi-et-progression.md`, usage dans `references/sensors.md` (HOM-295).
+
 ### Added
 - **`README.md`** documentant le plugin : structure Agent Plugins v1.0.0, mapping
   des skills par **fonction** (clinicien, biologiste, coach sportif,
