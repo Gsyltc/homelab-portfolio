@@ -14,6 +14,14 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/) ; versionnage
 - `sportif-dossiers/scripts/check_sportif.py` : sensors Python (`conforme | ecart | indisponible`) vérifiant le format de `suivi-sportif.md` et l'archivage de `programme-sportif.md` ; format du suivi formalisé dans `references/suivi-et-progression.md`, usage dans `references/sensors.md` (HOM-295).
 
 ### Added
+- **Sensors de clôture du domaine repas** (AUQU-153) : manifestes dans `sensors/`,
+  scripts Python dans `scripts/sensors/`, tests dans `sensors/tests/`.
+  - `repas-calendrier-agenda` — repas + ingrédients présents dans `calendar.repas`
+    (repas 19h–20h, créneau du lendemain 12h–13h sans description) ;
+  - `historique-repas-30j` — **bloquant** : aucune entrée de `repas-retenus.md`
+    plus ancienne que 30 jours glissants ;
+  - `fichiers-repas-conformes` — front matter, `count`, `oldest`/`newest`,
+    tableau 4 colonnes et listes à puces des trois fichiers de données.
 - **`README.md`** documentant le plugin : structure Agent Plugins v1.0.0, mapping
   des skills par **fonction** (clinicien, biologiste, coach sportif,
   planification nutritionnelle, intégration domotique), statut MCP
@@ -22,10 +30,24 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/) ; versionnage
   (HOM-278).
 
 ### Changed
+- `plugin.json` : version **0.3.0** (ajout des sensors de clôture) (AUQU-153).
+- `README.md` : arborescence (`sensors/`, `scripts/sensors/`) et section
+  « Sensors de clôture » (AUQU-153).
+- Skill `recherche-repas` : la diversification randomisée des sources et les
+  règles métier sont **portées par l'agent** ; la skill se limite au registre
+  `appareils/` et au format des fichiers de données (AUQU-153).
+- Skill `home-assistant-calendrier` : description alignée sur le créneau du
+  lendemain **12h–13h** et mention du sensor de clôture qui relit les évènements ;
+  `allowed-tools` passé en **espaces** (`Bash(curl) Bash(jq)`), conformément au
+  format Agent Skills (AUQU-153).
 - Alignement du plugin sur le standard du dépôt (modèle `homelab-assistant`) :
   `plugin.json` + `mcp.json` + `README.md` + `CHANGELOG.md` à la racine, skills
   conformes **Agent Skills** vérifiées par `scripts/validate_skills.sh`
   (7 skills, 0 échec) (HOM-278).
+
+### Fixed
+- **Créneau du lendemain du calendrier des repas : 12h–13h** (et non 10h–13h),
+  dans la skill `home-assistant-calendrier` et le contrôle de clôture (AUQU-153).
 
 ## [0.2.0]
 
