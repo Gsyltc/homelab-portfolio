@@ -8,7 +8,32 @@ ce fichier en donne la lecture chronologique côté produit.
 
 ## [Non publié]
 
+### Added
+- **Sensors de clôture du plugin `medical-assistant`** (réf. AUQU-153). Trois checks déterministes,
+  lancés à la clôture du chef cuisinier :
+  - `repas-calendrier-agenda` — chaque repas retenu à venir existe dans le calendrier Home Assistant
+    (`calendar.repas`) : repas 19h–20h avec ingrédients en puces + créneau du lendemain 12h–13h sans
+    description ;
+  - `historique-repas-30j` — **bloquant** : aucun repas de `repas-retenus.md` plus ancien que 30 jours
+    glissants ;
+  - `fichiers-repas-conformes` — `repas-retenus.md`, `repas-exclus.md` et `ingredients-refuses.md` à
+    jour et conformes (front matter, `count`, `oldest`/`newest`, tableau 4 colonnes, listes à puces).
+  Manifestes sous `plugins/medical-assistant/sensors/`, scripts sous
+  `plugins/medical-assistant/scripts/sensors/` (bibliothèque standard), tests :
+  `python3 -m unittest discover -s plugins/medical-assistant/sensors/tests`.
+
+### Fixed
+- **Créneau du lendemain du calendrier des repas : 12h–13h** (et non 10h–13h) dans la skill
+  `home-assistant-calendrier` et dans les instructions de l'agent chef cuisinier.
+- **Conformité Agent Skills des `allowed-tools`** : passage en espaces
+  (`Bash(curl) Bash(jq)`, `Bash(curl) Bash(multica *)`) au lieu de virgules dans
+  `home-assistant-calendrier` et `ntfy-notifications` ; validateur officiel `skills-ref`
+  (45/45) et audit structurel des 45 skills sans écart.
+
 ### Changed
+- Skill `recherche-repas` : la diversification randomisée des sources et les règles métier
+  sont portées par l'agent ; la skill se limite au registre `appareils/` et au format des
+  fichiers de données.
 - **Message A2A du workflow `homelab` porté par un fichier YAML joint, avec transmission des sensors**
   (réf. HOM-294, [ADR-0052](decisions/0052-message-a2a-homelab-fichier-yaml-joint-et-transmission-sensors.md), statut *Accepted* ; transposition de l'[ADR-0050](decisions/0050-message-a2a-core-fichier-yaml-joint-et-transmission-sensors.md) / PR #319 du workflow `core`).
   Transposition sur `homelab` du modèle « fichier YAML joint + commentaire minimal » (`matching-cv-ao` / `core`, [ADR-0033](decisions/0033-format-yaml-compact-message-a2a.md)), enrichi de la transmission des sensors :

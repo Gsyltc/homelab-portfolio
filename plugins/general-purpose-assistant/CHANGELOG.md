@@ -15,6 +15,9 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/) ; versionnage
   (HOM-278).
 
 ### Changed
+- Skill `ntfy-notifications` : `allowed-tools` passé en **espaces**
+  (`Bash(curl) Bash(multica *)`) au lieu de virgules, conformément au format
+  Agent Skills (AUQU-153).
 - Skill `skill-authoring` : mise à jour de `README.md` et `CHANGELOG.md` rendue
   **obligatoire** à chaque ajout, modification ou retrait d'une skill (section
   « Traçabilité obligatoire » + checklist) (HOM-280).

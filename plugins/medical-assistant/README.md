@@ -21,6 +21,8 @@ plugins/medical-assistant/
 ├── mcp.json             # config MCP (serveur home-assistant — voir « MCP » ci-dessous)
 ├── CHANGELOG.md
 ├── README.md
+├── sensors/             # manifestes des sensors de clôture (contrat + verdict attendu)
+├── scripts/sensors/     # scripts Python des sensors (bibliothèque standard)
 └── skills/
     ├── analyse-examens/              # SKILL.md
     ├── analyse-laboratoire/          # SKILL.md
@@ -47,8 +49,23 @@ officiel `skills-ref` — `scripts/validate_skills.sh` à la racine du dépôt,
 | `analyse-examens` | Clinicien — analyse et archivage des examens cliniques et d'imagerie (hors biologie), synthèse tableau | — |
 | `suivi-morphologie` | Clinicien — suivi de la composition corporelle (poids, IMC, IMG, IGC, tours, ratios, métabolisme de base), archivage horodaté et synthèse | — |
 | `sportif-dossiers` | Coach sportif — programmes d'entraînement adaptés, versionnage, planification sur 2 semaines, suivi des séances, export PDF | — |
-| `recherche-repas` | Planification nutritionnelle — référentiel et mécanique de recherche de recettes par appareil de cuisine, diversification randomisée des sources, format des fichiers de données | `appareils/` (registre extensible : 1 fichier de référence par appareil, livres embarqués) |
-| `home-assistant-calendrier` | Intégration domotique — ajout des repas planifiés au **calendrier Home Assistant** via le serveur MCP de HA (repli REST documenté) | — |
+| `recherche-repas` | Planification nutritionnelle — registre extensible des appareils de cuisine et **format** des fichiers de données ; la diversification randomisée des sources et les règles métier sont portées par l'agent | `appareils/` (registre extensible : 1 fichier de référence par appareil, livres embarqués) |
+| `home-assistant-calendrier` | Intégration domotique — ajout des repas planifiés au **calendrier Home Assistant** via le serveur MCP de HA (repli REST documenté) : repas **19h–20h** avec ingrédients en puces + créneau du lendemain **12h–13h** sans description | — |
+
+## Sensors de clôture (Python)
+
+Trois contrôles déterministes, lancés par l'agent chef cuisinier **à la clôture** — manifestes dans
+`sensors/`, scripts dans `scripts/sensors/` (bibliothèque standard uniquement) :
+
+| Sensor | Vérifie | Sévérité |
+|---|---|---|
+| `repas-calendrier-agenda` | Chaque repas retenu à venir existe dans `calendar.repas` : repas **19h–20h** avec ingrédients en puces + créneau du lendemain **12h–13h** sans description | advisory |
+| `historique-repas-30j` | Aucune entrée de `repas-retenus.md` plus ancienne que 30 jours glissants | **bloquant** |
+| `fichiers-repas-conformes` | `repas-retenus.md`, `repas-exclus.md` et `ingredients-refuses.md` conformes (front matter, `count`, bornes, tableau, listes) | advisory |
+
+Verdicts `✅` conforme / `⚠️` écart / `⛔` indisponible — un `⛔` n'est jamais lu comme un vert. Les
+scripts ne modifient aucune donnée et n'affichent aucun secret. Tests :
+`python3 -m unittest discover -s plugins/medical-assistant/sensors/tests`.
 
 ## MCP
 
