@@ -1,9 +1,9 @@
 ---
 name: home-assistant-calendrier
-description: "Ajoute les repas planifiés au calendrier Home Assistant (défaut calendar.repas) via le serveur MCP de HA ; pour chaque repas, crée deux évènements : le repas 19h-20h (description = ingrédients en puces) et un créneau le lendemain 10h-13h sans description. Adresse et jeton lus depuis l'environnement (secrets, jamais en clair). Se déclenche sur : calendrier, Home Assistant, repas au calendrier, planifier un repas dans l'agenda, ajouter un évènement, create_event, mcp home assistant."
+description: "Ajoute les repas planifiés au calendrier Home Assistant (défaut calendar.repas) via le serveur MCP de HA ; pour chaque repas, crée deux évènements : le repas 19h-20h (description = ingrédients en puces) et un créneau le lendemain 12h-13h sans description. Adresse et jeton lus depuis l'environnement (secrets, jamais en clair). Se déclenche sur : calendrier, Home Assistant, repas au calendrier, planifier un repas dans l'agenda, ajouter un évènement, create_event, mcp home assistant."
 metadata:
   user-invocable: "false"
-allowed-tools: Bash(curl), Bash(jq)
+allowed-tools: Bash(curl) Bash(jq)
 ---
 
 # home-assistant-calendrier — évènements de repas au calendrier `repas`
@@ -36,7 +36,7 @@ calendrier cible (`calendar.repas` par défaut) :
        (sel, poivre, épices, huile, vinaigre, eau…), cohérent avec la skill
        `recherche-repas`.
 
-2. **Évènement du lendemain** — **le jour suivant, de 10h00 à 13h00**,
+2. **Évènement du lendemain** — **le jour suivant, de 12h00 à 13h00**,
    **sans description**.
    - `summary` = nom du plat (même intitulé que l'évènement « repas »).
    - **Aucune** `description` (ne pas envoyer le champ).
@@ -93,11 +93,11 @@ La connexion à HA se fait par le **serveur MCP** `home-assistant`
 
 ### Champs passés à l'outil `calendar.create_event`
 
-| Champ | Évènement « repas » (19h–20h) | Évènement lendemain (10h–13h) |
+| Champ | Évènement « repas » (19h–20h) | Évènement lendemain (12h–13h) |
 |---|---|---|
 | `entity_id` | `calendar.repas` | `calendar.repas` |
 | `summary` | nom du plat | nom du plat |
-| `start_date_time` | `JJ 19:00:00` | `JJ+1 10:00:00` |
+| `start_date_time` | `JJ 19:00:00` | `JJ+1 12:00:00` |
 | `end_date_time` | `JJ 20:00:00` | `JJ+1 13:00:00` |
 | `description` | liste d'ingrédients en puces | *(absent)* |
 
@@ -132,5 +132,9 @@ Format des `*_date_time` : `YYYY-MM-DD HH:MM:SS`. La fin est **exclusive**.
   (le chef propose, l'humain valide).
 - Ingrédients de la description cohérents avec la skill `recherche-repas`
   (ingrédients principaux pour 4 personnes, condiments exclus).
+- Le sensor de clôture `repas-calendrier-agenda` (plugin `medical-assistant`,
+  `plugins/medical-assistant/scripts/sensors/`) relit ces deux évènements :
+  créneau du lendemain **12h–13h** et description en puces obligatoires. Un
+  écart est corrigé avant de clôturer, jamais contourné.
 - Ne jamais fusionner, pousser ni ouvrir de PR sur `homelab-portfolio` sans
   validation explicite de l'humain.
