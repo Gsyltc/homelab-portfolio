@@ -72,7 +72,7 @@ est le **seul** cas d'écriture autorisé, et uniquement pour écrire les clés 
 `env_variables/data/<service>`. **Jamais** un secret du montage `services/`, jamais une autre clé qu'une clé de version.
 L'écriture suit un pattern read-modify-write qui préserve toutes les autres clés ; la valeur
 n'est **jamais** affichée, loggée ni transmise ; l'écriture est tracée sur l'issue (nom de clé
-`VERSION` + statut seulement). Détail : [`homelab-vault-access`](../../plugins/homelab-assistant/skills/homelab-vault-access/SKILL.md).
+`VERSION` + statut seulement). Détail : `homelab-vault-access`.
 
 ## Report de priorité — `security-patch` l'emporte
 

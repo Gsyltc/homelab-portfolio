@@ -48,7 +48,7 @@ autonome (invariant du conductor). Rien n'est écrit ni déployé tant que l'hum
 ### Step 2 — Sur acceptation : écriture Vault de `VERSION` (exception d'écriture étroite)
 
 Sur « oui » explicite, écrire **uniquement** les clés de version (`VERSION` ou `VERSION_<NOM_DU_SERVICE>`, selon la convention du scope) du montage `env_variables/data/<service>`
-via la skill [`homelab-vault-access`](../../../../plugins/homelab-assistant/skills/homelab-vault-access/SKILL.md),
+via la skill `homelab-vault-access`,
 en **read-modify-write** (les autres clés sont relues puis réécrites à l'identique — jamais
 écrasées). Garde-fous **non débordables** :
 
