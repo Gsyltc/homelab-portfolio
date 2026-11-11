@@ -42,7 +42,7 @@ boundaries:
       - adr_a_jour
       - coherence_doc_adr
     checks: [artefacts-presents, liaison-tracabilite, absence-orphelin]
-    sensors: [required-sections, claim-sources, traceability, style-concision]   # traceability : chaîne exigence → ADR → livrable cohérente, sans orphelin dérivé ; claim-sources : chaque affirmation retenue porte une source résoluble
+    sensors: [required-sections-adr, required-sections-architecture, claim-sources, traceability, style-concision]   # traceability : chaîne exigence → ADR → livrable cohérente, sans orphelin dérivé ; claim-sources : chaque affirmation retenue porte une source résoluble
 
   - id: operation-fin
     frontiere: "Operation → Fin"

@@ -5,7 +5,7 @@ description: >
     Coordonnateur des travaux d'architecture : lance et supervise les livrables des architectes et administrateurs, vérifie la cohérence avec les ADR, demande les validations humaines et met les documents à disposition.
 skills:
   - architecture-solution-gabarits
-  - create-architectural-decision-record
+  - create-architecture-decision-record
   - cybersecurite
   - project-defaults
 disallowedTools: Task

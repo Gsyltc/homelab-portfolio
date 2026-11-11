@@ -1,13 +1,13 @@
-# Refonte de la pondération du scoring matching (6 critères 45/30/10/5/5/5)
-
 ---
-auteurs: Mika (agent)
-accepté par : multica.gaston
-accepté le : "2026-09-29"
+auteurs: Sylvain Goubaud
+parties_prenantes: ""
+accepte_par: Sylvain Goubaud
+accepte_le: "2026-09-29"
 supersedes: "0030-scoring-chiffre-par-profil-recherche"
 superseded_by: ""
-
 ---
+
+# Refonte de la pondération du scoring matching (6 critères 45/30/10/5/5/5)
 
 ## Status
 

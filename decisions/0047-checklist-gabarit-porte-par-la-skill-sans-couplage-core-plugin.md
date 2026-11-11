@@ -1,13 +1,13 @@
-# Gabarit d'état de la checklist porté par la skill `architecture-solution-gabarits`, sans couplage `core → plugin`
-
 ---
 auteurs: Sylvain Goubaud
-accepté par : "Sylvain Goubaud"
-accepté le : "2026-11-08"
+parties_prenantes: ""
+accepte_par: Sylvain Goubaud
+accepte_le: "2026-11-08"
 supersedes: ""
 superseded_by: ""
-
 ---
+
+# Gabarit d'état de la checklist porté par la skill `architecture-solution-gabarits`, sans couplage `core → plugin`
 
 ## Status
 

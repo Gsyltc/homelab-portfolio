@@ -21,7 +21,7 @@ ordre_presentation: 7
 
 <!-- 
 Cette section documente la **solution retenue** et les **solutions potentielles** étudiées. Il est possible de décrire plusieurs solutions (cas d'une prévente par exemple) ; dans ce cas, distinguer la **solution préférentielle** des **solutions alternatives**. Cette section doit permettre la compréhension des raisons du choix proposé.
-Chaque choix de solution fait l'objet d'un **ADR** (skill `create-architectural-decision-record`) référencé ici, et vérifie la **couverture d'un patron** du répertoire `patron-architecture/` de la skill `architecture-solution-gabarits`.
+Chaque choix de solution fait l'objet d'un **ADR** (skill `create-architecture-decision-record`) référencé ici, et vérifie la **couverture d'un patron** du répertoire `patron-architecture/` de la skill `architecture-solution-gabarits`.
 -->
 
 ### État des lieux / Solution actuelle

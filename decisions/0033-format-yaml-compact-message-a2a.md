@@ -1,13 +1,13 @@
-# Format YAML compact pour l'enveloppe du message A2A (économie de tokens)
-
 ---
-auteurs: Mika (agent)
-accepté par : multica.gaston
-accepté le : "2026-09-29"
+auteurs: Sylvain Goubaud
+parties_prenantes: ""
+accepte_par: Sylvain Goubaud
+accepte_le: "2026-09-29"
 supersedes: ""
 superseded_by: ""
-
 ---
+
+# Format YAML compact pour l'enveloppe du message A2A (économie de tokens)
 
 ## Status
 

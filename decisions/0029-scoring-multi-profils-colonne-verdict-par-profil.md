@@ -1,13 +1,13 @@
-# Scoring multi-profils : détail par profil + colonne « verdict par profil » dans la présentation des résultats
-
 ---
-auteurs: Mika (agent)
-accepté par : multica.gaston
-accepté le : 2026-09-26
+auteurs: Sylvain Goubaud
+parties_prenantes: ""
+accepte_par: Sylvain Goubaud
+accepte_le: 2026-09-26
 supersedes: ""
 superseded_by: ""
-
 ---
+
+# Scoring multi-profils : détail par profil + colonne « verdict par profil » dans la présentation des résultats
 
 ## Status
 

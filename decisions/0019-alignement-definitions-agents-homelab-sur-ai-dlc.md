@@ -1,13 +1,13 @@
-# Alignement des définitions d'agents Homelab sur le contrat AI-DLC « Adding an Agent »
-
 ---
-auteurs: Mika (agent)
-accepté par : multica.gaston
-accepté le : 2026-09-03
+auteurs: Sylvain Goubaud
+parties_prenantes: ""
+accepte_par: Sylvain Goubaud
+accepte_le: 2026-09-03
 supersedes: ""
 superseded_by: ""
-
 ---
+
+# Alignement des définitions d'agents Homelab sur le contrat AI-DLC « Adding an Agent »
 
 ## Status
 

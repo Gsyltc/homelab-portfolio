@@ -14,7 +14,7 @@ human_gate: none
 produces: [controle_securite_coherence]
 consumes: [{artifact: livrables_detailles, required: true}]
 requires_stage: [detailed-deliverables]
-sensors: [required-sections]
+sensors: [required-sections-adr, required-sections-architecture]
 scopes: [standard, feature, infra, security-patch, mvp, enterprise]
 inputs: "Livrables détaillés"
 outputs: "Contrôle sécurité + cohérence documentation ↔ décisions structurantes, corrections demandées le cas échéant"
@@ -41,7 +41,7 @@ Pour tout livrable modifiant l'architecture (mêmes règles que `design-and-deci
 ## Sensors
 
 Outputs: contrôle sécurité + cohérence consignés.
-Imports: `required-sections` (documents de décision / DAS).
+Imports: `required-sections-adr` (documents de décision), `required-sections-architecture`.
 Review artifact: `controle-securite-coherence.md` porte la section `## Review` ajoutée par le Reviewer de sécurité.
 
 ## Learn

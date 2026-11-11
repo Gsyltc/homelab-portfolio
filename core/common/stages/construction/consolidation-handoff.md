@@ -13,7 +13,7 @@ human_gate: granular
 produces: [livrables_valides]
 consumes: [{artifact: controle_securite_coherence, required: true}]
 requires_stage: [security-consistency-check]
-sensors: [checklist-progress, required-sections, traceability]
+sensors: [checklist-progress, required-sections-adr, required-sections-architecture, traceability]
 scopes: [standard, feature, infra, security-patch, mvp, poc, express, enterprise]
 inputs: "Livrables contrôlés"
 outputs: "Livrables validés granulairement par l'humain ; attestation OpenSpec (specs relues/validées, fichiers présents et conformes) si activé — l'archivage OpenSpec est découplé de l'approbation et relève de l'après-déploiement (operation/deployment-under-validation). La mise à disposition (archivage par dossier / commit + PR) est portée par le stage suivant delivery-handoff."
@@ -56,7 +56,7 @@ Le **coordinateur** reçoit les descriptions de passation, **identifie la nature
 ## Sensors
 
 Outputs: livrables validés granulairement par l'humain (mise à disposition portée par le stage suivant [`delivery-handoff`](delivery-handoff.md)). Gate humain granulaire.
-Imports: `checklist-progress`, `required-sections`, `traceability`.
+Imports: `checklist-progress`, `required-sections-adr`, `required-sections-architecture`, `traceability`.
 
 ## Learn
 

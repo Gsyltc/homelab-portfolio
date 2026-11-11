@@ -1,13 +1,13 @@
-# Champ unique « Responsabilités, réalisations et biens livrables » au niveau expérience dans les données CV
-
 ---
-auteurs: Gestionnaire CV (agent)
-accepté par : multica.gaston
-accepté le : "2026-10-01"
+auteurs: Sylvain Goubaud
+parties_prenantes: ""
+accepte_par: Sylvain Goubaud
+accepte_le: "2026-10-01"
 supersedes: ""
 superseded_by: ""
-
 ---
+
+# Champ unique « Responsabilités, réalisations et biens livrables » au niveau expérience dans les données CV
 
 ## Status
 

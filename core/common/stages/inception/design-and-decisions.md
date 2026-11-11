@@ -14,7 +14,7 @@ human_gate: granular
 produces: [decision_conception, diagramme_principal, conception_cible_validee]
 consumes: [{artifact: besoins_traces, required: true}, {artifact: decoupage_livrables, required: true}, {artifact: verdict_impact_structurant, required: true}, {artifact: verdict_methodologie, required: false}]
 requires_stage: [deliverables-breakdown]
-sensors: [required-sections, upstream-coverage, diagram-validity, data-lifecycle, claim-sources, style-concision]
+sensors: [required-sections-adr, required-sections-architecture, upstream-coverage, diagram-validity, data-lifecycle, claim-sources, style-concision]
 scopes: [standard, feature, infra, security-patch, mvp, enterprise]
 inputs: "Besoins tracés + découpage en livrables"
 outputs: "Conception cible + décisions structurantes validées granulairement par l'humain, après contrôle sécurité"
@@ -135,7 +135,7 @@ Sous Multica, le statut de l'issue ADR **reflète la phase du flux**. L'agent qu
 
 - **Outputs** : conception + décisions validées.
 - **Gate Inception → Construction** : `artefacts-presents` + `liaison-tracabilite` + `absence-orphelin`.
-- **Imports** : `required-sections`, `upstream-coverage`, `diagram-validity`, `data-lifecycle`, `claim-sources`, `style-concision`.
+- **Imports** : `required-sections-adr`, `required-sections-architecture`, `upstream-coverage`, `diagram-validity`, `data-lifecycle`, `claim-sources`, `style-concision`.
 - **Upstream targets** : `besoins_traces` (required), `decoupage_livrables` (required) — couverture amont vérifiée à l'écriture de la décision / conception.
 - **Données** : `data-lifecycle` vérifie `documentation/10-cycle_vie_donnees.md` (présent + renseigné). Advisory pour tous : il assiste la revue Architecte de solution → Architecte de données et alerte le coordinateur au verification gate, sans jamais bloquer.
 - **Review artifact** : la décision structurante (`decisions/<NNNN>-<titre>.md`) porte la section `## Review` ajoutée par le Reviewer de sécurité.

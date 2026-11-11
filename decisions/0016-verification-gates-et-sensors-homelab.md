@@ -1,13 +1,13 @@
-# Verification gates et Sensors déterministes advisory — Homelab
-
 ---
-auteurs: Mika (agent, sur validation humaine granulaire — multica.gaston)
-accepté par : multica.gaston (validation humaine — ALI-204, 2026-09-03)
-accepté le : 2026-09-03
+auteurs: Sylvain Goubaud
+parties_prenantes: ""
+accepte_par: Sylvain Goubaud
+accepte_le: 2026-09-03
 supersedes: ""
 superseded_by: ""
-
 ---
+
+# Verification gates et Sensors déterministes advisory — Homelab
 
 ## Status
 

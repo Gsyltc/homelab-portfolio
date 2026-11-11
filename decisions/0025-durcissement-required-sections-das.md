@@ -1,13 +1,13 @@
+---
+auteurs: Sylvain Goubaud
+parties_prenantes: ""
+accepte_par: Sylvain Goubaud
+accepte_le: 2026-09-05
+supersedes: ""
+superseded_by: ""
+---
+
 # Durcissement du sensor required-sections (volet DAS)
-
----
-auteurs: multica.gaston  
-accepté par : multica.gaston  
-accepté le : 2026-09-05  
-supersedes: ""  
-superseded_by: ""  
-
----
 
 ## Status
 

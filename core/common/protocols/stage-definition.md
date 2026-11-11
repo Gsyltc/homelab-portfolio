@@ -21,7 +21,7 @@ human_gate: <none|light|granular|explicit>       # gate humain applicable au sta
 produces: [<artefact>, ...]            # artefacts produits en sortie (arêtes avant)
 consumes: [{artifact: <nom>, required: <true|false>}, ...]   # artefacts consommés en entrée (arêtes arrière)
 requires_stage: [<slug>, ...]          # stages pré-requis (peut être vide)
-sensors: [<nom-de-sensor>, ...]        # sensors importés (required-sections, upstream-coverage, diagram-validity)
+sensors: [<nom-de-sensor>, ...]        # sensors importés (required-sections-adr, upstream-coverage, diagram-validity)
 scopes: [<scope>, ...]                 # scopes où le stage est actif (voir scopes-and-axes.md)
 inputs: "<description libre des entrées>"
 outputs: "<description libre des sorties>"

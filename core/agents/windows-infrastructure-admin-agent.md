@@ -5,7 +5,7 @@ description: >
     Administrateur infrastructure Windows : migration Win10 vers Win11, Intune, machines virtuelles, golden image, Autopilot, SCCM.
 skills:
   - architecture-solution-gabarits
-  - create-architectural-decision-record
+  - create-architecture-decision-record
   - project-defaults
   - windows-infrastructure-administration
 disallowedTools: Task

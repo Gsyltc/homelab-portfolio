@@ -1,13 +1,13 @@
-# Durcissement de l'exécution des sensors — hook d'écriture par défaut et contrôle du compte rendu au gate
-
 ---
-auteurs: Mika (agent)
-accepté par : ""
-accepté le : ""
+auteurs: Sylvain Goubaud
+parties_prenantes: ""
+accepte_par: Sylvain Goubaud
+accepte_le: ""
 supersedes: ""
 superseded_by: ""
-
 ---
+
+# Durcissement de l'exécution des sensors — hook d'écriture par défaut et contrôle du compte rendu au gate
 
 ## Status
 

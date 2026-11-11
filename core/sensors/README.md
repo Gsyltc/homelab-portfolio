@@ -19,7 +19,7 @@ Chaque manifeste fixe le **contrat** (périmètre de déclenchement, règles, so
 | `python3 "$CORE_HOME/core/scripts/sensor.py" --root <projet> fire <id> [--path <fichier>...]` | Exécute un sensor. Sans `--path` : balayage de gate sur le périmètre `matches` |
 | `python3 "$CORE_HOME/core/scripts/sensor.py" --root <projet> gate <frontière> [--attest a,b]` | Rapport de vérification d'une frontière de [`gates.md`](gates.md) |
 | `python3 "$CORE_HOME/core/scripts/sensor.py" report-check --stage <fiche> [--report-file F]` | Contrôle de gate du compte rendu : section `## Sensors` absente alors que la fiche de stage déclare `sensors:` non vide ⇒ `⚠️` écart (advisory) |
-| `python3 "$CORE_HOME/core/scripts/sensors/<id avec _>.py" --root <projet> [--path <fichier>...]` | Exécute un sensor seul (ex. `required_sections.py`) : un script par sensor |
+| `python3 "$CORE_HOME/core/scripts/sensors/<id avec _>.py" --root <projet> [--path <fichier>...]` | Exécute un sensor seul (ex. `required_sections_adr.py`) : un script par sensor |
 | `python3 "$CORE_HOME/core/sensors/hooks/post_write.py"` | Hook d'écriture : lit le JSON du harnais sur stdin, lance les sensors `fire_on: write` |
 
 Python 3.9+, bibliothèque standard uniquement. Tests : `python3 -m unittest discover -s core/scripts/tests`.
@@ -43,7 +43,7 @@ Les contrôles sont des **faits de forme**, pas des jugements :
 
 ### Hooks
 
-Le hook lance, à chaque écriture de fichier, les sensors `fire_on: write` dont `matches` correspond. Il sort **toujours en 0**. `--sensors a,b` le restreint aux sensors déclarés par le stage actif. `--audit-file <fichier>` ajoute le rapport à un `audit.md` append-only (hors Multica, ADR-0038).
+Le hook lance, à chaque écriture de fichier, les sensors `fire_on: write` dont `matches` correspond, ainsi que les sensors `fire_on: gate` dont `write_matches` correspond (ex. `required-sections-adr`). Il sort **toujours en 0**. `--sensors a,b` le restreint aux sensors déclarés par le stage actif. `--audit-file <fichier>` ajoute le rapport à un `audit.md` append-only (hors Multica, ADR-0038).
 
 Claude Code (`.claude/settings.json`) :
 
@@ -100,11 +100,12 @@ Les résultats vivent **sur l'issue** (piste d'audit existante), jamais dans un 
 
 ## Sensors définis
 
-Neuf sensors, alignés sur le contrat amont « Sensors » (schéma de manifeste `id` / `kind` / `command` / `default_severity` / `description` + `category` / `fire_on` / `matches`). Les `id` sont importés **par id nu** dans le champ `sensors:` des fiches de stage (pull-authoring).
+Dix sensors, alignés sur le contrat amont « Sensors » (schéma de manifeste `id` / `kind` / `command` / `default_severity` / `description` + `category` / `fire_on` / `matches`). Les `id` sont importés **par id nu** dans le champ `sensors:` des fiches de stage (pull-authoring).
 
 | Sensor | Manifeste | `category` | `fire_on` | `default_severity` | Objet |
 | --- | --- | --- | --- | --- | --- |
-| `required-sections` | [`sensors/required-sections.md`](sensors/required-sections.md) | document-shape | gate | advisory | Rubriques obligatoires d'ADR présentes et non vides ; fichiers/sections **mandatory** de la DAS (`001`, `01`, `02`, `06`, `08`, `10`, `11`) présents et non vides (durci ALI-218, [ADR-0025](../../decisions/0025-durcissement-required-sections-das.md)) ; chapitre d'architecture de sécurité (`architecture-securite/01`, `02`, `03`) — sept sections sécurité au total ([ADR-0045](../../decisions/0045-checklist-architecture-sections-requises-securite.md)) |
+| `required-sections-adr` | [`sensors/required-sections-adr.md`](sensors/required-sections-adr.md) | document-shape | gate (+ écriture via `write_matches`) | advisory | Rubriques obligatoires et forme des ADR : front matter, statut unique, puces codées, remplacement cohérent, `Critères de décision` (HOM-285) |
+| `required-sections-architecture` | [`sensors/required-sections-architecture.md`](sensors/required-sections-architecture.md) | document-shape | gate | advisory | Fichiers/sections **mandatory** de la DAS (`001`, `01`, `02`, `06`, `08`, `10`, `11`) et de l'architecture détaillée (`architecture-securite/` : surfaces, STRIDE, OWASP) présents et non vides (durci ALI-218, [ADR-0025](../../decisions/0025-durcissement-required-sections-das.md)) |
 | `data-lifecycle` | [`sensors/data-lifecycle.md`](sensors/data-lifecycle.md) | document-shape | gate | advisory | Document **Cycle de vie des données** (`10-cycle_vie_donnees.md`) présent et renseigné (cycle de vie, gouvernance, classification) **selon les données du projet**. **Advisory** : assiste la revue **Architecte de solution → Architecte de données** et alerte le coordinateur, **sans jamais bloquer** (origine ALI-231) |
 | `upstream-coverage` | [`sensors/upstream-coverage.md`](sensors/upstream-coverage.md) | document-shape | gate | advisory | Référence explicite à la demande amont (issue / ADR parent) |
 | `diagram-validity` | [`sensors/diagram-validity.md`](sensors/diagram-validity.md) | document-shape | write | advisory | Syntaxe des diagrammes en code (Mermaid / PlantUML / Structurizr) |
@@ -128,6 +129,7 @@ default_severity: advisory   # advisory | blocking (obligatoire) — blocking = 
 description: <une ligne>     # description humaine (obligatoire)
 category: <label libre>      # (optionnel) — document-shape | provenance | traceability
 fire_on: gate                # (optionnel) write | gate — défaut : write
+write_matches: <glob>        # (optionnel, sensor gate) déclenché aussi à l'écriture, par le hook, sur ce glob
 matches: <glob>              # (optionnel) filtre de chemin ; au gate, glob absent ⇒ tout livrable
 origine: ALI-<n>             # (maison, SG-1) provenance traçable — obligatoire côté gouvernance
 ```

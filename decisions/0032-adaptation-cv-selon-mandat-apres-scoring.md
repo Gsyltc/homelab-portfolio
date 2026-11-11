@@ -1,13 +1,13 @@
-# Adaptation du CV des collaborateurs selon le mandat (AO) après scoring, sur décision humaine
-
 ---
-auteurs: Mika (agent)
-accepté par :
-accepté le :
+auteurs: Sylvain Goubaud
+parties_prenantes: ""
+accepte_par: Sylvain Goubaud
+accepte_le: 
 supersedes: ""
 superseded_by: ""
-
 ---
+
+# Adaptation du CV des collaborateurs selon le mandat (AO) après scoring, sur décision humaine
 
 ## Status
 

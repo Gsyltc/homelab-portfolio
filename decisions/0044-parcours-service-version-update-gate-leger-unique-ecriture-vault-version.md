@@ -1,13 +1,13 @@
-# Parcours `service-version-update` : gate léger unique (A1) couvrant écriture Vault `VERSION` + déploiement Kestra, et exception d'écriture Vault étroite
-
 ---
-auteurs: Mika (agent)
-accepté par : sylvain.rodgers
-accepté le : 2026-10-30
+auteurs: Sylvain Goubaud
+parties_prenantes: ""
+accepte_par: Sylvain Goubaud
+accepte_le: 2026-10-30
 supersedes: ""
 superseded_by: ""
-
 ---
+
+# Parcours `service-version-update` : gate léger unique (A1) couvrant écriture Vault `VERSION` + déploiement Kestra, et exception d'écriture Vault étroite
 
 ## Status
 

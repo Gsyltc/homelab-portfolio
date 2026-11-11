@@ -16,6 +16,12 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/) ; versionnage
   (HOM-278).
 
 ### Changed
+- **`create-architecture-decision-record`** : gabarit ADR aligné sur arc42 §9
+  (HOM-285) — front matter en tête de fichier avec clés normalisées
+  (`accepte_par`, `accepte_le`, nouveau `parties_prenantes`), section
+  `Critères de décision` et matrice de Pugh optionnelle, `Contexte` en forces en
+  tension, `Historique des amendements`, règles d'immutabilité, « une décision =
+  un ADR » et de significativité.
 - **`architecture-solution-gabarits`** : porte désormais le **gabarit d'état de
   la checklist d'architecture** (`gabarits/00-checklist-architecture.md`),
   déplacé depuis `core/common/protocols/gabarits/`. C'est un **fichier d'état de

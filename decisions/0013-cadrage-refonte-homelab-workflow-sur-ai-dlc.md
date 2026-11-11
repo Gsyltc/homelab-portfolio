@@ -1,13 +1,13 @@
-# Cadrage de la refonte de homelab-workflow.md sur AI-DLC 2.0
-
 ---
-auteurs: Mika (agent)
-accepté par : Sylvain G.
-accepté le : 2026-09-03
+auteurs: Sylvain Goubaud
+parties_prenantes: ""
+accepte_par: Sylvain Goubaud
+accepte_le: 2026-09-03
 supersedes: ""
 superseded_by: ""
-
 ---
+
+# Cadrage de la refonte de homelab-workflow.md sur AI-DLC 2.0
 
 ## Status
 

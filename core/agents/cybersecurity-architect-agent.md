@@ -6,7 +6,7 @@ description: >
 skills:
   - architecture-solution-gabarits
   - architecture-securite-gabarits
-  - create-architectural-decision-record
+  - create-architecture-decision-record
   - cybersecurite
 disallowedTools: Task
 tier: judgment

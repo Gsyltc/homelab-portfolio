@@ -5,7 +5,7 @@ description: >
     Architecte de données : modélisation (dimensionnel, Data Vault), Data Warehouse / Lake / Lakehouse, Logical DW, virtualisation (Denodo). Traduit les besoins de l'Architecte de solution en modèles et plateformes de données.
 skills:
   - architecture-solution-gabarits
-  - create-architectural-decision-record
+  - create-architecture-decision-record
   - project-defaults
   - data-warehouse-ops
   - analytics-engineer

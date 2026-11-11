@@ -35,9 +35,9 @@ checks:
   non_vide: true                                     # une section présente mais vide (aucun contenu propre) = écart
 ```
 
-## Cohérence avec `required-sections`
+## Cohérence avec `required-sections-architecture`
 
-`required-sections` porte déjà `10-cycle_vie_donnees.md` dans ses fichiers mandatory (sections « Gouvernance de données » / « Classification des données »). `data-lifecycle` est **complémentaire** : il **spécialise** le contrôle sur ce document (ajout de la section « Cycle de vie des données » et de la **couverture effective des données du projet**), et **assiste** la revue Architecte de solution → Architecte de données sans jamais la bloquer. Toute évolution du gabarit `gabarits/10` doit être répercutée ici **et** dans `required-sections` dans la même PR (SG-1 / SG-6).
+`required-sections-architecture` porte déjà `10-cycle_vie_donnees.md` dans ses fichiers mandatory (sections « Gouvernance de données » / « Classification des données »). `data-lifecycle` est **complémentaire** : il **spécialise** le contrôle sur ce document (ajout de la section « Cycle de vie des données » et de la **couverture effective des données du projet**), et **assiste** la revue Architecte de solution → Architecte de données sans jamais la bloquer. Toute évolution du gabarit `gabarits/10` doit être répercutée ici **et** dans `required-sections-architecture` dans la même PR (SG-1 / SG-6).
 
 ## Sortie (piste d'audit)
 

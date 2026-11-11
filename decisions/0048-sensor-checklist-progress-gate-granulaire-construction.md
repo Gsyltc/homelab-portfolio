@@ -1,13 +1,13 @@
-# Sensor `checklist-progress` de catégorie `progress` attaché au gate granulaire de Construction
-
 ---
 auteurs: Sylvain Goubaud
-accepté par : "Sylvain Goubaud"
-accepté le : "2026-11-08"
+parties_prenantes: ""
+accepte_par: Sylvain Goubaud
+accepte_le: "2026-11-08"
 supersedes: ""
 superseded_by: ""
-
 ---
+
+# Sensor `checklist-progress` de catégorie `progress` attaché au gate granulaire de Construction
 
 ## Status
 

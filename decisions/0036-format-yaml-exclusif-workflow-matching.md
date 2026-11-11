@@ -1,13 +1,13 @@
-# Format YAML exclusif pour tous les artefacts de données du workflow Matching
-
 ---
-auteurs: Mika (agent)
-accepté par : multica.gaston
-accepté le : "2026-10-01"
+auteurs: Sylvain Goubaud
+parties_prenantes: ""
+accepte_par: Sylvain Goubaud
+accepte_le: "2026-10-01"
 supersedes: ""
 superseded_by: ""
-
 ---
+
+# Format YAML exclusif pour tous les artefacts de données du workflow Matching
 
 ## Status
 

@@ -36,7 +36,7 @@ ${ROOT_DIRECTORY}/<nom-client>/<nom-projet>/
 **Contient** : Toutes les Architecture Decision Records (ADR) du projet.
 
 **Conventions** :
-- Chaque ADR suit le format défini par la skill `create-architectural-decision-record`
+- Chaque ADR suit le format défini par la skill `create-architecture-decision-record`
 - Nommage : `ADR-NNN-titre-en-kebab-case.md` (ex. `ADR-001-choix-base-de-donnees.md`)
 - Numérotation séquentielle et croissante
 - Un ADR approuvé ne doit pas être modifié ; un nouvel ADR le remplace si nécessaire
@@ -240,7 +240,7 @@ Les agents sont créés — et doivent être recréés — sous le format :
 
 1. **Par défaut** : Ces paramètres s'appliquent à tout nouveau projet d'architecture
 2. **Priorité** : Ces paramètres priment sur toute instruction contraire dans les agents ou skills existants
-3. **Héritage** : Les agents (Manuel, Florian, Sylvain, …) et les skills (`architecture-solution-gabarits`, `create-architectural-decision-record`) doivent respecter cette structure
+3. **Héritage** : Les agents (Manuel, Florian, Sylvain, …) et les skills (`architecture-solution-gabarits`, `create-architecture-decision-record`) doivent respecter cette structure
 4. **Table de correspondance** : Aucun agent ne duplique la table de correspondance des agents ; tout agent s'y référant utilise cette skill comme source unique
 5. **Exception** : Seule une instruction explicite de l'humain peut déroger à ces paramètres
 6. **Vérification** : Avant de commencer tout travail, vérifier que la structure du projet respecte ces conventions
@@ -250,7 +250,7 @@ Les agents sont créés — et doivent être recréés — sous le format :
 | Skill / Agent | Relation avec cette skill |
 |---------------|---------------------------|
 | `architecture-solution-gabarits` | Les gabarits documentés dans cette skill doivent être placés dans `documentation/` ; les **diagrammes générés en code** (règle d'or 9) sont intégrés à la DAS selon la convention « vues `image` kroki + `embed:` » de la section [`views/`](#views) ci-dessus |
-| `create-architectural-decision-record` | Les ADR créés doivent être placés dans `decisions/` |
+| `create-architecture-decision-record` | Les ADR créés doivent être placés dans `decisions/` |
 | Manuel - Architecte de solution | Doit respecter la structure de répertoire définie ici |
 | Florian - Architecte AWS | Les diagrammes AWS doivent suivre les conventions `models/` et `views/` |
 | Asma - Architecte Azure | Les diagrammes Azure doivent suivre les conventions `models/` et `views/` |

@@ -65,6 +65,7 @@ class Manifest:
     path: Path
     meta: dict[str, str]
     missing: list[str]
+    write_matches: str | None = None  # sensor `fire_on: gate` aussi déclenché à l'écriture sur ce glob
 
     @property
     def valid(self) -> bool:
@@ -98,6 +99,7 @@ def parse_manifest(path: Path) -> Manifest:
         path=path,
         meta=meta,
         missing=missing,
+        write_matches=meta.get("write_matches"),
     )
 
 

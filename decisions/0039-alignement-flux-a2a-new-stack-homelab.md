@@ -1,13 +1,13 @@
+---
+auteurs: Sylvain Goubaud
+parties_prenantes: ""
+accepte_par: Sylvain Goubaud
+accepte_le: 2026-10-04
+supersedes: ""
+superseded_by: ""
+---
+
 # Alignement du flux A2A du scope `new-stack` (Homelab) sur le flux désiré
-
----
-auteurs: Sylvain Goubaud  
-accepté par : Sylvain Goubaud  
-accepté le : 2026-10-04  
-supersedes: ""  
-superseded_by: ""  
-
----
 
 ## Status
 

@@ -1,13 +1,13 @@
-# Création du skill `terraform-qa` (vérification adversariale d'une configuration Terraform)
-
 ---
-auteurs: Mika (agent)
-accepté par : multica.gaston
-accepté le : 2026-09-24
+auteurs: Sylvain Goubaud
+parties_prenantes: ""
+accepte_par: Sylvain Goubaud
+accepte_le: 2026-09-24
 supersedes: ""
 superseded_by: ""
-
 ---
+
+# Création du skill `terraform-qa` (vérification adversariale d'une configuration Terraform)
 
 ## Status
 

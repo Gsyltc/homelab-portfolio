@@ -1,13 +1,13 @@
-# Checklist d'architecture — avancement en pourcentage par élément (barème 80/10/10, suivi par section)
-
 ---
-auteurs: Architecture Solution & Intégration (agent)
-accepté par : "multica.gaston"
-accepté le : "2026-10-30"
+auteurs: Sylvain Goubaud
+parties_prenantes: ""
+accepte_par: Sylvain Goubaud
+accepte_le: "2026-10-30"
 supersedes: "0042-checklist-architecture-processus-protocole-gabarit.md"
 superseded_by: ""
-
 ---
+
+# Checklist d'architecture — avancement en pourcentage par élément (barème 80/10/10, suivi par section)
 
 ## Status
 

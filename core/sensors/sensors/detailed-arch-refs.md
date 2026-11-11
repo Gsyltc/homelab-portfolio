@@ -14,7 +14,7 @@ origine: ORIG-261
 
 Check déterministe déclenché **à l'écriture** (`fire_on: write`) d'un fichier de documentation d'architecture. Il **factualise** deux conventions récurrentes des skills `architecture-solution-gabarits` et `architecture-securite-gabarits` (règles d'or de renvoi et de titres ; section « Renvois vers l'architecture détaillée (format Structurizr) » commune aux deux skills), sans jamais bloquer (**advisory**, `default_severity: advisory`). Le glob `documentation/**/*.md` couvre aussi bien la DAS (`06`, `architecture-detaillee/…`) que le dossier de sécurité (`documentation/architecture-securite/…` et son `11-securite.md`).
 
-Complémentaire de `required-sections` (présence/forme) et `diagram-validity` (syntaxe de diagramme) : ici, le contrôle porte sur la **forme des renvois** et la **convention de titres** du détail. Advisory et non substituable à la revue de cohérence (SG-3).
+Complémentaire de `required-sections-architecture` (présence/forme) et `diagram-validity` (syntaxe de diagramme) : ici, le contrôle porte sur la **forme des renvois** et la **convention de titres** du détail. Advisory et non substituable à la revue de cohérence (SG-3).
 
 ## Contrat de vérification (`checks`)
 

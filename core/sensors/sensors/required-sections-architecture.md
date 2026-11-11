@@ -1,35 +1,25 @@
 ---
-id: required-sections
+id: required-sections-architecture
 kind: deterministic
-command: "python3 core/scripts/sensors/required_sections.py"
+command: "python3 core/scripts/sensors/required_sections_architecture.py"
 default_severity: advisory
-description: "Vérifie que les rubriques obligatoires de l'ADR, les fichiers/sections mandatory de la DAS et les sections requises du chapitre d'architecture de sécurité sont présents et non vides."
+description: "Vérifie que les fichiers et sections mandatory de l'architecture — DAS et architecture détaillée (chapitre architecture-securite/) — sont présents et non vides."
 category: document-shape
 fire_on: gate
-matches: "{decisions/[0-9][0-9][0-9][0-9]-*.md,documentation/*.md,documentation/**/*.md}"
+matches: "{documentation/*.md,documentation/**/*.md}"
 origine: ALI-218
 ---
 
-# Sensor `required-sections` — sections requises *(prioritaire)*
+# Sensor `required-sections-architecture` — sections requises de l'architecture (DAS et détaillée)
 
-Check déterministe déclenché **au gate de phase** (`fire_on: gate`) : vérifie que les **rubriques obligatoires** du gabarit sont présentes et non vides sur chaque **ADR**, **DAS** ou **chapitre d'architecture de sécurité** livré. **Advisory** (`default_severity: advisory`).
+Check déterministe déclenché **au gate de phase** (`fire_on: gate`) : vérifie que les **fichiers et rubriques mandatory** de la **DAS** et de l'**architecture détaillée** (chapitre `architecture-securite/`) sont présents et non vides. **Advisory** (`default_severity: advisory`).
+
+Issu de la scission du sensor unique `required-sections` (HOM-285) : deux manifestes, un pour les ADR ([`required-sections-adr`](required-sections-adr.md)), un pour l'architecture (celui-ci), pour éviter les confusions entre types de documents.
 
 ## Contrat de vérification (`checks`)
 
 ```yaml
 checks:
-  adr:                                         # rubriques dérivées du gabarit de la skill create-architecture-decision-record
-    entete_meta: [auteurs, "accepté par", "accepté le", supersedes, superseded_by]
-    sections:
-      - Status                 # titre en anglais (compat Structurizr), statut unique retenu
-      - "Date de création"      # date de création de l'ADR au format YYYY-MM-DD, sous Status
-      - Contexte
-      - Décision
-      - "Conséquences"        # sous-rubriques obligatoires : Positives / Négatives
-      - "Alternatives étudiées"
-      - "Notes d'implémentation"
-      - "Références"
-    non_vide: true
   das:                                         # fichiers DAS mandatory portés en propre (Option A, ADR-0025) — indépendants des gabarits (ADR-0012, NEG-004)
     fichiers_mandatory:                        # présents ET non vides dans le répertoire documentation/ du projet, au gate
       - fichier: "001-document-architecture-solution.md"    # page de garde
@@ -81,7 +71,7 @@ checks:
     non_vide: true
 ```
 
-## Sections mandatory de la DAS (Option A — manifeste autonome)
+## Volet `das:` — fichiers et sections mandatory de la DAS (Option A — manifeste autonome)
 
 Sur le volet `das:`, le sensor vérifie qu'au gate de phase, chacun des **7 fichiers mandatory** de la documentation d'architecture de solution est **présent** dans le répertoire `documentation/` du projet (les fichiers `.md` y sont déposés directement) et **non vide** (contenu propre, gabarit renseigné — les commentaires HTML `<!-- … -->` et les cellules d'exemple ne comptent pas comme contenu). Fichiers et sections retenus par l'humain (multica.gaston, ALI-218) :
 
@@ -97,9 +87,9 @@ Sur le volet `das:`, le sensor vérifie qu'au gate de phase, chacun des **7 fich
 
 Les autres fichiers (`03`, `04`, `05`, `07`, `09`, `12`–`15`) restent **recommandés** mais **hors périmètre mandatory** de ce check ; leur absence n'est pas signalée par ce sensor.
 
-### Volet `securite:` — chapitre d'architecture de sécurité
+## Volet `securite:` — architecture détaillée (chapitre d'architecture de sécurité)
 
-Le volet `securite:` porte les **trois sections du chapitre d'architecture de sécurité** qui ne vivent pas dans la DAS : surfaces d'attaque, modélisation STRIDE et modélisation OWASP. Il complète le volet `das:` (qui porte les quatre sections de `11-securite.md`) : ensemble, ils forment les **sept sections** de l'**architecture de sécurité détaillée** décomptées par la checklist.
+Ce volet porte les **trois sections du chapitre d'architecture de sécurité** qui ne vivent pas dans la DAS : surfaces d'attaque, modélisation STRIDE et modélisation OWASP. Il complète le volet `das:` (dont `11-securite.md` porte les quatre sections de `11-securite.md`) : ensemble, ils forment les **sept sections** de l'**architecture de sécurité détaillée** décomptées par la checklist.
 
 | Fichier du chapitre | Section mandatory | Pourquoi mandatory |
 | --- | --- | --- |
@@ -117,10 +107,10 @@ En **Option A**, la liste des fichiers et sections mandatory est portée **en pr
 
 Verdicts : `✅` conforme · `⚠️` écart · `⛔` indisponible (SG-2, jamais lu comme conforme). Source tracée (SG-5).
 
-Sur le volet DAS, un **fichier mandatory absent** du répertoire `documentation/` du projet est un écart au même titre qu'une section manquante ou vide (SG-2 : l'absence d'un signal attendu est elle-même un écart). Il en va de même sur le volet `securite:` pour un fichier du chapitre `architecture-securite/`.
+Un **fichier mandatory absent** (répertoire `documentation/` pour la DAS, chapitre `architecture-securite/` pour l'architecture détaillée) est un écart au même titre qu'une section manquante ou vide (SG-2 : l'absence d'un signal attendu est elle-même un écart).
 
 ```
-Sensor required-sections — <fichier>   (source : core/sensors/sensors/required-sections.md @ <commit>)
+Sensor required-sections-architecture — <fichier>   (source : core/sensors/sensors/required-sections-architecture.md @ <commit>)
 - verdict : ✅ conforme | ⚠️ fichiers mandatory manquants : <liste> | ⚠️ rubriques manquantes/vides : <liste> | ⛔ indisponible : <motif>
 ```
 

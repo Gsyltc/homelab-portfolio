@@ -1,13 +1,13 @@
-# Alignement des fiches de stage Homelab sur le contrat AI-DLC « Anatomy of a Stage »
-
 ---
-auteurs: Mika (agent)
-accepté par : multica.gaston
-accepté le : 2026-09-03
+auteurs: Sylvain Goubaud
+parties_prenantes: ""
+accepte_par: Sylvain Goubaud
+accepte_le: 2026-09-03
 supersedes: ""
 superseded_by: ""
-
 ---
+
+# Alignement des fiches de stage Homelab sur le contrat AI-DLC « Anatomy of a Stage »
 
 ## Status
 

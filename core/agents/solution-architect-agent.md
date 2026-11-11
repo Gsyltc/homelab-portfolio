@@ -5,7 +5,7 @@ description: >
     Architecte de solution qui conçoit des solutions TI : documentation d'architecture, ADR et diagrammes C4, Archimate, PlantUML ou CALM.
 skills:
   - architecture-solution-gabarits
-  - create-architectural-decision-record
+  - create-architecture-decision-record
   - project-defaults
   - cdae-ai-eligibilite
 disallowedTools: Task

@@ -1,13 +1,13 @@
-# Nommage daté unifié `<YYYY-mm-dd>-<nom>` et archivage de la dernière analyse CV (YAML + Markdown conservés)
-
 ---
-auteurs: Mika (agent)
-accepté par : multica.gaston
-accepté le : "2026-10-01"
+auteurs: Sylvain Goubaud
+parties_prenantes: ""
+accepte_par: Sylvain Goubaud
+accepte_le: "2026-10-01"
 supersedes: ""
 superseded_by: ""
-
 ---
+
+# Nommage daté unifié `<YYYY-mm-dd>-<nom>` et archivage de la dernière analyse CV (YAML + Markdown conservés)
 
 ## Status
 
