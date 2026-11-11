@@ -8,6 +8,12 @@ ce fichier en donne la lecture chronologique côté produit.
 
 ## [Non publié]
 
+### Added
+- **Sensor de conformité des fiches d'agents** (HOM-299). `scripts/validate_agents.py` contrôle le
+  front-matter des `<workflow>/agents/*.md` (`name` = nom de fichier, `disallowedTools: Task`, `tier`,
+  pas de `model`/`allowedTools`, aucun secret) ; déclenché par le hook `pre-commit` avant tout commit
+  touchant un agent et par la CI `validate-agents`.
+
 ### Changed
 - **Gabarit ADR aligné sur arc42 §9** (HOM-285). Front matter placé en tête de fichier avec clés
   normalisées (`accepte_par`, `accepte_le`, `parties_prenantes`) — les 53 ADR existants sont migrés

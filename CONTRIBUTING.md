@@ -45,6 +45,8 @@ Les skills sont **portées par les plugins**, à l'emplacement canonique [`plugi
 >
 > Le validateur officiel `skills-ref` ([agentskills.io](https://agentskills.io/specification)) est aussi exécuté par le hook `pre-commit` (`git config core.hooksPath .githooks`) et par la CI GitHub Actions (`validate-skills`). La skill `skill-authoring` (plugin `general-purpose-assistant`) décrit la procédure complète.
 
+> **Fiches d'agents** (`<workflow>/agents/*.md`) — le script `scripts/validate_agents.py` (front-matter : `name` = nom de fichier, `display_name`, `description`, `disallowedTools: Task`, `tier` ∈ `judgment|balanced|templated`, ni `model` ni `allowedTools` ; cf. ADR-0008 / ADR-0019) est exécuté par le même hook `pre-commit` avant tout commit touchant un agent, et par la CI GitHub Actions (`validate-agents`).
+
 > **Utilisation sur Multica** — déposer un `SKILL.md` dans le dépôt **ne suffit pas** : la plateforme ne le découvre pas automatiquement. Une skill devient utilisable seulement après avoir été **importée** dans le workspace, puis **assignée** à un agent :
 >
 > ```
