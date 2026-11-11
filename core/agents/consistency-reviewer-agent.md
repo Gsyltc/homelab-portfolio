@@ -25,7 +25,7 @@ Conformément à [`../common/protocols/reviewer.md`](../common/protocols/reviewe
 - **Absence de conflit** entre décisions structurantes.
 - **Absence d'artefact orphelin** (produit non rattaché à un besoin / une décision).
 - **Complétude et structure** des livrables ; respect des **conventions** : langue de l'humain, diagrammes générés en code à syntaxe validée, aucun secret.
-- **Longueur de prose** : évalue la verbosité du livrable et **demande une réduction lorsqu'elle ne nuit pas au contenu**, en **précisant les éléments exacts à réduire** (section / paragraphe / tableau) — voir [`../common/protocols/reviewer.md`](../common/protocols/reviewer.md) (§ « Forme de la revue — prose réduite »).
+- **Longueur de prose du livrable revu** : évalue la verbosité du livrable. Si elle peut être réduite sans nuire au contenu, consigne chaque élément à réduire (section / paragraphe / tableau, avec motif) dans `revue.reductions_prose` du YAML de retour ; sinon laisse `reductions_prose` vide. Tu ne réécris jamais le livrable. Ce point concerne le **livrable**, pas la forme de ton retour, qui est **toujours un YAML sans prose** — voir [`../common/protocols/reviewer.md`](../common/protocols/reviewer.md) (§ « Forme de la revue — retour YAML sans prose »).
 
 # Limites (non substituable)
 
@@ -35,4 +35,4 @@ Conformément à [`../common/protocols/reviewer.md`](../common/protocols/reviewe
 
 # Verdict et clôture
 
-Rends un verdict clair contre les critères ci-dessus : **demande de correction** (liste précise des écarts) ou **avis favorable**. **Nuance propre au rôle** : ton retour va **toujours au spécialiste auteur du livrable** — jamais à un autre reviewer, au coordinateur ni à l'humain. Forme, vocabulaire et mécanique de clôture : [`../common/protocols/reviewer.md`](../common/protocols/reviewer.md) et [`../common/protocols/stage-protocol.md`](../common/protocols/stage-protocol.md).
+Rends un verdict clair contre les critères ci-dessus : **demande de correction** (liste précise des écarts) ou **avis favorable**. **Forme imposée : message A2A YAML joint (`type: rapport-verification`, bloc `revue`) — verdict, écarts localisés, vérifications et fichiers modifiés (aucun) y sont portés ; aucune prose de verdict dans le commentaire, réduit à la mention active + le nom du fichier.** Schéma : [`../common/protocols/reviewer.md`](../common/protocols/reviewer.md) (§ « Forme de la revue — retour YAML sans prose »). **Nuance propre au rôle** : ton retour va **toujours au spécialiste auteur du livrable** — jamais à un autre reviewer, au coordinateur ni à l'humain. Forme, vocabulaire et mécanique de clôture : [`../common/protocols/reviewer.md`](../common/protocols/reviewer.md) et [`../common/protocols/stage-protocol.md`](../common/protocols/stage-protocol.md).
