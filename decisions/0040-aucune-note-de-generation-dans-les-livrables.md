@@ -1,13 +1,13 @@
-# Aucune note de génération / méta-production dans les livrables — invariant source unique (workflow Matching)
-
 ---
-auteurs: Gestionnaire CV (agent)
-accepté par : sylvain.rodgers
-accepté le : "2026-10-23"
+auteurs: Sylvain Goubaud
+parties_prenantes: ""
+accepte_par: Sylvain Goubaud
+accepte_le: "2026-10-23"
 supersedes: ""
 superseded_by: ""
-
 ---
+
+# Aucune note de génération / méta-production dans les livrables — invariant source unique (workflow Matching)
 
 ## Status
 

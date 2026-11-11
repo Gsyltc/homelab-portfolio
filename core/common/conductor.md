@@ -219,7 +219,7 @@ Le coordinateur est **responsable de la tenue à jour de la checklist du DAS** (
 - **État** : `documentation/00-checklist-architecture.md`, fichier d'état initialisé (copie idempotente du gabarit, tous éléments à **0 %**) lors de la vérification de présence en Initialization ([`directory-check`](stages/initialization/directory-check.md)). Processus et règles de tenue : source unique [`protocols/architecture-checklist.md`](protocols/architecture-checklist.md).
 - **Avancement** : `% = 80 × (sections conformes / total sections mandatory) + 10 × (revue pair) + 10 × (acceptation humaine)`.
   - Les +10 % d'acceptation ne s'ajoutent que sur annonce humaine explicite (gate Keep / Modify / Redo) : seul chemin vers 100 %.
-  - Pour les Livrables, les 80 % s'appuient sur le contrat [`required-sections`](../sensors/sensors/required-sections.md) (dénominateur dynamique).
+  - Pour les Livrables, les 80 % s'appuient sur le contrat [`required-sections-architecture`](../sensors/sensors/required-sections-architecture.md) (dénominateur dynamique).
   - Doute ⇒ ne pas compter, informer l'humain.
 - **Gate planification / réalisation** :
   - `< 80 %` ⇒ bloqué.

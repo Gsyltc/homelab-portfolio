@@ -18,7 +18,7 @@ ordre_presentation: 8
 <!-- 
 Cette section liste l'ensemble des **contraintes** qui s'imposent à la solution : lois et règlementations, référentiels et normes, conformités du domaine d'affaires, contraintes technologiques.
 Chaque contrainte est identifiée par un code (`CT-001`, `CT-002`, …) et déclinée selon les attributs : **Source**, **Responsable**, **Impact architectural**, **Mesure de conformité**, **Degré (imposable / négociable)**.
-Toute contrainte qui **force un choix d'architecture** est tracée dans un **ADR** (skill `create-architectural-decision-record`) et vérifie la **couverture d'un patron** du répertoire `patron-architecture/`.
+Toute contrainte qui **force un choix d'architecture** est tracée dans un **ADR** (skill `create-architecture-decision-record`) et vérifie la **couverture d'un patron** du répertoire `patron-architecture/`.
 -->
 ### Lois et règlementations
 

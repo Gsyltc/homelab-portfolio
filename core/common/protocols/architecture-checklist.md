@@ -1,6 +1,6 @@
 # Protocole — checklist d'architecture (cycle lecture / écriture)
 
-**Source unique** du **processus de checklist d'architecture** du workflow `core` : comment l'**état d'avancement de l'architecture** est tenu, lu et mis à jour tout au long des **5 phases** (`Initialization → Ideation → Inception → Construction → Operation`). La checklist est un **processus à part** — ni un stage, ni un livrable d'architecture : elle **suit** l'avancement des livrables sans les produire. Ce protocole fixe la **mécanique** (structure, calcul du %, règles d'écriture, vérification de conformité) ; il ne redéfinit **ni** les gates de phase et la validation humaine granulaire — source unique [`../conductor.md`](../conductor.md) et [`governance-security.md`](governance-security.md) — **ni** les sections mandatory des livrables — source unique [`../../sensors/sensors/required-sections.md`](../../sensors/sensors/required-sections.md) et, pour les livrables détaillés qu'il ne couvre pas, leurs gabarits de sections.
+**Source unique** du **processus de checklist d'architecture** du workflow `core` : comment l'**état d'avancement de l'architecture** est tenu, lu et mis à jour tout au long des **5 phases** (`Initialization → Ideation → Inception → Construction → Operation`). La checklist est un **processus à part** — ni un stage, ni un livrable d'architecture : elle **suit** l'avancement des livrables sans les produire. Ce protocole fixe la **mécanique** (structure, calcul du %, règles d'écriture, vérification de conformité) ; il ne redéfinit **ni** les gates de phase et la validation humaine granulaire — source unique [`../conductor.md`](../conductor.md) et [`governance-security.md`](governance-security.md) — **ni** les sections mandatory des livrables — source unique [`required-sections-architecture`](../../sensors/sensors/required-sections-architecture.md) et, pour les livrables détaillés qu'il ne couvre pas, leurs gabarits de sections.
 
 > **Qui est concerné.** Le **coordinateur** (Architecture Solution & Intégration) tient la checklist : il la lit sur demande humaine et ne fait **progresser le % d'un élément** que sur des faits **vérifiés** — conformité des sections, revue par un pair, et **acceptation humaine explicite** pour la part finale. Les agents spécialisés produisent les livrables ; ils ne s'**auto-acceptent jamais** un élément de la checklist.
 
@@ -30,11 +30,11 @@ Quatre sections, éléments **fixes** ; aucun ajout / retrait sans décision tra
 
 Chaque élément est suivi **en pourcentage** selon le **barème 80/10/10** de la section 3. Un élément n'atteint **100 %** que lorsque sa part « sections conformes » est complète **et** que sa **revue par un pair** et son **acceptation humaine** sont réalisées.
 
-Les **sections requises** d'un livrable — celles qui composent sa part de conformité — ont leur **source unique** dans les contrats de sections : [`required-sections`](../../sensors/sensors/required-sections.md) (et, pour les données, [`data-lifecycle`](../../sensors/sensors/data-lifecycle.md)), ou les gabarits du livrable qu'il ne couvre pas. Ce protocole ne les **liste pas** : le **gabarit d'état** en déploie seulement les **tables de suivi**, livrable par livrable, sans redéfinir le contrat.
+Les **sections requises** d'un livrable — celles qui composent sa part de conformité — ont leur **source unique** dans les contrats de sections : [`required-sections-architecture`](../../sensors/sensors/required-sections-architecture.md) (et, pour les données, [`data-lifecycle`](../../sensors/sensors/data-lifecycle.md)), ou les gabarits du livrable qu'il ne couvre pas. Ce protocole ne les **liste pas** : le **gabarit d'état** en déploie seulement les **tables de suivi**, livrable par livrable, sans redéfinir le contrat.
 
 ### 2.1 Arrimages — rôles mandatory
 
-L'élément **Arrimages** (section Projets) n'est **pas** une simple unité binaire : sa part 80 % se **décompte par rôle mandatory** (comme un livrable se décompte par section), à partir de la **matrice d'arrimage des rôles (RACI)** du fichier DAS `documentation/001-document-architecture-solution.md` (section « Arrimages » — « Arrimage des rôles », source de la liste des rôles ; ce fichier est l'un des 7 mandatory du volet `das:` du sensor [`required-sections`](../../sensors/sensors/required-sections.md)). Un rôle est **conforme** lorsqu'il est **présent et nommé** (colonne « Nom » renseignée) dans cette matrice.
+L'élément **Arrimages** (section Projets) n'est **pas** une simple unité binaire : sa part 80 % se **décompte par rôle mandatory** (comme un livrable se décompte par section), à partir de la **matrice d'arrimage des rôles (RACI)** du fichier DAS `documentation/001-document-architecture-solution.md` (section « Arrimages » — « Arrimage des rôles », source de la liste des rôles ; ce fichier est l'un des 7 mandatory du volet `das:` du sensor [`required-sections-architecture`](../../sensors/sensors/required-sections-architecture.md)). Un rôle est **conforme** lorsqu'il est **présent et nommé** (colonne « Nom » renseignée) dans cette matrice.
 
 **Rôles mandatory :**
 
@@ -64,7 +64,7 @@ Chaque élément est noté **en pourcentage** selon un barème **homogène** à 
 où `revue pair réalisée` et `acceptation humaine` valent `0` ou `1`. Résultat arrondi à l'entier.
 
 - **Part 80 % — conformité des sections.** `sections conformes / total sections mandatory` est la proportion des **sous-éléments mandatory** présents et conformes (section 6) :
-  - pour un **livrable** (section Livrables) : ses **sections mandatory** d'après le contrat **source unique** [`required-sections`](../../sensors/sensors/required-sections.md) ;
+  - pour un **livrable** (section Livrables) : ses **sections mandatory** d'après le contrat **source unique** [`required-sections-architecture`](../../sensors/sensors/required-sections-architecture.md) ;
   - pour **Arrimages** (section Projets) : ses **rôles mandatory** d'après la matrice RACI du DAS `001` (section 2.1), avec dénominateur **5** (ou **6** si Loi 25 activée) ;
   - pour les éléments **sans sous-éléments mandatory décomptés** (Cadrage, Besoins MoSCoW, et Projets **sauf Arrimages**), la part 80 % est **binaire** : `0` tant que l'élément n'est pas présent et conforme, `80` dès qu'il l'est — l'élément est traité comme une **unité suivie**.
 - **Part +10 % — revue par un pair.** Ajoutée **une fois** qu'une **revue par un pair** (peer review) de l'élément a été réalisée et tracée sur l'issue.
@@ -74,7 +74,7 @@ Les trois parts sont **indépendantes** : la revue pair et l'acceptation peuvent
 
 ### Dénominateur dynamique
 
-Le `total sections mandatory` d'un livrable est celui du contrat `required-sections` **au moment du calcul**. Toute **section ou fichier mandatory ajouté au fil de l'eau** s'ajoute au **dénominateur total** ; la part 80 % se **recalcule** sur le nouveau total (une section nouvellement requise non encore produite **abaisse** mécaniquement le %). La checklist ne redéfinit **aucun** contrat de sections : `required-sections` fait foi. Le même principe vaut pour **Arrimages** : l'**activation de la Loi 25** fait entrer le **Responsable Légal** au dénominateur (5 → 6 rôles mandatory), recalculant d'autant la part 80 %.
+Le `total sections mandatory` d'un livrable est celui du contrat `required-sections-architecture` **au moment du calcul**. Toute **section ou fichier mandatory ajouté au fil de l'eau** s'ajoute au **dénominateur total** ; la part 80 % se **recalcule** sur le nouveau total (une section nouvellement requise non encore produite **abaisse** mécaniquement le %). La checklist ne redéfinit **aucun** contrat de sections : `required-sections-architecture` fait foi. Le même principe vaut pour **Arrimages** : l'**activation de la Loi 25** fait entrer le **Responsable Légal** au dénominateur (5 → 6 rôles mandatory), recalculant d'autant la part 80 %.
 
 ### Agrégation (section et global)
 
@@ -119,7 +119,7 @@ Pour établir la **part 80 %** d'un élément (proportion `sections conformes / 
 
 - le ou les **documents attendus existent** et sont **au bon format** ;
 - ils sont **clairs**, **sans note de génération d'agent** (réf. décision [`0040`](../../../decisions/0040-aucune-note-de-generation-dans-les-livrables.md)), **sans doublon**, **sans incohérence** ;
-- pour la section **Livrables**, **chaque section requise** est comptée **conforme** uniquement si elle est **présente et non vide**, selon le sensor [`required-sections`](../../sensors/sensors/required-sections.md) (**source unique** du contrat et du **total** servant de dénominateur — ne pas le redupliquer ici ; le sensor reste **advisory** et **n'autorise jamais** à se passer de la validation humaine). Pour l'**architecture de sécurité détaillée**, le décompte porte sur les sections des volets `das:` (fichier `11`) et `securite:` ; la section « Frontières de confiance » n'est conforme que si son **diagramme** est présent et valide ;
+- pour la section **Livrables**, **chaque section requise** est comptée **conforme** uniquement si elle est **présente et non vide**, selon le sensor [`required-sections-architecture`](../../sensors/sensors/required-sections-architecture.md) (**source unique** du contrat et du **total** servant de dénominateur — ne pas le redupliquer ici ; le sensor reste **advisory** et **n'autorise jamais** à se passer de la validation humaine). Pour l'**architecture de sécurité détaillée**, le décompte porte sur les sections des volets `das:` (fichier `11`) et `securite:` ; la section « Frontières de confiance » n'est conforme que si son **diagramme** est présent et valide ;
 - pour l'élément **Arrimages** (section Projets), **chaque rôle mandatory** (section 2.1) est compté **conforme** uniquement s'il est **présent et nommé** (colonne « Nom » renseignée) dans la matrice RACI du DAS `001` ; le couple « Architecte de solution / intégrateur » est conforme dès que **l'un** des deux est nommé ; le **Responsable Légal** n'entre au dénominateur **que si la Loi 25 est activée**.
 - pour les éléments de la section **Besoins (MoSCoW)**, la part 80 % (binaire) n'est comptée **conforme** que si le besoin est **tracé et priorisé MoSCoW** en amont (mécanisme : section 2, identifiants `BA-…`, matrice de traçabilité du `proposal.md` si OpenSpec actif). Une chaîne de traçabilité **incomplète** (besoin sans priorité, scénario sans renvoi à son `BA-…`) **ne compte pas** (recoupe le sensor [`traceability`](../../sensors/sensors/traceability.md)).
 
@@ -133,10 +133,10 @@ Le mapping **livrable → document(s) attendu(s)** et la **source du contrat de 
 
 | Élément de la section **Livrables** | Document(s) attendu(s) dans `documentation/` | Contrat de sections |
 | --- | --- | --- |
-| Architecture de solution (DAS) | fichiers mandatory du DAS (`001`, `01`, `02`, `06`, `08`, `10`, `11`) | sensor [`required-sections`](../../sensors/sensors/required-sections.md), volet `das:` |
+| Architecture de solution (DAS) | fichiers mandatory du DAS (`001`, `01`, `02`, `06`, `08`, `10`, `11`) | sensor [`required-sections-architecture`](../../sensors/sensors/required-sections-architecture.md) |
 | Architecture Logicielle détaillée | `documentation/00-architecture-detaillee.md` (volet logiciel) | gabarit DAS `00-architecture-detaillee` |
 | Architecture de données détaillée | `documentation/10-cycle_vie_donnees.md` + modèles de données | sensor [`data-lifecycle`](../../sensors/sensors/data-lifecycle.md) |
-| Architecture de sécurité détaillée | `documentation/11-securite.md` + chapitre `architecture-securite/` | sensor [`required-sections`](../../sensors/sensors/required-sections.md), volets `das:` (fichier `11`) et `securite:` |
+| Architecture de sécurité détaillée | `documentation/11-securite.md` + chapitre `architecture-securite/` | sensor [`required-sections-architecture`](../../sensors/sensors/required-sections-architecture.md) (fichier `11` et chapitre `architecture-securite/`) |
 | Architecture infrastructure détaillée | `documentation/09-deploiement.md` + diagrammes d'infrastructure | gabarit DAS `09-deploiement` |
 
 Le **détail des sections requises** (et le **total** servant de dénominateur) n'est pas tenu ici : sa **source unique** est ces contrats (et, pour les données, `data-lifecycle`). En cas d'écart de nommage ou de découpage, **ces sources font foi**. Le **gabarit d'état** en déploie seulement les **tables de suivi**, sans redéfinir le contrat.
@@ -145,7 +145,7 @@ Le **détail des sections requises** (et le **total** servant de dénominateur) 
 
 - **Validation humaine granulaire** — la part **+10 % acceptation** d'un élément n'est ajoutée que sur annonce humaine explicite, et reste le **seul** chemin vers **100 %** ; aucun scope, aucune règle apprise, aucun sensor advisory ne peut l'y substituer (invariants [`../conductor.md`](../conductor.md), [`governance-security.md`](governance-security.md)).
 - **Piste d'audit sur l'issue** — chaque changement de % (et la composante qui l'a produit) y est tracé ; le fichier d'état ne porte aucune méta-production (décision [`0040`](../../../decisions/0040-aucune-note-de-generation-dans-les-livrables.md)).
-- **Sensors advisory** — `required-sections` et `data-lifecycle` **assistent** le décompte de la part 80 % sans jamais bloquer ni remplacer la validation humaine (SG-1..6).
+- **Sensors advisory** — `required-sections-architecture` et `data-lifecycle` **assistent** le décompte de la part 80 % sans jamais bloquer ni remplacer la validation humaine (SG-1..6).
 - **Gate ≥ 80 % non suffisant** — le seuil de déblocage planification / réalisation est une condition nécessaire, jamais une validation automatique : le lancement reste une décision humaine.
 - **Ne jamais deviner** — doute sur la conformité d'une section ou l'intention humaine ⇒ informer l'humain, ne pas compter la part concernée.
 - **Langue** — français par défaut (humain) ; voir [`../conductor.md`](../conductor.md), « OBLIGATOIRE : langue et format ».

@@ -1,13 +1,13 @@
+---
+auteurs: Sylvain Goubaud
+parties_prenantes: ""
+accepte_par: Sylvain Goubaud
+accepte_le: 2026-09-10
+supersedes: ""
+superseded_by: ""
+---
+
 # Matrice de traçabilité STRIDE dans le gabarit de sécurité de la DAS
-
----
-auteurs: multica.gaston  
-accepté par : multica.gaston  
-accepté le : 2026-09-10  
-supersedes: ""  
-superseded_by: ""  
-
----
 
 ## Status
 

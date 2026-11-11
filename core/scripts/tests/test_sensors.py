@@ -18,14 +18,15 @@ import sensor  # noqa: E402
 from sensorlib import common  # noqa: E402
 from sensorlib.common import GAP, OK, UNAVAILABLE  # noqa: E402
 
-ADR = """# ADR
----
+ADR = """---
 auteurs: A
-accepté par: ""
-accepté le: ""
+parties_prenantes: ""
+accepte_par: ""
+accepte_le: ""
 supersedes: ""
 superseded_by: ""
 ---
+# ADR
 ## Status
 Proposed
 ## Date de création
@@ -36,11 +37,11 @@ Issue HOM-1, exigence FR-001.
 On fait X.
 ## Conséquences
 ### Positives
-- a
+- POS-001 : a
 ### Négatives
-- b
+- NEG-001 : b
 ## Alternatives étudiées
-- c
+- ALT-001 : c
 ## Notes d'implémentation
 - d
 ## Références
@@ -98,7 +99,7 @@ class OneScriptPerSensorTests(unittest.TestCase):
         manifests = set(sensor.load_manifests())
         scripts = {p.stem.replace("_", "-") for p in sensor.SCRIPTS_DIR.glob("*.py") if p.stem != "__init__"}
         self.assertEqual(manifests, scripts, "chaque manifeste a un script et réciproquement")
-        self.assertEqual(len(scripts), 9)
+        self.assertEqual(len(scripts), 10)
 
     def test_each_script_exposes_run_and_id(self) -> None:
         for sid in sensor.load_manifests():
@@ -127,27 +128,58 @@ class SensorTests(unittest.TestCase):
 
     def test_required_sections_adr(self) -> None:
         self.p.write("decisions/0001-x.md", ADR)
-        self.assertEqual(self.p.verdict("required-sections", ["decisions/0001-x.md"]), OK)
-        self.p.write("decisions/0002-y.md", ADR.replace("- d\n", "").replace("- c\n", ""))
-        r = self.p.fire("required-sections", ["decisions/0002-y.md"])[0]
+        self.assertEqual(self.p.verdict("required-sections-adr", ["decisions/0001-x.md"]), OK)
+        self.p.write("decisions/0002-y.md", ADR.replace("- d\n", "").replace("- ALT-001 : c\n", ""))
+        r = self.p.fire("required-sections-adr", ["decisions/0002-y.md"])[0]
         self.assertEqual(r.verdict, GAP)
         self.assertTrue(any("vide" in f for f in r.findings))
 
+    def test_required_sections_adr_shape(self) -> None:
+        def gaps(name: str, text: str) -> list[str]:
+            self.p.write(f"decisions/{name}.md", text)
+            return self.p.fire("required-sections-adr", [f"decisions/{name}.md"])[0].findings
+
+        self.assertTrue(any("front matter absent" in f for f in gaps("0003-a", ADR.replace("---\nauteurs", "# T\n---\nauteurs", 1))))
+        self.assertTrue(any("parties_prenantes" in f for f in gaps("0004-b", ADR.replace('parties_prenantes: ""\n', ""))))
+        self.assertTrue(any("hors" in f for f in gaps("0005-c", ADR.replace("Proposed", "Brouillon"))))
+        self.assertTrue(any("statut unique" in f for f in gaps("0006-d", ADR.replace("Proposed", "Proposed\nAccepted"))))
+        self.assertEqual(gaps("0007-e", ADR.replace("Proposed", "Superseded par [ADR-0001](0001-x.md)")), [])
+        self.assertTrue(any("POS-NNN" in f for f in gaps("0008-f", ADR.replace("POS-001", "x"))))
+        self.assertTrue(any("ALT-NNN" in f for f in gaps("0009-g", ADR.replace("ALT-001", "x"))))
+        self.assertTrue(any("introuvable" in f for f in gaps("0010-h", ADR.replace('superseded_by: ""', "superseded_by: 0099"))))
+
+    def test_required_sections_adr_criteres_depuis_2026_11_11(self) -> None:
+        self.p.write("decisions/0011-i.md", ADR.replace("2026-01-02", "2026-11-11"))
+        r = self.p.fire("required-sections-adr", ["decisions/0011-i.md"])[0]
+        self.assertTrue(any("Critères de décision" in f for f in r.findings))
+        self.p.write("decisions/0012-j.md", ADR.replace("2026-01-02", "2026-11-11").replace("## Décision", "## Critères de décision\n- C1 : must\n## Décision"))
+        self.assertEqual(self.p.verdict("required-sections-adr", ["decisions/0012-j.md"]), OK)
+
     def test_required_sections_out_of_scope_is_unavailable(self) -> None:
         self.p.write("README.md", "x")
-        self.assertEqual(self.p.verdict("required-sections", ["README.md"]), UNAVAILABLE)
-        self.assertEqual(self.p.verdict("required-sections"), UNAVAILABLE)  # périmètre vide
+        self.assertEqual(self.p.verdict("required-sections-adr", ["README.md"]), UNAVAILABLE)
+        self.assertEqual(self.p.verdict("required-sections-architecture", ["README.md"]), UNAVAILABLE)
+        self.assertEqual(self.p.verdict("required-sections-adr"), UNAVAILABLE)  # périmètre vide
 
     def test_required_sections_gate_reports_missing_das_files(self) -> None:
         self.p.write("documentation/01-introduction.md", "## Contexte\nx\n## Périmètre\ny\n## Parties prenantes\nz\n")
-        rs = self.p.fire("required-sections")
+        rs = self.p.fire("required-sections-architecture")
         self.assertEqual(rs[0].verdict, OK)
         self.assertEqual(rs[-1].verdict, GAP)
         self.assertTrue(any("11-securite.md" in f for f in rs[-1].findings))
 
+    def test_required_sections_architecture_covers_detailed_chapter(self) -> None:
+        d = "documentation/architecture-securite/"
+        self.p.write(d + "01-surfaces-et-actifs.md", "## Surfaces d'attaque\nS1\n")
+        rs = self.p.fire("required-sections-architecture")
+        self.assertEqual(rs[0].verdict, OK)
+        self.assertEqual(rs[-1].verdict, GAP)
+        self.assertTrue(any("02-menaces-stride.md" in f for f in rs[-1].findings))
+        self.assertTrue(any("11-securite.md" in f for f in rs[-1].findings))  # DAS et détaillée : un seul sensor
+
     def test_template_only_section_is_empty(self) -> None:
         self.p.write("documentation/01-introduction.md", "## Contexte\n<!-- à remplir -->\n## Périmètre\n| a | b |\n|---|---|\n| <x> | ... |\n## Parties prenantes\nz\n")
-        r = self.p.fire("required-sections", ["documentation/01-introduction.md"])[0]
+        r = self.p.fire("required-sections-architecture", ["documentation/01-introduction.md"])[0]
         self.assertEqual(r.verdict, GAP)
         self.assertEqual(len(r.findings), 2)
 
@@ -240,7 +272,7 @@ class SensorTests(unittest.TestCase):
 
     def test_untraceable_commit_is_unavailable(self) -> None:
         self.p.write("decisions/0001-x.md", ADR)
-        rs = sensor.run_sensor("required-sections", self.p.root, ["decisions/0001-x.md"], sensor.load_manifests(), None)
+        rs = sensor.run_sensor("required-sections-adr", self.p.root, ["decisions/0001-x.md"], sensor.load_manifests(), None)
         self.assertEqual(common.worst(rs), UNAVAILABLE)
 
 
@@ -281,7 +313,17 @@ class GateAndHookTests(unittest.TestCase):
         self.assertEqual(rc, 0)
         self.assertIn("Sensor diagram-validity", out)
         self.assertIn("⚠️", out)
-        self.assertNotIn("required-sections", out)  # fire_on: gate => pas au hook
+        self.assertNotIn("required-sections-architecture", out)  # fire_on: gate => pas au hook
+
+    def test_hook_fires_required_sections_on_adr_write_only(self) -> None:
+        self.p.write("decisions/0001-x.md", ADR.replace("Proposed", "Brouillon"))
+        rc, out = self._hook({"tool_input": {"file_path": str(self.p.root / "decisions/0001-x.md")}})
+        self.assertEqual(rc, 0)
+        self.assertIn("Sensor required-sections-adr", out)  # write_matches : ADR contrôlé à l'écriture
+        self.assertIn("hors", out)
+        self.p.write("documentation/06.md", "## x\n")
+        _, out = self._hook({"tool_input": {"file_path": str(self.p.root / "documentation/06.md")}})
+        self.assertNotIn("required-sections-architecture", out)  # DAS : gate seul
 
     def test_hook_claude_format_and_audit_file(self) -> None:
         self.p.write("documentation/06.md", "# ok\n")

@@ -260,10 +260,13 @@ def cmd_hook(args: argparse.Namespace) -> int:
         wanted = {s.strip() for s in args.sensors.split(",")} if args.sensors else None
         results: list[Result] = []
         for sid, m in manifests.items():
-            if m.fire_on != "write" or (wanted is not None and sid not in wanted):
+            if wanted is not None and sid not in wanted:
                 continue
-            if m.matches and not glob_match(m.matches, rel):
-                continue
+            if m.fire_on == "write":
+                if m.matches and not glob_match(m.matches, rel):
+                    continue
+            elif not (m.write_matches and glob_match(m.write_matches, rel)):
+                continue  # sensor de gate : déclenché à l'écriture seulement sur `write_matches` (optionnel)
             results += run_sensor(sid, root, [rel], manifests, commit)
         # une cible sans diagramme (aucun contenu à vérifier) renvoie ⛔ « périmètre » : bruit à l'écriture
         results = [r for r in results if not (r.verdict == UNAVAILABLE and "aucun diagramme" in r.summary)]

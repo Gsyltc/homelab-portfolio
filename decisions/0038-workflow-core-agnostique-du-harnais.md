@@ -1,13 +1,13 @@
-# Rendre le workflow `core` agnostique du harnais via une couche d'adaptation
-
 ---
-auteurs: Sylvain G.
-accepté par : ""
-accepté le : ""
+auteurs: Sylvain Goubaud
+parties_prenantes: ""
+accepte_par: Sylvain Goubaud
+accepte_le: ""
 supersedes: ""
 superseded_by: ""
-
 ---
+
+# Rendre le workflow `core` agnostique du harnais via une couche d'adaptation
 
 ## Status
 

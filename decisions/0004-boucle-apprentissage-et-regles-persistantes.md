@@ -1,13 +1,13 @@
-# Boucle d'apprentissage et règles persistantes multi-couches
-
 ---
-auteurs: Sylvain G.
-accepté par : Sylvain G.
-accepté le : 2026-09-02
+auteurs: Sylvain Goubaud
+parties_prenantes: ""
+accepte_par: Sylvain Goubaud
+accepte_le: 2026-09-02
 supersedes: ""
 superseded_by: ""
-
 ---
+
+# Boucle d'apprentissage et règles persistantes multi-couches
 
 ## Status
 

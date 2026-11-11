@@ -1,13 +1,13 @@
-# Alignement des scopes Homelab sur le contrat AI-DLC « un fichier par scope »
-
 ---
-auteurs: Mika (agent)
-accepté par : multica.gaston
-accepté le : 2026-09-03
+auteurs: Sylvain Goubaud
+parties_prenantes: ""
+accepte_par: Sylvain Goubaud
+accepte_le: 2026-09-03
 supersedes: ""
 superseded_by: ""
-
 ---
+
+# Alignement des scopes Homelab sur le contrat AI-DLC « un fichier par scope »
 
 ## Status
 

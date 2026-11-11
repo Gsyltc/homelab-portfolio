@@ -1,13 +1,13 @@
-# Sensors Homelab exécutables — scripts Python déterministes, sévérité par scope et hooks d'écriture
-
 ---
-auteurs: Mika (agent)
-accepté par : ""
-accepté le : ""
+auteurs: Sylvain Goubaud
+parties_prenantes: ""
+accepte_par: Sylvain Goubaud
+accepte_le: ""
 supersedes: ""
 superseded_by: ""
-
 ---
+
+# Sensors Homelab exécutables — scripts Python déterministes, sévérité par scope et hooks d'écriture
 
 ## Status
 

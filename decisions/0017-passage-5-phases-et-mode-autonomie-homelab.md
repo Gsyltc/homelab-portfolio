@@ -1,13 +1,13 @@
-# Passage à 5 phases et mode d'autonomie en Production et Contrôle — Homelab
-
 ---
-auteurs: Mika (agent, sur validation humaine granulaire — multica.gaston)
-accepté par : multica.gaston (validation humaine — ALI-205, 2026-09-03)
-accepté le : 2026-09-03
+auteurs: Sylvain Goubaud
+parties_prenantes: ""
+accepte_par: Sylvain Goubaud
+accepte_le: 2026-09-03
 supersedes: ""
 superseded_by: ""
-
 ---
+
+# Passage à 5 phases et mode d'autonomie en Production et Contrôle — Homelab
 
 ## Status
 

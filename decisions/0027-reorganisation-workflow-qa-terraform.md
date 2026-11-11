@@ -1,13 +1,13 @@
-# Réorganisation du workflow : Terraform avant compose + élargissement du rôle QA au Terraform (Analyste QA)
-
 ---
-auteurs: Mika (agent)
-accepté par : multica.gaston
-accepté le : 2026-09-24
+auteurs: Sylvain Goubaud
+parties_prenantes: ""
+accepte_par: Sylvain Goubaud
+accepte_le: 2026-09-24
 supersedes: ""
 superseded_by: ""
-
 ---
+
+# Réorganisation du workflow : Terraform avant compose + élargissement du rôle QA au Terraform (Analyste QA)
 
 ## Status
 

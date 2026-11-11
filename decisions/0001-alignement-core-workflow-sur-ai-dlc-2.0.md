@@ -1,13 +1,13 @@
-# Alignement de core-workflow.md sur AI-DLC 2.0
-
 ---
-auteurs: Sylvain G.
-accepté par : Sylvain G.
-accepté le : 2026-09-02
+auteurs: Sylvain Goubaud
+parties_prenantes: ""
+accepte_par: Sylvain Goubaud
+accepte_le: 2026-09-02
 supersedes: ""
 superseded_by: ""
-
 ---
+
+# Alignement de core-workflow.md sur AI-DLC 2.0
 
 ## Status
 

@@ -1,13 +1,13 @@
-# Message A2A du workflow `homelab` porté par un fichier YAML joint (réduction de prose dans le fil) avec transmission des sensors
-
 ---
 auteurs: Sylvain Goubaud
-accepté par : Sylvain Goubaud
-accepté le : "2026-11-09"
+parties_prenantes: ""
+accepte_par: Sylvain Goubaud
+accepte_le: "2026-11-09"
 supersedes: ""
 superseded_by: ""
-
 ---
+
+# Message A2A du workflow `homelab` porté par un fichier YAML joint (réduction de prose dans le fil) avec transmission des sensors
 
 ## Status
 

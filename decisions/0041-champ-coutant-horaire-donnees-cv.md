@@ -1,13 +1,13 @@
-# Champ `coutant` (coûtant horaire — coût interne) dans les données CV du workflow Matching
-
 ---
-auteurs: Gestionnaire CV (agent)
-accepté par : ""
-accepté le : ""
+auteurs: Sylvain Goubaud
+parties_prenantes: ""
+accepte_par: Sylvain Goubaud
+accepte_le: ""
 supersedes: ""
 superseded_by: ""
-
 ---
+
+# Champ `coutant` (coûtant horaire — coût interne) dans les données CV du workflow Matching
 
 ## Status
 

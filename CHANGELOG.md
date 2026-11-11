@@ -8,6 +8,18 @@ ce fichier en donne la lecture chronologique côté produit.
 
 ## [Non publié]
 
+### Changed
+- **Gabarit ADR aligné sur arc42 §9** (HOM-285). Front matter placé en tête de fichier avec clés
+  normalisées (`accepte_par`, `accepte_le`, `parties_prenantes`) — les 53 ADR existants sont migrés
+  (changement de forme uniquement). Le sensor `required-sections` contrôle désormais le front matter en
+  tête, le statut unique, les puces codées `POS-`/`NEG-`/`ALT-`, la cohérence `supersedes`/`superseded_by`
+  et, pour les ADR créés dès le 2026-11-11, la section `Critères de décision`. Le hook d'écriture
+  déclenche désormais `required-sections` sur chaque écriture d'un ADR (nouvelle clé de manifeste
+  `write_matches` pour les sensors de gate). `auteurs` et `accepte_par` de tous les ADR : Sylvain Goubaud.
+- **Sensor `required-sections` scindé en deux** (HOM-285) : `required-sections-adr` (ADR) et
+  `required-sections-architecture` (DAS et architecture détaillée, chapitre `architecture-securite/`), avec un
+  manifeste et un script chacun. Fiches de stage, gates, protocole de checklist et README des sensors mis à jour.
+
 ### Added
 - **Sensors de clôture du plugin `medical-assistant`** (réf. AUQU-153). Trois checks déterministes,
   lancés à la clôture du chef cuisinier :

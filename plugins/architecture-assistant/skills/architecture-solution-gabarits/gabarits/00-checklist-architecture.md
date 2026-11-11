@@ -57,7 +57,7 @@ Synthèse (une ligne par livrable, % issu du sous-tableau correspondant) :
 
 ### Architecture de solution (DAS) — 0 %
 
-Sections requises : fichiers mandatory du DAS (contrat `required-sections`, volet `das:`).
+Sections requises : fichiers mandatory du DAS (sensor `required-sections-architecture`).
 
 | Section requise (fichier DAS) | Conforme ? |
 | --- | --- |
@@ -90,7 +90,7 @@ Sections requises : sensor `data-lifecycle` + `10-cycle_vie_donnees.md` et modè
 
 ### Architecture de sécurité détaillée — 0 %
 
-Sections requises : sept sections, réparties sur le chapitre `architecture-securite/` et le fichier `11-securite.md` (contrat `required-sections`, volets `das:` et `securite:`).
+Sections requises : sept sections, réparties sur le chapitre `architecture-securite/` et le fichier `11-securite.md` (sensor `required-sections-architecture`).
 
 | Section requise | Document | Conforme ? |
 | --- | --- | --- |

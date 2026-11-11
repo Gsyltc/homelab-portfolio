@@ -1,13 +1,13 @@
-# Message A2A du workflow `core` porté par un fichier YAML joint (réduction de prose dans le fil) avec transmission des sensors
-
 ---
-auteurs: Mika (agent)
-accepté par : ""
-accepté le : ""
+auteurs: Sylvain Goubaud
+parties_prenantes: ""
+accepte_par: Sylvain Goubaud
+accepte_le: ""
 supersedes: ""
 superseded_by: ""
-
 ---
+
+# Message A2A du workflow `core` porté par un fichier YAML joint (réduction de prose dans le fil) avec transmission des sensors
 
 ## Status
 

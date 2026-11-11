@@ -6,7 +6,7 @@ description: >
 skills:
   - architecture-solution-gabarits
   - azure-solution-architect
-  - create-architectural-decision-record
+  - create-architecture-decision-record
   - project-defaults
 disallowedTools: Task
 tier: judgment

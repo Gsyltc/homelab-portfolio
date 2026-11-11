@@ -1,13 +1,13 @@
-# Checklist d'architecture — sections requises par livrable et suivi de l'architecture de sécurité
-
 ---
-auteurs: Mika (agent)
-accepté par : "multica.gaston"
-accepté le : "2026-11-03"
+auteurs: Sylvain Goubaud
+parties_prenantes: ""
+accepte_par: Sylvain Goubaud
+accepte_le: "2026-11-03"
 supersedes: ""
 superseded_by: ""
-
 ---
+
+# Checklist d'architecture — sections requises par livrable et suivi de l'architecture de sécurité
 
 ## Status
 

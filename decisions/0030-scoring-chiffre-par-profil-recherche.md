@@ -1,13 +1,13 @@
-# Score chiffré par profil recherché (option différée)
-
 ---
-auteurs: Mika (agent)
-accepté par : multica.gaston
-accepté le : ""
+auteurs: Sylvain Goubaud
+parties_prenantes: ""
+accepte_par: Sylvain Goubaud
+accepte_le: ""
 supersedes: ""
 superseded_by: "0032-refonte-ponderation-scoring-matching"
-
 ---
+
+# Score chiffré par profil recherché (option différée)
 
 ## Status
 

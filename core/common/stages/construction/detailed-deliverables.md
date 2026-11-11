@@ -15,7 +15,7 @@ human_gate: granular
 produces: [livrables_detailles]
 consumes: [{artifact: walking_skeleton_valide, required: true}, {artifact: mode_execution_choisi, required: true}]
 requires_stage: [walking-skeleton]
-sensors: [checklist-progress, required-sections, upstream-coverage, diagram-validity, claim-sources, style-concision]
+sensors: [checklist-progress, required-sections-adr, required-sections-architecture, upstream-coverage, diagram-validity, claim-sources, style-concision]
 scopes: [standard, feature, infra, security-patch, mvp, enterprise]
 inputs: "Walking skeleton validé + mode d'exécution"
 outputs: "Livrables détaillés (documentation, diagrammes définitifs, coûts AWS / Azure, config infra, ou implémentation OpenSpec)"
@@ -63,7 +63,7 @@ S'arrêter et interroger l'humain sur : échec / impossibilité d'un livrable ; 
 ## Sensors
 
 Outputs: livrables détaillés (une fois par unité).
-Imports: `checklist-progress`, `required-sections`, `upstream-coverage`, `diagram-validity`, `claim-sources`, `style-concision`.
+Imports: `checklist-progress`, `required-sections-adr`, `required-sections-architecture`, `upstream-coverage`, `diagram-validity`, `claim-sources`, `style-concision`.
 Upstream targets: `walking_skeleton_valide` (required), `mode_execution_choisi` (required) — couverture amont vérifiée à l'écriture de chaque livrable.
 Review artifact: chaque `livrable-<unite>.md` porte la section `## Review` ajoutée par le Reviewer de cohérence.
 

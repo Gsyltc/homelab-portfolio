@@ -234,7 +234,7 @@ Cette section documente l'**évaluation de l'architecture de la solution** (conf
 
 ---
 
-<!-- Lier l'évaluation aux **tests non-fonctionnels** (`13-plan-qualite.md`), aux **défauts d'architecture** (`DEF-xxx` du `06`), et aux **ADR** tracés dans la skill `create-architectural-decision-record`. -->
+<!-- Lier l'évaluation aux **tests non-fonctionnels** (`13-plan-qualite.md`), aux **défauts d'architecture** (`DEF-xxx` du `06`), et aux **ADR** tracés dans la skill `create-architecture-decision-record`. -->
 
 ### Satisfaction exigences → composants/vues
 

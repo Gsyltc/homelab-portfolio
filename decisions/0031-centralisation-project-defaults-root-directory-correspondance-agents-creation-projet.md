@@ -1,13 +1,13 @@
-# Centralisation dans `project-defaults` : chemin racine `${ROOT_DIRECTORY}`, table de correspondance des agents et procédure de création de projet
-
 ---
-auteurs: Mika (agent)
-accepté par :
-accepté le :
+auteurs: Sylvain Goubaud
+parties_prenantes: ""
+accepte_par: Sylvain Goubaud
+accepte_le: 
 supersedes: ""
 superseded_by: ""
-
 ---
+
+# Centralisation dans `project-defaults` : chemin racine `${ROOT_DIRECTORY}`, table de correspondance des agents et procédure de création de projet
 
 ## Status
 

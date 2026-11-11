@@ -1,13 +1,13 @@
-# Scopes Homelab et axes Depth / Stratégie de vérification
-
 ---
-auteurs: Mika (agent)
-accepté par : Sylvain G.
-accepté le : 2026-09-03
+auteurs: Sylvain Goubaud
+parties_prenantes: ""
+accepte_par: Sylvain Goubaud
+accepte_le: 2026-09-03
 supersedes: ""
 superseded_by: ""
-
 ---
+
+# Scopes Homelab et axes Depth / Stratégie de vérification
 
 ## Status
 

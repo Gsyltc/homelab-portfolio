@@ -1,13 +1,13 @@
-# Verification gates et Sensors déterministes advisory
-
 ---
-auteurs: Sylvain G.
-accepté par : Sylvain G. (validation humaine — multica.gaston)
-accepté le : 2026-09-02
+auteurs: Sylvain Goubaud
+parties_prenantes: ""
+accepte_par: Sylvain Goubaud
+accepte_le: 2026-09-02
 supersedes: ""
 superseded_by: ""
-
 ---
+
+# Verification gates et Sensors déterministes advisory
 
 ## Status
 

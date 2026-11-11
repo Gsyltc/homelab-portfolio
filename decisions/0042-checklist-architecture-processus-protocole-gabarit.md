@@ -1,13 +1,13 @@
-# Checklist d'architecture comme processus à part — protocole dédié + gabarit d'état (workflow core)
-
 ---
-auteurs: Architecture Solution & Intégration (agent)
-accepté par : ""
-accepté le : ""
+auteurs: Sylvain Goubaud
+parties_prenantes: ""
+accepte_par: Sylvain Goubaud
+accepte_le: ""
 supersedes: ""
 superseded_by: "0043-checklist-architecture-avancement-en-pourcentage-bareme-80-10-10.md"
-
 ---
+
+# Checklist d'architecture comme processus à part — protocole dédié + gabarit d'état (workflow core)
 
 ## Status
 

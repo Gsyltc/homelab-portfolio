@@ -1,13 +1,13 @@
-# Sensors exécutables — scripts Python déterministes, hooks d'écriture et gate agnostiques du harnais
-
 ---
-auteurs: Mika (agent)
-accepté par : ""
-accepté le : ""
+auteurs: Sylvain Goubaud
+parties_prenantes: ""
+accepte_par: Sylvain Goubaud
+accepte_le: ""
 supersedes: ""
 superseded_by: ""
-
 ---
+
+# Sensors exécutables — scripts Python déterministes, hooks d'écriture et gate agnostiques du harnais
 
 ## Status
 

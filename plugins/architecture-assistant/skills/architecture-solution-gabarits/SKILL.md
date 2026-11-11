@@ -115,7 +115,7 @@ documentation/<Software System>#<ancre-de-section>
    - Générés **en code** (PlantUML, Mermaid, Structurizr, BPMN, C4), validés (DSL), indexés dans le `001` (Tab. 7).
    - Embarqués via Structurizr : vue `image` + kroki + référence `embed:` (`![…](embed:<clé>)`). Proscrire l'inclusion directe d'un fichier image/source. Renderer kroki selon le type ; réutiliser le thème projet (`theme/`) s'il existe.
    - **Le modèle C4/Structurizr est la source de vérité du détaillé** : conteneurs et composants modélisés comme éléments de 1er ordre dans `models/`/`views/` ; la DAS le reflète. C'est un travail de modélisation, pas un déplacement de prose.
-10. **ADR.** Chaque décision d'architecture est tracée en ADR (skill `create-architectural-decision-record`) et référencée dans les fichiers concernés.
+10. **ADR.** Chaque décision d'architecture est tracée en ADR (skill `create-architecture-decision-record`) et référencée dans les fichiers concernés.
 11. **Front-matter de ciblage maintenu à jour.** Cohérent avec le contenu ; `sujets` reflète les titres `##`/`###` dans l'ordre, mis à jour dans le même changement qu'un ajout/renommage/suppression ; jamais de secret ; `sensibilite` réelle.
 12. **Aucun secret** (mot de passe, identifiant) dans la documentation.
 13. **Architecture détaillée sous `architecture-detaillee/<software_system>/`**, en quatre sous-répertoires dans cet **ordre non négociable** :
@@ -135,6 +135,6 @@ documentation/<Software System>#<ancre-de-section>
 
 ## Arrimage avec les autres skills
 
-- `create-architectural-decision-record` : chaque décision d'architecture donne un ADR référencé dans les fichiers concernés.
+- `create-architecture-decision-record` : chaque décision d'architecture donne un ADR référencé dans les fichiers concernés.
 - `presentation-targeting` : consomme le front-matter de ciblage (`theme`, `domaine`, `types_presentation`, `sensibilite`, `sujets`) ; garder ce front-matter à jour (règle 11).
 - `09`, `12`, `14` rédigés avec les architectes infrastructure, cloud, sécurité, DevOps ; `13` avec le leader Assurance Qualité.

@@ -21,9 +21,13 @@ Si l'une des entrées requises n'est pas fournie ou ne peut pas être détermin�
 ## Exigences
 
 - Utiliser un langage précis et sans ambiguïté
+- **Une décision = un ADR.** Un ADR porte une seule décision d'architecture ; plusieurs décisions donnent plusieurs ADR liés par des références
+- **Décision architecturalement significative uniquement.** Documenter un ADR seulement si la décision touche la structure, les caractéristiques de qualité, les dépendances ou interfaces (surtout externes) ou les techniques de construction. Sinon, la consigner localement (section du livrable concerné) plutôt que dans `decisions/`
+- **Immutabilité.** Ne jamais modifier le contenu d'un ADR `Accepted`. Pour faire évoluer l'information, l'amender par ajout dans `## Historique des amendements` (date + changement) ; pour changer la décision, créer un nouvel ADR qui remplace l'ancien (`supersedes` / `superseded_by`, statut `Superseded`)
 - Respecter le format ADR standardisé avec front matter
 - Inclure à la fois les conséquences positives et négatives
-- Documenter les alternatives avec la justification de leur rejet
+- Documenter les critères de décision (ID, critère, importance) avant la décision, puis les alternatives avec la justification de leur rejet
+- À partir de trois options, présenter la comparaison sous forme de tableau critères × options (matrice de Pugh : note −1 / 0 / +1 par rapport à une option de référence, multipliée par le poids du critère). Dater toute donnée chiffrée volatile (coût, échéance, volumétrie)
 - Structurer pour l'analyse automatique (machine) et la consultation humaine
 - Utiliser des puces codées (codes de 3-4 lettres + numéros à 3 chiffres) pour les sections à éléments multiples
 - **Jamais de référence au workflow.** L'ADR documente une décision d'architecture **produit**, pas le processus qui l'a produite. Ne jamais mentionner, dans aucune section ni le front matter, un élément du workflow qui a généré l'ADR : noms ou rôles d'agents (Architecte de solution, Reviewer de sécurité, OpenSpec Expert, coordinateur…), stages ou phases (ideation, inception, construction, cadrage, découpage…), sensors, gates, scopes, protocoles, statuts d'issue Multica (`in_progress`, `ADR Proposée`, `cancelled`…), branches git du workflow, ou tout autre artefact de pilotage. L'ADR se lit seule, par un lecteur qui ignore tout du workflow. Seul le champ `## Status` de l'ADR (valeur en anglais) décrit l'état de la décision — il ne fait pas référence au workflow.
@@ -41,6 +45,8 @@ Si l'une des entrées requises n'est pas fournie ou ne peut pas être détermin�
 - **Pas d'issues en référence.** Ne jamais ajouter d'issues (tickets) dans la section Références
 - **Liens markdown.** Toute référence à d'autres ADR ou à la documentation du projet doit utiliser le format de lien markdown `[texte](chemin)`
 - **URL pour les liens externes.** Toute référence à un lien externe (internet) doit inclure l'URL complète, au format `[texte](https://...)`
+- **Parties prenantes.** Renseigner `parties_prenantes` dans le front matter avec les rôles ou noms de l'entrée `Stakeholders` (vide si non fournie)
+- **Clés de front matter normalisées.** Le front matter est en **tout début de fichier**, avant le titre H1, avec des clés sans accent ni espace : `auteurs`, `parties_prenantes`, `accepte_par`, `accepte_le`, `supersedes`, `superseded_by`
 - Par défaut, le nom du client et la date d'acceptation doivent restée vide. Si une instruction indique que le client a accepté l'ADR, renseigne le nom du client et la date de l'acceptation.
 
 L'ADR doit être enregistré dans le répertoire des adrs du projet `decisions/` en respectant la convention de nommage : `NNNN-titre.md`, où NNNN est le numéro séquentiel à 4 chiffres (en partant de 0001) suivi du slug du titre (par ex. `0001-database-selection.md`).
@@ -50,16 +56,16 @@ L'ADR doit être enregistré dans le répertoire des adrs du projet `decisions/`
 Le fichier de documentation doit suivre le modèle ci-dessous, en veillant à ce que toutes les sections soient correctement renseignées. Le front matter du markdown doit être structuré correctement comme dans l'exemple suivant :
 
 ```md
+---
+auteurs: [Par défaut l'architecte de solution (humain) du projet — déduit du README `## Équipe` puis, à défaut, de l'arrimage RACI « Nom » du `001` ; sinon noms fournis par l'humain]
+parties_prenantes: [Rôles ou noms des parties prenantes concernées par la décision]
+accepte_par: [Nom du client ayant accepté l'ADR]
+accepte_le: [Date de l'acceptation par le client]
+supersedes: ""
+superseded_by: ""
+---
+
 # [Titre de la décision]
-
----
-auteurs: [Par défaut l'architecte de solution (humain) du projet — déduit du README `## Équipe` puis, à défaut, de l'arrimage RACI « Nom » du `001` ; sinon noms fournis par l'humain]  
-accepté par : [Nom du client ayant accepté l'ADR]  
-accepté le : [Date de l'acceptation par le client]  
-supersedes: ""  
-superseded_by: ""  
-
----
 
 ## Status
 
@@ -71,7 +77,22 @@ YYYY-MM-DD
 
 ## Contexte
 
-[Énoncé du problème, contraintes techniques, exigences métier et facteurs environnementaux qui motivent cette décision.]
+<!-- Une force par puce, une phrase. Nommer la tension quand deux forces s'opposent. -->
+
+- **Problème** : [situation à résoudre, en une phrase]
+- **Technique** : [contraintes, dépendances, état existant]
+- **Métier** : [exigences, échéances, budget]
+- **Organisation / humain** : [compétences, politique interne, gouvernance]
+- **Tension** : [ex. « délai court » ⇄ « robustesse attendue »]
+
+## Critères de décision
+
+<!-- Critères ayant servi à choisir, avec leur importance (must / should / nice-to-have ou poids numérique). -->
+
+| ID | Critère | Importance |
+| --- | --- | --- |
+| CRI-001 | [Critère] | [must / should / nice-to-have] |
+| CRI-002 | [Critère] | [must / should / nice-to-have] |
 
 ## Décision
 
@@ -109,11 +130,22 @@ YYYY-MM-DD
 
 **Raison du rejet** : [Pourquoi cette option n'a pas été retenue]
 
+<!-- Dès trois options : matrice de Pugh (note −1/0/+1 vs option de référence × poids). Supprimer ce bloc sinon. -->
+
+| Critère | Poids | Référence | ALT-001 | ALT-002 |
+| --- | --- | --- | --- | --- |
+| CRI-001 | [poids] | 0 | [note × poids] | [note × poids] |
+| **Total** | | **0** | **[somme]** | **[somme]** |
+
 ## Notes d'implémentation
 
 - **IMP-001** : [Considérations clés d'implémentation]
 - **IMP-002** : [Stratégie de migration ou de déploiement, le cas échéant]
 - **IMP-003** : [Critères de suivi et de réussite]
+
+## Historique des amendements
+
+<!-- Optionnel. Ajouter, sans jamais réécrire l'existant : `YYYY-MM-DD` — [information ajoutée]. -->
 
 ## Références
 
@@ -121,3 +153,7 @@ YYYY-MM-DD
 - **REF-002** : [Documentation externe] au format lien markdown avec l'URL complète, par ex. `[Documentation PostgreSQL](https://www.postgresql.org/docs/)`
 - **REF-003** : [Norme ou cadre de référence] au format lien markdown avec l'URL complète, par ex. `[ADR Template de Michael Nygard](https://github.com/joelparkerhenderson/architecture-decision-record)`
 ```
+
+## Validation
+
+Le sensor `required-sections-adr` (manifeste [`core/sensors/sensors/required-sections-adr.md`](../../../../core/sensors/sensors/required-sections-adr.md)) contrôle la forme des ADR : front matter en tête et clés normalisées, statut unique parmi les valeurs autorisées, sections obligatoires non vides, puces codées `POS-` / `NEG-` / `ALT-`, `Critères de décision` pour les ADR créés à partir du 2026-11-11, cohérence `supersedes` / `superseded_by`. Il est advisory. Le hook d'écriture du workflow `core` le déclenche à chaque création ou modification d'un ADR de `decisions/` (`write_matches`), en plus du lancement explicite au gate : corriger les écarts signalés avant livraison.
