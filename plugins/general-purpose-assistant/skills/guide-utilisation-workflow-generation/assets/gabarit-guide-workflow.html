@@ -49,7 +49,9 @@
   li{margin:1.5pt 0;}
   b,strong{color:var(--ink);}
   .lead{color:var(--muted);}
-  .section{break-inside:avoid;}
+  h2,h3{break-after:avoid;}
+  table tr{break-inside:avoid;}
+  .grid2{break-inside:avoid;}
 
   .cover{
     height:297mm; color:#fff; position:relative; padding:34mm 22mm 0;
@@ -133,7 +135,7 @@
 
   <div class="foot">
     <span>Architecture de solution &amp; intégration</span>
-    <span>Document de présentation — v1.0</span>
+    <span>Document de présentation — v1.6</span>
   </div>
 </section>
 
@@ -147,7 +149,7 @@
   <div class="grid2">
     <div class="card brand">
       <h3>Le contexte</h3>
-      <p>Les projets d'architecture mêlent des expertises variées (solution, cloud, données, sécurité)
+      <p>Les projets d'architecture mêlent des expertises variées (solution, cloud AWS et Azure, données, sécurité)
       et exigent des décisions tracées et vérifiables. Le workflow Core apporte un cadre commun :
       une suite d'étapes claires, des rôles bien définis et une gouvernance qui garde l'humain
       aux commandes.</p>
@@ -156,7 +158,7 @@
       <h3>Les objectifs</h3>
       <ul>
         <li><b>Adapter l'effort au besoin</b> — léger pour le simple, complet pour le complexe.</li>
-        <li><b>Garantir la traçabilité</b> — chaque décision est consignée et justifiée.</li>
+        <li><b>Garantir la traçabilité</b> — chaque décision est consignée et justifiée, chaque besoin d'affaires est suivi jusqu'au livrable.</li>
         <li><b>Sécuriser par défaut</b> — un contrôle sécurité à chaque modification.</li>
         <li><b>Garder l'humain décideur</b> — rien n'avance sans sa validation.</li>
         <li><b>Apprendre dans le temps</b> — les corrections deviennent des règles durables.</li>
@@ -201,7 +203,7 @@
       <text x="375" y="90" font-size="8" fill="#cf8a3a" text-anchor="middle">validation granulaire</text>
       <rect x="456" y="40" width="138" height="54" rx="7" fill="#f3e9d8" stroke="#1f4a46"/>
       <text x="525" y="60" font-size="12" font-weight="700" fill="#1f4a46" text-anchor="middle">3 · Construction</text>
-      <text x="525" y="78" font-size="9.5" fill="#7a6a56" text-anchor="middle">Production</text>
+      <text x="525" y="78" font-size="9.5" fill="#7a6a56" text-anchor="middle">Production + mise à dispo</text>
       <text x="525" y="90" font-size="8" fill="#cf8a3a" text-anchor="middle">validation granulaire</text>
       <rect x="606" y="40" width="148" height="54" rx="7" fill="#f3e9d8" stroke="#1f4a46"/>
       <text x="680" y="60" font-size="12" font-weight="700" fill="#1f4a46" text-anchor="middle">4 · Operation</text>
@@ -221,12 +223,16 @@
 
   <table>
     <tr><th style="width:20%">Phase</th><th style="width:50%">Ce qui s'y passe</th><th style="width:30%">Contrôle humain</th></tr>
-    <tr><td><b>0 · Initialization</b></td><td>Vérifications de départ : répertoire du projet, contexte Git, projet neuf ou existant, ouverture de la piste d'audit.</td><td>Automatique<br><span class="fn">aucun gate</span></td></tr>
+    <tr><td><b>0 · Initialization</b></td><td>Vérifications de départ : répertoire du projet, contexte Git (branche dédiée à l'issue si projet Git), projet neuf ou existant, ouverture de la piste d'audit.</td><td>Automatique<br><span class="fn">aucun gate</span></td></tr>
     <tr><td><b>1 · Ideation</b></td><td>Capture de l'intention, contraintes et faisabilité, définition du périmètre, maquettes éventuelles.</td><td>Approbation de l'intention et du périmètre <span class="pill">léger</span></td></tr>
-    <tr><td><b>2 · Inception</b></td><td>Cadrage, analyse des besoins, découpage en livrables, conception et décisions structurantes.</td><td>Validation <span class="pill">choix par choix</span></td></tr>
-    <tr><td><b>3 · Construction</b></td><td>Première tranche de bout en bout (« walking skeleton »), puis production détaillée des livrables.</td><td>Validation <span class="pill">choix par choix</span></td></tr>
-    <tr><td><b>4 · Operation</b></td><td>Mise à disposition sous validation, notification de fin, maintenance et support.</td><td>Validation <span class="pill g">explicite</span> + rollback</td></tr>
+    <tr><td><b>2 · Inception</b></td><td>Cadrage, analyse des besoins (classés MoSCoW et identifiés BA-…), découpage en livrables, conception et décisions structurantes (ADR d'abord sur impact structurant).</td><td>Validation <span class="pill">choix par choix</span></td></tr>
+    <tr><td><b>3 · Construction</b></td><td>Walking skeleton, production détaillée, contrôle cohérence + sécurité, consolidation, puis mise à disposition (commit + PR ou archivage).</td><td>Validation <span class="pill">choix par choix</span></td></tr>
+    <tr><td><b>4 · Operation</b></td><td>Déploiement sous validation, notification de fin, maintenance et support.</td><td>Validation <span class="pill g">explicite</span> + rollback</td></tr>
   </table>
+  <p>La phase <b>Construction</b> se décompose en cinq étapes : walking skeleton (première tranche de bout en
+  bout), production détaillée des livrables, <b>contrôle cohérence + sécurité</b> (revue de cohérence puis revue
+  de sécurité adversariale), consolidation, et enfin <b>mise à disposition</b> — par commit + Pull Request ou par
+  archivage, suivie d'une notification de fin de réalisation.</p>
 </section>
 
 <section class="section">
@@ -310,6 +316,7 @@
       <p class="legend">Un niveau lié à la sécurité ne peut <b>jamais</b> être abaissé sans validation humaine tracée.</p>
     </div>
   </div>
+  <p class="legend">Détail de chaque scope : annexe (section 10).</p>
 
   <h3>3.4 — La mémoire de règles (apprentissage)</h3>
   <p>Le workflow <b>apprend des corrections humaines</b> : quand une personne corrige ou rejette un
@@ -363,6 +370,7 @@
       <ul style="margin:0">
         <li>Validation humaine granulaire</li>
         <li>Décision structurante tracée (registre de décisions)</li>
+        <li>ADR obligatoire sur impact structurant (ADR d'abord)</li>
         <li>Piste d'audit tenue sur l'issue</li>
         <li>Contrôle sécurité systématique (OWASP / STRIDE)</li>
         <li>Aucune action à impact sans validation ; rollback avant action destructive</li>
@@ -373,11 +381,89 @@
       <h3 style="margin-top:0">Gates &amp; sensors (advisory)</h3>
       <p>Des contrôles automatiques factualisent la <b>traçabilité</b> (sections obligatoires,
       cycle de vie des données, couverture de la demande, validité des diagrammes, sources des
-      affirmations, chaîne exigence → décision → livrable).</p>
+      affirmations, chaîne besoin d'affaires (MoSCoW) → exigence → décision → livrable).</p>
       <p class="legend">Ils <b>ne bloquent jamais</b> et <b>ne remplacent ni</b> la validation humaine
       <b>ni</b> le contrôle sécurité : ils assistent la décision, qui reste humaine.</p>
     </div>
   </div>
+
+  <h3>3.6 — Le format de retour d'un agent</h3>
+  <div class="grid2">
+    <div class="card brand">
+      <p>Tout retour d'un agent sur l'issue (compte rendu, retour A2A) adopte une <b>prose réduite</b>
+      — phrases courtes, une idée par puce, aucun remplissage — et une structure en <b>trois sections</b> :</p>
+      <ul style="margin:0">
+        <li><b>Résumé</b> — synthèse des tâches effectuées, en puces (toujours présent).</li>
+        <li><b>Points bloquants</b> — uniquement s'il en existe.</li>
+        <li><b>Action humaine requise</b> — uniquement si l'humain doit intervenir ; comporte alors la liste des fichiers modifiés et une mention humaine active.</li>
+      </ul>
+    </div>
+    <div class="card gold">
+      <p>La section « Action humaine requise » n'apparaît <b>jamais</b> sur un simple retour entre agents
+      (A2A) : rendre la main à un agent n'est pas une action humaine.</p>
+      <p class="legend">La concision ne relâche aucune règle de gating ; elle met l'arbitrage en forme, sans s'y substituer.</p>
+    </div>
+  </div>
+
+  <!-- 3.7 — Chargement paresseux. Source : core/common/conductor.md § « Chargement optimisé (lazy loading) »,
+       core/common/protocols/stage-definition.md, core/scopes/README.md, core/sensors/README.md, core/rules/README.md,
+       skills architecture-solution-gabarits / presentation-targeting (front-matter de ciblage). -->
+  <h3>3.7 — Le chargement paresseux (lazy loading)</h3>
+  <p>Un agent dispose d'une fenêtre de lecture limitée. Plutôt que de tout charger d'emblée, le workflow
+  applique le <b>chargement paresseux</b> : on ne lit au départ que de <b>légers inventaires</b>
+  (titres, index, descriptions), et le contenu complet d'un document n'est ouvert que <b>lorsque
+  l'étape qui en a besoin est déclenchée</b>. Cela préserve la fenêtre de contexte, accélère le
+  démarrage et évite de polluer l'analyse avec des informations hors sujet.</p>
+  <div class="grid2">
+    <div class="card brand">
+      <h3 style="margin-top:0">Au démarrage (léger uniquement)</h3>
+      <ul style="margin:0">
+        <li>liste des livrables du projet ;</li>
+        <li>agents disponibles et leur <b>description</b> (pas leurs instructions) ;</li>
+        <li>compétences et leurs descriptions ;</li>
+        <li>index des titres du registre de décisions ;</li>
+        <li>sommaire de la documentation d'architecture.</li>
+      </ul>
+    </div>
+    <div class="card gold">
+      <h3 style="margin-top:0">À la demande (au déclenchement)</h3>
+      <ul style="margin:0">
+        <li>contenu complet d'un agent, d'une compétence, d'une méthodologie ou d'un gabarit ;</li>
+        <li>corps d'un document de décision ou d'une spécification ;</li>
+        <li><b>fiche de stage et protocole</b> de l'étape en cours ;</li>
+        <li>règles de la phase et du scope confirmé.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Le rôle des front matter</h3>
+  <p>Ce qui rend la lecture légère possible, c'est le <b>front matter</b> : un court bloc d'en-tête
+  (au format YAML, encadré par deux lignes <code>---</code>) placé en tête de chaque fichier du workflow.
+  Il <b>décrit le fichier sans en livrer le contenu</b> — son nom, sa description, ses mots-clés, ses
+  liens. Le workflow lit d'abord ces en-têtes pour savoir <b>quoi</b> ouvrir, puis n'ouvre le
+  <b>corps</b> que lorsque l'étape le demande.</p>
+  <table>
+    <tr><th style="width:19%">Fichier</th><th style="width:37%">Ce que son front matter expose</th><th>Ce qui est lu d'abord, puis à la demande</th></tr>
+    <tr><td><b>Agent</b></td><td>nom, libellé, <b>description</b>, compétences assignées</td><td>Seule la <b>description</b> est lue au démarrage (sous Multica, le champ « description » de l'agent) ; ses <b>instructions</b> détaillées ne sont pas chargées par le coordinateur.</td></tr>
+    <tr><td><b>Compétence (skill)</b></td><td>nom, <b>description</b> (quand l'utiliser)</td><td>Le nom et la description servent d'inventaire ; le contenu de la compétence et ses références ne sont ouverts que par l'agent qui l'applique.</td></tr>
+    <tr><td><b>Workflow — fiche de stage</b></td><td>phase, condition d'exécution, agents, gate humain, scopes, sensors, entrées / sorties</td><td>L'en-tête sert à <b>enchaîner les étapes</b> ; le corps (déroulé de l'étape) n'est lu que par l'agent qui exécute l'étape, sur indication de la délégation.</td></tr>
+    <tr><td><b>Workflow — scope</b></td><td>nom, Depth, Vérification, <b>mots-clés</b>, description</td><td>Les mots-clés alimentent l'<b>auto-détection</b> du scope ; ses règles propres ne sont chargées qu'une fois le scope confirmé.</td></tr>
+    <tr><td><b>Workflow — sensor</b></td><td>identifiant, commande, moment de déclenchement, fichiers visés</td><td>L'en-tête dit <b>quand et sur quoi</b> lancer le contrôle ; le contrat de vérification n'est exécuté qu'à ce moment-là.</td></tr>
+    <tr><td><b>Documentation d'architecture</b></td><td>thème, domaine, <b>sujets</b> (titres de sections), types de présentation, sensibilité</td><td>On repère <b>la bonne section</b> sans lire le document ; seul le passage utile est ouvert.</td></tr>
+    <tr><td><b>Décision (ADR)</b></td><td>auteurs, acceptation, remplacements (<i>supersedes</i>)</td><td>Le registre est parcouru par ses titres ; l'en-tête est vérifié par les contrôles automatiques ; le corps de la décision n'est lu que lorsqu'elle est utile.</td></tr>
+  </table>
+  <p class="legend">Un front matter tenu à jour est donc une condition du chargement paresseux : par exemple, la
+  liste des <code>sujets</code> d'un document d'architecture est mise à jour à chaque ajout ou renommage de section.</p>
+
+  <table>
+    <tr><th style="width:34%">Règle complémentaire</th><th>Comment elle s'applique</th></tr>
+    <tr><td><b>Fiches de stage &amp; protocoles</b></td><td>Chaque délégation indique au délégataire la ou les fiches à charger pour sa mission : il ne lit jamais l'ensemble.</td></tr>
+    <tr><td><b>Règles de phase et de scope</b></td><td>Ouvertes uniquement quand la phase est déclenchée ou le scope confirmé ; une règle non applicable est marquée <b>N/A</b> et n'est pas chargée.</td></tr>
+    <tr><td><b>Normes de sécurité spécifiques</b></td><td>PCI DSS, GDPR, Loi 25, LPRPDE : chargées seulement si explicitement demandées ; par défaut, OWASP et STRIDE.</td></tr>
+  </table>
+  <div class="callout"><b>Traçabilité.</b> Ce qui a été chargé est consigné sur l'issue (piste d'audit) : on sait à tout moment sur
+  quelles informations repose une décision. Le chargement paresseux ne supprime aucun contrôle — il décide seulement
+  <i>quand</i> lire, jamais <i>s'il faut</i> respecter une règle.</div>
 </section>
 
 <section class="section">
@@ -391,18 +477,20 @@
     <tr><td><b>Architecture Solution &amp; Intégration</b><br><span class="fn">coordinateur</span></td><td>Orchestre le workflow : analyse la demande, délègue, sollicite les contrôles, demande les validations humaines, met les livrables à disposition.</td></tr>
     <tr><td><b>Architecte de solution</b></td><td>Conçoit les solutions : documentation d'architecture, décisions structurantes, diagrammes.</td></tr>
     <tr><td><b>Architecte AWS</b></td><td>Définit les services cloud AWS requis, produit les diagrammes et optimise les coûts.</td></tr>
-    <tr><td><b>Architecte Azure</b></td><td>Porte toutes les fonctions cloud Azure : services, diagrammes, coûts, et livrables d'infrastructure de déploiement Azure (IaC, plans de déploiement / rollback).</td></tr>
+    <tr><td><b>Architecte Azure</b></td><td>Porte toutes les fonctions cloud Microsoft Azure : services, diagrammes, coûts (CAPEX / OPEX), et livrables d'infrastructure de déploiement Azure (IaC Bicep / ARM / Terraform, plans de déploiement et de rollback).</td></tr>
     <tr><td><b>Architecte Cybersécurité</b></td><td>Conçoit et renforce la sécurité (OWASP, STRIDE, normes sur demande).</td></tr>
     <tr><td><b>Architecte de données</b></td><td>Modélise les données, le cycle de vie, la gouvernance et la classification.</td></tr>
     <tr><td><b>OpenSpec Expert</b></td><td>Pilote la méthode spec-driven lorsqu'elle est activée.</td></tr>
-    <tr><td><b>Reviewer de cohérence</b></td><td>Vérifie la cohérence documentation ↔ décisions (revue seule, aucun livrable).</td></tr>
-    <tr><td><b>Reviewer de sécurité</b></td><td>Rend le verdict de revue sécurité — obligatoire dès qu'une surface de sécurité évolue.</td></tr>
+    <tr><td><b>Reviewer de cohérence</b></td><td>Vérifie la cohérence documentation ↔ décisions et la longueur de prose des livrables (revue seule, aucun livrable).</td></tr>
+    <tr><td><b>Reviewer de sécurité</b></td><td>Rend le verdict de revue sécurité (adversariale) — obligatoire dès qu'une surface de sécurité évolue.</td></tr>
     <tr><td><b>Infrastructure Windows</b></td><td>Administration des postes et de l'infrastructure Windows (migrations, Intune, VM, golden image, Autopilot, SCCM). Périmètre strictement Windows ; le cloud Azure relève de l'Architecte Azure.</td></tr>
     <tr><td><b>Vente &amp; Appels d'Offres</b></td><td>Synthétise les architectures en supports de vente et réponses d'appels d'offres.</td></tr>
     <tr><td><b>Présentation client</b></td><td>Produit des présentations ciblées à partir des documents validés.</td></tr>
-    <tr><td><b>Experte d'archivage</b></td><td>Import / export de documents, mise à disposition et archivage des livrables validés.</td></tr>
-    <tr><td><b>Agent de notifications</b></td><td>Notifie la fin des tâches, sur demande du coordinateur.</td></tr>
+    <tr><td><b>Experte d'archivage</b></td><td>Import / export de documents, mise à disposition et archivage des livrables validés, et mise à disposition par Git (commit + Pull Request) sur demande.</td></tr>
+    <tr><td><b>Agent de notifications</b></td><td>Notifie la fin de réalisation et de déploiement, sur demande du coordinateur.</td></tr>
   </table>
+  <p class="legend">Quatorze agents au total. La correspondance nom ↔ fonction fait autorité dans la compétence
+  <b>project-defaults</b> (source unique) ; chaque agent est porté par sa définition propre.</p>
 
   <h3>Les compétences (« skills ») partagées</h3>
   <div class="grid2">
@@ -410,11 +498,16 @@
       <ul style="margin:0">
         <li><b>project-defaults</b> — structure de projet, conventions de nommage et correspondance des agents (source unique).</li>
         <li><b>architecture-solution-gabarits</b> — modèles standardisés des documents d'architecture.</li>
+        <li><b>architecture-securite-gabarits</b> — gabarits de documentation sécurité (00 → 06) et revue de sécurité SG-3.</li>
+        <li><b>create-architecture-decision-record</b> — format normalisé des décisions structurantes (ADR).</li>
       </ul>
     </div>
     <div class="card brand">
       <ul style="margin:0">
-        <li><b>create-architecture-decision-record</b> — format normalisé des décisions structurantes (ADR).</li>
+        <li><b>aws-solution-architect</b> — patrons et gabarits d'architecture AWS.</li>
+        <li><b>azure-solution-architect</b> — patrons serverless et gabarits IaC Azure (Bicep / ARM / Terraform azurerm).</li>
+        <li><b>git-delivery</b> — mise à disposition par Git : commit des fichiers et ouverture d'une Pull Request vers la branche cible.</li>
+        <li><b>openspec-proposal-creation</b> — propositions OpenSpec et matrice de traçabilité MoSCoW (section 9).</li>
         <li><b>cdae-ai-eligibilite</b> — analyse d'éligibilité au crédit d'impôt CDAE-IA (sur demande).</li>
       </ul>
     </div>
@@ -428,7 +521,8 @@
   <p>« A2A » désigne la collaboration <b>d'agent à agent</b>. Dans le workflow, elle repose sur un
   principe simple : <b>tout passe par l'issue</b> (le fil du projet). Le coordinateur délègue en
   publiant un commentaire qui <b>mentionne</b> l'agent voulu et lui confie une <b>mission cadrée</b>
-  (objectif, périmètre, critères d'acceptation). L'agent produit, puis rend la main pour contrôle.</p>
+  (objectif, périmètre, critères d'acceptation). L'agent produit, puis <b>rend la main par une mention active</b>
+  vers l'assigneur pour contrôle — c'est l'agent délégataire qui ferme la boucle A2A.</p>
 
   <figure>
   <div class="fig-wrap">
@@ -445,30 +539,31 @@
     <line x1="380" y1="38" x2="380" y2="60" stroke="#cf8a3a" stroke-width="2" marker-end="url(#a4g)"/>
     <line x1="400" y1="60" x2="400" y2="40" stroke="#cf8a3a" stroke-width="1.4" stroke-dasharray="3,3" marker-end="url(#a4g)"/>
     <text x="470" y="52" font-size="7.4" fill="#a89782" text-anchor="middle">demande ⇄ validation</text>
-    <g font-size="8" text-anchor="middle">
-      <rect x="20"  y="150" width="130" height="34" rx="6" fill="#f3e9d8" stroke="#5c8475"/><text x="85"  y="167" fill="#1f4a46" font-weight="700">Architecte solution</text><text x="85" y="178" fill="#7a6a56" font-size="7">+ données (délégué)</text>
-      <rect x="162" y="150" width="120" height="34" rx="6" fill="#f3e9d8" stroke="#5c8475"/><text x="222" y="171" fill="#1f4a46" font-weight="700">Architecte AWS</text>
-      <rect x="294" y="150" width="130" height="34" rx="6" fill="#f3e9d8" stroke="#5c8475"/><text x="359" y="167" fill="#1f4a46" font-weight="700">Architecte</text><text x="359" y="178" fill="#1f4a46" font-weight="700" font-size="7.6">cybersécurité</text>
-      <rect x="436" y="150" width="130" height="34" rx="6" fill="#f3e9d8" stroke="#5c8475"/><text x="501" y="167" fill="#1f4a46" font-weight="700">Reviewers</text><text x="501" y="178" fill="#7a6a56" font-size="7">cohérence · sécurité</text>
-      <rect x="578" y="150" width="162" height="34" rx="6" fill="#f3e9d8" stroke="#5c8475"/><text x="659" y="167" fill="#1f4a46" font-weight="700">Archivage · Notifications</text><text x="659" y="178" fill="#7a6a56" font-size="7">mise à dispo · ntfy</text>
+    <g font-size="7.8" text-anchor="middle">
+      <rect x="8"   y="150" width="112" height="34" rx="6" fill="#f3e9d8" stroke="#5c8475"/><text x="64"  y="165" fill="#1f4a46" font-weight="700">Architecte</text><text x="64"  y="177" fill="#7a6a56" font-size="6.8">de solution</text>
+      <rect x="132" y="150" width="112" height="34" rx="6" fill="#f3e9d8" stroke="#5c8475"/><text x="188" y="165" fill="#1f4a46" font-weight="700">Architecte</text><text x="188" y="177" fill="#7a6a56" font-size="6.8">de données</text>
+      <rect x="256" y="150" width="112" height="34" rx="6" fill="#f3e9d8" stroke="#5c8475"/><text x="312" y="165" fill="#1f4a46" font-weight="700">Archi. Infra</text><text x="312" y="177" fill="#7a6a56" font-size="6.8">AWS · Azure · Microsoft</text>
+      <rect x="380" y="150" width="112" height="34" rx="6" fill="#f3e9d8" stroke="#5c8475"/><text x="436" y="165" fill="#1f4a46" font-weight="700">Architecte</text><text x="436" y="177" fill="#7a6a56" font-size="6.8">cybersécurité</text>
+      <rect x="504" y="150" width="112" height="34" rx="6" fill="#f3e9d8" stroke="#5c8475"/><text x="560" y="165" fill="#1f4a46" font-weight="700">Reviewers</text><text x="560" y="177" fill="#7a6a56" font-size="6.8">cohérence · sécurité</text>
+      <rect x="628" y="150" width="126" height="34" rx="6" fill="#f3e9d8" stroke="#5c8475"/><text x="691" y="165" fill="#1f4a46" font-weight="700">Archivage · Notif.</text><text x="691" y="177" fill="#7a6a56" font-size="6.8">commit+PR/archive · ntfy</text>
     </g>
-    <g stroke="#5c8475" stroke-width="1.5" marker-end="url(#a4)" fill="none">
-      <path d="M352,128 C250,140 150,142 95,150"/>
-      <path d="M366,135 C320,146 260,148 230,150"/>
-      <path d="M380,140 L368,150"/>
-      <path d="M396,135 C440,146 480,148 500,150"/>
-      <path d="M408,128 C520,140 600,142 650,150"/>
+    <g stroke="#5c8475" stroke-width="1.4" marker-end="url(#a4)" fill="none">
+      <path d="M350,126 C240,138 120,140 64,150"/>
+      <path d="M358,132 C300,144 220,146 188,150"/>
+      <path d="M368,138 C350,146 325,148 312,150"/>
+      <path d="M392,138 C410,146 428,148 436,150"/>
+      <path d="M402,132 C470,144 540,146 560,150"/>
+      <path d="M410,126 C520,138 640,140 691,150"/>
     </g>
-    <text x="150" y="128" font-size="7.4" fill="#5c8475">délégation : mention + mission cadrée</text>
-    <text x="612" y="128" font-size="7.4" fill="#5c8475" text-anchor="end">retour : livrable + mention de l'assigneur</text>
+    <text x="100" y="130" font-size="7.4" fill="#5c8475">délégation : mention + mission cadrée</text>
+    <text x="700" y="130" font-size="7.4" fill="#5c8475" text-anchor="end">retour : livrable + mention active de l'assigneur</text>
   </svg>
   </div>
   <figcaption>Figure 4 — Le coordinateur délègue en « étoile » (hub-and-spoke) ; chaque livraison revient pour contrôle avant validation humaine.</figcaption>
   </figure>
 
   <!-- 5.1 — États & interactions (section OBLIGATOIRE de la trame — voir SKILL.md).
-       Adapter les couloirs aux acteurs du workflow visé : Humain · coordinateur · acteurs qui CONSTRUISENT
-       (un couloir chacun) · acteur qui VÉRIFIE (QA) · acteur de NOTIFICATION.
+       Couloirs : Humain · coordinateur · acteurs qui CONSTRUISENT · acteurs qui VÉRIFIENT · ARCHIVAGE · NOTIFICATION.
        Conventions couleur : A2A = vert (#5c8475), Agent ↔ Humain = ocre (#cf8a3a),
        boucle de retour = terracotta pointillé (#b07a4f), gate = losange ◆.
        Flèches STRICTEMENT HORIZONTALES reliant deux lignes de vie ; colonne « état de l'issue » à droite. -->
@@ -478,72 +573,83 @@
   relie deux acteurs — en <span style="color:#5c8475"><b>vert</b></span> l'<b>A2A</b> (entre agents), en
   <span style="color:#cf8a3a"><b>ocre</b></span> l'<b>Agent ↔ Humain</b> — chaque <b>losange</b> est un gate, et la
   colonne de droite donne l'<b>état de l'issue</b>. Les acteurs qui <b>construisent</b> et celui qui <b>vérifie</b>
-  ont chacun leur couloir, et la <b>notification</b> finale est explicite.</p>
+  ont chacun leur couloir, et la <b>mise à disposition</b> puis la <b>notification</b> finale sont explicites.</p>
 
   <figure>
   <div class="fig-wrap">
-  <svg viewBox="0 0 760 400" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans, DejaVu Sans, sans-serif">
+  <svg viewBox="0 0 760 422" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans, DejaVu Sans, sans-serif">
     <defs>
       <marker id="t5" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c8475"/></marker>
       <marker id="t5h" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#cf8a3a"/></marker>
       <marker id="t5r" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#b07a4f"/></marker>
     </defs>
-    <!-- Lignes de vie x : Humain=80 Coordinateur=235 Constructeur·A=385 Constructeur·B=500 Reviewer/QA=610 Notifs=710 -->
+    <!-- Lignes de vie x : Humain=70 Coordinateur=200 Spécialistes=330 Reviewers=450 Archivage=560 Notifications=650 -->
     <g text-anchor="middle" font-weight="700" font-size="8">
-      <rect x="36"  y="6" width="88"  height="30" rx="6" fill="#cf8a3a"/><text x="80"  y="19" fill="#2b2219">Humain</text><text x="80" y="30" fill="#3a3417" font-size="6.6" font-weight="400">décideur</text>
-      <rect x="189" y="6" width="92"  height="30" rx="6" fill="#1f4a46"/><text x="235" y="19" fill="#fff">Coordinateur</text><text x="235" y="30" fill="#e8dcc2" font-size="6.6" font-weight="400">orchestre + contrôle</text>
-      <rect x="339" y="6" width="92"  height="30" rx="6" fill="#5c8475"/><text x="385" y="19" fill="#fff">Constructeur A</text><text x="385" y="30" fill="#f1e8d6" font-size="6.6" font-weight="400">produit</text>
-      <rect x="454" y="6" width="92"  height="30" rx="6" fill="#5c8475"/><text x="500" y="19" fill="#fff">Constructeur B</text><text x="500" y="30" fill="#f1e8d6" font-size="6.6" font-weight="400">produit</text>
-      <rect x="566" y="6" width="88"  height="30" rx="6" fill="#356056"/><text x="610" y="19" fill="#fff">Reviewer / QA</text><text x="610" y="30" fill="#e8dcc2" font-size="6.6" font-weight="400">vérifie</text>
-      <rect x="666" y="6" width="88"  height="30" rx="6" fill="#b07a4f"/><text x="710" y="19" fill="#fff">Notifications</text><text x="710" y="30" fill="#f3e9d8" font-size="6.6" font-weight="400">ntfy</text>
+      <rect x="26"  y="6" width="88" height="30" rx="6" fill="#cf8a3a"/><text x="70"  y="19" fill="#2b2219">Humain</text><text x="70"  y="30" fill="#3a3417" font-size="6.6" font-weight="400">décideur</text>
+      <rect x="154" y="6" width="92" height="30" rx="6" fill="#1f4a46"/><text x="200" y="19" fill="#fff">Coordinateur</text><text x="200" y="30" fill="#e8dcc2" font-size="6.6" font-weight="400">orchestre + contrôle</text>
+      <rect x="286" y="6" width="88" height="30" rx="6" fill="#5c8475"/><text x="330" y="19" fill="#fff">Spécialistes</text><text x="330" y="30" fill="#f1e8d6" font-size="6.6" font-weight="400">produisent</text>
+      <rect x="404" y="6" width="92" height="30" rx="6" fill="#356056"/><text x="450" y="19" fill="#fff">Reviewers</text><text x="450" y="30" fill="#e8dcc2" font-size="6.6" font-weight="400">cohérence · sécurité</text>
+      <rect x="520" y="6" width="80" height="30" rx="6" fill="#5c8475"/><text x="560" y="19" fill="#fff">Archivage</text><text x="560" y="30" fill="#f1e8d6" font-size="6.6" font-weight="400">commit+PR/arch.</text>
+      <rect x="610" y="6" width="80" height="30" rx="6" fill="#b07a4f"/><text x="650" y="19" fill="#fff">Notifications</text><text x="650" y="30" fill="#f3e9d8" font-size="6.6" font-weight="400">ntfy</text>
     </g>
-    <text x="730" y="46" font-size="6.6" font-weight="700" fill="#7a6a56" text-anchor="middle">état de l'issue</text>
+    <text x="728" y="46" font-size="6.6" font-weight="700" fill="#7a6a56" text-anchor="middle">état de l'issue</text>
     <g stroke="#e0d2bb" stroke-width="1.3" stroke-dasharray="3,3">
-      <line x1="80"  y1="36" x2="80"  y2="378"/>
-      <line x1="235" y1="36" x2="235" y2="378"/>
-      <line x1="385" y1="36" x2="385" y2="378"/>
-      <line x1="500" y1="36" x2="500" y2="378"/>
-      <line x1="610" y1="36" x2="610" y2="378"/>
-      <line x1="710" y1="36" x2="710" y2="378"/>
+      <line x1="70"  y1="36" x2="70"  y2="414"/>
+      <line x1="200" y1="36" x2="200" y2="414"/>
+      <line x1="330" y1="36" x2="330" y2="414"/>
+      <line x1="450" y1="36" x2="450" y2="414"/>
+      <line x1="560" y1="36" x2="560" y2="414"/>
+      <line x1="650" y1="36" x2="650" y2="414"/>
     </g>
-    <line x1="80" y1="58" x2="231" y2="58" stroke="#cf8a3a" stroke-width="1.5" marker-end="url(#t5h)"/>
-    <text x="84" y="54" font-size="7.2" fill="#cf8a3a">1 · ouvre l'issue + mentionne le coordinateur</text>
-    <rect x="704" y="50" width="52" height="15" rx="7" fill="#f3e9d8" stroke="#b07a4f"/><text x="730" y="61" font-size="6.6" fill="#b07a4f" text-anchor="middle">todo</text>
-    <path d="M235,74 l12,9 l-12,9 l-12,-9 Z" fill="#cf8a3a"/>
-    <line x1="235" y1="100" x2="84" y2="100" stroke="#cf8a3a" stroke-width="1.5" marker-end="url(#t5h)"/>
-    <text x="231" y="96" font-size="7.2" fill="#7a6a56" text-anchor="end">gate — cadrage (⇄ humain)</text>
-    <text x="84" y="112" font-size="7" fill="#cf8a3a">2 · propose cadrage → l'humain confirme</text>
+    <!-- 1 -->
+    <line x1="70" y1="60" x2="196" y2="60" stroke="#cf8a3a" stroke-width="1.5" marker-end="url(#t5h)"/>
+    <text x="74" y="56" font-size="7" fill="#cf8a3a">1 · ouvre l'issue + mentionne le coordinateur</text>
+    <rect x="702" y="52" width="52" height="15" rx="7" fill="#f3e9d8" stroke="#b07a4f"/><text x="728" y="63" font-size="6.6" fill="#b07a4f" text-anchor="middle">todo</text>
+    <!-- 2 gate cadrage -->
+    <path d="M200,72 l10,8 l-10,8 l-10,-8 Z" fill="#cf8a3a"/>
+    <line x1="200" y1="100" x2="74" y2="100" stroke="#cf8a3a" stroke-width="1.5" marker-end="url(#t5h)"/>
+    <text x="196" y="96" font-size="7" fill="#cf8a3a" text-anchor="end">2 · propose le cadrage → l'humain confirme (gate)</text>
     <rect x="700" y="92" width="56" height="15" rx="7" fill="#1f4a46"/><text x="728" y="103" font-size="6.6" fill="#fff" text-anchor="middle">in_progress</text>
-    <line x1="235" y1="130" x2="381" y2="130" stroke="#5c8475" stroke-width="1.5" marker-end="url(#t5)"/>
-    <text x="239" y="126" font-size="7.2" fill="#5c8475">3 · délègue (mention UUID + mission)</text>
-    <line x1="235" y1="152" x2="496" y2="152" stroke="#5c8475" stroke-width="1.5" marker-end="url(#t5)"/>
-    <text x="239" y="148" font-size="7.2" fill="#5c8475">3b · délègue en parallèle</text>
-    <line x1="385" y1="182" x2="239" y2="182" stroke="#5c8475" stroke-width="1.5" marker-end="url(#t5)"/>
-    <text x="381" y="178" font-size="7.2" fill="#5c8475" text-anchor="end">4 · livrable + mention retour</text>
-    <line x1="500" y1="204" x2="239" y2="204" stroke="#5c8475" stroke-width="1.5" marker-end="url(#t5)"/>
-    <text x="496" y="200" font-size="7.2" fill="#5c8475" text-anchor="end">4b · livrable + mention retour</text>
-    <line x1="235" y1="234" x2="606" y2="234" stroke="#5c8475" stroke-width="1.5" marker-end="url(#t5)"/>
-    <text x="239" y="230" font-size="7.2" fill="#5c8475">5 · demande revue / vérification</text>
-    <path d="M610,242 l12,9 l-12,9 l-12,-9 Z" fill="#cf8a3a"/>
-    <line x1="610" y1="276" x2="389" y2="276" stroke="#b07a4f" stroke-width="1.4" stroke-dasharray="4,3" marker-end="url(#t5r)"/>
-    <text x="606" y="272" font-size="7.2" fill="#b07a4f" text-anchor="end">6 · renvoi au créateur (jamais corrigé par le reviewer)</text>
-    <line x1="610" y1="298" x2="239" y2="298" stroke="#356056" stroke-width="1.5" marker-end="url(#t5)"/>
-    <text x="606" y="294" font-size="7.2" fill="#356056" text-anchor="end">6b · GO (livrables conformes)</text>
-    <line x1="235" y1="328" x2="84" y2="328" stroke="#cf8a3a" stroke-width="1.5" marker-end="url(#t5h)"/>
-    <text x="84" y="324" font-size="7.2" fill="#cf8a3a">7 · présente chaque choix (Keep / Modify / Redo)</text>
-    <path d="M80,336 l12,9 l-12,9 l-12,-9 Z" fill="#cf8a3a"/>
-    <line x1="80" y1="366" x2="231" y2="366" stroke="#6a7636" stroke-width="1.6" marker-end="url(#t5)"/>
-    <text x="84" y="362" font-size="7.2" fill="#6a7636">8 · Keep → mise à disposition</text>
-    <rect x="702" y="330" width="54" height="15" rx="7" fill="#cf8a3a"/><text x="729" y="341" font-size="6.6" fill="#2b2219" text-anchor="middle">in_review</text>
-    <line x1="235" y1="366" x2="706" y2="366" stroke="#b07a4f" stroke-width="1.5" marker-end="url(#t5r)" opacity="0"/>
-    <rect x="700" y="358" width="56" height="15" rx="7" fill="#6a7636"/><text x="728" y="369" font-size="6.6" fill="#fff" text-anchor="middle">done (humain)</text>
-    <line x1="247" y1="366" x2="686" y2="366" stroke="#b07a4f" stroke-width="1.3" marker-end="url(#t5r)"/>
-    <text x="300" y="362" font-size="7" fill="#b07a4f">9 · déclenche la notification (ntfy)</text>
+    <!-- 3, 4 -->
+    <line x1="200" y1="126" x2="326" y2="126" stroke="#5c8475" stroke-width="1.5" marker-end="url(#t5)"/>
+    <text x="204" y="122" font-size="7" fill="#5c8475">3 · délègue (mention UUID + mission)</text>
+    <line x1="330" y1="150" x2="204" y2="150" stroke="#5c8475" stroke-width="1.5" marker-end="url(#t5)"/>
+    <text x="326" y="146" font-size="7" fill="#5c8475" text-anchor="end">4 · livrable produit</text>
+    <!-- 5 revue de cohérence -->
+    <line x1="200" y1="174" x2="446" y2="174" stroke="#5c8475" stroke-width="1.5" marker-end="url(#t5)"/>
+    <text x="204" y="170" font-size="7" fill="#5c8475">5 · sollicite la revue de cohérence</text>
+    <path d="M450,180 l10,8 l-10,8 l-10,-8 Z" fill="#cf8a3a"/>
+    <line x1="450" y1="206" x2="334" y2="206" stroke="#5c8475" stroke-width="1.5" marker-end="url(#t5)"/>
+    <text x="446" y="202" font-size="7" fill="#5c8475" text-anchor="end">6 · verdict TOUJOURS au spécialiste</text>
+    <!-- 7 revue de sécurité -->
+    <line x1="330" y1="230" x2="446" y2="230" stroke="#5c8475" stroke-width="1.5" marker-end="url(#t5)"/>
+    <text x="334" y="226" font-size="7" fill="#5c8475">7 · re-sollicite après corrections ; revue sécurité (adversariale)</text>
+    <path d="M450,236 l10,8 l-10,8 l-10,-8 Z" fill="#cf8a3a"/>
+    <line x1="450" y1="262" x2="334" y2="262" stroke="#b07a4f" stroke-width="1.4" stroke-dasharray="4,3" marker-end="url(#t5r)"/>
+    <text x="446" y="258" font-size="7" fill="#b07a4f" text-anchor="end">6b · RENVOI : le spécialiste corrige puis re-sollicite</text>
+    <!-- 8 compte rendu -->
+    <line x1="330" y1="288" x2="204" y2="288" stroke="#5c8475" stroke-width="1.5" marker-end="url(#t5)"/>
+    <text x="326" y="284" font-size="7" fill="#5c8475" text-anchor="end">8 · compte rendu + mention active du coordinateur</text>
+    <!-- 9 validation humaine -->
+    <line x1="200" y1="312" x2="74" y2="312" stroke="#cf8a3a" stroke-width="1.5" marker-end="url(#t5h)"/>
+    <text x="196" y="308" font-size="7" fill="#cf8a3a" text-anchor="end">9 · présente chaque choix (Keep / Modify / Redo)</text>
+    <rect x="702" y="304" width="52" height="15" rx="7" fill="#cf8a3a"/><text x="728" y="315" font-size="6.6" fill="#2b2219" text-anchor="middle">in_review</text>
+    <path d="M70,320 l10,8 l-10,8 l-10,-8 Z" fill="#cf8a3a"/>
+    <!-- 10 gate commit + PR -->
+    <line x1="70" y1="348" x2="196" y2="348" stroke="#cf8a3a" stroke-width="1.5" marker-end="url(#t5h)"/>
+    <text x="74" y="344" font-size="7" fill="#cf8a3a">10 · gate « commit + PR : oui / non ? » (systématique)</text>
+    <!-- 11 mise à disposition -->
+    <line x1="200" y1="374" x2="556" y2="374" stroke="#5c8475" stroke-width="1.5" marker-end="url(#t5)"/>
+    <text x="204" y="370" font-size="7" fill="#5c8475">11 · mise à disposition (commit + PR ou archive)</text>
+    <!-- 12 notification -->
+    <line x1="200" y1="400" x2="646" y2="400" stroke="#5c8475" stroke-width="1.5" marker-end="url(#t5)"/>
+    <text x="204" y="396" font-size="7" fill="#5c8475">12 · notification de fin de réalisation (ntfy)</text>
+    <rect x="700" y="392" width="56" height="15" rx="7" fill="#6a7636"/><text x="728" y="403" font-size="6.6" fill="#fff" text-anchor="middle">done (humain)</text>
   </svg>
   </div>
-  <figcaption>Figure 4bis — Diagramme d'états &amp; interactions (gabarit à adapter) : couloirs Humain · coordinateur ·
-  constructeurs · reviewer/QA · notifications ; flèches horizontales (vert A2A, ocre Agent ↔ Humain), losanges = gates,
-  colonne de droite = état de l'issue, boucles renvoi / Modify-Redo.</figcaption>
+  <figcaption>Figure 4bis — États &amp; interactions : couloirs Humain · coordinateur · spécialistes · reviewers · archivage ·
+  notifications ; revues séquentielles (cohérence puis sécurité) dont le verdict revient toujours au spécialiste ; gate
+  « commit + PR » systématique avant mise à disposition ; colonne de droite = état de l'issue, boucles RENVOI / Modify-Redo.</figcaption>
   </figure>
 
   <div class="grid2">
@@ -551,9 +657,10 @@
       <h3 style="margin-top:0">Les règles de la collaboration</h3>
       <ul style="margin:0">
         <li>Déclenchement par <b>mention valide</b> sur l'issue + mission claire.</li>
-        <li>Le coordinateur <b>contrôle chaque livrable</b> avant la validation humaine.</li>
-        <li>L'agent sollicité <b>mentionne en retour</b> l'assigneur pour vérification.</li>
-        <li>Un contrôle de sécurité est <b>sollicité à chaque modification</b> d'architecture.</li>
+        <li>L'agent délégataire <b>rend la main par une mention active</b> de l'assigneur, et ferme ainsi la boucle A2A.</li>
+        <li>Les revues (cohérence puis sécurité) sont <b>séquentielles</b> ; leur verdict revient toujours au spécialiste, jamais à un autre reviewer ni au coordinateur.</li>
+        <li>Les reviewers analysent la longueur de prose du livrable et demandent sa réduction localisée.</li>
+        <li>Un contrôle de sécurité est sollicité à <b>chaque modification</b> d'architecture (plancher SG-3, non substituable).</li>
       </ul>
     </div>
     <div class="card gold">
@@ -565,6 +672,13 @@
         <li><b>En direct</b> — le coordinateur exécute lui-même l'étape.</li>
       </ul>
     </div>
+  </div>
+
+  <div class="callout">
+    <b>Le flux ADR, d'abord.</b> Toute demande à impact structurant déclenche d'abord un ADR (issue parente
+    dédiée) : production → revues cohérence + sécurité → ADR Proposée → décision humaine. Accepté, l'ADR lance
+    ses sous-issues de livrable ; une fois tous les livrables validés et mis à disposition, l'ADR passe à « ADR
+    Acceptée » de façon dérivée. Refusé, l'ADR et l'issue d'origine sont annulés en cascade (section 8).
   </div>
 
   <div class="callout">
@@ -626,10 +740,10 @@
     <div class="card brand">
       <h3 style="margin-top:0">Les mécanismes Multica mobilisés</h3>
       <ul style="margin:0">
-        <li><b>L'issue comme pivot</b> — statut, priorité, assignation et historique au même endroit.</li>
+        <li><b>L'issue comme pivot</b> — statut, priorité, assignation et historique au même endroit ; statuts dédiés « ADR Proposée » et « ADR Acceptée » pour le flux de décision.</li>
         <li><b>La mention A2A</b> — déléguer, c'est mentionner l'agent voulu avec une mission cadrée ; l'identité de l'agent est résolue automatiquement, jamais devinée.</li>
         <li><b>La piste d'audit</b> — chaque étape est un commentaire ; l'historique n'est jamais écrasé.</li>
-        <li><b>Les pièces jointes</b> — les livrables (documents, diagrammes, PDF) sont attachés à l'issue.</li>
+        <li><b>Les pièces jointes</b> — les livrables (documents, diagrammes, PDF) sont attachés à l'issue ; un commit + Pull Request est aussi proposé systématiquement à la mise à disposition.</li>
       </ul>
     </div>
     <div class="card gold">
@@ -643,8 +757,8 @@
   </div>
   <div class="callout">
     <b>L'humain reste aux commandes depuis l'issue.</b> Rien n'avance sans sa validation, aucune
-    action à impact n'est engagée sans accord explicite, et tout blocage le mentionne directement
-    pour qu'il tranche.
+    action à impact n'est engagée sans accord explicite — y compris le commit + Pull Request, demandé par
+    un gate distinct — et tout blocage le mentionne directement pour qu'il tranche.
   </div>
 </section>
 
@@ -736,19 +850,231 @@
   </div>
 </section>
 
-<!-- ============ 8. ANNEXE — SCOPES EN DÉTAIL (section OBLIGATOIRE de la trame — voir SKILL.md) ============
-     Produire UNE fiche .scope-card PAR SCOPE du workflow visé (à partir de <workflow>/scopes/).
-     Chaque fiche porte : titre <code>, mots-clés + axes (Depth/Vérification), prose d'intention/garde-fous,
-     ET un DIAGRAMME D'ÉTAT du flux spécifique au scope mettant en avant les interactions A2A (vert #5c8475)
-     et Humain (ocre #cf8a3a), avec boucles de retour (terracotta pointillé #b07a4f) et gates (◆).
-     Le bloc ci-dessous est un GABARIT à dupliquer/adapter — ne pas livrer tel quel. -->
+<!-- ============ 8. FLUX ADR ============ -->
 <section class="section">
-  <h2><span class="n">8</span>Annexe — Les scopes en détail</h2>
+  <h2><span class="n">8</span>Le flux ADR : décider avant de construire</h2>
+  <p>Une <b>décision structurante</b> — un choix d'architecture dont l'impact dépasse le livrable du moment (une
+  technologie de base de données, un découpage de services, un modèle de sécurité) — n'est jamais prise à la volée.
+  Elle est tracée dans un <b>ADR</b> (Architecture Decision Record) : un document court qui consigne le choix, sa
+  justification et les alternatives écartées. Le workflow en fait un invariant : <b>dès qu'une demande a un impact
+  structurant, l'ADR passe en premier — avant tout livrable.</b></p>
+
+  <div class="callout">
+    <b>« ADR d'abord ».</b> Si, au cadrage, l'impact d'une demande est jugé <b>structurant</b>, le workflow ouvre une
+    <b>issue ADR dédiée</b> (issue parente de la décision) <b>avant</b> de produire quoi que ce soit. En cas de doute, on
+    traite comme structurant : c'est un plancher, jamais un plafond.
+  </div>
+
+  <h3>8.1 — Les six temps du flux</h3>
+  <p>L'ADR suit un cycle court et toujours identique, où la décision finale revient à l'humain et où la <b>mise à
+  disposition précède la clôture</b> :</p>
+
+  <figure>
+  <div class="fig-wrap">
+  <svg viewBox="0 0 760 170" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans, DejaVu Sans, sans-serif">
+    <defs>
+      <marker id="m8" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c8475"/></marker>
+      <marker id="m8h" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#cf8a3a"/></marker>
+      <marker id="m8r" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#b07a4f"/></marker>
+    </defs>
+    <g font-size="8.2" text-anchor="middle">
+      <rect x="8"   y="36" width="134" height="34" rx="6" fill="#1f4a46"/><text x="75"  y="51" fill="#fff" font-weight="700">1 · Production</text><text x="75"  y="63" fill="#e8dcc2" font-size="6.8">conception (nuée)</text>
+      <rect x="160" y="36" width="134" height="34" rx="6" fill="#356056"/><text x="227" y="51" fill="#fff" font-weight="700">2 · Revues</text><text x="227" y="63" fill="#e8dcc2" font-size="6.8">cohérence puis sécurité</text>
+      <rect x="312" y="36" width="134" height="34" rx="6" fill="#5c8475"/><text x="379" y="51" fill="#fff" font-weight="700">3 · ADR Proposée</text><text x="379" y="63" fill="#f1e8d6" font-size="6.8">décision attendue ◆</text>
+      <rect x="464" y="36" width="134" height="34" rx="6" fill="#cf8a3a"/><text x="531" y="51" fill="#2b2219" font-weight="700">4 · Décision humaine</text><text x="531" y="63" fill="#3a3417" font-size="6.8">Keep / Redo ◆</text>
+      <rect x="616" y="36" width="136" height="34" rx="6" fill="#5c8475"/><text x="684" y="51" fill="#fff" font-weight="700">5 · Livrables</text><text x="684" y="63" fill="#f1e8d6" font-size="6.8">sous-issues enfants</text>
+      <rect x="160" y="112" width="180" height="34" rx="6" fill="#8a6a44"/><text x="250" y="127" fill="#fff" font-weight="700">6a · Mise à disposition</text><text x="250" y="139" fill="#f3e9d8" font-size="6.8">commit + PR ◆ / archive + ntfy</text>
+      <rect x="400" y="112" width="180" height="34" rx="6" fill="#6a7636"/><text x="490" y="127" fill="#fff" font-weight="700">6b · ADR Acceptée</text><text x="490" y="139" fill="#f3e9d8" font-size="6.8">clôture dérivée (done)</text>
+    </g>
+    <g stroke="#5c8475" stroke-width="1.6" marker-end="url(#m8)">
+      <line x1="142" y1="53" x2="159" y2="53"/>
+      <line x1="294" y1="53" x2="311" y2="53"/>
+      <line x1="598" y1="53" x2="615" y2="53"/>
+      <line x1="340" y1="129" x2="399" y2="129"/>
+    </g>
+    <line x1="446" y1="53" x2="463" y2="53" stroke="#cf8a3a" stroke-width="1.6" marker-end="url(#m8h)"/>
+    <path d="M684,70 C684,96 300,92 250,111" fill="none" stroke="#5c8475" stroke-width="1.4" marker-end="url(#m8)"/>
+    <text x="470" y="92" font-size="6.8" fill="#5c8475" text-anchor="middle">tous les livrables terminés</text>
+    <path d="M227,36 C227,14 75,14 75,35" fill="none" stroke="#b07a4f" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#m8r)"/>
+    <text x="151" y="12" font-size="6.8" fill="#b07a4f" text-anchor="middle">RENVOI : le spécialiste corrige, re-sollicite</text>
+    <text x="531" y="28" font-size="6.8" fill="#b07a4f" text-anchor="middle">Redo / Modify : retour en production</text>
+    <text x="250" y="162" font-size="6.6" fill="#7a6a56" text-anchor="middle">la mise à disposition précède toujours la clôture de l'ADR</text>
+    <text x="680" y="162" font-size="6.6" fill="#b07a4f" text-anchor="middle">Refus ⇒ ADR + origine annulées</text>
+  </svg>
+  </div>
+  <figcaption>Figure 7 — Le flux ADR : production → revues → ADR Proposée → décision humaine → livrables → mise à disposition
+  puis clôture « ADR Acceptée ». Un refus annule l'ADR et l'issue d'origine en cascade.</figcaption>
+  </figure>
+
+  <ol>
+    <li><b>Production</b> — l'Architecte de solution rédige la conception et la décision ; les autres experts la challengent (mode « nuée »). La décision est tracée dans le registre du projet.</li>
+    <li><b>Revues — cohérence puis sécurité</b>, séquentielles ; le verdict revient toujours au spécialiste auteur, qui corrige et re-sollicite sur RENVOI. L'auteur n'est jamais son propre relecteur.</li>
+    <li><b>ADR Proposée</b> — une fois les deux revues indépendantes intégrées, l'ADR est posée en proposition : une <b>décision humaine est attendue</b>.</li>
+    <li><b>Décision humaine</b> — au gate granulaire, l'humain <b>accepte</b> (Keep) ou <b>rejette</b> (Redo). Rien n'est écrit « Accepté » sans cet arbitrage.</li>
+    <li><b>Livrables</b> — une fois l'ADR acceptée, ses sous-issues de livrable (enfants) sont créées et lancées ; l'issue ADR reste <b>bloquée</b> tant qu'elles tournent.</li>
+    <li><b>Mise à disposition puis clôture</b> — quand tous les livrables sont terminés, ils sont <b>d'abord</b> mis à disposition (gate « commit + PR : oui / non ? », ou archivage, puis notification), <b>ensuite</b> l'ADR passe à « ADR Acceptée » de façon dérivée.</li>
+  </ol>
+
+  <h3>8.2 — Le cycle de vie reflété sur l'issue (Multica)</h3>
+  <p>Sur Multica, le <b>statut de l'issue</b> qui porte l'ADR suit en temps réel la phase du flux. L'agent qui fait avancer
+  l'ADR met à jour ce statut dans le même temps, pour que le tableau montre l'ADR là où elle en est.</p>
+  <table>
+    <tr><th style="width:30%">Phase du flux</th><th style="width:26%">Statut de l'issue</th><th>Ce que cela signale</th></tr>
+    <tr><td>Production de la conception</td><td><span class="pill ok">in_progress</span></td><td>L'ADR est en cours de rédaction / correction.</td></tr>
+    <tr><td>Revues (cohérence, sécurité)</td><td><span class="pill">in_review</span></td><td>L'ADR est remise aux reviewers indépendants.</td></tr>
+    <tr><td>Proposée à l'humain</td><td><span class="pill g">ADR Proposée</span></td><td>Les revues sont intégrées ; une décision humaine est attendue.</td></tr>
+    <tr><td>Acceptée (Keep)</td><td><span class="pill">blocked</span> (parente)</td><td>Les sous-issues de livrable sont lancées ; l'ADR reste ouverte jusqu'à leur fin.</td></tr>
+    <tr><td>Rejetée (Redo)</td><td><span class="pill" style="background:#7a6a56">cancelled</span> + origine en cascade</td><td>Aucun livrable ; l'issue d'origine est annulée elle aussi.</td></tr>
+    <tr><td>Tous les livrables terminés</td><td><span class="pill ok">ADR Acceptée</span> → origine <span class="pill ok">done</span></td><td>Clôture dérivée, après mise à disposition.</td></tr>
+  </table>
+
+  <div class="callout">
+    <b>Garde-fous du flux.</b> Le passage en « ADR Proposée » exige <b>deux revues indépendantes</b> (cohérence et
+    sécurité), postées par des reviewers qui ne sont pas l'auteur. L'acceptation reste un <b>acte humain</b> — jamais
+    automatique — et la mise à disposition précède toujours la clôture « ADR Acceptée ». Un refus annule l'ADR et l'issue
+    d'origine en cascade : un impact structurant n'est jamais construit sans décision assumée.
+  </div>
+</section>
+
+<!-- ============ 9. TRAÇABILITÉ DES EXIGENCES & MoSCoW ============ -->
+<section class="section">
+  <h2><span class="n">9</span>Traçabilité des exigences d'affaires &amp; MoSCoW</h2>
+  <p>Une architecture n'a de valeur que si l'on peut montrer <b>pourquoi</b> chaque élément existe. Le workflow relie
+  donc chaque <b>besoin d'affaires</b> à ses <b>exigences</b>, à ses <b>scénarios</b>, puis aux <b>décisions (ADR)</b> et
+  <b>livrables</b> qui y répondent, et classe chaque besoin par <b>priorité de livraison</b> selon la méthode
+  <b>MoSCoW</b>. Résultat : on peut toujours remonter d'un livrable à un besoin, ou descendre d'un besoin à ce qui le couvre.</p>
+
+  <div class="grid2">
+    <div class="card brand">
+      <h3 style="margin-top:0">Deux repères stables</h3>
+      <ul style="margin:0">
+        <li><b>Identifiant <code>BA-…</code></b> — chaque besoin d'affaires retenu en porte un, stable, repris tel quel dans les exigences, les specs, les ADR et les livrables.</li>
+        <li><b>Priorité MoSCoW</b> — <span class="pill g">Must</span> <span class="pill">Should</span> <span class="pill ok">Could</span> <span class="pill" style="background:#7a6a56">Won't</span> : ce qui est indispensable, important, souhaitable ou exclu de cette livraison.</li>
+      </ul>
+    </div>
+    <div class="card gold">
+      <h3 style="margin-top:0">À ne pas confondre</h3>
+      <p>La priorité <b>MoSCoW</b> dit quand et si on livre (priorité de livraison). Les mots <b>SHALL / SHOULD / MAY</b>
+      du format EARS disent à quel point la phrase d'une exigence est contraignante. Les deux coexistent sur une même
+      exigence sans se substituer.</p>
+    </div>
+  </div>
+
+  <h3>9.1 — La chaîne de traçabilité</h3>
+  <figure>
+  <div class="fig-wrap">
+  <svg viewBox="0 0 760 200" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans, DejaVu Sans, sans-serif">
+    <defs>
+      <marker id="m9" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c8475"/></marker>
+      <marker id="m9h" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#cf8a3a"/></marker>
+      <marker id="m9r" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#b07a4f"/></marker>
+    </defs>
+    <text x="10" y="14" font-size="8" font-weight="700" fill="#1f4a46">Chaîne de traçabilité — identifiants stables repris tels quels en aval</text>
+    <g font-size="7.6" text-anchor="middle">
+      <rect x="8"   y="24" width="150" height="38" rx="6" fill="#cf8a3a"/><text x="83"  y="38" fill="#2b2219" font-weight="700">Besoin d'affaires</text><text x="83" y="49" fill="#3a3417" font-size="6.2">BA-… · Must / Should / Could / Won't</text><text x="83" y="58" fill="#3a3417" font-size="6.2">Inception · analyse des besoins</text>
+      <rect x="196" y="24" width="150" height="38" rx="6" fill="#1f4a46"/><text x="271" y="38" fill="#fff" font-weight="700">Exigence</text><text x="271" y="49" fill="#e8dcc2" font-size="6.2">priorité MoSCoW + besoin amont</text><text x="271" y="58" fill="#e8dcc2" font-size="6.2">formulation EARS (SHALL / SHOULD / MAY)</text>
+      <rect x="384" y="24" width="150" height="38" rx="6" fill="#356056"/><text x="459" y="38" fill="#fff" font-weight="700">Scénario / cas d'usage</text><text x="459" y="49" fill="#e8dcc2" font-size="6.2">ligne « Tracé vers : BA-… / Exigence »</text><text x="459" y="58" fill="#e8dcc2" font-size="6.2">spec OpenSpec (si méthodologie active)</text>
+      <rect x="572" y="24" width="180" height="38" rx="6" fill="#5c8475"/><text x="662" y="38" fill="#fff" font-weight="700">Décision (ADR) / Livrable</text><text x="662" y="49" fill="#f1e8d6" font-size="6.2">chaque exigence aboutit à un ADR</text><text x="662" y="58" fill="#f1e8d6" font-size="6.2">ou à un livrable — pas d'orphelin</text>
+      <rect x="8"   y="94" width="150" height="24" rx="12" fill="#cf8a3a"/><text x="83" y="109" fill="#2b2219" font-weight="700">Humain — arbitre la priorité ◆</text>
+      <rect x="196" y="94" width="338" height="30" rx="6" fill="#f3e9d8" stroke="#1f4a46"/><text x="365" y="107" fill="#1f4a46" font-weight="700">Matrice de traçabilité MoSCoW (proposal.md)</text><text x="365" y="118" fill="#7a6a56" font-size="6.2">une ligne par scénario · besoin · priorité · exigence · scénario · capacité</text>
+      <rect x="196" y="150" width="150" height="38" rx="6" fill="#1f4a46"/><text x="271" y="164" fill="#fff" font-weight="700">Checklist d'architecture</text><text x="271" y="175" fill="#e8dcc2" font-size="6.2">élément « Besoins (MoSCoW) »</text><text x="271" y="184" fill="#e8dcc2" font-size="6.2">conforme seulement si la chaîne est complète</text>
+      <rect x="384" y="150" width="150" height="38" rx="6" fill="#b07a4f"/><text x="459" y="164" fill="#fff" font-weight="700">Sensor « traceability »</text><text x="459" y="175" fill="#f3e9d8" font-size="6.2">recoupe la chaîne au gate (advisory)</text><text x="459" y="184" fill="#f3e9d8" font-size="6.2">signale maillon manquant / orphelin</text>
+    </g>
+    <g stroke="#5c8475" stroke-width="1.5" marker-end="url(#m9)">
+      <line x1="158" y1="43" x2="195" y2="43"/>
+      <line x1="346" y1="43" x2="383" y2="43"/>
+      <line x1="534" y1="43" x2="571" y2="43"/>
+      <line x1="271" y1="62" x2="271" y2="93"/>
+      <line x1="459" y1="62" x2="459" y2="93"/>
+      <line x1="271" y1="124" x2="271" y2="149"/>
+    </g>
+    <line x1="83" y1="62" x2="83" y2="93" stroke="#cf8a3a" stroke-width="1.3" stroke-dasharray="3,2" marker-end="url(#m9h)"/>
+    <text x="90" y="81" font-size="6.2" fill="#cf8a3a">priorité floue ⇒ on demande à l'humain (gate granulaire)</text>
+    <line x1="459" y1="124" x2="459" y2="149" stroke="#b07a4f" stroke-width="1.3" stroke-dasharray="3,2" marker-end="url(#m9r)"/>
+    <g font-size="6.2" fill="#7a6a56" text-anchor="middle">
+      <text x="640" y="160">MoSCoW = priorité de livraison</text>
+      <text x="640" y="170">≠ SHALL / SHOULD / MAY (EARS)</text>
+      <text x="640" y="180">= caractère contraignant du texte</text>
+    </g>
+  </svg>
+  </div>
+  <figcaption>Figure 8 — Du besoin d'affaires (BA-…, priorisé MoSCoW) jusqu'au livrable ; la matrice MoSCoW est l'élément
+  récapitulatif qui alimente la checklist d'architecture et que le sensor traceability recoupe.</figcaption>
+  </figure>
+
+  <h3>9.2 — Qui fait quoi, à quelle étape</h3>
+  <table>
+    <tr><th style="width:24%">Étape / outil</th><th>Rôle dans la traçabilité</th><th style="width:22%">Contrôle humain</th></tr>
+    <tr><td><b>Inception — analyse des besoins</b></td><td>Chaque besoin d'affaires retenu reçoit un identifiant <code>BA-…</code> et une priorité MoSCoW. C'est la <b>source amont</b> de toute la chaîne.</td><td>Priorité floue ⇒ l'humain tranche au gate granulaire</td></tr>
+    <tr><td><b>Proposition OpenSpec</b><br><span class="fn">si la méthodologie est active</span></td><td>Chaque exigence porte sa priorité MoSCoW, son besoin amont <code>BA-…</code> et, si besoin, son exigence amont ; chaque scénario porte une ligne « Tracé vers ». Le tout est consolidé dans la <b>Matrice de traçabilité MoSCoW</b> du <code>proposal.md</code> (une ligne par scénario : besoin · priorité · exigence · scénario · capacité).</td><td>Matrice présentée à l'approbation de la proposition</td></tr>
+    <tr><td><b>Checklist d'architecture</b></td><td>Le coordinateur lit la matrice comme <b>élément récapitulatif</b> pour suivre la conformité de la section « Besoins (MoSCoW) » (entreprises et affaires · solutions · technologique · sécurité).</td><td>Avancement en % suivi à chaque gate</td></tr>
+    <tr><td><b>Sensor traceability</b></td><td>Recoupe la chaîne complète au gate : besoin priorisé et relié à une exigence, exigence reliée à un ADR ou un livrable, scénario relié à son besoin, aucune décision ni livrable orphelin.</td><td>Advisory : signale, ne bloque pas</td></tr>
+  </table>
+
+  <h3>9.3 — Les règles à retenir</h3>
+  <div class="grid2">
+    <div class="card brand">
+      <ul style="margin:0">
+        <li><b>Pas d'orphelin.</b> Tout scénario renvoie à une exigence ; toute exigence renvoie à un besoin d'affaires et porte une priorité MoSCoW.</li>
+        <li><b>Ne jamais deviner.</b> Si la priorité d'un besoin n'est pas claire, elle est demandée à l'humain, jamais inventée.</li>
+        <li><b>Identifiants stables.</b> Les <code>BA-…</code> et les identifiants d'exigence ne changent pas, pour que la chaîne reste résolvable.</li>
+      </ul>
+    </div>
+    <div class="card gold">
+      <ul style="margin:0">
+        <li><b>Chaîne incomplète = non conforme.</b> Un besoin sans priorité, ou un scénario sans renvoi à son besoin, ne compte pas comme conforme dans la checklist.</li>
+        <li><b>Aide à la décision, pas substitut.</b> Le sensor est advisory et ne remplace ni la validation humaine ni le contrôle sécurité.</li>
+        <li><b>Sans OpenSpec</b>, la priorisation MoSCoW et les <code>BA-…</code> sont tout de même tracés au stage d'analyse des besoins.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 10. ANNEXE — SCOPES EN DÉTAIL (section OBLIGATOIRE de la trame — voir SKILL.md) ============
+     UNE fiche .scope-card PAR SCOPE du workflow visé (à partir de <workflow>/scopes/, front matter : name, depth,
+     verification, keywords, description). Chaque fiche porte : titre <code>, mots-clés + axes (Depth/Vérification),
+     prose d'intention/garde-fous, ET un DIAGRAMME D'ÉTAT du flux spécifique au scope mettant en avant les interactions
+     A2A (vert #5c8475) et Humain (ocre #cf8a3a), avec boucles de retour (terracotta pointillé #b07a4f) et gates (◆).
+     Pour un autre workflow : remplacer les fiches ci-dessous par celles de ses propres scopes. -->
+<section class="section">
+  <h2><span class="n">10</span>Annexe — Les scopes en détail</h2>
   <p>Un <b>scope</b> est le <b>type de chantier</b> : il fixe le parcours d'étapes et porte des <b>valeurs par
   défaut</b> d'axes — <b>Depth</b> (combien on écrit) et <b>Vérification</b> (à quel point on vérifie). Cette annexe
   détaille chaque scope du workflow avec un <b>diagramme d'état</b> de son <b>flux spécifique</b>, <b>interactions
   A2A</b> (<span style="color:#5c8475"><b>vert</b></span>) et <b>Humain</b> (<span style="color:#cf8a3a"><b>ocre</b></span>)
   mises en avant.</p>
+  <p>Le scope est auto-détecté par mots-clés puis <b>confirmé explicitement</b>. En cas de correspondances multiples,
+  l'ordre de priorité est : <code>security-patch</code> &gt; <code>enterprise</code> &gt; <code>infra</code> &gt;
+  <code>feature</code> &gt; <code>mvp</code> &gt; <code>poc</code> &gt; <code>express</code> &gt; <code>standard</code>.
+  Quels que soient le scope et les axes, les <b>invariants restent actifs</b> : validation humaine granulaire, décision
+  structurante tracée, piste d'audit, et plancher OWASP / STRIDE jamais désactivable.</p>
+
+  <figure>
+  <div class="fig-wrap">
+  <svg viewBox="0 0 760 74" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans, DejaVu Sans, sans-serif">
+    <defs><marker id="m10" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c8475"/></marker></defs>
+    <text x="10" y="14" font-size="8" font-weight="700" fill="#1f4a46">Ordre de désambiguïsation (priorité décroissante en cas de mots-clés multiples)</text>
+    <g font-size="7.4" text-anchor="middle" font-weight="700">
+      <rect x="10"  y="24" width="80" height="22" rx="4" fill="#1f4a46"/><text x="50"  y="38" fill="#fff">security-patch</text>
+      <rect x="104" y="24" width="80" height="22" rx="4" fill="#2a5650"/><text x="144" y="38" fill="#fff">enterprise</text>
+      <rect x="198" y="24" width="80" height="22" rx="4" fill="#356056"/><text x="238" y="38" fill="#fff">infra</text>
+      <rect x="292" y="24" width="80" height="22" rx="4" fill="#4a7266"/><text x="332" y="38" fill="#fff">feature</text>
+      <rect x="386" y="24" width="80" height="22" rx="4" fill="#5c8475"/><text x="426" y="38" fill="#fff">mvp</text>
+      <rect x="480" y="24" width="80" height="22" rx="4" fill="#77957f"/><text x="520" y="38" fill="#fff">poc</text>
+      <rect x="574" y="24" width="80" height="22" rx="4" fill="#8fa58f"/><text x="614" y="38" fill="#fff">express</text>
+      <rect x="668" y="24" width="82" height="22" rx="4" fill="#b3bfa6"/><text x="709" y="38" fill="#2b2219">standard</text>
+    </g>
+    <g stroke="#5c8475" stroke-width="1.3" marker-end="url(#m10)">
+      <line x1="90" y1="35" x2="103" y2="35"/><line x1="184" y1="35" x2="197" y2="35"/><line x1="278" y1="35" x2="291" y2="35"/>
+      <line x1="372" y1="35" x2="385" y2="35"/><line x1="466" y1="35" x2="479" y2="35"/><line x1="560" y1="35" x2="573" y2="35"/>
+      <line x1="654" y1="35" x2="667" y2="35"/>
+    </g>
+    <text x="10" y="64" font-size="6.6" fill="#cf8a3a">◆ scope confirmé explicitement avant démarrage</text>
+    <text x="750" y="64" font-size="6.6" fill="#7a6a56" text-anchor="end">← le plus contraignant l'emporte</text>
+  </svg>
+  </div>
+  <figcaption>Figure 9 — Ordre de priorité de désambiguïsation des scopes (le plus contraignant l'emporte).</figcaption>
+  </figure>
 
   <p class="flowkey"><b>Légende des diagrammes d'état par scope :</b>
   <span class="k a2a"></span> interaction A2A (agent → agent) &nbsp;·&nbsp;
@@ -756,39 +1082,246 @@
   <span class="k loop"></span> boucle de retour (renvoi / Modify / escalade) &nbsp;·&nbsp;
   ◆ gate / validation.</p>
 
-  <!-- GABARIT de fiche de scope — dupliquer pour chaque scope du workflow visé -->
   <div class="scope-card">
-    <h3><code>&lt;nom-du-scope&gt;</code> <span class="pill">libellé / priorité</span></h3>
-    <div class="scope-meta">Mots-clés : … — <span class="axis d">Depth …</span><span class="axis v">Vérif. …</span></div>
+    <h3><code>standard</code> <span class="pill">défaut</span></h3>
+    <div class="scope-meta">Mots-clés : architecture, conception, évolution, refonte, design — <span class="axis d">Depth standard</span><span class="axis v">Vérif. standard</span></div>
     <div class="scope-body">
       <div class="txt">
-        <p>Intention du scope + ce qui le distingue (parcours, étapes allégées / renforcées / court-circuitées).</p>
-        <p><b>Flux A2A &amp; Humain.</b> Décrire qui délègue à qui (A2A), où l'humain valide, les boucles de retour
-        et les garde-fous propres au scope.</p>
+        <p>Parcours d'architecture <b>complet</b> pour une conception ou une évolution « normale » — scope par défaut en l'absence de mot-clé. Tous les stages d'Ideation, Inception et Construction s'exécutent ; l'Operation est conditionnelle (seulement s'il y a une action à impact).</p>
+        <p><b>Flux A2A &amp; Humain.</b> Le coordinateur délègue aux spécialistes, sollicite les revues (cohérence puis sécurité), puis fait valider l'humain choix par choix. Aucun court-circuit.</p>
       </div>
       <div class="dia"><div class="fw">
-      <svg viewBox="0 0 236 150" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans, DejaVu Sans, sans-serif">
-        <defs>
-          <marker id="tpl-a" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c8475"/></marker>
-          <marker id="tpl-h" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#cf8a3a"/></marker>
-          <marker id="tpl-r" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#b07a4f"/></marker>
-        </defs>
-        <g text-anchor="middle" font-size="7">
-          <rect x="68" y="6"   width="100" height="18" rx="4" fill="#1f4a46"/><text x="118" y="18" fill="#fff">Coordinateur — scope ◆</text>
-          <rect x="56" y="42"  width="124" height="18" rx="4" fill="#5c8475"/><text x="118" y="54" fill="#fff">Constructeur (A2A)</text>
-          <rect x="60" y="78"  width="116" height="18" rx="4" fill="#356056"/><text x="118" y="90" fill="#fff">Reviewer / QA ◆</text>
-          <rect x="54" y="114" width="128" height="16" rx="4" fill="#cf8a3a"/><text x="118" y="126" fill="#2b2219">Humain — validation ◆</text>
-        </g>
-        <line x1="118" y1="24" x2="118" y2="41"  stroke="#5c8475" stroke-width="1.4" marker-end="url(#tpl-a)"/>
-        <line x1="118" y1="60" x2="118" y2="77"  stroke="#5c8475" stroke-width="1.4" marker-end="url(#tpl-a)"/>
-        <line x1="118" y1="96" x2="118" y2="113" stroke="#cf8a3a" stroke-width="1.4" marker-end="url(#tpl-h)"/>
-        <path d="M60,87 C26,80 26,52 56,49" fill="none" stroke="#b07a4f" stroke-width="1.2" stroke-dasharray="3,2" marker-end="url(#tpl-r)"/>
-        <text x="30" y="70" font-size="5.6" fill="#b07a4f" text-anchor="middle">renvoi</text>
-      </svg>
-      </div><div class="dia-cap">Flux du scope : A2A → vérification → validation humaine (à adapter)</div></div>
+<svg viewBox="0 0 236 142" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans, DejaVu Sans, sans-serif">
+<defs>
+<marker id="sc-standard-a" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c8475"/></marker>
+<marker id="sc-standard-h" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#cf8a3a"/></marker>
+<marker id="sc-standard-r" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#b07a4f"/></marker>
+</defs>
+<g text-anchor="middle" font-size="7">
+<rect x="46.0" y="8" width="144" height="16" rx="4" fill="#1f4a46"/><text x="118.0" y="19" fill="#fff">Coordinateur — scope ◆</text>
+<rect x="46.0" y="44" width="144" height="16" rx="4" fill="#5c8475"/><text x="118.0" y="55" fill="#fff">Spécialiste (A2A)</text>
+<rect x="46.0" y="80" width="144" height="16" rx="4" fill="#356056"/><text x="118.0" y="91" fill="#fff">Cohérence + Sécurité ◆</text>
+<rect x="46.0" y="116" width="144" height="16" rx="4" fill="#cf8a3a"/><text x="118.0" y="127" fill="#2b2219">Humain — validation ◆</text>
+</g>
+<line x1="118.0" y1="24" x2="118.0" y2="43" stroke="#5c8475" stroke-width="1.4" marker-end="url(#sc-standard-a)"/>
+<line x1="118.0" y1="60" x2="118.0" y2="79" stroke="#5c8475" stroke-width="1.4" marker-end="url(#sc-standard-a)"/>
+<line x1="118.0" y1="96" x2="118.0" y2="115" stroke="#cf8a3a" stroke-width="1.4" marker-end="url(#sc-standard-h)"/>
+<path d="M46.0,88.0 C12.0,84.0 12.0,56.0 46.0,52.0" fill="none" stroke="#b07a4f" stroke-width="1.2" stroke-dasharray="3,2" marker-end="url(#sc-standard-r)"/>
+<text x="24.0" y="72.0" font-size="5.6" fill="#b07a4f" text-anchor="middle">renvoi</text>
+</svg>
+      </div><div class="dia-cap">Parcours complet : A2A → revues → validation humaine</div></div>
     </div>
   </div>
-
+  <div class="scope-card">
+    <h3><code>feature</code> <span class="pill">ajout fonctionnel</span></h3>
+    <div class="scope-meta">Mots-clés : fonctionnalité, feature, ajout, évolution fonctionnelle — <span class="axis d">Depth standard</span><span class="axis v">Vérif. standard</span></div>
+    <div class="scope-body">
+      <div class="txt">
+        <p>Ajout ou évolution fonctionnelle : <b>Inception ciblée</b> puis Construction, avec <b>contrôle sécurité systématique</b>. Le chargement du contexte existant est activé (on part d'un existant) et le <b>walking skeleton</b> est pertinent quand la Construction ouvre sur un squelette fonctionnel.</p>
+        <p><b>Flux A2A &amp; Humain.</b> Délégation aux spécialistes, revues cohérence + sécurité, validation humaine granulaire — comme le parcours standard, resserré sur la fonction visée.</p>
+      </div>
+      <div class="dia"><div class="fw">
+<svg viewBox="0 0 236 142" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans, DejaVu Sans, sans-serif">
+<defs>
+<marker id="sc-feature-a" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c8475"/></marker>
+<marker id="sc-feature-h" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#cf8a3a"/></marker>
+<marker id="sc-feature-r" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#b07a4f"/></marker>
+</defs>
+<g text-anchor="middle" font-size="7">
+<rect x="46.0" y="8" width="144" height="16" rx="4" fill="#1f4a46"/><text x="118.0" y="19" fill="#fff">Coordinateur ◆</text>
+<rect x="46.0" y="44" width="144" height="16" rx="4" fill="#5c8475"/><text x="118.0" y="55" fill="#fff">Spécialiste + skeleton (A2A)</text>
+<rect x="46.0" y="80" width="144" height="16" rx="4" fill="#356056"/><text x="118.0" y="91" fill="#fff">Cohérence + Sécurité ◆</text>
+<rect x="46.0" y="116" width="144" height="16" rx="4" fill="#cf8a3a"/><text x="118.0" y="127" fill="#2b2219">Humain — validation ◆</text>
+</g>
+<line x1="118.0" y1="24" x2="118.0" y2="43" stroke="#5c8475" stroke-width="1.4" marker-end="url(#sc-feature-a)"/>
+<line x1="118.0" y1="60" x2="118.0" y2="79" stroke="#5c8475" stroke-width="1.4" marker-end="url(#sc-feature-a)"/>
+<line x1="118.0" y1="96" x2="118.0" y2="115" stroke="#cf8a3a" stroke-width="1.4" marker-end="url(#sc-feature-h)"/>
+<path d="M46.0,88.0 C12.0,84.0 12.0,56.0 46.0,52.0" fill="none" stroke="#b07a4f" stroke-width="1.2" stroke-dasharray="3,2" marker-end="url(#sc-feature-r)"/>
+<text x="24.0" y="72.0" font-size="5.6" fill="#b07a4f" text-anchor="middle">renvoi</text>
+</svg>
+      </div><div class="dia-cap">Inception ciblée + Construction, sécurité systématique</div></div>
+    </div>
+  </div>
+  <div class="scope-card">
+    <h3><code>infra</code> <span class="pill">plateforme</span></h3>
+    <div class="scope-meta">Mots-clés : infrastructure, réseau, AWS, Azure, migration, Windows, plateforme, déploiement — <span class="axis d">Depth standard</span><span class="axis vhi">Vérif. renforcé</span></div>
+    <div class="scope-body">
+      <div class="txt">
+        <p>Travaux d'infrastructure ou de plateforme. Accent sur l'<b>Architecte AWS</b>, l'<b>Architecte Azure</b> et l'<b>Infrastructure Windows</b> ; <b>rollback obligatoire</b> et <b>Operation activée</b> (action à impact). Vérification <b>renforcée</b> du contrôle des livrables.</p>
+        <p><b>Flux A2A &amp; Humain.</b> Le coordinateur délègue aux architectes infra, exige un plan de déploiement et de rollback, fait contrôler la sécurité, puis l'humain valide avant toute action à impact.</p>
+      </div>
+      <div class="dia"><div class="fw">
+<svg viewBox="0 0 236 178" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans, DejaVu Sans, sans-serif">
+<defs>
+<marker id="sc-infra-a" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c8475"/></marker>
+<marker id="sc-infra-h" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#cf8a3a"/></marker>
+<marker id="sc-infra-r" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#b07a4f"/></marker>
+</defs>
+<g text-anchor="middle" font-size="7">
+<rect x="46.0" y="8" width="144" height="16" rx="4" fill="#1f4a46"/><text x="118.0" y="19" fill="#fff">Coordinateur ◆</text>
+<rect x="46.0" y="44" width="144" height="16" rx="4" fill="#5c8475"/><text x="118.0" y="55" fill="#fff">Archi. AWS / Azure / Windows</text>
+<rect x="46.0" y="80" width="144" height="16" rx="4" fill="#356056"/><text x="118.0" y="91" fill="#fff">Sécurité renforcée ◆</text>
+<rect x="46.0" y="116" width="144" height="16" rx="4" fill="#cf8a3a"/><text x="118.0" y="127" fill="#2b2219">Humain — valid. + rollback ◆</text>
+<rect x="46.0" y="152" width="144" height="16" rx="4" fill="#8a6a44"/><text x="118.0" y="163" fill="#fff">Operation (déploiement)</text>
+</g>
+<line x1="118.0" y1="24" x2="118.0" y2="43" stroke="#5c8475" stroke-width="1.4" marker-end="url(#sc-infra-a)"/>
+<line x1="118.0" y1="60" x2="118.0" y2="79" stroke="#5c8475" stroke-width="1.4" marker-end="url(#sc-infra-a)"/>
+<line x1="118.0" y1="96" x2="118.0" y2="115" stroke="#cf8a3a" stroke-width="1.4" marker-end="url(#sc-infra-h)"/>
+<line x1="118.0" y1="132" x2="118.0" y2="151" stroke="#cf8a3a" stroke-width="1.4" marker-end="url(#sc-infra-h)"/>
+<path d="M46.0,88.0 C12.0,84.0 12.0,56.0 46.0,52.0" fill="none" stroke="#b07a4f" stroke-width="1.2" stroke-dasharray="3,2" marker-end="url(#sc-infra-r)"/>
+<text x="24.0" y="72.0" font-size="5.6" fill="#b07a4f" text-anchor="middle">renvoi</text>
+</svg>
+      </div><div class="dia-cap">Architectes infra, rollback + Operation, sécurité renforcée</div></div>
+    </div>
+  </div>
+  <div class="scope-card">
+    <h3><code>security-patch</code> <span class="pill">priorité max</span></h3>
+    <div class="scope-meta">Mots-clés : sécurité, correctif, patch, vulnérabilité, CVE, durcissement, hardening, faille — <span class="axis d">Depth standard</span><span class="axis vhi">Vérif. renforcé</span></div>
+    <div class="scope-body">
+      <div class="txt">
+        <p>Correction ou durcissement de sécurité : l'<b>Architecte cybersécurité pilote</b>, périmètre resserré, traçabilité renforcée, analyse d'impact / non-régression produite avant toute recommandation. <b>Garde-fou non abaissable</b> : Depth ≥ standard, Vérification ≥ renforcé ; aucun plafond de revue ne s'applique.</p>
+        <p><b>Flux A2A &amp; Humain.</b> La cybersécurité mène, la revue de sécurité reste obligatoire, puis validation humaine. Aucun override ne peut abaisser le niveau de contrôle.</p>
+      </div>
+      <div class="dia"><div class="fw">
+<svg viewBox="0 0 236 142" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans, DejaVu Sans, sans-serif">
+<defs>
+<marker id="sc-security-patch-a" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c8475"/></marker>
+<marker id="sc-security-patch-h" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#cf8a3a"/></marker>
+<marker id="sc-security-patch-r" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#b07a4f"/></marker>
+</defs>
+<g text-anchor="middle" font-size="7">
+<rect x="46.0" y="8" width="144" height="16" rx="4" fill="#1f4a46"/><text x="118.0" y="19" fill="#fff">Coordinateur ◆</text>
+<rect x="46.0" y="44" width="144" height="16" rx="4" fill="#5c8475"/><text x="118.0" y="55" fill="#fff">Cybersécurité PILOTE (A2A)</text>
+<rect x="46.0" y="80" width="144" height="16" rx="4" fill="#356056"/><text x="118.0" y="91" fill="#fff">Revue sécurité ◆</text>
+<rect x="46.0" y="116" width="144" height="16" rx="4" fill="#cf8a3a"/><text x="118.0" y="127" fill="#2b2219">Humain — validation ◆</text>
+</g>
+<line x1="118.0" y1="24" x2="118.0" y2="43" stroke="#5c8475" stroke-width="1.4" marker-end="url(#sc-security-patch-a)"/>
+<line x1="118.0" y1="60" x2="118.0" y2="79" stroke="#5c8475" stroke-width="1.4" marker-end="url(#sc-security-patch-a)"/>
+<line x1="118.0" y1="96" x2="118.0" y2="115" stroke="#cf8a3a" stroke-width="1.4" marker-end="url(#sc-security-patch-h)"/>
+<path d="M46.0,88.0 C12.0,84.0 12.0,56.0 46.0,52.0" fill="none" stroke="#b07a4f" stroke-width="1.2" stroke-dasharray="3,2" marker-end="url(#sc-security-patch-r)"/>
+<text x="24.0" y="72.0" font-size="5.6" fill="#b07a4f" text-anchor="middle">renvoi</text>
+</svg>
+      </div><div class="dia-cap">Cybersécurité pilote, contrôle non abaissable</div></div>
+    </div>
+  </div>
+  <div class="scope-card">
+    <h3><code>mvp</code> <span class="pill">cœur de valeur</span></h3>
+    <div class="scope-meta">Mots-clés : MVP, produit minimum viable, cœur de valeur, first cut — <span class="axis d">Depth standard</span><span class="axis v">Vérif. standard</span></div>
+    <div class="scope-body">
+      <div class="txt">
+        <p>Produit minimum viable : on livre le <b>cœur de valeur</b> à Depth standard, en <b>traçant la dette technique</b> contractée. Le contrôle sécurité est maintenu ; le walking skeleton est pertinent.</p>
+        <p><b>Flux A2A &amp; Humain.</b> Délégation, revues, validation humaine — comme standard, avec un focus explicite sur le cœur de valeur et une trace de la dette reportée.</p>
+      </div>
+      <div class="dia"><div class="fw">
+<svg viewBox="0 0 236 142" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans, DejaVu Sans, sans-serif">
+<defs>
+<marker id="sc-mvp-a" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c8475"/></marker>
+<marker id="sc-mvp-h" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#cf8a3a"/></marker>
+<marker id="sc-mvp-r" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#b07a4f"/></marker>
+</defs>
+<g text-anchor="middle" font-size="7">
+<rect x="46.0" y="8" width="144" height="16" rx="4" fill="#1f4a46"/><text x="118.0" y="19" fill="#fff">Coordinateur ◆</text>
+<rect x="46.0" y="44" width="144" height="16" rx="4" fill="#5c8475"/><text x="118.0" y="55" fill="#fff">Cœur de valeur + dette (A2A)</text>
+<rect x="46.0" y="80" width="144" height="16" rx="4" fill="#356056"/><text x="118.0" y="91" fill="#fff">Cohérence + Sécurité ◆</text>
+<rect x="46.0" y="116" width="144" height="16" rx="4" fill="#cf8a3a"/><text x="118.0" y="127" fill="#2b2219">Humain — validation ◆</text>
+</g>
+<line x1="118.0" y1="24" x2="118.0" y2="43" stroke="#5c8475" stroke-width="1.4" marker-end="url(#sc-mvp-a)"/>
+<line x1="118.0" y1="60" x2="118.0" y2="79" stroke="#5c8475" stroke-width="1.4" marker-end="url(#sc-mvp-a)"/>
+<line x1="118.0" y1="96" x2="118.0" y2="115" stroke="#cf8a3a" stroke-width="1.4" marker-end="url(#sc-mvp-h)"/>
+<path d="M46.0,88.0 C12.0,84.0 12.0,56.0 46.0,52.0" fill="none" stroke="#b07a4f" stroke-width="1.2" stroke-dasharray="3,2" marker-end="url(#sc-mvp-r)"/>
+<text x="24.0" y="72.0" font-size="5.6" fill="#b07a4f" text-anchor="middle">renvoi</text>
+</svg>
+      </div><div class="dia-cap">Cœur de valeur, dette tracée, sécurité maintenue</div></div>
+    </div>
+  </div>
+  <div class="scope-card">
+    <h3><code>poc</code> <span class="pill">jetable</span></h3>
+    <div class="scope-meta">Mots-clés : PoC, preuve de concept, prototype, jetable, spike, expérimentation — <span class="axis d">Depth minimal</span><span class="axis v">Vérif. advisory</span></div>
+    <div class="scope-body">
+      <div class="txt">
+        <p>Preuve de concept <b>jetable</b> : parcours allégé, Depth minimale, vérification advisory. Un PoC est <b>non promouvable tel quel</b> — toute reprise en feature / mvp / enterprise re-déclenche le contrôle sécurité complet du scope cible. Le plancher OWASP / STRIDE reste actif : seules la profondeur et la rigueur sont allégées.</p>
+        <p><b>Flux A2A &amp; Humain.</b> Chemin court ; revue allégée mais plancher sécurité non nul ; validation humaine conservée.</p>
+      </div>
+      <div class="dia"><div class="fw">
+<svg viewBox="0 0 236 142" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans, DejaVu Sans, sans-serif">
+<defs>
+<marker id="sc-poc-a" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c8475"/></marker>
+<marker id="sc-poc-h" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#cf8a3a"/></marker>
+<marker id="sc-poc-r" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#b07a4f"/></marker>
+</defs>
+<g text-anchor="middle" font-size="7">
+<rect x="46.0" y="8" width="144" height="16" rx="4" fill="#1f4a46"/><text x="118.0" y="19" fill="#fff">Coordinateur ◆</text>
+<rect x="46.0" y="44" width="144" height="16" rx="4" fill="#5c8475"/><text x="118.0" y="55" fill="#fff">Spécialiste — allégé (A2A)</text>
+<rect x="46.0" y="80" width="144" height="16" rx="4" fill="#356056"/><text x="118.0" y="91" fill="#fff">plancher OWASP / STRIDE (advisory)</text>
+<rect x="46.0" y="116" width="144" height="16" rx="4" fill="#cf8a3a"/><text x="118.0" y="127" fill="#2b2219">Humain — validation ◆</text>
+</g>
+<line x1="118.0" y1="24" x2="118.0" y2="43" stroke="#5c8475" stroke-width="1.4" marker-end="url(#sc-poc-a)"/>
+<line x1="118.0" y1="60" x2="118.0" y2="79" stroke="#5c8475" stroke-width="1.4" marker-end="url(#sc-poc-a)"/>
+<line x1="118.0" y1="96" x2="118.0" y2="115" stroke="#cf8a3a" stroke-width="1.4" marker-end="url(#sc-poc-h)"/>
+</svg>
+      </div><div class="dia-cap">Jetable, allégé — plancher sécurité conservé</div></div>
+    </div>
+  </div>
+  <div class="scope-card">
+    <h3><code>express</code> <span class="pill">chemin court</span></h3>
+    <div class="scope-meta">Mots-clés : express, petit changement, rapide, mineur, trivial, correction rapide — <span class="axis d">Depth minimal</span><span class="axis v">Vérif. standard</span></div>
+    <div class="scope-body">
+      <div class="txt">
+        <p>Petit changement clair et à faible risque : chemin court, les stages lourds sont ignorés. <b>Garde-fou R1</b> : l'allègement est réservé aux changements sans impact runtime / production — dès qu'un express déploie ou effectue une action à impact, le découpage repasse à activé et la vérification remonte à standard minimum.</p>
+        <p><b>Flux A2A &amp; Humain.</b> Délégation directe, revue allégée (sans jamais contourner le plancher OWASP / STRIDE), validation humaine conservée.</p>
+      </div>
+      <div class="dia"><div class="fw">
+<svg viewBox="0 0 236 106" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans, DejaVu Sans, sans-serif">
+<defs>
+<marker id="sc-express-a" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c8475"/></marker>
+<marker id="sc-express-h" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#cf8a3a"/></marker>
+<marker id="sc-express-r" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#b07a4f"/></marker>
+</defs>
+<g text-anchor="middle" font-size="7">
+<rect x="46.0" y="8" width="144" height="16" rx="4" fill="#1f4a46"/><text x="118.0" y="19" fill="#fff">Coordinateur ◆</text>
+<rect x="46.0" y="44" width="144" height="16" rx="4" fill="#5c8475"/><text x="118.0" y="55" fill="#fff">Spécialiste — court (A2A)</text>
+<rect x="46.0" y="80" width="144" height="16" rx="4" fill="#cf8a3a"/><text x="118.0" y="91" fill="#2b2219">Humain — validation ◆</text>
+</g>
+<line x1="118.0" y1="24" x2="118.0" y2="43" stroke="#5c8475" stroke-width="1.4" marker-end="url(#sc-express-a)"/>
+<line x1="118.0" y1="60" x2="118.0" y2="79" stroke="#cf8a3a" stroke-width="1.4" marker-end="url(#sc-express-h)"/>
+<path d="M46.0,88.0 C12.0,84.0 12.0,56.0 46.0,52.0" fill="none" stroke="#b07a4f" stroke-width="1.2" stroke-dasharray="3,2" marker-end="url(#sc-express-r)"/>
+<text x="24.0" y="72.0" font-size="5.6" fill="#b07a4f" text-anchor="middle">impact ⇒ remonte</text>
+</svg>
+      </div><div class="dia-cap">Chemin court ; remonte à standard dès un impact</div></div>
+    </div>
+  </div>
+  <div class="scope-card">
+    <h3><code>enterprise</code> <span class="pill">conformité</span></h3>
+    <div class="scope-meta">Mots-clés : enterprise, conformité, PCI DSS, GDPR, RGPD, Loi 25, LPRPDE, structurant, réglementaire — <span class="axis d">Depth comprehensive</span><span class="axis vhi">Vérif. renforcé</span></div>
+    <div class="scope-body">
+      <div class="txt">
+        <p>Chantier structurant à fort impact ou à enjeu de conformité : parcours complet, Depth <b>comprehensive</b>, vérification renforcée. Point de contrôle obligatoire <b>« applicabilité des normes »</b> (PCI DSS / GDPR / Loi 25 / LPRPDE), décision tracée en ADR (y compris « aucune norme requise ») ; classification des données traitée. Garde-fou non abaissable : Depth ≥ standard, Vérification ≥ renforcé.</p>
+        <p><b>Flux A2A &amp; Humain.</b> Flux complet avec ADR de conformité, revues renforcées, et validation humaine à chaque jalon.</p>
+      </div>
+      <div class="dia"><div class="fw">
+<svg viewBox="0 0 236 178" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans, DejaVu Sans, sans-serif">
+<defs>
+<marker id="sc-enterprise-a" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c8475"/></marker>
+<marker id="sc-enterprise-h" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#cf8a3a"/></marker>
+<marker id="sc-enterprise-r" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#b07a4f"/></marker>
+</defs>
+<g text-anchor="middle" font-size="7">
+<rect x="46.0" y="8" width="144" height="16" rx="4" fill="#1f4a46"/><text x="118.0" y="19" fill="#fff">Coordinateur — normes ◆</text>
+<rect x="46.0" y="44" width="144" height="16" rx="4" fill="#cf8a3a"/><text x="118.0" y="55" fill="#2b2219">ADR conformité (humain) ◆</text>
+<rect x="46.0" y="80" width="144" height="16" rx="4" fill="#5c8475"/><text x="118.0" y="91" fill="#fff">Spécialistes — comprehensive</text>
+<rect x="46.0" y="116" width="144" height="16" rx="4" fill="#356056"/><text x="118.0" y="127" fill="#fff">Cohérence + Sécurité ◆</text>
+<rect x="46.0" y="152" width="144" height="16" rx="4" fill="#cf8a3a"/><text x="118.0" y="163" fill="#2b2219">Humain — validation ◆</text>
+</g>
+<line x1="118.0" y1="24" x2="118.0" y2="43" stroke="#cf8a3a" stroke-width="1.4" marker-end="url(#sc-enterprise-h)"/>
+<line x1="118.0" y1="60" x2="118.0" y2="79" stroke="#cf8a3a" stroke-width="1.4" marker-end="url(#sc-enterprise-h)"/>
+<line x1="118.0" y1="96" x2="118.0" y2="115" stroke="#5c8475" stroke-width="1.4" marker-end="url(#sc-enterprise-a)"/>
+<line x1="118.0" y1="132" x2="118.0" y2="151" stroke="#cf8a3a" stroke-width="1.4" marker-end="url(#sc-enterprise-h)"/>
+<path d="M46.0,124.0 C12.0,120.0 12.0,92.0 46.0,88.0" fill="none" stroke="#b07a4f" stroke-width="1.2" stroke-dasharray="3,2" marker-end="url(#sc-enterprise-r)"/>
+<text x="24.0" y="108.0" font-size="5.6" fill="#b07a4f" text-anchor="middle">renvoi</text>
+</svg>
+      </div><div class="dia-cap">Complet + ADR conformité + revues renforcées</div></div>
+    </div>
+  </div>
 </section>
 
 </body>

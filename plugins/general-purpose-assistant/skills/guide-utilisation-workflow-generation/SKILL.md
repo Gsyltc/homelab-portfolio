@@ -10,6 +10,7 @@ Mode opératoire **unique** pour produire et **mettre à jour** les guides d'uti
 ## Livrable et emplacement
 
 - **Format livré : PDF uniquement.** Le HTML est un **élément de construction**, pas un livrable : il n'est **pas conservé** dans `docs/`. Le gabarit de construction vit dans cette skill (`assets/gabarit-guide-workflow.html`).
+- **Le gabarit porte le contenu à jour du guide `core`** (version de couverture comprise) : il est la **source de régénération** de `guide-utilisation-workflow-core.pdf`. Toute mise à jour du guide core se fait **dans le gabarit**, puis le PDF est régénéré depuis lui — jamais en retouchant le PDF seul (sinon le gabarit décroche et la régénération suivante perd du contenu). Pour les autres workflows, le gabarit sert de point de départ à adapter.
 - **Répertoire de stockage : `docs/`** (à la racine des guides existants).
 - **Nommage du fichier : `guide-utilisation-workflow-<workflow>.pdf`** où `<workflow>` ∈ { `core`, `homelab`, `matching-cv-ao` }.
 
@@ -19,12 +20,12 @@ Reprendre cette trame pour chaque workflow (adapter le contenu, jamais la struct
 
 1. **Contexte & objectifs** — ce qu'est le workflow, pourquoi, principe fondateur.
 2. **Fonctionnement global** — les phases et l'exigence croissante de validation humaine.
-3. **Les méthodes** — cycle d'une étape, boucle Keep / Modify / Redo, scopes & axes, mémoire de règles, garde-fous et contrôles automatiques.
+3. **Les méthodes** — cycle d'une étape, boucle Keep / Modify / Redo, scopes & axes, mémoire de règles, garde-fous et contrôles automatiques, format de retour d'un agent, et **chargement paresseux (lazy loading)** — y compris le rôle des **front matter** (ce que chaque type de fichier expose en en-tête, ce qui est lu d'abord puis à la demande).
 4. **Agents & compétences** — rôles mobilisés et compétences partagées.
 5. **A2A** — comment les agents collaborent. Inclut **obligatoirement** une sous-section **5.1 — États & interactions** : un **diagramme de séquence** à couloirs d'acteurs (au minimum Humain, coordinateur, les acteurs qui *construisent* chacun dans leur couloir, l'acteur qui *vérifie* / QA, et l'acteur de *notification*) ; voir « Conventions des diagrammes d'interaction » plus bas.
 6. **Utilisation avec Multica** — exécution autour de l'issue (mentions, piste d'audit, pièces jointes).
 7. **Agnosticité & autres harnais** — forme déclarative portable ; couche d'adaptation par harnais (Multica, Claude, Codex, OpenCode, Hermes, Deepseek, Kiro).
-8. **Annexe — les scopes en détail** — une **fiche par scope** du workflow (intention, mots-clés, axes Depth/Vérification par défaut, garde-fous propres) accompagnée d'un **diagramme d'état du flux spécifique au scope** mettant en avant les **interactions A2A et Humain** ; précédée d'un diagramme d'ensemble de l'ordre de priorité / désambiguïsation des scopes et d'une **légende commune** des diagrammes. Adapter la liste et le contenu des scopes au workflow visé (p. ex. les 7 scopes Homelab) à partir de `<workflow>/scopes/`.
+8. **Annexe — les scopes en détail** (toujours en **dernière section** ; dans le guide `core`, des sections propres au workflow la précèdent — flux ADR, traçabilité MoSCoW — et l'annexe y porte le n° 10) — une **fiche par scope** du workflow (intention, mots-clés, axes Depth/Vérification par défaut, garde-fous propres) accompagnée d'un **diagramme d'état du flux spécifique au scope** mettant en avant les **interactions A2A et Humain** ; précédée d'un diagramme d'ensemble de l'ordre de priorité / désambiguïsation des scopes et d'une **légende commune** des diagrammes. Adapter la liste et le contenu des scopes au workflow visé (p. ex. les 7 scopes Homelab) à partir de `<workflow>/scopes/`.
 
 Public visé : **non technique** (prospects, parties prenantes). Lecture simple, paragraphes définis, puces, tableaux, diagrammes.
 
@@ -57,7 +58,7 @@ Charte sobre inspirée des couleurs de *Réminiscence archéologique de l'Angél
 
 ## Mode opératoire
 
-1. **Copier le gabarit** `assets/gabarit-guide-workflow.html` vers un fichier de travail.
+1. **Copier le gabarit** `assets/gabarit-guide-workflow.html` vers un fichier de travail. Pour le guide `core`, modifier **directement le gabarit** (puis incrémenter la version de couverture `Document de présentation — vX.Y`).
 2. **Adapter le contenu** au workflow visé à partir de sa **source unique** `<workflow>/common/conductor.md`, ses fiches de stage `<workflow>/common/stages/` et ses protocoles `<workflow>/common/protocols/` (plus `scopes/`, `rules/`, `sensors/`, `agents/`). Ne rien inventer ; rester fidèle à la source. **Conserver les sections obligatoires de la trame**, dont la **sous-section 5.1 (États & interactions)** et l'**annexe « Les scopes en détail » (section 8)** avec **un diagramme d'état par scope** — en respectant les « Conventions des diagrammes d'interaction ».
 3. **Ne référencer que le workflow visé** — aucune référence aux autres workflows (cloisonnement, `AGENTS.md`).
 4. **Régénérer le PDF** avec WeasyPrint :
