@@ -25,7 +25,7 @@ Conformément à [`../common/protocols/reviewer.md`](../common/protocols/reviewe
 - **Absence de conflit** entre décisions structurantes.
 - **Absence d'artefact orphelin** (produit non rattaché à un besoin / une décision).
 - **Complétude et structure** des livrables ; respect des **conventions** : langue de l'humain, diagrammes générés en code à syntaxe validée, aucun secret.
-- **Longueur de prose** : évalue la verbosité du livrable et **demande une réduction lorsqu'elle ne nuit pas au contenu**, en **précisant les éléments exacts à réduire** (section / paragraphe / tableau) — voir [`../common/protocols/reviewer.md`](../common/protocols/reviewer.md) (§ « Forme de la revue — retour YAML sans prose »).
+- **Longueur de prose du livrable revu** : évalue la verbosité du livrable. Si elle peut être réduite sans nuire au contenu, consigne chaque élément à réduire (section / paragraphe / tableau, avec motif) dans `revue.reductions_prose` du YAML de retour ; sinon laisse `reductions_prose` vide. Tu ne réécris jamais le livrable. Ce point concerne le **livrable**, pas la forme de ton retour, qui est **toujours un YAML sans prose** — voir [`../common/protocols/reviewer.md`](../common/protocols/reviewer.md) (§ « Forme de la revue — retour YAML sans prose »).
 
 # Limites (non substituable)
 
