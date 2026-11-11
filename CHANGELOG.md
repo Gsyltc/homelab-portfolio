@@ -18,6 +18,20 @@ ce fichier en donne la lecture chronologique côté produit.
   touchant un agent et par la CI `validate-agents`.
 
 ### Changed
+- **Guide d'utilisation du workflow `core` v1.6 + gabarit HTML resynchronisé** (ORIG-435).
+  - Nouvelle section **3.7 « Le chargement paresseux (lazy loading) »** : ce qui est lu au démarrage
+    (inventaires légers) et à la demande, **rôle des front matter** par type de fichier (agent, skill, fiche de
+    stage, scope, sensor, documentation d'architecture, ADR), règles conditionnelles (N/A, normes de sécurité)
+    et traçabilité sur l'issue. Sources : `core/common/conductor.md` § « Chargement optimisé »,
+    `protocols/stage-definition.md`, `scopes/README.md`, `sensors/README.md`, skills
+    `architecture-solution-gabarits` / `presentation-targeting`.
+  - Le gabarit `assets/gabarit-guide-workflow.html` (resté en v1.0) reprend tout le contenu v1.1 → v1.5
+    (3.6 format de retour, flux ADR §8, traçabilité MoSCoW §9, annexe des 8 scopes §10, figures mises à jour)
+    et devient la **source de régénération** du PDF core ; le PDF (16 pages, couverture v1.6) est régénéré depuis lui.
+  - Skill `guide-utilisation-workflow-generation` : règle « mise à jour dans le gabarit, jamais sur le PDF seul »,
+    trame enrichie du chargement paresseux / front matter.
+  - Aligné sur HOM-300 : lecture / modification / création ciblées de la documentation d'architecture par
+    son front matter (protocole porté par la skill du gabarit) et contrôle par le sensor `sujets-a-jour`.
 - **Lazy loading de la documentation d'architecture** (HOM-300). Le conductor et le stage
   `existing-context-loading` imposent de lire d'abord le front-matter pour déterminer les fichiers et
   sections à utiliser, modifier ou créer. Le protocole (champs de routage, lecture, écriture) est porté par
