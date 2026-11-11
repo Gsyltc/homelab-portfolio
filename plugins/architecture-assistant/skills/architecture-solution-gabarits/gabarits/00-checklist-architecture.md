@@ -6,7 +6,13 @@ sujets:
   - Cadrage
   - Besoins (MoSCoW)
   - Livrables
+  - Architecture de solution (DAS)
+  - Architecture Logicielle détaillée
+  - Architecture de données détaillée
+  - Architecture de sécurité détaillée
+  - Architecture infrastructure détaillée
   - Projets
+  - Arrimages
 types_presentation: [executive]
 sensibilite: interne
 togaf_layer: null

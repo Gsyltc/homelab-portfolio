@@ -114,6 +114,7 @@ Objectif : préserver la fenêtre de contexte.
 - **À la demande** :
   - Contenu complet d'un agent, skill, méthodologie, gabarit, document de décision, spec, **fiche de stage ou protocole** : uniquement quand l'étape ou la délégation qui en a besoin est déclenchée.
   - Tracer sur l'issue ce qui a été chargé (piste d'audit).
+- **Documents d'architecture du projet** (lecture, modification, création) : lire d'abord les métadonnées (front-matter) pour cibler fichiers et sections, n'ouvrir que ceux-là. Le protocole est porté par la skill du gabarit du document ; à défaut, lire titres et table des matières avant le corps et le signaler à l'humain.
 - **Règles conditionnelles** :
   - Normes PCI DSS / GDPR / Loi 25 / LPRPDE : chargées seulement si explicitement demandées ; par défaut, OWASP / STRIDE seules.
   - Règles non applicables à l'étape : marquées **N/A**, non chargées.

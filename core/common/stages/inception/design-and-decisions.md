@@ -14,7 +14,7 @@ human_gate: granular
 produces: [decision_conception, diagramme_principal, conception_cible_validee]
 consumes: [{artifact: besoins_traces, required: true}, {artifact: decoupage_livrables, required: true}, {artifact: verdict_impact_structurant, required: true}, {artifact: verdict_methodologie, required: false}]
 requires_stage: [deliverables-breakdown]
-sensors: [required-sections-adr, required-sections-architecture, upstream-coverage, diagram-validity, data-lifecycle, claim-sources, style-concision]
+sensors: [required-sections-adr, required-sections-architecture, upstream-coverage, diagram-validity, data-lifecycle, claim-sources, style-concision, sujets-a-jour]
 scopes: [standard, feature, infra, security-patch, mvp, enterprise]
 inputs: "Besoins tracés + découpage en livrables"
 outputs: "Conception cible + décisions structurantes validées granulairement par l'humain, après contrôle sécurité"

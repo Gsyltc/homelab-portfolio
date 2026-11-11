@@ -33,7 +33,7 @@ Exécuter **SI** brownfield détecté et contexte insuffisant. **Ignorer (N/A) S
 
 ### Step 2 — Charger et synthétiser
 
-Charger la documentation d'architecture, les décisions structurantes et diagrammes pertinents ; en produire une synthèse sur l'issue. L'Architecte de solution est une **voix adoptée** en `inline`, pas une revue indépendante.
+Charger la documentation d'architecture, les décisions structurantes et diagrammes pertinents **en lazy loading** : lire d'abord les métadonnées (front-matter) de chaque document selon le protocole de ciblage de la skill du gabarit (voir conductor, « Chargement optimisé »), puis n'ouvrir que les fichiers et sections retenus ; en produire une synthèse sur l'issue. L'Architecte de solution est une **voix adoptée** en `inline`, pas une revue indépendante.
 
 ## Sensors
 
