@@ -5,6 +5,9 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/) ; versionnage
 
 ## [Non publié]
 
+### Fixed
+- **Détection de stack : recherche sous `${WORK_DIRECTORY}` uniquement** (HOM-298). `stack-detection` impose la résolution préalable de `${WORK_DIRECTORY}` et interdit de chercher dans le checkout du workflow (`$CORE_HOME`) ; variable non résolue → `blocked` + question à l'humain. Rappel ajouté au Tech Lead Homelab.
+
 ### Changed
 - **Clés de version par service dans Vault** (HOM-297). Pour une stack docker compose à plusieurs
   services à versions distinctes, une clé `VERSION_<NOM_DU_SERVICE>` par service remplace la clé
