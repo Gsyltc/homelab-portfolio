@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Versioned pre-commit hook: block commits that break Agent Skills conformance.
+# Versioned pre-commit hook: block commits that break Agent Skills conformance
+# or agent definition conventions (scripts/validate_agents.py).
 #
 # Enable once per clone:
 #   git config core.hooksPath .githooks
@@ -19,13 +20,28 @@ mapfile -t changed < <(
     | sort -u
 )
 
-if [[ ${#changed[@]} -eq 0 ]]; then
-  exit 0
+if [[ ${#changed[@]} -gt 0 ]]; then
+  echo "pre-commit: validating Agent Skills conformance (agentskills.io)…"
+  if ! scripts/validate_skills.sh "${changed[@]}"; then
+    echo >&2
+    echo "pre-commit: commit blocked — fix the skill(s) above or run 'scripts/validate_skills.sh'." >&2
+    exit 1
+  fi
 fi
 
-echo "pre-commit: validating Agent Skills conformance (agentskills.io)…"
-if ! scripts/validate_skills.sh "${changed[@]}"; then
-  echo >&2
-  echo "pre-commit: commit blocked — fix the skill(s) above or run 'scripts/validate_skills.sh'." >&2
-  exit 1
+# Collect agent definition files (<workflow>/agents/*.md, README excluded) staged for commit.
+mapfile -t agents < <(
+  git diff --cached --name-only --diff-filter=ACMR \
+    | grep -E '^[^/]+/agents/[^/]+\.md$' \
+    | grep -viE '/README\.md$' \
+    | sort -u
+)
+
+if [[ ${#agents[@]} -gt 0 ]]; then
+  echo "pre-commit: validating agent definitions (front-matter, Multica / AI-DLC best practices)…"
+  if ! python3 scripts/validate_agents.py "${agents[@]}"; then
+    echo >&2
+    echo "pre-commit: commit blocked — fix the agent definition(s) above or run 'scripts/validate_agents.py'." >&2
+    exit 1
+  fi
 fi
