@@ -2,8 +2,9 @@
 
 **Source unique** du format des **comptes rendus destinés à l'humain** du workflow `core` : comment un agent rédige un **compte rendu** ou une **présentation de gate** sur l'issue. **Ce format s'applique aux commentaires destinés à l'humain (gates, présentation finale, sollicitation d'arbitrage), pas aux handoffs A2A purs** : pour une délégation ou un retour agent↔agent sans gate humaine, la mission, le livrable et les verdicts de sensors voyagent dans le **fichier YAML joint (message A2A)** et le commentaire est réduit à la mention active + le nom du fichier (source unique : « Règle A2A » et « Schéma du message A2A » de [`governance-security.md`](governance-security.md)). Ce protocole fixe la **forme** (concision + structure) ; il ne redéfinit **ni** les mécanismes de clôture de la boucle A2A — statut d'issue, lien de mention actif, `trigger_outcomes`, anti-wake parasite — qui ont leur source unique dans la « Checklist de sortie de stage » de [`stage-protocol.md`](stage-protocol.md) et la « Règle A2A » de [`governance-security.md`](governance-security.md), **ni** les invariants de gouvernance et de gating, dont la source unique reste [`governance-security.md`](governance-security.md) et [`conductor.md`](../conductor.md).
 
-> **Qui est concerné.** Tout agent du workflow `core` qui poste un compte rendu à l'humain : coordinateur, architectes, experts, Experte d'archivage, Agent de notifications.
-> **Exception : les reviewers (cohérence, sécurité).** Leur retour à un agent est un YAML sans prose, défini dans [`reviewer.md`](reviewer.md), § « Forme de la revue — retour YAML sans prose ». Ils n'utilisent pas les 4 sections de ce protocole.
+> **Qui est concerné — tous les agents, reviewers compris. Le destinataire fixe la forme :**
+> - **Destinataire = l'humain** : prose réduite + 4 sections (ce protocole).
+> - **Destinataire = un autre agent** : YAML joint (message A2A) + commentaire réduit à la mention active et au nom du fichier — jamais de prose ni de 4 sections. Source : [`governance-security.md`](governance-security.md) (« Règle A2A »). Retour d'un reviewer : [`reviewer.md`](reviewer.md).
 
 ## 1. Prose réduite (obligatoire, tout retour)
 
