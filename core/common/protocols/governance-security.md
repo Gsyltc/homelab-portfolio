@@ -77,7 +77,7 @@ reference_audit: <id de commentaire ou d'artefact>
 
 - **`delegation`** : `objet`, `perimetre`, `criteres_acceptation`, `sensors_a_executer` renseignés ; `resultat` et `sensors_resultats` omis.
 - **`retour`** : `resultat` + `sensors_resultats` renseignés ; `artefacts` liste les livrables produits.
-- **`rapport-verification`** : `resultat.statut` + `sensors_resultats` structurés (voir [`../../sensors/gates.md`](../../sensors/gates.md), qui ne redéfinit pas ce schéma).
+- **`rapport-verification`** : `resultat.statut` + `sensors_resultats` structurés (voir [`../../sensors/gates.md`](../../sensors/gates.md), qui ne redéfinit pas ce schéma). Pour un **retour de reviewer**, le bloc `revue` (verdict, écarts, vérifications) est défini dans [`reviewer.md`](reviewer.md), § « Forme de la revue — retour YAML sans prose ».
 - **Sensors (garde-fous SG-1..6 reconduits, non contournables)** : le `verdict` est celui rendu par `sensor.py`, **jamais réinterprété** ; `indisponible ≠ conforme` ; un sensor présent dans `sensors_a_executer` mais **absent de `sensors_resultats` est un écart** (silence interdit) ; le message A2A reste **advisory** — il ne remplace ni la validation humaine granulaire ni le contrôle sécurité systématique.
 - Champs non pertinents omis. **Aucun secret** dans le YAML. La langue des valeurs libres suit celle de l'humain (français par défaut).
 - **Règle de validité YAML (obligatoire)** : en notation *flow* (`[...]` / `{...}`), **mettre entre guillemets** toute valeur contenant `${...}`, `{`, `}`, `:` suivi d'un espace, ou une **virgule** (ex. `chemin: "${ROOT_DIRECTORY}/..."`, `detail: "2 écarts, 1 indisponible"`). Un doute ⇒ guillemeter. Le fichier reste **YAML valide** de bout en bout (piste d'audit lisible).
