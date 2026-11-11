@@ -56,6 +56,25 @@ ordre_presentation: <n|null>              # = préfixe numérique du fichier (0�
 
 > Le gabarit de **revue** (`revue/revue-securite.md`) ne porte **pas** de front-matter de ciblage : ce n'est pas un livrable d'architecture présentable, c'est un verdict de contrôle.
 
+### Lecture et écriture ciblées (lazy loading)
+
+Cette skill est la **source unique** de la règle de ciblage pour les documents issus de ses gabarits : les agents qui lisent, modifient ou créent ces documents l'appliquent. Le workflow `core` reste agnostique ; si un gabarit futur porte d'autres métadonnées, **sa skill** redéfinit les champs de routage ci-dessous.
+
+- **Champs de routage de ces gabarits** : `doc_id`, `theme`, `domaine`, `sujets` (H2/H3), `types_presentation`, `sensibilite`, `togaf_layer`.
+- **Lecture / analyse.**
+  1. Lister les fichiers visés et lire **uniquement leur front-matter** (jamais le corps à ce stade).
+  2. Retenir les fichiers dont les champs de routage recoupent le besoin ; `sujets` désigne les sections (H2/H3) pertinentes.
+  3. Ouvrir **seulement ces sections** (ou le fichier entier si le besoin couvre tout le thème). Ne jamais charger toute la documentation.
+- **Modification.**
+  1. Localiser le fichier et la section par le front-matter, comme pour la lecture.
+  2. Ne modifier que les sections concernées.
+  3. Si un titre H2/H3 est ajouté, renommé, supprimé ou déplacé, mettre à jour `sujets` **dans le même changement**.
+- **Création.**
+  1. Si aucun fichier ni section ne couvre le besoin, partir du gabarit correspondant (front-matter compris) ; ne pas dupliquer un thème déjà couvert.
+  2. Renseigner les champs de routage (`doc_id` stable, `theme`, `domaine: [securite]`, `sensibilite: restreint`, `ordre_presentation`).
+  3. Renseigner `sujets` avec les titres H2/H3 réellement présents, dans l'ordre.
+- **Contrôle.** Le sensor `sujets-a-jour` (`core/sensors/sensors/sujets-a-jour.md`) signale à l'écriture tout `sujets` désynchronisé des titres. Il est advisory : la tenue à jour reste la responsabilité de l'agent qui écrit.
+
 ## Renvois vers l'architecture détaillée (format Structurizr)
 
 > Reporté de la skill `architecture-solution-gabarits` (§ « Renvois vers l'architecture détaillée (format Structurizr) »), **adapté à la sécurité** — fichier de synthèse de référence : `11-securite.md` de la DAS.
@@ -106,7 +125,7 @@ Dans **toute** table ou liste de renvoi (table du chapitre du `00`, renvois croi
 2. **Initialisation** : copier **l'ensemble** des fichiers de `gabarits/` dans `documentation/architecture-securite/` du projet, en conservant les noms de fichiers **et le front-matter YAML de ciblage**. Un thème non couvert pour l'instant est copié tel quel.
 3. **Socle normatif — OWASP + STRIDE toujours actifs.** Toute analyse de sécurité s'appuie **par défaut** sur OWASP Top 10 et STRIDE. Les autres normes (COBIT, NIST, PCI DSS, GDPR, Loi 25, LPRPDE) ne sont activées **que sur activation humaine explicite** (ou du coordinateur) — voir les règles d'activation de la skill `cybersecurite`. **Ne jamais décider seul** d'appliquer une norme non demandée.
 4. **IDs, échelles, liens figés** : respecter les conventions ci-dessus (IDs stables, échelle `Faible…Critique`, risque résiduel `P × I`, liens ADR relatifs, renvois croisés sans duplication).
-5. **Front-matter de ciblage maintenu à jour.** Le champ `sujets` reflète les titres H2/H3 dans l'ordre ; le mettre à jour dans le même changement qu'un ajout / renommage / suppression de titre. Jamais de secret dans le front-matter ; `sensibilite` reflète la confidentialité réelle (`restreint` pour ce dossier).
+5. **Front-matter de ciblage maintenu à jour.** Le champ `sujets` reflète les titres H2/H3 dans l'ordre ; le mettre à jour dans le même changement qu'un ajout / renommage / suppression de titre. Contrôlé par le sensor `sujets-a-jour` ; protocole de lecture/écriture ciblées : section « Front-matter de ciblage ». Jamais de secret dans le front-matter ; `sensibilite` reflète la confidentialité réelle (`restreint` pour ce dossier).
 6. **Aucun secret** (mot de passe, jeton, clé, identifiant) ne figure dans la documentation ni dans le front-matter.
 7. **Décisions tracées en ADR** : chaque décision d'architecture de sécurité est tracée dans un ADR (skill `create-architecture-decision-record`) et référencée par un lien relatif `../../decisions/NNNN-....md`.
 8. **La revue est review-only** : le gabarit `revue/revue-securite.md` ne produit aucune architecture ; il structure un verdict. Il respecte le plancher SG-3 (revue obligatoire et non substituable, précédant la validation humaine granulaire).

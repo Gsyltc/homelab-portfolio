@@ -190,6 +190,7 @@ Décrire les mesures de sécurisation de la chaîne d'approvisionnement logiciel
 Une politique de sécurité basée sur le principe du moindre privilège (PoLP, Principle of Least Privilege) est une stratégie de sécurité informatique dans laquelle un utilisateur se voit octroyer le minimum de permissions nécessaires pour accomplir ses tâches.
 Le but, en d'autres termes, sera de n'octroyer à un utilisateur que les informations et ressources strictement nécessaires pour l'accomplissement de son travail.
 S'applique aux utilisateurs comme aux services (identités applicatives, rôles de service) et aux données classées du `10-cycle_vie_donnees.md`.
+-->
 
 ### Authentification / Autorisation
 

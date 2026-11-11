@@ -16,6 +16,11 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/) ; versionnage
   (HOM-278).
 
 ### Changed
+- **`architecture-solution-gabarits` et `architecture-securite-gabarits`** : nouvelle sous-section
+  « Lecture et écriture ciblées (lazy loading) » (lecture du front-matter d'abord, puis sections
+  retenues ; mise à jour de `sujets` à la modification ; création depuis le gabarit) et renvoi au
+  sensor `sujets-a-jour` (HOM-300). Corrections de gabarits : `11-securite.md`
+  (commentaire non refermé), `00-checklist-architecture.md` (`sujets`).
 - **`create-architecture-decision-record`** : gabarit ADR aligné sur arc42 §9
   (HOM-285) — front matter en tête de fichier avec clés normalisées
   (`accepte_par`, `accepte_le`, nouveau `parties_prenantes`), section
