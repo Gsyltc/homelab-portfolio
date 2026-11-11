@@ -59,6 +59,25 @@ ordre_presentation: <n|null>
 - **`sensibilite`** : confidentialité réelle ; `restreint` (menaces, GIA) jamais exposé au client.
 - **Aucun secret** dans le front-matter.
 
+### Lecture et écriture ciblées (lazy loading)
+
+Cette skill est la **source unique** de la règle de ciblage pour les documents issus de ses gabarits : les agents qui lisent, modifient ou créent ces documents l'appliquent. Le workflow `core` reste agnostique ; si un gabarit futur porte d'autres métadonnées, **sa skill** redéfinit les champs de routage ci-dessous.
+
+- **Champs de routage de ces gabarits** : `doc_id`, `theme`, `domaine`, `sujets` (H2/H3), `types_presentation`, `sensibilite`, `togaf_layer`.
+- **Lecture / analyse.**
+  1. Lister les fichiers visés et lire **uniquement leur front-matter** (jamais le corps à ce stade).
+  2. Retenir les fichiers dont les champs de routage recoupent le besoin ; `sujets` désigne les sections (H2/H3) pertinentes.
+  3. Ouvrir **seulement ces sections** (ou le fichier entier si le besoin couvre tout le thème). Ne jamais charger toute la documentation.
+- **Modification.**
+  1. Localiser le fichier et la section par le front-matter, comme pour la lecture.
+  2. Ne modifier que les sections concernées.
+  3. Si un titre H2/H3 est ajouté, renommé, supprimé ou déplacé, mettre à jour `sujets` **dans le même changement**.
+- **Création.**
+  1. Si aucun fichier ni section ne couvre le besoin, partir du gabarit correspondant (front-matter compris) ; ne pas dupliquer un thème déjà couvert.
+  2. Renseigner les champs de routage (`doc_id` stable, `theme`, `domaine`, `sensibilite` réelle, `ordre_presentation`).
+  3. Renseigner `sujets` avec les titres H2/H3 réellement présents, dans l'ordre.
+- **Contrôle.** Le sensor `sujets-a-jour` (`core/sensors/sensors/sujets-a-jour.md`) signale à l'écriture tout `sujets` désynchronisé des titres. Il est advisory : la tenue à jour reste la responsabilité de l'agent qui écrit.
+
 ## Renvois vers l'architecture détaillée (format Structurizr)
 
 Rendu par **Structurizr** (vue `documentation` d'un `SoftwareSystem`). Les liens Markdown par chemin de fichier **ne résolvent pas** : proscrits. Format de renvoi **unique** = lien d'ancre Structurizr :
@@ -116,7 +135,7 @@ documentation/<Software System>#<ancre-de-section>
    - Embarqués via Structurizr : vue `image` + kroki + référence `embed:` (`![…](embed:<clé>)`). Proscrire l'inclusion directe d'un fichier image/source. Renderer kroki selon le type ; réutiliser le thème projet (`theme/`) s'il existe.
    - **Le modèle C4/Structurizr est la source de vérité du détaillé** : conteneurs et composants modélisés comme éléments de 1er ordre dans `models/`/`views/` ; la DAS le reflète. C'est un travail de modélisation, pas un déplacement de prose.
 10. **ADR.** Chaque décision d'architecture est tracée en ADR (skill `create-architecture-decision-record`) et référencée dans les fichiers concernés.
-11. **Front-matter de ciblage maintenu à jour.** Cohérent avec le contenu ; `sujets` reflète les titres `##`/`###` dans l'ordre, mis à jour dans le même changement qu'un ajout/renommage/suppression ; jamais de secret ; `sensibilite` réelle.
+11. **Front-matter de ciblage maintenu à jour.** Cohérent avec le contenu ; `sujets` reflète les titres `##`/`###` dans l'ordre, mis à jour dans le même changement qu'un ajout/renommage/suppression ; jamais de secret ; `sensibilite` réelle. Contrôlé par le sensor `sujets-a-jour` ; protocole de lecture/écriture ciblées : section « Front-matter de ciblage ».
 12. **Aucun secret** (mot de passe, identifiant) dans la documentation.
 13. **Architecture détaillée sous `architecture-detaillee/<software_system>/`**, en quatre sous-répertoires dans cet **ordre non négociable** :
     - `architecture-logicielle/` · `architecture-infra/` · `architecture-donnees/` · `architecture-securite/`.

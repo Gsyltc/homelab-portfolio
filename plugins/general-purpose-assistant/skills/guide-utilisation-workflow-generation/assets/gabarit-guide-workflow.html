@@ -449,11 +449,13 @@
     <tr><td><b>Workflow — fiche de stage</b></td><td>phase, condition d'exécution, agents, gate humain, scopes, sensors, entrées / sorties</td><td>L'en-tête sert à <b>enchaîner les étapes</b> ; le corps (déroulé de l'étape) n'est lu que par l'agent qui exécute l'étape, sur indication de la délégation.</td></tr>
     <tr><td><b>Workflow — scope</b></td><td>nom, Depth, Vérification, <b>mots-clés</b>, description</td><td>Les mots-clés alimentent l'<b>auto-détection</b> du scope ; ses règles propres ne sont chargées qu'une fois le scope confirmé.</td></tr>
     <tr><td><b>Workflow — sensor</b></td><td>identifiant, commande, moment de déclenchement, fichiers visés</td><td>L'en-tête dit <b>quand et sur quoi</b> lancer le contrôle ; le contrat de vérification n'est exécuté qu'à ce moment-là.</td></tr>
-    <tr><td><b>Documentation d'architecture</b></td><td>thème, domaine, <b>sujets</b> (titres de sections), types de présentation, sensibilité</td><td>On repère <b>la bonne section</b> sans lire le document ; seul le passage utile est ouvert.</td></tr>
+    <tr><td><b>Documentation d'architecture</b></td><td>thème, domaine, <b>sujets</b> (titres de sections), types de présentation, sensibilité</td><td>Pour <b>lire, modifier ou créer</b>, on lit d'abord les en-têtes pour cibler le fichier et la section ; seuls ceux-là sont ouverts. Si rien ne couvre le besoin, on part du gabarit au lieu de dupliquer un thème.</td></tr>
     <tr><td><b>Décision (ADR)</b></td><td>auteurs, acceptation, remplacements (<i>supersedes</i>)</td><td>Le registre est parcouru par ses titres ; l'en-tête est vérifié par les contrôles automatiques ; le corps de la décision n'est lu que lorsqu'elle est utile.</td></tr>
   </table>
-  <p class="legend">Un front matter tenu à jour est donc une condition du chargement paresseux : par exemple, la
-  liste des <code>sujets</code> d'un document d'architecture est mise à jour à chaque ajout ou renommage de section.</p>
+  <p class="legend">Un front matter tenu à jour est donc une condition du chargement paresseux : la liste des
+  <code>sujets</code> d'un document d'architecture est mise à jour dans le même changement que tout ajout, renommage ou
+  suppression de section, et le contrôle automatique <b>sujets-a-jour</b> signale à l'écriture tout écart (advisory).
+  La règle de ciblage est portée par la compétence du gabarit, pas par le workflow : un autre gabarit peut définir ses propres champs.</p>
 
   <table>
     <tr><th style="width:34%">Règle complémentaire</th><th>Comment elle s'applique</th></tr>

@@ -99,7 +99,7 @@ class OneScriptPerSensorTests(unittest.TestCase):
         manifests = set(sensor.load_manifests())
         scripts = {p.stem.replace("_", "-") for p in sensor.SCRIPTS_DIR.glob("*.py") if p.stem != "__init__"}
         self.assertEqual(manifests, scripts, "chaque manifeste a un script et réciproquement")
-        self.assertEqual(len(scripts), 10)
+        self.assertEqual(len(scripts), 11)
 
     def test_each_script_exposes_run_and_id(self) -> None:
         for sid in sensor.load_manifests():
@@ -176,6 +176,23 @@ class SensorTests(unittest.TestCase):
         self.assertEqual(rs[-1].verdict, GAP)
         self.assertTrue(any("02-menaces-stride.md" in f for f in rs[-1].findings))
         self.assertTrue(any("11-securite.md" in f for f in rs[-1].findings))  # DAS et détaillée : un seul sensor
+
+    def test_sujets_a_jour(self) -> None:
+        doc = "---\ndoc_id: x\nsujets:\n  - Alpha\n  - Beta (v2)\n---\n## Alpha\ntexte\n### Beta (v2)\ntexte\n#### Détail\n"
+        self.p.write("documentation/a.md", doc)
+        self.assertEqual(self.p.verdict("sujets-a-jour", ["documentation/a.md"]), OK)
+        self.p.write("documentation/b.md", doc + "## Gamma\n")  # titre ajouté sans maj de sujets
+        r = self.p.fire("sujets-a-jour", ["documentation/b.md"])[0]
+        self.assertEqual(r.verdict, GAP)
+        self.assertTrue(any("Gamma" in f for f in r.findings))
+        self.p.write("documentation/c.md", doc.replace("### Beta (v2)", "### Delta"))  # titre renommé
+        r = self.p.fire("sujets-a-jour", ["documentation/c.md"])[0]
+        self.assertTrue(any("Beta" in f for f in r.findings) and any("Delta" in f for f in r.findings))
+        self.p.write("documentation/d.md", doc.replace("sujets:\n  - Alpha\n  - Beta (v2)", "sujets: [\"Beta (v2)\", Alpha]"))
+        r = self.p.fire("sujets-a-jour", ["documentation/d.md"])[0]
+        self.assertTrue(any("ordre" in f for f in r.findings))
+        self.p.write("documentation/e.md", "---\ndoc_id: x\n---\n## Alpha\n")  # sans `sujets` : hors périmètre
+        self.assertEqual(self.p.verdict("sujets-a-jour", ["documentation/e.md"]), UNAVAILABLE)
 
     def test_template_only_section_is_empty(self) -> None:
         self.p.write("documentation/01-introduction.md", "## Contexte\n<!-- à remplir -->\n## Périmètre\n| a | b |\n|---|---|\n| <x> | ... |\n## Parties prenantes\nz\n")

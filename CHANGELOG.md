@@ -9,6 +9,9 @@ ce fichier en donne la lecture chronologique côté produit.
 ## [Non publié]
 
 ### Added
+- **Sensor `sujets-a-jour`** (HOM-300). Vérifie à l'écriture que le champ `sujets` du front-matter d'un
+  document d'architecture reflète ses titres `##`/`###` (présence, titres obsolètes, ordre). Branché sur
+  les stages `design-and-decisions` et `detailed-deliverables`.
 - **Sensor de conformité des fiches d'agents** (HOM-299). `scripts/validate_agents.py` contrôle le
   front-matter des `<workflow>/agents/*.md` (`name` = nom de fichier, `disallowedTools: Task`, `tier`,
   pas de `model`/`allowedTools`, aucun secret) ; déclenché par le hook `pre-commit` avant tout commit
@@ -27,6 +30,14 @@ ce fichier en donne la lecture chronologique côté produit.
     et devient la **source de régénération** du PDF core ; le PDF (16 pages, couverture v1.6) est régénéré depuis lui.
   - Skill `guide-utilisation-workflow-generation` : règle « mise à jour dans le gabarit, jamais sur le PDF seul »,
     trame enrichie du chargement paresseux / front matter.
+  - Aligné sur HOM-300 : lecture / modification / création ciblées de la documentation d'architecture par
+    son front matter (protocole porté par la skill du gabarit) et contrôle par le sensor `sujets-a-jour`.
+- **Lazy loading de la documentation d'architecture** (HOM-300). Le conductor et le stage
+  `existing-context-loading` imposent de lire d'abord le front-matter pour déterminer les fichiers et
+  sections à utiliser, modifier ou créer. Le protocole (champs de routage, lecture, écriture) est porté par
+  les skills de gabarits, pas par le workflow `core` (agnosticité).
+- **Gabarits** : `11-securite.md` (commentaire non refermé qui masquait un titre) et
+  `00-checklist-architecture.md` (`sujets` complété) resynchronisés, révélés par le nouveau sensor.
 - **Gabarit ADR aligné sur arc42 §9** (HOM-285). Front matter placé en tête de fichier avec clés
   normalisées (`accepte_par`, `accepte_le`, `parties_prenantes`) — les 53 ADR existants sont migrés
   (changement de forme uniquement). Le sensor `required-sections` contrôle désormais le front matter en

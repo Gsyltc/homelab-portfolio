@@ -100,7 +100,7 @@ Les résultats vivent **sur l'issue** (piste d'audit existante), jamais dans un 
 
 ## Sensors définis
 
-Dix sensors, alignés sur le contrat amont « Sensors » (schéma de manifeste `id` / `kind` / `command` / `default_severity` / `description` + `category` / `fire_on` / `matches`). Les `id` sont importés **par id nu** dans le champ `sensors:` des fiches de stage (pull-authoring).
+Onze sensors, alignés sur le contrat amont « Sensors » (schéma de manifeste `id` / `kind` / `command` / `default_severity` / `description` + `category` / `fire_on` / `matches`). Les `id` sont importés **par id nu** dans le champ `sensors:` des fiches de stage (pull-authoring).
 
 | Sensor | Manifeste | `category` | `fire_on` | `default_severity` | Objet |
 | --- | --- | --- | --- | --- | --- |
@@ -109,6 +109,7 @@ Dix sensors, alignés sur le contrat amont « Sensors » (schéma de manifeste `
 | `data-lifecycle` | [`sensors/data-lifecycle.md`](sensors/data-lifecycle.md) | document-shape | gate | advisory | Document **Cycle de vie des données** (`10-cycle_vie_donnees.md`) présent et renseigné (cycle de vie, gouvernance, classification) **selon les données du projet**. **Advisory** : assiste la revue **Architecte de solution → Architecte de données** et alerte le coordinateur, **sans jamais bloquer** (origine ALI-231) |
 | `upstream-coverage` | [`sensors/upstream-coverage.md`](sensors/upstream-coverage.md) | document-shape | gate | advisory | Référence explicite à la demande amont (issue / ADR parent) |
 | `diagram-validity` | [`sensors/diagram-validity.md`](sensors/diagram-validity.md) | document-shape | write | advisory | Syntaxe des diagrammes en code (Mermaid / PlantUML / Structurizr) |
+| `sujets-a-jour` | [`sensors/sujets-a-jour.md`](sensors/sujets-a-jour.md) | document-shape | write | advisory | Le champ `sujets` du front-matter d'un document d'architecture reflète ses titres `##`/`###` (présence, titres obsolètes, ordre) — sommaire de ciblage pour le lazy loading |
 | `detailed-arch-refs` | [`sensors/detailed-arch-refs.md`](sensors/detailed-arch-refs.md) | document-shape | write | advisory | Renvois vers l'architecture détaillée au format d'ancre Structurizr (`documentation/<SS>#<ancre>`, pas de chemin de fichier) et absence de suffixe de nom de système dans les titres du détail (origine ORIG-261) |
 | `claim-sources` | [`sensors/claim-sources.md`](sensors/claim-sources.md) | provenance | gate | advisory | Chaque affirmation retenue porte une source résoluble ; hypothèses = confirmation humaine explicite |
 | `style-concision` | [`sensors/style-concision.md`](sensors/style-concision.md) | document-shape | write | advisory | Style concis des documents livrables : paragraphes et phrases courts, puces limitées en profondeur, tableaux hors gabarit sobres (`RULE-WS-007`) |
