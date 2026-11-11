@@ -19,11 +19,11 @@ modification structurante d'une stack existante, `service-version-update` couvre
 en **trois temps** :
 
 1. **Analyse d'impact de version** — type de service (Docker Swarm vs Proxmox), lecture de la
-   version actuelle dans Vault (clé `VERSION`, lecture seule), analyse de la page Release GitHub,
+   version actuelle dans Vault (clé `VERSION` ou `VERSION_<NOM_DU_SERVICE>`, lecture seule), analyse de la page Release GitHub,
    détection des breaking changes et des enjeux de configuration. Un enjeu détecté (breaking
    change, version non stable, migration de configuration) **bloque** le parcours : l'issue passe
    `blocked`, aucune suite n'est engagée sans arbitrage humain.
-2. **Écriture `VERSION` dans Vault** — mise à jour de la seule clé `VERSION` du montage
+2. **Écriture de la version dans Vault** — mise à jour de la/des seule(s) clé(s) de version (`VERSION` ou `VERSION_<NOM_DU_SERVICE>`) du montage
    `env_variables/data/<service>` via la skill `homelab-vault-access` (exception d'écriture
    étroite, voir ci-dessous).
 3. **Déploiement Kestra** — lancement du flux `configure_service` à partir du fichier Terraform du
@@ -42,6 +42,20 @@ flowchart TD
     KD --> DONE[Service deploye en nouvelle version]
 ```
 
+## Convention des clés de version dans Vault
+
+- **Stack à un seul service, ou services partageant la même version** : clé unique `VERSION`
+  (`${VERSION:-<défaut>}` dans le compose).
+- **Stack docker compose à plusieurs services avec des versions distinctes** : **une clé
+  `VERSION_<NOM_DU_SERVICE>` par service** (nom en majuscules, ex. `VERSION_PROMETHEUS`,
+  `VERSION_ALERTMANAGER`), référencée dans le compose par `${VERSION_<NOM_DU_SERVICE>:-<défaut>}`.
+  Ce sont ces clés qui sont lues (Idéation) et écrites (Validation). Les anciens noms
+  spécifiques (`DOCKER_<X>_IMAGE`…) ne sont plus utilisés.
+- Si certains services d'une stack partagent la même version, ils partagent `VERSION` ; seuls les
+  services à version distincte reçoivent une clé `VERSION_<NOM_DU_SERVICE>`.
+- Une mise à jour ne cible que la/les clé(s) du ou des services concernés ; les autres clés de
+  version sont préservées.
+
 ## Gate humain léger unique
 
 Après une analyse d'impact **OK** (aucun breaking change, aucun enjeu de configuration), un **seul**
@@ -54,8 +68,8 @@ d'aller-retour, pas de double validation. Ce gate `light` est porté par le stag
 ## Exception d'écriture Vault étroite
 
 La skill `homelab-vault-access` reste en **lecture seule** pour tous les autres parcours. Ce scope
-est le **seul** cas d'écriture autorisé, et uniquement pour écrire la clé `VERSION` du montage
-`env_variables/data/<service>`. **Jamais** un secret du montage `services/`, jamais une autre clé.
+est le **seul** cas d'écriture autorisé, et uniquement pour écrire les clés de version (`VERSION` / `VERSION_<NOM_DU_SERVICE>`) du montage
+`env_variables/data/<service>`. **Jamais** un secret du montage `services/`, jamais une autre clé qu'une clé de version.
 L'écriture suit un pattern read-modify-write qui préserve toutes les autres clés ; la valeur
 n'est **jamais** affichée, loggée ni transmise ; l'écriture est tracée sur l'issue (nom de clé
 `VERSION` + statut seulement). Détail : [`homelab-vault-access`](../../plugins/homelab-assistant/skills/homelab-vault-access/SKILL.md).

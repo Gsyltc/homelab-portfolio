@@ -5,6 +5,13 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/) ; versionnage
 
 ## [Non publié]
 
+### Changed
+- **Clés de version par service dans Vault** (HOM-297). Pour une stack docker compose à plusieurs
+  services à versions distinctes, une clé `VERSION_<NOM_DU_SERVICE>` par service remplace la clé
+  unique `VERSION` (qui reste valable si les versions sont communes). Skill `homelab-vault-access`
+  (écriture read-modify-write paramétrée par `$VERSION_KEY`), scope `service-version-update` (nouvelle
+  § convention) et stages `version-impact-analysis` / `version-update-application` alignés.
+
 ### Added
 - **Skill `homelab-vault-access` — écriture encadrée de la clé `VERSION`** (parcours
   `service-version-update`, HOM-263). Nouvelle **Étape 3** : écriture en read-modify-write de la
