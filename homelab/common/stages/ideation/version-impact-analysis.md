@@ -35,7 +35,7 @@ quel**, il ne le redétecte pas : le service **existe déjà** et le type est ac
 
 ### Step 2 — Lire la version actuelle dans Vault (lecture seule)
 
-Via la skill [`homelab-vault-access`](../../../../plugins/homelab-assistant/skills/homelab-vault-access/SKILL.md), lire le **numéro de version actuelle** — clé `VERSION` du montage `env_variables/data/<service>` — **en lecture seule à ce stade**. La valeur n'est jamais affichée, loggée ni transmise : seul l'écart « version actuelle → version visée » est consigné (sans divulguer d'autres clés). Aucune écriture n'a lieu en Idéation.
+Via la skill `homelab-vault-access`, lire le **numéro de version actuelle** — clé(s) de version du montage `env_variables/data/<service>` (`VERSION`, ou une clé `VERSION_<NOM_DU_SERVICE>` par service si la stack en définit plusieurs — voir § Convention des clés de version du scope [`service-version-update`](../../../scopes/service-version-update.md)) — **en lecture seule à ce stade**. La valeur n'est jamais affichée, loggée ni transmise : seul l'écart « version actuelle → version visée » est consigné (sans divulguer d'autres clés). Aucune écriture n'a lieu en Idéation.
 
 ### Step 3 — Analyser les impacts de la montée de version (page Release GitHub)
 
@@ -60,7 +60,7 @@ Le compte-rendu posté sur l'issue est **minimal et déterministe** — pas de n
 ## Stack
 
 - Service : <service>
-- **Version cible** : <version visée> (actuelle : <version actuelle lue depuis Vault, clé `VERSION`>)
+- **Version cible** : <version visée> (actuelle : <version actuelle lue depuis Vault, clé `VERSION` ou `VERSION_<NOM_DU_SERVICE>` ; une ligne par service si la stack en a plusieurs>)
 - **Scope** : service-version-update (mise à jour service existant)
 - **Type** : <Docker Swarm | Proxmox> (déterminé en Initialisation par `stack-detection`)
 

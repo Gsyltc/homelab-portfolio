@@ -1,6 +1,6 @@
 ---
 name: homelab-vault-access
-description: "Accès Vault du Homelab (AppRole) pour lire secrets et variables des stacks (montages services/ et env_variables/). Lecture seule sauf écriture encadrée de la seule clé VERSION (env_variables, parcours service-version-update)."
+description: "Accès Vault du Homelab (AppRole) pour lire secrets et variables des stacks (montages services/ et env_variables/). Lecture seule sauf écriture encadrée des seules clés de version (VERSION ou VERSION_<NOM_DU_SERVICE>) (montage env_variables), uniquement sur demande explicite et validée par l'humain."
 ---
 
 # homelab-vault-access
@@ -134,22 +134,21 @@ curl -sS --fail-with-body -H "X-Vault-Token: $TOKEN" \
 (`sys/mounts` peut lui-même être refusé par une policy restrictive → 403 :
 passer directement aux chemins documentés ci-dessus.)
 
-## Étape 3 — Écriture encadrée de la clé `VERSION` (SEUL cas d'écriture autorisé)
+## Étape 3 — Écriture encadrée des clés de version (SEUL cas d'écriture autorisé)
 
-> **Portée stricte.** Cette skill est en **lecture seule** pour tous les parcours du workflow,
-> **sauf** le parcours [`service-version-update`](../../../../homelab/scopes/service-version-update.md),
-> et uniquement pour écrire la **seule** clé `VERSION` du montage `env_variables/data/<service>`.
-> **Jamais** un secret du montage `services/`. **Jamais** une autre clé que `VERSION`. Toute autre
-> écriture est **interdite**. L'écriture est **gardée par le gate léger unique (A1)** du stage
-> [`version-update-application`](../../../../homelab/common/stages/validation/version-update-application.md) :
-> aucune écriture sans l'acceptation humaine A1.
+> **Portée stricte.** Cette skill est en **lecture seule**, **sauf** pour écrire les **seules** clés
+> de version (`VERSION` ou `VERSION_<NOM_DU_SERVICE>`) du montage `env_variables/data/<service>`.
+> **Jamais** un secret du montage `services/`. **Jamais** une autre clé. Toute autre écriture est
+> **interdite**. L'écriture n'a lieu qu'après une **acceptation humaine explicite** fournie par
+> l'appelant : aucune écriture sans cette acceptation.
 
 L'API KV v2 **écrase l'ensemble du secret** à chaque POST sur `.../data/<service>`. Pour ne modifier
 que `VERSION` **sans perdre les autres clés**, utiliser un pattern **read-modify-write** : relire
-l'objet `.data.data` complet, n'y remplacer que `VERSION`, puis réécrire l'objet entier.
+l'objet `.data.data` complet, n'y remplacer que la/les clé(s) de version ciblée(s), puis réécrire l'objet entier.
 
 ```bash
-# Pré-requis : TOKEN obtenu à l'Étape 1 ; $SERVICE et $NEW_VERSION fournis par le workflow.
+# Pré-requis : TOKEN obtenu à l'Étape 1 ; $SERVICE, $VERSION_KEY (`VERSION` ou
+# `VERSION_<NOM_DU_SERVICE>`) et $NEW_VERSION fournis par l'appelant.
 # La NOUVELLE version est une donnée de version (non secrète) ; elle n'est pas un secret Vault,
 # mais on ne logge jamais le contenu complet du secret relu.
 
@@ -157,8 +156,8 @@ l'objet `.data.data` complet, n'y remplacer que `VERSION`, puis réécrire l'obj
 CURRENT=$(curl -sS --fail-with-body -H "X-Vault-Token: $TOKEN" \
   "${VAULT_ADDR}/v1/env_variables/data/${SERVICE}" | jq -c '.data.data')
 
-# 2. Construire le nouvel objet en ne remplaçant QUE la clé VERSION (toutes les autres préservées).
-NEW_DATA=$(printf '%s' "$CURRENT" | jq -c --arg v "$NEW_VERSION" '.VERSION = $v')
+# 2. Construire le nouvel objet en ne remplaçant QUE la clé de version ciblée (toutes les autres préservées).
+NEW_DATA=$(printf '%s' "$CURRENT" | jq -c --arg k "$VERSION_KEY" --arg v "$NEW_VERSION" '.[$k] = $v')
 
 # 3. Réécrire l'objet entier (KV v2 : enveloppe {"data": {...}}).
 #    Le corps transite par stdin (jamais en argument visible par `ps`).
@@ -166,22 +165,22 @@ printf '{"data": %s}' "$NEW_DATA" | curl -sS --fail-with-body -X POST \
   -H "X-Vault-Token: $TOKEN" -H "Content-Type: application/json" \
   --data @- "${VAULT_ADDR}/v1/env_variables/data/${SERVICE}" >/dev/null
 
-# 4. Vérifier que VERSION vaut bien la nouvelle valeur, SANS afficher les autres clés.
+# 4. Vérifier que la clé de version vaut bien la nouvelle valeur, SANS afficher les autres clés.
 WROTE=$(curl -sS --fail-with-body -H "X-Vault-Token: $TOKEN" \
-  "${VAULT_ADDR}/v1/env_variables/data/${SERVICE}" | jq -r '.data.data.VERSION')
-[ "$WROTE" = "$NEW_VERSION" ] && echo "VERSION: écrite" || echo "VERSION: échec"
+  "${VAULT_ADDR}/v1/env_variables/data/${SERVICE}" | jq -r --arg k "$VERSION_KEY" '.data.data[$k]')
+[ "$WROTE" = "$NEW_VERSION" ] && echo "${VERSION_KEY}: écrite" || echo "${VERSION_KEY}: échec"
 
 unset CURRENT NEW_DATA WROTE
 ```
 
 Garde-fous **non débordables** pour cette écriture :
 
-- **Une seule clé** : `VERSION`. Ne jamais ajouter, modifier ni supprimer une autre clé.
+- **Clés de version uniquement** : `VERSION` ou `VERSION_<NOM_DU_SERVICE>` (une écriture par clé ciblée). Ne jamais ajouter, modifier ni supprimer une autre clé. Pour une stack multi-services, ne toucher que la clé du/des service(s) mis à jour.
 - **Un seul montage** : `env_variables/`. **Jamais** `services/` (secrets).
 - **Préservation** : le read-modify-write relit puis réécrit toutes les autres clés à l'identique ;
   ne jamais réécrire un objet partiel qui écraserait les clés existantes.
 - **Pas de divulgation** : ne jamais afficher ni logger l'objet `.data.data` relu (il contient
-  d'autres variables) ; ne tracer sur l'issue que **le nom de clé `VERSION` + le statut** (écrite /
+  d'autres variables) ; ne tracer sur l'issue que **le(s) nom(s) de clé de version + le statut** (écrite /
   échec) — jamais la valeur.
 - **403 `permission denied` en écriture** : la policy AppRole n'accorde pas `update`/`create` sur
   `env_variables/data/<service>` — le signaler au propriétaire du workspace (il faut ajouter la
@@ -214,9 +213,9 @@ unset TOKEN VALUE SECRET_ID ROLE_ID
 
 6. Si une donnée demandée n'existe pas dans Vault (404), le signaler tel quel
    — ne pas la deviner ni la remplacer par une valeur arbitraire.
-7. **Écriture = exception unique.** La seule écriture autorisée est la clé
-   `VERSION` du montage `env_variables/data/<service>`, dans le cadre du parcours
-   `service-version-update` et sous le gate léger unique (A1). **Jamais** une
-   écriture sur le montage `services/`, jamais sur une autre clé que `VERSION`,
-   jamais sans l'acceptation humaine A1. Toute autre demande d'écriture est
+7. **Écriture = exception unique.** Les seules écritures autorisées sont les clés de version
+   (`VERSION` / `VERSION_<NOM_DU_SERVICE>`) du montage `env_variables/data/<service>`, après
+   acceptation humaine explicite. **Jamais** une écriture sur le montage `services/`, jamais sur
+   une autre clé qu'une clé de version, jamais sans cette acceptation. Toute autre demande
+   d'écriture est
    refusée et signalée.

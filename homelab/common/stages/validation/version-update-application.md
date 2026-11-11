@@ -36,7 +36,7 @@ actuelle → version visée, **sans** divulguer d'autres clés Vault), le résul
 d'impact (aucun breaking change, aucun enjeu de configuration) et les **deux actions** qu'une
 acceptation autorise en une seule étape :
 
-1. l'**écriture de la clé `VERSION`** du montage `env_variables/data/<service>` dans Vault ;
+1. l'**écriture de la clé de version** (`VERSION`, ou chaque clé `VERSION_<NOM_DU_SERVICE>` concernée pour une stack multi-services) du montage `env_variables/data/<service>` dans Vault ;
 2. le **déploiement Kestra** (`configure_service`) à partir du fichier Terraform **existant** du
    service (`terraform/swarm/<service>` pour Docker Swarm, `terraform/services/<service>` pour
    Proxmox).
@@ -47,14 +47,14 @@ autonome (invariant du conductor). Rien n'est écrit ni déployé tant que l'hum
 
 ### Step 2 — Sur acceptation : écriture Vault de `VERSION` (exception d'écriture étroite)
 
-Sur « oui » explicite, écrire la **seule** clé `VERSION` du montage `env_variables/data/<service>`
-via la skill [`homelab-vault-access`](../../../../plugins/homelab-assistant/skills/homelab-vault-access/SKILL.md),
+Sur « oui » explicite, écrire **uniquement** les clés de version (`VERSION` ou `VERSION_<NOM_DU_SERVICE>`, selon la convention du scope) du montage `env_variables/data/<service>`
+via la skill `homelab-vault-access`,
 en **read-modify-write** (les autres clés sont relues puis réécrites à l'identique — jamais
 écrasées). Garde-fous **non débordables** :
 
-- **jamais** un secret du montage `services/`, **jamais** une autre clé que `VERSION` ;
+- **jamais** un secret du montage `services/`, **jamais** une autre clé qu'une clé de version (`VERSION` / `VERSION_<NOM_DU_SERVICE>`) ;
 - la valeur n'est **jamais** affichée, loggée ni transmise ;
-- l'écriture est **tracée sur l'issue** : nom de clé `VERSION` + statut (écrite / échec) **seulement** ;
+- l'écriture est **tracée sur l'issue** : nom(s) de clé de version + statut (écrite / échec) **seulement** ;
 - le token Vault est **révoqué** en fin d'opération.
 
 C'est le **seul** cas d'écriture autorisé de la skill (voir son `SKILL.md` § écriture encadrée).
