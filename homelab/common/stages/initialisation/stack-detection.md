@@ -34,6 +34,15 @@ travail sont dans le workspace, aux emplacements définis par le workflow
 (voir [`file-deposit.md`](../validation/file-deposit.md)). Une stack
 existante se localise via ces emplacements, jamais dans le dépôt du workflow.
 
+**Résolution de `${WORK_DIRECTORY}` (préalable, avant toute recherche).** Résoudre la valeur réelle
+de la variable d'environnement (`echo "$WORK_DIRECTORY"`) et vérifier que le répertoire existe.
+Le checkout `homelab-portfolio` (`$CORE_HOME`) ne porte que le workflow : il **ne contient jamais**
+les stacks, `.tfvars` ni docker-compose du projet, et son absence de résultat **ne prouve rien**.
+Si `${WORK_DIRECTORY}` est vide, non définie ou introuvable : **ne pas se rabattre** sur
+`$CORE_HOME`, le répertoire courant ni le dépôt GitHub — passer l'issue en `blocked` et demander
+à l'humain le chemin du répertoire de travail du projet. Consigner dans le commentaire d'audit la
+valeur résolue de `${WORK_DIRECTORY}` (chemin, jamais de secret).
+
 ### Step 2 — OBLIGATOIRE : vérifier l'existence sur le système de fichiers (toute demande)
 
 **Pour TOUTE demande**, la nature « existante vs nouvelle » est tranchée par le **système de fichiers** de `${WORK_DIRECTORY}`,
