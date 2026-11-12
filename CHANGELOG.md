@@ -18,6 +18,14 @@ ce fichier en donne la lecture chronologique côté produit.
   touchant un agent et par la CI `validate-agents`.
 
 ### Changed
+- **Chef cuisinier — primauté de la décision humaine, plus aucun interdit** (réf. AUQU-165).
+  Les règles de cadrage du chef cuisinier (composition, légumineuses, œufs, quota de viandes rouges,
+  historique 30 jours, exclusions) deviennent des **recommandations de proposition** : l'agent ne les
+  propose pas de lui-même, mais **applique toujours une décision explicite de l'humain** — journalisation,
+  calendrier, agenda et clôture compris — et émet une **alerte `⚠️`** chiffrée sur l'écart, au lieu
+  d'opposer un refus catégorique (constat d'échec d'AUQU-164). Seules les pannes techniques et les
+  contrôles d'intégrité restent bloquants. Fiche `temporaire/agents/chef-cuisinier-clinique-biboumed.md`
+  mise à jour (rôle, règles nutritionnelles, traitement des décisions, clôture, contraintes, description).
 - **Guide d'utilisation du workflow `core` v1.6 + gabarit HTML resynchronisé** (ORIG-435).
   - Nouvelle section **3.7 « Le chargement paresseux (lazy loading) »** : ce qui est lu au démarrage
     (inventaires légers) et à la demande, **rôle des front matter** par type de fichier (agent, skill, fiche de
