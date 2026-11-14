@@ -12,7 +12,7 @@ review_class: none
 human_gate: none
 produces: [labels_poses, piste_audit_initialisee, demande_brute_consignee, regles_global_chargees]
 consumes: []
-requires_stage: [deployment-prereqs-precheck]
+requires_stage: [concurrency-lock-read]
 sensors: []
 scopes: [stack-update, new-stack, config-change, security-patch, infra-terraform, n8n, home-assistant]
 inputs: "Demande brute"

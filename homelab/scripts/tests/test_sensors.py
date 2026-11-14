@@ -487,7 +487,6 @@ class TestInitialProposal(unittest.TestCase):
                        "variantes_testees": ["sync-in", "syncin"]},
             "auth": {"recommande": "oidc", "justification": "SSO OIDC supporté", "source": "https://sync-in.com/docs/auth"},
             "database": {"recommande": "mariadb", "justification": "moteur exigé", "source": "https://sync-in.com/docs/db"},
-            "kestra": {"statut": "accessible"},
         }
 
     def run_with(self, p: dict, scope: str | None = None) -> dict:
@@ -504,14 +503,12 @@ class TestInitialProposal(unittest.TestCase):
         p = self.valid()
         p["cibles"]["proxmox"] = "non recherché"
         p["auth"] = {"justification": "à trancher", "source": "doc"}
-        p["kestra"] = {"statut": "non vérifié"}
         f = self.findings(self.run_with(p))
         self.assertIn("cibles.proxmox", f)
         self.assertIn("auth : `recommande` OU `options`", f)
-        self.assertIn("kestra.statut", f)
 
     def test_missing_section_is_gap(self):
-        for k in ("cibles", "auth", "database", "kestra"):
+        for k in ("cibles", "auth", "database"):
             p = self.valid()
             del p[k]
             self.assertEqual(verdict(self.run_with(p)), GAP, k)
@@ -597,7 +594,7 @@ class TestDispatcher(unittest.TestCase):
         self.assertIn("yaml-validity", p34["sensors"])
         self.assertTrue(any(e["artifact"] == "livrable_tfvars_present" and "new-stack" in e["scopes"]
                             for e in p34["blocking_on_scope"]))
-        self.assertEqual(p34["prerequis_40"], ["repertoire_travail_defini", "flux_kestra_accessible"])
+        self.assertEqual(p34["prerequis_40"], ["repertoire_travail_defini"])
 
     def test_security_posture_blocking_on_new_stack(self):
         p34 = sensor.parse_boundaries()["phase3-phase4"]

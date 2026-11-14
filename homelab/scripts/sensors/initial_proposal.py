@@ -2,8 +2,7 @@
 """Sensor `initial-proposal` — applique `homelab/sensors/sensors/initial-proposal.md`.
 
 Vérifie que `preselection.json`, alimenté par les stages de pré-sélection d'Initialisation
-(`deployment-prereqs-precheck`, `deployment-target-preselection`, `auth-preselection`,
-`database-preselection`), est complet avant la proposition initiale (`intent-scope-approval`).
+(`deployment-target-preselection`, `auth-preselection`, `database-preselection`), est complet avant la proposition initiale (`intent-scope-approval`).
 Une section absente ou remplie par « non vérifié » / « à trancher » sans options est un écart.
 
 Parsing **statique** (SG-4). Aucune valeur de secret n'est lue ni affichée.
@@ -26,11 +25,10 @@ from sensorlib.context import Ctx, no_scope, res  # noqa: E402
 
 ID = "initial-proposal"
 
-SECTIONS = {"cibles", "auth", "database", "kestra"}
+SECTIONS = {"cibles", "auth", "database"}
 AUTH_TYPES = {"none", "local", "forwardauth", "oidc"}
 DATABASES = {"postgres", "mysql", "mariadb", "mongodb", "none"}
 TARGETS = {"docker-swarm", "proxmox"}
-KESTRA = {"accessible", "injoignable"}
 
 URL_RE = re.compile(r"^https?://\S+$")
 PROXMOX_RE = re.compile(
@@ -127,11 +125,6 @@ def check(p: dict) -> list[str]:
     _check_cibles(p.get("cibles"), gaps)
     _check_choice("auth", p.get("auth"), AUTH_TYPES, "auth-preselection", gaps)
     _check_choice("database", p.get("database"), DATABASES, "database-preselection", gaps)
-    k = p.get("kestra")
-    if not (isinstance(k, dict) and k.get("statut") in KESTRA):
-        gaps.append(f"kestra.statut : requis, valeurs {sorted(KESTRA)} (deployment-prereqs-precheck)")
-    elif isinstance(k, dict):
-        _unknown(k, {"statut"}, "kestra.", gaps)
     return gaps
 
 

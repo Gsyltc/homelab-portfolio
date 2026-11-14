@@ -33,11 +33,15 @@ Le Tech Lead demande si l'humain souhaite lancer le déploiement via **Kestra**.
 
 > **Inputs MCP sur stack Docker Swarm (`deploy_stack` / `configure_service`).** Laisser `middleware` et `service_url` à leur valeur par défaut — ne jamais les renseigner ni les modifier. Le routage et le middleware d'authentification sont déjà portés par les labels Traefik du docker-compose (convention `docker-composer`, provider Swarm). Voir `RULE-GL-013` ([`../../../rules/global.md`](../../../rules/global.md)).
 
-### Step 2 — Garde-fou absolu
+### Step 2 — Vérifier l'accès Kestra (prérequis du déploiement)
+
+Après le « oui », le **Spécialiste Déploiement Kestra** (seul agent ayant l'accès Kestra) confirme que le flux `configure_service` est **accessible**, avant tout lancement. Injoignable → ne rien lancer, le signaler à l'humain ; les fichiers déposés restent en place (dépôt manuel possible).
+
+### Step 3 — Garde-fou absolu
 
 **Aucun lancement du flux `configure_service` sans validation humaine explicite de la configuration complète.** Action à impact → jamais autonome (invariant).
 
-### Step 3 — Pré-requis selon le scope (exclusifs)
+### Step 4 — Pré-requis selon le scope (exclusifs)
 
 Le pré-requis amont de ce stage dépend du scope et les deux voies sont **mutuellement exclusives** :
 

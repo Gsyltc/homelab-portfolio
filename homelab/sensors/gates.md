@@ -85,8 +85,7 @@ boundaries:
     sensors: [yaml-validity, swarm-deploy-section, plaintext-secret, terraform-no-sni, traefik-coherence]
     prerequis_40:                          # prérequis de déploiement anticipés (§4.0)
       - repertoire_travail_defini          # variable [répertoire de travail] définie et non vide
-      - flux_kestra_accessible             # flux Kestra configure_service accessible
-    # en cas de prérequis §4.0 manquant : signaler, ne pas promettre le déploiement automatique
+    # l'accès Kestra n'est pas contrôlé ici : prérequis du déploiement (kestra-deployment Step 2)
 
   - id: phase4-cloture
     frontiere: "Phase 4 → Clôture (Validation → Done)"
@@ -100,7 +99,7 @@ boundaries:
 
 ## Articulation avec les prérequis §4.0
 
-Le contrôle `phase3-phase4` **anticipe** les prérequis de déploiement du §4.0 (`[répertoire de travail]` défini, flux Kestra `configure_service` accessible) : il les vérifie **avant** d'entrer en Phase 4, pour éviter qu'un prérequis manquant ne fasse échouer silencieusement le dépôt (§4.3) ou ne bloque le §4.4 sans explication. C'est le pendant automatisé et anticipé du garde-fou §4.0, qui reste par ailleurs le contrôle bloquant de référence exécuté par le Tech Lead en entrée de Phase 4.
+Le contrôle `phase3-phase4` **anticipe** le prérequis de dépôt du §4.0 (`[répertoire de travail]` défini) : il le vérifie **avant** d'entrer en Phase 4, pour éviter qu'il ne fasse échouer silencieusement le dépôt (§4.3). L'accès Kestra n'est pas anticipé : c'est un prérequis du déploiement, vérifié par le Spécialiste Kestra dans `kestra-deployment`. C'est le pendant automatisé et anticipé du garde-fou §4.0, qui reste par ailleurs le contrôle bloquant de référence exécuté par le Tech Lead en entrée de Phase 4.
 
 ## En cas d'écart
 
@@ -125,7 +124,7 @@ Rapport de vérification — <frontière>   (source : homelab/sensors/gates.md @
 - arbitrage_swarm_proxmox (new-stack / infra-terraform) : ✅ présent | ⛔ MANQUANT (écart bloquant)
 - livrable_tfvars (new-stack / infra-terraform) : ✅ présent | ⛔ MANQUANT (écart bloquant) | ⚠️ conditionnel hors scope
 - controle_securite_posture (surface de sécurité) : ✅ présent (délégation sécurité réalisée) | ⛔ MANQUANT (écart bloquant sur stack-update / new-stack / security-patch / infra-terraform) | ⚠️ MANQUANT (config-change, advisory) | ⚠️ sans objet (aucune surface de sécurité)
-- prérequis §4.0 (frontière Phase 3 → Phase 4) : ✅ | ⚠️ <[répertoire de travail] / Kestra> | ⛔ <indisponible>
+- prérequis §4.0 (frontière Phase 3 → Phase 4) : ✅ | ⚠️ <[répertoire de travail]> | ⛔ <indisponible>
 Sensors de gate :   # une ligne par sensor du champ sensors: de la frontière — aucune omission (SG-2)
 - `<sensor-id>` : ✅ conforme | ⚠️ écart | ⛔ indisponible — <fait vérifié ou motif>
 ```
