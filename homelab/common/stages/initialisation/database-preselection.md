@@ -14,7 +14,7 @@ produces: [database_service_preselectionne]
 consumes: [{artifact: detection_stack_existante_vs_nouvelle, required: true}, {artifact: lien_documentation_officielle, required: true}]
 requires_stage: [auth-preselection]
 sensors: []
-scopes: [stack-update, new-stack, security-patch]
+scopes: [stack-update, new-stack, config-change, security-patch, infra-terraform]
 inputs: "Stack détectée + documentation officielle (lue à l'étape 3 de l'amorçage)"
 outputs: "Base de données recommandée + justification"
 ---

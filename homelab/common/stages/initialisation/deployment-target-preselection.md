@@ -14,7 +14,7 @@ produces: [cibles_disponibles]
 consumes: [{artifact: detection_stack_existante_vs_nouvelle, required: true}, {artifact: lien_documentation_officielle, required: true}]
 requires_stage: [labels-audit-init]
 sensors: []
-scopes: [stack-update, new-stack, security-patch, infra-terraform]
+scopes: [stack-update, new-stack, config-change, security-patch, infra-terraform]
 inputs: "Stack détectée + documentation officielle (lue à l'étape 3 de l'amorçage)"
 outputs: "Cibles de déploiement disponibles : Docker (image) et/ou Proxmox (script Helper-Scripts)"
 ---

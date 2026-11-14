@@ -11,8 +11,8 @@ reviewer: null
 review_class: none
 human_gate: light
 produces: [intention_perimetre_approuves, scope_confirme, arbitrage_swarm_proxmox, label_cible_pose, fqdn_valide, auth_type_valide, database_service_valide]
-consumes: [{artifact: intention_capturee, required: true}, {artifact: scope_propose, required: true}, {artifact: axes_proposes, required: true}, {artifact: cibles_disponibles, required: false}, {artifact: auth_type_preselectionne, required: false}, {artifact: database_service_preselectionne, required: false}, {artifact: prerequis_deploiement_anticipes, required: false}]
-requires_stage: [scope-detection]
+consumes: [{artifact: intention_capturee, required: true}, {artifact: scope_propose, required: true}, {artifact: axes_proposes, required: true}, {artifact: cibles_disponibles, required: true}, {artifact: auth_type_preselectionne, required: true}, {artifact: database_service_preselectionne, required: true}, {artifact: prerequis_deploiement_anticipes, required: true}]
+requires_stage: [scope-detection, deployment-prereqs-precheck, deployment-target-preselection, auth-preselection, database-preselection]
 sensors: []
 scopes: [stack-update, new-stack, config-change, security-patch, infra-terraform]
 inputs: "Intention capturée, scope + axes proposés"

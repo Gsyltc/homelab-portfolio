@@ -26,6 +26,8 @@ ce fichier en donne la lecture chronologique côté produit.
   touchant un agent et par la CI `validate-agents`.
 
 ### Changed
+- **Pré-sélections obligatoires avant le gate léger.** `intent-scope-approval` exige (`required: true`) les quatre
+  artefacts de pré-sélection ; ces stages couvrent désormais tous les scopes de stack.
 - **Séquence d'amorçage explicite jusqu'au gate léger.** Le conductor nomme chaque stage d'Initialisation et
   d'Idéation (fiche à lire) jusqu'à `intent-scope-approval`, dont les trois pré-sélections obligatoires pour une
   stack ; le renvoi générique au tableau ne vaut plus qu'après le gate.
