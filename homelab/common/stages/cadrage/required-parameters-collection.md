@@ -35,9 +35,12 @@ Le Tech Lead vérifie que tous les paramètres sont renseignés ; **il ne génè
 | --- | --- | --- |
 | Nom de la stack `${stack_name}` | Oui | Texte alphanumérique |
 | Type d'authentification `${auth_type}` | Optionnel | `none`, `local`, `forwardauth`, `oidc` |
+| FQDN d'exposition `${fqdn}` | Déductible | Texte (nom de domaine complet). **Défaut** : `<stack_name>.<domaine du homelab>` — domaine : **source unique** [`domaine-homelab.md`](../../../../plugins/homelab-assistant/skills/configuration-applications/references/domaine-homelab.md) ; préfixe déduit des FQDN des stacks existantes si une convention diffère. Le défaut est **proposé et confirmé en un seul message** (jamais une question ouverte), avec les autres défauts déductibles. Écrit **en clair** dans le Terraform, jamais `${SNI}`. |
 | Réseau Traefik `${traefik_network}` | Déductible | **Source unique** : liste et réseau par défaut définis dans la skill `docker-composer` ([`references/network.md`](../../../../plugins/homelab-assistant/skills/docker-composer/references/network.md)) ; défaut **à confirmer par l'humain**. |
 | Activer Valkey `${valkey_enabled}` | Déductible | `true`, `false` — le Homelab possède **déjà** un Valkey/Redis mutualisé : ne jamais recréer ce service, s'y connecter (règle portée par la skill `docker-composer`). |
 | Service base de données `${database_service}` | Optionnel | `postgres`, `mysql`, `mariadb`, `mongodb`, `none` — PostgreSQL mutualisé **déjà** présent : ne jamais recréer `postgres`, s'y connecter (règle portée par la skill `docker-composer`). |
+
+**Un seul message de confirmation** : le Tech Lead propose en bloc les valeurs par défaut déduites (`${fqdn}`, `${traefik_network}`, `${valkey_enabled}`) et attend la confirmation ou correction de l'humain.
 
 Demander aussi si la stack nécessite une création / modification de secrets ou variables dans **HashiCorp Vault** (le signaler à l'humain ; agent Vault dédié à créer plus tard).
 
@@ -55,7 +58,7 @@ Demander aussi si la stack nécessite une création / modification de secrets ou
 
 ## Sensors
 
-Outputs: paramètres requis complets + `${auth_type}` figé. Frontière **Cadrage → Production** : gate `artefacts-presents` + `liaison-tracabilite` (tous les paramètres §requis reliés à la demande) — voir [`homelab/sensors/gates.md`](../../../sensors/gates.md).
+Outputs: paramètres requis complets (dont `${fqdn}`) + `${auth_type}` figé. Frontière **Cadrage → Production** : gate `artefacts-presents` + `liaison-tracabilite` (tous les paramètres §requis reliés à la demande) — voir [`homelab/sensors/gates.md`](../../../sensors/gates.md).
 Imports: none.
 
 ## Learn
