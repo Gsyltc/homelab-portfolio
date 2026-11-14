@@ -53,9 +53,9 @@ flowchart TD
 
 | Phase | N° | Nom Homelab | Stages (fiches) | Gate humain |
 | --- | --- | --- | --- | --- |
-| **Initialisation** | 0 | Initialisation | [`stack-detection`](stages/initialisation/stack-detection.md) · [`concurrency-lock-read`](stages/initialisation/concurrency-lock-read.md) · [`deployment-prereqs-precheck`](stages/initialisation/deployment-prereqs-precheck.md) · [`labels-audit-init`](stages/initialisation/labels-audit-init.md) | Non (bootstrap déterministe) |
-| **Idéation** | 1 | Idéation | [`intent-capture`](stages/ideation/intent-capture.md) · [`scope-detection`](stages/ideation/scope-detection.md) · [`feasibility-arbitration`](stages/ideation/feasibility-arbitration.md) · [`version-impact-analysis`](stages/ideation/version-impact-analysis.md) · [`auth-preselection`](stages/ideation/auth-preselection.md) · [`intent-scope-approval`](stages/ideation/intent-scope-approval.md) | Léger (intention + périmètre) |
-| **Cadrage et Paramètres** | 2 | Inception | [`n8n-absolute-rule`](stages/cadrage/n8n-absolute-rule.md) · [`domain-triage`](stages/cadrage/domain-triage.md) · [`intake-framing`](stages/cadrage/intake-framing.md) · [`swarm-proxmox-arbitration`](stages/cadrage/swarm-proxmox-arbitration.md) · [`required-parameters-collection`](stages/cadrage/required-parameters-collection.md) | Advisory (avant Production) |
+| **Initialisation** | 0 | Initialisation | [`stack-detection`](stages/initialisation/stack-detection.md) · [`concurrency-lock-read`](stages/initialisation/concurrency-lock-read.md) · [`deployment-prereqs-precheck`](stages/initialisation/deployment-prereqs-precheck.md) · [`labels-audit-init`](stages/initialisation/labels-audit-init.md) · [`deployment-target-preselection`](stages/initialisation/deployment-target-preselection.md) · [`auth-preselection`](stages/initialisation/auth-preselection.md) | Non (bootstrap déterministe + pré-sélection) |
+| **Idéation** | 1 | Idéation | [`intent-capture`](stages/ideation/intent-capture.md) · [`scope-detection`](stages/ideation/scope-detection.md) · [`version-impact-analysis`](stages/ideation/version-impact-analysis.md) · [`intent-scope-approval`](stages/ideation/intent-scope-approval.md) | Léger (intention + périmètre) |
+| **Cadrage et Paramètres** | 2 | Inception | [`n8n-absolute-rule`](stages/cadrage/n8n-absolute-rule.md) · [`domain-triage`](stages/cadrage/domain-triage.md) · [`intake-framing`](stages/cadrage/intake-framing.md) · [`required-parameters-collection`](stages/cadrage/required-parameters-collection.md) | Advisory (avant Production) |
 | **Production et Contrôle** | 3 | Construction | [`autonomy-mode`](stages/production/autonomy-mode.md) · [`terraform-configuration`](stages/production/terraform-configuration.md) · [`docker-compose-creation`](stages/production/docker-compose-creation.md) · [`quality-assurance`](stages/production/quality-assurance.md) · [`n8n-branch`](stages/production/n8n-branch.md) · [`home-assistant-branch`](stages/production/home-assistant-branch.md) · [`central-quality-control`](stages/production/central-quality-control.md) · [`security-delegation`](stages/production/security-delegation.md) | Granulaire |
 | **Validation et Déploiement** | 4 | Operation | [`deployment-prereqs-check`](stages/validation/deployment-prereqs-check.md) · [`review-and-notification`](stages/validation/review-and-notification.md) · [`human-granular-validation`](stages/validation/human-granular-validation.md) · [`file-deposit`](stages/validation/file-deposit.md) · [`version-update-application`](stages/validation/version-update-application.md) · [`kestra-deployment`](stages/validation/kestra-deployment.md) · [`closure`](stages/validation/closure.md) | Explicite |
 
@@ -71,8 +71,7 @@ flowchart TD
 
 - Si de l'information existe → s'en servir pour **cadrer** la demande (déployabilité : image/registry, port principal, type d'auth, dépendances majeures) et documenter le **lien officiel** sur l'issue **avant** de poursuivre.
 - Si rien n'est trouvé → le signaler explicitement sur l'issue et à l'humain, puis poursuivre en le précisant.
-- **Recherche Helper-Scripts** (`new-stack` / `infra-terraform`, obligatoire) : à faire après la détection du scope et avant le Cadrage, selon [`stages/ideation/feasibility-arbitration.md`](stages/ideation/feasibility-arbitration.md) (source unique). Le Cadrage la lit, ne la refait pas.
-- **Type d'authentification** : lorsque la documentation précise les types disponibles, appliquer la règle de **sélection automatique** (voir [`stages/ideation/auth-preselection.md`](stages/ideation/auth-preselection.md) et [`stages/cadrage/required-parameters-collection.md`](stages/cadrage/required-parameters-collection.md)) selon l'ordre `oidc → forwardauth → local` (premier disponible **et gratuit**) ; **en cas de doute, demander à l'humain**.
+- **Cible et authentification** : pré-sélectionnées en fin d'Initialisation ([`deployment-target-preselection`](stages/initialisation/deployment-target-preselection.md), [`auth-preselection`](stages/initialisation/auth-preselection.md)), à partir de cette documentation.
 
 **Limite de responsabilité :** à ce stade, le Tech Lead reste au niveau du **cadrage**. Le relevé fin des éléments de configuration (variables d'environnement, conventions `_FILE`, volumes, healthcheck, versions, hardening) n'est **pas** produit par le Tech Lead : il est réalisé par le Spécialiste Docker au moment de la production (voir [`stages/production/docker-compose-creation.md`](stages/production/docker-compose-creation.md)).
 
@@ -93,13 +92,16 @@ La **règle préalable universelle — documentation officielle** (ci-dessus) re
    (stages/initialisation/stack-detection.md).
 2. concurrency-lock-read : lire le verrou `active_step` par artefact ; un artefact déjà
    verrouillé est mis en file (stages/initialisation/concurrency-lock-read.md).
-3. Règle préalable documentation officielle + chargement du contexte existant en LÉGER
+3. Règle préalable documentation officielle (lecture UNIQUE pour tout le workflow ; produit
+   l'artefact `lien_documentation_officielle`) + chargement du contexte existant en LÉGER
    (lazy loading, voir ci-dessous) : métadonnées de cadrage et de routage, pas les corps.
 4. labels-audit-init : poser les labels (`Homelab`, etc.) et initialiser la piste d'audit
    sur l'issue (stages/initialisation/labels-audit-init.md).
 5. Exécuter ensuite les stages dans l'ordre du tableau « Les 5 phases et leurs stages »,
-   en chargeant la fiche de CHAQUE stage au moment de l'exécuter. Aucune question à
-   l'humain en dehors de ce qu'une fiche prévoit ; aucune liste de questions improvisée.
+   en chargeant la fiche de CHAQUE stage au moment de l'exécuter. La PREMIÈRE
+   sollicitation de l'humain est le gate léger `intent-scope-approval`, au format de sa
+   fiche (cible Proxmox / Docker, FQDN complet, auth recommandée). Aucune question avant, sauf
+   intention ambiguë ; aucune liste de questions improvisée.
 ```
 
 > **Propagation de `$CORE_HOME`.** À chaque délégation, le Tech Lead **transmet `$CORE_HOME`** dans le **message A2A `delegation`** (fichier YAML joint, champ `core_home: "<chemin du checkout>"`), pour que le délégataire lance sensors, gates et hook d'écriture **sans re-chercher le harnais**. Le même YAML porte `fiches_a_recharger` — la (les) **fiche(s) de stage et protocole(s)** à charger pour sa mission (chargement paresseux ciblé, pas de lecture intégrale). **La mission voyage dans ce fichier joint, jamais en prose dans le fil** (voir [`protocols/governance-security.md`](protocols/governance-security.md) § « Règle A2A » et « Schéma du message A2A », et [`protocols/stage-protocol.md`](protocols/stage-protocol.md) temps 2). Convention d'invocation du harnais ancré sur `$CORE_HOME` : [`../sensors/README.md`](../sensors/README.md).

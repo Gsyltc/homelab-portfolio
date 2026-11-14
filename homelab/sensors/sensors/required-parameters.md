@@ -47,7 +47,7 @@ Check déterministe exécuté **au gate `phase2-phase3`** (Cadrage → Productio
 | Clé | Règle |
 | --- | --- |
 | `stack_name` | Requis. Minuscules, chiffres, tirets. |
-| `cible` | Requis : `swarm` ou `proxmox` (résultat de `swarm-proxmox-arbitration`). |
+| `cible` | Requis : `swarm` ou `proxmox` (cible choisie au gate léger `intent-scope-approval`). |
 | `auth_type` | Optionnel : `none`, `local`, `forwardauth`, `oidc`. |
 | `fqdn` | Requis. Nom de domaine complet, sous le domaine de [`domaine-homelab.md`](../../../plugins/homelab-assistant/skills/configuration-applications/references/domaine-homelab.md). |
 | `oidc` | Requis si `auth_type` = `oidc`, absent sinon. `idp` = `authentik` ; `client_name` non vide ; `redirect_uri` commence par `https://<fqdn>/` ; `scopes` contient `openid`. |

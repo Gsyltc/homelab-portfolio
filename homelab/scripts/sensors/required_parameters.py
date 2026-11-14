@@ -123,7 +123,7 @@ def check(params: dict) -> tuple[list[str], list[str]]:
 
     cible = params.get("cible")
     if cible not in CIBLES:
-        gaps.append(f"cible : requis, valeurs {sorted(CIBLES)} (issu de swarm-proxmox-arbitration)")
+        gaps.append(f"cible : requis, valeurs {sorted(CIBLES)} (cible choisie au gate léger)")
 
     auth = params.get("auth_type")
     if auth is not None and auth not in AUTH_TYPES:

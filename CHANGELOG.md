@@ -26,6 +26,13 @@ ce fichier en donne la lecture chronologique côté produit.
   touchant un agent et par la CI `validate-agents`.
 
 ### Changed
+- **Proposition initiale au gate léger, pré-sélection en Initialisation.** `intent-scope-approval` est la première
+  sollicitation de l'humain, au format fixe : intention, scope, cible (Proxmox / Docker si disponibles), FQDN
+  complet, authentification recommandée. Le choix de cible y est fait. `feasibility-arbitration` devient
+  `deployment-target-preselection` et passe, avec `auth-preselection`, en fin d'Initialisation.
+  `swarm-proxmox-arbitration` (Cadrage) est supprimé.
+- **Documentation officielle lue une seule fois.** L'étape 3 de l'amorçage produit `lien_documentation_officielle`,
+  contrôlé à l'entrée de Phase 0. `intake-framing` ne relit plus la documentation (ancien Step 3 retiré).
 - **Cadrage : stages exécutés fiche par fiche, paramètres déduits.** La séquence d'amorçage du conductor impose
   d'enchaîner les stages en chargeant chaque fiche. `required-parameters-collection` ajoute le stockage NFS du
   Homelab comme paramètre déduit, propose le FQDN avec sa valeur complète et fixe Authentik comme IdP OIDC.

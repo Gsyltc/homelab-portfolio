@@ -66,7 +66,6 @@ Légende : ✅ activé · ➖ allégé / au juste nécessaire · ❌ ignoré · 
 | `domain-triage`                  | ❌              | ❌           | ❌               | ❌                | ❌                 | ❌                        | ✅ ambigu    | ✅ ambigu         |
 | `intake-framing`                 | ✅              | ✅           | ➖               | ✅                | ✅                 | ➖                        | ⏭           | ⏭                |
 | `version-impact-analysis`        | ❌              | ❌           | ❌               | ❌                | ❌                 | ✅                        | ❌           | ❌                |
-| `swarm-proxmox-arbitration`      | ➖              | ✅           | ❌               | ➖                | ✅                 | ❌                        | ⏭           | ⏭                |
 | `required-parameters-collection` | ✅              | ✅           | ➖               | ✅                | ➖                 | ➖                        | ⏭           | ⏭                |
 | `autonomy-mode`                  | ✅              | ✅           | ➖               | ✅                | ✅                 | ❌                        | ⏭           | ⏭                |
 | `terraform-configuration`        | ➖              | ✅           | ❌               | ➖                | ✅                 | ❌                        | ⏭           | ⏭                |
