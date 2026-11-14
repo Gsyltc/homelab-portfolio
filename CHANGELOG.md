@@ -9,6 +9,10 @@ ce fichier en donne la lecture chronologique côté produit.
 ## [Non publié]
 
 ### Added
+- **Répertoire de relecture `.a-valider/<id-tâche>/<stack>/`** (HOM-309). Les spécialistes Terraform et Docker
+  déposent tous leurs fichiers générés dans `${WORK_DIRECTORY}/.a-valider/` pour relecture humaine ; après
+  validation explicite, `file-deposit.md` les déplace vers `terraform/<type>/<stack>/` et `docker/stacks/`,
+  vérifie puis nettoie. `.a-valider/` est exclu de la détection de stack.
 - **Sensor `sujets-a-jour`** (HOM-300). Vérifie à l'écriture que le champ `sujets` du front-matter d'un
   document d'architecture reflète ses titres `##`/`###` (présence, titres obsolètes, ordre). Branché sur
   les stages `design-and-decisions` et `detailed-deliverables`.

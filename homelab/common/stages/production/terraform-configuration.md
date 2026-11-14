@@ -16,7 +16,7 @@ requires_stage: [autonomy-mode]
 sensors: [terraform-no-sni, plaintext-secret]
 scopes: [stack-update, new-stack, security-patch, infra-terraform]
 inputs: "Paramètres collectés en Cadrage (§2.4) + walking skeleton validé"
-outputs: "Fichiers .tf / .tfvars de la stack, téléchargeables (jamais d'apply)"
+outputs: "Fichiers .tf / .tfvars de la stack, déposés dans `${WORK_DIRECTORY}/.a-valider/<id-tâche>/<stack>/` (jamais d'apply)"
 ---
 
 # Configuration Terraform (Spécialiste Terraform)
@@ -35,15 +35,17 @@ Sur scope `new-stack` / `infra-terraform`, ce stage est **obligatoire et incondi
 
 ### Step 2 — Produire les fichiers (jamais d'apply)
 
-Préparer uniquement les fichiers `.tf` / `.tfvars` — **JAMAIS** `terraform init/apply/destroy` (invariant absolu). **Jamais `${SNI}`** : écrire les domaines / URLs en clair. Puis appliquer le **geste de fin de mission** [`producer-report.md`](../../protocols/producer-report.md) : joindre le livrable `.tf` / `.tfvars` **et** le **message A2A `retour` en YAML** (`retour-terraform-<stack>.yaml` — `resultat` + `sensors_resultats`), corps minimal (mention valide du Tech Lead + une ligne de statut + nom du YAML `retour`), zéro prose. Sans mention valide → compte-rendu réputé non rendu, flux arrêté. **Une fois le livrable produit et le compte-rendu rendu, la sous-issue Terraform passe en `in_review`** (livrable produit, en attente de vérification QA ; cf. [`stage-protocol.md` § Cycle de statut des sous-issues & barrière de stage](../../protocols/stage-protocol.md#cycle-de-statut-des-sous-issues--barrière-de-stage)).
+Préparer uniquement les fichiers `.tf` / `.tfvars` — **JAMAIS** `terraform init/apply/destroy` (invariant absolu). **Jamais `${SNI}`** : écrire les domaines / URLs en clair. Déposer les fichiers dans le **répertoire de relecture** (voir ci-dessous). Puis appliquer le **geste de fin de mission** [`producer-report.md`](../../protocols/producer-report.md) : joindre le livrable `.tf` / `.tfvars` **et** le **message A2A `retour` en YAML** (`retour-terraform-<stack>.yaml` — `resultat` + `sensors_resultats`), corps minimal (mention valide du Tech Lead + une ligne de statut + nom du YAML `retour`), zéro prose. Sans mention valide → compte-rendu réputé non rendu, flux arrêté. **Une fois le livrable produit et le compte-rendu rendu, la sous-issue Terraform passe en `in_review`** (livrable produit, en attente de vérification QA ; cf. [`stage-protocol.md` § Cycle de statut des sous-issues & barrière de stage](../../protocols/stage-protocol.md#cycle-de-statut-des-sous-issues--barrière-de-stage)).
 
 ### Step 3 — Vérification QA en aval
 
 Le livrable `.tfvars` produit passe **obligatoirement** par l'**Analyste QA** ([`quality-assurance.md`](quality-assurance.md), volet Terraform, skill `terraform-qa`) avant l'aiguillage du Tech Lead ([`central-quality-control.md`](central-quality-control.md)) : vérification systématique, jamais sautée. Sur défaut, l'Analyste QA émet un `RENVOI` vers le **Spécialiste Terraform** (agent créateur) via le rapport YAML ; il ne modifie jamais le livrable.
 
+> **Répertoire de relecture.** Tous les fichiers générés vont dans `${WORK_DIRECTORY}/.a-valider/<id-tâche>/<stack>/` (`<id-tâche>` = identifiant de l'issue, ex. `HOM-303`), jamais ailleurs avant la validation humaine ; le commentaire de livraison en consigne le chemin résolu. `${WORK_DIRECTORY}` vide ou introuvable → issue `blocked` ([`stack-detection.md`](../initialisation/stack-detection.md)). Déplacement final : [`file-deposit.md`](../validation/file-deposit.md).
+
 ## Sensors
 
-Outputs: livrable `.tfvars` téléchargeable, puis vérifié par l'Analyste QA. Gate humain granulaire.
+Outputs: livrable `.tfvars` lisible dans `${WORK_DIRECTORY}/.a-valider/<id-tâche>/<stack>/` (et joint à l'issue), puis vérifié par l'Analyste QA. Gate humain granulaire.
 Imports: `terraform-no-sni` (write — **bloquant sur `security-patch` / `new-stack`**, ALI-204), `plaintext-secret` (write — **bloquant sur `security-patch` / `new-stack`**).
 Upstream targets: `parametres_requis_complets` (required), `walking_skeleton_valide` (required).
 

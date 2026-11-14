@@ -43,6 +43,8 @@ Si `${WORK_DIRECTORY}` est vide, non définie ou introuvable : **ne pas se rabat
 à l'humain le chemin du répertoire de travail du projet. Consigner dans le commentaire d'audit la
 valeur résolue de `${WORK_DIRECTORY}` (chemin, jamais de secret).
 
+**Exclusion.** Le répertoire `${WORK_DIRECTORY}/.a-valider/` (livrables générés en attente de validation humaine, voir [`file-deposit.md`](../validation/file-deposit.md)) est **exclu** de toute recherche de détection : un fichier qui s'y trouve ne prouve **pas** qu'une stack existe.
+
 ### Step 2 — OBLIGATOIRE : vérifier l'existence sur le système de fichiers (toute demande)
 
 **Pour TOUTE demande**, la nature « existante vs nouvelle » est tranchée par le **système de fichiers** de `${WORK_DIRECTORY}`,
