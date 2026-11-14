@@ -37,7 +37,7 @@ Consigner le résultat (✅ ou ⚠️) sans message séparé : il est affiché a
 
 ## Sensors
 
-Outputs: rappel advisory consigné, affiché au point 7 de la proposition initiale. Aucun gate humain (bootstrap déterministe). C'est le pendant anticipé du gate `phase3-phase4` de [`homelab/sensors/gates.md`](../../../sensors/gates.md).
+Outputs: rappel advisory consigné, affiché au point 7 de la proposition initiale. Demande de stack : section `kestra` de `${WORK_DIRECTORY}/.a-valider/<id-tâche>/<stack>/preselection.json` (format : sensor [`initial-proposal`](../../../sensors/sensors/initial-proposal.md)). Aucun gate humain (bootstrap déterministe). C'est le pendant anticipé du gate `phase3-phase4` de [`homelab/sensors/gates.md`](../../../sensors/gates.md).
 Imports: none.
 
 ## Learn

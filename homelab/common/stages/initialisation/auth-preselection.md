@@ -14,7 +14,7 @@ produces: [auth_type_preselectionne]
 consumes: [{artifact: detection_stack_existante_vs_nouvelle, required: true}, {artifact: lien_documentation_officielle, required: true}]
 requires_stage: [deployment-target-preselection]
 sensors: []
-scopes: [stack-update, new-stack, security-patch]
+scopes: [stack-update, new-stack, config-change, security-patch, infra-terraform]
 inputs: "Stack détectée + documentation officielle (lue à l'étape 3 de l'amorçage)"
 outputs: "Type d'authentification recommandé + justification"
 ---
@@ -37,7 +37,7 @@ Lire la section authentification de la documentation officielle (OIDC / OAuth / 
 
 ## Sensors
 
-Outputs: `auth_type_preselectionne` consigné sur l'issue. Présenté au point 5 de [`intent-scope-approval`](../ideation/intent-scope-approval.md).
+Outputs: `auth_type_preselectionne` consigné sur l'issue et dans la section `auth` de `${WORK_DIRECTORY}/.a-valider/<id-tâche>/<stack>/preselection.json` (format : sensor [`initial-proposal`](../../../sensors/sensors/initial-proposal.md)). Sans objet (ex. `infra-terraform`) : `sans_objet` + raison. Présenté au point 5 de [`intent-scope-approval`](../ideation/intent-scope-approval.md).
 Imports: none.
 
 ## Learn

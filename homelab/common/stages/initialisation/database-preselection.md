@@ -14,7 +14,7 @@ produces: [database_service_preselectionne]
 consumes: [{artifact: detection_stack_existante_vs_nouvelle, required: true}, {artifact: lien_documentation_officielle, required: true}]
 requires_stage: [auth-preselection]
 sensors: []
-scopes: [stack-update, new-stack, security-patch]
+scopes: [stack-update, new-stack, config-change, security-patch, infra-terraform]
 inputs: "Stack détectée + documentation officielle (lue à l'étape 3 de l'amorçage)"
 outputs: "Base de données recommandée + justification"
 ---
@@ -43,7 +43,7 @@ Consigner la valeur recommandée et sa justification (lien vers la section de la
 
 ## Sensors
 
-Outputs: `database_service_preselectionne` consigné sur l'issue. Présenté au point 6 de [`intent-scope-approval`](../ideation/intent-scope-approval.md).
+Outputs: `database_service_preselectionne` consigné sur l'issue et dans la section `database` de `${WORK_DIRECTORY}/.a-valider/<id-tâche>/<stack>/preselection.json` (format : sensor [`initial-proposal`](../../../sensors/sensors/initial-proposal.md)). Sans objet (ex. `infra-terraform`) : `sans_objet` + raison. Présenté au point 6 de [`intent-scope-approval`](../ideation/intent-scope-approval.md).
 Imports: none.
 
 ## Learn

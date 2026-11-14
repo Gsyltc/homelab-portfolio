@@ -38,6 +38,7 @@ boundaries:
       - intention_capturee                 # intention consignée (§1.1)
       - scope_propose                      # scope auto-détecté (§1.2, homelab/scopes/)
     checks: [artefacts-presents]
+    sensors: [initial-proposal]            # preselection.json complet avant la proposition initiale — bloquant sur new-stack / infra-terraform
 
   - id: phase1-phase2
     frontiere: "Phase 1 → Phase 2 (Idéation → Cadrage)"

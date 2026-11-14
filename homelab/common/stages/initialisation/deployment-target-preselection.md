@@ -14,7 +14,7 @@ produces: [cibles_disponibles]
 consumes: [{artifact: detection_stack_existante_vs_nouvelle, required: true}, {artifact: lien_documentation_officielle, required: true}]
 requires_stage: [labels-audit-init]
 sensors: []
-scopes: [stack-update, new-stack, security-patch, infra-terraform]
+scopes: [stack-update, new-stack, config-change, security-patch, infra-terraform]
 inputs: "Stack détectée + documentation officielle (lue à l'étape 3 de l'amorçage)"
 outputs: "Cibles de déploiement disponibles : Docker (image) et/ou Proxmox (script Helper-Scripts)"
 ---
@@ -49,7 +49,7 @@ Consigner le lien du script, ou « aucun script trouvé » + variantes testées.
 
 ## Sensors
 
-Outputs: `cibles_disponibles` consigné sur l'issue. Présenté au point 3 de [`intent-scope-approval`](../ideation/intent-scope-approval.md). Bloquant si absent sur `new-stack` / `infra-terraform` (voir [`gates.md`](../../../sensors/gates.md)).
+Outputs: `cibles_disponibles` consigné sur l'issue et dans la section `cibles` de `${WORK_DIRECTORY}/.a-valider/<id-tâche>/<stack>/preselection.json` (format : sensor [`initial-proposal`](../../../sensors/sensors/initial-proposal.md)). Présenté au point 3 de [`intent-scope-approval`](../ideation/intent-scope-approval.md). Bloquant si absent sur `new-stack` / `infra-terraform` (voir [`gates.md`](../../../sensors/gates.md)).
 Imports: none.
 
 ## Learn

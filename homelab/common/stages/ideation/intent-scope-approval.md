@@ -11,9 +11,9 @@ reviewer: null
 review_class: none
 human_gate: light
 produces: [intention_perimetre_approuves, scope_confirme, arbitrage_swarm_proxmox, label_cible_pose, fqdn_valide, auth_type_valide, database_service_valide]
-consumes: [{artifact: intention_capturee, required: true}, {artifact: scope_propose, required: true}, {artifact: axes_proposes, required: true}, {artifact: cibles_disponibles, required: false}, {artifact: auth_type_preselectionne, required: false}, {artifact: database_service_preselectionne, required: false}, {artifact: prerequis_deploiement_anticipes, required: false}]
-requires_stage: [scope-detection]
-sensors: []
+consumes: [{artifact: intention_capturee, required: true}, {artifact: scope_propose, required: true}, {artifact: axes_proposes, required: true}, {artifact: cibles_disponibles, required: true}, {artifact: auth_type_preselectionne, required: true}, {artifact: database_service_preselectionne, required: true}, {artifact: prerequis_deploiement_anticipes, required: true}]
+requires_stage: [scope-detection, deployment-prereqs-precheck, deployment-target-preselection, auth-preselection, database-preselection]
+sensors: [initial-proposal]
 scopes: [stack-update, new-stack, config-change, security-patch, infra-terraform]
 inputs: "Intention capturée, scope + axes proposés"
 outputs: "Intention + périmètre approuvés (gate léger), scope confirmé"
@@ -56,7 +56,7 @@ Une fois la cible validée au point 3, poser sur l'issue (et sur ses sous-issues
 
 ## Sensors
 
-Outputs: intention + périmètre approuvés, scope confirmé, cible (`arbitrage_swarm_proxmox`), `${fqdn}`, `${auth_type}` et `${database_service}` validés (repris en Cadrage sans redemander). Frontière **Idéation → Cadrage** : gate `artefacts-presents` (intention, scope confirmé) + approbation périmètre tracée — voir [`homelab/sensors/gates.md`](../../../sensors/gates.md).
+Outputs: intention + périmètre approuvés, scope confirmé, cible (`arbitrage_swarm_proxmox`), `${fqdn}`, `${auth_type}` et `${database_service}` validés (repris en Cadrage sans redemander). Imports: `initial-proposal` (gate — ✅ requis avant de poster la proposition ; bloquant sur `new-stack` / `infra-terraform`). Frontière **Idéation → Cadrage** : gate `artefacts-presents` (intention, scope confirmé) + approbation périmètre tracée — voir [`homelab/sensors/gates.md`](../../../sensors/gates.md).
 Imports: none.
 
 ## Learn
