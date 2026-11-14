@@ -2,7 +2,7 @@
 slug: feasibility-arbitration
 phase: ideation
 execution: ALWAYS
-condition: "Always executes — arbitrage Swarm/Proxmox amorcé (affiné en Cadrage)"
+condition: "Always executes — faisabilité + recherche Helper-Scripts"
 lead_agent: Tech Lead Homelab
 support_agents: []
 mode: inline
@@ -10,36 +10,34 @@ summary_confirmation: optional
 reviewer: null
 review_class: none
 human_gate: none
-produces: [faisabilite_evaluee, arbitrage_swarm_proxmox_amorce]
-consumes: [{artifact: intention_capturee, required: true}]
-requires_stage: [intent-capture]
+produces: [faisabilite_evaluee, recherche_helper_scripts]
+consumes: [{artifact: intention_capturee, required: true}, {artifact: scope_propose, required: true}]
+requires_stage: [scope-detection]
 sensors: []
 scopes: [stack-update, new-stack, security-patch, infra-terraform]
-inputs: "Intention capturée"
-outputs: "Faisabilité évaluée + arbitrage Docker Swarm / Proxmox amorcé"
+inputs: "Intention capturée + scope proposé"
+outputs: "Faisabilité évaluée + recherche Helper-Scripts consignée"
 ---
 
-# Faisabilité et arbitrage Swarm / Proxmox (amorce)
+# Faisabilité et recherche Helper-Scripts
 
 ## Objectif
 
-Vérifier que la stack est déployable dans le Homelab et amorcer l'arbitrage Swarm / Proxmox.
+Vérifier que la stack est déployable dans le Homelab et consigner la recherche Helper-Scripts.
 
 ## Steps
 
-### Step 1 — Faisabilité / contraintes
+### Step 1 — Faisabilité
 
-La stack est-elle déployable dans le Homelab (existence d'images Docker, alternative Proxmox) ?
+Existence d'images Docker, alternative Proxmox.
 
-**Recherche Proxmox VE Helper-Scripts.** Pour toute nouvelle stack, chercher sans attendre de demande humaine un script sur `https://community-scripts.org/` : d'abord le site, puis une recherche web. Consigner le lien trouvé, ou « aucun script trouvé ».
+### Step 2 — Recherche Helper-Scripts (obligatoire, source unique)
 
-### Step 2 — Arbitrage Docker Swarm vs Proxmox (amorce)
-
-Arbitrage **amorcé** ici : si les deux existent, la question est **posée à l'humain** (affinée dans [`../cadrage/swarm-proxmox-arbitration.md`](../cadrage/swarm-proxmox-arbitration.md)). Ne jamais présumer le choix.
+Si le scope proposé (`scope-detection`) est `new-stack` / `infra-terraform`, **avant le gate `intent-scope-approval` et tout le Cadrage** : chercher sur `https://community-scripts.org/`, puis par recherche web. Consigner sur l'issue le lien, ou « aucun script trouvé » (`recherche_helper_scripts`). Si le gate léger relève ensuite le scope vers l'un d'eux, la recherche est faite avant de passer en Cadrage. Le choix Swarm / Proxmox n'est **pas** fait ici : voir [`swarm-proxmox-arbitration`](../cadrage/swarm-proxmox-arbitration.md).
 
 ## Sensors
 
-Outputs: faisabilité + arbitrage amorcé consignés. Aucun gate humain à ce stage.
+Outputs: faisabilité + recherche consignées. Frontière Idéation → Cadrage : `recherche_helper_scripts` bloquant (voir [`gates.md`](../../../sensors/gates.md)). Aucun gate humain à ce stage.
 Imports: none.
 
 ## Learn

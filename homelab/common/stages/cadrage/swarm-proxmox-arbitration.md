@@ -2,7 +2,7 @@
 slug: swarm-proxmox-arbitration
 phase: cadrage
 execution: CONDITIONAL
-condition: "Création / modification de stack (recherche toujours exécutée ; question à l'humain si Docker Swarm ET Proxmox sont possibles)"
+condition: "Création / modification de stack"
 lead_agent: Tech Lead Homelab
 support_agents: []
 mode: inline
@@ -11,11 +11,11 @@ reviewer: null
 review_class: none
 human_gate: none
 produces: [arbitrage_swarm_proxmox]
-consumes: [{artifact: cadrage_confirme, required: true}, {artifact: arbitrage_swarm_proxmox_amorce, required: false}]
+consumes: [{artifact: cadrage_confirme, required: true}, {artifact: recherche_helper_scripts, required: true}]
 requires_stage: [intake-framing]
 sensors: []
 scopes: [stack-update, new-stack, security-patch, infra-terraform]
-inputs: "Cadrage confirmé + arbitrage amorcé en Idéation"
+inputs: "Cadrage confirmé + recherche Helper-Scripts (Idéation)"
 outputs: "Choix Docker Swarm / Proxmox arbitré par l'humain (si les deux existent)"
 ---
 
@@ -27,13 +27,14 @@ Trancher entre Docker Swarm et Proxmox lorsque les deux sont possibles.
 
 ## Steps
 
-### Step 1 — Vérifier les images et alternatives
+### Step 1 — Lire la recherche
 
-Confirmer que les images Docker nécessaires existent **et** rechercher, sans attendre de demande humaine, un script Proxmox VE Helper-Scripts (`https://community-scripts.org/`) : d'abord le site, puis une recherche web. Consigner le lien trouvé, ou « aucun script trouvé ».
+Vérifier que les images Docker existent et lire `recherche_helper_scripts` (produit en Idéation par [`feasibility-arbitration`](../ideation/feasibility-arbitration.md)). **Ne pas la refaire.** Si elle est absente : s'arrêter et exécuter d'abord `feasibility-arbitration`.
 
-### Step 2 — Arbitrer avec l'humain
+### Step 2 — Arbitrer (seul stage qui pose la question)
 
-Si **aucun** script Proxmox n'existe → consigner « Docker Swarm retenu, aucune alternative Proxmox ». Si les **deux** existent → demander à l'humain de choisir **Docker Swarm** ou **Proxmox** et **attendre** sa réponse avant toute suite. Ne jamais présumer le choix.
+- Aucun script trouvé → consigner « Docker Swarm retenu, aucune alternative Proxmox ».
+- Script trouvé → demander à l'humain **Docker Swarm** ou **Proxmox**, **attendre** sa réponse. Ne jamais présumer.
 
 ## Sensors
 

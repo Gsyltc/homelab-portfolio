@@ -22,6 +22,10 @@ ce fichier en donne la lecture chronologique côté produit.
   touchant un agent et par la CI `validate-agents`.
 
 ### Changed
+- **Recherche Proxmox VE Helper-Scripts obligatoire dès l'Idéation, sans doublon**.
+  Source unique dans `feasibility-arbitration` (artefact `recherche_helper_scripts`), rappelée dans la règle
+  préalable du conductor, avant toute question de cadrage ; `swarm-proxmox-arbitration` la consomme au lieu
+  de la refaire. Gate `phase1-phase2` bloquant sur `new-stack` / `infra-terraform` si l'artefact manque.
 - **Chef cuisinier — primauté de la décision humaine, plus aucun interdit** (réf. AUQU-165).
   Les règles de cadrage du chef cuisinier (composition, légumineuses, œufs, quota de viandes rouges,
   historique 30 jours, exclusions) deviennent des **recommandations de proposition** : l'agent ne les

@@ -11,11 +11,11 @@ reviewer: null
 review_class: none
 human_gate: none
 produces: [scope_propose, axes_proposes]
-consumes: [{artifact: intention_capturee, required: true}, {artifact: faisabilite_evaluee, required: false}]
-requires_stage: [feasibility-arbitration]
+consumes: [{artifact: intention_capturee, required: true}]
+requires_stage: [intent-capture]
 sensors: []
 scopes: [stack-update, new-stack, config-change, security-patch, infra-terraform]
-inputs: "Intention capturée + faisabilité"
+inputs: "Intention capturée"
 outputs: "Scope auto-détecté + axes Depth / vérification proposés (confirmés au gate léger)"
 ---
 
