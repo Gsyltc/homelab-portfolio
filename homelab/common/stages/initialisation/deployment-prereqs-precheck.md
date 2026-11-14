@@ -31,13 +31,13 @@ Signaler tôt un prérequis de déploiement manquant, sans en faire ici le contr
 
 Rappel **advisory anticipé** des prérequis de la Validation (`deployment-prereqs-check`) : présence de la variable `[répertoire de travail]` du Tech Lead et accessibilité du flux Kestra `configure_service`.
 
-### Step 2 — Signaler tôt, ne pas bloquer
+### Step 2 — Consigner, ne pas bloquer
 
-Un prérequis manquant est **signalé tôt** (pour ne pas engager un cadrage qui échouera au dépôt), mais **n'est pas** ici le contrôle bloquant : le stage `deployment-prereqs-check` (entrée de Validation) reste le contrôle bloquant de référence.
+Consigner le résultat (✅ ou ⚠️) sans message séparé : il est affiché au point 7 de la proposition initiale ([`intent-scope-approval`](../ideation/intent-scope-approval.md)), sans question. Un répertoire de travail manquant est déjà bloquant dans `stack-detection`. Ce stage **n'est pas** le contrôle bloquant : `deployment-prereqs-check` (entrée de Validation) reste le contrôle de référence.
 
 ## Sensors
 
-Outputs: rappel advisory consigné. Aucun gate humain (bootstrap déterministe). C'est le pendant anticipé du gate `phase3-phase4` de [`homelab/sensors/gates.md`](../../../sensors/gates.md).
+Outputs: rappel advisory consigné, affiché au point 7 de la proposition initiale. Aucun gate humain (bootstrap déterministe). C'est le pendant anticipé du gate `phase3-phase4` de [`homelab/sensors/gates.md`](../../../sensors/gates.md).
 Imports: none.
 
 ## Learn
