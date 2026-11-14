@@ -10,7 +10,7 @@ summary_confirmation: required
 reviewer: null
 review_class: none
 human_gate: light
-produces: [intention_perimetre_approuves, scope_confirme, arbitrage_swarm_proxmox, fqdn_valide, auth_type_valide, database_service_valide]
+produces: [intention_perimetre_approuves, scope_confirme, arbitrage_swarm_proxmox, label_cible_pose, fqdn_valide, auth_type_valide, database_service_valide]
 consumes: [{artifact: intention_capturee, required: true}, {artifact: scope_propose, required: true}, {artifact: axes_proposes, required: true}, {artifact: cibles_disponibles, required: false}, {artifact: auth_type_preselectionne, required: false}, {artifact: database_service_preselectionne, required: false}]
 requires_stage: [scope-detection]
 sensors: []
@@ -48,6 +48,10 @@ Point 4 : valeur calculée selon la règle `${fqdn}` de [`required-parameters-co
 ### Step 2 — Gate léger (Keep / Modify / Redo)
 
 L'humain approuve ou ajuste. C'est un gate **léger** : il valide *quoi* et *jusqu'où*, pas *comment* (les paramètres détaillés sont figés en Cadrage). Sur les scopes légers (`config-change`), ce gate reste **resserré** mais n'est jamais supprimé. Rien n'engage le Cadrage tant que l'intention et le périmètre ne sont pas approuvés et le scope confirmé (l'auto-détection est un plancher : la confirmation peut monter le contrôle, jamais le descendre sans trace).
+
+### Step 3 — Poser le label de cible
+
+Une fois la cible validée au point 3, poser sur l'issue (et sur ses sous-issues de livrable) le label correspondant : **Docker Swarm** → `Docker Swarm` ; **Proxmox** → `Proxmox`. Jamais avant cette validation.
 
 ## Sensors
 

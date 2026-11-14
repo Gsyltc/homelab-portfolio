@@ -29,7 +29,7 @@ Poser les labels, initialiser la piste d'audit et charger les règles toujours a
 
 ### Step 1 — Poser les labels
 
-Poser systématiquement le label **`Homelab`** (et **`Docker Swarm`** pour un livrable compose).
+Poser systématiquement le label **`Homelab`**.
 
 ### Step 2 — Initialiser la piste d'audit
 

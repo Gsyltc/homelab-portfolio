@@ -31,6 +31,8 @@ ce fichier en donne la lecture chronologique côté produit.
   complet, authentification recommandée. Le choix de cible y est fait. `feasibility-arbitration` devient
   `deployment-target-preselection` et passe, avec `auth-preselection`, en fin d'Initialisation.
   `swarm-proxmox-arbitration` (Cadrage) est supprimé.
+- **Labels de cible posés après validation.** `Docker Swarm` retiré de `labels-audit-init` ; `Docker Swarm` ou
+  `Proxmox` posé au gate léger (`intent-scope-approval`, Step 3) selon la cible retenue par l'humain. Contrôlé à la frontière `phase1-phase2`.
 - **Entrée brute consignée une seule fois.** `labels-audit-init` est seul à consigner la demande brute
   (`demande_brute_consignee`) ; `intent-capture` la reformule sans la recopier ; `intake-framing` perd ses Steps 1
   (état de l'issue, déjà contrôlé en Phase 0) et 2 (recopie de la demande).

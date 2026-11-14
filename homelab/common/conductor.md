@@ -150,7 +150,7 @@ Pendant un stage, chaque correction / rejet ❌ / reformulation 💬 humaine (ou
 
 ## OBLIGATOIRE : piste d'audit sur l'issue
 
-La piste d'audit vit **sur l'issue Multica**, jamais dans un fichier `audit.md`. Chaque agent : documente chaque étape (documentation officielle, analyse, paramètres collectés, décision, délégation, résultat, sollicitation sécurité, validation) en commentaire ; capture l'**entrée brute** des demandes / arbitrages humains sans la résumer ; n'écrase jamais l'historique ; ajoute le label **`Homelab`** à toutes les issues et sous-issues (et **`Docker Swarm`** pour les livrables compose) ; trace chaque décision structurante dans le registre de décisions (`decisions/`).
+La piste d'audit vit **sur l'issue Multica**, jamais dans un fichier `audit.md`. Chaque agent : documente chaque étape (documentation officielle, analyse, paramètres collectés, décision, délégation, résultat, sollicitation sécurité, validation) en commentaire ; capture l'**entrée brute** des demandes / arbitrages humains sans la résumer ; n'écrase jamais l'historique ; ajoute le label **`Homelab`** à toutes les issues et sous-issues (et le label de cible **`Docker Swarm`** ou **`Proxmox`** une fois la cible validée au gate léger) ; trace chaque décision structurante dans le registre de décisions (`decisions/`).
 
 ---
 

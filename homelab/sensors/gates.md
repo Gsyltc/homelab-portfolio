@@ -26,7 +26,7 @@ boundaries:
     frontiere: "Demande → Phase 0 (Initialisation)"
     artefacts_requis:
       - demande_brute_consignee            # entrée brute sur l'issue — labels-audit-init, seule consignation
-      - label_homelab_pose                 # label Homelab (+ Docker Swarm si compose)
+      - label_homelab_pose                 # label Homelab (le label de cible est posé au gate léger)
       - detection_stack                    # stack existante vs nouvelle consignée (§0.1)
       - verrou_concurrence_lu              # active_step lu (§0.2)
       - lien_documentation_officielle      # règle préalable (amorçage, étape 3) — lue une seule fois ; artefact requis PROPRE au Homelab
@@ -46,6 +46,7 @@ boundaries:
       - intention_perimetre_approuves      # gate humain léger (§1.3)
       - cibles_disponibles                 # deployment-target-preselection : Docker / Proxmox consignés — bloquant sur new-stack / infra-terraform
       - arbitrage_swarm_proxmox            # cible choisie au gate léger — bloquant sur new-stack / infra-terraform
+      - label_cible_pose                   # label Docker Swarm ou Proxmox posé après validation de la cible
     checks: [artefacts-presents]
     blocking_on_scope:
       - artifact: cibles_disponibles
