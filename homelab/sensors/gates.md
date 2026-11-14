@@ -25,7 +25,7 @@ boundaries:
   - id: entree-phase0
     frontiere: "Demande → Phase 0 (Initialisation)"
     artefacts_requis:
-      - demande_brute_consignee            # entrée brute sur l'issue (§0.4)
+      - demande_brute_consignee            # entrée brute sur l'issue — labels-audit-init, seule consignation
       - label_homelab_pose                 # label Homelab (+ Docker Swarm si compose)
       - detection_stack                    # stack existante vs nouvelle consignée (§0.1)
       - verrou_concurrence_lu              # active_step lu (§0.2)

@@ -27,15 +27,7 @@ Cadrer la demande et identifier le domaine avant toute génération. La document
 
 ## Steps
 
-### Step 1 — Confirmer l'état de l'issue
-
-Confirmer que l'issue est en `in_progress` et que le label `Homelab` est posé (posé en Phase 0).
-
-### Step 2 — Consigner la demande brute
-
-Consigner la demande initiale (entrée brute) en commentaire si ce n'est pas déjà fait en amont.
-
-### Step 3 — Identifier le domaine
+### Step 1 — Identifier le domaine
 
 Stack Docker (Spécialiste Docker / Analyste QA), Home Assistant (Expert Home Assistant), Terraform (Spécialiste Terraform), ou domaine sans agent (Ansible, logs, Flux Kestra → Tech Lead réalise lui-même la vérification et le signale à l'humain).
 

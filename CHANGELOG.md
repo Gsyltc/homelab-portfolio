@@ -31,6 +31,9 @@ ce fichier en donne la lecture chronologique côté produit.
   complet, authentification recommandée. Le choix de cible y est fait. `feasibility-arbitration` devient
   `deployment-target-preselection` et passe, avec `auth-preselection`, en fin d'Initialisation.
   `swarm-proxmox-arbitration` (Cadrage) est supprimé.
+- **Entrée brute consignée une seule fois.** `labels-audit-init` est seul à consigner la demande brute
+  (`demande_brute_consignee`) ; `intent-capture` la reformule sans la recopier ; `intake-framing` perd ses Steps 1
+  (état de l'issue, déjà contrôlé en Phase 0) et 2 (recopie de la demande).
 - **Secrets Vault proposés au lieu d'être demandés.** `required-parameters-collection` propose `${vault}` : noms des
   secrets (`services/<stack>`) et variables (`env_variables/<stack>`), construits tous deux selon les besoins de la stack avec
   les noms de l'application, jamais de valeur. `parametres.json` remplace `vault_secrets_required` par
