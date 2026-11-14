@@ -469,6 +469,98 @@ class TestRequiredParameters(unittest.TestCase):
         self.assertIn("parametres_requis_complets : ✅", out)
 
 
+class TestInitialProposal(unittest.TestCase):
+    REL = ".a-valider/HOM-1/sync-in/preselection.json"
+
+    def setUp(self):
+        self.p = Project()
+
+    def tearDown(self):
+        self.p.cleanup()
+
+    @staticmethod
+    def valid() -> dict:
+        return {
+            "cibles": {"docker": {"image": "syncin/server"},
+                       "proxmox": {"script": "https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/ct/sync-in.sh",
+                                   "source": "https://github.com/Sync-in/server"},
+                       "variantes_testees": ["sync-in", "syncin"]},
+            "auth": {"recommande": "oidc", "justification": "SSO OIDC supporté", "source": "https://sync-in.com/docs/auth"},
+            "database": {"recommande": "mariadb", "justification": "moteur exigé", "source": "https://sync-in.com/docs/db"},
+            "kestra": {"statut": "accessible"},
+        }
+
+    def run_with(self, p: dict, scope: str | None = None) -> dict:
+        self.p.write(self.REL, json.dumps(p))
+        return fire(self.p.root, "initial-proposal", [self.REL], scope)
+
+    def findings(self, rep: dict) -> str:
+        return " ".join(f for r in rep["results"] for f in r["findings"])
+
+    def test_valid(self):
+        self.assertEqual(verdict(self.run_with(self.valid())), OK)
+
+    def test_hom311_unverified_proposal_is_gap(self):
+        p = self.valid()
+        p["cibles"]["proxmox"] = "non recherché"
+        p["auth"] = {"justification": "à trancher", "source": "doc"}
+        p["kestra"] = {"statut": "non vérifié"}
+        f = self.findings(self.run_with(p))
+        self.assertIn("cibles.proxmox", f)
+        self.assertIn("auth : `recommande` OU `options`", f)
+        self.assertIn("kestra.statut", f)
+
+    def test_missing_section_is_gap(self):
+        for k in ("cibles", "auth", "database", "kestra"):
+            p = self.valid()
+            del p[k]
+            self.assertEqual(verdict(self.run_with(p)), GAP, k)
+
+    def test_no_proxmox_requires_variants(self):
+        p = self.valid()
+        p["cibles"]["proxmox"] = None
+        self.assertEqual(verdict(self.run_with(p)), OK)
+        p["cibles"]["variantes_testees"] = []
+        self.assertIn("variantes_testees", self.findings(self.run_with(p)))
+
+    def test_proxmox_wrong_url_is_gap(self):
+        p = self.valid()
+        p["cibles"]["proxmox"]["script"] = "https://example.com/install.sh"
+        self.assertIn("cibles.proxmox.script", self.findings(self.run_with(p)))
+
+    def test_no_target_is_gap(self):
+        p = self.valid()
+        p["cibles"]["docker"] = None
+        p["cibles"]["proxmox"] = None
+        self.assertIn("aucune cible", self.findings(self.run_with(p)))
+
+    def test_existing_stack_and_sans_objet(self):
+        p = self.valid()
+        p["cibles"] = {"actuelle": "docker-swarm"}
+        p["database"] = {"sans_objet": "pas de base"}
+        self.assertEqual(verdict(self.run_with(p)), OK)
+
+    def test_auth_options_need_two(self):
+        p = self.valid()
+        p["auth"] = {"options": ["oidc"], "justification": "doute", "source": "https://x.y/doc"}
+        self.assertIn("auth.options", self.findings(self.run_with(p)))
+        p["auth"]["options"] = ["oidc", "local"]
+        self.assertEqual(verdict(self.run_with(p)), OK)
+
+    def test_blocking_on_new_stack(self):
+        m = sensor.load_manifests()["initial-proposal"]
+        self.assertEqual(sensor.resolve_severity(m, "new-stack"), "blocking")
+        self.assertEqual(sensor.resolve_severity(m, "config-change"), "advisory")
+
+    def test_gate_phase0_phase1_runs_sensor(self):
+        self.p.write(self.REL, json.dumps(self.valid()))
+        self.assertIn("initial-proposal", sensor.parse_boundaries()["phase0-phase1"]["sensors"])
+        buf = io.StringIO()
+        with redirect_stdout(buf):
+            sensor.main(["--root", str(self.p.root), "gate", "phase0-phase1", "--scope", "new-stack"])
+        self.assertIn("initial-proposal [BLOQUANT]", buf.getvalue())
+
+
 class TestDispatcher(unittest.TestCase):
     def setUp(self):
         self.p = Project()
@@ -478,7 +570,7 @@ class TestDispatcher(unittest.TestCase):
 
     def test_all_manifests_valid(self):
         manifests = sensor.load_manifests()
-        self.assertEqual(len(manifests), 7)
+        self.assertEqual(len(manifests), 8)
         for sid, m in manifests.items():
             self.assertTrue(m.valid, f"{sid} invalide : {m.missing}")
             self.assertIsNotNone(sensor.load_check(sid), f"{sid} : script absent/invalide")

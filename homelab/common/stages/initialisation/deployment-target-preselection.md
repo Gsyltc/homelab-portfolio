@@ -49,7 +49,7 @@ Consigner le lien du script, ou « aucun script trouvé » + variantes testées.
 
 ## Sensors
 
-Outputs: `cibles_disponibles` consigné sur l'issue. Présenté au point 3 de [`intent-scope-approval`](../ideation/intent-scope-approval.md). Bloquant si absent sur `new-stack` / `infra-terraform` (voir [`gates.md`](../../../sensors/gates.md)).
+Outputs: `cibles_disponibles` consigné sur l'issue et dans la section `cibles` de `${WORK_DIRECTORY}/.a-valider/<id-tâche>/<stack>/preselection.json` (format : sensor [`initial-proposal`](../../../sensors/sensors/initial-proposal.md)). Présenté au point 3 de [`intent-scope-approval`](../ideation/intent-scope-approval.md). Bloquant si absent sur `new-stack` / `infra-terraform` (voir [`gates.md`](../../../sensors/gates.md)).
 Imports: none.
 
 ## Learn

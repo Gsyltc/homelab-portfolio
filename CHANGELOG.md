@@ -9,6 +9,10 @@ ce fichier en donne la lecture chronologique côté produit.
 ## [Non publié]
 
 ### Added
+- **Sensor `initial-proposal`.** Vérifie, avant la proposition initiale et au gate `phase0-phase1`, que
+  `preselection.json` (écrit par les quatre stages de pré-sélection d'Initialisation) est complet : cibles Docker /
+  Proxmox avec variantes testées, auth et base recommandées avec source, statut Kestra, aucune valeur « non
+  vérifié ». Bloquant sur `new-stack` / `infra-terraform`.
 - **Sensor `required-parameters`.** Vérifie au gate Cadrage → Production que `parametres.json` (écrit par
   `required-parameters-collection` dans `.a-valider/<id-tâche>/<stack>/`) contient tous les paramètres requis,
   avec des valeurs valides (FQDN sous le domaine du Homelab, OIDC Authentik, NFS `truenas`, réseau Traefik connu,

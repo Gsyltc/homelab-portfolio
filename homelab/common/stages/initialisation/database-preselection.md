@@ -43,7 +43,7 @@ Consigner la valeur recommandée et sa justification (lien vers la section de la
 
 ## Sensors
 
-Outputs: `database_service_preselectionne` consigné sur l'issue. Présenté au point 6 de [`intent-scope-approval`](../ideation/intent-scope-approval.md).
+Outputs: `database_service_preselectionne` consigné sur l'issue et dans la section `database` de `${WORK_DIRECTORY}/.a-valider/<id-tâche>/<stack>/preselection.json` (format : sensor [`initial-proposal`](../../../sensors/sensors/initial-proposal.md)). Sans objet (ex. `infra-terraform`) : `sans_objet` + raison. Présenté au point 6 de [`intent-scope-approval`](../ideation/intent-scope-approval.md).
 Imports: none.
 
 ## Learn

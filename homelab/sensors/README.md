@@ -27,7 +27,7 @@ Le code retour est **0** même en écart (advisory). `--strict` renvoie 1 en cas
 
 ### Sévérité conditionnelle par scope (ALI-204)
 
-`plaintext-secret` et `terraform-no-sni` portent un bloc `severity_overrides` : **bloquants sur les scopes `security-patch` / `new-stack`**, advisory ailleurs. `required-parameters` (contrôle de `parametres.json` au gate `phase2-phase3`) est **bloquant sur `new-stack` / `infra-terraform`**. Le dispatcher résout la sévérité effective via `--scope <scope>` (ou la variable `SENSORS_SCOPE`) ; sur ces scopes, un écart est signalé **BLOQUANT** (à corriger ou lever explicitement et à tracer), conformément à la décision humaine + contrôle sécurité de l'Analyste QA (SG-1). La sévérité ne passe **jamais** par le code retour du dispatcher (toujours 0) : elle est portée par le rapport et le workflow.
+`plaintext-secret` et `terraform-no-sni` portent un bloc `severity_overrides` : **bloquants sur les scopes `security-patch` / `new-stack`**, advisory ailleurs. `required-parameters` (contrôle de `parametres.json` au gate `phase2-phase3`) et `initial-proposal` (contrôle de `preselection.json` avant la proposition initiale, gate `phase0-phase1`) sont **bloquants sur `new-stack` / `infra-terraform`**. Le dispatcher résout la sévérité effective via `--scope <scope>` (ou la variable `SENSORS_SCOPE`) ; sur ces scopes, un écart est signalé **BLOQUANT** (à corriger ou lever explicitement et à tracer), conformément à la décision humaine + contrôle sécurité de l'Analyste QA (SG-1). La sévérité ne passe **jamais** par le code retour du dispatcher (toujours 0) : elle est portée par le rapport et le workflow.
 
 ### Hooks
 
@@ -46,7 +46,7 @@ Le hook est **branché par défaut** sur les **agents producteurs de livrables**
 ## Garde-fou : advisory par défaut, bloquant conditionnel (sécurité)
 
 - La grande majorité des gates et sensors **ne bloquent jamais** : ils laissent une trace d'audit factuelle sans arrêter le flux.
-- **Exception sécurité confirmée (ALI-204, arbitrage 2)** : `plaintext-secret` et `terraform-no-sni` sont **bloquants sur les scopes `security-patch` / `new-stack`** (`severity_overrides`) — une détection **arrête l'avancée du workflow** jusqu'à correction ou levée humaine explicite tracée. Partout ailleurs, ils restent advisory. Même logique pour `required-parameters`, bloquant sur `new-stack` / `infra-terraform`.
+- **Exception sécurité confirmée (ALI-204, arbitrage 2)** : `plaintext-secret` et `terraform-no-sni` sont **bloquants sur les scopes `security-patch` / `new-stack`** (`severity_overrides`) — une détection **arrête l'avancée du workflow** jusqu'à correction ou levée humaine explicite tracée. Partout ailleurs, ils restent advisory. Même logique pour `required-parameters` et `initial-proposal`, bloquants sur `new-stack` / `infra-terraform`.
 - Même bloquant, un sensor **ne remplace jamais** la **validation humaine granulaire** (unique gate décisionnel de fond), ni le **contrôle QA systématique** (§2.2), ni le contrôle qualité central du Tech Lead (§2.6) : bloquer, c'est forcer la correction ou une levée humaine tracée, pas décider à la place de l'humain.
 - Un signal **au vert ne vaut pas validation** ; un signal **en échec n'autorise aucun raccourci**.
 - Toute évolution de la sévérité d'un sensor (bascule bloquant/advisory, périmètre de scopes) est une décision structurante explicite (ADR + contrôle sécurité Analyste QA, SG-1).

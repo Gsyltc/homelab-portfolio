@@ -37,7 +37,7 @@ Lire la section authentification de la documentation officielle (OIDC / OAuth / 
 
 ## Sensors
 
-Outputs: `auth_type_preselectionne` consigné sur l'issue. Présenté au point 5 de [`intent-scope-approval`](../ideation/intent-scope-approval.md).
+Outputs: `auth_type_preselectionne` consigné sur l'issue et dans la section `auth` de `${WORK_DIRECTORY}/.a-valider/<id-tâche>/<stack>/preselection.json` (format : sensor [`initial-proposal`](../../../sensors/sensors/initial-proposal.md)). Sans objet (ex. `infra-terraform`) : `sans_objet` + raison. Présenté au point 5 de [`intent-scope-approval`](../ideation/intent-scope-approval.md).
 Imports: none.
 
 ## Learn
