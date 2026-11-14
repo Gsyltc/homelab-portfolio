@@ -29,7 +29,9 @@ Vérifier que la stack est déployable dans le Homelab et amorcer l'arbitrage Sw
 
 ### Step 1 — Faisabilité / contraintes
 
-La stack est-elle déployable dans le Homelab (existence d'images Docker, alternative Proxmox sur `https://community-scripts.org/`) ?
+La stack est-elle déployable dans le Homelab (existence d'images Docker, alternative Proxmox) ?
+
+**Recherche Proxmox VE Helper-Scripts.** Pour toute nouvelle stack, chercher sans attendre de demande humaine un script sur `https://community-scripts.org/` : d'abord le site, puis une recherche web. Consigner le lien trouvé, ou « aucun script trouvé ».
 
 ### Step 2 — Arbitrage Docker Swarm vs Proxmox (amorce)
 
