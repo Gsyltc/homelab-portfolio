@@ -82,24 +82,24 @@ Cette recherche est toujours faite **en premier**. Elle précède l'analyse, la 
 
 ## OBLIGATOIRE : séquence d'amorçage au démarrage
 
-Ordre unique, non ambigu. Les étapes 0 et 1 sont la **seule** « première chose à faire » du Tech Lead (elles priment sur toute autre lecture). La **règle préalable universelle — documentation officielle** (ci-dessus) reste la première action **de cadrage** une fois l'amorçage posé (étape 4).
+La **règle préalable universelle — documentation officielle** (ci-dessus) reste la première action **de cadrage** une fois l'amorçage posé (étape 3).
 
 ```
 0. Checkout de homelab-portfolio (base main, à jour). RETENIR la racine du checkout
    dans $CORE_HOME. Deux dépôts distincts, jamais confondus :
      - workflow + harnais (conductor, stages, protocols, sensors, scripts) = $CORE_HOME ;
      - livrables du projet (compose, .tfvars) = dépôt / répertoire officiel du projet.
-1. Lire AGENTS.md § « Homelab Flow » UNIQUEMENT (règle de routage) → confirmer que la
-   demande relève du workflow Homelab. Ne pas lire AGENTS.md en entier : le reste est de
-   l'hygiène de dépôt et les invariants sont déjà dans conductor.md / protocols/.
-2. stack-detection : détecter la stack visée et son état existant
+1. stack-detection : détecter la stack visée et son état existant
    (stages/initialisation/stack-detection.md).
-3. concurrency-lock-read : lire le verrou `active_step` par artefact ; un artefact déjà
+2. concurrency-lock-read : lire le verrou `active_step` par artefact ; un artefact déjà
    verrouillé est mis en file (stages/initialisation/concurrency-lock-read.md).
-4. Règle préalable documentation officielle + chargement du contexte existant en LÉGER
+3. Règle préalable documentation officielle + chargement du contexte existant en LÉGER
    (lazy loading, voir ci-dessous) : métadonnées de cadrage et de routage, pas les corps.
-5. labels-audit-init : poser les labels (`Homelab`, etc.) et initialiser la piste d'audit
+4. labels-audit-init : poser les labels (`Homelab`, etc.) et initialiser la piste d'audit
    sur l'issue (stages/initialisation/labels-audit-init.md).
+5. Exécuter ensuite les stages dans l'ordre du tableau « Les 5 phases et leurs stages »,
+   en chargeant la fiche de CHAQUE stage au moment de l'exécuter. Aucune question à
+   l'humain en dehors de ce qu'une fiche prévoit ; aucune liste de questions improvisée.
 ```
 
 > **Propagation de `$CORE_HOME`.** À chaque délégation, le Tech Lead **transmet `$CORE_HOME`** dans le **message A2A `delegation`** (fichier YAML joint, champ `core_home: "<chemin du checkout>"`), pour que le délégataire lance sensors, gates et hook d'écriture **sans re-chercher le harnais**. Le même YAML porte `fiches_a_recharger` — la (les) **fiche(s) de stage et protocole(s)** à charger pour sa mission (chargement paresseux ciblé, pas de lecture intégrale). **La mission voyage dans ce fichier joint, jamais en prose dans le fil** (voir [`protocols/governance-security.md`](protocols/governance-security.md) § « Règle A2A » et « Schéma du message A2A », et [`protocols/stage-protocol.md`](protocols/stage-protocol.md) temps 2). Convention d'invocation du harnais ancré sur `$CORE_HOME` : [`../sensors/README.md`](../sensors/README.md).
@@ -110,9 +110,7 @@ Ordre unique, non ambigu. Les étapes 0 et 1 sont la **seule** « première chos
 
 **Au démarrage (chargement léger uniquement)** : le Tech Lead ne charge que les métadonnées nécessaires au cadrage et au routage — la liste des agents disponibles et leurs **descriptions** (via `multica agent list --output json`, champ `description`, **pas** les `instructions`), la liste des skills et leurs descriptions, le contexte existant utile de la stack visée, et les règles **toujours actives** (couche `global` de [`homelab/rules/`](../rules/README.md)).
 
-**NE PAS charger au démarrage** : AGENTS.md hors § « Homelab Flow », les instructions détaillées d'un spécialiste, les fiches de stage et protocoles autres que ceux de l'étape courante, les gabarits complets, les configurations Terraform intégrales, le corps complet des documents de décision, ou le contenu des secrets Vault.
-
-**Chargement différé (à la demande)** : le contenu complet d'une skill, d'un gabarit, d'une règle de couche `stack` / `phase` / `scope` ou d'une configuration n'est chargé qu'au moment où l'étape ou la délégation qui en a besoin est déclenchée. Documenter sur l'issue ce qui a été chargé à la demande (piste d'audit).
+**Chargement différé** : la fiche de l'étape courante est **toujours** chargée. Tout le reste (fiches et protocoles des autres étapes, instructions détaillées d'un spécialiste, contenu complet d'une skill, gabarits, règles de couche `stack` / `phase` / `scope`, configurations Terraform, corps des documents de décision) n'est chargé qu'au moment où l'étape ou la délégation qui en a besoin est déclenchée. Documenter sur l'issue ce qui a été chargé (piste d'audit). Les secrets suivent la règle ci-dessous.
 
 **Secrets** : les valeurs de secrets / variables Vault ne sont récupérées (skill `homelab-vault-access`) que si l'étape l'exige, et **jamais** affichées, loggées, copiées ni transmises dans un commentaire, un livrable ou une notification.
 
@@ -238,8 +236,7 @@ sequenceDiagram
 Récapitulatif vérifiable à chaque tour (pas une règle neuve — les sources sont les sections ci-dessus et les protocoles) :
 
 ```
-☑ Amorçage fait ($CORE_HOME posé, routage AGENTS.md § Homelab Flow confirmé,
-   stack détectée, verrou de concurrence lu)
+☑ Amorçage fait ($CORE_HOME posé, stack détectée, verrou de concurrence lu)
 ☑ Règle préalable documentation officielle appliquée et lien consigné sur l'issue
 ☑ Rapport de vérification (gate de phase) posté AVANT toute validation humaine
 ☑ Validation humaine granulaire : chaque choix Keep / Modify / Redo séparément

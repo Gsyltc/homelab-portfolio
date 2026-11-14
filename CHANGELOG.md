@@ -9,6 +9,10 @@ ce fichier en donne la lecture chronologique côté produit.
 ## [Non publié]
 
 ### Added
+- **Sensor `required-parameters`.** Vérifie au gate Cadrage → Production que `parametres.json` (écrit par
+  `required-parameters-collection` dans `.a-valider/<id-tâche>/<stack>/`) contient tous les paramètres requis,
+  avec des valeurs valides (FQDN sous le domaine du Homelab, OIDC Authentik, NFS `truenas`, réseau Traefik connu,
+  aucun secret ni espace réservé). Bloquant sur `new-stack` / `infra-terraform`.
 - **Répertoire de relecture `.a-valider/<id-tâche>/<stack>/`** (HOM-309). Les spécialistes Terraform et Docker
   déposent tous leurs fichiers générés dans `${WORK_DIRECTORY}/.a-valider/` pour relecture humaine ; après
   validation explicite, `file-deposit.md` les déplace vers `terraform/<type>/<stack>/` et `docker/stacks/`,
@@ -22,6 +26,9 @@ ce fichier en donne la lecture chronologique côté produit.
   touchant un agent et par la CI `validate-agents`.
 
 ### Changed
+- **Cadrage : stages exécutés fiche par fiche, paramètres déduits.** La séquence d'amorçage du conductor impose
+  d'enchaîner les stages en chargeant chaque fiche. `required-parameters-collection` ajoute le stockage NFS du
+  Homelab comme paramètre déduit, propose le FQDN avec sa valeur complète et fixe Authentik comme IdP OIDC.
 - **Méthode de recherche Helper-Scripts fiabilisée.** `feasibility-arbitration` impose une recherche par variantes de nom
   dans le dépôt `community-scripts/ProxmoxVE` (`ct/`), car le site community-scripts.org est rendu côté client et
   ne permet pas de conclure à l'absence d'un script.

@@ -13,10 +13,10 @@ human_gate: granular
 produces: [parametres_requis_complets, auth_type_fige]
 consumes: [{artifact: cadrage_confirme, required: true}, {artifact: auth_type_preselectionne, required: false}]
 requires_stage: [intake-framing]
-sensors: []
+sensors: [required-parameters]
 scopes: [stack-update, new-stack, config-change, security-patch, infra-terraform]
 inputs: "Cadrage confirmé + auth pré-sélectionné"
-outputs: "Tous les paramètres requis renseignés + ${auth_type} figé (ou arbitré par l'humain)"
+outputs: "parametres.json (paramètres requis complets et valides) + ${auth_type} figé (ou arbitré par l'humain)"
 ---
 
 # Collecte des paramètres requis
@@ -35,13 +35,14 @@ Le Tech Lead vérifie que tous les paramètres sont renseignés ; **il ne génè
 | --- | --- | --- |
 | Nom de la stack `${stack_name}` | Oui | Texte alphanumérique |
 | Type d'authentification `${auth_type}` | Optionnel | `none`, `local`, `forwardauth`, `oidc` |
-| FQDN d'exposition `${fqdn}` | Déductible | Texte (nom de domaine complet). **Défaut** : `<stack_name>.<domaine du homelab>` — domaine : **source unique** [`domaine-homelab.md`](../../../../plugins/homelab-assistant/skills/configuration-applications/references/domaine-homelab.md) ; préfixe déduit des FQDN des stacks existantes si une convention diffère. Le défaut est **proposé et confirmé en un seul message** (jamais une question ouverte), avec les autres défauts déductibles. Écrit **en clair** dans le Terraform, jamais `${SNI}`. |
+| FQDN d'exposition `${fqdn}` | Déductible | Texte (nom de domaine complet). **Défaut** : `<stack_name>.<domaine du homelab>` — domaine : **source unique** [`domaine-homelab.md`](../../../../plugins/homelab-assistant/skills/configuration-applications/references/domaine-homelab.md) ; préfixe déduit des FQDN des stacks existantes si une convention diffère. Le défaut est **proposé avec sa valeur complète** (jamais un gabarit `<domaine>`) et confirmé en un seul message, avec les autres défauts déductibles. Si l'humain ne modifie que le sous-domaine, recomposer `<sous-domaine>.<domaine du homelab>` sans redemander. Écrit **en clair** dans le Terraform, jamais `${SNI}`. |
 | Paramètres OIDC `${oidc_params}` | Déductible (si `${auth_type}` = `oidc`) | IdP, nom du client, redirect URI, scopes — voir Step 3. Sans objet pour les autres types. |
+| Stockage `${storage}` | Déductible | NFS du Homelab : serveur `truenas`, chemin `/mnt/datas/${ENVIRONMENT}/<services\|databases>/<stack_name>`. **Source unique** : [`template.yml`](../../../../plugins/homelab-assistant/skills/docker-composer/references/template.yml) (section `VOLUMES`) de la skill `docker-composer`. Ne jamais demander le serveur ni le chemin. |
 | Réseau Traefik `${traefik_network}` | Déductible | **Source unique** : liste et réseau par défaut définis dans la skill `docker-composer` ([`references/network.md`](../../../../plugins/homelab-assistant/skills/docker-composer/references/network.md)) ; défaut **à confirmer par l'humain**. |
 | Activer Valkey `${valkey_enabled}` | Déductible | `true`, `false` — le Homelab possède **déjà** un Valkey/Redis mutualisé : ne jamais recréer ce service, s'y connecter (règle portée par la skill `docker-composer`). |
 | Service base de données `${database_service}` | Optionnel | `postgres`, `mysql`, `mariadb`, `mongodb`, `none` — PostgreSQL mutualisé **déjà** présent : ne jamais recréer `postgres`, s'y connecter (règle portée par la skill `docker-composer`). |
 
-**Un seul message de confirmation** : le Tech Lead propose en bloc les valeurs par défaut déduites (`${fqdn}`, `${traefik_network}`, `${valkey_enabled}`) et attend la confirmation ou correction de l'humain.
+**Un seul message de confirmation** : le Tech Lead propose en bloc les valeurs par défaut déduites (`${fqdn}`, `${storage}`, `${traefik_network}`, `${valkey_enabled}` et, si `oidc`, `${oidc_params}`) et attend la confirmation ou correction de l'humain.
 
 Demander aussi si la stack nécessite une création / modification de secrets ou variables dans **HashiCorp Vault** (le signaler à l'humain ; agent Vault dédié à créer plus tard).
 
@@ -63,7 +64,7 @@ Le Tech Lead **déduit** les paramètres OIDC au lieu de les demander, puis les 
 
 | Paramètre | Valeur déduite par défaut |
 | --- | --- |
-| IdP | **Authentik** (IdP du Homelab) |
+| IdP | **Authentik**, seul IdP OIDC du Homelab. Ne jamais demander l'IdP ni son URL d'émetteur : le client est créé par le Terraform (`oauth[]`). |
 | Nom du client | `${stack_name}` |
 | Redirect URI | Chemin de callback issu de la **documentation officielle** de l'application (ex. `/oauth2/callback`, `/authorization-code/callback`), préfixé par `https://${fqdn}` — dépend donc de `${fqdn}` (déduit au Step 1) |
 | Scopes | Ceux requis par la documentation officielle ; à défaut `openid profile email` |
@@ -75,10 +76,14 @@ Règles :
 - La règle d'auto-sélection du Step 2 (`oidc → forwardauth → local`) est **inchangée** (SEC-1) : ce Step ne fait que renseigner les paramètres une fois `oidc` retenu.
 - Mapping vers le Terraform : `oauth[]` et `allowed_redirect_uris[][]` (voir la skill `configuration-applications`, [`authentification.md`](../../../../plugins/homelab-assistant/skills/configuration-applications/references/authentification.md)).
 
+### Step 4 — Écrire `parametres.json`
+
+Après la confirmation de l'humain, écrire les valeurs retenues dans `${WORK_DIRECTORY}/.a-valider/<id-tâche>/<stack>/parametres.json`. Format et règles : sensor [`required-parameters`](../../../sensors/sensors/required-parameters.md).
+
 ## Sensors
 
-Outputs: paramètres requis complets (dont `${fqdn}` et, si `oidc`, `${oidc_params}`) + `${auth_type}` figé. Frontière **Cadrage → Production** : gate `artefacts-presents` + `liaison-tracabilite` (tous les paramètres §requis reliés à la demande) — voir [`homelab/sensors/gates.md`](../../../sensors/gates.md).
-Imports: none.
+Outputs: `parametres.json` dans `${WORK_DIRECTORY}/.a-valider/<id-tâche>/<stack>/` (artefact `parametres_requis_complets`) + `${auth_type}` figé. Frontière **Cadrage → Production** : voir [`homelab/sensors/gates.md`](../../../sensors/gates.md).
+Imports: `required-parameters` (gate — **bloquant sur `new-stack` / `infra-terraform`**).
 
 ## Learn
 

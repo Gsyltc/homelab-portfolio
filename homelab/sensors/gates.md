@@ -60,6 +60,7 @@ boundaries:
     blocking_on_scope:
       - artifact: arbitrage_swarm_proxmox
         scopes: [new-stack, infra-terraform]
+    sensors: [required-parameters]         # parametres.json complet et valide — bloquant sur new-stack / infra-terraform
     # note : le lien de documentation officielle est un artefact requis PROPRE au Homelab
 
   - id: phase3-phase4
