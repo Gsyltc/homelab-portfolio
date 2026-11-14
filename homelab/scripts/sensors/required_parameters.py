@@ -33,15 +33,18 @@ NETWORK_SRC = SKILLS / "docker-composer" / "references" / "network.md"
 NFS_SRC = SKILLS / "docker-composer" / "references" / "template.yml"
 
 KEYS = {"stack_name", "cible", "auth_type", "fqdn", "oidc", "storage", "traefik_network",
-        "valkey_enabled", "database_service", "vault_secrets_required", "mode_execution"}
+        "valkey_enabled", "database_service", "vault", "mode_execution"}
 OIDC_KEYS = {"idp", "client_name", "redirect_uri", "scopes"}
 STORAGE_KEYS = {"server", "paths"}
+VAULT_KEYS = {"secrets", "variables"}
+VAULT_NAME_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_.-]{0,127}$")
+VAULT_ENTRY_KEYS = {"nom", "besoin"}
 CIBLES = {"swarm", "proxmox"}
 AUTH_TYPES = {"none", "local", "forwardauth", "oidc"}
 DATABASES = {"postgres", "mysql", "mariadb", "mongodb", "none"}
 MODES = {"gated", "autonome"}
 
-KNOWN_KEYS = KEYS | OIDC_KEYS | STORAGE_KEYS
+KNOWN_KEYS = KEYS | OIDC_KEYS | STORAGE_KEYS | VAULT_KEYS | VAULT_ENTRY_KEYS
 
 STACK_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 HOST_RE = re.compile(r"^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$")
@@ -176,8 +179,32 @@ def check(params: dict) -> tuple[list[str], list[str]]:
     if mode not in MODES:
         gaps.append(f"mode_execution : requis, valeurs {sorted(MODES)} (défaut gated)")
 
-    if not isinstance(params.get("vault_secrets_required"), bool):
-        gaps.append("vault_secrets_required : booléen requis (réponse à la question Vault du Step 1)")
+    vault = params.get("vault")
+    if not isinstance(vault, dict):
+        gaps.append("vault : requis (objet { secrets: [...], variables: [...] }, listes d'objets {nom, besoin}, éventuellement vides)")
+    else:
+        _unknown(vault, VAULT_KEYS, "vault.", gaps)
+        for k in sorted(VAULT_KEYS):
+            names = vault.get(k)
+            if not isinstance(names, list):
+                gaps.append(f"vault.{k} : liste requise (vide si aucun)")
+                continue
+            seen: set[str] = set()
+            for i, e in enumerate(names):
+                where = f"vault.{k}[{i}]"
+                if not isinstance(e, dict):
+                    gaps.append(f"{where} : objet {{nom, besoin}} attendu")
+                    continue
+                _unknown(e, VAULT_ENTRY_KEYS, f"{where}.", gaps)
+                nom = e.get("nom")
+                if not (isinstance(nom, str) and VAULT_NAME_RE.match(nom)):
+                    gaps.append(f"{where}.nom : nom de clé attendu (lettre ou _ en tête, puis lettres, chiffres, _ . -), jamais une valeur")
+                elif nom in seen:
+                    gaps.append(f"{where}.nom : doublon dans vault.{k}")
+                else:
+                    seen.add(nom)
+                if not _nonempty_str(e.get("besoin")):
+                    gaps.append(f"{where}.besoin : requis (pourquoi ce secret / cette variable existe)")
     return gaps, missing_src
 
 

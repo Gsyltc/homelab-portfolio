@@ -38,7 +38,16 @@ Check déterministe exécuté **au gate `phase2-phase3`** (Cadrage → Productio
   "traefik_network": "traefik_frontend",
   "valkey_enabled": false,
   "database_service": "mariadb",
-  "vault_secrets_required": true,
+  "vault": {
+    "secrets": [
+      {"nom": "<nom attendu par l'application>", "besoin": "clé de chiffrement exigée par la doc (section …)"},
+      {"nom": "<nom attendu par l'application>", "besoin": "client secret OIDC (auth_type = oidc)"}
+    ],
+    "variables": [
+      {"nom": "<nom attendu par l'application>", "besoin": "URL publique (fqdn) exigée par la doc"},
+      {"nom": "<nom attendu par l'application>", "besoin": "hôte de la base (database_service = mariadb)"}
+    ]
+  },
   "mode_execution": "gated"
 }
 ```
@@ -56,7 +65,7 @@ Check déterministe exécuté **au gate `phase2-phase3`** (Cadrage → Productio
 | `traefik_network` | Requis si `cible` = `swarm`. Réseau listé dans [`network.md`](../../../plugins/homelab-assistant/skills/docker-composer/references/network.md). |
 | `valkey_enabled` | Booléen, requis si `cible` = `swarm`. |
 | `database_service` | Optionnel : `postgres`, `mysql`, `mariadb`, `mongodb`, `none`. |
-| `vault_secrets_required` | Booléen requis (réponse à la question Vault). |
+| `vault` | Requis : `secrets` et `variables`, listes (éventuellement vides) d'objets `{nom, besoin}`. `nom` : libre, celui attendu par l'application (lettre ou `_` en tête, puis lettres, chiffres, `_`, `.`, `-`, 128 car. max), unique dans sa liste. `besoin` : non vide. Une valeur n'y figure jamais. |
 | `mode_execution` | Requis : `gated` (défaut) ou `autonome` (voir [`autonomy-mode`](../../common/stages/production/autonomy-mode.md)). |
 
 Contrôles transverses :

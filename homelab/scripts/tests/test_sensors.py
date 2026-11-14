@@ -317,7 +317,10 @@ class TestRequiredParameters(unittest.TestCase):
             "traefik_network": "traefik_frontend",
             "valkey_enabled": False,
             "database_service": "mariadb",
-            "vault_secrets_required": True,
+            "vault": {"secrets": [{"nom": "auth.encryptionKey", "besoin": "clé de chiffrement exigée par la doc"},
+                                  {"nom": "OIDC_CLIENT_SECRET", "besoin": "client secret OIDC"}],
+                      "variables": [{"nom": "publicUrl", "besoin": "URL publique exigée par la doc"},
+                                    {"nom": "DB_HOST", "besoin": "hôte de la base"}]},
             "mode_execution": "gated",
         }
 
@@ -380,6 +383,50 @@ class TestRequiredParameters(unittest.TestCase):
         for k in ("storage", "traefik_network", "valkey_enabled"):
             del params[k]
         self.assertEqual(verdict(self.run_with(params)), OK)
+
+    def test_vault_free_naming_accepted(self):
+        params = self.valid()
+        params["vault"]["secrets"].append({"nom": "db_password", "besoin": "mot de passe MariaDB dédiée"})
+        self.assertEqual(verdict(self.run_with(params)), OK)
+
+    def test_vault_entry_without_besoin_is_gap(self):
+        params = self.valid()
+        params["vault"]["secrets"][0]["besoin"] = ""
+        self.assertIn("vault.secrets[0].besoin", self.findings(self.run_with(params)))
+
+    def test_vault_duplicate_name_is_gap(self):
+        params = self.valid()
+        params["vault"]["secrets"].append(dict(params["vault"]["secrets"][0]))
+        self.assertIn("doublon", self.findings(self.run_with(params)))
+
+    def test_vault_invalid_name_never_leaks(self):
+        params = self.valid()
+        params["vault"]["secrets"][0]["nom"] = "valeur avec espaces !"
+        rep = self.run_with(params)
+        self.assertIn("vault.secrets[0].nom", self.findings(rep))
+        self.assertNotIn("valeur avec espaces", json.dumps(rep))
+
+    def test_vault_variables_same_rules(self):
+        params = self.valid()
+        params["vault"]["variables"].append({"nom": "server.port", "besoin": "port interne"})
+        self.assertEqual(verdict(self.run_with(params)), OK)
+        params["vault"]["variables"][0]["besoin"] = ""
+        params["vault"]["variables"].append(dict(params["vault"]["variables"][1]))
+        params["vault"]["variables"].append("PLAIN")
+        f = self.findings(self.run_with(params))
+        self.assertIn("vault.variables[0].besoin", f)
+        self.assertIn("doublon dans vault.variables", f)
+        self.assertIn("vault.variables[4] : objet {nom, besoin} attendu", f)
+
+    def test_vault_bare_string_is_gap(self):
+        params = self.valid()
+        params["vault"]["secrets"] = ["OIDC_CLIENT_SECRET"]
+        self.assertIn("objet {nom, besoin} attendu", self.findings(self.run_with(params)))
+
+    def test_vault_missing_is_gap(self):
+        params = self.valid()
+        del params["vault"]
+        self.assertIn("vault : requis", self.findings(self.run_with(params)))
 
     def test_invalid_mode_is_gap(self):
         params = self.valid()
