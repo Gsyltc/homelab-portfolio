@@ -16,6 +16,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/) ; versionnage
   § convention) et stages `version-impact-analysis` / `version-update-application` alignés.
 
 ### Added
+- **Paramètres OIDC déduits au cadrage** (HOM-308). `required-parameters-collection` : nouveau paramètre `${oidc_params}` (IdP Authentik, client = `${stack_name}`, redirect URI depuis la doc officielle et `${fqdn}`, scopes), proposé en validation globale unique ; aucun secret. Invariant `oidc → forwardauth → local` inchangé (SEC-1).
 - **Skill `homelab-vault-access` — écriture encadrée de la clé `VERSION`** (parcours
   `service-version-update`, HOM-263). Nouvelle **Étape 3** : écriture en read-modify-write de la
   **seule** clé `VERSION` du montage `env_variables/data/<service>`, préservant toutes les autres

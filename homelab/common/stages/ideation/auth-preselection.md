@@ -35,6 +35,10 @@ Si la documentation officielle est déjà connue, appliquer la règle d'auto-sé
 
 **En cas de doute → demander à l'humain** et attendre. Le doute ne bascule jamais vers un choix implicite. La valeur reste **de cadrage** ; elle est figée en Cadrage (`required-parameters-collection`).
 
+### Step 3 — Annoncer les paramètres OIDC à déduire
+
+Si `oidc` est pré-sélectionné, le noter : les paramètres OIDC (IdP Authentik, client = `${stack_name}`, redirect URI, scopes) seront **déduits et proposés au Cadrage** (Step 3 de [`required-parameters-collection`](../cadrage/required-parameters-collection.md)). Rien n'est figé ici.
+
 ## Sensors
 
 Outputs: `${auth_type}` pré-sélectionné consigné (valeur de cadrage). Aucun gate humain à ce stage.
