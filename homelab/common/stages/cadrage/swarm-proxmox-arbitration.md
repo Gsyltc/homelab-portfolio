@@ -2,7 +2,7 @@
 slug: swarm-proxmox-arbitration
 phase: cadrage
 execution: CONDITIONAL
-condition: "Création / modification de stack où Docker Swarm ET Proxmox sont possibles"
+condition: "Création / modification de stack (recherche toujours exécutée ; question à l'humain si Docker Swarm ET Proxmox sont possibles)"
 lead_agent: Tech Lead Homelab
 support_agents: []
 mode: inline
@@ -29,15 +29,15 @@ Trancher entre Docker Swarm et Proxmox lorsque les deux sont possibles.
 
 ### Step 1 — Vérifier les images et alternatives
 
-Confirmer que les images Docker nécessaires existent **et** chercher une alternative Proxmox sur `https://community-scripts.org/`.
+Confirmer que les images Docker nécessaires existent **et** rechercher, sans attendre de demande humaine, un script Proxmox VE Helper-Scripts (`https://community-scripts.org/`) : d'abord le site, puis une recherche web. Consigner le lien trouvé, ou « aucun script trouvé ».
 
 ### Step 2 — Arbitrer avec l'humain
 
-Si les **deux** existent → demander à l'humain de choisir **Docker Swarm** ou **Proxmox** et **attendre** sa réponse avant toute suite. Ne jamais présumer le choix.
+Si **aucun** script Proxmox n'existe → consigner « Docker Swarm retenu, aucune alternative Proxmox ». Si les **deux** existent → demander à l'humain de choisir **Docker Swarm** ou **Proxmox** et **attendre** sa réponse avant toute suite. Ne jamais présumer le choix.
 
 ## Sensors
 
-Outputs: choix Swarm / Proxmox consigné. Frontière **Cadrage → Production** : artefact `arbitrage_swarm_proxmox` (conditionnel) contrôlé par le gate — voir [`homelab/sensors/gates.md`](../../../sensors/gates.md).
+Outputs: choix Swarm / Proxmox consigné. Frontière **Cadrage → Production** : artefact `arbitrage_swarm_proxmox` (**bloquant** sur `new-stack` / `infra-terraform`) contrôlé par le gate — voir [`homelab/sensors/gates.md`](../../../sensors/gates.md).
 Imports: none.
 
 ## Learn
