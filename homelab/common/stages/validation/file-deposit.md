@@ -15,8 +15,8 @@ consumes: [{artifact: validation_humaine_explicite, required: true}, {artifact: 
 requires_stage: [human-granular-validation]
 sensors: [vault-secret-exists]
 scopes: [stack-update, new-stack, config-change, security-patch, infra-terraform]
-inputs: "Configuration validée + prérequis §répertoire vérifiés"
-outputs: "Fichiers déposés dans les répertoires de travail, vérifiés"
+inputs: "Configuration validée + prérequis §répertoire vérifiés + fichiers du répertoire de relecture `${WORK_DIRECTORY}/.a-valider/<id-tâche>/<stack>/`"
+outputs: "Fichiers déplacés vers les répertoires de travail, vérifiés ; répertoire de relecture nettoyé"
 ---
 
 # Dépôt des fichiers dans les répertoires de travail (sur confirmation)
@@ -31,14 +31,26 @@ Déposer les livrables validés aux emplacements conventionnels, sur confirmatio
 
 > Prérequis : la variable `[répertoire de travail]` a été vérifiée ([`deployment-prereqs-check.md`](deployment-prereqs-check.md)).
 
-Le Tech Lead **propose** les chemins de dépôt en les affichant, et **attend la confirmation explicite** de l'humain avant tout dépôt :
+**Source** : `${WORK_DIRECTORY}/.a-valider/<id-tâche>/<stack>/` (répertoire de relecture alimenté par les spécialistes, voir [`terraform-configuration.md`](../production/terraform-configuration.md) et [`docker-compose-creation.md`](../production/docker-compose-creation.md)). Aucun fichier n'est placé hors de `.a-valider/` avant la validation humaine explicite.
 
-- docker-compose : `/[répertoire de travail]/docker/stacks/[domaine]/[nom-stack].yml` (domaine = valeur `domain` du `config.tfvars` ; convention `<stack>.yml`).
-- Terraform : `[répertoire de travail]/terraform/[type]/[nom-de-la-stack]/config.tfvars` (type = `swarm` si Docker Swarm, `service` si Proxmox ; créer le répertoire s'il n'existe pas).
+Le Tech Lead **propose** les chemins de destination en les affichant, et **attend la confirmation explicite** de l'humain avant tout déplacement :
 
-### Step 2 — Vérifier après dépôt
+- docker-compose : `${WORK_DIRECTORY}/docker/stacks/[domaine]/[nom-stack].yml` (domaine = valeur `domain` du `config.tfvars` ; convention `<stack>.yml`).
+- Terraform : `${WORK_DIRECTORY}/terraform/[type]/[nom-de-la-stack]/config.tfvars` (type = `swarm` si Docker Swarm, `service` si Proxmox ; créer le répertoire s'il n'existe pas).
 
-Après dépôt, vérifier les fichiers copiés (contenu conforme, parse YAML pour le compose).
+### Step 2 — Déplacer depuis `.a-valider/`
+
+Après confirmation, **déplacer** (et non copier) les fichiers depuis `.a-valider/<id-tâche>/<stack>/` vers leurs emplacements définitifs. Ne jamais écraser un fichier existant sans l'avoir signalé à l'humain.
+
+### Step 3 — Vérifier après déplacement
+
+Vérifier les fichiers déplacés : présence à l'emplacement définitif, contenu conforme, parse YAML pour le compose, aucun secret en clair.
+
+### Step 4 — Nettoyer le répertoire de relecture
+
+Une fois la vérification réussie, supprimer `.a-valider/<id-tâche>/<stack>/` (puis `.a-valider/<id-tâche>/` s'il est vide). En cas d'échec de vérification, **conserver** le répertoire de relecture et le signaler à l'humain.
+
+> `.a-valider/` doit être exclu du dépôt git du projet (`.gitignore` du répertoire de travail) : le Tech Lead le vérifie et le signale à l'humain s'il ne l'est pas.
 
 ## Sensors
 

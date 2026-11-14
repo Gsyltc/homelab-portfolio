@@ -16,7 +16,7 @@ requires_stage: [autonomy-mode]
 sensors: [yaml-validity, plaintext-secret]
 scopes: [stack-update, new-stack, config-change, security-patch]
 inputs: "Paramètres requis (collectés en Cadrage §2.4 — domaine / FQDN, auth) + documentation officielle + walking skeleton validé"
-outputs: "Fichier docker-compose optimisé Swarm, téléchargeable"
+outputs: "Fichier docker-compose optimisé Swarm, déposé dans `${WORK_DIRECTORY}/.a-valider/<id-tâche>/<stack>/`"
 ---
 
 # Création du docker-compose (Spécialiste Docker)
@@ -33,13 +33,15 @@ Le Tech Lead délègue au **Spécialiste Docker** par mention valide (mission + 
 
 ### Step 2 — Produire le livrable
 
-Produire le fichier (skill `docker-composer`), conserver les commentaires `#` des gabarits, vérifier la syntaxe YAML, puis appliquer le **geste de fin de mission** [`producer-report.md`](../../protocols/producer-report.md) : joindre le livrable `docker-compose.yml` **et** le **message A2A `retour` en YAML** (`retour-docker-<stack>.yaml` — `resultat` + `sensors_resultats`), corps minimal (mention valide du Tech Lead + une ligne de statut + nom du YAML `retour`), zéro prose. Sans mention valide → compte-rendu réputé non rendu, flux arrêté. **Une fois le livrable produit et le compte-rendu rendu, la sous-issue Docker passe en `in_review`** (livrable produit, en attente de vérification QA ; cf. [`stage-protocol.md` § Cycle de statut des sous-issues & barrière de stage](../../protocols/stage-protocol.md#cycle-de-statut-des-sous-issues--barrière-de-stage)).
+Produire le fichier (skill `docker-composer`), conserver les commentaires `#` des gabarits, vérifier la syntaxe YAML, puis déposer les fichiers dans le **répertoire de relecture** (voir ci-dessous). Appliquer ensuite le **geste de fin de mission** [`producer-report.md`](../../protocols/producer-report.md) : joindre le livrable `docker-compose.yml` **et** le **message A2A `retour` en YAML** (`retour-docker-<stack>.yaml` — `resultat` + `sensors_resultats`), corps minimal (mention valide du Tech Lead + une ligne de statut + nom du YAML `retour`), zéro prose. Sans mention valide → compte-rendu réputé non rendu, flux arrêté. **Une fois le livrable produit et le compte-rendu rendu, la sous-issue Docker passe en `in_review`** (livrable produit, en attente de vérification QA ; cf. [`stage-protocol.md` § Cycle de statut des sous-issues & barrière de stage](../../protocols/stage-protocol.md#cycle-de-statut-des-sous-issues--barrière-de-stage)).
 
 > **Autorité des règles techniques (A5/A6).** La règle des **services mutualisés** (ne jamais recréer Traefik / Redis-Valkey / PostgreSQL — réutiliser les instances existantes du Homelab) et la **liste des réseaux Traefik + réseau par défaut** sont portées par la **skill `docker-composer`** (`SKILL.md` et [`references/network.md`](../../../../plugins/homelab-assistant/skills/docker-composer/references/network.md)), qui en est la **source unique**. Le workflow ne réénonce pas ces règles : il les **référence** et se limite à collecter les paramètres associés (`${traefik_network}`, `${valkey_enabled}`, `${database_service}` — voir [`required-parameters-collection.md`](../cadrage/required-parameters-collection.md)).
 
+> **Répertoire de relecture.** Tous les fichiers générés vont dans `${WORK_DIRECTORY}/.a-valider/<id-tâche>/<stack>/` (`<id-tâche>` = identifiant de l'issue, ex. `HOM-303`), jamais ailleurs avant la validation humaine ; le commentaire de livraison en consigne le chemin résolu. `${WORK_DIRECTORY}` vide ou introuvable → issue `blocked` ([`stack-detection.md`](../initialisation/stack-detection.md)). Déplacement final : [`file-deposit.md`](../validation/file-deposit.md).
+
 ## Sensors
 
-Outputs: livrable compose téléchargeable. Gate humain granulaire (via `quality-assurance` puis `central-quality-control` puis Validation).
+Outputs: livrable compose lisible dans `${WORK_DIRECTORY}/.a-valider/<id-tâche>/<stack>/` (et joint à l'issue). Gate humain granulaire (via `quality-assurance` puis `central-quality-control` puis Validation).
 Imports: `yaml-validity` (write), `plaintext-secret` (write — **bloquant sur `security-patch` / `new-stack`**).
 Upstream targets: `parametres_requis_complets` (required), `walking_skeleton_valide` (required). Plus de dépendance `livrable_tfvars` : le compose est produit en parallèle du `.tfvars`.
 
