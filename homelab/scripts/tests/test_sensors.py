@@ -318,6 +318,7 @@ class TestRequiredParameters(unittest.TestCase):
             "valkey_enabled": False,
             "database_service": "mariadb",
             "vault_secrets_required": True,
+            "mode_execution": "gated",
         }
 
     def run_with(self, params: dict, scope: str | None = None) -> dict:
@@ -379,6 +380,11 @@ class TestRequiredParameters(unittest.TestCase):
         for k in ("storage", "traefik_network", "valkey_enabled"):
             del params[k]
         self.assertEqual(verdict(self.run_with(params)), OK)
+
+    def test_invalid_mode_is_gap(self):
+        params = self.valid()
+        params["mode_execution"] = "auto"
+        self.assertIn("mode_execution", self.findings(self.run_with(params)))
 
     def test_unknown_key_is_gap(self):
         params = self.valid()

@@ -10,7 +10,7 @@ summary_confirmation: required
 reviewer: null
 review_class: none
 human_gate: granular
-produces: [parametres_requis_complets, auth_type_fige]
+produces: [parametres_requis_complets, auth_type_fige, mode_execution_choisi]
 consumes: [{artifact: cadrage_confirme, required: true}, {artifact: fqdn_valide, required: false}, {artifact: auth_type_valide, required: false}]
 requires_stage: [intake-framing]
 sensors: [required-parameters]
@@ -42,7 +42,7 @@ Le Tech Lead vérifie que tous les paramètres sont renseignés ; **il ne génè
 | Activer Valkey `${valkey_enabled}` | Déductible | `true`, `false` — le Homelab possède **déjà** un Valkey/Redis mutualisé : ne jamais recréer ce service, s'y connecter (règle portée par la skill `docker-composer`). |
 | Service base de données `${database_service}` | Optionnel | `postgres`, `mysql`, `mariadb`, `mongodb`, `none` — PostgreSQL mutualisé **déjà** présent : ne jamais recréer `postgres`, s'y connecter (règle portée par la skill `docker-composer`). |
 
-**Un seul message de confirmation** : le Tech Lead propose en bloc les valeurs par défaut déduites restantes (`${storage}`, `${traefik_network}`, `${valkey_enabled}` et, si `oidc`, `${oidc_params}`) et attend la confirmation ou correction de l'humain.
+**Un seul message de confirmation** : le Tech Lead propose en bloc les valeurs par défaut déduites restantes (`${storage}`, `${traefik_network}`, `${valkey_enabled}` et, si `oidc`, `${oidc_params}`) ainsi que le **mode d'exécution** de la Production (options et défaut : [`autonomy-mode`](../production/autonomy-mode.md)), et attend la confirmation ou correction de l'humain.
 
 Demander aussi si la stack nécessite une création / modification de secrets ou variables dans **HashiCorp Vault** (le signaler à l'humain ; agent Vault dédié à créer plus tard).
 

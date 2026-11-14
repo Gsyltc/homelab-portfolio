@@ -38,7 +38,8 @@ Check déterministe exécuté **au gate `phase2-phase3`** (Cadrage → Productio
   "traefik_network": "traefik_frontend",
   "valkey_enabled": false,
   "database_service": "mariadb",
-  "vault_secrets_required": true
+  "vault_secrets_required": true,
+  "mode_execution": "gated"
 }
 ```
 
@@ -56,6 +57,7 @@ Check déterministe exécuté **au gate `phase2-phase3`** (Cadrage → Productio
 | `valkey_enabled` | Booléen, requis si `cible` = `swarm`. |
 | `database_service` | Optionnel : `postgres`, `mysql`, `mariadb`, `mongodb`, `none`. |
 | `vault_secrets_required` | Booléen requis (réponse à la question Vault). |
+| `mode_execution` | Requis : `gated` (défaut) ou `autonome` (voir [`autonomy-mode`](../../common/stages/production/autonomy-mode.md)). |
 
 Contrôles transverses :
 - Clé inconnue → écart (faute de frappe, paramètre hors contrat).

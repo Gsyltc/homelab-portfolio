@@ -47,7 +47,7 @@ flowchart TD
     P0 -.->|bootstrap deterministe - detection stack + verrou + labels - sans gate humain| P0
     P1 -.->|gate humain leger - intention + perimetre + scope confirme| P1
     P2 -.->|gate advisory - doc officielle + parametres requis| P2
-    P3 -.->|walking skeleton - mode autonomie - halt-and-ask sur echec| P3
+    P3 -.->|mode gated ou autonome - halt-and-ask sur echec| P3
     P4 -.->|validation humaine explicite + prerequis 4.0 + rollback si destructif| P4
 ```
 
@@ -205,7 +205,6 @@ sequenceDiagram
     S->>H: Gate leger - intention + perimetre + scope confirme (IDEATION)
     H-->>S: Approbation intention + perimetre
     S->>S: Doc officielle + arbitrage + parametres (CADRAGE)
-    S->>S: Walking skeleton valide -> question autonomie (une seule fois)
     S->>An: Delegue variables Terraform en premier (jamais apply)
     An-->>S: Config Terraform (.tfvars)
     S->>K: Delegue verification Terraform (mention + mission)

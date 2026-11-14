@@ -33,12 +33,13 @@ NETWORK_SRC = SKILLS / "docker-composer" / "references" / "network.md"
 NFS_SRC = SKILLS / "docker-composer" / "references" / "template.yml"
 
 KEYS = {"stack_name", "cible", "auth_type", "fqdn", "oidc", "storage", "traefik_network",
-        "valkey_enabled", "database_service", "vault_secrets_required"}
+        "valkey_enabled", "database_service", "vault_secrets_required", "mode_execution"}
 OIDC_KEYS = {"idp", "client_name", "redirect_uri", "scopes"}
 STORAGE_KEYS = {"server", "paths"}
 CIBLES = {"swarm", "proxmox"}
 AUTH_TYPES = {"none", "local", "forwardauth", "oidc"}
 DATABASES = {"postgres", "mysql", "mariadb", "mongodb", "none"}
+MODES = {"gated", "autonome"}
 
 KNOWN_KEYS = KEYS | OIDC_KEYS | STORAGE_KEYS
 
@@ -170,6 +171,10 @@ def check(params: dict) -> tuple[list[str], list[str]]:
     db = params.get("database_service")
     if db is not None and db not in DATABASES:
         gaps.append(f"database_service : valeurs {sorted(DATABASES)}")
+
+    mode = params.get("mode_execution")
+    if mode not in MODES:
+        gaps.append(f"mode_execution : requis, valeurs {sorted(MODES)} (défaut gated)")
 
     if not isinstance(params.get("vault_secrets_required"), bool):
         gaps.append("vault_secrets_required : booléen requis (réponse à la question Vault du Step 1)")
