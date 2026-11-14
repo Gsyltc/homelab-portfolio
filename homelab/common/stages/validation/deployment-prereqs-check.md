@@ -16,24 +16,20 @@ requires_stage: [central-quality-control, security-delegation]
 sensors: []
 scopes: [stack-update, new-stack, config-change, security-patch, infra-terraform, n8n, home-assistant]
 inputs: "Livrables contrôlés (QA, contrôle central) + revue sécurité close"
-outputs: "Prérequis de dépôt / déploiement vérifiés (bloquant si manquant)"
+outputs: "Prérequis de dépôt vérifiés (bloquant si manquant)"
 ---
 
-# Vérification des prérequis de déploiement (bloquant, avant toute action de Validation)
+# Vérification des prérequis de dépôt (bloquant, avant toute action de Validation)
 
 ## Objectif
 
-Garantir que le dépôt et le déploiement sont possibles avant toute action à impact.
+Garantir que le dépôt des fichiers est possible avant toute action à impact. L'accès Kestra est vérifié au déploiement ([`kestra-deployment`](kestra-deployment.md) Step 2), pas ici.
 
 ## Steps
 
 ### Step 1 — Variable de dépôt (bloquant)
 
 Confirmer que la variable `[répertoire de travail]` du Tech Lead est **définie et non vide**. Si absente → **ne pas** tenter le dépôt, passer l'issue en `blocked` et signaler à l'humain : « Variable d'environnement du répertoire de travail non définie : impossible de calculer les chemins de dépôt. Merci de la renseigner avant déploiement. »
-
-### Step 2 — Accessibilité du flux Kestra
-
-Confirmer que le flux Kestra `configure_service` est **accessible** avant d'envisager le déploiement ([`kestra-deployment.md`](kestra-deployment.md)). S'il est injoignable → le signaler explicitement à l'humain, ne pas promettre de déploiement automatique, proposer le dépôt manuel comme repli.
 
 ## Sensors
 

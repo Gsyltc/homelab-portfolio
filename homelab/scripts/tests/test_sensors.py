@@ -594,7 +594,7 @@ class TestDispatcher(unittest.TestCase):
         self.assertIn("yaml-validity", p34["sensors"])
         self.assertTrue(any(e["artifact"] == "livrable_tfvars_present" and "new-stack" in e["scopes"]
                             for e in p34["blocking_on_scope"]))
-        self.assertEqual(p34["prerequis_40"], ["repertoire_travail_defini", "flux_kestra_accessible"])
+        self.assertEqual(p34["prerequis_40"], ["repertoire_travail_defini"])
 
     def test_security_posture_blocking_on_new_stack(self):
         p34 = sensor.parse_boundaries()["phase3-phase4"]

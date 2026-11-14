@@ -37,7 +37,9 @@ ce fichier en donne la lecture chronologique côté produit.
   stack ; le renvoi générique au tableau ne vaut plus qu'après le gate.
 - **Kestra vérifié au déploiement uniquement.** Le stage `deployment-prereqs-precheck` (Initialisation) est supprimé,
   ainsi que le point 7 de la proposition initiale et la section `kestra` de `preselection.json`. L'accès Kestra
-  reste un prérequis du déploiement. Un répertoire de travail manquant reste bloquant dès `stack-detection`.
+  est vérifié uniquement au déploiement (`kestra-deployment` Step 2, par le Spécialiste Kestra, après le « oui ») :
+  il est retiré de `deployment-prereqs-check` et du gate `phase3-phase4`. Un répertoire de travail manquant reste
+  bloquant dès `stack-detection`.
 - **Gates granulaires de Production liés au mode d'exécution.** Les fiches `terraform-configuration`,
   `docker-compose-creation`, `quality-assurance` et `central-quality-control` précisent que leur validation humaine
   dépend du mode (gated : à chaque stage ; autonome : regroupée). `autonomy-mode` liste les stages concernés.
