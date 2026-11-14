@@ -37,7 +37,7 @@ Confirmer que le flux Kestra `configure_service` est **accessible** avant d'envi
 
 ## Sensors
 
-Outputs: prérequis vérifiés. Ce contrôle est le **contrôle bloquant de référence** ; il est anticipé en advisory dès la Phase 0 ([`../initialisation/deployment-prereqs-precheck.md`](../initialisation/deployment-prereqs-precheck.md)) et au gate `phase3-phase4` de [`homelab/sensors/gates.md`](../../../sensors/gates.md).
+Outputs: prérequis vérifiés. Ce contrôle est le **contrôle bloquant de référence** ; il est anticipé en advisory au gate `phase3-phase4` de [`homelab/sensors/gates.md`](../../../sensors/gates.md).
 Imports: none.
 
 ## Learn

@@ -35,9 +35,9 @@ ce fichier en donne la lecture chronologique côté produit.
 - **Séquence d'amorçage explicite jusqu'au gate léger.** Le conductor nomme chaque stage d'Initialisation et
   d'Idéation (fiche à lire) jusqu'à `intent-scope-approval`, dont les trois pré-sélections obligatoires pour une
   stack ; le renvoi générique au tableau ne vaut plus qu'après le gate.
-- **Prérequis de déploiement affichés dans la proposition initiale.** Le résultat de `deployment-prereqs-precheck`
-  (accès Kestra `configure_service`) apparaît au point 7 d'`intent-scope-approval`, en information seule, au lieu
-  d'un signalement séparé.
+- **Kestra vérifié au déploiement uniquement.** Le stage `deployment-prereqs-precheck` (Initialisation) est supprimé,
+  ainsi que le point 7 de la proposition initiale et la section `kestra` de `preselection.json`. L'accès Kestra
+  reste un prérequis du déploiement. Un répertoire de travail manquant reste bloquant dès `stack-detection`.
 - **Gates granulaires de Production liés au mode d'exécution.** Les fiches `terraform-configuration`,
   `docker-compose-creation`, `quality-assurance` et `central-quality-control` précisent que leur validation humaine
   dépend du mode (gated : à chaque stage ; autonome : regroupée). `autonomy-mode` liste les stages concernés.

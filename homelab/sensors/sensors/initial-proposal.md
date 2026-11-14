@@ -28,8 +28,7 @@ Check déterministe exécuté **avant de poster la proposition initiale** ([`int
     "variantes_testees": ["sync-in", "syncin"]
   },
   "auth": {"recommande": "oidc", "justification": "SSO OIDC supporté", "source": "<lien doc>"},
-  "database": {"recommande": "mariadb", "justification": "moteur exigé par la doc", "source": "<lien doc>"},
-  "kestra": {"statut": "accessible"}
+  "database": {"recommande": "mariadb", "justification": "moteur exigé par la doc", "source": "<lien doc>"}
 }
 ```
 
@@ -40,7 +39,6 @@ Check déterministe exécuté **avant de poster la proposition initiale** ([`int
 | `cibles` | `deployment-target-preselection` | Stack existante : `{actuelle: docker-swarm\|proxmox}`. Sinon : `docker` (`{image}` ou `null`), `proxmox` (`{script, source}` ou `null`, `script` = URL `ct/<slug>.sh` du dépôt `community-scripts/ProxmoxVE`), `variantes_testees` non vide. Au moins une cible disponible. |
 | `auth` | `auth-preselection` | `recommande` (un type) **ou** `options` (≥ 2 types), + `justification` et `source`. Ou `{sans_objet: raison}`. |
 | `database` | `database-preselection` | Même forme, valeurs `postgres`, `mysql`, `mariadb`, `mongodb`, `none`. Ou `{sans_objet: raison}`. |
-| `kestra` | `deployment-prereqs-precheck` | `statut` : `accessible` ou `injoignable`. |
 
 Contrôles transverses :
 - Clé inconnue → écart.
