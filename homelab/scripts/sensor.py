@@ -238,6 +238,7 @@ def artefact_status(name: str, root: Path, attested: set[str]) -> tuple[str, str
     probes = {
         "livrable_compose_present": lambda: bool(list_files(root, "{**/*compose*.yml,**/*compose*.yaml,**/docker-compose.y*ml}")),
         "livrable_tfvars_present": lambda: bool(list_files(root, "{**/*.tfvars,**/*.tf}")),
+        "parametres_requis_complets": lambda: bool(list_files(root, "**/.a-valider/*/*/parametres.json")),
     }
     if name in probes:
         return (OK, "présent") if probes[name]() else (GAP, "absent du projet")

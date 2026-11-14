@@ -40,7 +40,7 @@ Le Tech Lead **propose** les chemins de destination en les affichant, et **atten
 
 ### Step 2 — Déplacer depuis `.a-valider/`
 
-Après confirmation, **déplacer** (et non copier) les fichiers depuis `.a-valider/<id-tâche>/<stack>/` vers leurs emplacements définitifs. Ne jamais écraser un fichier existant sans l'avoir signalé à l'humain.
+Après confirmation, **déplacer** (et non copier) les fichiers depuis `.a-valider/<id-tâche>/<stack>/` vers leurs emplacements définitifs. `parametres.json` n'est pas déposé : il est supprimé avec le répertoire au Step 4. Ne jamais écraser un fichier existant sans l'avoir signalé à l'humain.
 
 ### Step 3 — Vérifier après déplacement
 
