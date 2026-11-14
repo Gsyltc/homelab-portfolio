@@ -31,6 +31,9 @@ ce fichier en donne la lecture chronologique côté produit.
   complet, authentification recommandée. Le choix de cible y est fait. `feasibility-arbitration` devient
   `deployment-target-preselection` et passe, avec `auth-preselection`, en fin d'Initialisation.
   `swarm-proxmox-arbitration` (Cadrage) est supprimé.
+- **Base de données pré-sélectionnée en Initialisation.** Nouveau stage `database-preselection` (après
+  `auth-preselection`) : PostgreSQL mutualisé si supporté, sinon le moteur exigé par la doc. Proposé au point 6 du
+  gate léger et repris en Cadrage sans redemander.
 - **Revue sécurité obligatoire avant la revue humaine.** `deployment-prereqs-check` dépend de `security-delegation` ;
   `review-and-notification` ne passe en `in_review` qu'une fois la revue sécurité close ; `controle_securite_posture`
   devient bloquant au gate `phase3-phase4` sur `stack-update` / `new-stack` / `security-patch` / `infra-terraform`.
