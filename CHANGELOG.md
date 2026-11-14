@@ -26,6 +26,9 @@ ce fichier en donne la lecture chronologique côté produit.
   touchant un agent et par la CI `validate-agents`.
 
 ### Changed
+- **Gates granulaires de Production liés au mode d'exécution.** Les fiches `terraform-configuration`,
+  `docker-compose-creation`, `quality-assurance` et `central-quality-control` précisent que leur validation humaine
+  dépend du mode (gated : à chaque stage ; autonome : regroupée). `autonomy-mode` liste les stages concernés.
 - **Proposition initiale au gate léger, pré-sélection en Initialisation.** `intent-scope-approval` est la première
   sollicitation de l'humain, au format fixe : intention, scope, cible (Proxmox / Docker si disponibles), FQDN
   complet, authentification recommandée. Le choix de cible y est fait. `feasibility-arbitration` devient

@@ -46,7 +46,7 @@ Sur `GO`, et dès qu'un livrable touche une surface de sécurité, le Tech Lead 
 
 ## Sensors
 
-Outputs: aiguillage GO / RENVOI consigné. Frontière **Production → Validation** : gate `artefacts-presents` + `liaison-tracabilite` + `absence-orphelin` (voir [`homelab/sensors/gates.md`](../../../sensors/gates.md)).
+Outputs: aiguillage GO / RENVOI consigné. Gate humain granulaire **selon le mode d'exécution** ([`autonomy-mode`](autonomy-mode.md)) : gated → validation à ce stage ; autonome → regroupée au point de synchronisation. Frontière **Production → Validation** : gate `artefacts-presents` + `liaison-tracabilite` + `absence-orphelin` (voir [`homelab/sensors/gates.md`](../../../sensors/gates.md)).
 Imports: `traefik-coherence` (gate).
 Review artifact: `controle-qualite-central.md` porte la section `## Review` (advisory — revue portée par le **Tech Lead** lui-même ; le contrôle qualité central ne remplace jamais le contrôle sécurité ni la validation humaine, plancher SG-3).
 

@@ -36,6 +36,8 @@ Options proposées dans le message unique de [`required-parameters-collection`](
 
 Réponse consignée sur l'issue, **jamais présumée** (pas de réponse ⇒ gated). Un nouveau lot **re-pose** la question. Ce stage applique la réponse, sans nouvelle question.
 
+Stages concernés par le mode : `terraform-configuration`, `docker-compose-creation`, `quality-assurance`, `central-quality-control`. Non concernés : l'arrêt sécurité de `security-delegation` et le halt-and-ask (Step 2), qui s'appliquent dans les deux modes, et la validation humaine granulaire finale (`human-granular-validation`), toujours posée.
+
 ### Step 2 — Halt-and-ask systématique + réversibilité
 
 Quel que soit le mode, l'exécution **s'arrête et interroge l'humain** sur : échec / impossibilité d'un livrable ; écart ou contrôle de sécurité requis ; gate / sensor en écart, bloquant, ou `⛔ indisponible` ; décision structurante nouvelle non cadrée ; toute **action à impact / destructive** (dépôt, Kestra, n8n, Home Assistant) — **jamais autonome**. Retour en gated possible à tout point de synchronisation. Sur `security-patch` / `new-stack`, le plancher `renforcé` et le halt-and-ask sécurité restent **pleins**.

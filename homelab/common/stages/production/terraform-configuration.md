@@ -45,7 +45,7 @@ Le livrable `.tfvars` produit passe **obligatoirement** par l'**Analyste QA** ([
 
 ## Sensors
 
-Outputs: livrable `.tfvars` lisible dans `${WORK_DIRECTORY}/.a-valider/<id-tâche>/<stack>/` (et joint à l'issue), puis vérifié par l'Analyste QA. Gate humain granulaire.
+Outputs: livrable `.tfvars` lisible dans `${WORK_DIRECTORY}/.a-valider/<id-tâche>/<stack>/` (et joint à l'issue), puis vérifié par l'Analyste QA. Gate humain granulaire **selon le mode d'exécution** ([`autonomy-mode`](autonomy-mode.md)) : gated → validation à ce stage ; autonome → regroupée au point de synchronisation.
 Imports: `terraform-no-sni` (write — **bloquant sur `security-patch` / `new-stack`**, ALI-204), `plaintext-secret` (write — **bloquant sur `security-patch` / `new-stack`**).
 Upstream targets: `parametres_requis_complets` (required), `mode_execution_applique` (required).
 
