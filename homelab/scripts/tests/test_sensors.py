@@ -460,6 +460,16 @@ class TestDispatcher(unittest.TestCase):
                             for e in p34["blocking_on_scope"]))
         self.assertEqual(p34["prerequis_40"], ["repertoire_travail_defini", "flux_kestra_accessible"])
 
+    def test_security_posture_blocking_on_new_stack(self):
+        p34 = sensor.parse_boundaries()["phase3-phase4"]
+        self.assertTrue(any(e["artifact"] == "controle_securite_posture" and "new-stack" in e["scopes"]
+                            for e in p34["blocking_on_scope"]))
+        buf = io.StringIO()
+        with redirect_stdout(buf):
+            sensor.main(["--root", str(self.p.root), "gate", "phase3-phase4", "--scope", "new-stack"])
+        self.assertIn("controle_securite_posture : ⚠️", buf.getvalue())
+        self.assertIn("(écart BLOQUANT)", buf.getvalue().split("controle_securite_posture")[1].splitlines()[0])
+
     def test_gate_runs(self):
         self.p.write("docker-compose.yml", "services:\n  web:\n    image: nginx\n    deploy:\n      replicas: 1\n")
         buf = io.StringIO()

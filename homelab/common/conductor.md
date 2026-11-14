@@ -196,6 +196,7 @@ sequenceDiagram
     participant An as Specialiste Terraform
     participant B as Specialiste Docker
     participant K as Analyste QA
+    participant SA as Architecte de securite Homelab
     participant M as Expert n8n
     participant Hu as Expert Home Assistant
     participant AL as Agent de notifications
@@ -220,6 +221,8 @@ sequenceDiagram
     Hu-->>S: Proposition / modif apres validation
     Note over S: Barriere de stage : central-quality-control demarre uniquement quand toutes les sous-issues sont done
     S->>S: Controle qualite central de chaque livrable (PRODUCTION)
+    S->>SA: Delegue revue securite (avant toute revue humaine)
+    SA-->>S: Jugement de posture
     S->>S: in_review + prerequis 4.0
     S->>AL: Demande notification revue prete
     AL-->>H: Notification ntfy

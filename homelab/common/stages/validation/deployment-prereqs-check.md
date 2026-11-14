@@ -11,11 +11,11 @@ reviewer: null
 review_class: none
 human_gate: none
 produces: [prerequis_deploiement_verifies]
-consumes: [{artifact: controle_qualite_central_go, required: true}]
-requires_stage: [central-quality-control]
+consumes: [{artifact: controle_qualite_central_go, required: true}, {artifact: controle_securite_posture, required: false}]
+requires_stage: [central-quality-control, security-delegation]
 sensors: []
 scopes: [stack-update, new-stack, config-change, security-patch, infra-terraform, n8n, home-assistant]
-inputs: "Livrables contrôlés"
+inputs: "Livrables contrôlés (QA, contrôle central) + revue sécurité close"
 outputs: "Prérequis de dépôt / déploiement vérifiés (bloquant si manquant)"
 ---
 

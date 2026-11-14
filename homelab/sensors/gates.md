@@ -74,6 +74,8 @@ boundaries:
     blocking_on_scope:                     # écart bloquant (non advisory) pour ces couples artefact × scope
       - artifact: livrable_tfvars_present
         scopes: [new-stack, infra-terraform]
+      - artifact: controle_securite_posture  # revue sécurité AVANT la revue humaine — toujours une surface de sécurité sur ces scopes
+        scopes: [stack-update, new-stack, security-patch, infra-terraform]
     conditional_on_scope:                  # artefact requis sur ces scopes (surface de sécurité) ; sans objet si aucun livrable ne touche la sécurité
       - artifact: controle_securite_posture
         scopes: [stack-update, new-stack, config-change, security-patch, infra-terraform]
@@ -102,8 +104,9 @@ Le contrôle `phase3-phase4` **anticipe** les prérequis de déploiement du §4.
 
 - Advisory (cas général) : le Tech Lead Homelab **ne bloque pas** ; il **signale l'écart** dans le « Rapport de vérification » et **propose de revenir corriger** avant de présenter le contenu à l'humain.
 - Bloquant : un `livrable_tfvars_present` manquant sur `new-stack` / `infra-terraform` (voir `blocking_on_scope`) **arrête l'avancée** jusqu'à correction ou levée humaine explicite tracée.
+- Bloquant : `controle_securite_posture` manquant sur `stack-update` / `new-stack` / `security-patch` / `infra-terraform` **arrête l'avancée** : pas de passage en revue humaine sans revue sécurité close.
 - Bloquant : `cibles_disponibles` ou `arbitrage_swarm_proxmox` manquant sur `new-stack` / `infra-terraform` **arrête l'avancée** jusqu'à correction ou levée humaine explicite tracée.
-- Trace sécurité : sur surface de sécurité (voir `conditional_on_scope`), un `controle_securite_posture` manquant signale que la **délégation sécurité n'est pas tracée** à la frontière — écart **advisory** (la garantie que le contrôle sécurité précède la validation humaine est portée **en amont** par le séquencement de la Phase 3 : `central-quality-control` → `security-delegation` ; le gate ne fait qu'en **attester la trace**, il ne la remplace pas). Le Tech Lead signale l'écart et propose de revenir le consigner avant de présenter à l'humain.
+- Trace sécurité (`config-change`) : un `controle_securite_posture` manquant sur surface de sécurité est un écart **advisory** ; le Tech Lead le signale et propose de revenir le consigner avant de présenter à l'humain.
 - L'humain reste seul décideur : demander la correction, ou valider en connaissance de cause en actant l'écart sur l'issue.
 - Le gate automatique ne remplace, n'abaisse ni ne court-circuite jamais la validation humaine granulaire, le contrôle QA systématique ni les garde-fous absolus (invariants non négociables — SG-3).
 
@@ -119,7 +122,7 @@ Rapport de vérification — <frontière>   (source : homelab/sensors/gates.md @
 - cibles_disponibles (new-stack / infra-terraform) : ✅ présent | ⛔ MANQUANT (écart bloquant)
 - arbitrage_swarm_proxmox (new-stack / infra-terraform) : ✅ présent | ⛔ MANQUANT (écart bloquant)
 - livrable_tfvars (new-stack / infra-terraform) : ✅ présent | ⛔ MANQUANT (écart bloquant) | ⚠️ conditionnel hors scope
-- controle_securite_posture (surface de sécurité) : ✅ présent (délégation sécurité réalisée) | ⚠️ MANQUANT (contrôle sécurité non tracé) | ⚠️ sans objet (aucune surface de sécurité)
+- controle_securite_posture (surface de sécurité) : ✅ présent (délégation sécurité réalisée) | ⛔ MANQUANT (écart bloquant sur stack-update / new-stack / security-patch / infra-terraform) | ⚠️ MANQUANT (config-change, advisory) | ⚠️ sans objet (aucune surface de sécurité)
 - prérequis §4.0 (frontière Phase 3 → Phase 4) : ✅ | ⚠️ <[répertoire de travail] / Kestra> | ⛔ <indisponible>
 Sensors de gate :   # une ligne par sensor du champ sensors: de la frontière — aucune omission (SG-2)
 - `<sensor-id>` : ✅ conforme | ⚠️ écart | ⛔ indisponible — <fait vérifié ou motif>

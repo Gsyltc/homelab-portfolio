@@ -31,6 +31,11 @@ ce fichier en donne la lecture chronologique côté produit.
   complet, authentification recommandée. Le choix de cible y est fait. `feasibility-arbitration` devient
   `deployment-target-preselection` et passe, avec `auth-preselection`, en fin d'Initialisation.
   `swarm-proxmox-arbitration` (Cadrage) est supprimé.
+- **Revue sécurité obligatoire avant la revue humaine.** `deployment-prereqs-check` dépend de `security-delegation` ;
+  `review-and-notification` ne passe en `in_review` qu'une fois la revue sécurité close ; `controle_securite_posture`
+  devient bloquant au gate `phase3-phase4` sur `stack-update` / `new-stack` / `security-patch` / `infra-terraform`.
+  Un constat critique / majeur arrête le flux et interroge l'humain tout de suite (Modify / Redo), puis repasse par
+  la revue sécurité ; la validation granulaire ne reçoit que des livrables à revue sécurité close.
 - **Walking skeleton supprimé** ([ADR-0053](decisions/0053-suppression-walking-skeleton-homelab-mode-execution-au-cadrage.md)).
   La question du mode d'exécution (gated / autonome) rejoint le message unique de `required-parameters-collection` ;
   `autonomy-mode` applique le mode et garde le halt-and-ask. Terraform et Docker démarrent en parallèle sans
