@@ -2,50 +2,49 @@
 slug: autonomy-mode
 phase: production
 execution: ALWAYS
-condition: "Always executes — walking skeleton puis question du mode, une seule fois par lot"
+condition: "Always executes — applique le mode d'exécution choisi en Cadrage"
 lead_agent: Tech Lead Homelab
-support_agents: [Spécialiste Terraform, Spécialiste Docker, Analyste QA]
-mode: pipeline
-summary_confirmation: required
-reviewer: Analyste QA
-review_class: adversarial
-review_artifact: walking-skeleton.md
-human_gate: granular
-produces: [walking_skeleton_valide, mode_execution_choisi]
-consumes: [{artifact: parametres_requis_complets, required: true}]
+support_agents: []
+mode: inline
+summary_confirmation: none
+reviewer: null
+review_class: none
+human_gate: none
+produces: [mode_execution_applique]
+consumes: [{artifact: parametres_requis_complets, required: true}, {artifact: mode_execution_choisi, required: true}]
 requires_stage: [required-parameters-collection]
-sensors: [yaml-validity, swarm-deploy-section]
+sensors: []
 scopes: [stack-update, new-stack, config-change, security-patch, infra-terraform]
-inputs: "Paramètres requis complets"
-outputs: "Walking skeleton validé + mode d'exécution (gated / autonome) choisi une fois"
+inputs: "Paramètres requis complets + mode d'exécution choisi en Cadrage"
+outputs: "Mode d'exécution appliqué au lot"
 ---
 
-# Walking skeleton et choix du mode d'autonomie
+# Mode d'exécution du lot
 
 ## Objectif
 
-Valider la plus petite tranche cohérente, puis fixer le rythme de validation du reste du lot.
+Fixer le rythme de validation de la Production et les cas d'arrêt.
 
 ## Steps
 
-### Step 1 — Walking skeleton (premier jalon validé)
+### Step 1 — Mode d'exécution (source unique)
 
-La plus petite tranche cohérente du lot (ex. premier `.tfvars`, ou squelette du docker-compose) passe **obligatoirement** par l'Analyste QA ([`quality-assurance.md`](quality-assurance.md)), le contrôle qualité central ([`central-quality-control.md`](central-quality-control.md)) et la validation granulaire. **Aucune autonomie avant ce jalon.**
+Options proposées dans le message unique de [`required-parameters-collection`](../cadrage/required-parameters-collection.md) :
 
-### Step 2 — La question, posée une seule fois
+- **gated** *(défaut)* : validation granulaire à chaque étape de production ;
+- **autonome jusqu'au prochain point de synchronisation** : la validation granulaire est regroupée en un point de synchronisation (l'humain valide en bloc, **toujours choix par choix**).
 
-Après validation du walking skeleton, le Tech Lead demande, pour le **reste du lot déjà cadré** : rythme **gated à chaque étape** *(défaut)* ou **autonome jusqu'au prochain point de synchronisation**. En autonome, la validation granulaire est **regroupée** en un point de synchronisation (l'humain valide en bloc, **toujours choix par choix**). Réponse consignée sur l'issue, **jamais présumée** (pas de réponse ⇒ gated), un nouveau lot **re-pose** la question.
+Réponse consignée sur l'issue, **jamais présumée** (pas de réponse ⇒ gated). Un nouveau lot **re-pose** la question. Ce stage applique la réponse, sans nouvelle question.
 
-### Step 3 — Halt-and-ask systématique + réversibilité
+### Step 2 — Halt-and-ask systématique + réversibilité
 
 Quel que soit le mode, l'exécution **s'arrête et interroge l'humain** sur : échec / impossibilité d'un livrable ; écart ou contrôle de sécurité requis ; gate / sensor en écart, bloquant, ou `⛔ indisponible` ; décision structurante nouvelle non cadrée ; toute **action à impact / destructive** (dépôt, Kestra, n8n, Home Assistant) — **jamais autonome**. Retour en gated possible à tout point de synchronisation. Sur `security-patch` / `new-stack`, le plancher `renforcé` et le halt-and-ask sécurité restent **pleins**.
 
 ## Sensors
 
-Outputs: walking skeleton validé + mode consigné.
-Imports: `yaml-validity` (write), `swarm-deploy-section` (gate).
-Review artifact: `walking-skeleton.md` porte la section `## Review` de l'Analyste QA (revue adversariale, plancher SG-3).
+Outputs: mode appliqué consigné. Aucun gate humain à ce stage.
+Imports: none.
 
 ## Learn
 
-Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : candidats-règles (motifs d'ossature, choix de mode récurrents) tracés, remontés au **gate humain granulaire** ; persistance des apprentissages **confirmés** dans `homelab/rules/` via capture → confirmation humaine → contrôle de conflit.
+Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : candidats-règles (choix de mode récurrents) tracés, remontés au **gate humain granulaire** ; persistance des apprentissages **confirmés** dans `homelab/rules/` via capture → confirmation humaine → contrôle de conflit.

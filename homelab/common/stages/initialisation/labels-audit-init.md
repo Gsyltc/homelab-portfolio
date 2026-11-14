@@ -10,7 +10,7 @@ summary_confirmation: none
 reviewer: null
 review_class: none
 human_gate: none
-produces: [labels_poses, piste_audit_initialisee, regles_global_chargees]
+produces: [labels_poses, piste_audit_initialisee, demande_brute_consignee, regles_global_chargees]
 consumes: []
 requires_stage: [deployment-prereqs-precheck]
 sensors: []
@@ -29,11 +29,11 @@ Poser les labels, initialiser la piste d'audit et charger les règles toujours a
 
 ### Step 1 — Poser les labels
 
-Poser systématiquement le label **`Homelab`** (et **`Docker Swarm`** pour un livrable compose).
+Poser systématiquement le label **`Homelab`**.
 
 ### Step 2 — Initialiser la piste d'audit
 
-Initialiser la piste d'audit sur l'issue (entrée **brute** de la demande, non résumée).
+Initialiser la piste d'audit : consigner sur l'issue l'entrée **brute** de la demande, non résumée (`demande_brute_consignee`). C'est la **seule** consignation de l'entrée brute du workflow : les stages suivants s'y réfèrent sans la recopier.
 
 ### Step 3 — Charger les règles toujours actives (chargement paresseux)
 

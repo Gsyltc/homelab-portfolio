@@ -10,12 +10,12 @@ summary_confirmation: required
 reviewer: null
 review_class: none
 human_gate: granular
-produces: [parametres_requis_complets, auth_type_fige]
-consumes: [{artifact: cadrage_confirme, required: true}, {artifact: auth_type_preselectionne, required: false}]
+produces: [parametres_requis_complets, auth_type_fige, mode_execution_choisi]
+consumes: [{artifact: cadrage_confirme, required: true}, {artifact: fqdn_valide, required: false}, {artifact: auth_type_valide, required: false}, {artifact: database_service_valide, required: false}]
 requires_stage: [intake-framing]
 sensors: [required-parameters]
 scopes: [stack-update, new-stack, config-change, security-patch, infra-terraform]
-inputs: "Cadrage confirmé + auth pré-sélectionné"
+inputs: "Cadrage confirmé + FQDN et auth validés au gate léger"
 outputs: "parametres.json (paramètres requis complets et valides) + ${auth_type} figé (ou arbitré par l'humain)"
 ---
 
@@ -34,17 +34,18 @@ Le Tech Lead vérifie que tous les paramètres sont renseignés ; **il ne génè
 | Paramètre | Requis | Valeurs |
 | --- | --- | --- |
 | Nom de la stack `${stack_name}` | Oui | Texte alphanumérique |
-| Type d'authentification `${auth_type}` | Optionnel | `none`, `local`, `forwardauth`, `oidc` |
-| FQDN d'exposition `${fqdn}` | Déductible | Texte (nom de domaine complet). **Défaut** : `<stack_name>.<domaine du homelab>` — domaine : **source unique** [`domaine-homelab.md`](../../../../plugins/homelab-assistant/skills/configuration-applications/references/domaine-homelab.md) ; préfixe déduit des FQDN des stacks existantes si une convention diffère. Le défaut est **proposé avec sa valeur complète** (jamais un gabarit `<domaine>`) et confirmé en un seul message, avec les autres défauts déductibles. Si l'humain ne modifie que le sous-domaine, recomposer `<sous-domaine>.<domaine du homelab>` sans redemander. Écrit **en clair** dans le Terraform, jamais `${SNI}`. |
+| Type d'authentification `${auth_type}` | Optionnel | `none`, `local`, `forwardauth`, `oidc` — validé au gate léger, repris sans redemander. |
+| FQDN d'exposition `${fqdn}` | Déductible | Texte (nom de domaine complet). **Défaut** : `<stack_name>.<domaine du homelab>` — domaine : **source unique** [`domaine-homelab.md`](../../../../plugins/homelab-assistant/skills/configuration-applications/references/domaine-homelab.md) ; préfixe déduit des FQDN des stacks existantes si une convention diffère. Valeur complète présentée et validée au gate léger ([`intent-scope-approval`](../ideation/intent-scope-approval.md)) : la reprendre ici sans redemander. Si l'humain n'a modifié que le sous-domaine, recomposer `<sous-domaine>.<domaine du homelab>`. Écrit **en clair** dans le Terraform, jamais `${SNI}`. |
 | Paramètres OIDC `${oidc_params}` | Déductible (si `${auth_type}` = `oidc`) | IdP, nom du client, redirect URI, scopes — voir Step 3. Sans objet pour les autres types. |
 | Stockage `${storage}` | Déductible | NFS du Homelab : serveur `truenas`, chemin `/mnt/datas/${ENVIRONMENT}/<services\|databases>/<stack_name>`. **Source unique** : [`template.yml`](../../../../plugins/homelab-assistant/skills/docker-composer/references/template.yml) (section `VOLUMES`) de la skill `docker-composer`. Ne jamais demander le serveur ni le chemin. |
+| Secrets et variables Vault `${vault}` | Déductible | **Noms uniquement, jamais de valeur.** Deux listes, `secrets` et `variables`, construites de la même façon selon les besoins de la stack, avec les noms attendus par l'application (sa documentation fait foi, aucun nom imposé par le workflow). Sources : éléments exigés par la documentation officielle, plus ceux induits par les paramètres retenus. Exemples : secrets → client secret si `oidc`, mot de passe si base dédiée, compte admin initial ; variables → URL publique (`${fqdn}`), hôte / nom de la base, issuer OIDC. Chaque entrée porte son `besoin` (pourquoi elle existe). Secrets → montage `services/<stack_name>` ; variables → `env_variables/<stack_name>` (layout : skill `homelab-vault-access`). Stack existante : lister les clés présentes (noms seuls). Liste vide si aucun besoin. |
 | Réseau Traefik `${traefik_network}` | Déductible | **Source unique** : liste et réseau par défaut définis dans la skill `docker-composer` ([`references/network.md`](../../../../plugins/homelab-assistant/skills/docker-composer/references/network.md)) ; défaut **à confirmer par l'humain**. |
 | Activer Valkey `${valkey_enabled}` | Déductible | `true`, `false` — le Homelab possède **déjà** un Valkey/Redis mutualisé : ne jamais recréer ce service, s'y connecter (règle portée par la skill `docker-composer`). |
-| Service base de données `${database_service}` | Optionnel | `postgres`, `mysql`, `mariadb`, `mongodb`, `none` — PostgreSQL mutualisé **déjà** présent : ne jamais recréer `postgres`, s'y connecter (règle portée par la skill `docker-composer`). |
+| Service base de données `${database_service}` | Optionnel | `postgres`, `mysql`, `mariadb`, `mongodb`, `none` — validé au gate léger ([`database-preselection`](../initialisation/database-preselection.md)), repris sans redemander. |
 
-**Un seul message de confirmation** : le Tech Lead propose en bloc les valeurs par défaut déduites (`${fqdn}`, `${storage}`, `${traefik_network}`, `${valkey_enabled}` et, si `oidc`, `${oidc_params}`) et attend la confirmation ou correction de l'humain.
+**Un seul message de confirmation** : le Tech Lead propose en bloc les valeurs par défaut déduites restantes (`${storage}`, `${traefik_network}`, `${valkey_enabled}`, `${vault}` et, si `oidc`, `${oidc_params}`) ainsi que le **mode d'exécution** de la Production (options et défaut : [`autonomy-mode`](../production/autonomy-mode.md)), et attend la confirmation ou correction de l'humain.
 
-Demander aussi si la stack nécessite une création / modification de secrets ou variables dans **HashiCorp Vault** (le signaler à l'humain ; agent Vault dédié à créer plus tard).
+La création des clés Vault proposées reste une action humaine (agent Vault dédié à créer plus tard) : le message le signale.
 
 ### Step 2 — Sélection automatique du type d'authentification
 
@@ -54,7 +55,7 @@ Demander aussi si la stack nécessite une création / modification de secrets ou
 2. **`forwardauth`** — auth locale désactivable, ou aucune auth ;
 3. **`local`** — auth locale non désactivable.
 
-**En cas de doute → demander à l'humain** et attendre. Le doute ne bascule **jamais** vers un choix implicite.
+**En cas de doute** → l'option est présentée à l'humain au gate léger (point 5 de [`intent-scope-approval`](../ideation/intent-scope-approval.md)). Le doute ne bascule **jamais** vers un choix implicite.
 
 > **SAML / LDAP non encore supportés.** Ces deux types étaient historiquement listés dans l'ordre de sélection mais ne sont pas implémentés côté middlewares Traefik ni côté template Terraform. Ils ont été **retirés** de la règle de sélection (voir [ADR-0024](../../../../decisions/0024-retrait-temporaire-saml-ldap-authentification.md)). Si une stack requiert SAML ou LDAP → **demander à l'humain** ; leur ré-intégration fera l'objet des actions tracées dans l'ADR-0024.
 
@@ -72,7 +73,7 @@ Le Tech Lead **déduit** les paramètres OIDC au lieu de les demander, puis les 
 Règles :
 
 - Si la documentation officielle ne permet pas de déterminer le chemin de callback ou les scopes → **demander à l'humain** pour cette valeur uniquement ; jamais d'invention.
-- **Aucun secret** (client secret, jetons) dans les livrables ni les commentaires ; le secret relève de Vault (signalé à l'humain, voir Step 1).
+- **Aucun secret** (client secret, jetons) dans les livrables ni les commentaires ; le secret relève de Vault (proposé dans `${vault}`, voir Step 1).
 - La règle d'auto-sélection du Step 2 (`oidc → forwardauth → local`) est **inchangée** (SEC-1) : ce Step ne fait que renseigner les paramètres une fois `oidc` retenu.
 - Mapping vers le Terraform : `oauth[]` et `allowed_redirect_uris[][]` (voir la skill `configuration-applications`, [`authentification.md`](../../../../plugins/homelab-assistant/skills/configuration-applications/references/authentification.md)).
 

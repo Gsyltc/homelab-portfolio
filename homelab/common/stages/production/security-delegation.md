@@ -17,7 +17,7 @@ requires_stage: [central-quality-control]
 sensors: [plaintext-secret, terraform-no-sni, traefik-coherence]
 scopes: [stack-update, new-stack, config-change, security-patch, infra-terraform]
 inputs: "Travail finalisé et contrôlé par le Tech Lead (contrôle qualité central GO), livrables compose et / ou Terraform"
-outputs: "Jugement de posture sécurité (Architecte de sécurité Homelab) + branchement par gravité : critique/majeur → validation humaine granulaire (escalade « Gate renforcée ») ; non critique → retour Tech Lead par mention valide"
+outputs: "Jugement de posture sécurité (Architecte de sécurité Homelab) + branchement par gravité : critique/majeur → arrêt immédiat et question à l'humain avant toute revue ; non critique → retour Tech Lead par mention valide"
 ---
 
 # Délégation sécurité (Tech Lead → Architecte de sécurité Homelab)
@@ -48,15 +48,18 @@ L'Architecte de sécurité Homelab juge la posture et **classe** les constats pa
 
 ### Step 3 — Branchement par gravité
 
-- **Éléments critiques / majeurs.** L'Architecte mentionne le Tech Lead ; le Tech Lead
-  **escalade à l'humain via la [validation humaine granulaire](../validation/human-granular-validation.md)**.
-  L'humain tranche **choix par choix** :
-  - **Modify** → le Tech Lead **mentionne les spécialistes concernés** (Docker / Terraform) ;
-    retour par mention valide, re-contrôle QA, puis re-passage par cette étape.
-  - **Redo / refus** → le Tech Lead **télécharge le fichier** pour **validation granulaire**
-    élément par élément.
+- **Éléments critiques / majeurs → arrêt immédiat.** L'Architecte mentionne le Tech Lead ; le Tech Lead
+  **s'arrête et interroge l'humain tout de suite** (issue `blocked`), **avant** tout passage en revue.
+  Il présente chaque constat (`constat` / `cause` / `correction`) ; l'humain tranche **constat par constat** :
+  - **Modify** → le Tech Lead mentionne les spécialistes concernés (Docker / Terraform) ; correction,
+    re-contrôle QA, contrôle qualité central, puis **re-passage par cette étape**.
+  - **Redo** → retour en Production sur le livrable concerné, même boucle.
+
+  La revue sécurité n'est **close** (`controle_securite_posture`) que lorsqu'il ne reste aucun constat
+  critique / majeur. La [validation humaine granulaire](../validation/human-granular-validation.md) ne
+  reçoit que des livrables dont la revue sécurité est close.
 - **Éléments non critiques / mineurs.** **Retour explicite au Tech Lead par mention valide** ;
-  le Tech Lead intègre, puis poursuit vers la validation humaine granulaire.
+  le Tech Lead les liste dans la présentation de la validation humaine granulaire.
 
 Quel que soit le branchement, les **invariants non contournables** restent pleins (liste
 autoritaire : [`governance-security.md` § Invariants non contournables](../../protocols/governance-security.md#invariants-non-contournables)).

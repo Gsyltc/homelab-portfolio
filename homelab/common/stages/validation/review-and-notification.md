@@ -29,7 +29,7 @@ Signaler à l'humain qu'une configuration contrôlée est prête à être revue.
 
 ### Step 1 — Passer l'issue en revue
 
-Quand Docker (Spécialiste Docker + Analyste QA) et Terraform (Spécialiste Terraform) sont contrôlés et conformes, le Tech Lead passe l'issue en `in_review` (`multica issue status <issue-id> in_review`). **`in_review` signifie « prêt à être revu par l'humain »** et l'issue y demeure jusqu'à ce que l'humain statue.
+Quand Docker et Terraform sont contrôlés et conformes **et** que la revue sécurité ([`security-delegation`](../production/security-delegation.md)) est close, le Tech Lead passe l'issue en `in_review` (`multica issue status <issue-id> in_review`). **`in_review` signifie « prêt à être revu par l'humain »** et l'issue y demeure jusqu'à ce que l'humain statue.
 
 ### Step 2 — Demander la notification (Tech Lead uniquement)
 

@@ -11,11 +11,11 @@ reviewer: null
 review_class: none
 human_gate: granular
 produces: [livrable_compose]
-consumes: [{artifact: parametres_requis_complets, required: true}, {artifact: walking_skeleton_valide, required: true}]
+consumes: [{artifact: parametres_requis_complets, required: true}, {artifact: mode_execution_applique, required: true}]
 requires_stage: [autonomy-mode]
 sensors: [yaml-validity, plaintext-secret]
 scopes: [stack-update, new-stack, config-change, security-patch]
-inputs: "Paramètres requis (collectés en Cadrage §2.4 — domaine / FQDN, auth) + documentation officielle + walking skeleton validé"
+inputs: "Paramètres requis (collectés en Cadrage §2.4 — domaine / FQDN, auth) + documentation officielle + mode d'exécution appliqué"
 outputs: "Fichier docker-compose optimisé Swarm, déposé dans `${WORK_DIRECTORY}/.a-valider/<id-tâche>/<stack>/`"
 ---
 
@@ -43,7 +43,7 @@ Produire le fichier (skill `docker-composer`), conserver les commentaires `#` de
 
 Outputs: livrable compose lisible dans `${WORK_DIRECTORY}/.a-valider/<id-tâche>/<stack>/` (et joint à l'issue). Gate humain granulaire (via `quality-assurance` puis `central-quality-control` puis Validation).
 Imports: `yaml-validity` (write), `plaintext-secret` (write — **bloquant sur `security-patch` / `new-stack`**).
-Upstream targets: `parametres_requis_complets` (required), `walking_skeleton_valide` (required). Plus de dépendance `livrable_tfvars` : le compose est produit en parallèle du `.tfvars`.
+Upstream targets: `parametres_requis_complets` (required), `mode_execution_applique` (required). Plus de dépendance `livrable_tfvars` : le compose est produit en parallèle du `.tfvars`.
 
 ## Learn
 

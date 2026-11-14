@@ -11,11 +11,11 @@ reviewer: null
 review_class: none
 human_gate: granular
 produces: [livrable_tfvars]
-consumes: [{artifact: parametres_requis_complets, required: true}, {artifact: walking_skeleton_valide, required: true}]
+consumes: [{artifact: parametres_requis_complets, required: true}, {artifact: mode_execution_applique, required: true}]
 requires_stage: [autonomy-mode]
 sensors: [terraform-no-sni, plaintext-secret]
 scopes: [stack-update, new-stack, security-patch, infra-terraform]
-inputs: "Paramètres collectés en Cadrage (§2.4) + walking skeleton validé"
+inputs: "Paramètres collectés en Cadrage (§2.4) + mode d'exécution appliqué"
 outputs: "Fichiers .tf / .tfvars de la stack, déposés dans `${WORK_DIRECTORY}/.a-valider/<id-tâche>/<stack>/` (jamais d'apply)"
 ---
 
@@ -27,9 +27,9 @@ Préparer les variables Terraform de la stack, sans jamais déployer. Ce stage s
 
 ## Steps
 
-### Step 1 — Déléguer après le walking skeleton
+### Step 1 — Déléguer
 
-Après le walking skeleton validé ([`autonomy-mode.md`](autonomy-mode.md)), le Tech Lead ordonne au **Spécialiste Terraform** (mission + mention valide) — **en parallèle** de la délégation au Spécialiste Docker (deux sous-issues `--stage 1` ; verrou par artefact, cf. [`governance-security.md`](../../protocols/governance-security.md) § concurrence) — de créer / modifier les **variables Terraform** de la stack (skill `configuration-applications`), cohérentes avec les **paramètres collectés en Cadrage (§2.4)** (auth, `cloudflare_dns_nb`, domaine / FQDN d'exposition, etc.). **La sous-issue Terraform passe en `in_progress`** dès que son travail démarre (cycle de statut des sous-issues : [`stage-protocol.md` § Cycle de statut des sous-issues & barrière de stage](../../protocols/stage-protocol.md#cycle-de-statut-des-sous-issues--barrière-de-stage)).
+Une fois le mode d'exécution appliqué ([`autonomy-mode.md`](autonomy-mode.md)), le Tech Lead ordonne au **Spécialiste Terraform** (mission + mention valide) — **en parallèle** de la délégation au Spécialiste Docker (deux sous-issues `--stage 1` ; verrou par artefact, cf. [`governance-security.md`](../../protocols/governance-security.md) § concurrence) — de créer / modifier les **variables Terraform** de la stack (skill `configuration-applications`), cohérentes avec les **paramètres collectés en Cadrage (§2.4)** (auth, `cloudflare_dns_nb`, domaine / FQDN d'exposition, etc.). **La sous-issue Terraform passe en `in_progress`** dès que son travail démarre (cycle de statut des sous-issues : [`stage-protocol.md` § Cycle de statut des sous-issues & barrière de stage](../../protocols/stage-protocol.md#cycle-de-statut-des-sous-issues--barrière-de-stage)).
 
 Sur scope `new-stack` / `infra-terraform`, ce stage est **obligatoire et inconditionnel** : le Tech Lead ne peut ni le sauter ni le déclarer « non requis ». Ne pas produire le livrable `.tfvars` sur ces scopes est un **écart bloquant** (frontière `phase3-phase4`), non une décision légitime d'un coordinateur (invariant — SEC-1).
 
@@ -47,7 +47,7 @@ Le livrable `.tfvars` produit passe **obligatoirement** par l'**Analyste QA** ([
 
 Outputs: livrable `.tfvars` lisible dans `${WORK_DIRECTORY}/.a-valider/<id-tâche>/<stack>/` (et joint à l'issue), puis vérifié par l'Analyste QA. Gate humain granulaire.
 Imports: `terraform-no-sni` (write — **bloquant sur `security-patch` / `new-stack`**, ALI-204), `plaintext-secret` (write — **bloquant sur `security-patch` / `new-stack`**).
-Upstream targets: `parametres_requis_complets` (required), `walking_skeleton_valide` (required).
+Upstream targets: `parametres_requis_complets` (required), `mode_execution_applique` (required).
 
 ## Learn
 

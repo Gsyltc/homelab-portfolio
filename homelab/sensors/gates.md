@@ -12,7 +12,7 @@ Pendant Homelab de `core/sensors/gates.md` : même forme déclarative, **fronti�
 
 ## Nature advisory et exception bloquante par scope
 
-Les gates sont **advisory par défaut** : ils signalent un écart, ne bloquent pas. **Exception** : sur scope `new-stack` / `infra-terraform`, l'omission de `recherche_helper_scripts` (frontière `phase1-phase2`) ou de `arbitrage_swarm_proxmox` (frontière `phase2-phase3`) est un **écart bloquant**. **Exception (alignée sur les sensors bloquants)** : sur scope `new-stack` / `infra-terraform`, l'artefact `livrable_tfvars_present` de la frontière `phase3-phase4` est **requis de façon non-conditionnelle** — son absence est un **écart bloquant** qui arrête l'avancée jusqu'à correction ou levée humaine explicite tracée. Ce durcissement reflète le caractère non abaissable du livrable Terraform sur ces scopes (voir `new-stack.md` et `terraform-configuration.md`) et la sévérité déjà bloquante du sensor `terraform-no-sni` sur `new-stack`. Il **ne remplace pas** la validation humaine granulaire ni le contrôle QA (SG-3).
+Les gates sont **advisory par défaut** : ils signalent un écart, ne bloquent pas. **Exception** : sur scope `new-stack` / `infra-terraform`, l'omission de `cibles_disponibles` ou de `arbitrage_swarm_proxmox` (frontière `phase1-phase2`) est un **écart bloquant**. **Exception (alignée sur les sensors bloquants)** : sur scope `new-stack` / `infra-terraform`, l'artefact `livrable_tfvars_present` de la frontière `phase3-phase4` est **requis de façon non-conditionnelle** — son absence est un **écart bloquant** qui arrête l'avancée jusqu'à correction ou levée humaine explicite tracée. Ce durcissement reflète le caractère non abaissable du livrable Terraform sur ces scopes (voir `new-stack.md` et `terraform-configuration.md`) et la sévérité déjà bloquante du sensor `terraform-no-sni` sur `new-stack`. Il **ne remplace pas** la validation humaine granulaire ni le contrôle QA (SG-3).
 
 ## Frontières et artefacts requis
 
@@ -25,10 +25,11 @@ boundaries:
   - id: entree-phase0
     frontiere: "Demande → Phase 0 (Initialisation)"
     artefacts_requis:
-      - demande_brute_consignee            # entrée brute sur l'issue (§0.4)
-      - label_homelab_pose                 # label Homelab (+ Docker Swarm si compose)
+      - demande_brute_consignee            # entrée brute sur l'issue — labels-audit-init, seule consignation
+      - label_homelab_pose                 # label Homelab (le label de cible est posé au gate léger)
       - detection_stack                    # stack existante vs nouvelle consignée (§0.1)
       - verrou_concurrence_lu              # active_step lu (§0.2)
+      - lien_documentation_officielle      # règle préalable (amorçage, étape 3) — lue une seule fois ; artefact requis PROPRE au Homelab
     checks: [artefacts-presents]
 
   - id: phase0-phase1
@@ -43,23 +44,22 @@ boundaries:
     artefacts_requis:
       - scope_confirme                     # scope confirmé au gate léger (§1.3)
       - intention_perimetre_approuves      # gate humain léger (§1.3)
-      - recherche_helper_scripts           # §1.2 : recherche Helper-Scripts consignée (lien ou « aucun script trouvé ») — bloquant sur new-stack / infra-terraform
+      - cibles_disponibles                 # deployment-target-preselection : Docker / Proxmox consignés — bloquant sur new-stack / infra-terraform
+      - arbitrage_swarm_proxmox            # cible choisie au gate léger — bloquant sur new-stack / infra-terraform
+      - label_cible_pose                   # label Docker Swarm ou Proxmox posé après validation de la cible
     checks: [artefacts-presents]
     blocking_on_scope:
-      - artifact: recherche_helper_scripts
+      - artifact: cibles_disponibles
+        scopes: [new-stack, infra-terraform]
+      - artifact: arbitrage_swarm_proxmox
         scopes: [new-stack, infra-terraform]
 
   - id: phase2-phase3
     frontiere: "Phase 2 → Phase 3 (Cadrage → Production)"
     artefacts_requis:
-      - lien_documentation_officielle      # règle préalable de documentation officielle (§2.2)
       - parametres_requis_complets         # tous les paramètres §2.4 renseignés (${stack_name}, ${traefik_network}, …)
-      - arbitrage_swarm_proxmox            # §2.3 : bloquant sur new-stack / infra-terraform (voir blocking_on_scope)
       - auth_type_fige_ou_reporte          # §2.4 : choisi automatiquement ou arbitré par l'humain
     checks: [artefacts-presents, liaison-tracabilite]
-    blocking_on_scope:
-      - artifact: arbitrage_swarm_proxmox
-        scopes: [new-stack, infra-terraform]
     sensors: [required-parameters]         # parametres.json complet et valide — bloquant sur new-stack / infra-terraform
     # note : le lien de documentation officielle est un artefact requis PROPRE au Homelab
 
@@ -75,6 +75,8 @@ boundaries:
     blocking_on_scope:                     # écart bloquant (non advisory) pour ces couples artefact × scope
       - artifact: livrable_tfvars_present
         scopes: [new-stack, infra-terraform]
+      - artifact: controle_securite_posture  # revue sécurité AVANT la revue humaine — toujours une surface de sécurité sur ces scopes
+        scopes: [stack-update, new-stack, security-patch, infra-terraform]
     conditional_on_scope:                  # artefact requis sur ces scopes (surface de sécurité) ; sans objet si aucun livrable ne touche la sécurité
       - artifact: controle_securite_posture
         scopes: [stack-update, new-stack, config-change, security-patch, infra-terraform]
@@ -103,8 +105,9 @@ Le contrôle `phase3-phase4` **anticipe** les prérequis de déploiement du §4.
 
 - Advisory (cas général) : le Tech Lead Homelab **ne bloque pas** ; il **signale l'écart** dans le « Rapport de vérification » et **propose de revenir corriger** avant de présenter le contenu à l'humain.
 - Bloquant : un `livrable_tfvars_present` manquant sur `new-stack` / `infra-terraform` (voir `blocking_on_scope`) **arrête l'avancée** jusqu'à correction ou levée humaine explicite tracée.
-- Bloquant : `recherche_helper_scripts` ou `arbitrage_swarm_proxmox` manquant sur `new-stack` / `infra-terraform` **arrête l'avancée** jusqu'à correction ou levée humaine explicite tracée.
-- Trace sécurité : sur surface de sécurité (voir `conditional_on_scope`), un `controle_securite_posture` manquant signale que la **délégation sécurité n'est pas tracée** à la frontière — écart **advisory** (la garantie que le contrôle sécurité précède la validation humaine est portée **en amont** par le séquencement de la Phase 3 : `central-quality-control` → `security-delegation` ; le gate ne fait qu'en **attester la trace**, il ne la remplace pas). Le Tech Lead signale l'écart et propose de revenir le consigner avant de présenter à l'humain.
+- Bloquant : `controle_securite_posture` manquant sur `stack-update` / `new-stack` / `security-patch` / `infra-terraform` **arrête l'avancée** : pas de passage en revue humaine sans revue sécurité close.
+- Bloquant : `cibles_disponibles` ou `arbitrage_swarm_proxmox` manquant sur `new-stack` / `infra-terraform` **arrête l'avancée** jusqu'à correction ou levée humaine explicite tracée.
+- Trace sécurité (`config-change`) : un `controle_securite_posture` manquant sur surface de sécurité est un écart **advisory** ; le Tech Lead le signale et propose de revenir le consigner avant de présenter à l'humain.
 - L'humain reste seul décideur : demander la correction, ou valider en connaissance de cause en actant l'écart sur l'issue.
 - Le gate automatique ne remplace, n'abaisse ni ne court-circuite jamais la validation humaine granulaire, le contrôle QA systématique ni les garde-fous absolus (invariants non négociables — SG-3).
 
@@ -117,10 +120,10 @@ Rapport de vérification — <frontière>   (source : homelab/sensors/gates.md @
 - artefacts-presents : ✅ | ⚠️ <artefact manquant> | ⛔ <indisponible>
 - liaison-tracabilite : ✅ | ⚠️ <paramètre / décision sans amont ni ADR> | ⛔ <indisponible>
 - absence-orphelin : ✅ | ⚠️ <livrable / décision orphelin> | ⛔ <indisponible>
-- recherche_helper_scripts (new-stack / infra-terraform) : ✅ présent | ⛔ MANQUANT (écart bloquant)
+- cibles_disponibles (new-stack / infra-terraform) : ✅ présent | ⛔ MANQUANT (écart bloquant)
 - arbitrage_swarm_proxmox (new-stack / infra-terraform) : ✅ présent | ⛔ MANQUANT (écart bloquant)
 - livrable_tfvars (new-stack / infra-terraform) : ✅ présent | ⛔ MANQUANT (écart bloquant) | ⚠️ conditionnel hors scope
-- controle_securite_posture (surface de sécurité) : ✅ présent (délégation sécurité réalisée) | ⚠️ MANQUANT (contrôle sécurité non tracé) | ⚠️ sans objet (aucune surface de sécurité)
+- controle_securite_posture (surface de sécurité) : ✅ présent (délégation sécurité réalisée) | ⛔ MANQUANT (écart bloquant sur stack-update / new-stack / security-patch / infra-terraform) | ⚠️ MANQUANT (config-change, advisory) | ⚠️ sans objet (aucune surface de sécurité)
 - prérequis §4.0 (frontière Phase 3 → Phase 4) : ✅ | ⚠️ <[répertoire de travail] / Kestra> | ⛔ <indisponible>
 Sensors de gate :   # une ligne par sensor du champ sensors: de la frontière — aucune omission (SG-2)
 - `<sensor-id>` : ✅ conforme | ⚠️ écart | ⛔ indisponible — <fait vérifié ou motif>
