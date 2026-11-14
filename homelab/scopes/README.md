@@ -18,8 +18,9 @@ Un scope se déclare en **deux endroits**, et cette séparation est l'idée maî
 2. **L'appartenance** (quels stages s'exécutent sous ce scope) vit **transposée sur les
    stages** : chaque fiche de stage (`homelab/common/stages/<phase>/<slug>.md`, produite au
    Stage 7) nommera dans son front-matter `scopes:` les scopes sous lesquels elle s'exécute. Un
-   stage qui ne nomme pas un scope est ignoré (`SKIP`) sous ce scope ; les stages
-   d'**Initialisation** nomment **tous** les scopes (ils s'exécutent toujours).
+   stage qui ne nomme pas un scope est ignoré (`SKIP`) sous ce scope ; les stages de bootstrap
+   d'**Initialisation** nomment **tous** les scopes (ils s'exécutent toujours), les stages de
+   pré-sélection (cible, authentification, base de données) ne nomment que les scopes de stack.
 
 La liaison entre les deux est le **nom du scope**. L'appartenance est ainsi déclarée **une seule
 fois, sur le stage**, jamais redéclarée dans huit blocs de scope séparés.
