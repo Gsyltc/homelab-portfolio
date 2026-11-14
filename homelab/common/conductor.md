@@ -95,13 +95,27 @@ La **règle préalable universelle — documentation officielle** (ci-dessus) re
 3. Règle préalable documentation officielle (lecture UNIQUE pour tout le workflow ; produit
    l'artefact `lien_documentation_officielle`) + chargement du contexte existant en LÉGER
    (lazy loading, voir ci-dessous) : métadonnées de cadrage et de routage, pas les corps.
-4. labels-audit-init : poser les labels (`Homelab`, etc.) et initialiser la piste d'audit
-   sur l'issue (stages/initialisation/labels-audit-init.md).
-5. Exécuter ensuite les stages dans l'ordre du tableau « Les 5 phases et leurs stages »,
-   en chargeant la fiche de CHAQUE stage au moment de l'exécuter. La PREMIÈRE
-   sollicitation de l'humain est le gate léger `intent-scope-approval`, au format de sa
-   fiche (cible Proxmox / Docker, FQDN complet, auth et base de données recommandées). Aucune question avant, sauf
-   intention ambiguë ; aucune liste de questions improvisée.
+4. deployment-prereqs-precheck : rappel advisory répertoire de travail + accès Kestra
+   (stages/initialisation/deployment-prereqs-precheck.md).
+5. labels-audit-init : label `Homelab`, entrée brute consignée, règles `global`
+   (stages/initialisation/labels-audit-init.md).
+   --- Demande de stack (Docker / Proxmox) : pré-sélections OBLIGATOIRES, fiche lue ---
+6. deployment-target-preselection : image Docker + recherche Helper-Scripts
+   (stages/initialisation/deployment-target-preselection.md).
+7. auth-preselection : type d'authentification recommandé
+   (stages/initialisation/auth-preselection.md).
+8. database-preselection : base de données recommandée
+   (stages/initialisation/database-preselection.md).
+9. intent-capture : reformuler l'intention (stages/ideation/intent-capture.md).
+10. scope-detection : scope + axes proposés (stages/ideation/scope-detection.md).
+11. intent-scope-approval : PREMIÈRE sollicitation de l'humain, au format de sa fiche,
+    construit à partir des résultats des étapes 4 et 6 à 10
+    (stages/ideation/intent-scope-approval.md).
+12. Stages suivants dans l'ordre du tableau « Les 5 phases et leurs stages ».
+
+Chaque étape = lire sa fiche puis l'exécuter ; aucune n'est sautée ni remplacée par
+« non vérifié ». Aucune question à l'humain avant l'étape 11, sauf intention ambiguë
+(étape 9) ; aucune liste de questions improvisée.
 ```
 
 > **Propagation de `$CORE_HOME`.** À chaque délégation, le Tech Lead **transmet `$CORE_HOME`** dans le **message A2A `delegation`** (fichier YAML joint, champ `core_home: "<chemin du checkout>"`), pour que le délégataire lance sensors, gates et hook d'écriture **sans re-chercher le harnais**. Le même YAML porte `fiches_a_recharger` — la (les) **fiche(s) de stage et protocole(s)** à charger pour sa mission (chargement paresseux ciblé, pas de lecture intégrale). **La mission voyage dans ce fichier joint, jamais en prose dans le fil** (voir [`protocols/governance-security.md`](protocols/governance-security.md) § « Règle A2A » et « Schéma du message A2A », et [`protocols/stage-protocol.md`](protocols/stage-protocol.md) temps 2). Convention d'invocation du harnais ancré sur `$CORE_HOME` : [`../sensors/README.md`](../sensors/README.md).
