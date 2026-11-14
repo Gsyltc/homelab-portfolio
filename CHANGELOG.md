@@ -22,6 +22,9 @@ ce fichier en donne la lecture chronologique côté produit.
   touchant un agent et par la CI `validate-agents`.
 
 ### Changed
+- **Méthode de recherche Helper-Scripts fiabilisée.** `feasibility-arbitration` impose une recherche par variantes de nom
+  dans le dépôt `community-scripts/ProxmoxVE` (`ct/`), car le site community-scripts.org est rendu côté client et
+  ne permet pas de conclure à l'absence d'un script.
 - **Recherche Proxmox VE Helper-Scripts obligatoire dès l'Idéation, sans doublon**.
   Source unique dans `feasibility-arbitration` (artefact `recherche_helper_scripts`), rappelée dans la règle
   préalable du conductor, avant toute question de cadrage ; `swarm-proxmox-arbitration` la consomme au lieu
