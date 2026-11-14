@@ -82,3 +82,4 @@ la spec l'interdit — §7.2.1 / §9.2).
   ce ne sont pas de vrais secrets.
 - Le domaine `jeedom-gaston.ovh` est le domaine public du propriétaire, déjà
   présent ailleurs dans ce dépôt ; il n'est pas traité comme un secret.
+  Source unique de sa valeur : `skills/configuration-applications/references/domaine-homelab.md`.
