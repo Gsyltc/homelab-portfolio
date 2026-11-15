@@ -15,7 +15,12 @@ Portée : aiguillage **GO / RENVOI** au niveau macro. Le Tech Lead vérifie uniq
 
 Portée : sécurité de base d'un homelab (secrets, exposition réseau, permissions, durcissement Docker/Swarm, cohérence Traefik, absence de `${SNI}`). **Aucune notion de Loi 25 / PCI DSS / GDPR / LPRPDE.**
 
-- **Analyste QA** — contrôle sécurité **technique** (revue adversariale) sur **les deux livrables** (docker-compose et configuration Terraform) : hardening, secrets `_FILE`, exposition, permissions, cohérence Traefik via `traefik-manager-read`, et côté Terraform structure HCL / cohérence des variables / absence de `${SNI}` (skill `terraform-qa`). **L'Analyste QA contrôle et classifie** (critical / warning / info) : tout défaut est consigné dans son rapport YAML (`verdict = RENVOI`, points autosuffisants) adressé **au Tech Lead**, jamais au spécialiste directement. Le Tech Lead attend aussi le rapport de la revue sécurité (parallèle), synthétise, puis délègue **un lot de correctifs par livrable** ; la QA et la sécurité re-contrôlent la version corrigée une seule fois.
+- **Analyste QA** : contrôle sécurité **technique** (revue adversariale) sur **les deux livrables** (docker-compose et configuration Terraform).
+  - Docker : hardening, secrets `_FILE`, exposition, permissions, cohérence Traefik via `traefik-manager-read`.
+  - Terraform : structure HCL, cohérence des variables, absence de `${SNI}` (skill `terraform-qa`).
+  - Il **contrôle et classifie** (critical / warning / info) : tout défaut est consigné dans son rapport YAML (`verdict = RENVOI`, points autosuffisants) adressé **au Tech Lead**, jamais au spécialiste.
+  - Le Tech Lead attend aussi le rapport de la revue sécurité (en parallèle), synthétise, puis délègue **un lot de correctifs par livrable**.
+  - La QA et la sécurité re-contrôlent la version corrigée une seule fois.
 - **Architecte de sécurité Homelab** — **jugement** de posture (voix adoptée / sollicité pour les décisions structurantes de sécurité et la couche `global` des règles).
 - **Déclenché systématiquement** dès qu'un stage produit ou modifie une surface de sécurité (compose, Terraform, hardening, exposition, Traefik, secrets).
 - Procédure : le Tech Lead poste un commentaire mentionnant l'Analyste QA (UUID résolu via `multica agent list --output json`) avec le contexte et le résumé des modifications ; **attend l'analyse** ; intègre les recommandations **avant** la validation humaine.
@@ -41,4 +46,9 @@ flowchart LR
 
 ## Fin de revue
 
-L'agent de revue notifie le Tech Lead par **mention valide** sur l'issue, **en attachant le compte-rendu YAML** (`review-<agent>-<stack>.yaml`) conforme au format unique [`report-format.md`](report-format.md) / [`report-format.schema.yaml`](report-format.schema.yaml). Ce geste vaut pour **chaque verdict — `OK` compris**. Corps, mention et reprise : [`report-format.md`](report-format.md) § « Geste de fin de mission » et [`governance-security.md`](governance-security.md) § « Retour A2A ». Tant que le run de reprise du Tech Lead n'est pas enfilé, la revue reste **ouverte**. **L'omission de la mention de retour est un défaut, jamais une clôture implicite.**
+L'agent de revue notifie le Tech Lead par **mention valide** sur l'issue, en attachant le compte-rendu YAML `review-<agent>-<stack>.yaml` ([`report-format.md`](report-format.md) / [`report-format.schema.yaml`](report-format.schema.yaml)).
+
+- Ce geste vaut pour **chaque verdict**, `OK` compris.
+- Corps, mention et reprise : [`report-format.md`](report-format.md) § « Geste de fin de mission » et [`governance-security.md`](governance-security.md) § « Retour A2A ».
+- Tant que le run de reprise du Tech Lead n'est pas enfilé, la revue reste **ouverte**.
+- **L'omission de la mention de retour est un défaut**, jamais une clôture implicite.

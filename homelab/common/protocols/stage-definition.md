@@ -1,6 +1,12 @@
 # Protocole — définition d'un stage (schéma de front-matter)
 
-Ce protocole fixe le **contrat** d'une fiche de stage (`stages/<phase>/<stage>.md`) du workflow Homelab. Chaque fiche a **deux lecteurs qui ne se recouvrent jamais** : le **parseur** ne lit que le **front-matter YAML** (nœud de graphe : agents, mode, arêtes `consumes` / `produces`), l'**agent exécutant** ne lit que le **corps** (les trois compartiments `## Steps` / `## Sensors` / `## Learn`). Les agents y sont désignés par leur **fonction** (rôles génériques du workflow) ; aucun tooling exécutable n'est requis (conventions Markdown uniquement — pas de compilation `stage-graph.json`, non applicable Multica ; le graphe reste conceptuel via `consumes` / `produces` / `requires_stage`).
+Ce protocole fixe le **contrat** d'une fiche de stage (`stages/<phase>/<stage>.md`) du workflow Homelab.
+
+- Chaque fiche a **deux lecteurs qui ne se recouvrent jamais** :
+  - le **parseur** lit uniquement le **front-matter YAML** (nœud de graphe : agents, mode, arêtes `consumes` / `produces`) ;
+  - l'**agent exécutant** lit uniquement le **corps** (compartiments `## Steps` / `## Sensors` / `## Learn`).
+- Les agents y sont désignés par leur **fonction** (rôles génériques du workflow).
+- Aucun tooling exécutable requis : conventions Markdown uniquement, pas de compilation `stage-graph.json` (non applicable Multica). Le graphe reste conceptuel via `consumes` / `produces` / `requires_stage`.
 
 Miroir Homelab de [`core/common/protocols/stage-definition.md`](../../../core/common/protocols/stage-definition.md), adapté aux 5 phases Homelab, aux 8 scopes et à l'équipe DevOps Homelab.
 

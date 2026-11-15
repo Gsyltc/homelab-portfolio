@@ -27,10 +27,19 @@ flowchart LR
 
 - Le Tech Lead poste un commentaire sur l'issue avec une **mention valide** `[@Label](mention://agent/<uuid>)` et le **nom d'un fichier YAML `delegation` joint** (message A2A — [`governance-security.md`](governance-security.md) § « Schéma du message A2A ») : **aucune prose de mission dans le fil**. Le YAML `delegation` (champs : même § « Schéma du message A2A ») permet au délégataire de lancer sensors/gates/hook et de charger son contexte **de façon ciblée**, sans re-chercher le harnais ni relire le workflow entier.
 - **UUID et `trigger_outcomes`** : résolution de l'UUID, lecture de `trigger_outcomes` après chaque mention et statuts bloquants : [`governance-security.md`](governance-security.md) § « Règle A2A ». Procédure de résolution : [`tech-lead-homelab-agent.md`](../../agents/tech-lead-homelab-agent.md).
-- La **topologie** dépend du `mode` : `subagent` = hub-and-spoke ; `pipeline` = supports chaînés dans l'ordre déclaré, chacun voyant tout le travail amont ; `mob` = supports en parallèle contre le brouillon du lead. `pipeline` / `mob` exigent `support_agents` non vide. ⚠️ Ne pas confondre avec les **stages de Production** où Docker et Terraform s'exécutent **en parallèle** (deux sous-issues `--stage 1`, voir [« Cycle de statut des sous-issues & barrière de stage »](#cycle-de-statut-des-sous-issues--barrière-de-stage)) : ce n'est pas un `pipeline` séquentiel Docker → Terraform.
+- La **topologie** dépend du `mode` :
+  - `subagent` : hub-and-spoke ;
+  - `pipeline` : supports chaînés dans l'ordre déclaré, chacun voyant tout le travail amont ;
+  - `mob` : supports en parallèle contre le brouillon du lead ;
+  - `pipeline` / `mob` exigent `support_agents` non vide.
+  - ⚠️ Ne pas confondre avec les **stages de Production** : Docker et Terraform s'y exécutent **en parallèle** (deux sous-issues `--stage 1`, voir [« Cycle de statut des sous-issues & barrière de stage »](#cycle-de-statut-des-sous-issues--barrière-de-stage)), ce n'est pas un `pipeline` séquentiel.
 - **Statut de la sous-issue déléguée** : `in_progress` au démarrage (`multica issue status <sous-issue-id> in_progress`). Cycle complet : [« Cycle de statut des sous-issues & barrière de stage »](#cycle-de-statut-des-sous-issues--barrière-de-stage).
 - Si `mode: inline`, le Tech Lead exécute directement (supports = voix adoptées).
-- Le spécialiste appelé **rend toujours compte** au Tech Lead en fin de tâche, **par une mention valide** de retour (un compte-rendu sans mention valide est réputé non rendu et arrête le flux). Ce **lien de retour actif est construit par l'agent délégataire lui-même** (UUID résolu via `multica agent list --output json`), jamais recopié depuis la mission. **L'assigneur ne pose jamais de lien de mention actif vers lui-même** (anti-wake parasite) : dans sa consigne de délégation il nomme l'agent de retour **en texte clair**. Voir [`governance-security.md`](governance-security.md) § « Règle A2A ».
+- Le spécialiste appelé **rend toujours compte** au Tech Lead en fin de tâche, par une **mention valide** de retour :
+  - un compte-rendu sans mention valide est réputé non rendu et arrête le flux ;
+  - le lien de retour actif est construit **par l'agent délégataire** (UUID résolu via `multica agent list --output json`), jamais recopié depuis la mission ;
+  - l'assigneur ne pose jamais de lien actif vers lui-même (anti-wake parasite) : il nomme l'agent de retour **en texte clair** ;
+  - voir [`governance-security.md`](governance-security.md) § « Règle A2A ».
 - **Pas d'accusé de réception (tous agents).** À la réception d'un retour sans décision ni action, le Tech Lead ne commente pas la sous-issue ; un spécialiste ou reviewer réveillé sans nouvelle mission ne poste rien ([`governance-security.md`](governance-security.md) § « Règle A2A », « Pas d'accusé de réception »).
 - **Reprise bornée puis escalade** : une seule reprise de mention, puis `blocked` + escalade humaine ([`governance-security.md`](governance-security.md) § « Règle A2A »).
 - Si `for_each` est déclaré, le cycle 3→6 s'exécute **une fois par instance** de l'artefact nommé.
@@ -46,7 +55,12 @@ flowchart LR
 
 > ⛔ **Les sensors ne se contournent pas.** Une vérification équivalente faite en prose, un commentaire ad hoc, ou une affirmation « conforme » sans exécution de `sensor.py` **ne satisfont pas** le temps 4. L'absence de verdict pour un sensor déclaré est un **écart à signaler** (SG-2 : `⛔ indisponible ≠ conforme`, silence = écart).
 
-À l'écriture d'un artefact (compose, `.tfvars`), l'agent **auteur** exécute **tous les sensors déclarés dans le champ `sensors:` de la fiche de stage** avec `python3 "$CORE_HOME/homelab/scripts/sensor.py" --root <projet> fire <id> --path <artefact>` (les sensors `fire_on: gate` : sans `--path`, au gate — temps 5). Le verdict est celui du script (`sensor.py`), jamais réinterprété. Il **collecte chaque verdict dans le champ `sensors_resultats` du message A2A `retour`** qu'il joindra en fin de mission ([`governance-security.md`](governance-security.md) § « Schéma du message A2A ») — **un élément par sensor déclaré**, structuré ainsi :
+À l'écriture d'un artefact (compose, `.tfvars`), l'agent **auteur** :
+
+- exécute **tous les sensors déclarés** dans le champ `sensors:` de la fiche de stage : `python3 "$CORE_HOME/homelab/scripts/sensor.py" --root <projet> fire <id> --path <artefact>` ;
+  - sensors `fire_on: gate` : sans `--path`, au gate (temps 5) ;
+  - le verdict est celui du script, jamais réinterprété ;
+- collecte chaque verdict dans `sensors_resultats` du message A2A `retour` joint en fin de mission ([`governance-security.md`](governance-security.md) § « Schéma du message A2A ») : **un élément par sensor déclaré**, structuré ainsi :
 
 ```yaml
 sensors_resultats:
@@ -55,7 +69,12 @@ sensors_resultats:
 
 Les verdicts voyagent dans ce **YAML joint** (le reviewer les porte dans le champ `sensors[]` de son rapport `review-<agent>-<stack>.yaml`, [`report-format.md`](report-format.md)), **pas** en prose dans le fil de commentaires.
 
-> **Où se lance un sensor (convention d'invocation).** Le harnais (`homelab/scripts/sensor.py`, les manifestes `homelab/sensors/` et le hook `homelab/sensors/hooks/post_write.py`) vit dans le **checkout `homelab-portfolio`**, **jamais** dans le dépôt du projet vérifié. Les sensors se lancent **depuis ce checkout** : le script est désigné par un **chemin ancré** sur sa racine — `$CORE_HOME` = racine du checkout `homelab-portfolio` — et `--root <projet>` pointe le dépôt du projet à vérifier. Un chemin **relatif** (`homelab/scripts/sensor.py`) ne se résout que si le répertoire courant est déjà ce checkout. Détail et exemples : [`../../sensors/README.md`](../../sensors/README.md).
+> **Où se lance un sensor (convention d'invocation).**
+>
+> - Le harnais (`homelab/scripts/sensor.py`, manifestes `homelab/sensors/`, hook `homelab/sensors/hooks/post_write.py`) vit dans le **checkout `homelab-portfolio`**, jamais dans le dépôt du projet vérifié.
+> - Les sensors se lancent **depuis ce checkout** : chemin **ancré** sur `$CORE_HOME` (racine du checkout), et `--root <projet>` pointe le dépôt à vérifier.
+> - Un chemin **relatif** (`homelab/scripts/sensor.py`) ne se résout que si le répertoire courant est ce checkout.
+> - Détail et exemples : [`../../sensors/README.md`](../../sensors/README.md).
 
 Règles non contournables :
 
@@ -65,7 +84,11 @@ Règles non contournables :
 - **Advisory par défaut** — n'autorise aucun raccourci, ne vaut pas validation (SG-1..6). **Exception** : `plaintext-secret` / `terraform-no-sni` sont **bloquants sur `security-patch` / `new-stack`** (ALI-204) — une détection arrête l'avancée jusqu'à correction ou levée humaine explicite tracée.
 - Les sensors `fire_on: write` (ex. `yaml-validity`, `plaintext-secret`, `terraform-no-sni`) sont invoqués **à chaque écriture** de l'artefact concerné, pas seulement en fin de stage.
 
-Ce rapport par sensor est **repris en synthèse** dans le champ `sensors_resultats` du **message A2A `retour`** à la fin de mission ([`governance-security.md`](governance-security.md) § « Schéma du message A2A ») : par le **reviewer** via le rapport `review-<agent>-<stack>.yaml` (champ `sensors[]`, [`report-format.md`](report-format.md)), par le **producteur** via le YAML `retour-<agent>-<stack>.yaml` ([`producer-report.md`](producer-report.md)). Le fil de commentaires ne porte plus ces verdicts en prose — ils voyagent dans le YAML joint, exploitables pour les contrôles et la présentation au gate humain.
+Ce rapport par sensor est **repris en synthèse** dans `sensors_resultats` du message A2A `retour` à la fin de mission ([`governance-security.md`](governance-security.md) § « Schéma du message A2A ») :
+
+- **reviewer** : rapport `review-<agent>-<stack>.yaml`, champ `sensors[]` ([`report-format.md`](report-format.md)) ;
+- **producteur** : YAML `retour-<agent>-<stack>.yaml` ([`producer-report.md`](producer-report.md)) ;
+- le fil de commentaires ne porte plus ces verdicts en prose : ils voyagent dans le YAML joint, exploitables pour les contrôles et le gate humain.
 
 ### 5. Verification gate à la frontière de phase
 
@@ -91,7 +114,11 @@ Quand un stage délègue son travail via des **sous-issues** (cas des stages de 
 
 > `done` est ici le signal d'**acceptation technique du livrable par la QA et la revue sécurité** au sein du flux, et non la clôture humaine de l'issue parente — celle-ci reste la décision humaine portée par [`stages/validation/closure.md`](../stages/validation/closure.md).
 
-**Barrière de stage.** L'aiguillage central ([`stages/production/central-quality-control.md`](../stages/production/central-quality-control.md)) ne démarre **que lorsque toutes les sous-issues spécialistes du stage sont à `done`** (barrière de stage : pas de démarrage tant que Docker **et** Terraform ne sont pas `done`). Tant qu'une sous-issue reste en `in_review` (ou en attente de re-contrôle après `RENVOI`), la barrière **n'est pas** franchie et le contrôle qualité central **ne démarre pas**. La condition de démarrage est donc « **toutes les sous-issues `done`** », jamais « au moins un livrable en `in_review` ».
+**Barrière de stage.** L'aiguillage central ([`stages/production/central-quality-control.md`](../stages/production/central-quality-control.md)) ne démarre que lorsque **toutes** les sous-issues spécialistes du stage sont à `done`.
+
+- Pas de démarrage tant que Docker **et** Terraform ne sont pas `done`.
+- Une sous-issue en `in_review` (ou en attente de re-contrôle après `RENVOI`) : barrière non franchie.
+- Condition : « toutes les sous-issues `done` », jamais « au moins un livrable en `in_review` ».
 
 ## Contrôle sécurité — non contournable
 
