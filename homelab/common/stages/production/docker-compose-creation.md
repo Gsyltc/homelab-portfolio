@@ -37,7 +37,7 @@ Produire le fichier (skill `docker-composer`), conserver les commentaires `#` de
 
 > **Autorité des règles techniques (A5/A6).** La règle des **services mutualisés** (ne jamais recréer Traefik / Redis-Valkey / PostgreSQL — réutiliser les instances existantes du Homelab) et la **liste des réseaux Traefik + réseau par défaut** sont portées par la **skill `docker-composer`** (`SKILL.md` et [`references/network.md`](../../../../plugins/homelab-assistant/skills/docker-composer/references/network.md)), qui en est la **source unique**. Le workflow ne réénonce pas ces règles : il les **référence** et se limite à collecter les paramètres associés (`${traefik_network}`, `${valkey_enabled}`, `${database_service}` — voir [`required-parameters-collection.md`](../cadrage/required-parameters-collection.md)).
 
-> **Répertoire de relecture.** Tous les fichiers générés vont dans `${WORK_DIRECTORY}/.a-valider/<id-tâche>/<stack>/` (`<id-tâche>` = identifiant de l'issue, ex. `HOM-303`), jamais ailleurs avant la validation humaine ; le commentaire de livraison en consigne le chemin résolu. `${WORK_DIRECTORY}` vide ou introuvable → issue `blocked` ([`stack-detection.md`](../initialisation/stack-detection.md)). Déplacement final : [`file-deposit.md`](../validation/file-deposit.md).
+> **Répertoire de relecture.** Fichiers générés déposés uniquement dans `.a-valider/<id-tâche>/<stack>/` : [`review-directory.md`](../../protocols/review-directory.md).
 
 ## Sensors
 

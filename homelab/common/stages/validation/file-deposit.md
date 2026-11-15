@@ -31,7 +31,7 @@ Déposer les livrables validés aux emplacements conventionnels, sur confirmatio
 
 > Prérequis : la variable `[répertoire de travail]` a été vérifiée ([`deployment-prereqs-check.md`](deployment-prereqs-check.md)).
 
-**Source** : `${WORK_DIRECTORY}/.a-valider/<id-tâche>/<stack>/` (répertoire de relecture alimenté par les spécialistes, voir [`terraform-configuration.md`](../production/terraform-configuration.md) et [`docker-compose-creation.md`](../production/docker-compose-creation.md)). Aucun fichier n'est placé hors de `.a-valider/` avant la validation humaine explicite.
+**Source** : répertoire de relecture `.a-valider/<id-tâche>/<stack>/` ([`review-directory.md`](../../protocols/review-directory.md)).
 
 Avant de proposer le dépôt, le Tech Lead lance `version-livrables` sur `.a-valider/<id-tâche>/<stack>/versions.json` ; sur écart, il ne propose pas le dépôt (retour en Production).
 
@@ -61,7 +61,7 @@ Hors « oui » explicite à la décision 3 (**absence de réponse = non**), **au
 
 Une fois la vérification réussie, supprimer `.a-valider/<id-tâche>/<stack>/` (puis `.a-valider/<id-tâche>/` s'il est vide). En cas d'échec de vérification, **conserver** le répertoire de relecture et le signaler à l'humain.
 
-> `.a-valider/` doit être exclu du dépôt git du projet (`.gitignore` du répertoire de travail) : le Tech Lead le vérifie et le signale à l'humain s'il ne l'est pas.
+Exclusion git et règles du répertoire : [`review-directory.md`](../../protocols/review-directory.md).
 
 ## Sensors
 

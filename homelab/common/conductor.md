@@ -386,8 +386,8 @@ sequenceDiagram
 
 ## Références
 
-- [`protocols/stage-definition.md`](protocols/stage-definition.md) — schéma du front-matter d'une fiche de stage
-- [`protocols/stage-protocol.md`](protocols/stage-protocol.md) — cycle générique d'exécution d'un stage
+- [`protocols/stage-definition.md`](protocols/stage-definition.md), [`protocols/stage-protocol.md`](protocols/stage-protocol.md) — front-matter d'une fiche de stage, cycle générique d'exécution
+- [`protocols/review-directory.md`](protocols/review-directory.md) — répertoire de relecture `.a-valider/`
 - [`protocols/governance-security.md`](protocols/governance-security.md) — gouvernance A2A, contrôle sécurité, invariants, garde-fous, concurrence par stack
 - [`protocols/reviewer.md`](protocols/reviewer.md) — protocole de revue (Analyste QA + sécurité Homelab)
 - [`protocols/output-format.md`](protocols/output-format.md) — format unique des messages destinés à l'humain
