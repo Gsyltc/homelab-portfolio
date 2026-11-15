@@ -12,8 +12,8 @@ review_class: advisory
 review_artifact: controle-qualite-central.md
 human_gate: granular
 produces: [controle_qualite_central_go]
-consumes: [{artifact: rapport_qa, required: false}, {artifact: livrable_tfvars, required: false}, {artifact: livrable_compose, required: false}, {artifact: flux_n8n_propose_ou_applique, required: false}, {artifact: modification_home_assistant_proposee_ou_appliquee, required: false}]
-requires_stage: [quality-assurance]
+consumes: [{artifact: rapport_qa, required: false}, {artifact: controle_securite_posture, required: false}, {artifact: livrable_tfvars, required: false}, {artifact: livrable_compose, required: false}, {artifact: flux_n8n_propose_ou_applique, required: false}, {artifact: modification_home_assistant_proposee_ou_appliquee, required: false}]
+requires_stage: [quality-assurance, security-delegation]
 sensors: [traefik-coherence]
 scopes: [stack-update, new-stack, config-change, security-patch, infra-terraform, n8n, home-assistant]
 inputs: "Livrables des spécialistes vérifiés par l'Analyste QA (.tfvars, compose, flux n8n, modif HA)"
@@ -30,7 +30,7 @@ Router chaque livrable (GO / RENVOI) au niveau macro, sans analyse technique de 
 
 ### Step 0 — Barrière de stage : ne démarrer que sur toutes les sous-issues `done`
 
-Le contrôle qualité central **ne démarre que lorsque toutes les sous-issues spécialistes du stage sont à `done`** (barrière de stage : Docker **et** Terraform `done`). Chaque sous-issue atteint `done` à la **validation QA** (`verdict = OK`) de **son** livrable (cf. [`quality-assurance.md`](quality-assurance.md) et [`protocols/stage-protocol.md` § Cycle de statut des sous-issues & barrière de stage](../../protocols/stage-protocol.md#cycle-de-statut-des-sous-issues--barrière-de-stage)). Tant qu'une sous-issue demeure en `in_progress` ou `in_review` (y compris en boucle courte de `RENVOI`), **la barrière n'est pas franchie et ce stage ne démarre pas**. La condition de démarrage est « **toutes les sous-issues `done`** », jamais « au moins un livrable en `in_review` ».
+Le contrôle qualité central **ne démarre que lorsque toutes les sous-issues spécialistes du stage sont à `done`** (barrière de stage : Docker **et** Terraform `done`). Chaque sous-issue atteint `done` quand la **QA et la revue sécurité** ont toutes deux rendu `OK` sur **son** livrable (cf. [`quality-assurance.md`](quality-assurance.md) et [`protocols/stage-protocol.md` § Cycle de statut des sous-issues & barrière de stage](../../protocols/stage-protocol.md#cycle-de-statut-des-sous-issues--barrière-de-stage)). Tant qu'une sous-issue demeure en `in_progress` ou `in_review` (y compris en attente de re-contrôle après `RENVOI`), **la barrière n'est pas franchie et ce stage ne démarre pas**. La condition de démarrage est « **toutes les sous-issues `done`** », jamais « au moins un livrable en `in_review` ».
 
 ### Step 1 — Contrôle macro (jamais technique)
 
@@ -38,11 +38,11 @@ Le Tech Lead vérifie uniquement : (a) le livrable répond-il à la demande et a
 
 ### Step 2 — Ordre imposé et renvoi
 
-Tout livrable — **compose ET Terraform** — passe par l'Analyste QA ([`quality-assurance.md`](quality-assurance.md)) **avant** cet aiguillage. Le Tech Lead ne réalise **jamais** lui-même l'analyse de compatibilité, l'audit sécurité / hardening, la cohérence Traefik, la vérification du `.tfvars` ni un correctif. Les `RENVOI` techniques de la QA transitent par une boucle courte directe QA ↔ spécialiste : le Tech Lead intervient sur le **travail finalisé** (après QA `OK`). Doute macro → renvoyer au spécialiste en décrivant le **symptôme** (« l'authentification risque d'échouer »), **sans** diagnostic ni solution. Livrable incomplet / hors-sujet → renvoyer avec la liste des manques.
+Tout livrable — **compose ET Terraform** — passe par l'Analyste QA ([`quality-assurance.md`](quality-assurance.md)) **avant** cet aiguillage. Le Tech Lead ne réalise **jamais** lui-même l'analyse de compatibilité, l'audit sécurité / hardening, la cohérence Traefik, la vérification du `.tfvars` ni un correctif. Les `RENVOI` de la QA et de la revue sécurité lui parviennent d'abord et sont synthétisés avant tout renvoi au spécialiste : ce contrôle intervient sur le **travail finalisé** (QA et sécurité `OK`). Doute macro → renvoyer au spécialiste en décrivant le **symptôme** (« l'authentification risque d'échouer »), **sans** diagnostic ni solution. Livrable incomplet / hors-sujet → renvoyer avec la liste des manques.
 
-### Step 3 — Enchaînement vers la délégation sécurité
+### Step 3 — Enchaînement vers la validation humaine
 
-Sur `GO`, et dès qu'un livrable touche une surface de sécurité, le Tech Lead enchaîne — **avant** la validation humaine — sur l'étape de délégation sécurité ([`security-delegation.md`](security-delegation.md)) : Tech Lead → Architecte de sécurité Homelab. Le contrôle du travail finalisé précède donc toujours le contrôle de sécurité.
+La revue sécurité ([`security-delegation.md`](security-delegation.md)) est **déjà close** : elle a tourné en parallèle de la QA et sa synthèse a précédé ce contrôle. Sur `GO`, le Tech Lead enchaîne sur la validation humaine granulaire. Ce contrôle est un **contrôle macro de cohérence** sur le lot final ; il ne rejoue ni la QA ni la revue sécurité.
 
 ## Sensors
 

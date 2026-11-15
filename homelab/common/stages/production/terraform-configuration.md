@@ -39,7 +39,7 @@ Préparer uniquement les fichiers `.tf` / `.tfvars` — **JAMAIS** `terraform in
 
 ### Step 3 — Vérification QA en aval
 
-Le livrable `.tfvars` produit passe **obligatoirement** par l'**Analyste QA** ([`quality-assurance.md`](quality-assurance.md), volet Terraform, skill `terraform-qa`) avant l'aiguillage du Tech Lead ([`central-quality-control.md`](central-quality-control.md)) : vérification systématique, jamais sautée. Sur défaut, l'Analyste QA émet un `RENVOI` vers le **Spécialiste Terraform** (agent créateur) via le rapport YAML ; il ne modifie jamais le livrable.
+Le livrable `.tfvars` produit passe **obligatoirement** par l'**Analyste QA** ([`quality-assurance.md`](quality-assurance.md), volet Terraform, skill `terraform-qa`) avant l'aiguillage du Tech Lead ([`central-quality-control.md`](central-quality-control.md)) : vérification systématique, jamais sautée. Sur défaut, l'Analyste QA émet un `RENVOI` dans son rapport YAML adressé au **Tech Lead**, qui renvoie au Spécialiste Terraform après synthèse avec la revue sécurité ; la QA ne modifie jamais le livrable.
 
 > **Répertoire de relecture.** Tous les fichiers générés vont dans `${WORK_DIRECTORY}/.a-valider/<id-tâche>/<stack>/` (`<id-tâche>` = identifiant de l'issue, ex. `HOM-303`), jamais ailleurs avant la validation humaine ; le commentaire de livraison en consigne le chemin résolu. `${WORK_DIRECTORY}` vide ou introuvable → issue `blocked` ([`stack-detection.md`](../initialisation/stack-detection.md)). Déplacement final : [`file-deposit.md`](../validation/file-deposit.md).
 

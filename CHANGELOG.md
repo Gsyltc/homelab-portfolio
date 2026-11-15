@@ -9,6 +9,13 @@ ce fichier en donne la lecture chronologique côté produit.
 ## [Non publié]
 
 ### Changed
+- **QA et revue sécurité en parallèle, synthèse obligatoire.** Les deux revues portent sur la même version dès que
+  tous les livrables sont livrés et rendent leur rapport au Tech Lead seul (fin de la boucle courte QA ↔ spécialiste).
+  Le Tech Lead attend les deux rapports, synthétise les écarts, présente un seul message à l'humain si besoin, puis
+  délègue un lot de correctifs par livrable et une seule revue partielle (éléments corrigés et effets directs). QA et sécurité
+  ne sollicitent jamais l'humain : seul le Tech Lead communique avec lui. Une sous-issue passe à `done` quand QA et sécurité
+  sont `OK`. Modifs : `quality-assurance`, `security-delegation`, `central-quality-control`, `governance-security`,
+  `stage-protocol`, `reviewer`, `report-format`, `conductor`.
 - **Éléments dépendant d'une valeur manquante.** Le Tech Lead les présente avec la valeur à fournir, dans la même
   décision, et ne les valide ni ne les applique sans elle ; sans valeur, l'élément et ses dérivés sont retirés ensemble.
   Modifs : `conductor.md`, `required-parameters-collection`, `output-format`.

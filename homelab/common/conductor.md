@@ -56,7 +56,7 @@ flowchart TD
 | **Initialisation** | 0 | Initialisation | [`stack-detection`](stages/initialisation/stack-detection.md) · [`concurrency-lock-read`](stages/initialisation/concurrency-lock-read.md) · [`labels-audit-init`](stages/initialisation/labels-audit-init.md) · [`deployment-target-preselection`](stages/initialisation/deployment-target-preselection.md) · [`auth-preselection`](stages/initialisation/auth-preselection.md) · [`database-preselection`](stages/initialisation/database-preselection.md) · [`network-preselection`](stages/initialisation/network-preselection.md) | Non (bootstrap déterministe + pré-sélection) |
 | **Idéation** | 1 | Idéation | [`intent-capture`](stages/ideation/intent-capture.md) · [`scope-detection`](stages/ideation/scope-detection.md) · [`version-impact-analysis`](stages/ideation/version-impact-analysis.md) · [`intent-scope-approval`](stages/ideation/intent-scope-approval.md) | Léger (intention + périmètre) |
 | **Cadrage et Paramètres** | 2 | Inception | [`n8n-absolute-rule`](stages/cadrage/n8n-absolute-rule.md) · [`domain-triage`](stages/cadrage/domain-triage.md) · [`intake-framing`](stages/cadrage/intake-framing.md) · [`required-parameters-collection`](stages/cadrage/required-parameters-collection.md) | Advisory (avant Production) |
-| **Production et Contrôle** | 3 | Construction | [`autonomy-mode`](stages/production/autonomy-mode.md) · [`terraform-configuration`](stages/production/terraform-configuration.md) · [`docker-compose-creation`](stages/production/docker-compose-creation.md) · [`quality-assurance`](stages/production/quality-assurance.md) · [`n8n-branch`](stages/production/n8n-branch.md) · [`home-assistant-branch`](stages/production/home-assistant-branch.md) · [`central-quality-control`](stages/production/central-quality-control.md) · [`security-delegation`](stages/production/security-delegation.md) | Granulaire |
+| **Production et Contrôle** | 3 | Construction | [`autonomy-mode`](stages/production/autonomy-mode.md) · [`terraform-configuration`](stages/production/terraform-configuration.md) · [`docker-compose-creation`](stages/production/docker-compose-creation.md) · [`quality-assurance`](stages/production/quality-assurance.md) ∥ [`security-delegation`](stages/production/security-delegation.md) (en parallèle) · [`n8n-branch`](stages/production/n8n-branch.md) · [`home-assistant-branch`](stages/production/home-assistant-branch.md) · [`central-quality-control`](stages/production/central-quality-control.md) | Granulaire |
 | **Validation et Déploiement** | 4 | Operation | [`deployment-prereqs-check`](stages/validation/deployment-prereqs-check.md) · [`review-and-notification`](stages/validation/review-and-notification.md) · [`human-granular-validation`](stages/validation/human-granular-validation.md) · [`file-deposit`](stages/validation/file-deposit.md) · [`version-update-application`](stages/validation/version-update-application.md) · [`kestra-deployment`](stages/validation/kestra-deployment.md) · [`closure`](stages/validation/closure.md) | Explicite |
 
 > **Compatibilité ascendante.** Les libellés Homelab historiques (`Cadrage et Paramètres`, `Production et Contrôle`, `Validation et Déploiement`) restent valides comme alias. Les couches de règles `phase` ([`homelab/rules/phases/<phase>.md`](../rules/README.md)) sont nommées par le **nom** de phase (pas le numéro) et restent inchangées.
@@ -225,21 +225,21 @@ sequenceDiagram
     S->>S: Doc officielle + arbitrage + parametres (CADRAGE)
     S->>An: Delegue variables Terraform en premier (jamais apply)
     An-->>S: Config Terraform (.tfvars)
-    S->>K: Delegue verification Terraform (mention + mission)
-    K-->>S: Rapport QA Terraform
     S->>B: Delegue creation docker-compose (mention + mission)
     B-->>S: Compose + recapitulatif
-    S->>K: Delegue verification compose (mention + mission)
+    Note over S,SA: Tous les livrables livres : QA et revue securite lancees EN PARALLELE, meme version
+    S->>K: Delegue verification (compose + Terraform)
+    S->>SA: Delegue revue securite (meme version)
     K-->>S: Rapport QA + coherence Traefik
-    Note over S,K: Sous-issues Docker/Terraform : in_progress -> in_review (livrable) -> done (QA OK)
+    SA-->>S: Jugement de posture
+    Note over S: Attente OBLIGATOIRE des 2 rapports, synthese unique des ecarts, 1 lot de correctifs, 1 re-controle
+    Note over S,K: Sous-issues : in_progress -> in_review (livrable) -> done (QA ET securite OK)
     S->>M: Branche n8n si demande n8n (delegation immediate)
     M-->>S: Proposition / flux applique apres validation
     S->>Hu: Branche Home Assistant si demande HA
     Hu-->>S: Proposition / modif apres validation
     Note over S: Barriere de stage : central-quality-control demarre uniquement quand toutes les sous-issues sont done
     S->>S: Controle qualite central de chaque livrable (PRODUCTION)
-    S->>SA: Delegue revue securite (avant toute revue humaine)
-    SA-->>S: Jugement de posture
     S->>S: in_review + prerequis 4.0
     S->>AL: Demande notification revue prete
     AL-->>H: Notification ntfy
