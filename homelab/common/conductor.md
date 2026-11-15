@@ -196,7 +196,7 @@ Aucun scope, aucune règle apprise, aucun gate/sensor advisory ne peut désactiv
 - **Sélection automatique du type d'authentification** (`oidc → forwardauth → local`) préservée ; en cas de doute → humain.
 - **Terraform ne déploie JAMAIS** (`terraform init/apply/destroy` interdits) ; **aucun secret en clair** ; **jamais `${SNI}`** dans un livrable Terraform ; **un seul traitement par stack**.
 - **Validation humaine granulaire** (chaque choix validé / rejeté séparément).
-- **Aucune action à impact** (dépôt de fichiers, flux Kestra, application n8n / Home Assistant) sans validation humaine explicite.
+- **Aucune action à impact** (dépôt de fichiers, écriture de clés Vault, flux Kestra, application n8n / Home Assistant) sans validation humaine explicite.
 - **Piste d'audit** sur l'issue ; **décision structurante tracée** en ADR.
 - **Contrôle sécurité** (sécurité de base d'un homelab : secrets, exposition, permissions, durcissement Docker/Swarm, Traefik) systématique, porté par l'Analyste QA et l'Architecte de sécurité Homelab.
 

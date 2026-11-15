@@ -13,6 +13,10 @@ ce fichier en donne la lecture chronologique côté produit.
   candidats sont consignés au fil du workflow et présentés une seule fois, dans un message distinct, au Step 2 de
   `closure` (une décision par règle, défaut proposé, notification courte). Modifs : `conductor`, `closure`, `homelab/rules/README.md`,
   lignes « Learn » de tous les stages.
+- **Écriture des clés Vault au choix, indépendante de Kestra.** Le gate final gagne une décision « écriture des clés
+  Vault » (défaut « non »), séparée du déploiement Kestra : sur « oui » le Tech Lead crée les clés créables sans valeur
+  humaine (secrets générables, variables validées), sans écraser, sans jamais afficher une valeur ; les autres restent à
+  l'humain. `homelab-vault-access` : seconde écriture encadrée (Étape 4). Revue de l'Architecte de sécurité : RENVOI corrigé (injection par l'environnement de `jq`, check-and-set KV v2, `trap`, catégories de clés dans `parametres.json`, validation des noms, ADR-0054 `Accepted`, AppRole d'écriture dédié porté par le seul Tech Lead).
 - **Question Kestra intégrée au gate final.** `human-granular-validation` pose en un seul message la validation des
   livrables, les chemins de dépôt et le déploiement Kestra (trois décisions séparées ; défaut « non » confirmé pour Kestra ; « oui » exige
   que les clés Vault soient créées au préalable, vérifiées avant lancement ; sinon « non »). `file-deposit` et `kestra-deployment` n'ont plus de

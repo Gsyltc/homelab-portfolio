@@ -445,6 +445,39 @@ class TestRequiredParameters(unittest.TestCase):
         self.assertEqual(verdict(rep), GAP)
         self.assertNotIn("S3cr3tValue", json.dumps(rep))
 
+    def test_vault_categories(self):
+        params = self.valid()
+        params["vault"]["secrets"][0]["categorie"] = "generable"
+        params["vault"]["variables"][0].update({"categorie": "variable", "valeur": "https://sync.jeedom-gaston.ovh"})
+        self.assertEqual(verdict(self.run_with(params)), OK)
+
+    def test_secret_never_carries_a_value(self):
+        params = self.valid()
+        params["vault"]["secrets"][0]["valeur"] = "S3cr3tValue"
+        rep = self.run_with(params)
+        self.assertEqual(verdict(rep), GAP)
+        self.assertNotIn("S3cr3tValue", json.dumps(rep))
+
+    def test_variable_requires_value_and_no_secret_name(self):
+        params = self.valid()
+        params["vault"]["variables"][0]["categorie"] = "variable"
+        self.assertEqual(verdict(self.run_with(params)), GAP)  # valeur manquante
+        params["vault"]["variables"][0].update({"valeur": "x", "nom": "DB_PASSWORD"})
+        self.assertEqual(verdict(self.run_with(params)), GAP)  # nom évoquant un secret
+
+    def test_variable_value_with_credentials_rejected(self):
+        for bad in ("postgres://app:S3cr3t@db:5432/x", "abcdefghijklmnopqrstuvwxyz0123456789ABCD"):
+            params = self.valid()
+            params["vault"]["variables"][0].update({"categorie": "variable", "valeur": bad})
+            rep = self.run_with(params)
+            self.assertEqual(verdict(rep), GAP)
+            self.assertNotIn(bad, json.dumps(rep))
+
+    def test_generable_only_in_secrets(self):
+        params = self.valid()
+        params["vault"]["variables"][0]["categorie"] = "generable"
+        self.assertEqual(verdict(self.run_with(params)), GAP)
+
     def test_invalid_json_is_unavailable(self):
         self.p.write(self.REL, "{not json")
         rep = fire(self.p.root, "required-parameters", [self.REL])
