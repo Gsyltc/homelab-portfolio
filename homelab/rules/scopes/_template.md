@@ -2,7 +2,7 @@
 
 Gabarit de règles **rattachées à un scope Homelab** (voir `homelab/scopes/` : `stack-update`, `new-stack`, `config-change`, `security-patch`, `infra-terraform`, `n8n`, `home-assistant`). Copier ce fichier en `scopes/<scope>.md`. Chargé **à la demande** quand le scope est confirmé.
 
-Pendant Homelab de [`../../core/rules/scopes/_template.md`](../../core/rules/scopes/_template.md).
+Pendant Homelab de [`../../core/rules/scopes/_template.md`](../../../core/rules/scopes/_template.md).
 
 Précédence : couche la plus faible. Une règle `scope` ne peut pas contredire une règle `global` / `stack` / `phase` sans arbitrage humain.
 

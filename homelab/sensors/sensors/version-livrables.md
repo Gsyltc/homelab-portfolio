@@ -19,7 +19,13 @@ Check déterministe exécuté **au gate `phase3-phase4`** et **avant le déplace
 
 ## Fichier de référence
 
-`${WORK_DIRECTORY}/.a-valider/<id-tâche>/<stack>/versions.json`, **généré** à chaque version validée par la QA et la revue sécurité, par `python3 "$CORE_HOME/homelab/scripts/versions.py" record --dir <répertoire> <retour.yaml>...` à partir des YAML joints téléchargés (`sensors_resultats[]` d'un retour A2A, `sensors[]` d'un rapport reviewer, chacun avec le `sha256` du livrable contrôlé). Le script ignore et signale tout verdict sans `sha256` ou d'une autre version, et retient le verdict le plus défavorable en cas de doublon. Il requiert PyYAML (code 2 sans écriture sinon). Le fichier ne contient ni secret ni valeur de configuration.
+Fichier : `${WORK_DIRECTORY}/.a-valider/<id-tâche>/<stack>/versions.json`.
+
+- **Généré** à chaque version validée par la QA et la revue sécurité : `python3 "$CORE_HOME/homelab/scripts/versions.py" record --dir <répertoire> <retour.yaml>...`.
+- Entrées : YAML joints téléchargés (`sensors_resultats[]` d'un retour A2A, `sensors[]` d'un rapport reviewer), chacun avec le `sha256` du livrable contrôlé.
+- Le script ignore et signale tout verdict sans `sha256` ou d'une autre version, et retient le verdict le plus défavorable en cas de doublon.
+- Il requiert PyYAML (code 2 sans écriture sinon).
+- Le fichier ne contient ni secret ni valeur de configuration.
 
 ```json
 {

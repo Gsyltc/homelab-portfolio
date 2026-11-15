@@ -43,7 +43,7 @@ Si `${WORK_DIRECTORY}` est vide, non définie ou introuvable : **ne pas se rabat
 à l'humain le chemin du répertoire de travail du projet. Consigner dans le commentaire d'audit la
 valeur résolue de `${WORK_DIRECTORY}` (chemin, jamais de secret).
 
-**Exclusion.** Le répertoire `${WORK_DIRECTORY}/.a-valider/` (livrables générés en attente de validation humaine, voir [`file-deposit.md`](../validation/file-deposit.md)) est **exclu** de toute recherche de détection : un fichier qui s'y trouve ne prouve **pas** qu'une stack existe.
+**Exclusion.** Le répertoire de relecture `.a-valider/` ([`review-directory.md`](../../protocols/review-directory.md)) est **exclu** de toute recherche de détection : un fichier qui s'y trouve ne prouve **pas** qu'une stack existe.
 
 ### Step 2 — OBLIGATOIRE : vérifier l'existence sur le système de fichiers (toute demande)
 
@@ -69,9 +69,11 @@ répertoire de travail.
   nature est une **modification / mise à jour** (`service-version-update` / `stack-update` /
   `config-change` / `security-patch`, tranché en Idéation). Consigner les chemins exacts trouvés
   et le type détecté. **Ne jamais classer en `new-stack` lorsqu'un artefact existe.**
+
 - **Aucun artefact trouvé** sous aucun des emplacements ci-dessus ⇒ la nature est une
   **création** de nouvelle stack (`new-stack`). Consigner explicitement les emplacements balayés
   (preuve de l'absence).
+
 - **Mise à jour de version avec service introuvable** (nature = mise à jour de version annoncée
   mais aucun artefact détecté) → **halt-and-ask** : passer l'issue en **`blocked`** et **demander
   à l'humain** par une mention explicite (service introuvable sous ces chemins, confirmer

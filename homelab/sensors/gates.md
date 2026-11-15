@@ -12,11 +12,20 @@ Pendant Homelab de `core/sensors/gates.md` : même forme déclarative, **fronti�
 
 ## Nature advisory et exception bloquante par scope
 
-Les gates sont **advisory par défaut** : ils signalent un écart, ne bloquent pas. **Exception** : sur scope `new-stack` / `infra-terraform`, l'omission de `cibles_disponibles` ou de `arbitrage_swarm_proxmox` (frontière `phase1-phase2`) est un **écart bloquant**. **Exception (alignée sur les sensors bloquants)** : sur scope `new-stack` / `infra-terraform`, l'artefact `livrable_tfvars_present` de la frontière `phase3-phase4` est **requis de façon non-conditionnelle** — son absence est un **écart bloquant** qui arrête l'avancée jusqu'à correction ou levée humaine explicite tracée. Ce durcissement reflète le caractère non abaissable du livrable Terraform sur ces scopes (voir `new-stack.md` et `terraform-configuration.md`) et la sévérité déjà bloquante du sensor `terraform-no-sni` sur `new-stack`. Il **ne remplace pas** la validation humaine granulaire ni le contrôle QA (SG-3).
+Les gates sont **advisory par défaut** : ils signalent un écart sans bloquer.
+
+**Exceptions bloquantes** sur scope `new-stack` / `infra-terraform` :
+
+- Frontière `phase1-phase2` : l'omission de `cibles_disponibles` ou de `arbitrage_swarm_proxmox` est un **écart bloquant**.
+- Frontière `phase3-phase4` : l'artefact `livrable_tfvars_present` est **requis sans condition**.
+  - Son absence est un **écart bloquant** : l'avancée s'arrête jusqu'à correction ou levée humaine explicite tracée.
+  - Ce durcissement reflète le caractère non abaissable du livrable Terraform sur ces scopes (voir `new-stack.md` et `terraform-configuration.md`) et la sévérité bloquante du sensor `terraform-no-sni` sur `new-stack`.
+
+Un gate **ne remplace pas** la validation humaine granulaire ni le contrôle QA (SG-3).
 
 ## Frontières et artefacts requis
 
-> Adossé aux **5 phases** du workflow Homelab (Phase 0 Initialisation / Phase 1 Idéation / Phase 2 Cadrage et Paramètres / Phase 3 Production et Contrôle / Phase 4 Validation et Déploiement — ADR-0017, triptyque `homelab/common/` au Stage 7). Le prérequis de déploiement **§3.0 devient §4.0** ; le rappel advisory anticipé est en §0.3.
+> Adossé aux **5 phases** du workflow Homelab (Phase 0 - Initialisation / Phase 1 - Idéation / Phase 2 - Cadrage / Phase 3 - Production / Phase 4 - Validation).
 
 ```yaml
 type: verification-gates
@@ -129,4 +138,8 @@ Sensors de gate :   # une ligne par sensor du champ sensors: de la frontière �
 - `<sensor-id>` : ✅ conforme | ⚠️ écart | ⛔ indisponible — <fait vérifié ou motif>
 ```
 
-> **Sensors de gate — non contournables.** La liste `Sensors de gate` reprend **chaque** id du champ `sensors:` de la frontière franchie (ex. `yaml-validity`, `swarm-deploy-section`, `plaintext-secret`, `terraform-no-sni`, `traefik-coherence` à `phase3-phase4` ; `vault-secret-exists` à `phase4-cloture`). Un sensor déclaré non exécuté est `⛔ indisponible`, **jamais omis ni lu comme conforme** (SG-2). C'est cette ligne qui **montre, au gate, que chaque sensor de gate a été vérifié** ; elle est le pendant, côté frontière de phase, du rapport de sensor à l'écriture (`protocols/stage-protocol.md` § 4).
+> **Sensors de gate — non contournables.**
+>
+> - La ligne `Sensors de gate` reprend **chaque** id du champ `sensors:` de la frontière franchie (ex. `yaml-validity`, `swarm-deploy-section`, `plaintext-secret`, `terraform-no-sni`, `traefik-coherence` à `phase3-phase4` ; `vault-secret-exists` à `phase4-cloture`).
+> - Un sensor déclaré non exécuté est `⛔ indisponible`, **jamais omis ni lu comme conforme** (SG-2).
+> - Cette ligne montre, au gate, que chaque sensor de gate a été vérifié. C'est le pendant, côté frontière de phase, du rapport de sensor à l'écriture (`protocols/stage-protocol.md` § 4).

@@ -15,6 +15,7 @@ Un scope se déclare en **deux endroits**, et cette séparation est l'idée maî
    à l'image de `homelab/sensors/`). Il porte le nom du scope, ses
    métadonnées de routage (`keywords`) et ses **valeurs par défaut** d'axes (`depth`,
    niveau de vérification → `verification`).
+
 2. **L'appartenance** (quels stages s'exécutent sous ce scope) vit **transposée sur les
    stages** : chaque fiche de stage (`homelab/common/stages/<phase>/<slug>.md`, produite au
    Stage 7) nommera dans son front-matter `scopes:` les scopes sous lesquels elle s'exécute. Un
@@ -34,7 +35,6 @@ fois, sur le stage**, jamais redéclarée dans huit blocs de scope séparés.
 
 > **Source d'identité.** Ces fichiers sont la **source d'identité** des scopes. La matrice
 > ci-dessous et la vue lisible de [`../common/protocols/scopes-and-axes.md`](../common/protocols/scopes-and-axes.md)
-> (ainsi que le stub [`../../docs/homelab-workflow.md`](../../docs/homelab-workflow.md))
 > restent des **vues lisibles** ; en cas d'écart sur l'identité d'un scope (nom, depth, mots-clés,
 > vérification), **le fichier de scope fait foi**.
 
@@ -59,6 +59,7 @@ axes indépendants** :
 
 - **Axe 1 — Depth** (`minimal` / `standard` / `comprehensive`) : détail des artefacts produits
   (docker-compose, config Terraform, documentation). Contrôle *combien on écrit*.
+
 - **Axe 2 — Stratégie de vérification** (`advisory` / `standard` / `renforcé`) : **intensité du
   Analyste QA** et du contrôle qualité central. Contrôle *à quel point on vérifie*.
   - `advisory` — validité YAML + cohérence de base (syntaxe seule), signalé sans bloquer.
@@ -76,18 +77,23 @@ Rappel des invariants du workflow Homelab — **aucun scope ne les désactive** 
 
 - **Validation humaine granulaire** avant toute action à impact (dépôt de fichiers, flux Kestra) —
   NON négociable, quel que soit le scope ou les axes.
+
 - **Règle absolue n8n** (§1.1) : toute demande n8n déclenche le scope `n8n` et une délégation
   immédiate à l'Expert N8n — pas même l'analyse par le Tech Lead. Un scope ne peut pas la lever.
+
 - **Sélection automatique du type d'authentification** (§1.4, `oidc → forwardauth →
   local`) préservée telle quelle ; en cas de doute → humain.
+
 - **Terraform ne déploie JAMAIS** (`terraform init/apply/destroy` interdits), **aucun secret en
   clair**, **jamais `${SNI}`** dans un livrable Terraform, **un seul traitement par stack**
   (verrou `active_step`) — garde-fous absolus, insensibles au scope.
+
 - Sur `security-patch` / `new-stack` : `depth` ≥ `standard` et `verification` ≥ `renforcé` ne
   peuvent jamais être abaissés par override. Sur ces deux scopes, les sensors sécurité
-  `plaintext-secret` et `terraform-no-sni` sont **bloquants** (décision ALI-204 + contrôle
+  `plaintext-secret` et `terraform-no-sni` sont **bloquants** (décision humaine + contrôle
   sécurité Analyste QA — voir [`../sensors/README.md`](../sensors/README.md)) : une détection
   arrête l'avancée jusqu'à correction ou levée humaine explicite tracée.
+
 - **Auto-détection = plancher** : la confirmation humaine peut *monter* le contrôle, jamais le
   *descendre* sans validation tracée.
 

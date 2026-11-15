@@ -29,7 +29,13 @@ Pour une demande **ambiguë hors stack**, déterminer par **recherche de corresp
 
 ### Step 1 — Confirmer le déclenchement du triage
 
-N'exécuter ce stage que si la demande est **ambiguë** (mot « automatisation », ou un nommage pouvant viser aussi bien un **flux n8n** qu'une **automatisation Home Assistant**) **ET** ne concerne **pas** une stack Docker/Swarm ou Proxmox. Les demandes dont le domaine est **déjà explicite** (« n8n » nommé explicitement → règle absolue n8n, voir [`n8n-absolute-rule.md`](n8n-absolute-rule.md) ; « Home Assistant » nommé explicitement → branche Home Assistant) **ne passent pas** par ce triage. Les demandes de stack (Docker/Swarm, Proxmox) suivent leur routage habituel (cible choisie au gate léger, voir [`deployment-target-preselection`](../initialisation/deployment-target-preselection.md)).
+N'exécuter ce stage que si la demande est **ambiguë** (mot « automatisation », ou nommage pouvant viser aussi bien un **flux n8n** qu'une **automatisation Home Assistant**) **ET** ne concerne **pas** une stack Docker/Swarm ou Proxmox.
+
+Ne passent **pas** par ce triage :
+
+- « n8n » nommé explicitement : règle absolue n8n ([`n8n-absolute-rule.md`](n8n-absolute-rule.md)).
+- « Home Assistant » nommé explicitement : branche Home Assistant.
+- Demandes de stack (Docker/Swarm, Proxmox) : routage habituel (cible choisie au gate léger, voir [`deployment-target-preselection`](../initialisation/deployment-target-preselection.md)).
 
 ### Step 2 — Recherche de correspondance (existence seulement, AUCUNE analyse)
 

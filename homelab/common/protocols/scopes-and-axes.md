@@ -21,15 +21,23 @@ Défaut : `stack-update`. **Aucun scope ne désactive les invariants non contour
 
 ## Auto-détection & désambiguïsation
 
-Scope auto-détecté par mots-clés (FR / EN) puis **confirmé explicitement** avant démarrage (jamais de démarrage silencieux). Les mots-clés déclencheurs sont **déclarés en données** dans le champ `keywords:` de chaque fichier [`../../scopes/<name>.md`](../../scopes/README.md) (source d'identité). Ordre de priorité en cas de correspondances multiples (**le niveau le plus élevé l'emporte**, héritage direct de la règle « allégé vs complet ») :
+Scope auto-détecté par mots-clés (FR / EN) puis **confirmé explicitement** avant démarrage (aucun démarrage silencieux). Les mots-clés déclencheurs sont **déclarés en données** dans le champ `keywords:` de chaque fichier [`../../scopes/<name>.md`](../../scopes/README.md) (source d'identité). Ordre de priorité en cas de correspondances multiples (**le niveau le plus élevé l'emporte**, héritage direct de la règle « allégé vs complet ») :
 
 `n8n` = `home-assistant` (branches autonomes, court-circuit immédiat) > `security-patch` > `new-stack` > `infra-terraform` > `service-version-update` > `stack-update` > `config-change`
 
 **`service-version-update` vs `stack-update`.** `service-version-update` est une **spécialisation ciblée** de `stack-update` : il l'emporte dès qu'un déclencheur « nouvelle version / montée de version / release » vise un service **existant**. Il reste **sous** `security-patch` : si la montée de version porte un enjeu sécurité (CVE, auth, exposition, secrets), `security-patch` l'emporte et impose son plancher renforcé.
 
-**Le doute ne bascule jamais vers `config-change`** : dès qu'un seul déclencheur d'un scope plus élevé s'applique — ou en cas de doute sur l'impact sécurité — le scope supérieur s'impose. L'auto-détection est un **plancher** : la confirmation humaine peut monter le contrôle, jamais le descendre sans trace.
+**Le doute ne bascule jamais vers `config-change`** : dès qu'un seul déclencheur d'un scope plus élevé s'applique — ou en cas de doute sur l'impact sécurité — le scope supérieur s'impose. L'auto-détection est un **plancher** : la confirmation humaine peut monter le contrôle, et ne le descend pas sans trace.
 
-**Ambiguïté `n8n` vs `home-assistant` (hors stack).** Lorsque la demande est **ambiguë** (mot « automatisation », ou nommage pouvant viser aussi bien un flux n8n qu'une automatisation Home Assistant) **et** ne concerne pas une stack Docker/Swarm ou Proxmox, le domaine n'est **pas** tranché par mots-clés : le départage `n8n` = `home-assistant` est résolu en Cadrage par le stage [`domain-triage`](../stages/cadrage/domain-triage.md), qui détermine le domaine par **recherche de correspondance** via les deux MCP (existence seulement, **aucune analyse**) puis aiguille (n8n seul → Expert n8n ; HA seul → Expert Home Assistant ; les deux → remontée humaine explicite ; nulle part → création vers le spécialiste du type demandé, ou remontée humaine si vérification/modification d'un élément inexistant). Un déclencheur n8n **explicite** conserve la règle absolue n8n ; une demande de stack conserve son routage stack.
+**Ambiguïté `n8n` vs `home-assistant` (hors stack).** Si la demande est **ambiguë** (mot « automatisation », nommage pouvant viser un flux n8n comme une automatisation Home Assistant) **et** ne concerne pas une stack Docker/Swarm ou Proxmox :
+
+- le domaine n'est **pas** tranché par mots-clés ;
+- le stage Cadrage [`domain-triage`](../stages/cadrage/domain-triage.md) le détermine par **recherche de correspondance** via les deux MCP (existence seulement, **aucune analyse**), puis aiguille :
+  - n8n seul → Expert n8n ;
+  - Home Assistant seul → Expert Home Assistant ;
+  - les deux → remontée humaine explicite ;
+  - nulle part → création vers le spécialiste du type demandé, ou remontée humaine si vérification / modification d'un élément inexistant ;
+- un déclencheur n8n **explicite** conserve la règle absolue n8n ; une demande de stack conserve son routage stack.
 
 ## Axes
 
@@ -78,7 +86,14 @@ Légende : ✅ activé · ➖ allégé / au juste nécessaire · ❌ ignoré · 
 | `version-update-application`     | ❌              | ❌           | ❌               | ❌                | ❌                 | ✅ (gate léger unique)        | ❌           | ❌                |
 | `kestra-deployment`              | ✅              | ✅           | ✅               | ✅                | ✅                 | ✅                        | ❌           | ❌                |
 
-> **Lecture du parcours `service-version-update`.** Idéation et Cadrage sont **resserrés** (pas de création d'artefact de stack) : l'essentiel se joue dans le stage dédié [`version-impact-analysis`](../stages/ideation/version-impact-analysis.md) (analyse de la release, détection breaking change → `blocked` si enjeu) puis, en Validation, dans [`version-update-application`](../stages/validation/version-update-application.md) qui **porte le gate léger unique** et enchaîne, sur une **seule** acceptation humaine, l'écriture Vault de `VERSION` **et** le déploiement `kestra-deployment`. Les stages de production d'artefacts (`terraform-configuration`, `docker-compose-creation`, `quality-assurance`, `autonomy-mode`) sont **ignorés** : la mise à jour réutilise le fichier Terraform **existant** du service. Si la montée de version porte un enjeu sécurité, le scope bascule sur `security-patch` (report de priorité).
+> **Lecture du parcours `service-version-update`.**
+>
+> - Idéation et Cadrage sont **resserrés** (pas de création d'artefact de stack).
+> - L'essentiel se joue dans [`version-impact-analysis`](../stages/ideation/version-impact-analysis.md) (analyse de la release, breaking change → `blocked` si enjeu), puis en Validation dans [`version-update-application`](../stages/validation/version-update-application.md).
+>   - Ce stage **porte le gate léger unique**.
+>   - Sur une **seule** acceptation humaine, il enchaîne l'écriture Vault de `VERSION` **et** le déploiement `kestra-deployment`.
+> - Les stages de production d'artefacts (`terraform-configuration`, `docker-compose-creation`, `quality-assurance`, `autonomy-mode`) sont **ignorés** : la mise à jour réutilise le fichier Terraform **existant** du service.
+> - Enjeu sécurité sur la montée de version : le scope bascule sur `security-patch` (report de priorité).
 
 **Ce que change chaque scope.** Un scope allégé (`config-change`) réduit le **nombre d'étapes** (Idéation resserrée, cadrage resserré, moins de contrôles intermédiaires) ; les scopes complets appliquent l'intégralité des phases 0 à 4. Dans tous les cas, la validation humaine avant toute action à impact et la répartition des rôles restent inchangées. **Un scope joue sur le nombre d'étapes, jamais sur qui les exécute** : alléger ne transfère jamais la responsabilité d'un spécialiste vers le Tech Lead.
 

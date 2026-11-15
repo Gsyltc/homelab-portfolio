@@ -31,7 +31,7 @@ Déposer les livrables validés aux emplacements conventionnels, sur confirmatio
 
 > Prérequis : la variable `[répertoire de travail]` a été vérifiée ([`deployment-prereqs-check.md`](deployment-prereqs-check.md)).
 
-**Source** : `${WORK_DIRECTORY}/.a-valider/<id-tâche>/<stack>/` (répertoire de relecture alimenté par les spécialistes, voir [`terraform-configuration.md`](../production/terraform-configuration.md) et [`docker-compose-creation.md`](../production/docker-compose-creation.md)). Aucun fichier n'est placé hors de `.a-valider/` avant la validation humaine explicite.
+**Source** : répertoire de relecture `.a-valider/<id-tâche>/<stack>/` ([`review-directory.md`](../../protocols/review-directory.md)).
 
 Avant de proposer le dépôt, le Tech Lead lance `version-livrables` sur `.a-valider/<id-tâche>/<stack>/versions.json` ; sur écart, il ne propose pas le dépôt (retour en Production).
 
@@ -50,7 +50,17 @@ Vérifier les fichiers déplacés : présence à l'emplacement définitif et **`
 
 ### Step 3 bis — Écrire les clés Vault (uniquement si la décision 3 du gate final est « oui »)
 
-Hors « oui » explicite à la décision 3 (**absence de réponse = non**), **aucune clé n'est écrite**. Le « oui » vaut pour la liste `vault` (noms et catégories) montrée avec la décision : **une liste modifiée après le « oui » annule l'accord** et la décision est reposée. Sur « oui », le Tech Lead écrit les clés de la liste `vault` de `parametres.json` (noms validés au Cadrage) via la skill `homelab-vault-access` (§ « Écriture encadrée des clés d'une nouvelle stack », [ADR-0054](../../../../decisions/0054-ecriture-vault-creation-cles-nouvelle-stack.md)), après validation du nom de stack (celui de l'`active_step`) et des noms de clés. La catégorie de chaque clé vient de `parametres.json` (`generable`, `variable`, `humain` par défaut) :
+Conditions d'écriture :
+
+- Hors « oui » explicite à la décision 3 (**absence de réponse = non**) : **aucune clé n'est écrite**.
+- Le « oui » vaut pour la liste `vault` (noms et catégories) montrée avec la décision. **Une liste modifiée après le « oui » annule l'accord** ; la décision est reposée.
+
+Sur « oui », le Tech Lead :
+
+1. Valide le nom de stack (celui de l'`active_step`) et les noms de clés.
+2. Écrit les clés de la liste `vault` de `parametres.json` (noms validés au Cadrage) via la skill `homelab-vault-access` (§ « Écriture encadrée des clés d'une nouvelle stack »).
+
+La catégorie de chaque clé vient de `parametres.json` (`generable`, `variable`, `humain` par défaut) :
 
 - **Créables** : secrets **générables** (clé de chiffrement, secrets JWT, mot de passe de base sans autre usage imposé) générés localement, et variables non secrètes dont la valeur est connue et validée (URL publique, nom de base, issuer, identifiant). Écrits **uniquement s'ils n'existent pas** (jamais d'écrasement).
 - **Non créables par le Tech Lead** (restent à l'humain, listées dans le compte rendu par nom) : valeur choisie par l'humain (mot de passe de compte admin), valeur issue d'un système tiers (client secret OIDC créé par Authentik après déploiement Terraform), valeur dérivée de plusieurs autres (URL de connexion contenant un mot de passe).
@@ -61,7 +71,7 @@ Hors « oui » explicite à la décision 3 (**absence de réponse = non**), **au
 
 Une fois la vérification réussie, supprimer `.a-valider/<id-tâche>/<stack>/` (puis `.a-valider/<id-tâche>/` s'il est vide). En cas d'échec de vérification, **conserver** le répertoire de relecture et le signaler à l'humain.
 
-> `.a-valider/` doit être exclu du dépôt git du projet (`.gitignore` du répertoire de travail) : le Tech Lead le vérifie et le signale à l'humain s'il ne l'est pas.
+Exclusion git et règles du répertoire : [`review-directory.md`](../../protocols/review-directory.md).
 
 ## Sensors
 

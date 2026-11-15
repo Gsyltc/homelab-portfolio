@@ -35,17 +35,45 @@ Le Tech Lead vérifie que tous les paramètres sont renseignés ; **il ne génè
 | --- | --- | --- |
 | Nom de la stack `${stack_name}` | Oui | Texte alphanumérique |
 | Type d'authentification `${auth_type}` | Optionnel | `none`, `local`, `forwardauth`, `oidc` — validé au gate léger, repris sans redemander. |
-| FQDN d'exposition `${fqdn}` | Déductible | Texte (nom de domaine complet). **Défaut** : `<stack_name>.<domaine du homelab>` — domaine : **source unique** [`domaine-homelab.md`](../../../../plugins/homelab-assistant/skills/configuration-applications/references/domaine-homelab.md) ; préfixe déduit des FQDN des stacks existantes si une convention diffère. Valeur complète présentée et validée au gate léger ([`intent-scope-approval`](../ideation/intent-scope-approval.md)) : la reprendre ici sans redemander. Si l'humain n'a modifié que le sous-domaine, recomposer `<sous-domaine>.<domaine du homelab>`. Écrit **en clair** dans le Terraform, jamais `${SNI}`. |
+| FQDN d'exposition `${fqdn}` | Déductible | Nom de domaine complet. Voir « Détail : FQDN » ci-dessous. |
 | Paramètres OIDC `${oidc_params}` | Déductible (si `${auth_type}` = `oidc`) | IdP, nom du client, redirect URI, scopes — voir Step 3. Sans objet pour les autres types. |
 | Stockage `${storage}` | Déductible | NFS du Homelab : serveur `truenas`, chemin `/mnt/datas/${ENVIRONMENT}/<services\|databases>/<stack_name>`. **Source unique** : [`template.yml`](../../../../plugins/homelab-assistant/skills/docker-composer/references/template.yml) (section `VOLUMES`) de la skill `docker-composer`. Ne jamais demander le serveur ni le chemin. |
-| Secrets et variables Vault `${vault}` | Déductible | **Noms uniquement, jamais de valeur.** Deux listes, `secrets` et `variables`, construites de la même façon selon les besoins de la stack, avec les noms attendus par l'application (sa documentation fait foi, aucun nom imposé par le workflow). Sources : éléments exigés par la documentation officielle, plus ceux induits par les paramètres retenus. Exemples : secrets → client secret si `oidc`, mot de passe si base dédiée, compte admin initial ; variables → URL publique (`${fqdn}`), hôte / nom de la base, issuer OIDC. Chaque entrée porte son `besoin` (pourquoi elle existe) et sa **`categorie`** (`generable` : secret aléatoire créable par le Tech Lead ; `variable` : variable non secrète avec sa `valeur` validée ; `humain` : valeur que seul l'humain détient, défaut en cas de doute). La catégorie est montrée à l'humain dans ce message et conditionne l'option d'écriture des clés Vault du gate final. Secrets → montage `services/<stack_name>` ; variables → `env_variables/<stack_name>` (layout : skill `homelab-vault-access`). Stack existante : lister les clés présentes (noms seuls). Liste vide si aucun besoin. |
+| Secrets et variables Vault `${vault}` | Déductible | **Noms uniquement, jamais de valeur.** Voir « Détail : Vault » ci-dessous. |
 | Réseau Traefik `${traefik_network}` | Déductible | **Source unique** : liste et réseau par défaut définis dans la skill `docker-composer` ([`references/network.md`](../../../../plugins/homelab-assistant/skills/docker-composer/references/network.md)). Validé au gate léger ([`network-preselection`](../initialisation/network-preselection.md)), repris sans redemander. |
-| Activer Valkey `${valkey_enabled}` | Déductible | `true`, `false` — le Homelab possède **déjà** un Valkey/Redis mutualisé : ne jamais recréer ce service, s'y connecter (règle portée par la skill `docker-composer`). |
+| Activer Valkey `${valkey_enabled}` | Déductible | `true`, `false` — le Homelab possède **déjà** un Valkey/Redis mutualisé : ne pas recréer ce service, s'y connecter (règle portée par la skill `docker-composer`). |
 | Service base de données `${database_service}` | Optionnel | `postgres`, `mysql`, `mariadb`, `mongodb`, `none` — validé au gate léger ([`database-preselection`](../initialisation/database-preselection.md)), repris sans redemander. |
 
 **Un seul message de confirmation**, au format [`output-format`](../../protocols/output-format.md) (une décision par bloc, valeur déduite comme **proposition par défaut**, toute valeur manquante connue incluse dès ce message) : le Tech Lead propose en bloc les valeurs par défaut déduites restantes (`${storage}`, `${valkey_enabled}`, `${vault}` et, si `oidc`, `${oidc_params}`) ainsi que le **mode d'exécution** de la Production (options et défaut : [`autonomy-mode`](../production/autonomy-mode.md)), et attend la confirmation ou correction de l'humain.
 
-**Dépendances entre paramètres.** Avant de poser le message, le Tech Lead identifie les paramètres qui **dépendent d'une valeur que seul l'humain détient** (nom d'un groupe ou d'un mapping Authentik, rôle admin, valeur de `main_group`…). Chacun est présenté **dans la même décision** que la valeur dont il dépend, avec la valeur demandée en toutes lettres (« à fournir : nom exact du mapping »), et **n'est pas validé sans elle** (règle : [`conductor.md`](../../conductor.md), « Élément dépendant d'une valeur manquante »). Si la valeur n'est pas fournie, l'élément et ses dérivés (scope, variable Vault, action humaine) sont retirés ensemble plutôt que livrés incomplets.
+### Détail : FQDN `${fqdn}`
+
+- **Défaut** : `<stack_name>.<domaine du homelab>`.
+  - Domaine : source unique [`domaine-homelab.md`](../../../../plugins/homelab-assistant/skills/configuration-applications/references/domaine-homelab.md).
+  - Préfixe déduit des FQDN des stacks existantes si une convention diffère.
+- Valeur complète déjà présentée et validée au gate léger ([`intent-scope-approval`](../ideation/intent-scope-approval.md)) : la reprendre sans redemander.
+- Si l'humain n'a modifié que le sous-domaine : recomposer `<sous-domaine>.<domaine du homelab>`.
+- Écrit **en clair** dans le Terraform, jamais `${SNI}`.
+
+### Détail : Vault `${vault}`
+
+- **Deux listes**, `secrets` et `variables`, construites de la même façon selon les besoins de la stack.
+  - Noms attendus par l'application : sa documentation fait foi, aucun nom imposé par le workflow.
+  - Sources : éléments exigés par la documentation officielle, plus ceux induits par les paramètres retenus.
+  - Exemples : secrets (client secret si `oidc`, mot de passe si base dédiée, compte admin initial) ; variables (URL publique `${fqdn}`, hôte / nom de la base, issuer OIDC).
+- **Chaque entrée porte** :
+  - son `besoin` (pourquoi elle existe) ;
+  - sa `categorie` : `generable` (secret aléatoire créable par le Tech Lead), `variable` (non secrète, avec sa `valeur` validée) ou `humain` (valeur que seul l'humain détient ; défaut en cas de doute).
+- La catégorie est montrée à l'humain et conditionne l'option d'écriture des clés Vault du gate final.
+- **Emplacements** (layout : skill `homelab-vault-access`) : secrets → `services/<stack_name>` ; variables → `env_variables/<stack_name>`.
+- Stack existante : lister les clés présentes (noms seuls). Liste vide si aucun besoin.
+
+### Dépendances entre paramètres
+
+Avant de poser le message, le Tech Lead identifie les paramètres qui **dépendent d'une valeur que seul l'humain détient** (nom d'un groupe ou d'un mapping Authentik, rôle admin, valeur de `main_group`…).
+
+- Chacun est présenté **dans la même décision** que la valeur dont il dépend, avec la valeur demandée en toutes lettres (« à fournir : nom exact du mapping »).
+- Il **n'est pas validé sans elle** (règle : [`conductor.md`](../../conductor.md), « Élément dépendant d'une valeur manquante »).
+- Valeur non fournie : l'élément et ses dérivés (scope, variable Vault, action humaine) sont retirés ensemble plutôt que livrés incomplets.
 
 La création des clés Vault proposées reste une action humaine (agent Vault dédié à créer plus tard) : le message le signale.
 
@@ -59,7 +87,7 @@ La création des clés Vault proposées reste une action humaine (agent Vault d�
 
 **En cas de doute** → l'option est présentée à l'humain au gate léger (point 5 de [`intent-scope-approval`](../ideation/intent-scope-approval.md)). Le doute ne bascule **jamais** vers un choix implicite.
 
-> **SAML / LDAP non encore supportés.** Ces deux types étaient historiquement listés dans l'ordre de sélection mais ne sont pas implémentés côté middlewares Traefik ni côté template Terraform. Ils ont été **retirés** de la règle de sélection (voir [ADR-0024](../../../../decisions/0024-retrait-temporaire-saml-ldap-authentification.md)). Si une stack requiert SAML ou LDAP → **demander à l'humain** ; leur ré-intégration fera l'objet des actions tracées dans l'ADR-0024.
+> **SAML / LDAP non supportés.** Ces deux types ne sont implémentés ni côté middlewares Traefik ni côté template Terraform, et sont exclus de la règle de sélection. Si une stack requiert SAML ou LDAP : **demander à l'humain**.
 
 ### Step 3 — Paramètres OIDC (si `${auth_type}` = `oidc`)
 
@@ -67,7 +95,7 @@ Le Tech Lead **déduit** les paramètres OIDC au lieu de les demander, puis les 
 
 | Paramètre | Valeur déduite par défaut |
 | --- | --- |
-| IdP | **Authentik**, seul IdP OIDC du Homelab. Ne jamais demander l'IdP ni son URL d'émetteur : le client est créé par le Terraform (`oauth[]`). |
+| IdP | **Authentik**, seul IdP OIDC du Homelab. Ne pas demander l'IdP ni son URL d'émetteur : le client est créé par le Terraform (`oauth[]`). |
 | Nom du client | `${stack_name}` |
 | Redirect URI | Chemin de callback issu de la **documentation officielle** de l'application (ex. `/oauth2/callback`, `/authorization-code/callback`), préfixé par `https://${fqdn}` — dépend donc de `${fqdn}` (déduit au Step 1) |
 | Scopes | Ceux requis par la documentation officielle ; à défaut `openid profile email` |
@@ -75,7 +103,7 @@ Le Tech Lead **déduit** les paramètres OIDC au lieu de les demander, puis les 
 Règles :
 
 - Si la documentation officielle ne permet pas de déterminer le chemin de callback ou les scopes → **demander à l'humain** pour cette valeur uniquement ; jamais d'invention.
-- **Aucun secret** (client secret, jetons) dans les livrables ni les commentaires ; le secret relève de Vault (proposé dans `${vault}`, voir Step 1).
+- **Aucun secret** ([`governance-security.md`](../../protocols/governance-security.md) § « Aucun secret ») ; il relève de Vault (proposé dans `${vault}`, voir Step 1).
 - La règle d'auto-sélection du Step 2 (`oidc → forwardauth → local`) est **inchangée** (SEC-1) : ce Step ne fait que renseigner les paramètres une fois `oidc` retenu.
 - Mapping vers le Terraform : `oauth[]` et `allowed_redirect_uris[][]` (voir la skill `configuration-applications`, [`authentification.md`](../../../../plugins/homelab-assistant/skills/configuration-applications/references/authentification.md)).
 

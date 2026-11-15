@@ -35,13 +35,20 @@ quel**, il ne le redétecte pas : le service **existe déjà** et le type est ac
 
 ### Step 2 — Lire la version actuelle dans Vault (lecture seule)
 
-Via la skill `homelab-vault-access`, lire le **numéro de version actuelle** — clé(s) de version du montage `env_variables/data/<service>` (`VERSION`, ou une clé `VERSION_<NOM_DU_SERVICE>` par service si la stack en définit plusieurs — voir § Convention des clés de version du scope [`service-version-update`](../../../scopes/service-version-update.md)) — **en lecture seule à ce stade**. La valeur n'est jamais affichée, loggée ni transmise : seul l'écart « version actuelle → version visée » est consigné (sans divulguer d'autres clés). Aucune écriture n'a lieu en Idéation.
+Via la skill `homelab-vault-access`, lire le **numéro de version actuelle**, **en lecture seule à ce stade** :
+
+- Source : clé(s) de version du montage `env_variables/data/<service>`.
+- Clé : `VERSION`, ou `VERSION_<NOM_DU_SERVICE>` par service si la stack en définit plusieurs.
+- Convention : § Convention des clés de version du scope [`service-version-update`](../../../scopes/service-version-update.md). La valeur n'est jamais affichée, loggée ni transmise : seul l'écart « version actuelle → version visée » est consigné (sans divulguer d'autres clés). Aucune écriture n'a lieu en Idéation.
 
 ### Step 3 — Analyser les impacts de la montée de version (page Release GitHub)
 
 Analyser la **page Release GitHub** de la version visée (lien fourni dans l'intention) pour vérifier les **impacts** : **breaking changes**, migrations de configuration requises, et **stabilité de la version** (écarter les versions RC / beta / non stables — recommander la dernière version **stable** si la version visée ne l'est pas).
 
-**Variables d'environnement — toujours relevées comme breaking change.** Toute **modification, ajout ou suppression** d'une **variable d'environnement** entre la version actuelle et la version visée (renommage, nouvelle variable obligatoire, variable retirée ou dépréciée, changement de valeur par défaut ou de format attendu) **doit être relevée** comme un breaking change, car elle impacte la configuration du service dans Vault / le fichier Terraform. Chaque variable concernée est listée avec l'action à mener (ajouter / mettre à jour / retirer la clé).
+**Variables d'environnement : toujours relevées comme breaking change.** Elles impactent la configuration du service dans Vault / le fichier Terraform. Est relevée :
+
+- toute **modification, ajout ou suppression** d'une variable entre la version actuelle et la version visée ;
+- en particulier : renommage, nouvelle variable obligatoire, variable retirée ou dépréciée, changement de valeur par défaut ou de format attendu. Chaque variable concernée est listée avec l'action à mener (ajouter / mettre à jour / retirer la clé).
 
 ### Step 4 — Verdict et blocage
 
@@ -71,8 +78,10 @@ Règles de remplissage :
 
 - **Type** — toujours `Docker Swarm` **ou** `Proxmox`, jamais « à déterminer » : il a été tranché en
   Initialisation par `stack-detection` (localisation du fichier Terraform) et est **réutilisé** ici.
+
 - **Version actuelle** — toujours la valeur réelle lue dans Vault (Step 2) ; jamais « à
   déterminer ».
+
 - **Breaking Change** — si **aucun** : conserver la ligne `✅ **AUCUN breaking change détecté**` telle quelle. Si **au moins un** : remplacer par une ligne d'en-tête puis **une liste à puces**,  chaque puce = un breaking change **et l'action à mener**. **Toute modification, ajout ou suppression de variable d'environnement** entre la version actuelle et la version visée **compte comme un breaking change** et figure dans la liste (une puce par variable, avec l'action : ajouter / mettre à jour / retirer la clé) :
 
   ```markdown

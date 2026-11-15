@@ -1,6 +1,6 @@
 # Agents — équipe DevOps Homelab
 
-Définitions conformes (front-matter YAML + corps Markdown, même format que [`core/agents/`](../../core/agents/)) des agents de l'équipe DevOps Homelab, coordonnée par le **Tech Lead Homelab**. Le workflow de référence est [`../common/conductor.md`](../common/conductor.md) (source unique — instructions du coordinateur ; le QUOI de chaque étape vit dans [`../common/stages/`](../common/stages/) et les mécanismes transverses dans [`../common/protocols/`](../common/protocols/)). Vue narrative historique (stub de redirection) : [`docs/homelab-workflow.md`](../../docs/homelab-workflow.md).
+Définitions conformes (front-matter YAML + corps Markdown, même format que [`core/agents/`](../../core/agents/)) des agents de l'équipe DevOps Homelab, coordonnée par le **Tech Lead Homelab**. Le workflow de référence est [`../common/conductor.md`](../common/conductor.md) (source unique — instructions du coordinateur ; le QUOI de chaque étape vit dans [`../common/stages/`](../common/stages/) et les mécanismes transverses dans [`../common/protocols/`](../common/protocols/)).
 
 ## Rôles génériques → fichiers
 
@@ -17,11 +17,11 @@ Définitions conformes (front-matter YAML + corps Markdown, même format que [`c
 
 ## Agent partagé (non dupliqué ici)
 
-- **Agent de notifications** — utilitaire de workspace partagé entre les deux workflows. Sa définition conforme unique vit dans [`core/agents/notification-agent.md`](../../core/agents/notification-agent.md) (source unique de vérité) ; le Tech Lead Homelab le mentionne via l'UUID `254d9349-1eb3-4f50-a4cd-b18a7043a7c0`. Pas de duplication sous `homelab/agents/` pour éviter deux sources divergentes.
+- **Agent de notifications** — utilitaire de workspace partagé entre les deux workflows. Sa définition conforme unique vit dans [`core/agents/notification-agent.md`](../../core/agents/notification-agent.md) (source unique de vérité) ; le Tech Lead Homelab le mentionne après résolution de son UUID. Pas de duplication sous `homelab/agents/` pour éviter deux sources divergentes.
 
-## Correspondance UUID (moteur A2A Multica)
+## Résolution des UUID (moteur A2A Multica)
 
-Les délégations se font par mention `[@Label](mention://agent/<uuid>)`. La table des UUID fait foi dans [tech-lead-homelab-agent.md](tech-lead-homelab-agent.md) ; vérifier via `multica agent list --output json` (champ `id`), ne jamais inventer un UUID.
+Les délégations se font par mention `[@Label](mention://agent/<uuid>)`. Aucun UUID n'est figé : il est résolu via `multica agent list --output json` (champ `id`), procédure dans [tech-lead-homelab-agent.md](tech-lead-homelab-agent.md).
 
 ## Garde-fous absolus (rappel)
 

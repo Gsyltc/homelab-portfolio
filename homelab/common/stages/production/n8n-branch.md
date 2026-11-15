@@ -33,7 +33,15 @@ La demande est **entièrement** traitée par l'Expert n8n (aucune tâche n8n ex�
 
 ### Step 2 — Proposition → feu vert Tech Lead → validation humaine
 
-L'Expert n8n **propose** la conception ou les changements, les fait **valider par le Tech Lead** (mention valide), **n'applique rien** via le MCP avant ce feu vert, applique **après validation humaine explicite**, vérifie l'état du flux, puis applique le **geste de fin de mission** [`../../protocols/producer-report.md`](../../protocols/producer-report.md) : joindre l'export de flux **s'il existe sous forme de fichier** (sinon aucun fichier), corps minimal (mention valide du Tech Lead + une ligne de statut `proposé` / `appliqué` / `bloqué`), zéro prose. Publication d'un flux : confirmation humaine explicite obligatoire.
+Séquence de l'Expert n8n :
+
+1. **Proposer** la conception ou les changements.
+2. Les faire **valider par le Tech Lead** (mention valide) : rien n'est appliqué via le MCP avant ce feu vert.
+3. Appliquer **après validation humaine explicite**.
+4. Vérifier l'état du flux.
+5. Appliquer le **geste de fin de mission** [`producer-report.md`](../../protocols/producer-report.md) : joindre l'export de flux **s'il existe sous forme de fichier** (sinon aucun fichier), avec une ligne de statut `proposé` / `appliqué` / `bloqué`.
+
+Publication d'un flux : confirmation humaine explicite obligatoire.
 
 ## Sensors
 

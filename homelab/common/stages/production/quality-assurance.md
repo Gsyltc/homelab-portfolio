@@ -24,7 +24,7 @@ outputs: "Rapport QA YAML par livrable (compose : syntaxe, Swarm, hardening, Tra
 
 ## Objectif
 
-Vérifier et durcir (par le contrôle) chaque livrable de la stack avant toute suite — **docker-compose ET configuration Terraform** — vérification jamais sautée. **L'Analyste QA ne modifie jamais le livrable** : sur défaut, il émet un RENVOI dans son rapport YAML, adressé au Tech Lead (Step 5).
+Vérifier et durcir (par le contrôle) chaque livrable de la stack avant toute suite — **docker-compose ET configuration Terraform** — vérification obligatoire. **L'Analyste QA ne modifie jamais le livrable** : sur défaut, il émet un RENVOI dans son rapport YAML, adressé au Tech Lead (Step 5).
 
 > **Périmètre par scope.** Sur `new-stack` / `stack-update` / `security-patch` : l'Analyste QA vérifie le Terraform **et** le compose, et — ces deux livrables étant produits **en parallèle** — porte explicitement la **réconciliation de leur cohérence croisée** (domaine / FQDN, auth, réseau Traefik) ; tout désaccord est rapporté au Tech Lead (synthèse unique, cf. Step 5). Sous `infra-terraform` : il vérifie **uniquement le Terraform** (aucun compose n'est produit). Sous `config-change` : au juste nécessaire selon les livrables présents.
 
@@ -38,11 +38,44 @@ Le Tech Lead délègue à l'**Analyste QA** (mission + mention valide). Ordre im
 
 ### Step 2 — Vérifier le Terraform (volet `.tfvars`, skill `terraform-qa`)
 
-Sur les scopes produisant du Terraform, analyser le livrable `.tfvars` (skill `terraform-qa`) : structure HCL, conformité au template de configuration de stack, cohérence des variables (dont `cloudflare_dns_nb`), **absence de `${SNI}`** (domaines / URLs en clair — critique), **absence de secret en clair** (critique), absence de toute exécution Terraform. Classer les problèmes (critical / warning / info), rédiger chaque point de façon **autosuffisante** (`constat` / `cause` / `correction` / `domaine_correction`) dans le rapport YAML (`report-format.schema.yaml`) : sur au moins un défaut `critical` / `warning`, `verdict = RENVOI` rapporté au **Tech Lead** (qui renverra au Spécialiste Terraform après synthèse) ; sinon `verdict = OK`.
+Sur les scopes produisant du Terraform, analyser le livrable `.tfvars` (skill `terraform-qa`) :
+
+- Structure HCL.
+- Conformité au template de configuration de stack.
+- Cohérence des variables (dont `cloudflare_dns_nb`).
+- **Absence de `${SNI}`** (domaines / URLs en clair) : critique.
+- **Absence de secret en clair** : critique.
+- Absence de toute exécution Terraform.
+
+Classement et rapport :
+
+1. Classer les problèmes (critical / warning / info).
+2. Rédiger chaque point de façon **autosuffisante** (`constat` / `cause` / `correction` / `domaine_correction`) dans le rapport YAML (`report-format.schema.yaml`).
+3. Au moins un défaut `critical` / `warning` : `verdict = RENVOI`, rapporté au **Tech Lead** (qui renvoie au Spécialiste Terraform après synthèse).
+4. Sinon : `verdict = OK`.
 
 ### Step 3 — Analyser et classer le compose (revue adversariale — plancher SG-3)
 
-Sur les scopes produisant un compose, analyser syntaxe, compatibilité Swarm, réseaux / volumes / secrets, hardening (skill `docker-composer`), classer les problèmes (critical / warning / info) et rédiger chaque point de façon **autosuffisante** dans le rapport YAML : sur au moins un défaut, le `verdict` est `RENVOI` et le rapport YAML est rendu au **Tech Lead** (qui renverra au Spécialiste Docker après synthèse) ; sans défaut, `verdict = OK`. **La skill `dockerfile-validator` s'applique uniquement aux stacks *build-from-source*** (celles qui fournissent un `Dockerfile` construit localement, `build:` dans le compose) : elle valide alors le `Dockerfile`. Pour une stack tirant des **images publiées** (pas de `Dockerfile` à construire), `dockerfile-validator` ne s'applique pas. L'Analyste QA porte le **contrôle sécurité technique** (revue adversariale) sur les deux livrables : sur `security-patch` / `new-stack`, vérification `renforcé` non abaissable.
+Sur les scopes produisant un compose, analyser :
+
+- Syntaxe.
+- Compatibilité Swarm.
+- Réseaux, volumes, secrets.
+- Hardening (skill `docker-composer`).
+
+Classement et rapport :
+
+1. Classer les problèmes (critical / warning / info).
+2. Rédiger chaque point de façon **autosuffisante** dans le rapport YAML.
+3. Au moins un défaut : `verdict = RENVOI`, rapport rendu au **Tech Lead** (qui renvoie au Spécialiste Docker après synthèse).
+4. Sans défaut : `verdict = OK`.
+
+Règles propres au volet Docker :
+
+- La skill `dockerfile-validator` s'applique **uniquement aux stacks *build-from-source*** (`Dockerfile` construit localement, `build:` dans le compose) : elle valide alors le `Dockerfile`.
+- Stack tirant des **images publiées** : `dockerfile-validator` ne s'applique pas.
+- L'Analyste QA porte le **contrôle sécurité technique** (revue adversariale) sur les deux livrables.
+- Sur `security-patch` / `new-stack` : vérification `renforcé`, non abaissable.
 
 ### Step 4 — Cohérence Traefik
 
@@ -50,16 +83,29 @@ Vérifier via **`traefik-manager-read`** que services, middlewares et entrypoint
 
 ### Step 5 — Rapport au Tech Lead (aucune correction directe)
 
-**La QA rend son rapport au Tech Lead et à lui seul.** Elle ne mentionne **jamais** le spécialiste créateur et ne déclenche aucune correction : la revue sécurité ([`security-delegation`](security-delegation.md)) tourne **en parallèle sur la même version**, et le Tech Lead **attend obligatoirement les deux rapports** avant toute suite. Il en fait **une synthèse unique** (écarts dédoublonnés, classés, points à décision humaine isolés), la présente à l'humain en un message si une décision est requise ([`output-format`](../../protocols/output-format.md)), puis délègue **un seul lot de correctifs par livrable**. La QA et la revue sécurité font ensuite **une revue partielle** de la version corrigée (uniquement les éléments corrigés et leurs effets directs, liste `points_corriges` fournie par le Tech Lead), en parallèle, **une seule fois**. **L'Analyste QA ne s'adresse jamais à l'humain** : sur un rapport bloquant, le Tech Lead présente le point à l'humain.
+**La QA rend son rapport au Tech Lead et à lui seul.**
 
-**Statut des sous-issues.** Un `RENVOI` (QA ou sécurité) laisse la sous-issue du livrable en `in_review`. La sous-issue passe à `done` (`multica issue status <sous-issue-id> done`, posé par le Tech Lead) quand **les deux** contrôles, QA **et** sécurité, ont rendu `OK` sur son livrable — correspondance un-pour-un (Docker → Docker, Terraform → Terraform). Ce `done` est le signal d'acceptation technique qui alimente la **barrière de stage** du contrôle qualité central ([`stage-protocol.md` § Cycle de statut des sous-issues & barrière de stage](../../protocols/stage-protocol.md#cycle-de-statut-des-sous-issues--barrière-de-stage)) ; il ne vaut pas clôture humaine de l'issue parente.
+- Elle ne mentionne **jamais** le spécialiste créateur et ne déclenche aucune correction.
+- La revue sécurité ([`security-delegation`](security-delegation.md)) tourne **en parallèle sur la même version**.
+- Le Tech Lead **attend obligatoirement les deux rapports** avant toute suite.
+
+Suite, dans l'ordre :
+
+1. Le Tech Lead fait **une synthèse unique** : écarts dédoublonnés, classés, points à décision humaine isolés.
+2. Si une décision est requise, il la présente à l'humain en un message ([`output-format`](../../protocols/output-format.md)).
+3. Il délègue **un seul lot de correctifs par livrable**.
+4. La QA et la revue sécurité font **une revue partielle**, en parallèle et **une seule fois**, de la version corrigée : uniquement les éléments corrigés et leurs effets directs (liste `points_corriges` fournie par le Tech Lead).
+
+**L'Analyste QA ne s'adresse jamais à l'humain** : sur un rapport bloquant, le Tech Lead présente le point à l'humain.
+
+**Statut des sous-issues.** Le Tech Lead passe la sous-issue du livrable à `done` quand QA **et** sécurité ont rendu `OK` ; un `RENVOI` la laisse en `in_review`. Cycle complet : [`stage-protocol.md` § Cycle de statut des sous-issues & barrière de stage](../../protocols/stage-protocol.md#cycle-de-statut-des-sous-issues--barrière-de-stage).
 
 Lorsque le(s) livrable(s) sont `OK`, l'Analyste QA **rend compte au Tech Lead** (l'Analyste QA construit lui-même son lien de retour — cf. Step 1) : la phase QA est passée, le travail finalisé est prêt pour le contrôle qualité central. L'Analyste QA **ne présente aucun livrable modifié** : il ne produit qu'un rapport.
 
 ## Sensors
 
 Outputs: rapport(s) QA (compose et / ou Terraform) + cohérence Traefik + verdict Terraform. Gate humain granulaire **selon le mode d'exécution** ([`autonomy-mode`](autonomy-mode.md)) : gated → validation à ce stage ; autonome → regroupée au point de synchronisation.
-Imports: `swarm-deploy-section` (gate) et `traefik-coherence` (gate), **lancés par la QA** (propriétaire). `plaintext-secret` (write — **bloquant sur `security-patch` / `new-stack`**) et `terraform-no-sni` (write — **bloquant sur `security-patch` / `new-stack`**, ALI-204) sont **repris** du retour de l'auteur (`origine: repris`) si le `sha256` du livrable est identique, relancés sinon. Règle : [`governance-security.md`](../../protocols/governance-security.md) § « Un contrôle, un propriétaire ».
+Imports: `swarm-deploy-section` (gate) et `traefik-coherence` (gate), **lancés par la QA** (propriétaire). `plaintext-secret` (write — **bloquant sur `security-patch` / `new-stack`**) et `terraform-no-sni` (write — **bloquant sur `security-patch` / `new-stack`**) sont **repris** du retour de l'auteur (`origine: repris`) si le `sha256` du livrable est identique, relancés sinon. Règle : [`governance-security.md`](../../protocols/governance-security.md) § « Un contrôle, un propriétaire ».
 Review artifact: `rapport-qa.md` porte la section `## Review` (revue adversariale de l'Analyste QA, plancher SG-3).
 
 ## Learn

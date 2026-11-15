@@ -57,7 +57,12 @@ Chaque règle est une entrée de liste avec un identifiant stable :
   - _portée_ : global · _origine_ : ALI-000 · _ajoutée le_ : AAAA-MM-JJ
 ```
 
-**Rubriques topicales** : dans un fichier de couche, les règles se rangent sous des **rubriques topicales** en prose — par ex. `## Conventions Docker/Swarm`, `## Conventions Terraform`, `## Sécurité / Hardening`, `## Conventions Traefik`, `## Manière de travailler` — une règle = une puce sous la rubrique idoine. Les rubriques sont **indicatives** (à créer selon le besoin) ; l'identifiant `RULE-*`, la portée, l'origine et la date restent **obligatoires** (traçabilité, clause SEC-5 adaptée). Voir les gabarits [`stacks/_template.md`](stacks/_template.md) et [`scopes/_template.md`](scopes/_template.md).
+**Rubriques topicales** : dans un fichier de couche, les règles se rangent sous des rubriques en prose (ex. `## Conventions Docker/Swarm`, `## Conventions Terraform`, `## Sécurité / Hardening`, `## Conventions Traefik`, `## Manière de travailler`).
+
+- Une règle = une puce sous la rubrique idoine.
+- Les rubriques sont **indicatives** (à créer selon le besoin).
+- Restent **obligatoires** : identifiant `RULE-*`, portée, origine et date (traçabilité, clause SEC-5 adaptée).
+- Gabarits : [`stacks/_template.md`](stacks/_template.md) et [`scopes/_template.md`](scopes/_template.md).
 
 ## Invariants non contournables
 

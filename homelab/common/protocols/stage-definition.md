@@ -1,6 +1,12 @@
 # Protocole — définition d'un stage (schéma de front-matter)
 
-Ce protocole fixe le **contrat** d'une fiche de stage (`stages/<phase>/<stage>.md`) du workflow Homelab. Chaque fiche a **deux lecteurs qui ne se recouvrent jamais** : le **parseur** ne lit que le **front-matter YAML** (nœud de graphe : agents, mode, arêtes `consumes` / `produces`), l'**agent exécutant** ne lit que le **corps** (les trois compartiments `## Steps` / `## Sensors` / `## Learn`). Les agents y sont désignés par leur **fonction** (rôles génériques du workflow) ; aucun tooling exécutable n'est requis (conventions Markdown uniquement — pas de compilation `stage-graph.json`, non applicable Multica ; le graphe reste conceptuel via `consumes` / `produces` / `requires_stage`).
+Ce protocole fixe le **contrat** d'une fiche de stage (`stages/<phase>/<stage>.md`) du workflow Homelab.
+
+- Chaque fiche a **deux lecteurs qui ne se recouvrent jamais** :
+  - le **parseur** lit uniquement le **front-matter YAML** (nœud de graphe : agents, mode, arêtes `consumes` / `produces`) ;
+  - l'**agent exécutant** lit uniquement le **corps** (compartiments `## Steps` / `## Sensors` / `## Learn`).
+- Les agents y sont désignés par leur **fonction** (rôles génériques du workflow).
+- Aucun tooling exécutable requis : conventions Markdown uniquement, pas de compilation `stage-graph.json` (non applicable Multica). Le graphe reste conceptuel via `consumes` / `produces` / `requires_stage`.
 
 Miroir Homelab de [`core/common/protocols/stage-definition.md`](../../../core/common/protocols/stage-definition.md), adapté aux 5 phases Homelab, aux 8 scopes et à l'équipe DevOps Homelab.
 
@@ -12,7 +18,7 @@ phase: <initialisation|ideation|cadrage|production|validation>
 execution: <ALWAYS|CONDITIONAL>        # le stage s'exécute toujours, ou sous condition
 condition: "<phrase décrivant la condition>"   # ex. "Demande n8n détectée" ; "Always executes"
 lead_agent: <fonction|null>            # fonction responsable ou null (Tech Lead / coordinateur)
-support_agents: [<fonction>, ...]      # fonctions en appui (peut être vide)
+support_agents: [<fonction>, ...]      # fonctions en appui (champ obligatoire, `[]` si vide)
 mode: <inline|subagent|pipeline|mob>   # topologie de communication (voir ci-dessous)
 for_each: <artefact>                   # (optionnel) itération une-fois-par-instance ; omis ⇒ exécution unique
 summary_confirmation: <required|optional|none>   # résumé confirmé avant d'avancer
@@ -23,7 +29,7 @@ human_gate: <none|light|granular|explicit>       # gate humain applicable au sta
 produces: [<artefact>, ...]            # artefacts produits en sortie (arêtes avant)
 consumes: [{artifact: <nom>, required: <true|false>}, ...]   # artefacts consommés en entrée (arêtes arrière)
 requires_stage: [<slug>, ...]          # stages pré-requis (peut être vide)
-sensors: [<id-de-sensor>, ...]         # sensors importés par id nu (voir homelab/sensors/)
+sensors: [<id-de-sensor>, ...]         # sensors importés par id nu (voir homelab/sensors/) ; champ obligatoire, `[]` si vide
 scopes: [<scope>, ...]                 # scopes où le stage est actif (voir scopes-and-axes.md)
 inputs: "<description libre des entrées>"
 outputs: "<description libre des sorties>"
@@ -37,7 +43,7 @@ outputs: "<description libre des sorties>"
 | `mode`, `for_each`, `summary_confirmation` | topologie de communication, itération éventuelle, confirmation de résumé |
 | `produces`, `consumes`, `requires_stage` | flux d'artefacts et dépendances (le graphe émerge de ces déclarations) |
 | `sensors`, `scopes`, `inputs`, `outputs` | sensors importés, scopes actifs, entrées / sorties |
-| `lead_agent`, `support_agents`, `reviewer` | **fonctions** de l'équipe : Tech Lead Homelab (coordinateur), Spécialiste Docker, Analyste QA, Spécialiste Terraform, Expert n8n, Expert Home Assistant, Architecte de sécurité Homelab, Agent de notifications — validées contre [`homelab/agents/`](../../agents/README.md) |
+| `lead_agent`, `support_agents`, `reviewer` | **fonctions** de l'équipe, validées contre la liste de [`homelab/agents/README.md`](../../agents/README.md) (source unique des fonctions) |
 | `review_class`, `review_artifact` | nature de la revue et livrable qui porte sa section `## Review` |
 | `human_gate` | matérialise les gates du workflow : `none` (Initialisation), `light` (Idéation), `granular` (Cadrage / Production), `explicit` (Validation) |
 

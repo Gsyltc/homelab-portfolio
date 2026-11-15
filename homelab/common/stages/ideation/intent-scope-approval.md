@@ -48,7 +48,7 @@ Point 4 : valeur calculée selon la règle `${fqdn}` de [`required-parameters-co
 
 ### Step 2 — Gate léger (Keep / Modify / Redo)
 
-L'humain approuve ou ajuste. C'est un gate **léger** : il valide *quoi* et *jusqu'où*, pas *comment* (les paramètres détaillés sont figés en Cadrage). Sur les scopes légers (`config-change`), ce gate reste **resserré** mais n'est jamais supprimé. Rien n'engage le Cadrage tant que l'intention et le périmètre ne sont pas approuvés et le scope confirmé (l'auto-détection est un plancher : la confirmation peut monter le contrôle, jamais le descendre sans trace).
+L'humain approuve ou ajuste. C'est un gate **léger** : il valide *quoi* et *jusqu'où*, pas *comment* (les paramètres détaillés sont figés en Cadrage). Sur les scopes légers (`config-change`), ce gate reste **resserré** mais n'est pas supprimé. Rien n'engage le Cadrage tant que l'intention et le périmètre ne sont pas approuvés et le scope confirmé (l'auto-détection est un plancher : la confirmation peut monter le contrôle, jamais le descendre sans trace).
 
 ### Step 3 — Poser le label de cible
 
@@ -61,4 +61,4 @@ Imports: none.
 
 ## Learn
 
-Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : ce stage **porte le gate humain léger** d'Idéation — le Tech Lead **n'y remonte aucun** candidat-règle : ceux capturés depuis `intent-capture` sont consignés (`[candidat-règle]`) et remontés **en fin de workflow**, dans un message séparé ([`closure`](../validation/closure.md)), jamais mêlés à la validation de l'intention. Persistance des apprentissages **confirmés** dans `homelab/rules/` (jamais dans le run courant — application au prochain workflow).
+Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : ce stage **porte le gate humain léger** d'Idéation — le Tech Lead **n'y remonte aucun** candidat-règle : ceux capturés depuis `intent-capture` sont consignés (`[candidat-règle]`) et remontés **en fin de workflow**, dans un message séparé ([`closure`](../validation/closure.md)), sans mélange avec la validation de l'intention. Persistance des apprentissages **confirmés** dans `homelab/rules/` (jamais dans le run courant — application au prochain workflow).

@@ -28,8 +28,8 @@ Ton Leader te transmet le contexte, le périmètre et les critères dans sa ment
 
 - **JAMAIS** `terraform init`, `terraform apply`, `terraform destroy` (ni équivalent, y compris via `-chdir=`) : tu prépares les fichiers, **l'humain exécute**. `terraform validate` / `fmt -check` autorisés uniquement si nécessaires à la validation d'un livrable.
 - **JAMAIS** la variable `${SNI}` dans les `.tf` / `.tfvars` : écris les URLs de service en clair (ex. `https://<service>.<domaine-homelab>`), le domaine provenant du contexte de la stack.
-- **JAMAIS** afficher, logger ou copier un secret : la skill `homelab-vault-access` (AppRole) lit les secrets/variables d'une stack ; adresse et identifiants proviennent des **variables d'environnement de l'agent Multica**, jamais codés en dur (variables manquantes → signale-le au propriétaire du workspace).
+- **JAMAIS** afficher, logger ou copier un secret : la skill `homelab-vault-access` (AppRole) lit les secrets/variables d'une stack ; adresse et identifiants proviennent des **variables d'environnement de l'agent Multica**, non codés en dur (variables manquantes → signale-le au propriétaire du workspace).
 
 # Fin de tâche
 
-Dépose le livrable téléchargeable sur l'issue, puis rends compte au Leader selon le **format unique producteur** [`homelab/common/protocols/producer-report.md`](../common/protocols/producer-report.md) (livrable seul joint, corps minimal, mention valide du Tech Lead, lecture de `trigger_outcomes`) et poste le verdict des sensors déclarés dans ta fiche de stage ([`stage-protocol.md`](../common/protocols/stage-protocol.md) § 4, SG-2).
+Dépose le livrable téléchargeable sur l'issue. Rends ensuite compte au Leader selon le **format unique producteur** [`homelab/common/protocols/producer-report.md`](../common/protocols/producer-report.md) (livrable seul joint, corps minimal, mention valide du Tech Lead, lecture de `trigger_outcomes`). Poste le verdict des sensors déclarés dans ta fiche de stage ([`stage-protocol.md`](../common/protocols/stage-protocol.md) § 4, SG-2).

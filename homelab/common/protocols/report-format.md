@@ -1,20 +1,18 @@
 # Protocole — format de compte-rendu A2A (Homelab)
 
-Source unique du **compte-rendu de revue** qu'un reviewer remonte au Tech Lead Homelab en fin de mission. Ce protocole et le schéma [`report-format.schema.yaml`](report-format.schema.yaml) font foi ; les fiches d'agent et de stage le **référencent**, sans le redupliquer (source unique — SG-1 / SEC-5).
+Source unique du **compte-rendu de revue** remonté par un reviewer au Tech Lead Homelab en fin de mission. Ce protocole et le schéma [`report-format.schema.yaml`](report-format.schema.yaml) font foi ; fiches d'agent et de stage le **référencent** sans le redupliquer (SG-1 / SEC-5).
 
-> **Le rapport reviewer EST l'instance `retour` / `rapport-verification` du message A2A.** L'enveloppe commune à tous les handoffs (délégation, retour, rapport de vérification) est définie une seule fois dans [`governance-security.md`](governance-security.md) § « Schéma du message A2A » ; ce rapport en est la **forme détaillée pour un reviewer** — il porte le `verdict`, les `points[]` classés (`critical/warning/info`) et les `sensors[]` (équivalents du champ `sensors_resultats` de l'enveloppe). Les deux ne se contredisent pas : l'enveloppe A2A porte le contrat minimal commun, `report-format` détaille le retour reviewer.
-
-> **Sérialisation : YAML.** Rapport et schéma sont en **YAML**. Le rapport conforme est écrit dans `review-<agent>-<stack>.yaml` et déposé en pièce jointe.
-
-Objectif : un retour **minimal, uniforme et déterministe**, pour que le Tech Lead route sans relire de la prose. Lui seul compose la communication en langage naturel vers l'humain.
+- **Position dans le message A2A** : le rapport reviewer est la forme détaillée du `retour` / `rapport-verification`. L'enveloppe commune est définie une seule fois dans [`governance-security.md`](governance-security.md) § « Schéma du message A2A ».
+- **Champs propres au reviewer** : `verdict`, `points[]` classés (`critical/warning/info`), `sensors[]` (équivalent de `sensors_resultats`). Ils ne contredisent pas l'enveloppe.
+- **Sérialisation** : YAML, fichier `review-<agent>-<stack>.yaml` joint au commentaire.
+- **Objectif** : un retour minimal, uniforme et déterministe. Le Tech Lead route sans relire de prose et compose seul la communication vers l'humain.
 
 ## Geste de fin de mission (obligatoire)
 
-En toute dernière action (succès, échec OU blocage), le spécialiste :
+Règles communes (réponse dans le thread, mention valide, `trigger_outcomes`, reprise unique) : [`governance-security.md`](governance-security.md) § « Règle A2A », « Retour A2A ». Spécifique au reviewer, en toute dernière action (succès, échec ou blocage) :
 
-1. écrit le compte-rendu conforme au schéma dans un fichier **YAML** `review-<agent>-<stack>.yaml` (tokens en `kebab-case`, `<agent>` = valeur de l'enum `agent`) ;
-2. le dépose **en pièce jointe** du commentaire ;
-3. publie ce commentaire **en réponse dans le thread** de la mission, avec la **mention valide** du Tech Lead.
+1. Écrire le rapport conforme au schéma dans `review-<agent>-<stack>.yaml` (tokens en `kebab-case`, `<agent>` = valeur de l'enum `agent`).
+2. Le joindre au commentaire de réponse :
 
 ```
 multica issue comment add <issue-id> --parent <comment-id> \
@@ -22,9 +20,7 @@ multica issue comment add <issue-id> --parent <comment-id> \
   --content-file ./trigger.md
 ```
 
-Le corps (`trigger.md`) est réduit au **strict minimum** : la mention valide du Tech Lead + le `verdict` en un mot + « rapport YAML en pièce jointe ». **Aucune prose, aucune liste de points dans le thread** — le détail vit exclusivement dans le YAML attaché.
-
-> Invariant conservé : sans **mention valide** du Leader, le compte-rendu est réputé **non rendu** et le flux s'arrête (voir [`reviewer.md`](reviewer.md) § « Fin de revue »). Après publication, lire `trigger_outcomes` ; statut `blocked` / `coalesced` / `deferred` → corriger la mention. Aucun secret ni `${SNI}` dans le YAML.
+3. Corps (`trigger.md`) : mention valide du Tech Lead + `verdict` en un mot + « rapport YAML en pièce jointe ». Le détail vit dans le YAML, jamais dans le thread.
 
 ### Exemple de rapport YAML
 
@@ -71,5 +67,5 @@ Le contrat complet (types, enums, obligations) est porté par [`report-format.sc
 
 Le Tech Lead lit le `verdict` (aiguillage immédiat), télécharge le YAML attaché, agrège les `points` des différents spécialistes, **passe en revue le tableau `sensors[]`** (chaque sensor déclaré doit y figurer avec son verdict ; un `indisponible` ou un `ecart` est tracé comme écart au Rapport de vérification, jamais lu comme conforme — SG-2), puis :
 
-- **Renvoi via le Tech Lead** : sur `verdict = RENVOI` d'un QA ou d'une revue sécurité, le rapport va au Tech Lead, qui attend l'autre rapport, synthétise, puis transmet **un lot de correctifs** par `id` à l'agent créateur (plus de boucle courte directe QA ↔ spécialiste) — mécanisme décrit par [`quality-assurance.md` Step 5](../stages/production/quality-assurance.md) et [`reviewer.md`](reviewer.md). Le QA ne modifie jamais le livrable ; le Tech Lead est tenu informé (piste d'audit).
-- **Escalade humaine** : sur `arbitrage_requis = true` (ou tout choix structurant), le Tech Lead décide de l'escalade et **présente l'arbitrage à l'humain en s'appuyant sur `arbitrage_motif`** — qu'il reformule au besoin, mais qui doit déjà contenir le choix, les options et le compromis pour être explicable clairement (validation humaine granulaire, invariant). Les spécialistes ne s'adressent jamais directement à l'humain.
+- **Renvoi via le Tech Lead** : sur `verdict = RENVOI` d'un QA ou d'une revue sécurité, le rapport va au Tech Lead. Il attend l'autre rapport, synthétise, puis transmet **un lot de correctifs** par `id` à l'agent créateur. Il n'y a pas de boucle courte directe QA ↔ spécialiste. Mécanisme : [`quality-assurance.md` Step 5](../stages/production/quality-assurance.md) et [`reviewer.md`](reviewer.md). Le QA ne modifie jamais le livrable ; le Tech Lead est tenu informé (piste d'audit).
+- **Escalade humaine** : sur `arbitrage_requis = true` (ou tout choix structurant), le Tech Lead décide de l'escalade et **présente l'arbitrage à l'humain en s'appuyant sur `arbitrage_motif`**. Il peut le reformuler, mais le motif doit déjà contenir le choix, les options et le compromis (validation humaine granulaire, invariant). Les spécialistes ne s'adressent jamais directement à l'humain.

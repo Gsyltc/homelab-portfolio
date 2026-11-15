@@ -35,7 +35,11 @@ Auto-détecter le scope par mots-clés (FR / EN, champ `keywords:` des fichiers 
 
 Rappel : `n8n` / `home-assistant` court-circuitent immédiatement vers leur branche autonome dès que le domaine est **explicite** (la règle absolue n8n s'applique dès qu'un déclencheur n8n **explicite** est présent — voir [`../cadrage/n8n-absolute-rule.md`](../cadrage/n8n-absolute-rule.md)).
 
-Cas **ambigu hors stack** : lorsque la demande est ambiguë (mot « automatisation », ou nommage pouvant viser aussi bien un flux n8n qu'une automatisation Home Assistant) **et** ne concerne pas une stack Docker/Swarm ou Proxmox, le domaine (`n8n` vs `home-assistant`) n'est **pas** tranché par mots-clés à l'auto-détection : il est déterminé plus tard, en Cadrage, par le **triage de domaine** ([`../cadrage/domain-triage.md`](../cadrage/domain-triage.md)) via recherche de correspondance MCP (existence seulement, aucune analyse). Ne pas forcer un scope stack sur une telle demande.
+**Cas ambigu hors stack.** La demande est ambiguë (mot « automatisation », nommage pouvant viser un flux n8n comme une automatisation Home Assistant) **et** ne concerne pas une stack Docker/Swarm ou Proxmox.
+
+- Le domaine (`n8n` vs `home-assistant`) n'est **pas** tranché par mots-clés à l'auto-détection.
+- Il est déterminé en Cadrage par le **triage de domaine** ([`../cadrage/domain-triage.md`](../cadrage/domain-triage.md)) : recherche de correspondance MCP, existence seulement, aucune analyse.
+- Ne pas forcer un scope stack sur une telle demande.
 
 ### Step 3 — Proposer les axes
 

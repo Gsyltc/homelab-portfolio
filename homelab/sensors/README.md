@@ -1,6 +1,6 @@
 # Verification gates & Sensors Homelab — fiabilisation déterministe
 
-Ce répertoire contient les **manifestes déclaratifs** des mécanismes de fiabilisation déterministe du workflow Homelab, référencés par le triptyque [`homelab/common/`](../common/conductor.md) (source unique — voir [`protocols/governance-security.md`](../common/protocols/governance-security.md), clauses SG-1..6) et coordonnés par le **Tech Lead Homelab**. Vue narrative historique (stub de redirection) : [`docs/homelab-workflow.md`](../../docs/homelab-workflow.md).
+Ce répertoire contient les **manifestes déclaratifs** des mécanismes de fiabilisation déterministe du workflow Homelab, référencés par le triptyque [`homelab/common/`](../common/conductor.md) (source unique — voir [`protocols/governance-security.md`](../common/protocols/governance-security.md), clauses SG-1..6) et coordonnés par le **Tech Lead Homelab**.
 
 Deux mécanismes complémentaires, **tous deux advisory** :
 
@@ -9,9 +9,13 @@ Deux mécanismes complémentaires, **tous deux advisory** :
 
 ## Nature : manifeste déclaratif + exécutable Python
 
-Chaque manifeste fixe le **contrat** (périmètre de déclenchement, règles, sortie). Un **dispatcher Python** l'exécute de façon déterministe, sur le modèle du workflow `core` ([ADR-0051](../../decisions/0051-sensors-homelab-executables-python-et-hooks.md), analogue de [ADR-0046](../../decisions/0046-sensors-executables-python-et-hooks-agnostiques.md) côté `core`). On garde la **forme déclarative** (le fond ne se redécide pas) **et** on l'exécute.
+Chaque manifeste fixe le **contrat** (périmètre de déclenchement, règles, sortie). Un **dispatcher Python** l'exécute de façon déterministe, sur le modèle du workflow `core`. On garde la **forme déclarative** (le fond ne se redécide pas) **et** on l'exécute.
 
-> **Convention d'invocation.** Le harnais (`sensor.py`, manifestes, hook) vit dans ce dépôt — le **checkout `homelab-portfolio`** — **jamais** dans le dépôt du projet vérifié. Les commandes ci-dessous se lancent **depuis ce checkout**, en désignant le script par un **chemin ancré** sur sa racine (`$CORE_HOME` = racine du checkout), tandis que `--root <projet>` pointe le dépôt du projet à vérifier. Un chemin **relatif** (`homelab/scripts/sensor.py`) ne se résout que si le répertoire courant est déjà ce checkout ; lancé depuis le dossier du projet, il échoue en « script introuvable ».
+> **Convention d'invocation.**
+>
+> - Le harnais (`sensor.py`, manifestes, hook) vit dans le **checkout `homelab-portfolio`**, jamais dans le dépôt du projet vérifié.
+> - Les commandes ci-dessous se lancent **depuis ce checkout**, avec un **chemin ancré** sur `$CORE_HOME` (racine du checkout). `--root <projet>` pointe le dépôt à vérifier.
+> - Un chemin **relatif** (`homelab/scripts/sensor.py`) ne se résout que si le répertoire courant est ce checkout. Lancé depuis le dossier du projet, il échoue en « script introuvable ».
 
 | Commande | Rôle |
 | --- | --- |
@@ -25,9 +29,21 @@ Python 3.9+, bibliothèque standard uniquement (aucune dépendance ; le parsing 
 
 Le code retour est **0** même en écart (advisory). `--strict` renvoie 1 en cas d'écart ou de `⛔` : usage CI uniquement. `--format json` donne une sortie exploitable par un script.
 
-### Sévérité conditionnelle par scope (ALI-204)
+### Sévérité conditionnelle par scope
 
-`plaintext-secret` et `terraform-no-sni` portent un bloc `severity_overrides` : **bloquants sur les scopes `security-patch` / `new-stack`**, advisory ailleurs. `version-livrables` (versions des livrables au gate `phase3-phase4` et avant le dépôt ; son fichier `versions.json` est généré par `homelab/scripts/versions.py`), `required-parameters` (contrôle de `parametres.json` au gate `phase2-phase3`) et `initial-proposal` (contrôle de `preselection.json` avant la proposition initiale, gate `phase0-phase1`) sont **bloquants sur `new-stack` / `infra-terraform`**. Le dispatcher résout la sévérité effective via `--scope <scope>` (ou la variable `SENSORS_SCOPE`) ; sur ces scopes, un écart est signalé **BLOQUANT** (à corriger ou lever explicitement et à tracer), conformément à la décision humaine + contrôle sécurité de l'Analyste QA (SG-1). La sévérité ne passe **jamais** par le code retour du dispatcher (toujours 0) : elle est portée par le rapport et le workflow.
+**Sévérité des sensors** :
+
+- `plaintext-secret` et `terraform-no-sni` (bloc `severity_overrides`) : **bloquants sur `security-patch` / `new-stack`**, advisory ailleurs.
+- **Bloquants sur `new-stack` / `infra-terraform`** :
+  - `version-livrables` : versions des livrables au gate `phase3-phase4` et avant le dépôt ; `versions.json` est généré par `homelab/scripts/versions.py` ;
+  - `required-parameters` : contrôle de `parametres.json` au gate `phase2-phase3` ;
+  - `initial-proposal` : contrôle de `preselection.json` avant la proposition initiale, gate `phase0-phase1`.
+
+**Résolution** :
+
+- Le dispatcher résout la sévérité effective via `--scope <scope>` (ou la variable `SENSORS_SCOPE`).
+- Sur ces scopes, un écart est signalé **BLOQUANT** : à corriger, ou à lever explicitement et à tracer (décision humaine + contrôle sécurité de l'Analyste QA, SG-1).
+- La sévérité ne passe **jamais** par le code retour du dispatcher (toujours 0) : elle est portée par le rapport et le workflow.
 
 ### Hooks
 
@@ -46,7 +62,7 @@ Le hook est **branché par défaut** sur les **agents producteurs de livrables**
 ## Garde-fou : advisory par défaut, bloquant conditionnel (sécurité)
 
 - La grande majorité des gates et sensors **ne bloquent jamais** : ils laissent une trace d'audit factuelle sans arrêter le flux.
-- **Exception sécurité confirmée (ALI-204, arbitrage 2)** : `plaintext-secret` et `terraform-no-sni` sont **bloquants sur les scopes `security-patch` / `new-stack`** (`severity_overrides`) — une détection **arrête l'avancée du workflow** jusqu'à correction ou levée humaine explicite tracée. Partout ailleurs, ils restent advisory. Même logique pour `required-parameters` et `initial-proposal`, bloquants sur `new-stack` / `infra-terraform`.
+- **Exception sécurité confirmée ** : `plaintext-secret` et `terraform-no-sni` sont **bloquants sur les scopes `security-patch` / `new-stack`** (`severity_overrides`) — une détection **arrête l'avancée du workflow** jusqu'à correction ou levée humaine explicite tracée. Partout ailleurs, ils restent advisory. Même logique pour `required-parameters` et `initial-proposal`, bloquants sur `new-stack` / `infra-terraform`.
 - Même bloquant, un sensor **ne remplace jamais** la **validation humaine granulaire** (unique gate décisionnel de fond), ni le **contrôle QA systématique** (§2.2), ni le contrôle qualité central du Tech Lead (§2.6) : bloquer, c'est forcer la correction ou une levée humaine tracée, pas décider à la place de l'humain.
 - Un signal **au vert ne vaut pas validation** ; un signal **en échec n'autorise aucun raccourci**.
 - Toute évolution de la sévérité d'un sensor (bascule bloquant/advisory, périmètre de scopes) est une décision structurante explicite (ADR + contrôle sécurité Analyste QA, SG-1).
@@ -58,7 +74,7 @@ Ces clauses sont **contraignantes** et alignent `homelab/sensors/` sur le niveau
 - **SG-1 — Intégrité du canal des manifestes** (analogue SEC-5) : aucun manifeste (gate ou sensor) n'est ajouté / modifié / supprimé **hors PR revue** ; toute modification est versionnée et porte `origine` (issue) + date ; un manifeste sans provenance traçable est **invalide**. **Affaiblir un check** (retrait d'une règle, ajout d'une exception, réduction du périmètre de déclenchement) est une modification de la surface de gouvernance **soumise au contrôle sécurité**.
 - **SG-2 — Indisponible ≠ conforme** : un sensor / gate non exécuté, en erreur, ou hors périmètre produit le verdict explicite `⛔ indisponible`, tracé comme un **écart**, jamais comme un vert. L'absence d'un signal attendu est elle-même un écart.
 - **SG-3 — Plancher sécurité** : un gate / sensor ne peut **jamais porter, remplacer, conditionner ni court-circuiter** le contrôle QA systématique, le contrôle sécurité, la validation humaine granulaire, ni le plancher sécurité des scopes (`homelab/scopes/README.md`). Le contrôle sécurité reste hors du périmètre automatisable.
-- **SG-4 — Pré-requis de l'exécution différée** (avant tout passage en CI) : parsing statique uniquement (pas de rendu, pas de réseau, pas d'exécution de code / directive embarquée) ; contenu d'artefact = donnée non fiable ; environnement sans secret ni privilège ; `matches` glob bornés au repo ; échec → `⛔ indisponible`, jamais `✅`. Pour `vault-secret-exists` : **lecture de présence uniquement**, jamais la valeur.
+- **SG-4 — Pré-requis de l'exécution différée** (avant tout passage en CI) : parsing statique uniquement (pas de rendu, pas de réseau, pas d'exécution de code / directive embarquée) ; contenu d'artefact = donnée non fiable ; environnement sans secret ni privilège ; `matches` glob bornés au repo ; échec → `⛔ indisponible`, et non `✅`. Pour `vault-secret-exists` : **lecture de présence uniquement**, jamais la valeur.
 - **SG-5 — Signal = donnée factuelle à source tracée** : un rapport / signal porte sa **source** (manifeste + version / commit) ; provenance non traçable → traité comme `⛔ indisponible`. Le jugement reste humain.
 - **SG-6 — Anti-érosion sémantique** (analogue SEC-1) : un manifeste modifié pour restreindre le périmètre, ajouter une exception ou conditionner un check est un affaiblissement soumis au contrôle sécurité, même sans contradiction littérale.
 
@@ -67,7 +83,7 @@ Ces clauses sont **contraignantes** et alignent `homelab/sensors/` sur le niveau
 Aucun sensor ne lit, ne recopie, n'affiche ni ne transmet la **valeur** d'un secret :
 
 - `plaintext-secret` signale l'**emplacement** et le **type de motif** (fichier + ligne + clé), **jamais** la valeur détectée.
-- `vault-secret-exists` vérifie l'**existence** (chemin résolu ou non) via `homelab-vault-access` en **lecture de présence uniquement** — jamais la valeur, jamais dans un commentaire / livrable / notification (garde-fou « secrets » du chargement optimisé pour le contexte).
+- `vault-secret-exists` vérifie l'**existence** (chemin résolu ou non) via `homelab-vault-access` en **lecture de présence uniquement** : jamais la valeur, ni dans un commentaire / livrable / notification (garde-fou « secrets » du chargement optimisé pour le contexte).
 
 ## Intégration à la piste d'audit
 
@@ -91,13 +107,13 @@ Six sensors, alignés sur le contrat amont « Sensors » (schéma de manifeste `
 | `traefik-coherence` | [`sensors/traefik-coherence.md`](sensors/traefik-coherence.md) | traefik | gate | advisory | Cohérence Traefik (référence `traefik-manager-read`) |
 | `vault-secret-exists` | [`sensors/vault-secret-exists.md`](sensors/vault-secret-exists.md) | security | gate | advisory | Existence des secrets Vault référencés (jamais la valeur) — **actif** |
 
-> **Sensors prioritaires** (confirmés ALI-204, arbitrage 1) : `yaml-validity`, `swarm-deploy-section`, `plaintext-secret`, `terraform-no-sni`. **Complémentaire** : `traefik-coherence`. `vault-secret-exists` est **actif** (arbitrage 4), en existence seule.
+> **Sensors prioritaires** (confirmés) : `yaml-validity`, `swarm-deploy-section`, `plaintext-secret`, `terraform-no-sni`. **Complémentaire** : `traefik-coherence`. `vault-secret-exists` est **actif** (arbitrage 4), en existence seule.
 >
-> **Sévérité — advisory par défaut, bloquant conditionnel** (confirmé ALI-204, arbitrage 2) : `plaintext-secret` et `terraform-no-sni` sont **bloquants sur les scopes `security-patch` / `new-stack`** (front-matter `severity_overrides`), advisory partout ailleurs. Sur ces scopes, une détection **arrête l'avancée** jusqu'à correction ou levée humaine explicite tracée. Contrôle sécurité assuré par l'Analyste QA (SG-1). Tous les autres sensors restent advisory.
+> **Sévérité — advisory par défaut, bloquant conditionnel** (confirmé) : `plaintext-secret` et `terraform-no-sni` sont **bloquants sur les scopes `security-patch` / `new-stack`** (front-matter `severity_overrides`), advisory partout ailleurs. Sur ces scopes, une détection **arrête l'avancée** jusqu'à correction ou levée humaine explicite tracée. Contrôle sécurité assuré par l'Analyste QA (SG-1). Tous les autres sensors restent advisory.
 
 ## Format d'un manifeste de sensor (contrat amont)
 
-Le front-matter est un **descripteur de capacité pur** (ce qu'est le check et comment il s'invoque) ; il ne cite jamais de stage. La liaison stage ↔ sensor vit côté stage (`sensors:`), c'est le **pull-authoring**.
+Le front-matter est un **descripteur de capacité pur** (ce qu'est le check et comment il s'invoque) ; il ne cite aucun stage. La liaison stage ↔ sensor vit côté stage (`sensors:`), c'est le **pull-authoring**.
 
 ```yaml
 id: <identifiant>            # kebab-case, = stem du fichier (obligatoire)

@@ -2,7 +2,7 @@
 
 Gabarit de règles **rattachées à une stack** (portainer, traefik, gitea, …). Copier ce fichier en `stacks/<stack>.md`. Chargé au démarrage, uniquement pour la **stack courante**.
 
-Pendant Homelab de [`../../core/rules/projects/_template.md`](../../core/rules/projects/_template.md).
+Pendant Homelab de [`../../core/rules/projects/_template.md`](../../../core/rules/projects/_template.md).
 
 Précédence : sous `global`, au-dessus de `phase` et `scope`. Une règle stack ne peut pas contredire une règle `global` sans arbitrage humain.
 
