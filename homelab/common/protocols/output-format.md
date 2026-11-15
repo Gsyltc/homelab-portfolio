@@ -69,7 +69,32 @@ Les sept points de [`intent-scope-approval`](../stages/ideation/intent-scope-app
 
 Les blocs de [`required-parameters-collection`](../stages/cadrage/required-parameters-collection.md) (OIDC, stockage, Valkey, clés Vault, mode d'exécution) sont des questions D<n> avec la valeur déduite comme proposition par défaut et sa source. Les clés Vault sont listées par nom seulement, avec leur `besoin`. Les actions humaines hors workflow (création des clés, secrets, dossiers NFS) sont rappelées en fin de message.
 
-## 5. Ce que ce protocole ne change pas
+## 5. Notification courte à chaque gate humain
+
+**Source unique** de la notification qui accompagne toute sollicitation de l'humain dans le workflow `homelab`. Elle complète la mention humaine (elle ne la remplace pas) et précise, pour le Homelab, le message générique de l'invariant 7 de [`governance-security.md`](governance-security.md).
+
+- **Quand** : à chaque message du Tech Lead qui attend une réponse de l'humain (gate `light`, `granular` ou `explicit`, arbitrage, blocage `blocked`). **Une notification par message de gate**, jamais une par décision, jamais sur un simple compte rendu.
+- **Qui** : le Tech Lead uniquement. Il délègue l'envoi à l'**Agent de notifications** par un handoff A2A pur (mention + fichier YAML `delegation-notification-<stack>.yaml`). Les autres agents n'appellent jamais l'Agent de notifications.
+- **Quand exactement** : après la publication du commentaire de gate, pour que la notification renvoie vers un message déjà lisible.
+- **Message** : une phrase, rédigée par le Tech Lead et transmise telle quelle dans le YAML (champ `message`). Forme : `<Prénom>, merci de <action> de la phase de <phase> pour la stack <stack>`.
+- **Titre** : `<stack> : phase de <phase>`. **Priorité** : `high`. Lien vers l'issue si l'outil le permet.
+- **Contenu interdit** : aucune valeur, aucune décision, aucun secret, aucun détail du livrable. Le message dit quoi faire et où, rien de plus.
+- `<Prénom>` : celui de l'humain mentionné dans le gate (membre résolu par `multica workspace member list --output json`). Sans prénom connu, omettre `<Prénom>, ` plutôt que de l'inventer.
+
+| Gate | `<phase>` | `<action>` |
+| --- | --- | --- |
+| Proposition initiale (`intent-scope-approval`) | idéation | valider l'intention et le périmètre |
+| Paramètres (`required-parameters-collection`) | cadrage | valider les informations |
+| Synthèse QA + sécurité (`security-delegation`) | production | arbitrer les écarts relevés |
+| Validation granulaire (`human-granular-validation`) | validation | valider les livrables |
+| Déploiement Kestra / dépôt | validation | confirmer le dépôt et le déploiement |
+| Blocage (`blocked`) | phase courante | débloquer la situation |
+
+Exemple : `Sylvain, merci de valider les informations de la phase de cadrage pour la stack sync-in`.
+
+Le YAML porte `objet` (« notification gate humain »), `perimetre` (`prenom`, `phase`, `stack`, `issue`), `criteres_acceptation` (envoi HTTP 2xx, aucun secret) et le `message` exact. L'Agent de notifications envoie, vérifie le code HTTP, confirme sur l'issue sans doublon (une seule notification par gate) puis rend la main au Tech Lead (retour A2A, aucune section humaine).
+
+## 6. Ce que ce protocole ne change pas
 
 - Validation humaine granulaire, Keep / Modify / Redo, gates de phase, contrôle sécurité, mention humaine sur blocage.
 - Clôture A2A : un commentaire destiné à l'humain se termine par la mention de l'humain ; un handoff agent se termine par la mention de l'agent.

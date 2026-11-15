@@ -9,6 +9,9 @@ ce fichier en donne la lecture chronologique côté produit.
 ## [Non publié]
 
 ### Changed
+- **Notification courte à chaque gate humain.** `output-format.md` § 5 : le Tech Lead demande à l'Agent de
+  notifications (handoff A2A YAML) une phrase `<Prénom>, merci de <action> de la phase de <phase> pour la stack
+  <stack>`, après le commentaire de gate, sans valeur ni secret. Table des gates et phrases associées.
 - **QA et revue sécurité en parallèle, synthèse obligatoire.** Les deux revues portent sur la même version dès que
   tous les livrables sont livrés et rendent leur rapport au Tech Lead seul (fin de la boucle courte QA ↔ spécialiste).
   Le Tech Lead attend les deux rapports, synthétise les écarts, présente un seul message à l'humain si besoin, puis

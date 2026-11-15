@@ -18,7 +18,7 @@ Les acteurs sont désignés par leur **fonction**. La délégation A2A résout l
 | **Spécialiste Terraform** | Crée / modifie les `.tf` / `.tfvars` (skill `configuration-applications`). **N'exécute JAMAIS** `terraform init/apply/destroy` ; **jamais `${SNI}`**. Rend compte au Tech Lead ; **sur correction d'un `RENVOI` QA, mentionne obligatoirement l'Analyste QA en retour**. |
 | **Expert n8n** | **Toute** tâche n8n via MCP. **Règle absolue** : dès que « n8n » apparaît, délégation immédiate, pas même l'analyse par le Tech Lead. Applique après feu vert Tech Lead + validation humaine explicite. |
 | **Expert Home Assistant** | **Toute** tâche Home Assistant via MCP officiel. Séquence obligatoire : proposition → vérification Tech Lead → validation humaine explicite → modification réelle. |
-| **Agent de notifications** | Notification ntfy, déclenchée **uniquement par le Tech Lead** ; les spécialistes ne l'appellent jamais directement. Agent partagé (source unique [`core/agents/notification-agent.md`](../../../core/agents/notification-agent.md)). |
+| **Agent de notifications** | Notification ntfy, déclenchée **uniquement par le Tech Lead** ; les spécialistes ne l'appellent jamais directement. Agent partagé (source unique [`core/agents/notification-agent.md`](../../../core/agents/notification-agent.md)). **Une notification courte à chaque gate humain**, au format de [`output-format.md`](output-format.md) § 5 (prénom, phase, stack). |
 
 ## Règle A2A
 
