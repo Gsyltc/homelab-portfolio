@@ -29,7 +29,7 @@ Valider *qu'on part dans la bonne direction* et confirmer le scope, avant d'enga
 
 ### Step 1 — Présenter la proposition initiale
 
-C'est la **première sollicitation de l'humain** : tout ce qui précède s'exécute sans question (sauf intention ambiguë, `intent-capture`). Un seul message, au format suivant, chaque point numéroté et validé séparément (Keep / Modify / Redo) :
+C'est la **première sollicitation de l'humain** : tout ce qui précède s'exécute sans question (sauf intention ambiguë, `intent-capture`). Le message suit [`output-format`](../../protocols/output-format.md) (sections `Résumé`, `Sensors`, `Décisions à prendre`) ; chaque point ci-dessous est une décision avec sa **proposition par défaut** (résultat de la pré-sélection). Un seul message, au format suivant, chaque point numéroté et validé séparément (Keep / Modify / Redo) :
 
 ```
 1. Intention : <reformulation>

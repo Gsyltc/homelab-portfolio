@@ -177,6 +177,7 @@ Le verrou « un seul traitement par stack » se lit **par artefact / livrable** 
 ## OBLIGATOIRE : langue, format et sécurité
 
 - Rédiger **tous les documents en français** (langue de l'humain par défaut).
+- **Tout message destiné à l'humain** (proposition, demande de paramètres, gate, clôture) suit [`protocols/output-format.md`](protocols/output-format.md) : sections fixes, une fiche par question, **proposition par défaut** pour chaque question quand elle est possible.
 - Conserver les **commentaires `#`** des gabarits docker-compose et les commentaires utiles Terraform.
 - Générer les diagrammes **en code** (Mermaid) et **valider leur syntaxe** avant écriture.
 - **Aucun secret** (mot de passe, token, clé API, secret Vault) dans les livrables, commentaires ou notifications.
@@ -278,6 +279,7 @@ Récapitulatif vérifiable à chaque tour (pas une règle neuve — les sources 
 - [`protocols/stage-protocol.md`](protocols/stage-protocol.md) — cycle générique d'exécution d'un stage.
 - [`protocols/governance-security.md`](protocols/governance-security.md) — gouvernance A2A, contrôle sécurité, invariants, garde-fous, concurrence par stack.
 - [`protocols/reviewer.md`](protocols/reviewer.md) — protocole de revue (Analyste QA + sécurité Homelab).
+- [`protocols/output-format.md`](protocols/output-format.md) — format unique des messages destinés à l'humain (4 sections, une fiche par décision avec proposition par défaut).
 - [`protocols/report-format.md`](protocols/report-format.md) — format unique du compte-rendu A2A (YAML en pièce jointe + mention valide), schéma [`protocols/report-format.schema.yaml`](protocols/report-format.schema.yaml).
 - [`protocols/scopes-and-axes.md`](protocols/scopes-and-axes.md) — scopes, axes Depth / vérification, matrice stage × scope.
 - [`stages/`](stages/) — fiches de stage des 5 phases.

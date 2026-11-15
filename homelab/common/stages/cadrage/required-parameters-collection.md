@@ -43,7 +43,7 @@ Le Tech Lead vérifie que tous les paramètres sont renseignés ; **il ne génè
 | Activer Valkey `${valkey_enabled}` | Déductible | `true`, `false` — le Homelab possède **déjà** un Valkey/Redis mutualisé : ne jamais recréer ce service, s'y connecter (règle portée par la skill `docker-composer`). |
 | Service base de données `${database_service}` | Optionnel | `postgres`, `mysql`, `mariadb`, `mongodb`, `none` — validé au gate léger ([`database-preselection`](../initialisation/database-preselection.md)), repris sans redemander. |
 
-**Un seul message de confirmation** : le Tech Lead propose en bloc les valeurs par défaut déduites restantes (`${storage}`, `${valkey_enabled}`, `${vault}` et, si `oidc`, `${oidc_params}`) ainsi que le **mode d'exécution** de la Production (options et défaut : [`autonomy-mode`](../production/autonomy-mode.md)), et attend la confirmation ou correction de l'humain.
+**Un seul message de confirmation**, au format [`output-format`](../../protocols/output-format.md) (une décision par bloc, valeur déduite comme **proposition par défaut**, toute valeur manquante connue incluse dès ce message) : le Tech Lead propose en bloc les valeurs par défaut déduites restantes (`${storage}`, `${valkey_enabled}`, `${vault}` et, si `oidc`, `${oidc_params}`) ainsi que le **mode d'exécution** de la Production (options et défaut : [`autonomy-mode`](../production/autonomy-mode.md)), et attend la confirmation ou correction de l'humain.
 
 La création des clés Vault proposées reste une action humaine (agent Vault dédié à créer plus tard) : le message le signale.
 

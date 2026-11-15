@@ -9,6 +9,10 @@ ce fichier en donne la lecture chronologique côté produit.
 ## [Non publié]
 
 ### Added
+- **Protocole `homelab/common/protocols/output-format.md`.** Format unique des messages Homelab destinés à l'humain : quatre
+  sections (`Résumé`, `Sensors`, `Points bloquants`, `Décisions à prendre`), une fiche par question avec **proposition par
+  défaut**, alternatives et impact. Référencé par le conducteur, la gouvernance A2A, `intent-scope-approval` et
+  `required-parameters-collection`.
 - **Sensor `initial-proposal`.** Vérifie, avant la proposition initiale et au gate `phase0-phase1`, que
   `preselection.json` (écrit par les quatre stages de pré-sélection d'Initialisation) est complet : cibles Docker /
   Proxmox avec variantes testées, auth et base recommandées avec source, statut Kestra, aucune valeur « non
