@@ -18,7 +18,7 @@ phase: <initialisation|ideation|cadrage|production|validation>
 execution: <ALWAYS|CONDITIONAL>        # le stage s'exécute toujours, ou sous condition
 condition: "<phrase décrivant la condition>"   # ex. "Demande n8n détectée" ; "Always executes"
 lead_agent: <fonction|null>            # fonction responsable ou null (Tech Lead / coordinateur)
-support_agents: [<fonction>, ...]      # fonctions en appui (peut être vide)
+support_agents: [<fonction>, ...]      # fonctions en appui (champ obligatoire, `[]` si vide)
 mode: <inline|subagent|pipeline|mob>   # topologie de communication (voir ci-dessous)
 for_each: <artefact>                   # (optionnel) itération une-fois-par-instance ; omis ⇒ exécution unique
 summary_confirmation: <required|optional|none>   # résumé confirmé avant d'avancer
@@ -29,7 +29,7 @@ human_gate: <none|light|granular|explicit>       # gate humain applicable au sta
 produces: [<artefact>, ...]            # artefacts produits en sortie (arêtes avant)
 consumes: [{artifact: <nom>, required: <true|false>}, ...]   # artefacts consommés en entrée (arêtes arrière)
 requires_stage: [<slug>, ...]          # stages pré-requis (peut être vide)
-sensors: [<id-de-sensor>, ...]         # sensors importés par id nu (voir homelab/sensors/)
+sensors: [<id-de-sensor>, ...]         # sensors importés par id nu (voir homelab/sensors/) ; champ obligatoire, `[]` si vide
 scopes: [<scope>, ...]                 # scopes où le stage est actif (voir scopes-and-axes.md)
 inputs: "<description libre des entrées>"
 outputs: "<description libre des sorties>"

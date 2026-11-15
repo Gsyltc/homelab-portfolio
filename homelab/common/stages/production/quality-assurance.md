@@ -105,7 +105,7 @@ Lorsque le(s) livrable(s) sont `OK`, l'Analyste QA **rend compte au Tech Lead** 
 ## Sensors
 
 Outputs: rapport(s) QA (compose et / ou Terraform) + cohérence Traefik + verdict Terraform. Gate humain granulaire **selon le mode d'exécution** ([`autonomy-mode`](autonomy-mode.md)) : gated → validation à ce stage ; autonome → regroupée au point de synchronisation.
-Imports: `swarm-deploy-section` (gate) et `traefik-coherence` (gate), **lancés par la QA** (propriétaire). `plaintext-secret` (write — **bloquant sur `security-patch` / `new-stack`**) et `terraform-no-sni` (write — **bloquant sur `security-patch` / `new-stack`**, ALI-204) sont **repris** du retour de l'auteur (`origine: repris`) si le `sha256` du livrable est identique, relancés sinon. Règle : [`governance-security.md`](../../protocols/governance-security.md) § « Un contrôle, un propriétaire ».
+Imports: `swarm-deploy-section` (gate) et `traefik-coherence` (gate), **lancés par la QA** (propriétaire). `plaintext-secret` (write — **bloquant sur `security-patch` / `new-stack`**) et `terraform-no-sni` (write — **bloquant sur `security-patch` / `new-stack`**) sont **repris** du retour de l'auteur (`origine: repris`) si le `sha256` du livrable est identique, relancés sinon. Règle : [`governance-security.md`](../../protocols/governance-security.md) § « Un contrôle, un propriétaire ».
 Review artifact: `rapport-qa.md` porte la section `## Review` (revue adversariale de l'Analyste QA, plancher SG-3).
 
 ## Learn

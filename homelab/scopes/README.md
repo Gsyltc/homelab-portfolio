@@ -84,7 +84,7 @@ Rappel des invariants du workflow Homelab — **aucun scope ne les désactive** 
   (verrou `active_step`) — garde-fous absolus, insensibles au scope.
 - Sur `security-patch` / `new-stack` : `depth` ≥ `standard` et `verification` ≥ `renforcé` ne
   peuvent jamais être abaissés par override. Sur ces deux scopes, les sensors sécurité
-  `plaintext-secret` et `terraform-no-sni` sont **bloquants** (décision ALI-204 + contrôle
+  `plaintext-secret` et `terraform-no-sni` sont **bloquants** (décision humaine + contrôle
   sécurité Analyste QA — voir [`../sensors/README.md`](../sensors/README.md)) : une détection
   arrête l'avancée jusqu'à correction ou levée humaine explicite tracée.
 - **Auto-détection = plancher** : la confirmation humaine peut *monter* le contrôle, jamais le

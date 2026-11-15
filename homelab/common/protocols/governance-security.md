@@ -90,7 +90,7 @@ type: delegation | retour | rapport-verification
 de: <nom de la fonction émettrice>
 vers: <nom de la fonction destinataire ou 'humain'>
 stage: <slug du stage concerné>
-core_home: "<chemin du checkout homelab-portfolio>"   # délégation : racine du harnais ($CORE_HOME), propagée (HOM-291)
+core_home: "<chemin du checkout homelab-portfolio>"   # délégation : racine du harnais ($CORE_HOME)
 fiches_a_recharger: [<fiche de stage / protocole>, ...] # délégation : chargement paresseux ciblé par le délégataire
 objet: <phrase courte — ce qui est demandé ou livré>
 perimetre: [<élément de périmètre>, ...]
@@ -109,7 +109,7 @@ reference_audit: <id de commentaire ou d'artefact>
 - **`delegation`** : `objet`, `perimetre`, `criteres_acceptation`, `sensors_a_executer`, `core_home`, `fiches_a_recharger` renseignés (et `points_corriges` pour un re-contrôle partiel) ; `resultat` et `sensors_resultats` omis.
 - **`retour`** : `resultat` + `sensors_resultats` renseignés ; `artefacts` liste les livrables produits.
 - **`rapport-verification`** : `resultat.statut` + `sensors_resultats` structurés. Pour un **reviewer**, l'instance détaillée de ce retour est le rapport `review-<agent>-<stack>.yaml` conforme à [`report-format.schema.yaml`](report-format.schema.yaml) (points `critical/warning/info` + `sensors[]`) : [`report-format.md`](report-format.md) détaille ce contrat, il ne le contredit pas.
-- **Sensors (garde-fous SG-1..6 reconduits, non contournables)** : le `verdict` est celui rendu par `sensor.py` (`python3 "$CORE_HOME/homelab/scripts/sensor.py" …`), **jamais réinterprété** ; `indisponible ≠ conforme` ; un sensor présent dans `sensors_a_executer` mais **absent de `sensors_resultats` est un écart** (silence interdit) ; le message A2A reste **advisory** — il ne remplace ni la validation humaine granulaire ni le contrôle sécurité systématique (Analyste QA + Architecte de sécurité Homelab). L'exception bloquante `plaintext-secret` / `terraform-no-sni` sur `security-patch` / `new-stack` (ALI-204) demeure.
+- **Sensors (garde-fous SG-1..6 reconduits, non contournables)** : le `verdict` est celui rendu par `sensor.py` (`python3 "$CORE_HOME/homelab/scripts/sensor.py" …`), **jamais réinterprété** ; `indisponible ≠ conforme` ; un sensor présent dans `sensors_a_executer` mais **absent de `sensors_resultats` est un écart** (silence interdit) ; le message A2A reste **advisory** — il ne remplace ni la validation humaine granulaire ni le contrôle sécurité systématique (Analyste QA + Architecte de sécurité Homelab). L'exception bloquante `plaintext-secret` / `terraform-no-sni` sur `security-patch` / `new-stack` demeure.
 - **Version d'un livrable = son `sha256`.** Chaque livrable `produit` porte l'empreinte `sha256` du fichier livré, et chaque verdict de sensor porte le `sha256` du livrable qu'il a contrôlé. Un verdict n'est valable que pour **ce** `sha256`.
 - Champs non pertinents omis. **jamais `${SNI}`** dans un artefact Terraform référencé. La langue des valeurs libres suit celle de l'humain (français par défaut).
 - **Règle de validité YAML (obligatoire)** : en notation *flow* (`[...]` / `{...}`), **mettre entre guillemets** toute valeur contenant `${...}`, `{`, `}`, `:` suivi d'un espace, ou une **virgule** (ex. `chemin: "${ROOT_DIRECTORY}/..."`, `detail: "2 écarts, 1 indisponible"`). Un doute ⇒ guillemeter. Le fichier reste **YAML valide** de bout en bout (piste d'audit lisible).

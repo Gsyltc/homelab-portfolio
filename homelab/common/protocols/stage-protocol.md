@@ -81,7 +81,7 @@ Règles non contournables :
 - **Chaque sensor déclaré fait l'objet d'une entrée distincte dans `sensors_resultats`** — aucun regroupement ni omission (SG-2 : silence = écart).
 - **`⛔ indisponible`** s'applique lorsque le script ne peut pas s'exécuter (Python absent, erreur, périmètre vide — voir [`../../sensors/README.md`](../../sensors/README.md)) : l'agent reprend le motif donné par le script et le reporte avec ce verdict. Un sensor non exécuté est toujours un verdict `indisponible`, **jamais un silence** ni une vérification en prose.
 - **`⚠️ écart`** : l'agent décrit l'écart en une ligne et continue (advisory) ; il **ne devance pas** la décision humaine mais la documente pour la validation humaine granulaire (temps 6).
-- **Advisory par défaut** — n'autorise aucun raccourci, ne vaut pas validation (SG-1..6). **Exception** : `plaintext-secret` / `terraform-no-sni` sont **bloquants sur `security-patch` / `new-stack`** (ALI-204) — une détection arrête l'avancée jusqu'à correction ou levée humaine explicite tracée.
+- **Advisory par défaut** — n'autorise aucun raccourci, ne vaut pas validation (SG-1..6). **Exception** : `plaintext-secret` / `terraform-no-sni` sont **bloquants sur `security-patch` / `new-stack`** — une détection arrête l'avancée jusqu'à correction ou levée humaine explicite tracée.
 - Les sensors `fire_on: write` (ex. `yaml-validity`, `plaintext-secret`, `terraform-no-sni`) sont invoqués **à chaque écriture** de l'artefact concerné, pas seulement en fin de stage.
 
 Ce rapport par sensor est **repris en synthèse** dans `sensors_resultats` du message A2A `retour` à la fin de mission ([`governance-security.md`](governance-security.md) § « Schéma du message A2A ») :

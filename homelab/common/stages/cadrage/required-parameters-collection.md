@@ -87,7 +87,7 @@ La création des clés Vault proposées reste une action humaine (agent Vault d�
 
 **En cas de doute** → l'option est présentée à l'humain au gate léger (point 5 de [`intent-scope-approval`](../ideation/intent-scope-approval.md)). Le doute ne bascule **jamais** vers un choix implicite.
 
-> **SAML / LDAP non encore supportés.** Ces deux types étaient historiquement listés dans l'ordre de sélection mais ne sont pas implémentés côté middlewares Traefik ni côté template Terraform. Ils ont été **retirés** de la règle de sélection (voir [ADR-0024](../../../../decisions/0024-retrait-temporaire-saml-ldap-authentification.md)). Si une stack requiert SAML ou LDAP → **demander à l'humain** ; leur ré-intégration fera l'objet des actions tracées dans l'ADR-0024.
+> **SAML / LDAP non supportés.** Ces deux types ne sont implémentés ni côté middlewares Traefik ni côté template Terraform, et sont exclus de la règle de sélection. Si une stack requiert SAML ou LDAP : **demander à l'humain**.
 
 ### Step 3 — Paramètres OIDC (si `${auth_type}` = `oidc`)
 

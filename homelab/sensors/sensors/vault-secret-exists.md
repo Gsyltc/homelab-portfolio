@@ -12,7 +12,7 @@ origine: ALI-204
 
 # Sensor `vault-secret-exists` — existence des secrets Vault référencés *(actif, sécurité)*
 
-Check déterministe déclenché **au gate de phase** (`fire_on: gate`) : pour chaque **référence de secret Vault** présente dans le livrable, vérifie que le secret **existe** dans Vault. **Il ne lit, ne recopie et n'affiche JAMAIS la valeur du secret** — uniquement sa **présence** (chemin résolu ou non). **Advisory** (`default_severity: advisory`). **Activé** par décision humaine (ALI-204, arbitrage 4 « oui »), en **lecture de présence uniquement**.
+Check déterministe déclenché **au gate de phase** (`fire_on: gate`) : pour chaque **référence de secret Vault** présente dans le livrable, vérifie que le secret **existe** dans Vault. **Il ne lit, ne recopie et n'affiche JAMAIS la valeur du secret** — uniquement sa **présence** (chemin résolu ou non). **Advisory** (`default_severity: advisory`). **Activé** par décision humaine (arbitrage humain), en **lecture de présence uniquement**.
 
 ## Contrat de vérification (`checks`)
 

@@ -4,7 +4,7 @@ kind: deterministic
 command: "python3 homelab/scripts/sensor.py fire plaintext-secret"
 default_severity: advisory
 severity_overrides:
-  # décision humaine (ALI-204, arbitrage 2 « Oui ») + contrôle sécurité Analyste QA : bloquant sur les scopes sécuritaires
+  # décision humaine (arbitrage humain) + contrôle sécurité Analyste QA : bloquant sur les scopes sécuritaires
   - scopes: [security-patch, new-stack]
     severity: blocking
 description: "Détecte des motifs de secret en clair (mot de passe / token / clé API) dans les livrables compose et Terraform."
@@ -16,7 +16,7 @@ origine: ALI-204
 
 # Sensor `plaintext-secret` — détection de secret en clair *(prioritaire, sécurité)*
 
-Check déterministe déclenché **à l'écriture** (`fire_on: write`) : détecte des **motifs de secret en clair** (mot de passe, token, clé API) dans un livrable compose ou Terraform. **Advisory par défaut**, **bloquant sur `security-patch` / `new-stack`** (décision humaine ALI-204, arbitrage 2 « Oui » + contrôle sécurité de l'Analyste QA, cf. `severity_overrides` ; SG-1). Recoupe le garde-fou absolu « aucun secret en clair » du workflow (§ langue, format et sécurité) et le contrôle macro « un secret en clair saute-t-il aux yeux ? » du Tech Lead (§2.6).
+Check déterministe déclenché **à l'écriture** (`fire_on: write`) : détecte des **motifs de secret en clair** (mot de passe, token, clé API) dans un livrable compose ou Terraform. **Advisory par défaut**, **bloquant sur `security-patch` / `new-stack`** (décision humaine + contrôle sécurité de l'Analyste QA, cf. `severity_overrides` ; SG-1). Recoupe le garde-fou absolu « aucun secret en clair » du workflow (§ langue, format et sécurité) et le contrôle macro « un secret en clair saute-t-il aux yeux ? » du Tech Lead (§2.6).
 
 ## Contrat de vérification (`checks`)
 
@@ -50,6 +50,6 @@ Sensor plaintext-secret — <fichier>   (source : homelab/sensors/sensors/plaint
 ## Garde-fou
 
 - **Advisory par défaut** : signale un motif suspect **sans jamais divulguer la valeur**, ne bloque pas hors scope sécuritaire.
-- **Bloquant sur `security-patch` / `new-stack`** (décision humaine ALI-204 + contrôle sécurité Analyste QA) : un motif détecté **arrête l'avancée** jusqu'à correction ou levée humaine explicite tracée.
+- **Bloquant sur `security-patch` / `new-stack`** (décision humaine + contrôle sécurité Analyste QA) : un motif détecté **arrête l'avancée** jusqu'à correction ou levée humaine explicite tracée.
 - Même bloquant, le sensor **ne remplace pas** l'audit de sécurité de l'Analyste QA (niveau `renforcé`) ni la validation humaine (SG-3).
 - **Parsing statique uniquement** (SG-4) : détection par motif, jamais de résolution ni de lecture de secret Vault.
