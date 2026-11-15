@@ -86,8 +86,7 @@ Les blocs de [`required-parameters-collection`](../stages/cadrage/required-param
 | Proposition initiale (`intent-scope-approval`) | idéation | valider l'intention et le périmètre |
 | Paramètres (`required-parameters-collection`) | cadrage | valider les informations |
 | Synthèse QA + sécurité (`security-delegation`) | production | arbitrer les écarts relevés |
-| Validation granulaire (`human-granular-validation`) | validation | valider les livrables |
-| Déploiement Kestra / dépôt | validation | confirmer le dépôt et le déploiement |
+| Validation finale (`human-granular-validation` : livrables, dépôt, déploiement Kestra) | validation | valider les livrables, le dépôt et le déploiement |
 | Blocage (`blocked`) | phase courante | débloquer la situation |
 
 Exemple : `Sylvain, merci de valider les informations de la phase de cadrage pour la stack sync-in`.

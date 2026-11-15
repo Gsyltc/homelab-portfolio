@@ -35,7 +35,7 @@ Déposer les livrables validés aux emplacements conventionnels, sur confirmatio
 
 Avant de proposer le dépôt, le Tech Lead lance `version-livrables` sur `.a-valider/<id-tâche>/<stack>/versions.json` ; sur écart, il ne propose pas le dépôt (retour en Production).
 
-Le Tech Lead **propose** les chemins de destination en les affichant, et **attend la confirmation explicite** de l'humain avant tout déplacement :
+Les chemins de destination sont **proposés dans le message de validation finale** ([`human-granular-validation`](human-granular-validation.md) Step 1, décision 2) ; **la confirmation explicite de cette décision** autorise le déplacement, sans second message. Chemins proposés :
 
 - docker-compose : `${WORK_DIRECTORY}/docker/stacks/[domaine]/[nom-stack].yml` (domaine = valeur `domain` du `config.tfvars` ; convention `<stack>.yml`).
 - Terraform : `${WORK_DIRECTORY}/terraform/[type]/[nom-de-la-stack]/config.tfvars` (type = `swarm` si Docker Swarm, `service` si Proxmox ; créer le répertoire s'il n'existe pas).

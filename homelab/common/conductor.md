@@ -245,8 +245,8 @@ sequenceDiagram
     AL-->>H: Notification ntfy
     S->>H: Validation granulaire (Terraform + Docker)
     H-->>S: Validation / rejet par element
-    S->>H: Propose chemins de depot + attend confirmation (OPERATION)
-    H-->>S: Confirmation depot + Kestra si demande (validation explicite)
+    S->>H: Validation finale en un message : livrables + chemins de depot + deploiement Kestra (OPERATION)
+    H-->>S: Reponse par decision (depot confirme, Kestra oui / apres prerequis / non)
     S->>S: Flux Kestra + issue Done
 ```
 

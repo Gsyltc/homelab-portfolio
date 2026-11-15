@@ -9,6 +9,10 @@ ce fichier en donne la lecture chronologique côté produit.
 ## [Non publié]
 
 ### Changed
+- **Question Kestra intégrée au gate final.** `human-granular-validation` pose en un seul message la validation des
+  livrables, les chemins de dépôt et le déploiement Kestra (trois décisions séparées ; défaut « non » confirmé pour Kestra ; « oui » exige
+  que les clés Vault soient créées au préalable, vérifiées avant lancement ; sinon « non »). `file-deposit` et `kestra-deployment` n'ont plus de
+  question propre : un tour de moins.
 - **Gate limité à la stack en cours.** `sensor.py gate <frontière> --dir .a-valider/<id-tâche>/<stack>` n'examine que ce
   répertoire (artefacts et sensors) au lieu de balayer tout `${WORK_DIRECTORY}` ; un compose nommé `<stack>.yml` y est
   reconnu. Corrige les écarts hors périmètre (autres stacks, archives, fichiers non Homelab) et le faux `livrable_compose_present`.

@@ -36,7 +36,13 @@ Obtenir la validation explicite, choix par choix, avant toute action à impact.
 
 ### Step 1 — Soumettre la configuration complète
 
-Le Tech Lead soumet à l'humain la **configuration complète** (Docker + Terraform), fichiers téléchargeables à l'appui, et demande une **validation explicite**. **L'issue reste en `in_review`** pendant toute cette phase ; rien n'avance sur un élément non validé (boucle Keep / Modify / Redo, chaque choix séparément).
+Le Tech Lead soumet à l'humain la **configuration complète** (Docker + Terraform), fichiers téléchargeables à l'appui, et demande une **validation explicite**, **en un seul message** ([`output-format`](../../protocols/output-format.md)) qui porte **trois groupes de décisions**, chacune validée séparément (Keep / Modify / Redo) :
+
+1. **Livrables** : une décision par fichier (compose, `.tfvars`), avec leurs points d'information.
+2. **Dépôt** : les chemins de destination proposés ([`file-deposit`](file-deposit.md) Step 1). **Proposition par défaut : les chemins conventionnels.**
+3. **Déploiement Kestra** ([`kestra-deployment`](kestra-deployment.md)) : lancer le flux `configure_service` après le dépôt. Réponses possibles : **oui** ou **non** (déploiement manuel). **Proposition par défaut : non**, confirmée par l'humain : une action à impact ne se déclenche jamais par défaut. **Répondre « oui » exige que les clés Vault de la stack soient déjà créées** : le message les liste (noms seuls, jamais de valeur) et rappelle les autres prérequis humains (secrets Swarm, dossiers NFS). Clés non créées : répondre « non » ; le déploiement se fera plus tard, hors de ce workflow ou par une nouvelle demande. Le message demande aussi l'environnement (production ou développement).
+
+Un « oui » aux livrables ou au dépôt ne vaut **jamais** « oui » au déploiement : la décision 3 est répondue à part. Il n'y a plus de question Kestra posée après le dépôt. **L'issue reste en `in_review`** pendant toute cette phase ; rien n'avance sur un élément non validé (boucle Keep / Modify / Redo, chaque choix séparément).
 
 ### Step 2 — Modifications demandées → retour en Production
 
@@ -44,7 +50,7 @@ Si l'humain **demande des modifications** (rejet total ou partiel) → le Tech L
 
 ### Step 3 — Validation → dépôt
 
-Si l'humain **valide** → poursuivre en [`file-deposit.md`](file-deposit.md).
+Si l'humain **valide** → poursuivre en [`file-deposit.md`](file-deposit.md), puis, si la décision 3 est un « oui », en [`kestra-deployment.md`](kestra-deployment.md), sans nouvelle sollicitation de l'humain.
 
 ## Sensors
 
