@@ -37,7 +37,12 @@ Déclencheur n8n **explicite** présent → **déléguer IMMÉDIATEMENT à l'Exp
 
 ### Step 3 — Aiguiller une demande ambiguë hors stack vers le triage de domaine
 
-Si la demande est **ambiguë** (mot « automatisation », ou nommage pouvant viser un flux n8n **ou** une automatisation Home Assistant) **ET** ne concerne **pas** une stack Docker/Swarm ou Proxmox → **ne pas** appliquer la règle absolue n8n ; passer d'abord par le **triage de domaine** ([`domain-triage.md`](domain-triage.md)), qui détermine le domaine par recherche de correspondance MCP (existence seulement, aucune analyse) et aiguille. Une demande de **stack** (Docker/Swarm, Proxmox), même si elle emploie le mot « automatisation », suit son routage habituel et **ne** déclenche pas le triage.
+Si la demande est **ambiguë** (mot « automatisation », ou nommage pouvant viser un flux n8n **ou** une automatisation Home Assistant) **ET** ne concerne **pas** une stack Docker/Swarm ou Proxmox :
+
+- **Ne pas** appliquer la règle absolue n8n.
+- Passer d'abord par le **triage de domaine** ([`domain-triage.md`](domain-triage.md)) : recherche de correspondance MCP (existence seulement, aucune analyse), puis aiguillage.
+
+Une demande de **stack** (Docker/Swarm, Proxmox), même avec le mot « automatisation », suit son routage habituel et ne déclenche pas le triage.
 
 ## Sensors
 
