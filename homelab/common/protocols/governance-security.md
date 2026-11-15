@@ -6,16 +6,16 @@ Miroir Homelab de [`core/common/protocols/governance-security.md`](../../../core
 
 ## Acteurs et responsabilités
 
-Les acteurs sont désignés par leur **fonction**. La délégation A2A résout l'UUID de l'agent portant la fonction via `multica agent list --output json` (ou la table de [`tech-lead-homelab-agent.md`](../../agents/tech-lead-homelab-agent.md)) au moment de la mention (jamais d'UUID figé ici).
+Les acteurs sont désignés par leur **fonction**. Liste des fonctions et fichiers : [`agents/README.md`](../../agents/README.md) ; UUID : résolus au moment de la mention, procédure dans [`tech-lead-homelab-agent.md`](../../agents/tech-lead-homelab-agent.md) (aucun UUID figé). Le tableau ci-dessous ne reprend que les **responsabilités de gouvernance**.
 
 | Fonction | Rôle |
 | --- | --- |
 | **Humain (demandeur / valideur)** | Exprime le besoin, arbitre (Docker Swarm vs Proxmox, réseau Traefik, Vault), valide **chaque** décision (granulaire), autorise les actions à impact (dépôt de fichiers, flux Kestra, application n8n / Home Assistant). |
 | **Tech Lead Homelab (coordinateur)** | Lance, supervise, applique le verrou par stack, collecte les paramètres, délègue, **sollicite le contrôle sécurité**, demande les validations, orchestre la livraison et la notification. **Ne produit pas les livrables** ; contrôle qualité central (aiguillage GO / RENVOI). Aucune issue ne va en revue humaine sans son contrôle. |
-| **Spécialiste Docker** | Analyse la documentation officielle, crée / modifie les docker-compose optimisés Swarm (skill `docker-composer`). Conserve les commentaires des gabarits. Rend compte au Tech Lead par mention ; **sur correction d'un `RENVOI` QA, mentionne obligatoirement l'Analyste QA en retour**. |
+| **Spécialiste Docker** | Produit les docker-compose (skill `docker-composer`). Rend compte au Tech Lead par mention ; **sur correction d'un `RENVOI` QA, mentionne obligatoirement l'Analyste QA en retour**. |
 | **Analyste QA** | Vérifie et durcit (par le contrôle) le docker-compose (syntaxe YAML, compatibilité Swarm, hardening, cohérence Traefik via `traefik-manager-read`) ; **contrôle sans corriger** — tout défaut est rapporté **au Tech Lead**, qui synthétise avec la revue sécurité avant de le renvoyer à l'agent créateur (Spécialiste Docker / Terraform) (détail : [`quality-assurance.md` Step 5](../stages/production/quality-assurance.md) et [`reviewer.md`](reviewer.md)). **Porte le contrôle sécurité technique** (revue adversariale, plancher SG-3) et le contrôle sécurité des manifestes de sensors. Rend compte au Tech Lead une fois le livrable `OK`. |
-| **Architecte de sécurité Homelab** | **Jugement sécurité** de posture : hardening et sécurité de base des stacks (secrets, exposition, permissions, durcissement, Traefik). Contrôleur sécurité de la couche `global` de la mémoire de règles (SEC-4). Périmètre limité à la sécurité de base d'un homelab. |
-| **Spécialiste Terraform** | Crée / modifie les `.tf` / `.tfvars` (skill `configuration-applications`). **N'exécute JAMAIS** `terraform init/apply/destroy` ; **jamais `${SNI}`**. Rend compte au Tech Lead ; **sur correction d'un `RENVOI` QA, mentionne obligatoirement l'Analyste QA en retour**. |
+| **Architecte de sécurité Homelab** | **Jugement sécurité** de posture (périmètre : sécurité de base d'un homelab). Contrôleur sécurité de la couche `global` de la mémoire de règles (SEC-4). |
+| **Spécialiste Terraform** | Produit les `.tf` / `.tfvars` (skill `configuration-applications`). **N'exécute JAMAIS** `terraform init/apply/destroy` ; **jamais `${SNI}`**. Rend compte au Tech Lead ; **sur correction d'un `RENVOI` QA, mentionne obligatoirement l'Analyste QA en retour**. |
 | **Expert n8n** | **Toute** tâche n8n via MCP. **Règle absolue** : dès que « n8n » apparaît, délégation immédiate, pas même l'analyse par le Tech Lead. Applique après feu vert Tech Lead + validation humaine explicite. |
 | **Expert Home Assistant** | **Toute** tâche Home Assistant via MCP officiel. Séquence obligatoire : proposition → vérification Tech Lead → validation humaine explicite → modification réelle. |
 | **Agent de notifications** | Notification ntfy, déclenchée **uniquement par le Tech Lead** ; les spécialistes ne l'appellent jamais directement. Agent partagé (source unique [`core/agents/notification-agent.md`](../../../core/agents/notification-agent.md)). **Une notification courte à chaque gate humain**, au format de [`output-format.md`](output-format.md) § 5 (prénom, phase, stack). |
@@ -33,7 +33,7 @@ Un agent est déclenché par un **commentaire sur l'issue** qui porte deux chose
 - Contenu du YAML : voir § « Schéma du message A2A ». Il est la **source unique** lue par l'agent suivant.
 - Aucune prose de mission, de livrable ni de rapport de sensors dans le fil.
 
-- **Ne jamais deviner un UUID** : le résoudre via `multica agent list --output json` (ou la table de [`tech-lead-homelab-agent.md`](../../agents/tech-lead-homelab-agent.md)) avant chaque mention. **Écrire le nom d'un agent en texte brut ne déclenche RIEN** — seul le lien `mention://agent/<uuid>` enfile un run.
+- **Ne jamais deviner un UUID** : le résoudre via `multica agent list --output json` avant chaque mention (procédure : [`tech-lead-homelab-agent.md`](../../agents/tech-lead-homelab-agent.md) § « Résolution des agents »). **Écrire le nom d'un agent en texte brut ne déclenche RIEN** — seul le lien `mention://agent/<uuid>` enfile un run.
 - La **réduction de prose ne touche qu'au texte AUTOUR du lien, jamais au lien de mention lui-même** : le lien reste **actif**, l'UUID résolu à chaque fois, jamais une auto-mention. Détail opératoire (résolution d'UUID, `trigger_outcomes`) : [`stage-protocol.md`](stage-protocol.md) (temps 2 et 3).
 - Le Tech Lead contrôle chaque livrable (le YAML joint + le fichier produit) avant la validation humaine.
 

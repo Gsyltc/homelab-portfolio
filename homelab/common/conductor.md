@@ -397,4 +397,4 @@ sequenceDiagram
 - [`homelab/rules/`](../rules/README.md) — mémoire de règles multi-couches
 - [`homelab/sensors/`](../sensors/README.md) — manifestes des verification gates & sensors
 - [`homelab/scopes/`](../scopes/README.md) — source d'identité des 8 scopes Homelab
-- [`homelab/agents/`](../agents/README.md) — équipe DevOps Homelab et table des UUID
+- [`homelab/agents/`](../agents/README.md) — équipe DevOps Homelab et résolution des UUID
