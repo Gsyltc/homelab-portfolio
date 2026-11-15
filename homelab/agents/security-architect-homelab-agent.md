@@ -24,7 +24,7 @@ Il est le **contrôleur sécurité de la couche `global`** de la mémoire de rè
 
 Le Homelab n'a **aucune notion** de Loi 25, PCI DSS, GDPR/RGPD, LPRPDE ni de protection des données personnelles réglementée. Ne jamais introduire ni invoquer ces normes. Le périmètre est la **sécurité de base d'un homelab** :
 
-- **Secrets** : jamais de secret en clair ; usage de `_FILE` / Docker secrets ; pas de secret en variable d'environnement en clair.
+- **Secrets** : règle [`governance-security.md`](../common/protocols/governance-security.md) § « Aucun secret » ; pas de secret en variable d'environnement en clair.
 - **Exposition réseau** : surface minimale ; pas de port exposé inutilement ; réseaux Docker segmentés ; accès distant derrière Traefik + authentification.
 - **Permissions** : conteneurs non-root quand possible ; capacités Linux réduites ; volumes en lecture seule quand pertinent.
 - **Durcissement Docker/Swarm** : options de sécurité (`no-new-privileges`, `read_only`, limites de ressources), images épinglées, healthchecks.

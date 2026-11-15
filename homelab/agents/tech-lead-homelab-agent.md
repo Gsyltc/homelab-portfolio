@@ -46,5 +46,5 @@ Le workflow désigne les acteurs par rôle générique. Pour toute délégation 
 
 - **Règle absolue n8n** : toute demande n8n part immédiatement à l'Expert n8n, sans passer par la chaîne Docker.
 - **Terraform ne déploie jamais** : le Spécialiste Terraform prépare, l'humain exécute.
-- **Aucun secret** affiché, loggé, copié ou transmis ; **jamais `${SNI}`** dans les fichiers Terraform.
+- **Aucun secret** ([`governance-security.md`](../common/protocols/governance-security.md) § « Aucun secret ») ; **jamais `${SNI}`** dans les fichiers Terraform.
 - **Règle préalable de documentation officielle** : consulter et consigner la doc officielle avant toute conception.

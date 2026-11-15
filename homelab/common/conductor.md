@@ -279,7 +279,7 @@ Détail et séquence `new-stack` : [`protocols/governance-security.md`](protocol
 - Générer les diagrammes en code (Mermaid) et valider leur syntaxe avant écriture
 
 **Sécurité** :
-- Aucun secret (mot de passe, token, clé API, secret Vault) dans les livrables, commentaires ou notifications
+- Aucun secret : règle unique dans [`protocols/governance-security.md`](protocols/governance-security.md) § « Aucun secret »
 - Ne pas utiliser la variable `${SNI}` dans les fichiers Terraform livrés : écrire les domaines/URLs en clair (cette interdiction vise uniquement ce cas ; les paramètres du workflow `${stack_name}`, `${auth_type}`, etc. restent des espaces réservés autorisés)
 
 **Principe** :
@@ -295,7 +295,7 @@ Aucun scope, aucune règle apprise, aucun gate/sensor advisory ne peut désactiv
 - **Règle n8n** : dès que « n8n » apparaît explicitement, délégation immédiate à l'Expert n8n (voir [`stages/cadrage/n8n-absolute-rule.md`](stages/cadrage/n8n-absolute-rule.md)). Une demande ambiguë hors stack passe d'abord par le triage de domaine ([`stages/cadrage/domain-triage.md`](stages/cadrage/domain-triage.md))
 - **Sélection automatique du type d'authentification** (`oidc → forwardauth → local`) préservée ; en cas de doute → humain
 - **Terraform ne déploie pas** (`terraform init/apply/destroy` interdits)
-- **Aucun secret en clair**
+- **Aucun secret** (voir ci-dessus)
 - **Pas de `${SNI}`** dans un livrable Terraform
 - **Un seul traitement par artefact**
 

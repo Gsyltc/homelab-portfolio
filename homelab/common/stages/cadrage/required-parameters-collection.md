@@ -75,7 +75,7 @@ Le Tech Lead **déduit** les paramètres OIDC au lieu de les demander, puis les 
 Règles :
 
 - Si la documentation officielle ne permet pas de déterminer le chemin de callback ou les scopes → **demander à l'humain** pour cette valeur uniquement ; jamais d'invention.
-- **Aucun secret** (client secret, jetons) dans les livrables ni les commentaires ; le secret relève de Vault (proposé dans `${vault}`, voir Step 1).
+- **Aucun secret** ([`governance-security.md`](../../protocols/governance-security.md) § « Aucun secret ») ; il relève de Vault (proposé dans `${vault}`, voir Step 1).
 - La règle d'auto-sélection du Step 2 (`oidc → forwardauth → local`) est **inchangée** (SEC-1) : ce Step ne fait que renseigner les paramètres une fois `oidc` retenu.
 - Mapping vers le Terraform : `oauth[]` et `allowed_redirect_uris[][]` (voir la skill `configuration-applications`, [`authentification.md`](../../../../plugins/homelab-assistant/skills/configuration-applications/references/authentification.md)).
 

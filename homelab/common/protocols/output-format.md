@@ -16,7 +16,7 @@ Ce protocole fixe la **forme** (structure, concision, proposition par défaut). 
 - Rien d'implicite : chaque question, risque ou action reste compréhensible seul. La concision ne justifie jamais d'omettre un écart, une source ou une condition de levée d'un blocage.
 - Les valeurs sont écrites en clair (FQDN complet, chemin, nom de clé Vault), jamais sous forme de gabarit (`<stack>.<domaine>`).
 - Tableaux seulement pour une comparaison réelle. Cellules télégraphiques.
-- Aucun secret, aucune valeur Vault, jamais `${SNI}`.
+- Ni secret ni valeur Vault ([`governance-security.md`](governance-security.md) § « Aucun secret »), jamais `${SNI}`.
 
 ## 2. Structure : quatre sections, dans cet ordre
 
