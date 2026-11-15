@@ -8,6 +8,11 @@ ce fichier en donne la lecture chronologique côté produit.
 
 ## [Non publié]
 
+### Changed
+- **QA : une passe par version, pas de correctif partiel avant décision.** `quality-assurance` : un rapport par
+  livrable et par version, re-contrôle seulement quand tous les livrables renvoyés sont corrigés ; un point
+  `arbitrage_requis` suspend toute correction jusqu'à la décision humaine, puis un seul lot de correctifs par livrable.
+
 ### Added
 - **Protocole `homelab/common/protocols/output-format.md`.** Format unique des messages Homelab destinés à l'humain : quatre
   sections (`Résumé`, `Sensors`, `Points bloquants`, `Décisions à prendre`), une fiche par question avec **proposition par
