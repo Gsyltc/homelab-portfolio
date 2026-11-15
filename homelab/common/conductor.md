@@ -53,7 +53,7 @@ flowchart TD
 
 | Phase | N° | Nom Homelab | Stages (fiches) | Gate humain |
 | --- | --- | --- | --- | --- |
-| **Initialisation** | 0 | Initialisation | [`stack-detection`](stages/initialisation/stack-detection.md) · [`concurrency-lock-read`](stages/initialisation/concurrency-lock-read.md) · [`labels-audit-init`](stages/initialisation/labels-audit-init.md) · [`deployment-target-preselection`](stages/initialisation/deployment-target-preselection.md) · [`auth-preselection`](stages/initialisation/auth-preselection.md) · [`database-preselection`](stages/initialisation/database-preselection.md) | Non (bootstrap déterministe + pré-sélection) |
+| **Initialisation** | 0 | Initialisation | [`stack-detection`](stages/initialisation/stack-detection.md) · [`concurrency-lock-read`](stages/initialisation/concurrency-lock-read.md) · [`labels-audit-init`](stages/initialisation/labels-audit-init.md) · [`deployment-target-preselection`](stages/initialisation/deployment-target-preselection.md) · [`auth-preselection`](stages/initialisation/auth-preselection.md) · [`database-preselection`](stages/initialisation/database-preselection.md) · [`network-preselection`](stages/initialisation/network-preselection.md) | Non (bootstrap déterministe + pré-sélection) |
 | **Idéation** | 1 | Idéation | [`intent-capture`](stages/ideation/intent-capture.md) · [`scope-detection`](stages/ideation/scope-detection.md) · [`version-impact-analysis`](stages/ideation/version-impact-analysis.md) · [`intent-scope-approval`](stages/ideation/intent-scope-approval.md) | Léger (intention + périmètre) |
 | **Cadrage et Paramètres** | 2 | Inception | [`n8n-absolute-rule`](stages/cadrage/n8n-absolute-rule.md) · [`domain-triage`](stages/cadrage/domain-triage.md) · [`intake-framing`](stages/cadrage/intake-framing.md) · [`required-parameters-collection`](stages/cadrage/required-parameters-collection.md) | Advisory (avant Production) |
 | **Production et Contrôle** | 3 | Construction | [`autonomy-mode`](stages/production/autonomy-mode.md) · [`terraform-configuration`](stages/production/terraform-configuration.md) · [`docker-compose-creation`](stages/production/docker-compose-creation.md) · [`quality-assurance`](stages/production/quality-assurance.md) · [`n8n-branch`](stages/production/n8n-branch.md) · [`home-assistant-branch`](stages/production/home-assistant-branch.md) · [`central-quality-control`](stages/production/central-quality-control.md) · [`security-delegation`](stages/production/security-delegation.md) | Granulaire |
@@ -71,7 +71,7 @@ flowchart TD
 
 - Si de l'information existe → s'en servir pour **cadrer** la demande (déployabilité : image/registry, port principal, type d'auth, dépendances majeures) et documenter le **lien officiel** sur l'issue **avant** de poursuivre.
 - Si rien n'est trouvé → le signaler explicitement sur l'issue et à l'humain, puis poursuivre en le précisant.
-- **Cible, authentification et base de données** : pré-sélectionnées en fin d'Initialisation ([`deployment-target-preselection`](stages/initialisation/deployment-target-preselection.md), [`auth-preselection`](stages/initialisation/auth-preselection.md), [`database-preselection`](stages/initialisation/database-preselection.md)), à partir de cette documentation.
+- **Cible, authentification, base de données et réseau Traefik** : pré-sélectionnés en fin d'Initialisation ([`deployment-target-preselection`](stages/initialisation/deployment-target-preselection.md), [`auth-preselection`](stages/initialisation/auth-preselection.md), [`database-preselection`](stages/initialisation/database-preselection.md), [`network-preselection`](stages/initialisation/network-preselection.md)), à partir de cette documentation.
 
 **Limite de responsabilité :** à ce stade, le Tech Lead reste au niveau du **cadrage**. Le relevé fin des éléments de configuration (variables d'environnement, conventions `_FILE`, volumes, healthcheck, versions, hardening) n'est **pas** produit par le Tech Lead : il est réalisé par le Spécialiste Docker au moment de la production (voir [`stages/production/docker-compose-creation.md`](stages/production/docker-compose-creation.md)).
 
@@ -104,16 +104,18 @@ La **règle préalable universelle — documentation officielle** (ci-dessus) re
    (stages/initialisation/auth-preselection.md).
 7. database-preselection : base de données recommandée
    (stages/initialisation/database-preselection.md).
-8. intent-capture : reformuler l'intention (stages/ideation/intent-capture.md).
-9. scope-detection : scope + axes proposés (stages/ideation/scope-detection.md).
-10. intent-scope-approval : PREMIÈRE sollicitation de l'humain, au format de sa fiche,
-    construit à partir des résultats des étapes 5 à 9
+8. network-preselection : réseau Traefik recommandé
+   (stages/initialisation/network-preselection.md).
+9. intent-capture : reformuler l'intention (stages/ideation/intent-capture.md).
+10. scope-detection : scope + axes proposés (stages/ideation/scope-detection.md).
+11. intent-scope-approval : PREMIÈRE sollicitation de l'humain, au format de sa fiche,
+    construit à partir des résultats des étapes 5 à 10
     (stages/ideation/intent-scope-approval.md).
-11. Stages suivants dans l'ordre du tableau « Les 5 phases et leurs stages ».
+12. Stages suivants dans l'ordre du tableau « Les 5 phases et leurs stages ».
 
 Chaque étape = lire sa fiche puis l'exécuter ; aucune n'est sautée ni remplacée par
-« non vérifié ». Aucune question à l'humain avant l'étape 10, sauf intention ambiguë
-(étape 8) ; aucune liste de questions improvisée.
+« non vérifié ». Aucune question à l'humain avant l'étape 11, sauf intention ambiguë
+(étape 9) ; aucune liste de questions improvisée.
 ```
 
 > **Propagation de `$CORE_HOME`.** À chaque délégation, le Tech Lead **transmet `$CORE_HOME`** dans le **message A2A `delegation`** (fichier YAML joint, champ `core_home: "<chemin du checkout>"`), pour que le délégataire lance sensors, gates et hook d'écriture **sans re-chercher le harnais**. Le même YAML porte `fiches_a_recharger` — la (les) **fiche(s) de stage et protocole(s)** à charger pour sa mission (chargement paresseux ciblé, pas de lecture intégrale). **La mission voyage dans ce fichier joint, jamais en prose dans le fil** (voir [`protocols/governance-security.md`](protocols/governance-security.md) § « Règle A2A » et « Schéma du message A2A », et [`protocols/stage-protocol.md`](protocols/stage-protocol.md) temps 2). Convention d'invocation du harnais ancré sur `$CORE_HOME` : [`../sensors/README.md`](../sensors/README.md).

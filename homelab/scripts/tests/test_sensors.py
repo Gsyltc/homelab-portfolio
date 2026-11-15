@@ -487,6 +487,7 @@ class TestInitialProposal(unittest.TestCase):
                        "variantes_testees": ["sync-in", "syncin"]},
             "auth": {"recommande": "oidc", "justification": "SSO OIDC supporté", "source": "https://sync-in.com/docs/auth"},
             "database": {"recommande": "mariadb", "justification": "moteur exigé", "source": "https://sync-in.com/docs/db"},
+            "reseau": {"recommande": "traefik_frontend", "justification": "application commune", "source": "network.md"},
         }
 
     def run_with(self, p: dict, scope: str | None = None) -> dict:
@@ -508,7 +509,7 @@ class TestInitialProposal(unittest.TestCase):
         self.assertIn("auth : `recommande` OU `options`", f)
 
     def test_missing_section_is_gap(self):
-        for k in ("cibles", "auth", "database"):
+        for k in ("cibles", "auth", "database", "reseau"):
             p = self.valid()
             del p[k]
             self.assertEqual(verdict(self.run_with(p)), GAP, k)
@@ -543,6 +544,11 @@ class TestInitialProposal(unittest.TestCase):
         self.assertIn("auth.options", self.findings(self.run_with(p)))
         p["auth"]["options"] = ["oidc", "local"]
         self.assertEqual(verdict(self.run_with(p)), OK)
+
+    def test_unknown_network_is_gap(self):
+        p = self.valid()
+        p["reseau"]["recommande"] = "public"
+        self.assertIn("reseau.recommande", self.findings(self.run_with(p)))
 
     def test_blocking_on_new_stack(self):
         m = sensor.load_manifests()["initial-proposal"]

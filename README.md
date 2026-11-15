@@ -36,7 +36,7 @@ Le workflow d'architecture est structuré selon le modèle **conductor / stages 
 Le workflow **Homelab** suit le **même modèle déclaratif** (aligné sur les contrats AI-DLC *Harness Engineer Guide*, décisions [ADR-0018](decisions/0018-adaptation-modele-conductor-stages-protocols-homelab.md)…[ADR-0023](decisions/0023-alignement-sensors-homelab-sur-ai-dlc.md)) sous [`homelab/`](homelab/) :
 
 - [`homelab/common/conductor.md`](homelab/common/conductor.md) — instructions du coordinateur (Tech Lead Homelab), la *source unique*.
-- [`homelab/common/stages/`](homelab/common/stages/) — 29 fiches de stage sur les 5 phases (`Initialisation → Idéation → Cadrage → Production → Validation`), corps en 3 compartiments (`## Steps` / `## Sensors` / `## Learn`) et front-matter normalisé (`mode`, `review_class`, `human_gate`, `sensors:`, `scopes:`, `produces`/`consumes`/`requires_stage`).
+- [`homelab/common/stages/`](homelab/common/stages/) — 30 fiches de stage sur les 5 phases (`Initialisation → Idéation → Cadrage → Production → Validation`), corps en 3 compartiments (`## Steps` / `## Sensors` / `## Learn`) et front-matter normalisé (`mode`, `review_class`, `human_gate`, `sensors:`, `scopes:`, `produces`/`consumes`/`requires_stage`).
 - [`homelab/common/protocols/`](homelab/common/protocols/) — mécanismes transverses (définition de stage, exécution, gouvernance & sécurité, reviewer, scopes & axes).
 - [`homelab/rules/`](homelab/rules/) — mémoire de règles multi-couches (`global > stack > phase > scope`) + boucle d'apprentissage, garde-fous absolus **non surchargeables**.
 - [`homelab/scopes/`](homelab/scopes/) — un fichier par scope (8 scopes : `name`, `depth`, `verification`, `keywords`).
