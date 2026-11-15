@@ -140,6 +140,8 @@ Chaque étape = lire sa fiche puis l'exécuter ; aucune n'est sautée ni remplac
 - **💬 Modify** — l'humain reformule ; le Tech Lead ajuste et re-présente **cet élément uniquement**.
 - **❌ Redo** — l'élément est rejeté ; le Tech Lead propose une alternative et relance la validation **de cet élément uniquement**.
 
+**Élément dépendant d'une valeur manquante.** Un élément qui dépend d'une valeur absente (ex. un scope `groups` qui exige le nom du mapping de groupes, un groupe admin dont le nom est inconnu) n'est **jamais validé seul**. Le Tech Lead le présente **avec** la valeur manquante, dans la même décision, et ne l'applique qu'une fois la valeur fournie. Si l'humain choisit « Keep » sans fournir la valeur, l'élément reste **en attente** : le Tech Lead redemande la valeur, il ne délègue ni ne devine. Une valeur que l'humain décide d'omettre est tracée comme **renoncement** et l'élément dépendant est retiré (pas de configuration à moitié active).
+
 Ne jamais avancer sur un élément non validé. Ne jamais fusionner des choix en une approbation globale « tout ou rien » (même en mode autonome — voir [`stages/production/docker-compose-creation.md`](stages/production/docker-compose-creation.md) et [`stages/production/autonomy-mode.md`](stages/production/autonomy-mode.md)).
 
 ### Résolution des questions / contradictions intra-stage

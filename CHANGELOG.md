@@ -9,6 +9,9 @@ ce fichier en donne la lecture chronologique côté produit.
 ## [Non publié]
 
 ### Changed
+- **Éléments dépendant d'une valeur manquante.** Le Tech Lead les présente avec la valeur à fournir, dans la même
+  décision, et ne les valide ni ne les applique sans elle ; sans valeur, l'élément et ses dérivés sont retirés ensemble.
+  Modifs : `conductor.md`, `required-parameters-collection`, `output-format`.
 - **QA : une passe par version, pas de correctif partiel avant décision.** `quality-assurance` : un rapport par
   livrable et par version, re-contrôle seulement quand tous les livrables renvoyés sont corrigés ; un point
   `arbitrage_requis` suspend toute correction jusqu'à la décision humaine, puis un seul lot de correctifs par livrable.

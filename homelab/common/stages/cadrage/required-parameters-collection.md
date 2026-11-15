@@ -45,6 +45,8 @@ Le Tech Lead vérifie que tous les paramètres sont renseignés ; **il ne génè
 
 **Un seul message de confirmation**, au format [`output-format`](../../protocols/output-format.md) (une décision par bloc, valeur déduite comme **proposition par défaut**, toute valeur manquante connue incluse dès ce message) : le Tech Lead propose en bloc les valeurs par défaut déduites restantes (`${storage}`, `${valkey_enabled}`, `${vault}` et, si `oidc`, `${oidc_params}`) ainsi que le **mode d'exécution** de la Production (options et défaut : [`autonomy-mode`](../production/autonomy-mode.md)), et attend la confirmation ou correction de l'humain.
 
+**Dépendances entre paramètres.** Avant de poser le message, le Tech Lead identifie les paramètres qui **dépendent d'une valeur que seul l'humain détient** (nom d'un groupe ou d'un mapping Authentik, rôle admin, valeur de `main_group`…). Chacun est présenté **dans la même décision** que la valeur dont il dépend, avec la valeur demandée en toutes lettres (« à fournir : nom exact du mapping »), et **n'est pas validé sans elle** (règle : [`conductor.md`](../../conductor.md), « Élément dépendant d'une valeur manquante »). Si la valeur n'est pas fournie, l'élément et ses dérivés (scope, variable Vault, action humaine) sont retirés ensemble plutôt que livrés incomplets.
+
 La création des clés Vault proposées reste une action humaine (agent Vault dédié à créer plus tard) : le message le signale.
 
 ### Step 2 — Sélection automatique du type d'authentification

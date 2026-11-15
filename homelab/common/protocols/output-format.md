@@ -54,7 +54,7 @@ Présente si et seulement si l'**humain** doit intervenir. Elle contient **une f
 Règles :
 - **Chaque question porte une proposition par défaut**, formulée comme une valeur concrète et prête à être retenue. Répondre « Keep » suffit à la valider.
 - **Pas de proposition possible** (information que seul l'humain détient, ex. nom d'un groupe, choix de goût) : écrire `**Proposition par défaut** : aucune — <motif>` et lister les options. Ne jamais inventer une valeur.
-- **Une valeur manquante bloque la question qui en dépend** : la question est posée avec cette valeur, jamais validée sans elle (ex. un scope `groups` ne se valide pas sans le nom du mapping).
+- **Une valeur manquante bloque la question qui en dépend** : la question est posée avec cette valeur (`**À fournir** : <valeur attendue>` dans la fiche), jamais validée sans elle (ex. un scope `groups` ne se valide pas sans le nom du mapping). Voir [`conductor.md`](../conductor.md), « Élément dépendant d'une valeur manquante ».
 - Les questions sont regroupées en **un seul message par gate**. Toute valeur manquante connue au moment du gate y figure. Pas de questions posées au fil de l'eau.
 - Les décisions sont indépendantes les unes des autres. L'humain répond par élément (`D1 Keep, D2 Modify : …`).
 - **Livrables à relire** : si le gate porte sur des fichiers, ajouter avant les décisions `### Livrables à relire`, une puce par fichier (chemin en code inline, sous `.a-valider/<id-tâche>/<stack>/` avant dépôt).
