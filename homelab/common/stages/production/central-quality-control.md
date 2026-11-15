@@ -40,7 +40,22 @@ Le Tech Lead vérifie uniquement : (a) le livrable répond-il à la demande et a
 
 ### Step 2 — Ordre imposé et renvoi
 
-Tout livrable — **compose ET Terraform** — passe par l'Analyste QA ([`quality-assurance.md`](quality-assurance.md)) **avant** cet aiguillage. Le Tech Lead ne réalise **jamais** lui-même l'analyse de compatibilité, l'audit sécurité / hardening, la cohérence Traefik, la vérification du `.tfvars` ni un correctif. Les `RENVOI` de la QA et de la revue sécurité lui parviennent d'abord et sont synthétisés avant tout renvoi au spécialiste : ce contrôle intervient sur le **travail finalisé** (QA et sécurité `OK`). Doute macro → renvoyer au spécialiste en décrivant le **symptôme** (« l'authentification risque d'échouer »), **sans** diagnostic ni solution. Livrable incomplet / hors-sujet → renvoyer avec la liste des manques.
+Tout livrable, **compose ET Terraform**, passe par l'Analyste QA ([`quality-assurance.md`](quality-assurance.md)) **avant** cet aiguillage.
+
+Le Tech Lead ne réalise **jamais** lui-même :
+
+- l'analyse de compatibilité ;
+- l'audit sécurité / hardening ;
+- la cohérence Traefik ;
+- la vérification du `.tfvars` ;
+- un correctif.
+
+Cadre du contrôle :
+
+- Les `RENVOI` de la QA et de la revue sécurité lui parviennent d'abord et sont synthétisés avant tout renvoi au spécialiste.
+- Ce contrôle porte sur le **travail finalisé** (QA et sécurité `OK`).
+- Doute macro : renvoyer au spécialiste en décrivant le **symptôme** (« l'authentification risque d'échouer »), **sans** diagnostic ni solution.
+- Livrable incomplet ou hors-sujet : renvoyer avec la liste des manques.
 
 ### Step 3 — Enchaînement vers la validation humaine
 

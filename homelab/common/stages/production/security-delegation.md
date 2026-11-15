@@ -39,7 +39,12 @@ constats.
 
 ### Step 1 — Déléguer en parallèle de la QA
 
-Quand tous les livrables sont livrés (`in_review`), le Tech Lead délègue à l'**Architecte de sécurité Homelab** (mission + mention valide, UUID résolu via `multica agent list --output json` — jamais figé) **dans le même tour** que la QA : jugement de posture sécurité sur les livrables, périmètre « sécurité de base d'un homelab ». Les deux revues portent sur la **même version** ; aucune des deux n'attend l'autre. (Ordre normatif contrôle sécurité → validation humaine : [`governance-security.md` § Contrôle sécurité systématique](../../protocols/governance-security.md#contrôle-sécurité-systématique).)
+Quand tous les livrables sont livrés (`in_review`), le Tech Lead délègue à l'**Architecte de sécurité Homelab** (mission + mention valide ; UUID résolu via `multica agent list --output json`, jamais figé).
+
+- La délégation est faite **dans le même tour** que celle à la QA.
+- Objet : jugement de posture sécurité sur les livrables, périmètre « sécurité de base d'un homelab ».
+- Les deux revues portent sur la **même version** ; aucune n'attend l'autre.
+- Ordre normatif contrôle sécurité → validation humaine : [`governance-security.md` § Contrôle sécurité systématique](../../protocols/governance-security.md#contrôle-sécurité-systématique).
 
 ### Step 2 — Jugement de posture et classification
 
@@ -49,7 +54,12 @@ L'Architecte de sécurité Homelab juge la posture et **classe** les constats pa
 
 **Seul le Tech Lead parle à l'humain.** L'Architecte de sécurité et l'Analyste QA ne sollicitent jamais l'humain, même sur un constat critique, bloquant ou à décision. Ils déposent leur **rapport YAML** et mentionnent le Tech Lead. Sur un rapport bloquant (`verdict = BLOQUE`, constat critique / majeur, `arbitrage_requis: true`), c'est le Tech Lead qui passe l'issue `blocked` et s'adresse à l'humain, après avoir reçu les deux rapports.
 
-**Revue partielle.** Au re-contrôle, la QA et la sécurité ne revoient que les **éléments corrigés** : le Tech Lead leur transmet dans le message A2A la liste des `id` de points corrigés (`points_corriges`) avec le livrable corrigé. Chaque reviewer vérifie ces éléments et leurs **effets directs** (ex. une variable renommée, la cohérence Traefik ou la cohérence compose ↔ tfvars qu'elle touche) ; il ne refait pas la revue complète. Sur un effet de bord nouveau, il l'ajoute comme **nouveau point** dans son rapport. Une version qui apporte des modifications hors liste est signalée par le reviewer au Tech Lead.
+**Revue partielle.** Au re-contrôle, la QA et la sécurité ne revoient que les **éléments corrigés**.
+
+- Le Tech Lead transmet dans le message A2A la liste des `id` de points corrigés (`points_corriges`) avec le livrable corrigé.
+- Chaque reviewer vérifie ces éléments et leurs **effets directs** (ex. variable renommée, cohérence Traefik, cohérence compose ↔ tfvars) ; il ne refait pas la revue complète.
+- Effet de bord nouveau : ajouté comme **nouveau point** dans son rapport.
+- Modification hors liste : signalée par le reviewer au Tech Lead.
 
 Le Tech Lead **attend les deux rapports** (QA et sécurité), obligatoirement, puis produit **une synthèse unique** : écarts dédoublonnés (un même défaut vu par les deux revues compte une fois), classés par gravité, points à décision humaine isolés. Aucun correctif n'est délégué avant cette synthèse.
 

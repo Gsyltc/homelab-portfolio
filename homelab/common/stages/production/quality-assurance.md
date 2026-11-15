@@ -38,11 +38,44 @@ Le Tech Lead délègue à l'**Analyste QA** (mission + mention valide). Ordre im
 
 ### Step 2 — Vérifier le Terraform (volet `.tfvars`, skill `terraform-qa`)
 
-Sur les scopes produisant du Terraform, analyser le livrable `.tfvars` (skill `terraform-qa`) : structure HCL, conformité au template de configuration de stack, cohérence des variables (dont `cloudflare_dns_nb`), **absence de `${SNI}`** (domaines / URLs en clair — critique), **absence de secret en clair** (critique), absence de toute exécution Terraform. Classer les problèmes (critical / warning / info), rédiger chaque point de façon **autosuffisante** (`constat` / `cause` / `correction` / `domaine_correction`) dans le rapport YAML (`report-format.schema.yaml`) : sur au moins un défaut `critical` / `warning`, `verdict = RENVOI` rapporté au **Tech Lead** (qui renverra au Spécialiste Terraform après synthèse) ; sinon `verdict = OK`.
+Sur les scopes produisant du Terraform, analyser le livrable `.tfvars` (skill `terraform-qa`) :
+
+- Structure HCL.
+- Conformité au template de configuration de stack.
+- Cohérence des variables (dont `cloudflare_dns_nb`).
+- **Absence de `${SNI}`** (domaines / URLs en clair) : critique.
+- **Absence de secret en clair** : critique.
+- Absence de toute exécution Terraform.
+
+Classement et rapport :
+
+1. Classer les problèmes (critical / warning / info).
+2. Rédiger chaque point de façon **autosuffisante** (`constat` / `cause` / `correction` / `domaine_correction`) dans le rapport YAML (`report-format.schema.yaml`).
+3. Au moins un défaut `critical` / `warning` : `verdict = RENVOI`, rapporté au **Tech Lead** (qui renvoie au Spécialiste Terraform après synthèse).
+4. Sinon : `verdict = OK`.
 
 ### Step 3 — Analyser et classer le compose (revue adversariale — plancher SG-3)
 
-Sur les scopes produisant un compose, analyser syntaxe, compatibilité Swarm, réseaux / volumes / secrets, hardening (skill `docker-composer`), classer les problèmes (critical / warning / info) et rédiger chaque point de façon **autosuffisante** dans le rapport YAML : sur au moins un défaut, le `verdict` est `RENVOI` et le rapport YAML est rendu au **Tech Lead** (qui renverra au Spécialiste Docker après synthèse) ; sans défaut, `verdict = OK`. **La skill `dockerfile-validator` s'applique uniquement aux stacks *build-from-source*** (celles qui fournissent un `Dockerfile` construit localement, `build:` dans le compose) : elle valide alors le `Dockerfile`. Pour une stack tirant des **images publiées** (pas de `Dockerfile` à construire), `dockerfile-validator` ne s'applique pas. L'Analyste QA porte le **contrôle sécurité technique** (revue adversariale) sur les deux livrables : sur `security-patch` / `new-stack`, vérification `renforcé` non abaissable.
+Sur les scopes produisant un compose, analyser :
+
+- Syntaxe.
+- Compatibilité Swarm.
+- Réseaux, volumes, secrets.
+- Hardening (skill `docker-composer`).
+
+Classement et rapport :
+
+1. Classer les problèmes (critical / warning / info).
+2. Rédiger chaque point de façon **autosuffisante** dans le rapport YAML.
+3. Au moins un défaut : `verdict = RENVOI`, rapport rendu au **Tech Lead** (qui renvoie au Spécialiste Docker après synthèse).
+4. Sans défaut : `verdict = OK`.
+
+Règles propres au volet Docker :
+
+- La skill `dockerfile-validator` s'applique **uniquement aux stacks *build-from-source*** (`Dockerfile` construit localement, `build:` dans le compose) : elle valide alors le `Dockerfile`.
+- Stack tirant des **images publiées** : `dockerfile-validator` ne s'applique pas.
+- L'Analyste QA porte le **contrôle sécurité technique** (revue adversariale) sur les deux livrables.
+- Sur `security-patch` / `new-stack` : vérification `renforcé`, non abaissable.
 
 ### Step 4 — Cohérence Traefik
 
@@ -50,7 +83,20 @@ Vérifier via **`traefik-manager-read`** que services, middlewares et entrypoint
 
 ### Step 5 — Rapport au Tech Lead (aucune correction directe)
 
-**La QA rend son rapport au Tech Lead et à lui seul.** Elle ne mentionne **jamais** le spécialiste créateur et ne déclenche aucune correction : la revue sécurité ([`security-delegation`](security-delegation.md)) tourne **en parallèle sur la même version**, et le Tech Lead **attend obligatoirement les deux rapports** avant toute suite. Il en fait **une synthèse unique** (écarts dédoublonnés, classés, points à décision humaine isolés), la présente à l'humain en un message si une décision est requise ([`output-format`](../../protocols/output-format.md)), puis délègue **un seul lot de correctifs par livrable**. La QA et la revue sécurité font ensuite **une revue partielle** de la version corrigée (uniquement les éléments corrigés et leurs effets directs, liste `points_corriges` fournie par le Tech Lead), en parallèle, **une seule fois**. **L'Analyste QA ne s'adresse jamais à l'humain** : sur un rapport bloquant, le Tech Lead présente le point à l'humain.
+**La QA rend son rapport au Tech Lead et à lui seul.**
+
+- Elle ne mentionne **jamais** le spécialiste créateur et ne déclenche aucune correction.
+- La revue sécurité ([`security-delegation`](security-delegation.md)) tourne **en parallèle sur la même version**.
+- Le Tech Lead **attend obligatoirement les deux rapports** avant toute suite.
+
+Suite, dans l'ordre :
+
+1. Le Tech Lead fait **une synthèse unique** : écarts dédoublonnés, classés, points à décision humaine isolés.
+2. Si une décision est requise, il la présente à l'humain en un message ([`output-format`](../../protocols/output-format.md)).
+3. Il délègue **un seul lot de correctifs par livrable**.
+4. La QA et la revue sécurité font **une revue partielle**, en parallèle et **une seule fois**, de la version corrigée : uniquement les éléments corrigés et leurs effets directs (liste `points_corriges` fournie par le Tech Lead).
+
+**L'Analyste QA ne s'adresse jamais à l'humain** : sur un rapport bloquant, le Tech Lead présente le point à l'humain.
 
 **Statut des sous-issues.** Le Tech Lead passe la sous-issue du livrable à `done` quand QA **et** sécurité ont rendu `OK` ; un `RENVOI` la laisse en `in_review`. Cycle complet : [`stage-protocol.md` § Cycle de statut des sous-issues & barrière de stage](../../protocols/stage-protocol.md#cycle-de-statut-des-sous-issues--barrière-de-stage).
 

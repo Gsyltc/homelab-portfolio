@@ -29,13 +29,29 @@ Produire le docker-compose optimisé Swarm, cohérent avec les **paramètres col
 
 ### Step 1 — Déléguer au Spécialiste Docker (en parallèle du Terraform)
 
-Le Tech Lead délègue au **Spécialiste Docker** par mention valide (mission + périmètre + critères), **en parallèle** de la délégation au Spécialiste Terraform (deux sous-issues `--stage 1` ; verrou de concurrence par artefact, cf. [`governance-security.md`](../../protocols/governance-security.md) § concurrence). **La sous-issue Docker passe en `in_progress`** dès que son travail démarre (cycle de statut des sous-issues : [`stage-protocol.md` § Cycle de statut des sous-issues & barrière de stage](../../protocols/stage-protocol.md#cycle-de-statut-des-sous-issues--barrière-de-stage)). Le compose s'appuie sur les **paramètres collectés en Cadrage (§2.4)**, pas sur un `.tfvars` en amont. C'est le Spécialiste Docker — **pas le Tech Lead** — qui exploite la documentation officielle pour établir le **relevé fin** (variables d'environnement supportées, convention de secrets `_FILE` ou non, volumes, port, healthcheck, versions).
+Le Tech Lead délègue au **Spécialiste Docker** par mention valide (mission + périmètre + critères).
+
+- La délégation se fait **en parallèle** de celle au Spécialiste Terraform (deux sous-issues `--stage 1`). Verrou de concurrence par artefact : [`governance-security.md`](../../protocols/governance-security.md) § concurrence.
+- La sous-issue Docker passe en `in_progress` dès que son travail démarre. Cycle : [`stage-protocol.md` § Cycle de statut des sous-issues & barrière de stage](../../protocols/stage-protocol.md#cycle-de-statut-des-sous-issues--barrière-de-stage).
+- Le compose s'appuie sur les **paramètres collectés en Cadrage (§2.4)**, pas sur un `.tfvars` en amont.
+- Le **relevé fin** (variables d'environnement supportées, convention de secrets `_FILE` ou non, volumes, port, healthcheck, versions) est établi par le Spécialiste Docker, **pas le Tech Lead**, à partir de la documentation officielle.
 
 ### Step 2 — Produire le livrable
 
-Produire le fichier (skill `docker-composer`), conserver les commentaires `#` des gabarits, vérifier la syntaxe YAML, puis déposer les fichiers dans le **répertoire de relecture** (voir ci-dessous). Appliquer ensuite le **geste de fin de mission** [`producer-report.md`](../../protocols/producer-report.md) : joindre le livrable `docker-compose.yml` **et** le **message A2A `retour` en YAML** (`retour-docker-<stack>.yaml` — `resultat` + `sensors_resultats`), corps minimal (mention valide du Tech Lead + une ligne de statut + nom du YAML `retour`), zéro prose. Sans mention valide → compte-rendu réputé non rendu, flux arrêté. **Une fois le livrable produit et le compte-rendu rendu, la sous-issue Docker passe en `in_review`** (livrable produit, en attente de vérification QA ; cf. [`stage-protocol.md` § Cycle de statut des sous-issues & barrière de stage](../../protocols/stage-protocol.md#cycle-de-statut-des-sous-issues--barrière-de-stage)).
+Produire le fichier (skill `docker-composer`) :
 
-> **Autorité des règles techniques (A5/A6).** La règle des **services mutualisés** (ne jamais recréer Traefik / Redis-Valkey / PostgreSQL — réutiliser les instances existantes du Homelab) et la **liste des réseaux Traefik + réseau par défaut** sont portées par la **skill `docker-composer`** (`SKILL.md` et [`references/network.md`](../../../../plugins/homelab-assistant/skills/docker-composer/references/network.md)), qui en est la **source unique**. Le workflow ne réénonce pas ces règles : il les **référence** et se limite à collecter les paramètres associés (`${traefik_network}`, `${valkey_enabled}`, `${database_service}` — voir [`required-parameters-collection.md`](../cadrage/required-parameters-collection.md)).
+1. Conserver les commentaires `#` des gabarits.
+2. Vérifier la syntaxe YAML.
+3. Déposer les fichiers dans le **répertoire de relecture** (voir ci-dessous).
+4. Appliquer le **geste de fin de mission** [`producer-report.md`](../../protocols/producer-report.md) : joindre `docker-compose.yml` **et** le message A2A `retour` (`retour-docker-<stack>.yaml`).
+5. Livrable produit et compte-rendu rendu : la sous-issue Docker passe en `in_review` (en attente de vérification QA). Cycle : [`stage-protocol.md` § Cycle de statut des sous-issues & barrière de stage](../../protocols/stage-protocol.md#cycle-de-statut-des-sous-issues--barrière-de-stage).
+
+> **Autorité des règles techniques (A5/A6).** La skill `docker-composer` est la **source unique** de :
+>
+> - la règle des **services mutualisés** (ne jamais recréer Traefik / Redis-Valkey / PostgreSQL, réutiliser les instances existantes) ;
+> - la **liste des réseaux Traefik** et le réseau par défaut, dans `SKILL.md` et [`references/network.md`](../../../../plugins/homelab-assistant/skills/docker-composer/references/network.md).
+>
+> Le workflow ne réénonce pas ces règles : il les référence et collecte les paramètres associés (`${traefik_network}`, `${valkey_enabled}`, `${database_service}`, voir [`required-parameters-collection.md`](../cadrage/required-parameters-collection.md)).
 
 > **Répertoire de relecture.** Fichiers générés déposés uniquement dans `.a-valider/<id-tâche>/<stack>/` : [`review-directory.md`](../../protocols/review-directory.md).
 

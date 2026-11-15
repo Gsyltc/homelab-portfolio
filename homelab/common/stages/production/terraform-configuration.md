@@ -29,13 +29,26 @@ Préparer les variables Terraform de la stack, sans jamais déployer. Ce stage s
 
 ### Step 1 — Déléguer
 
-Une fois le mode d'exécution appliqué ([`autonomy-mode.md`](autonomy-mode.md)), le Tech Lead ordonne au **Spécialiste Terraform** (mission + mention valide) — **en parallèle** de la délégation au Spécialiste Docker (deux sous-issues `--stage 1` ; verrou par artefact, cf. [`governance-security.md`](../../protocols/governance-security.md) § concurrence) — de créer / modifier les **variables Terraform** de la stack (skill `configuration-applications`), cohérentes avec les **paramètres collectés en Cadrage (§2.4)** (auth, `cloudflare_dns_nb`, domaine / FQDN d'exposition, etc.). **La sous-issue Terraform passe en `in_progress`** dès que son travail démarre (cycle de statut des sous-issues : [`stage-protocol.md` § Cycle de statut des sous-issues & barrière de stage](../../protocols/stage-protocol.md#cycle-de-statut-des-sous-issues--barrière-de-stage)).
+Une fois le mode d'exécution appliqué ([`autonomy-mode.md`](autonomy-mode.md)), le Tech Lead ordonne au **Spécialiste Terraform** (mission + mention valide) de créer / modifier les **variables Terraform** de la stack (skill `configuration-applications`).
+
+- La délégation se fait **en parallèle** de celle au Spécialiste Docker (deux sous-issues `--stage 1`). Verrou par artefact : [`governance-security.md`](../../protocols/governance-security.md) § concurrence.
+- Les variables sont cohérentes avec les **paramètres collectés en Cadrage (§2.4)** : auth, `cloudflare_dns_nb`, domaine / FQDN d'exposition, etc.
+- La sous-issue Terraform passe en `in_progress` dès que son travail démarre. Cycle : [`stage-protocol.md` § Cycle de statut des sous-issues & barrière de stage](../../protocols/stage-protocol.md#cycle-de-statut-des-sous-issues--barrière-de-stage).
 
 Sur scope `new-stack` / `infra-terraform`, ce stage est **obligatoire et inconditionnel** : le Tech Lead ne peut ni le sauter ni le déclarer « non requis ». Ne pas produire le livrable `.tfvars` sur ces scopes est un **écart bloquant** (frontière `phase3-phase4`), non une décision légitime d'un coordinateur (invariant — SEC-1).
 
 ### Step 2 — Produire les fichiers (jamais d'apply)
 
-Préparer uniquement les fichiers `.tf` / `.tfvars` — **JAMAIS** `terraform init/apply/destroy` (invariant absolu). **Jamais `${SNI}`** : écrire les domaines / URLs en clair. Déposer les fichiers dans le **répertoire de relecture** (voir ci-dessous). Puis appliquer le **geste de fin de mission** [`producer-report.md`](../../protocols/producer-report.md) : joindre le livrable `.tf` / `.tfvars` **et** le **message A2A `retour` en YAML** (`retour-terraform-<stack>.yaml` — `resultat` + `sensors_resultats`), corps minimal (mention valide du Tech Lead + une ligne de statut + nom du YAML `retour`), zéro prose. Sans mention valide → compte-rendu réputé non rendu, flux arrêté. **Une fois le livrable produit et le compte-rendu rendu, la sous-issue Terraform passe en `in_review`** (livrable produit, en attente de vérification QA ; cf. [`stage-protocol.md` § Cycle de statut des sous-issues & barrière de stage](../../protocols/stage-protocol.md#cycle-de-statut-des-sous-issues--barrière-de-stage)).
+Préparer uniquement les fichiers `.tf` / `.tfvars` :
+
+- **JAMAIS** `terraform init/apply/destroy` (invariant absolu).
+- **Jamais `${SNI}`** : écrire les domaines / URLs en clair.
+
+Livraison :
+
+1. Déposer les fichiers dans le **répertoire de relecture** (voir ci-dessous).
+2. Appliquer le **geste de fin de mission** [`producer-report.md`](../../protocols/producer-report.md) : joindre le livrable `.tf` / `.tfvars` **et** le message A2A `retour` (`retour-terraform-<stack>.yaml`).
+3. Livrable produit et compte-rendu rendu : la sous-issue Terraform passe en `in_review` (en attente de vérification QA). Cycle : [`stage-protocol.md` § Cycle de statut des sous-issues & barrière de stage](../../protocols/stage-protocol.md#cycle-de-statut-des-sous-issues--barrière-de-stage).
 
 ### Step 3 — Vérification QA en aval
 
