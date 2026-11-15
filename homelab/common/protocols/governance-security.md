@@ -27,7 +27,11 @@ Un agent est déclenché par un **commentaire sur l'issue** qui porte deux chose
 1. un **lien de mention ACTIF** `[@Label](mention://agent/<uuid>)` — **seul vecteur de déclenchement** d'un run ;
 2. le **nom du fichier YAML joint à l'issue** qui porte la mission (délégation) ou le retour de livrable.
 
-**La mission et le livrable voyagent dans le fichier YAML joint (message A2A), jamais en prose dans le fil.** À chaque délégation ou retour entre agents, l'agent **téléverse un fichier YAML** (via `multica attachment` — voir `multica attachment --help`) contenant l'objet, le périmètre, les critères d'acceptation, **la liste des sensors à exécuter** et **`core_home`** (délégation), ou **le résultat et les verdicts de sensors** (retour), puis poste un **commentaire minimal**. Le YAML joint est la **source unique** lue par l'agent suivant ; le commentaire ne fait que le référencer. **Plus de prose de mission, de livrable ni de rapport de sensors dans le fil A2A** — cette prose vit désormais dans le YAML, exploitable pour les contrôles.
+**La mission et le livrable voyagent dans le YAML joint (message A2A), jamais en prose dans le fil.**
+
+- L'agent téléverse le YAML (`multica attachment --help`), puis poste un **commentaire minimal** : mention active + nom du fichier.
+- Contenu du YAML : voir § « Schéma du message A2A ». Il est la **source unique** lue par l'agent suivant.
+- Aucune prose de mission, de livrable ni de rapport de sensors dans le fil.
 
 - **Ne jamais deviner un UUID** : le résoudre via `multica agent list --output json` (ou la table de [`tech-lead-homelab-agent.md`](../../agents/tech-lead-homelab-agent.md)) avant chaque mention. **Écrire le nom d'un agent en texte brut ne déclenche RIEN** — seul le lien `mention://agent/<uuid>` enfile un run.
 - La **réduction de prose ne touche qu'au texte AUTOUR du lien, jamais au lien de mention lui-même** : le lien reste **actif**, l'UUID résolu à chaque fois, jamais une auto-mention. Détail opératoire (résolution d'UUID, `trigger_outcomes`) : [`stage-protocol.md`](stage-protocol.md) (temps 2 et 3).
@@ -46,7 +50,9 @@ Après tout commentaire censé déclencher un agent, l'auteur **lit `trigger_out
 
 - En fin de tâche, l'agent délégataire passe sa sous-issue en `in_review` et **pose lui-même** le lien de mention actif de retour `[@<Nom assigneur>](mention://agent/<uuid>)` + le **nom du fichier YAML de retour joint** : ce lien enqueue le run de reprise.
 - Cible du retour : le **Tech Lead** pour un spécialiste producteur, l'Analyste QA et l'Architecte de sécurité (le Tech Lead synthétise puis renvoie, [`reviewer.md`](reviewer.md)).
+- Commentaire de retour publié **en réponse dans le thread** de la mission : mention valide + **une** ligne de statut + nom du YAML joint. Aucune liste de points ni bloc technique. Toujours adressé au Tech Lead, jamais à l'agent de notifications.
 - Une mention en texte clair, ou une simple réponse, n'enqueue aucun run : la chaîne A2A est alors rompue (compte-rendu réputé non rendu, le flux s'arrête).
+- Aucun secret ni `${SNI}` dans le YAML.
 
 > **Pas d'accusé de réception, pour tous les agents.** Règle posée d'abord pour le Tech Lead, étendue aux spécialistes et reviewers (Spécialistes Docker, Terraform, Kestra, n8n, Home Assistant, Analyste QA, Architecte de sécurité). Quand le Tech Lead reçoit un retour d'un spécialiste ou d'un reviewer sur une sous-issue, il ne poste **aucun commentaire** si ce retour n'appelle ni **décision** ni **action** de sa part. Sont des décisions ou actions : une délégation ou un renvoi (mention + YAML), un changement de statut qui engage la suite, une demande à l'humain, une synthèse. Ne sont **pas** des raisons de commenter : « Reçu », « Pris en compte », la reformulation du retour, l'annonce qu'il attend la suite, la confirmation d'un état déjà visible (statut, pièce jointe). Le silence vaut réception : le statut de la sous-issue et la lecture de `trigger_outcomes` suffisent. Si la piste d'audit exige une trace (vérification d'un livrable, lien entre deux retours), elle est consignée **en un seul commentaire sur l'issue parente**, jamais en commentaire de réponse sur la sous-issue. Un commentaire qui mentionne un agent pour le seul fait de le remercier ou de lui confirmer la réception est interdit (il enfile un run inutile).
 >

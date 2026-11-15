@@ -149,7 +149,7 @@ La règle préalable universelle (ci-dessus) reste la première action de cadrag
 - Aucune question à l'humain avant l'étape 9, sauf intention ambiguë (étape 7)
 - Aucune liste de questions improvisée
 
-> **Propagation de `$CORE_HOME`** : À chaque délégation, le Tech Lead transmet `$CORE_HOME` dans le message A2A `delegation` (fichier YAML joint, champ `core_home`), pour que le délégataire lance sensors, gates et hook d'écriture sans re-chercher le harnais. Le même YAML porte `fiches_a_recharger` — les fiches de stage et protocoles à charger pour sa mission (chargement paresseux ciblé). La mission voyage dans ce fichier joint, jamais en prose (voir [`protocols/governance-security.md`](protocols/governance-security.md) § « Règle A2A » et [`protocols/stage-protocol.md`](protocols/stage-protocol.md)).
+> **Propagation de `$CORE_HOME`** : le Tech Lead transmet `$CORE_HOME` et `fiches_a_recharger` dans chaque message A2A `delegation` (voir [`protocols/governance-security.md`](protocols/governance-security.md) § « Schéma du message A2A »).
 
 ---
 
