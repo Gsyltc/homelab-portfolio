@@ -121,6 +121,16 @@ $defs:
         minLength: 1
         description: 'Une ligne factuelle : fait vérifié (si conforme), description de l''écart (si ecart),
           ou motif d''indisponibilité (si indisponible). Jamais de valeur de secret ni de ${SNI}.'
+      sha256:
+        type: string
+        description: Empreinte sha256 du livrable contrôlé (64 hexadécimaux). Optionnel ; requis pour que le verdict soit repris dans versions.json (sensor version-livrables).
+        pattern: '^[0-9a-fA-F]{64}$'
+      origine:
+        type: string
+        description: execute = lancé par l'émetteur ; repris = lu dans le retour du propriétaire du sensor (même sha256).
+        enum:
+        - execute
+        - repris
   point:
     type: object
     additionalProperties: false

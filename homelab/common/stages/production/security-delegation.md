@@ -14,7 +14,7 @@ human_gate: granular
 produces: [controle_securite_posture, branchement_gravite_securite]
 consumes: [{artifact: livrable_tfvars, required: false}, {artifact: livrable_compose, required: false}]
 requires_stage: [terraform-configuration, docker-compose-creation]
-sensors: [plaintext-secret, terraform-no-sni, traefik-coherence]
+sensors: []
 scopes: [stack-update, new-stack, config-change, security-patch, infra-terraform]
 inputs: "Livrables compose et / ou Terraform livrés (même version que celle soumise à la QA)"
 outputs: "Jugement de posture sécurité (Architecte de sécurité Homelab) + branchement par gravité : critique/majeur → rapport au Tech Lead, qui seul interroge l'humain après synthèse avec la QA ; non critique → retour Tech Lead par mention valide ; le Tech Lead attend aussi le rapport QA avant toute suite"
@@ -66,7 +66,7 @@ autoritaire : [`governance-security.md` § Invariants non contournables](../../p
 ## Sensors
 
 Outputs: jugement de posture sécurité + branchement par gravité consigné (piste d'audit sur l'issue).
-Imports: `plaintext-secret` (write — **bloquant sur `security-patch` / `new-stack`**, ALI-204), `terraform-no-sni` (write — **bloquant sur `security-patch` / `new-stack`**), `traefik-coherence` (gate).
+Aucun sensor déclaré : l'Architecte de sécurité **ne relance rien** et **consomme** les verdicts de l'auteur et de la QA (`sensors_resultats`, même `sha256`) pour porter son jugement de posture. Règle : [`governance-security.md`](../../protocols/governance-security.md) § « Un contrôle, un propriétaire ». Les sensors bloquants (`plaintext-secret`, `terraform-no-sni`) restent bloquants chez leur propriétaire.
 Review artifact: `controle-securite.md` porte la section `## Review` (revue adversariale de l'Architecte de sécurité Homelab, plancher SG-3 — jamais portée / remplacée / conditionnée par un gate / sensor advisory).
 
 ## Learn

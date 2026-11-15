@@ -73,9 +73,9 @@ criteres_acceptation: [<critère>, ...]
 sensors_a_executer: [<id-sensor>, ...]            # délégation : contrôles attendus (repris de la fiche de stage / frontière)
 points_corriges: [<id-point>, ...]               # délégation de re-contrôle (revue partielle) : ids des points corrigés ; le reviewer ne revoit que ceux-là et leurs effets directs
 sensors_resultats:                                 # retour / rapport-vérification : verdicts rendus par sensor.py
-  - {sensor: <id>, fire_on: write | gate, verdict: conforme | ecart | indisponible, detail: "<ligne factuelle>", source: "<manifeste @ commit>"}
+  - {sensor: <id>, fire_on: write | gate, verdict: conforme | ecart | indisponible, detail: "<ligne factuelle>", source: "<manifeste @ commit>", sha256: "<livrable contrôlé>", origine: execute | repris}
 artefacts:
-  - {role: produit | consomme, nom: <fichier>, chemin: "${ROOT_DIRECTORY}/..."}
+  - {role: produit | consomme, nom: <fichier>, chemin: "${ROOT_DIRECTORY}/...", sha256: "<empreinte du fichier>"}   # sha256 obligatoire pour role: produit
 resultat: {statut: ok | ecart | halt, detail: <optionnel>}
 gate_humaine: aucune | legere | granulaire | explicite
 reference_audit: <id de commentaire ou d'artefact>
@@ -85,8 +85,26 @@ reference_audit: <id de commentaire ou d'artefact>
 - **`retour`** : `resultat` + `sensors_resultats` renseignés ; `artefacts` liste les livrables produits.
 - **`rapport-verification`** : `resultat.statut` + `sensors_resultats` structurés. Pour un **reviewer**, l'instance détaillée de ce retour est le rapport `review-<agent>-<stack>.yaml` conforme à [`report-format.schema.yaml`](report-format.schema.yaml) (points `critical/warning/info` + `sensors[]`) : [`report-format.md`](report-format.md) détaille ce contrat, il ne le contredit pas.
 - **Sensors (garde-fous SG-1..6 reconduits, non contournables)** : le `verdict` est celui rendu par `sensor.py` (`python3 "$CORE_HOME/homelab/scripts/sensor.py" …`), **jamais réinterprété** ; `indisponible ≠ conforme` ; un sensor présent dans `sensors_a_executer` mais **absent de `sensors_resultats` est un écart** (silence interdit) ; le message A2A reste **advisory** — il ne remplace ni la validation humaine granulaire ni le contrôle sécurité systématique (Analyste QA + Architecte de sécurité Homelab). L'exception bloquante `plaintext-secret` / `terraform-no-sni` sur `security-patch` / `new-stack` (ALI-204) demeure.
+- **Version d'un livrable = son `sha256`.** Chaque livrable `produit` porte l'empreinte `sha256` du fichier livré, et chaque verdict de sensor porte le `sha256` du livrable qu'il a contrôlé. Un verdict n'est valable que pour **ce** `sha256`.
 - Champs non pertinents omis. **Aucun secret** dans le YAML ; **jamais `${SNI}`** dans un artefact Terraform référencé. La langue des valeurs libres suit celle de l'humain (français par défaut).
 - **Règle de validité YAML (obligatoire)** : en notation *flow* (`[...]` / `{...}`), **mettre entre guillemets** toute valeur contenant `${...}`, `{`, `}`, `:` suivi d'un espace, ou une **virgule** (ex. `chemin: "${ROOT_DIRECTORY}/..."`, `detail: "2 écarts, 1 indisponible"`). Un doute ⇒ guillemeter. Le fichier reste **YAML valide** de bout en bout (piste d'audit lisible).
+
+### Un contrôle, un propriétaire (sensors)
+
+Chaque sensor tourne **une fois par version** (`sha256`), chez son **propriétaire**. Les autres agents **lisent** le verdict dans le YAML joint (`sensors_resultats`, `origine: repris`) et ne le relancent que si le `sha256` du livrable a changé.
+
+| Propriétaire | Sensors lancés | Moment |
+| --- | --- | --- |
+| **Auteur** (Spécialiste Docker / Terraform) | `yaml-validity`, `plaintext-secret`, `terraform-no-sni` | à l'écriture |
+| **Analyste QA** | `swarm-deploy-section`, `traefik-coherence` | à la vérification QA |
+| **Spécialiste Déploiement** | `vault-secret-exists` | au dépôt |
+| **Architecte de sécurité**, **Tech Lead** (contrôle qualité central) | aucun | ils consomment les verdicts |
+
+- La QA **déclare** aussi `plaintext-secret` et `terraform-no-sni` (aucune omission, SG-2) : elle les **reprend** de l'auteur (`origine: repris`) si le `sha256` est identique, et les relance sinon.
+- Un verdict repris dont le `sha256` ne correspond pas à la version courante est **absent**, donc un écart (silence interdit).
+- Le Tech Lead ne relance aucun sensor pour « vérifier » une livraison : il lit le YAML et ne contrôle que le `sha256`.
+- Le Tech Lead **génère** `versions.json` à chaque version validée, par script et non à la main : il télécharge les YAML joints (`multica attachment download`) puis lance `python3 "$CORE_HOME/homelab/scripts/versions.py" record --dir ${WORK_DIRECTORY}/.a-valider/<id-tâche>/<stack> <retour.yaml>...`. Le script calcule le `sha256` des livrables, rattache à chacun les verdicts dont le `sha256` correspond (un verdict sans `sha256` ou d'une autre version est ignoré et signalé, jamais deviné) et écrit le fichier (répertoire de relecture : `sha256` des livrables + verdicts par `sha256`). Le gate de phase `phase3-phase4` **ne relance pas** les sensors : il lance seulement le sensor [`version-livrables`](../../sensors/sensors/version-livrables.md), qui vérifie que les fichiers ont le `sha256` validé et que chaque verdict requis existe pour ce `sha256`.
+- Aucun contrôle n'est supprimé : SG-1..6 et le plancher SG-3 de la revue sécurité restent inchangés.
 
 ## Concurrence — un seul traitement par stack (lecture **par artefact**)
 

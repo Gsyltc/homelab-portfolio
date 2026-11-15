@@ -573,7 +573,7 @@ class TestDispatcher(unittest.TestCase):
 
     def test_all_manifests_valid(self):
         manifests = sensor.load_manifests()
-        self.assertEqual(len(manifests), 8)
+        self.assertEqual(len(manifests), 9)
         for sid, m in manifests.items():
             self.assertTrue(m.valid, f"{sid} invalide : {m.missing}")
             self.assertIsNotNone(sensor.load_check(sid), f"{sid} : script absent/invalide")
@@ -597,7 +597,7 @@ class TestDispatcher(unittest.TestCase):
         b = sensor.parse_boundaries()
         self.assertIn("phase3-phase4", b)
         p34 = b["phase3-phase4"]
-        self.assertIn("yaml-validity", p34["sensors"])
+        self.assertEqual(p34["sensors"], ["version-livrables"])  # aucun sensor relancé au gate : seule la version des livrables est contrôlée
         self.assertTrue(any(e["artifact"] == "livrable_tfvars_present" and "new-stack" in e["scopes"]
                             for e in p34["blocking_on_scope"]))
         self.assertEqual(p34["prerequis_40"], ["repertoire_travail_defini"])
@@ -619,6 +619,123 @@ class TestDispatcher(unittest.TestCase):
             rc = sensor.main(["--root", str(self.p.root), "gate", "phase3-phase4", "--scope", "new-stack"])
         self.assertEqual(rc, 0)  # advisory : code 0
         self.assertIn("Rapport de vérification", buf.getvalue())
+
+
+class TestVersionLivrables(unittest.TestCase):
+    DIR = ".a-valider/HOM-1/sync-in"
+    REL = DIR + "/versions.json"
+
+    def setUp(self):
+        self.p = Project()
+
+    def tearDown(self):
+        self.p.cleanup()
+
+    @staticmethod
+    def sha(text: str) -> str:
+        import hashlib
+        return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+    def setup_files(self, compose="services: {}\n", tfvars="stack_name = \"sync-in\"\n"):
+        self.p.write(self.DIR + "/sync-in.yml", compose)
+        self.p.write(self.DIR + "/config.tfvars", tfvars)
+        c, t = self.sha(compose), self.sha(tfvars)
+        v = lambda h, ids: {i: {"verdict": "conforme", "sha256": h} for i in ids}
+        return {"livrables": {
+            "sync-in.yml": {"sha256": c, "verdicts": v(c, ["yaml-validity", "plaintext-secret", "swarm-deploy-section", "traefik-coherence"])},
+            "config.tfvars": {"sha256": t, "verdicts": v(t, ["terraform-no-sni", "plaintext-secret"])},
+        }}
+
+    def fire_with(self, data, scope=None):
+        self.p.write(self.REL, json.dumps(data))
+        return fire(self.p.root, "version-livrables", [self.REL], scope)
+
+    def test_ok(self):
+        self.assertEqual(verdict(self.fire_with(self.setup_files())), OK)
+
+    def test_modified_file(self):
+        data = self.setup_files()
+        self.p.write(self.DIR + "/sync-in.yml", "services:\n  x: {}\n")
+        self.assertEqual(verdict(self.fire_with(data)), GAP)
+
+    def test_stale_verdict(self):
+        data = self.setup_files()
+        data["livrables"]["config.tfvars"]["verdicts"]["terraform-no-sni"]["sha256"] = "0" * 64
+        self.assertEqual(verdict(self.fire_with(data)), GAP)
+
+    def test_missing_verdict(self):
+        data = self.setup_files()
+        del data["livrables"]["sync-in.yml"]["verdicts"]["traefik-coherence"]
+        self.assertEqual(verdict(self.fire_with(data)), GAP)
+
+    def test_unregistered_deliverable(self):
+        data = self.setup_files()
+        self.p.write(self.DIR + "/autre.yml", "services: {}\n")
+        self.assertEqual(verdict(self.fire_with(data)), GAP)
+
+    def test_invalid_json(self):
+        self.p.write(self.REL, "{")
+        self.assertEqual(verdict(fire(self.p.root, "version-livrables", [self.REL])), UNAVAILABLE)
+
+    def test_no_scope(self):
+        self.assertEqual(verdict(fire(self.p.root, "version-livrables", [])), UNAVAILABLE)
+
+    def test_blocking_on_new_stack(self):
+        m = sensor.load_manifests()["version-livrables"]
+        self.assertEqual(sensor.resolve_severity(m, "new-stack"), "blocking")
+        self.assertEqual(sensor.resolve_severity(m, "config-change"), "advisory")
+
+
+class TestVersionsRecord(unittest.TestCase):
+    def setUp(self):
+        self.p = Project()
+        self.dir = self.p.root / ".a-valider/HOM-1/sync-in"
+
+    def tearDown(self):
+        self.p.cleanup()
+
+    def test_record_then_sensor_ok(self):
+        import hashlib
+        import versions
+        compose, tfvars = "services: {}\n", "stack_name = \"x\"\n"
+        self.p.write(".a-valider/HOM-1/sync-in/sync-in.yml", compose)
+        self.p.write(".a-valider/HOM-1/sync-in/config.tfvars", tfvars)
+        c = hashlib.sha256(compose.encode()).hexdigest()
+        t = hashlib.sha256(tfvars.encode()).hexdigest()
+
+        def a2a(ids, h):
+            return "sensors_resultats:\n" + "".join(
+                f"  - {{sensor: {i}, fire_on: write, verdict: conforme, detail: \"ok, vu\", sha256: \"{h}\"}}\n" for i in ids)
+
+        self.p.write("r1.yaml", a2a(["yaml-validity", "plaintext-secret"], c))
+        self.p.write("r2.yaml", a2a(["terraform-no-sni", "plaintext-secret"], t))
+        qa = "report:\n  sensors:\n" + "".join(
+            f"    - {{id: {i}, fire_on: gate, verdict: conforme, note: ok, sha256: \"{c}\"}}\n"
+            for i in ["swarm-deploy-section", "traefik-coherence"])
+        self.p.write("r3.yaml", qa)
+        rc = versions.main(["record", "--dir", str(self.dir)] + [str(self.p.root / n) for n in ("r1.yaml", "r2.yaml", "r3.yaml")])
+        self.assertEqual(rc, 0)
+        rep = fire(self.p.root, "version-livrables", [".a-valider/HOM-1/sync-in/versions.json"])
+        self.assertEqual(verdict(rep), OK)
+
+    def test_stale_and_missing_are_reported_not_guessed(self):
+        import versions
+        self.p.write(".a-valider/HOM-1/sync-in/sync-in.yml", "services: {}\n")
+        self.p.write("r.yaml", "sensors_resultats:\n  - {sensor: plaintext-secret, verdict: conforme}\n")
+        data, notes = versions.record(self.dir, [self.p.root / "r.yaml"])
+        self.assertEqual(data["livrables"]["sync-in.yml"]["verdicts"], {})
+        self.assertTrue(any("ignoré" in n for n in notes))
+        self.assertTrue(any("manquant" in n for n in notes))
+
+    def test_worst_verdict_wins(self):
+        import hashlib
+        import versions
+        self.p.write(".a-valider/HOM-1/sync-in/config.tfvars", "a = 1\n")
+        h = hashlib.sha256(b"a = 1\n").hexdigest()
+        self.p.write("a.yaml", f"sensors_resultats:\n  - {{sensor: terraform-no-sni, verdict: conforme, sha256: \"{h}\"}}\n")
+        self.p.write("b.yaml", f"sensors_resultats:\n  - {{sensor: terraform-no-sni, verdict: ecart, sha256: \"{h}\"}}\n")
+        data, _ = versions.record(self.dir, [self.p.root / "a.yaml", self.p.root / "b.yaml"])
+        self.assertEqual(data["livrables"]["config.tfvars"]["verdicts"]["terraform-no-sni"]["verdict"], "ecart")
 
 
 if __name__ == "__main__":

@@ -42,7 +42,7 @@ Produire le fichier (skill `docker-composer`), conserver les commentaires `#` de
 ## Sensors
 
 Outputs: livrable compose lisible dans `${WORK_DIRECTORY}/.a-valider/<id-tâche>/<stack>/` (et joint à l'issue). Gate humain granulaire **selon le mode d'exécution** ([`autonomy-mode`](autonomy-mode.md)) : gated → validation à ce stage ; autonome → regroupée au point de synchronisation.
-Imports: `yaml-validity` (write), `plaintext-secret` (write — **bloquant sur `security-patch` / `new-stack`**).
+Imports: `yaml-validity` (write), `plaintext-secret` (write — **bloquant sur `security-patch` / `new-stack`**). L'auteur en est **propriétaire** : ses verdicts, avec le `sha256` du compose, voyagent dans le YAML `retour` et sont repris par la QA ([`governance-security.md`](../../protocols/governance-security.md) § « Un contrôle, un propriétaire »).
 Upstream targets: `parametres_requis_complets` (required), `mode_execution_applique` (required). Plus de dépendance `livrable_tfvars` : le compose est produit en parallèle du `.tfvars`.
 
 ## Learn

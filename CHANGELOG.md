@@ -9,6 +9,15 @@ ce fichier en donne la lecture chronologique côté produit.
 ## [Non publié]
 
 ### Changed
+- **Script `homelab/scripts/versions.py`.** `record` génère `versions.json` depuis les YAML joints (`sensors_resultats[]`,
+  `sensors[]`) en rattachant chaque verdict au livrable de même `sha256`. Le schéma de rapport reviewer gagne `sha256` et
+  `origine` (optionnels) par sensor.
+- **Contrôles au bon moment : un contrôle, un propriétaire.** Chaque sensor tourne une fois par version (`sha256` du
+  livrable) chez son propriétaire (auteur : `yaml-validity`, `plaintext-secret`, `terraform-no-sni` ; QA :
+  `swarm-deploy-section`, `traefik-coherence` ; déploiement : `vault-secret-exists`) ; les autres reprennent le verdict
+  (`origine: repris`). Sensors retirés de `security-delegation` et `central-quality-control` ; contrôle macro unique ;
+  le gate `phase3-phase4` ne relance plus de sensor mais lance le nouveau sensor `version-livrables` (`versions.json`, `sha256`) ; le dépôt le lance aussi avant déplacement et contrôle le
+  `sha256`. Modifs : `governance-security`, stages `production` et `validation`, `homelab/sensors/gates.md`, test du gate.
 - **Plus d'accusé de réception sur les sous-issues, pour tous les agents.** Un retour sans décision ni action ne reçoit aucun
   commentaire (le silence vaut réception) ; un spécialiste ou reviewer réveillé sans nouvelle mission ne poste rien (fin des
   « mission déjà traitée ») ; une trace d'audit éventuelle va en un seul commentaire sur l'issue parente.

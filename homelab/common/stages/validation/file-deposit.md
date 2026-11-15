@@ -13,7 +13,7 @@ human_gate: explicit
 produces: [depot_fichiers_confirme]
 consumes: [{artifact: validation_humaine_explicite, required: true}, {artifact: prerequis_deploiement_verifies, required: true}]
 requires_stage: [human-granular-validation]
-sensors: [vault-secret-exists]
+sensors: [version-livrables, vault-secret-exists]
 scopes: [stack-update, new-stack, config-change, security-patch, infra-terraform]
 inputs: "Configuration validée + prérequis §répertoire vérifiés + fichiers du répertoire de relecture `${WORK_DIRECTORY}/.a-valider/<id-tâche>/<stack>/`"
 outputs: "Fichiers déplacés vers les répertoires de travail, vérifiés ; répertoire de relecture nettoyé"
@@ -33,6 +33,8 @@ Déposer les livrables validés aux emplacements conventionnels, sur confirmatio
 
 **Source** : `${WORK_DIRECTORY}/.a-valider/<id-tâche>/<stack>/` (répertoire de relecture alimenté par les spécialistes, voir [`terraform-configuration.md`](../production/terraform-configuration.md) et [`docker-compose-creation.md`](../production/docker-compose-creation.md)). Aucun fichier n'est placé hors de `.a-valider/` avant la validation humaine explicite.
 
+Avant de proposer le dépôt, le Tech Lead lance `version-livrables` sur `.a-valider/<id-tâche>/<stack>/versions.json` ; sur écart, il ne propose pas le dépôt (retour en Production).
+
 Le Tech Lead **propose** les chemins de destination en les affichant, et **attend la confirmation explicite** de l'humain avant tout déplacement :
 
 - docker-compose : `${WORK_DIRECTORY}/docker/stacks/[domaine]/[nom-stack].yml` (domaine = valeur `domain` du `config.tfvars` ; convention `<stack>.yml`).
@@ -44,7 +46,7 @@ Après confirmation, **déplacer** (et non copier) les fichiers depuis `.a-valid
 
 ### Step 3 — Vérifier après déplacement
 
-Vérifier les fichiers déplacés : présence à l'emplacement définitif, contenu conforme, parse YAML pour le compose, aucun secret en clair.
+Vérifier les fichiers déplacés : présence à l'emplacement définitif et **`sha256` identique à la version validée** (`versions.json`, déjà contrôlé par `version-livrables` avant le déplacement ; le déplacement ne change pas le contenu). Si l'empreinte correspond, **aucun sensor d'écriture n'est relancé** (`plaintext-secret`, `terraform-no-sni`, `yaml-validity` : verdicts déjà valables pour ce `sha256`). Si elle diffère, le fichier n'est pas déposé : retour en Production. Le seul sensor lancé au dépôt est `vault-secret-exists`.
 
 ### Step 4 — Nettoyer le répertoire de relecture
 
@@ -55,7 +57,7 @@ Une fois la vérification réussie, supprimer `.a-valider/<id-tâche>/<stack>/` 
 ## Sensors
 
 Outputs: dépôt confirmé + fichiers vérifiés. Action à impact → validation humaine explicite requise (invariant).
-Imports: `vault-secret-exists` (gate — existence seule, **jamais** la valeur).
+Imports: `version-livrables` (gate — lancé **avant le déplacement**, Step 1 : fichiers identiques à la version validée), `vault-secret-exists` (gate — existence seule, **jamais** la valeur).
 
 ## Learn
 
