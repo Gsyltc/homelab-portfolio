@@ -36,7 +36,7 @@ checks:
     - "/run/secrets/*"
 ```
 
-> **Ne lit ni ne recopie jamais la valeur détectée** : le signal indique **l'emplacement** (fichier + ligne + clé) et le **type de motif**, jamais le contenu du secret (garde-fou « aucun secret dans les commentaires / notifications »).
+> **Ne lit ni ne recopie jamais la valeur détectée** : le signal indique **l'emplacement** (fichier + ligne + clé) et le **type de motif**, pas le contenu du secret (garde-fou « aucun secret dans les commentaires / notifications »).
 
 ## Sortie (piste d'audit)
 

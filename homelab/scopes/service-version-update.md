@@ -73,7 +73,7 @@ d'aller-retour, pas de double validation. Ce gate `light` est porté par le stag
 ## Exception d'écriture Vault étroite
 
 La skill `homelab-vault-access` reste en **lecture seule** pour tous les autres parcours, hors la création de clés d'une nouvelle stack sur « oui » explicite au gate final. Pour **ce scope**, la seule écriture autorisée est celle des clés de version (`VERSION` / `VERSION_<NOM_DU_SERVICE>`) du montage
-`env_variables/data/<service>`. **Jamais** un secret du montage `services/`, jamais une autre clé qu'une clé de version.
+`env_variables/data/<service>`. **Jamais** un secret du montage `services/` ni une autre clé qu'une clé de version.
 L'écriture suit un pattern read-modify-write qui préserve toutes les autres clés ; la valeur
 n'est **jamais** affichée, loggée ni transmise ; l'écriture est tracée sur l'issue (nom de clé
 `VERSION` + statut seulement). Détail : `homelab-vault-access`.

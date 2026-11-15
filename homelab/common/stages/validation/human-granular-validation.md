@@ -76,4 +76,4 @@ Imports: none.
 
 ## Learn
 
-Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : ce stage **porte le gate explicite** — le Tech Lead **n'y remonte aucun** candidat-règle : ceux capturés en Production sont consignés et remontés **en fin de workflow**, dans un message séparé ([`closure`](closure.md)), jamais mêlés à la validation des livrables ; persistance des apprentissages **confirmés** dans `homelab/rules/` (jamais dans le run courant).
+Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : ce stage **porte le gate explicite** — le Tech Lead **n'y remonte aucun** candidat-règle : ceux capturés en Production sont consignés et remontés **en fin de workflow**, dans un message séparé ([`closure`](closure.md)), sans mélange avec la validation des livrables ; persistance des apprentissages **confirmés** dans `homelab/rules/` (jamais dans le run courant).

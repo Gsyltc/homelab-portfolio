@@ -199,7 +199,7 @@ Un élément qui dépend d'une valeur absente (ex. un scope `groups` qui exige l
 
 Si l'humain choisit « Keep » sans fournir la valeur, l'élément reste **en attente** : le Tech Lead redemande la valeur, il ne délègue ni ne devine. Une valeur que l'humain décide d'omettre est tracée comme **renoncement** et l'élément dépendant est retiré.
 
-**Ne jamais avancer sur un élément non validé.** Ne jamais fusionner des choix en une approbation globale « tout ou rien » (même en mode autonome — voir [`stages/production/docker-compose-creation.md`](stages/production/docker-compose-creation.md) et [`stages/production/autonomy-mode.md`](stages/production/autonomy-mode.md)).
+**Ne jamais avancer sur un élément non validé.** Interdit de fusionner des choix en une approbation globale « tout ou rien » (même en mode autonome — voir [`stages/production/docker-compose-creation.md`](stages/production/docker-compose-creation.md) et [`stages/production/autonomy-mode.md`](stages/production/autonomy-mode.md)).
 
 ### Résolution des questions / contradictions intra-stage
 

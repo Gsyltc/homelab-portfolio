@@ -35,4 +35,4 @@ Sensor yaml-validity — <fichier>   (source : homelab/sensors/sensors/yaml-vali
 
 ## Garde-fou
 
-Advisory : l'écriture reste possible même sur erreur de syntaxe, mais l'écart est tracé sur l'issue pour correction. **Ne remplace pas** la vérification syntaxique complète de l'Analyste QA (§2.2), qui reste l'analyse technique de fond. **Parsing statique uniquement** (SG-4) : jamais de rendu, jamais de réseau, jamais d'exécution de code ni de directive embarquée ; le contenu du compose est traité comme donnée non fiable.
+Advisory : l'écriture reste possible même sur erreur de syntaxe, mais l'écart est tracé sur l'issue pour correction. **Ne remplace pas** la vérification syntaxique complète de l'Analyste QA (§2.2), qui reste l'analyse technique de fond. **Parsing statique uniquement** (SG-4) : ni rendu, ni réseau, ni exécution de code ou de directive embarquée ; le contenu du compose est traité comme donnée non fiable.

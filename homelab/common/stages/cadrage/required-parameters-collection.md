@@ -40,7 +40,7 @@ Le Tech Lead vérifie que tous les paramètres sont renseignés ; **il ne génè
 | Stockage `${storage}` | Déductible | NFS du Homelab : serveur `truenas`, chemin `/mnt/datas/${ENVIRONMENT}/<services\|databases>/<stack_name>`. **Source unique** : [`template.yml`](../../../../plugins/homelab-assistant/skills/docker-composer/references/template.yml) (section `VOLUMES`) de la skill `docker-composer`. Ne jamais demander le serveur ni le chemin. |
 | Secrets et variables Vault `${vault}` | Déductible | **Noms uniquement, jamais de valeur.** Voir « Détail : Vault » ci-dessous. |
 | Réseau Traefik `${traefik_network}` | Déductible | **Source unique** : liste et réseau par défaut définis dans la skill `docker-composer` ([`references/network.md`](../../../../plugins/homelab-assistant/skills/docker-composer/references/network.md)). Validé au gate léger ([`network-preselection`](../initialisation/network-preselection.md)), repris sans redemander. |
-| Activer Valkey `${valkey_enabled}` | Déductible | `true`, `false` — le Homelab possède **déjà** un Valkey/Redis mutualisé : ne jamais recréer ce service, s'y connecter (règle portée par la skill `docker-composer`). |
+| Activer Valkey `${valkey_enabled}` | Déductible | `true`, `false` — le Homelab possède **déjà** un Valkey/Redis mutualisé : ne pas recréer ce service, s'y connecter (règle portée par la skill `docker-composer`). |
 | Service base de données `${database_service}` | Optionnel | `postgres`, `mysql`, `mariadb`, `mongodb`, `none` — validé au gate léger ([`database-preselection`](../initialisation/database-preselection.md)), repris sans redemander. |
 
 **Un seul message de confirmation**, au format [`output-format`](../../protocols/output-format.md) (une décision par bloc, valeur déduite comme **proposition par défaut**, toute valeur manquante connue incluse dès ce message) : le Tech Lead propose en bloc les valeurs par défaut déduites restantes (`${storage}`, `${valkey_enabled}`, `${vault}` et, si `oidc`, `${oidc_params}`) ainsi que le **mode d'exécution** de la Production (options et défaut : [`autonomy-mode`](../production/autonomy-mode.md)), et attend la confirmation ou correction de l'humain.
@@ -95,7 +95,7 @@ Le Tech Lead **déduit** les paramètres OIDC au lieu de les demander, puis les 
 
 | Paramètre | Valeur déduite par défaut |
 | --- | --- |
-| IdP | **Authentik**, seul IdP OIDC du Homelab. Ne jamais demander l'IdP ni son URL d'émetteur : le client est créé par le Terraform (`oauth[]`). |
+| IdP | **Authentik**, seul IdP OIDC du Homelab. Ne pas demander l'IdP ni son URL d'émetteur : le client est créé par le Terraform (`oauth[]`). |
 | Nom du client | `${stack_name}` |
 | Redirect URI | Chemin de callback issu de la **documentation officielle** de l'application (ex. `/oauth2/callback`, `/authorization-code/callback`), préfixé par `https://${fqdn}` — dépend donc de `${fqdn}` (déduit au Step 1) |
 | Scopes | Ceux requis par la documentation officielle ; à défaut `openid profile email` |

@@ -23,7 +23,7 @@ outputs: "Fichiers .tf / .tfvars de la stack, déposés dans `${WORK_DIRECTORY}/
 
 ## Objectif
 
-Préparer les variables Terraform de la stack, sans jamais déployer. Ce stage s'exécute **en parallèle** du docker-compose ([`docker-compose-creation.md`](docker-compose-creation.md)) : les valeurs proviennent des **paramètres collectés en Cadrage (§2.4)**, jamais d'une déduction depuis un docker-compose.
+Préparer les variables Terraform de la stack, sans jamais déployer. Ce stage s'exécute **en parallèle** du docker-compose ([`docker-compose-creation.md`](docker-compose-creation.md)) : les valeurs proviennent des **paramètres collectés en Cadrage (§2.4)**, pas d'une déduction depuis un docker-compose.
 
 ## Steps
 
@@ -52,7 +52,7 @@ Livraison :
 
 ### Step 3 — Vérification QA en aval
 
-Le livrable `.tfvars` produit passe **obligatoirement** par l'**Analyste QA** ([`quality-assurance.md`](quality-assurance.md), volet Terraform, skill `terraform-qa`) avant l'aiguillage du Tech Lead ([`central-quality-control.md`](central-quality-control.md)) : vérification systématique, jamais sautée. Sur défaut, l'Analyste QA émet un `RENVOI` dans son rapport YAML adressé au **Tech Lead**, qui renvoie au Spécialiste Terraform après synthèse avec la revue sécurité ; la QA ne modifie jamais le livrable.
+Le livrable `.tfvars` produit passe **obligatoirement** par l'**Analyste QA** ([`quality-assurance.md`](quality-assurance.md), volet Terraform, skill `terraform-qa`) avant l'aiguillage du Tech Lead ([`central-quality-control.md`](central-quality-control.md)) : vérification systématique et obligatoire. Sur défaut, l'Analyste QA émet un `RENVOI` dans son rapport YAML adressé au **Tech Lead**, qui renvoie au Spécialiste Terraform après synthèse avec la revue sécurité ; la QA ne modifie jamais le livrable.
 
 > **Répertoire de relecture.** Fichiers générés déposés uniquement dans `.a-valider/<id-tâche>/<stack>/` : [`review-directory.md`](../../protocols/review-directory.md).
 

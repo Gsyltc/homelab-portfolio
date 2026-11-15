@@ -52,7 +52,7 @@ via la skill `homelab-vault-access`,
 en **read-modify-write** (les autres clés sont relues puis réécrites à l'identique — jamais
 écrasées). Garde-fous **non débordables** :
 
-- **jamais** un secret du montage `services/`, **jamais** une autre clé qu'une clé de version (`VERSION` / `VERSION_<NOM_DU_SERVICE>`) ;
+- **jamais** un secret du montage `services/` ni une autre clé qu'une clé de version (`VERSION` / `VERSION_<NOM_DU_SERVICE>`) ;
 - la valeur n'est **jamais** affichée, loggée ni transmise ;
 - l'écriture est **tracée sur l'issue** : nom(s) de clé de version + statut (écrite / échec) **seulement** ;
 - le token Vault est **révoqué** en fin d'opération.

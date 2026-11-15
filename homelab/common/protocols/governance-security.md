@@ -34,7 +34,7 @@ Un agent est déclenché par un **commentaire sur l'issue** qui porte deux chose
 - Aucune prose de mission, de livrable ni de rapport de sensors dans le fil.
 
 - **Ne jamais deviner un UUID** : le résoudre via `multica agent list --output json` avant chaque mention (procédure : [`tech-lead-homelab-agent.md`](../../agents/tech-lead-homelab-agent.md) § « Résolution des agents »). **Écrire le nom d'un agent en texte brut ne déclenche RIEN** — seul le lien `mention://agent/<uuid>` enfile un run.
-- La **réduction de prose ne touche qu'au texte AUTOUR du lien, jamais au lien de mention lui-même** : le lien reste **actif**, l'UUID résolu à chaque fois, jamais une auto-mention. Détail opératoire (résolution d'UUID, `trigger_outcomes`) : [`stage-protocol.md`](stage-protocol.md) (temps 2 et 3).
+- La **réduction de prose ne touche qu'au texte AUTOUR du lien, pas au lien de mention lui-même** : le lien reste **actif**, l'UUID est résolu à chaque fois, sans auto-mention. Détail opératoire (résolution d'UUID, `trigger_outcomes`) : [`stage-protocol.md`](stage-protocol.md) (temps 2 et 3).
 - Le Tech Lead contrôle chaque livrable (le YAML joint + le fichier produit) avant la validation humaine.
 
 Après tout commentaire censé déclencher un agent, l'auteur **lit `trigger_outcomes`** dans la réponse de la CLI ; sur un statut `blocked` / `coalesced` / `deferred`, il **corrige la mention et retente une seule fois** ; si cette reprise échoue, il **passe l'issue en `blocked`**, **escalade à l'humain** et n'effectue aucune nouvelle reprise automatique.
@@ -44,7 +44,7 @@ Après tout commentaire censé déclencher un agent, l'auteur **lit `trigger_out
 | Cas | Mention | Texte du commentaire |
 | --- | --- | --- |
 | **Délégation / retour SANS gate humaine** (handoff A2A pur) | `[@Agent](mention://agent/<uuid>)` **actif** | **Aucune prose.** Réduit à la mention + le **nom du fichier YAML joint**. Ex. `[@Analyste QA](mention://agent/<uuid>) — compose à contrôler → delegation-qa-<stack>.yaml` |
-| **Gate humaine REQUISE** | mention de **l'humain** `[@Nom](mention://member/<user_id>)` | **Présentation Markdown DÉTAILLÉE** du contenu à décider **reprise en clair**, au format de [`output-format.md`](output-format.md) (une fiche par décision, proposition par défaut), close par l'action à effectuer. Elle **DOIT inclure les verdicts de sensors du stage** (section `## Sensors`, un sensor par puce — ou la ligne « Sensors de gate » du **Rapport de vérification**, [`../../sensors/gates.md`](../../sensors/gates.md)) — information de décision **obligatoire**, jamais réduite ni masquée. Le YAML joint est la source/audit, **jamais un substitut** à la présentation. |
+| **Gate humaine REQUISE** | mention de **l'humain** `[@Nom](mention://member/<user_id>)` | **Présentation Markdown DÉTAILLÉE** du contenu à décider **reprise en clair**, au format de [`output-format.md`](output-format.md) (une fiche par décision, proposition par défaut), close par l'action à effectuer. Elle **DOIT inclure les verdicts de sensors du stage** (section `## Sensors`, un sensor par puce — ou la ligne « Sensors de gate » du **Rapport de vérification**, [`../../sensors/gates.md`](../../sensors/gates.md)) — information de décision **obligatoire**, ni réduite ni masquée. Le YAML joint est la source/audit, **jamais un substitut** à la présentation. |
 
 ### Retour A2A (clôture de la boucle)
 

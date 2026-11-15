@@ -21,13 +21,13 @@ Défaut : `stack-update`. **Aucun scope ne désactive les invariants non contour
 
 ## Auto-détection & désambiguïsation
 
-Scope auto-détecté par mots-clés (FR / EN) puis **confirmé explicitement** avant démarrage (jamais de démarrage silencieux). Les mots-clés déclencheurs sont **déclarés en données** dans le champ `keywords:` de chaque fichier [`../../scopes/<name>.md`](../../scopes/README.md) (source d'identité). Ordre de priorité en cas de correspondances multiples (**le niveau le plus élevé l'emporte**, héritage direct de la règle « allégé vs complet ») :
+Scope auto-détecté par mots-clés (FR / EN) puis **confirmé explicitement** avant démarrage (aucun démarrage silencieux). Les mots-clés déclencheurs sont **déclarés en données** dans le champ `keywords:` de chaque fichier [`../../scopes/<name>.md`](../../scopes/README.md) (source d'identité). Ordre de priorité en cas de correspondances multiples (**le niveau le plus élevé l'emporte**, héritage direct de la règle « allégé vs complet ») :
 
 `n8n` = `home-assistant` (branches autonomes, court-circuit immédiat) > `security-patch` > `new-stack` > `infra-terraform` > `service-version-update` > `stack-update` > `config-change`
 
 **`service-version-update` vs `stack-update`.** `service-version-update` est une **spécialisation ciblée** de `stack-update` : il l'emporte dès qu'un déclencheur « nouvelle version / montée de version / release » vise un service **existant**. Il reste **sous** `security-patch` : si la montée de version porte un enjeu sécurité (CVE, auth, exposition, secrets), `security-patch` l'emporte et impose son plancher renforcé.
 
-**Le doute ne bascule jamais vers `config-change`** : dès qu'un seul déclencheur d'un scope plus élevé s'applique — ou en cas de doute sur l'impact sécurité — le scope supérieur s'impose. L'auto-détection est un **plancher** : la confirmation humaine peut monter le contrôle, jamais le descendre sans trace.
+**Le doute ne bascule jamais vers `config-change`** : dès qu'un seul déclencheur d'un scope plus élevé s'applique — ou en cas de doute sur l'impact sécurité — le scope supérieur s'impose. L'auto-détection est un **plancher** : la confirmation humaine peut monter le contrôle, et ne le descend pas sans trace.
 
 **Ambiguïté `n8n` vs `home-assistant` (hors stack).** Si la demande est **ambiguë** (mot « automatisation », nommage pouvant viser un flux n8n comme une automatisation Home Assistant) **et** ne concerne pas une stack Docker/Swarm ou Proxmox :
 

@@ -24,7 +24,7 @@ outputs: "Rapport QA YAML par livrable (compose : syntaxe, Swarm, hardening, Tra
 
 ## Objectif
 
-Vérifier et durcir (par le contrôle) chaque livrable de la stack avant toute suite — **docker-compose ET configuration Terraform** — vérification jamais sautée. **L'Analyste QA ne modifie jamais le livrable** : sur défaut, il émet un RENVOI dans son rapport YAML, adressé au Tech Lead (Step 5).
+Vérifier et durcir (par le contrôle) chaque livrable de la stack avant toute suite — **docker-compose ET configuration Terraform** — vérification obligatoire. **L'Analyste QA ne modifie jamais le livrable** : sur défaut, il émet un RENVOI dans son rapport YAML, adressé au Tech Lead (Step 5).
 
 > **Périmètre par scope.** Sur `new-stack` / `stack-update` / `security-patch` : l'Analyste QA vérifie le Terraform **et** le compose, et — ces deux livrables étant produits **en parallèle** — porte explicitement la **réconciliation de leur cohérence croisée** (domaine / FQDN, auth, réseau Traefik) ; tout désaccord est rapporté au Tech Lead (synthèse unique, cf. Step 5). Sous `infra-terraform` : il vérifie **uniquement le Terraform** (aucun compose n'est produit). Sous `config-change` : au juste nécessaire selon les livrables présents.
 

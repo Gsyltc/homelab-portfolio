@@ -73,7 +73,7 @@ Les blocs de [`required-parameters-collection`](../stages/cadrage/required-param
 
 **Source unique** de la notification qui accompagne toute sollicitation de l'humain dans le workflow `homelab`. Elle complète la mention humaine (elle ne la remplace pas) et précise, pour le Homelab, le message générique de l'invariant 7 de [`governance-security.md`](governance-security.md).
 
-- **Quand** : à chaque message du Tech Lead qui attend une réponse de l'humain (gate `light`, `granular` ou `explicit`, arbitrage, blocage `blocked`). **Une notification par message de gate**, jamais une par décision, jamais sur un simple compte rendu.
+- **Quand** : à chaque message du Tech Lead qui attend une réponse de l'humain (gate `light`, `granular` ou `explicit`, arbitrage, blocage `blocked`). **Une notification par message de gate**, pas une par décision, aucune sur un simple compte rendu.
 - **Qui** : le Tech Lead uniquement. Il délègue l'envoi à l'**Agent de notifications** par un handoff A2A pur (mention + fichier YAML `delegation-notification-<stack>.yaml`). Les autres agents n'appellent jamais l'Agent de notifications.
 - **Quand exactement** : après la publication du commentaire de gate, pour que la notification renvoie vers un message déjà lisible.
 - **Message** : une phrase, rédigée par le Tech Lead et transmise telle quelle dans le YAML (champ `message`). Forme : `<Prénom>, merci de <action> de la phase de <phase> pour la stack <stack>`.
