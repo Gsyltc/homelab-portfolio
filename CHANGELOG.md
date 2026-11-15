@@ -9,6 +9,10 @@ ce fichier en donne la lecture chronologique côté produit.
 ## [Non publié]
 
 ### Changed
+- **Plus d'accusé de réception sur les sous-issues, pour tous les agents.** Un retour sans décision ni action ne reçoit aucun
+  commentaire (le silence vaut réception) ; un spécialiste ou reviewer réveillé sans nouvelle mission ne poste rien (fin des
+  « mission déjà traitée ») ; une trace d'audit éventuelle va en un seul commentaire sur l'issue parente.
+  Modifs : `governance-security`, `stage-protocol`, `conductor`, `tech-lead-homelab-agent`.
 - **Notification courte à chaque gate humain.** `output-format.md` § 5 : le Tech Lead demande à l'Agent de
   notifications (handoff A2A YAML) une phrase `<Prénom>, merci de <action> de la phase de <phase> pour la stack
   <stack>`, après le commentaire de gate, sans valeur ni secret. Table des gates et phrases associées.

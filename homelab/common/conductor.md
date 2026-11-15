@@ -261,6 +261,7 @@ Récapitulatif vérifiable à chaque tour (pas une règle neuve — les sources 
 ☑ Règle préalable documentation officielle appliquée et lien consigné sur l'issue
 ☑ Rapport de vérification (gate de phase) posté AVANT toute validation humaine
 ☑ Validation humaine granulaire : chaque choix Keep / Modify / Redo séparément
+☑ Aucun accusé de réception sur les sous-issues, pour aucun agent : un retour sans décision ni action ne reçoit pas de commentaire, un agent réveillé sans nouvelle mission ne poste rien
 ☑ Notification courte envoyée (prénom, phase, stack) à chaque gate humain, après le commentaire de gate ([`protocols/output-format.md`](protocols/output-format.md) § 5)
 ☑ Piste d'audit à jour sur l'issue (entrées brutes conservées, historique non écrasé,
    label `Homelab` posé)
