@@ -42,4 +42,4 @@ Imports: none.
 
 ## Learn
 
-Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : candidats-règles (patterns d'entités / scènes / automatisations récurrents) tracés, remontés à la validation humaine.
+Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : candidats-règles (patterns d'entités / scènes / automatisations récurrents) tracés, remontés **en fin de workflow**, dans un message séparé ([`closure`](../validation/closure.md)).

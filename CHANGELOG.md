@@ -8,7 +8,57 @@ ce fichier en donne la lecture chronologique côté produit.
 
 ## [Non publié]
 
+### Changed
+- **Candidats-règles en fin de workflow, séparés de la validation du livrable.** Plus de remontée aux gates : les
+  candidats sont consignés au fil du workflow et présentés une seule fois, dans un message distinct, au Step 2 de
+  `closure` (une décision par règle, défaut proposé, notification courte). Modifs : `conductor`, `closure`, `homelab/rules/README.md`,
+  lignes « Learn » de tous les stages.
+- **Écriture des clés Vault au choix, indépendante de Kestra.** Le gate final gagne une décision « écriture des clés
+  Vault » (défaut « non »), séparée du déploiement Kestra : sur « oui » le Tech Lead crée les clés créables sans valeur
+  humaine (secrets générables, variables validées), sans écraser, sans jamais afficher une valeur ; les autres restent à
+  l'humain. `homelab-vault-access` : seconde écriture encadrée (Étape 4). Revue de l'Architecte de sécurité : RENVOI corrigé (injection par l'environnement de `jq`, check-and-set KV v2, `trap`, catégories de clés dans `parametres.json`, validation des noms, ADR-0054 `Accepted`, AppRole d'écriture dédié porté par le seul Tech Lead).
+- **Question Kestra intégrée au gate final.** `human-granular-validation` pose en un seul message la validation des
+  livrables, les chemins de dépôt et le déploiement Kestra (trois décisions séparées ; défaut « non » confirmé pour Kestra ; « oui » exige
+  que les clés Vault soient créées au préalable, vérifiées avant lancement ; sinon « non »). `file-deposit` et `kestra-deployment` n'ont plus de
+  question propre : un tour de moins.
+- **Gate limité à la stack en cours.** `sensor.py gate <frontière> --dir .a-valider/<id-tâche>/<stack>` n'examine que ce
+  répertoire (artefacts et sensors) au lieu de balayer tout `${WORK_DIRECTORY}` ; un compose nommé `<stack>.yml` y est
+  reconnu. Corrige les écarts hors périmètre (autres stacks, archives, fichiers non Homelab) et le faux `livrable_compose_present`.
+- **Script `homelab/scripts/versions.py`.** `record` génère `versions.json` depuis les YAML joints (`sensors_resultats[]`,
+  `sensors[]`) en rattachant chaque verdict au livrable de même `sha256`. Le schéma de rapport reviewer gagne `sha256` et
+  `origine` (optionnels) par sensor.
+- **Contrôles au bon moment : un contrôle, un propriétaire.** Chaque sensor tourne une fois par version (`sha256` du
+  livrable) chez son propriétaire (auteur : `yaml-validity`, `plaintext-secret`, `terraform-no-sni` ; QA :
+  `swarm-deploy-section`, `traefik-coherence` ; déploiement : `vault-secret-exists`) ; les autres reprennent le verdict
+  (`origine: repris`). Sensors retirés de `security-delegation` et `central-quality-control` ; contrôle macro unique ;
+  le gate `phase3-phase4` ne relance plus de sensor mais lance le nouveau sensor `version-livrables` (`versions.json`, `sha256`) ; le dépôt le lance aussi avant déplacement et contrôle le
+  `sha256`. Modifs : `governance-security`, stages `production` et `validation`, `homelab/sensors/gates.md`, test du gate.
+- **Plus d'accusé de réception sur les sous-issues, pour tous les agents.** Un retour sans décision ni action ne reçoit aucun
+  commentaire (le silence vaut réception) ; un spécialiste ou reviewer réveillé sans nouvelle mission ne poste rien (fin des
+  « mission déjà traitée ») ; une trace d'audit éventuelle va en un seul commentaire sur l'issue parente.
+  Modifs : `governance-security`, `stage-protocol`, `conductor`, `tech-lead-homelab-agent`.
+- **Notification courte à chaque gate humain.** `output-format.md` § 5 : le Tech Lead demande à l'Agent de
+  notifications (handoff A2A YAML) une phrase `<Prénom>, merci de <action> de la phase de <phase> pour la stack
+  <stack>`, après le commentaire de gate, sans valeur ni secret. Table des gates et phrases associées.
+- **QA et revue sécurité en parallèle, synthèse obligatoire.** Les deux revues portent sur la même version dès que
+  tous les livrables sont livrés et rendent leur rapport au Tech Lead seul (fin de la boucle courte QA ↔ spécialiste).
+  Le Tech Lead attend les deux rapports, synthétise les écarts, présente un seul message à l'humain si besoin, puis
+  délègue un lot de correctifs par livrable et une seule revue partielle (éléments corrigés et effets directs). QA et sécurité
+  ne sollicitent jamais l'humain : seul le Tech Lead communique avec lui. Une sous-issue passe à `done` quand QA et sécurité
+  sont `OK`. Modifs : `quality-assurance`, `security-delegation`, `central-quality-control`, `governance-security`,
+  `stage-protocol`, `reviewer`, `report-format`, `conductor`.
+- **Éléments dépendant d'une valeur manquante.** Le Tech Lead les présente avec la valeur à fournir, dans la même
+  décision, et ne les valide ni ne les applique sans elle ; sans valeur, l'élément et ses dérivés sont retirés ensemble.
+  Modifs : `conductor.md`, `required-parameters-collection`, `output-format`.
+- **QA : une passe par version, pas de correctif partiel avant décision.** `quality-assurance` : un rapport par
+  livrable et par version, re-contrôle seulement quand tous les livrables renvoyés sont corrigés ; un point
+  `arbitrage_requis` suspend toute correction jusqu'à la décision humaine, puis un seul lot de correctifs par livrable.
+
 ### Added
+- **Protocole `homelab/common/protocols/output-format.md`.** Format unique des messages Homelab destinés à l'humain : quatre
+  sections (`Résumé`, `Sensors`, `Points bloquants`, `Décisions à prendre`), une fiche par question avec **proposition par
+  défaut**, alternatives et impact. Référencé par le conducteur, la gouvernance A2A, `intent-scope-approval` et
+  `required-parameters-collection`.
 - **Sensor `initial-proposal`.** Vérifie, avant la proposition initiale et au gate `phase0-phase1`, que
   `preselection.json` (écrit par les quatre stages de pré-sélection d'Initialisation) est complet : cibles Docker /
   Proxmox avec variantes testées, auth et base recommandées avec source, statut Kestra, aucune valeur « non

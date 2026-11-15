@@ -36,7 +36,14 @@ Obtenir la validation explicite, choix par choix, avant toute action à impact.
 
 ### Step 1 — Soumettre la configuration complète
 
-Le Tech Lead soumet à l'humain la **configuration complète** (Docker + Terraform), fichiers téléchargeables à l'appui, et demande une **validation explicite**. **L'issue reste en `in_review`** pendant toute cette phase ; rien n'avance sur un élément non validé (boucle Keep / Modify / Redo, chaque choix séparément).
+Le Tech Lead soumet à l'humain la **configuration complète** (Docker + Terraform), fichiers téléchargeables à l'appui, et demande une **validation explicite**, **en un seul message** ([`output-format`](../../protocols/output-format.md)) qui porte **quatre groupes de décisions**, chacune validée séparément (Keep / Modify / Redo) :
+
+1. **Livrables** : une décision par fichier (compose, `.tfvars`), avec leurs points d'information.
+2. **Dépôt** : les chemins de destination proposés ([`file-deposit`](file-deposit.md) Step 1). **Proposition par défaut : les chemins conventionnels.**
+3. **Écriture des clés Vault** ([`file-deposit`](file-deposit.md) Step 3 bis), **indépendante du déploiement Kestra** : l'humain peut la demander même s'il répond « non » à Kestra. **Proposition par défaut : non** (les clés restent une action humaine). Le message montre la liste des clés avec leur **catégorie** (nom + `generable` / `variable` / `humain`). Sur « oui », le Tech Lead écrit uniquement les clés `generable` et `variable` ; les clés `humain` restent à créer par l'humain. **Absence de réponse = non. Une liste modifiée après le « oui » annule l'accord.** Aucune valeur n'est jamais affichée ni transmise.
+4. **Déploiement Kestra** ([`kestra-deployment`](kestra-deployment.md)) : lancer le flux `configure_service` après le dépôt. Réponses possibles : **oui** ou **non** (déploiement manuel). **Proposition par défaut : non**, confirmée par l'humain : une action à impact ne se déclenche jamais par défaut. **Répondre « oui » exige que les clés Vault de la stack existent** : soit déjà créées par l'humain, soit écrites par le Tech Lead sur « oui » à la décision 3. Le message liste les clés (noms seuls, jamais de valeur) et rappelle les autres prérequis humains (secrets Swarm, dossiers NFS). Clés absentes : répondre « non » ; le déploiement se fera plus tard, hors de ce workflow ou par une nouvelle demande. Le message demande aussi l'environnement (production ou développement).
+
+Un « oui » aux livrables ou au dépôt ne vaut **jamais** « oui » à l'écriture des clés Vault ni au déploiement : les décisions 3 et 4 sont répondues à part. Il n'y a plus de question Kestra posée après le dépôt. **L'issue reste en `in_review`** pendant toute cette phase ; rien n'avance sur un élément non validé (boucle Keep / Modify / Redo, chaque choix séparément).
 
 ### Step 2 — Modifications demandées → retour en Production
 
@@ -44,7 +51,7 @@ Si l'humain **demande des modifications** (rejet total ou partiel) → le Tech L
 
 ### Step 3 — Validation → dépôt
 
-Si l'humain **valide** → poursuivre en [`file-deposit.md`](file-deposit.md).
+Si l'humain **valide** → poursuivre en [`file-deposit.md`](file-deposit.md), puis, si la décision 4 est un « oui », en [`kestra-deployment.md`](kestra-deployment.md), sans nouvelle sollicitation de l'humain.
 
 ## Sensors
 
@@ -53,4 +60,4 @@ Imports: none.
 
 ## Learn
 
-Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : ce stage **porte le gate explicite** — le Tech Lead y remonte les candidats-règles capturés en Production, formulés en règles courtes ; persistance des apprentissages **confirmés** dans `homelab/rules/` (jamais dans le run courant).
+Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : ce stage **porte le gate explicite** — le Tech Lead **n'y remonte aucun** candidat-règle : ceux capturés en Production sont consignés et remontés **en fin de workflow**, dans un message séparé ([`closure`](closure.md)), jamais mêlés à la validation des livrables ; persistance des apprentissages **confirmés** dans `homelab/rules/` (jamais dans le run courant).

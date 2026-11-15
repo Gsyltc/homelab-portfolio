@@ -6,7 +6,7 @@ Sous-commandes (Python ≥ 3.9, bibliothèque standard uniquement) :
   list                                          sensors disponibles (manifestes valides)
   describe <id>                                 champs du manifeste
   fire <id> [--path P ...] [--scope S]          exécute un sensor (balayage de gate sans --path)
-  gate <frontière> [--scope S] [--attest a,b]   rapport de vérification d'une frontière de phase
+  gate <frontière> [--scope S] [--dir D] [--attest a,b]   rapport de vérification d'une frontière de phase (D = périmètre .a-valider/<id-tâche>/<stack>)
   hook [--sensors a,b] [--scope S]              hook d'écriture (stdin JSON harnais) : sensors `fire_on: write`
 
 `--scope` (ou SENSORS_SCOPE) résout la **sévérité conditionnelle** : `severity_overrides`
@@ -114,8 +114,13 @@ def resolve_commit() -> str | None:
     return os.environ.get("SENSORS_SOURCE_COMMIT") or source_commit(REPO_ANCHOR)
 
 
+def in_scope(rel: str, scope_dir: str | None) -> bool:
+    """Vrai si `rel` est dans le répertoire de périmètre (None = tout le projet)."""
+    return scope_dir is None or rel == scope_dir or rel.startswith(scope_dir.rstrip("/") + "/")
+
+
 def run_sensor(sid: str, root: Path, paths: list[str] | None, manifests: dict[str, Manifest],
-               commit: str | None) -> list[Result]:
+               commit: str | None, scope_dir: str | None = None) -> list[Result]:
     """Exécute un sensor. Manifeste/implémentation/provenance défaillants => ⛔ (SG-1, SG-2, SG-5)."""
     m = manifests.get(sid)
     if m is None:
@@ -129,7 +134,9 @@ def run_sensor(sid: str, root: Path, paths: list[str] | None, manifests: dict[st
                        f"indisponible : script absent ou invalide ({script_path(sid).name})")]
     results: list[Result] = []
     if paths is None:
-        targets, explicit = list_files(root, m.matches), False
+        targets, explicit = [t for t in list_files(root, m.matches) if in_scope(t, scope_dir)], False
+        if scope_dir is not None and not targets:
+            return [Result(sid, scope_dir, UNAVAILABLE, f"indisponible : aucun fichier concerné dans {scope_dir}")]
     else:
         targets, explicit = [], True
         for p in paths:
@@ -234,12 +241,18 @@ def parse_boundaries() -> dict[str, dict]:
 
 
 # Probes d'artefacts spécifiques au Homelab (présence de fichier uniquement, SG-4).
-def artefact_status(name: str, root: Path, attested: set[str]) -> tuple[str, str]:
+def artefact_status(name: str, root: Path, attested: set[str], scope_dir: str | None = None) -> tuple[str, str]:
+    def found(pattern: str) -> bool:
+        return any(in_scope(t, scope_dir) for t in list_files(root, pattern))
+
+    # Avec un répertoire de périmètre (.a-valider/<id-tâche>/<stack>), un compose est tout .yml/.yaml du répertoire
+    # (le nom `<stack>.yml` n'est pas reconnaissable par motif) ; sans périmètre, motifs historiques sur tout le projet.
+    compose_glob = "{**/*.yml,**/*.yaml}" if scope_dir else "{**/*compose*.yml,**/*compose*.yaml,**/docker-compose.y*ml}"
     probes = {
-        "livrable_compose_present": lambda: bool(list_files(root, "{**/*compose*.yml,**/*compose*.yaml,**/docker-compose.y*ml}")),
-        "livrable_tfvars_present": lambda: bool(list_files(root, "{**/*.tfvars,**/*.tf}")),
-        "parametres_requis_complets": lambda: bool(list_files(root, "**/.a-valider/*/*/parametres.json")),
-        "cibles_disponibles": lambda: bool(list_files(root, "**/.a-valider/*/*/preselection.json")),
+        "livrable_compose_present": lambda: found(compose_glob),
+        "livrable_tfvars_present": lambda: found("{**/*.tfvars,**/*.tf}"),
+        "parametres_requis_complets": lambda: found("**/.a-valider/*/*/parametres.json"),
+        "cibles_disponibles": lambda: found("**/.a-valider/*/*/preselection.json"),
     }
     if name in probes:
         return (OK, "présent") if probes[name]() else (GAP, "absent du projet")
@@ -264,19 +277,21 @@ def _is_conditional_artifact(boundary: dict, artifact: str, scope: str | None) -
     return False
 
 
-def run_gate(bid: str, root: Path, scope: str | None, attested: set[str], commit: str | None) -> tuple[str, str]:
+def run_gate(bid: str, root: Path, scope: str | None, attested: set[str], commit: str | None,
+             scope_dir: str | None = None) -> tuple[str, str]:
     boundaries = parse_boundaries()
     b = boundaries.get(bid)
     if b is None:
         raise SystemExit(f"frontière inconnue « {bid} » (disponibles : {', '.join(boundaries)})")
     manifests = load_manifests()
     lines = [f"Rapport de vérification — {bid}   (source : {GATES_REL} @ {commit or 'indéterminé'})",
-             f"Frontière : {b.get('frontiere', bid)}" + (f"   (scope : {scope})" if scope else "")]
+             f"Frontière : {b.get('frontiere', bid)}" + (f"   (scope : {scope})" if scope else "")
+             + (f"   (périmètre : {scope_dir})" if scope_dir else "")]
     verdicts: list[str] = []
     if "artefacts-presents" in b["checks"]:
         lines.append("- artefacts-presents :")
         for a in b["artefacts"]:
-            v, d = artefact_status(a, root, attested)
+            v, d = artefact_status(a, root, attested, scope_dir)
             blocking = _is_blocking_artifact(b, a, scope)
             conditional = _is_conditional_artifact(b, a, scope)
             tag = ""
@@ -292,7 +307,7 @@ def run_gate(bid: str, root: Path, scope: str | None, attested: set[str], commit
     if b["prerequis_40"]:
         lines.append("- prérequis §4.0 :")
         for p in b["prerequis_40"]:
-            v, d = artefact_status(p, root, attested)
+            v, d = artefact_status(p, root, attested, scope_dir)
             verdicts.append(v)
             lines.append(f"    - {p} : {ICONS[v]} {d}")
     # sensors de gate — chaque id du champ sensors:, aucune omission (SG-2)
@@ -300,7 +315,7 @@ def run_gate(bid: str, root: Path, scope: str | None, attested: set[str], commit
     if b["sensors"]:
         lines.append("Sensors de gate :")
         for s in b["sensors"]:
-            rs = run_sensor(s, root, None, manifests, commit)
+            rs = run_sensor(s, root, None, manifests, commit, scope_dir)
             m = manifests.get(s)
             sev = resolve_severity(m, scope) if m else "advisory"
             severities[s] = sev
@@ -386,6 +401,7 @@ def main(argv: list[str] | None = None) -> int:
     g = sub.add_parser("gate")
     g.add_argument("boundary", nargs="?")
     g.add_argument("--scope", help="scope actif (résout blocking_on_scope / conditional_on_scope)")
+    g.add_argument("--dir", help="répertoire de périmètre relatif à --root (ex. .a-valider/HOM-317/sync-in) : seuls ses fichiers sont examinés (défaut : tout le projet)")
     g.add_argument("--attest", default="", help="artefacts abstraits attestés par le coordinateur (a,b)")
     h = sub.add_parser("hook")
     h.add_argument("--root", default=argparse.SUPPRESS, help="racine du projet (aussi accepté avant la sous-commande)")
@@ -431,7 +447,13 @@ def main(argv: list[str] | None = None) -> int:
         if not args.boundary:
             print("frontières : " + ", ".join(parse_boundaries()))
             return 0
-        verdict, report = run_gate(args.boundary, root, args.scope, {a for a in args.attest.split(",") if a}, commit)
+        scope_dir = None
+        if args.dir:
+            scope_dir = Path(args.dir).as_posix().strip("/")
+            if Path(args.dir).is_absolute() or ".." in Path(args.dir).parts or not (root / scope_dir).is_dir():
+                print(f"--dir « {args.dir} » : répertoire relatif introuvable sous --root", file=sys.stderr)
+                return 2
+        verdict, report = run_gate(args.boundary, root, args.scope, {a for a in args.attest.split(",") if a}, commit, scope_dir)
         print(report)
         return 1 if args.strict and verdict != OK else 0
     return 2

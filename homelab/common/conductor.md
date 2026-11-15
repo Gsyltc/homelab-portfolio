@@ -56,7 +56,7 @@ flowchart TD
 | **Initialisation** | 0 | Initialisation | [`stack-detection`](stages/initialisation/stack-detection.md) · [`concurrency-lock-read`](stages/initialisation/concurrency-lock-read.md) · [`labels-audit-init`](stages/initialisation/labels-audit-init.md) · [`deployment-target-preselection`](stages/initialisation/deployment-target-preselection.md) · [`auth-preselection`](stages/initialisation/auth-preselection.md) · [`database-preselection`](stages/initialisation/database-preselection.md) · [`network-preselection`](stages/initialisation/network-preselection.md) | Non (bootstrap déterministe + pré-sélection) |
 | **Idéation** | 1 | Idéation | [`intent-capture`](stages/ideation/intent-capture.md) · [`scope-detection`](stages/ideation/scope-detection.md) · [`version-impact-analysis`](stages/ideation/version-impact-analysis.md) · [`intent-scope-approval`](stages/ideation/intent-scope-approval.md) | Léger (intention + périmètre) |
 | **Cadrage et Paramètres** | 2 | Inception | [`n8n-absolute-rule`](stages/cadrage/n8n-absolute-rule.md) · [`domain-triage`](stages/cadrage/domain-triage.md) · [`intake-framing`](stages/cadrage/intake-framing.md) · [`required-parameters-collection`](stages/cadrage/required-parameters-collection.md) | Advisory (avant Production) |
-| **Production et Contrôle** | 3 | Construction | [`autonomy-mode`](stages/production/autonomy-mode.md) · [`terraform-configuration`](stages/production/terraform-configuration.md) · [`docker-compose-creation`](stages/production/docker-compose-creation.md) · [`quality-assurance`](stages/production/quality-assurance.md) · [`n8n-branch`](stages/production/n8n-branch.md) · [`home-assistant-branch`](stages/production/home-assistant-branch.md) · [`central-quality-control`](stages/production/central-quality-control.md) · [`security-delegation`](stages/production/security-delegation.md) | Granulaire |
+| **Production et Contrôle** | 3 | Construction | [`autonomy-mode`](stages/production/autonomy-mode.md) · [`terraform-configuration`](stages/production/terraform-configuration.md) · [`docker-compose-creation`](stages/production/docker-compose-creation.md) · [`quality-assurance`](stages/production/quality-assurance.md) ∥ [`security-delegation`](stages/production/security-delegation.md) (en parallèle) · [`n8n-branch`](stages/production/n8n-branch.md) · [`home-assistant-branch`](stages/production/home-assistant-branch.md) · [`central-quality-control`](stages/production/central-quality-control.md) | Granulaire |
 | **Validation et Déploiement** | 4 | Operation | [`deployment-prereqs-check`](stages/validation/deployment-prereqs-check.md) · [`review-and-notification`](stages/validation/review-and-notification.md) · [`human-granular-validation`](stages/validation/human-granular-validation.md) · [`file-deposit`](stages/validation/file-deposit.md) · [`version-update-application`](stages/validation/version-update-application.md) · [`kestra-deployment`](stages/validation/kestra-deployment.md) · [`closure`](stages/validation/closure.md) | Explicite |
 
 > **Compatibilité ascendante.** Les libellés Homelab historiques (`Cadrage et Paramètres`, `Production et Contrôle`, `Validation et Déploiement`) restent valides comme alias. Les couches de règles `phase` ([`homelab/rules/phases/<phase>.md`](../rules/README.md)) sont nommées par le **nom** de phase (pas le numéro) et restent inchangées.
@@ -140,6 +140,8 @@ Chaque étape = lire sa fiche puis l'exécuter ; aucune n'est sautée ni remplac
 - **💬 Modify** — l'humain reformule ; le Tech Lead ajuste et re-présente **cet élément uniquement**.
 - **❌ Redo** — l'élément est rejeté ; le Tech Lead propose une alternative et relance la validation **de cet élément uniquement**.
 
+**Élément dépendant d'une valeur manquante.** Un élément qui dépend d'une valeur absente (ex. un scope `groups` qui exige le nom du mapping de groupes, un groupe admin dont le nom est inconnu) n'est **jamais validé seul**. Le Tech Lead le présente **avec** la valeur manquante, dans la même décision, et ne l'applique qu'une fois la valeur fournie. Si l'humain choisit « Keep » sans fournir la valeur, l'élément reste **en attente** : le Tech Lead redemande la valeur, il ne délègue ni ne devine. Une valeur que l'humain décide d'omettre est tracée comme **renoncement** et l'élément dépendant est retiré (pas de configuration à moitié active).
+
 Ne jamais avancer sur un élément non validé. Ne jamais fusionner des choix en une approbation globale « tout ou rien » (même en mode autonome — voir [`stages/production/docker-compose-creation.md`](stages/production/docker-compose-creation.md) et [`stages/production/autonomy-mode.md`](stages/production/autonomy-mode.md)).
 
 ### Résolution des questions / contradictions intra-stage
@@ -150,13 +152,13 @@ Ne jamais avancer sur un élément non validé. Ne jamais fusionner des choix en
 
 ### Tenue du journal d'observations (candidats-règles)
 
-Pendant un stage, chaque correction / rejet ❌ / reformulation 💬 humaine (ou correction récurrente de l'Analyste QA) sur un choix est consignée en commentaire sur l'issue comme **candidat-règle** potentiel (balise `[candidat-règle]`). Au point de validation, le Tech Lead remonte les candidats formulés en règles courtes (couche + portée proposées). **Aucune règle n'est écrite sans validation humaine explicite** ni sans le contrôle de conflit à l'admission ; une règle apprise s'applique au **prochain** workflow, jamais en cours de route. Détail : [`homelab/rules/`](../rules/README.md) et [`protocols/governance-security.md`](protocols/governance-security.md).
+Pendant un stage, chaque correction / rejet ❌ / reformulation 💬 humaine (ou correction récurrente de l'Analyste QA) sur un choix est consignée en commentaire sur l'issue comme **candidat-règle** potentiel (balise `[candidat-règle]`). **En fin de workflow, dans un message séparé de la validation des livrables** ([`stages/validation/closure.md`](stages/validation/closure.md) Step 2), le Tech Lead remonte les candidats formulés en règles courtes (couche + portée proposées). Aucun candidat n'est présenté à un gate de validation de livrable. **Aucune règle n'est écrite sans validation humaine explicite** ni sans le contrôle de conflit à l'admission ; une règle apprise s'applique au **prochain** workflow, jamais en cours de route. Détail : [`homelab/rules/`](../rules/README.md) et [`protocols/governance-security.md`](protocols/governance-security.md).
 
 ---
 
 ## Verification gates aux frontières de phases
 
-À **chaque transition de phase**, avant le point de validation humaine, le Tech Lead exécute le **contrôle automatique de traçabilité** décrit dans le manifeste [`homelab/sensors/gates.md`](../sensors/gates.md) et poste un **« Rapport de vérification »** sur l'issue. Ces gates (et les sensors déclenchés à l'écriture d'un artefact) sont **advisory par défaut** : ils factualisent la traçabilité mais **ne remplacent jamais** la validation humaine, le contrôle QA systématique ni le contrôle sécurité (garde-fous SG-1..6 — voir [`protocols/governance-security.md`](protocols/governance-security.md)).
+À **chaque transition de phase**, avant le point de validation humaine, le Tech Lead exécute le **contrôle automatique de traçabilité** décrit dans le manifeste [`homelab/sensors/gates.md`](../sensors/gates.md) et poste un **« Rapport de vérification »** sur l'issue. Le gate se lance **limité à la stack et à la tâche en cours** : `python3 "$CORE_HOME/homelab/scripts/sensor.py" --root ${WORK_DIRECTORY} gate <frontière> --scope <scope> --dir .a-valider/<id-tâche>/<stack>`. Sans `--dir`, il balaierait tout `${WORK_DIRECTORY}` et remonterait des écarts sans lien avec la stack (autres stacks, archives, fichiers non Homelab). Ces gates (et les sensors déclenchés à l'écriture d'un artefact) sont **advisory par défaut** : ils factualisent la traçabilité mais **ne remplacent jamais** la validation humaine, le contrôle QA systématique ni le contrôle sécurité (garde-fous SG-1..6 — voir [`protocols/governance-security.md`](protocols/governance-security.md)).
 
 > **Exception sécurité confirmée.** Les sensors `plaintext-secret` et `terraform-no-sni` sont **bloquants sur les scopes `security-patch` / `new-stack`** : une détection y arrête l'avancée jusqu'à correction ou levée humaine explicite tracée. Même bloquant, un sensor **ne décide jamais à la place de l'humain**.
 
@@ -177,6 +179,7 @@ Le verrou « un seul traitement par stack » se lit **par artefact / livrable** 
 ## OBLIGATOIRE : langue, format et sécurité
 
 - Rédiger **tous les documents en français** (langue de l'humain par défaut).
+- **Tout message destiné à l'humain** (proposition, demande de paramètres, gate, clôture) suit [`protocols/output-format.md`](protocols/output-format.md) : sections fixes, une fiche par question, **proposition par défaut** pour chaque question quand elle est possible.
 - Conserver les **commentaires `#`** des gabarits docker-compose et les commentaires utiles Terraform.
 - Générer les diagrammes **en code** (Mermaid) et **valider leur syntaxe** avant écriture.
 - **Aucun secret** (mot de passe, token, clé API, secret Vault) dans les livrables, commentaires ou notifications.
@@ -193,7 +196,7 @@ Aucun scope, aucune règle apprise, aucun gate/sensor advisory ne peut désactiv
 - **Sélection automatique du type d'authentification** (`oidc → forwardauth → local`) préservée ; en cas de doute → humain.
 - **Terraform ne déploie JAMAIS** (`terraform init/apply/destroy` interdits) ; **aucun secret en clair** ; **jamais `${SNI}`** dans un livrable Terraform ; **un seul traitement par stack**.
 - **Validation humaine granulaire** (chaque choix validé / rejeté séparément).
-- **Aucune action à impact** (dépôt de fichiers, flux Kestra, application n8n / Home Assistant) sans validation humaine explicite.
+- **Aucune action à impact** (dépôt de fichiers, écriture de clés Vault, flux Kestra, application n8n / Home Assistant) sans validation humaine explicite.
 - **Piste d'audit** sur l'issue ; **décision structurante tracée** en ADR.
 - **Contrôle sécurité** (sécurité de base d'un homelab : secrets, exposition, permissions, durcissement Docker/Swarm, Traefik) systématique, porté par l'Analyste QA et l'Architecte de sécurité Homelab.
 
@@ -222,28 +225,28 @@ sequenceDiagram
     S->>S: Doc officielle + arbitrage + parametres (CADRAGE)
     S->>An: Delegue variables Terraform en premier (jamais apply)
     An-->>S: Config Terraform (.tfvars)
-    S->>K: Delegue verification Terraform (mention + mission)
-    K-->>S: Rapport QA Terraform
     S->>B: Delegue creation docker-compose (mention + mission)
     B-->>S: Compose + recapitulatif
-    S->>K: Delegue verification compose (mention + mission)
+    Note over S,SA: Tous les livrables livres : QA et revue securite lancees EN PARALLELE, meme version
+    S->>K: Delegue verification (compose + Terraform)
+    S->>SA: Delegue revue securite (meme version)
     K-->>S: Rapport QA + coherence Traefik
-    Note over S,K: Sous-issues Docker/Terraform : in_progress -> in_review (livrable) -> done (QA OK)
+    SA-->>S: Jugement de posture
+    Note over S: Attente OBLIGATOIRE des 2 rapports, synthese unique des ecarts, 1 lot de correctifs, 1 re-controle
+    Note over S,K: Sous-issues : in_progress -> in_review (livrable) -> done (QA ET securite OK)
     S->>M: Branche n8n si demande n8n (delegation immediate)
     M-->>S: Proposition / flux applique apres validation
     S->>Hu: Branche Home Assistant si demande HA
     Hu-->>S: Proposition / modif apres validation
     Note over S: Barriere de stage : central-quality-control demarre uniquement quand toutes les sous-issues sont done
     S->>S: Controle qualite central de chaque livrable (PRODUCTION)
-    S->>SA: Delegue revue securite (avant toute revue humaine)
-    SA-->>S: Jugement de posture
     S->>S: in_review + prerequis 4.0
     S->>AL: Demande notification revue prete
     AL-->>H: Notification ntfy
     S->>H: Validation granulaire (Terraform + Docker)
     H-->>S: Validation / rejet par element
-    S->>H: Propose chemins de depot + attend confirmation (OPERATION)
-    H-->>S: Confirmation depot + Kestra si demande (validation explicite)
+    S->>H: Validation finale en un message : livrables + chemins de depot + deploiement Kestra (OPERATION)
+    H-->>S: Reponse par decision (depot confirme, Kestra oui / apres prerequis / non)
     S->>S: Flux Kestra + issue Done
 ```
 
@@ -258,6 +261,8 @@ Récapitulatif vérifiable à chaque tour (pas une règle neuve — les sources 
 ☑ Règle préalable documentation officielle appliquée et lien consigné sur l'issue
 ☑ Rapport de vérification (gate de phase) posté AVANT toute validation humaine
 ☑ Validation humaine granulaire : chaque choix Keep / Modify / Redo séparément
+☑ Aucun accusé de réception sur les sous-issues, pour aucun agent : un retour sans décision ni action ne reçoit pas de commentaire, un agent réveillé sans nouvelle mission ne poste rien
+☑ Notification courte envoyée (prénom, phase, stack) à chaque gate humain, après le commentaire de gate ([`protocols/output-format.md`](protocols/output-format.md) § 5)
 ☑ Piste d'audit à jour sur l'issue (entrées brutes conservées, historique non écrasé,
    label `Homelab` posé)
 ☑ Issue parente `blocked` tant qu'une sous-issue spécialiste est ouverte (barrière de stage)
@@ -278,6 +283,7 @@ Récapitulatif vérifiable à chaque tour (pas une règle neuve — les sources 
 - [`protocols/stage-protocol.md`](protocols/stage-protocol.md) — cycle générique d'exécution d'un stage.
 - [`protocols/governance-security.md`](protocols/governance-security.md) — gouvernance A2A, contrôle sécurité, invariants, garde-fous, concurrence par stack.
 - [`protocols/reviewer.md`](protocols/reviewer.md) — protocole de revue (Analyste QA + sécurité Homelab).
+- [`protocols/output-format.md`](protocols/output-format.md) — format unique des messages destinés à l'humain (4 sections, une fiche par décision avec proposition par défaut).
 - [`protocols/report-format.md`](protocols/report-format.md) — format unique du compte-rendu A2A (YAML en pièce jointe + mention valide), schéma [`protocols/report-format.schema.yaml`](protocols/report-format.schema.yaml).
 - [`protocols/scopes-and-axes.md`](protocols/scopes-and-axes.md) — scopes, axes Depth / vérification, matrice stage × scope.
 - [`stages/`](stages/) — fiches de stage des 5 phases.

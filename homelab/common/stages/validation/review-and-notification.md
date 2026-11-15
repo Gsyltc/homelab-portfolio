@@ -33,7 +33,7 @@ Quand Docker et Terraform sont contrôlés et conformes **et** que la revue séc
 
 ### Step 2 — Demander la notification (Tech Lead uniquement)
 
-Le Tech Lead demande à l'**Agent de notifications** (mention valide) une notification « revue par un humain prête ». **Les spécialistes n'appellent jamais l'Agent de notifications directement.**
+Le Tech Lead demande à l'**Agent de notifications** (mention valide) une notification « revue par un humain prête », au format de [`output-format.md`](../../protocols/output-format.md) § 5 (prénom, phase, stack : `<Prénom>, merci de valider les livrables de la phase de <phase> pour la stack <stack>`). Les gates des phases précédentes déclenchent la même notification, chacune par le Tech Lead. **Les spécialistes n'appellent jamais l'Agent de notifications directement.**
 
 ## Sensors
 
@@ -42,4 +42,4 @@ Imports: none.
 
 ## Learn
 
-Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : candidats-règles éventuels tracés, remontés au gate explicite.
+Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : candidats-règles éventuels tracés, remontés **en fin de workflow**, dans un message séparé ([`closure`](closure.md)).

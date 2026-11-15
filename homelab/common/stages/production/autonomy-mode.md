@@ -49,4 +49,4 @@ Imports: none.
 
 ## Learn
 
-Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : candidats-règles (choix de mode récurrents) tracés, remontés au **gate humain granulaire** ; persistance des apprentissages **confirmés** dans `homelab/rules/` via capture → confirmation humaine → contrôle de conflit.
+Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : candidats-règles (choix de mode récurrents) tracés, remontés **en fin de workflow**, dans un message séparé ([`closure`](../validation/closure.md)); persistance des apprentissages **confirmés** dans `homelab/rules/` via capture → confirmation humaine → contrôle de conflit.

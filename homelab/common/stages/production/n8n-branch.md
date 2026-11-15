@@ -42,4 +42,4 @@ Imports: none.
 
 ## Learn
 
-Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : candidats-règles (patterns de flux n8n récurrents) tracés, remontés à la validation humaine ; la règle absolue n8n est un **invariant**.
+Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : candidats-règles (patterns de flux n8n récurrents) tracés, remontés **en fin de workflow**, dans un message séparé ([`closure`](../validation/closure.md)) ; la règle absolue n8n est un **invariant**.

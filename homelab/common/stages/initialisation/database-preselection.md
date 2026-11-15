@@ -48,4 +48,4 @@ Imports: none.
 
 ## Learn
 
-Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : candidats-règles (moteurs de base par famille d'applications) tracés, remontés au gate léger.
+Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : candidats-règles (moteurs de base par famille d'applications) tracés, remontés **en fin de workflow**, dans un message séparé ([`closure`](../validation/closure.md)).

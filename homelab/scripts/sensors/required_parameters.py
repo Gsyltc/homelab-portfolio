@@ -38,7 +38,8 @@ OIDC_KEYS = {"idp", "client_name", "redirect_uri", "scopes"}
 STORAGE_KEYS = {"server", "paths"}
 VAULT_KEYS = {"secrets", "variables"}
 VAULT_NAME_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_.-]{0,127}$")
-VAULT_ENTRY_KEYS = {"nom", "besoin"}
+VAULT_ENTRY_KEYS = {"nom", "besoin", "categorie", "valeur"}
+VAULT_CATEGORIES = {"generable", "variable", "humain"}  # défaut implicite : humain (créée par l'humain)
 CIBLES = {"swarm", "proxmox"}
 AUTH_TYPES = {"none", "local", "forwardauth", "oidc"}
 DATABASES = {"postgres", "mysql", "mariadb", "mongodb", "none"}
@@ -49,6 +50,7 @@ KNOWN_KEYS = KEYS | OIDC_KEYS | STORAGE_KEYS | VAULT_KEYS | VAULT_ENTRY_KEYS
 STACK_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 HOST_RE = re.compile(r"^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$")
 SECRET_KEY_RE = re.compile(r"(?:password|passwd|secret|token|api[_-]?key|private[_-]?key)", re.I)
+CRED_IN_VALUE_RE = re.compile(r"://[^/\s:@]+:[^/\s@]+@|\b[A-Za-z0-9+/=_-]{32,}\b")  # URL avec identifiants, ou chaîne type clé/jeton
 PLACEHOLDER_RE = re.compile(r"<[^>]*>|\$\{(?!ENVIRONMENT\})[^}]*\}|\bTODO\b|\bxxx+\b|\bTBD\b", re.I)
 
 
@@ -205,6 +207,25 @@ def check(params: dict) -> tuple[list[str], list[str]]:
                     seen.add(nom)
                 if not _nonempty_str(e.get("besoin")):
                     gaps.append(f"{where}.besoin : requis (pourquoi ce secret / cette variable existe)")
+                cat = e.get("categorie", "humain")
+                if cat not in VAULT_CATEGORIES:
+                    gaps.append(f"{where}.categorie : valeurs {sorted(VAULT_CATEGORIES)} (défaut humain)")
+                elif cat == "generable" and k != "secrets":
+                    gaps.append(f"{where}.categorie : « generable » réservé à vault.secrets")
+                elif cat == "variable" and k != "variables":
+                    gaps.append(f"{where}.categorie : « variable » réservé à vault.variables")
+                if "valeur" in e:
+                    # Seule une variable non secrète validée porte une valeur ; jamais un secret (la valeur n'est pas citée).
+                    if cat != "variable":
+                        gaps.append(f"{where}.valeur : interdite hors catégorie « variable » (un secret n'a jamais de valeur ici)")
+                    elif not _nonempty_str(e.get("valeur")) or PLACEHOLDER_RE.search(e["valeur"]):
+                        gaps.append(f"{where}.valeur : valeur concrète requise (ni vide, ni espace réservé)")
+                    elif CRED_IN_VALUE_RE.search(e["valeur"]):
+                        gaps.append(f"{where}.valeur : évoque un identifiant ou un jeton (URL user:pass@, chaîne de type clé) : à déclarer dans vault.secrets")
+                    elif isinstance(nom, str) and SECRET_KEY_RE.search(nom):
+                        gaps.append(f"{where} : nom de clé évoquant un secret, à déclarer dans vault.secrets (catégorie humain)")
+                elif cat == "variable":
+                    gaps.append(f"{where}.valeur : requise pour la catégorie « variable »")
     return gaps, missing_src
 
 

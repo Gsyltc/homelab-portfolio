@@ -29,7 +29,7 @@ Valider *qu'on part dans la bonne direction* et confirmer le scope, avant d'enga
 
 ### Step 1 — Présenter la proposition initiale
 
-C'est la **première sollicitation de l'humain** : tout ce qui précède s'exécute sans question (sauf intention ambiguë, `intent-capture`). Un seul message, au format suivant, chaque point numéroté et validé séparément (Keep / Modify / Redo) :
+C'est la **première sollicitation de l'humain** : tout ce qui précède s'exécute sans question (sauf intention ambiguë, `intent-capture`). Le message suit [`output-format`](../../protocols/output-format.md) (sections `Résumé`, `Sensors`, `Décisions à prendre`) ; chaque point ci-dessous est une décision avec sa **proposition par défaut** (résultat de la pré-sélection). Un seul message, au format suivant, chaque point numéroté et validé séparément (Keep / Modify / Redo) :
 
 ```
 1. Intention : <reformulation>
@@ -61,4 +61,4 @@ Imports: none.
 
 ## Learn
 
-Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : ce stage **porte le gate humain léger** d'Idéation — le Tech Lead y remonte les candidats-règles capturés depuis `intent-capture`, formulés en règles courtes (couche + portée proposées). L'humain garde ✅ / rejette ❌ / reformule 💬 chaque candidat séparément ; persistance des apprentissages **confirmés** dans `homelab/rules/` (jamais dans le run courant — application au prochain workflow).
+Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : ce stage **porte le gate humain léger** d'Idéation — le Tech Lead **n'y remonte aucun** candidat-règle : ceux capturés depuis `intent-capture` sont consignés (`[candidat-règle]`) et remontés **en fin de workflow**, dans un message séparé ([`closure`](../validation/closure.md)), jamais mêlés à la validation de l'intention. Persistance des apprentissages **confirmés** dans `homelab/rules/` (jamais dans le run courant — application au prochain workflow).

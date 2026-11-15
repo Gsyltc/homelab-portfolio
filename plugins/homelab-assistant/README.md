@@ -41,7 +41,7 @@ officiel `skills-ref` — `scripts/validate_skills.sh` à la racine du dépôt,
 | `docker-composer` | Spécialiste Docker / Analyste QA — génération de `docker-compose.yml` | `references/` (network, template) |
 | `dockerfile-validator` | Analyste QA — lint/audit/scan de Dockerfile (stacks *build-from-source* uniquement) | `scripts/`, `references/`, `examples/`, `tests/` |
 | `terraform-qa` | Analyste QA — vérification adversariale d'une configuration Terraform (`.tf`/`.tfvars`) | `references/` (cloudflare-dns-nb) |
-| `homelab-vault-access` | Spécialiste Docker / Analyste QA / Spécialiste Terraform — accès Vault (AppRole), lecture seule sauf écriture encadrée des clés de version `VERSION` / `VERSION_<NOM_DU_SERVICE>` | — |
+| `homelab-vault-access` | Spécialiste Docker / Analyste QA / Spécialiste Terraform — accès Vault (AppRole), lecture seule sauf deux écritures encadrées : les clés de version `VERSION` / `VERSION_<NOM_DU_SERVICE>` et la création de clés absentes d'une nouvelle stack (ADR-0054, sur « oui » explicite) | — |
 | `traefik-manager-read` | Spécialiste Docker / Analyste QA / Architecte sécurité — lecture Traefik Manager | — |
 
 La skill de notifications (`ntfy-notifications`) est **mutualisée** : son porteur

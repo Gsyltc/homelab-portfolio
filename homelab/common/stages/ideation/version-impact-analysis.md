@@ -95,4 +95,4 @@ Upstream targets: `intention_capturee` (service + version visée), `type_service
 
 ## Learn
 
-Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : candidats-règles (motifs de breaking change par service, signatures de versions non stables, sources de release fiables) tracés sur l'issue, remontés au gate léger de Validation — jamais écrits dans le run courant.
+Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : candidats-règles (motifs de breaking change par service, signatures de versions non stables, sources de release fiables) tracés sur l'issue, remontés **en fin de workflow**, dans un message séparé ([`closure`](../validation/closure.md)).

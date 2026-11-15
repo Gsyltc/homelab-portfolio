@@ -82,7 +82,7 @@ boundaries:
       - artifact: controle_securite_posture
         scopes: [stack-update, new-stack, config-change, security-patch, infra-terraform]
         source_stage: security-delegation  # produit par homelab/common/stages/production/security-delegation.md
-    sensors: [yaml-validity, swarm-deploy-section, plaintext-secret, terraform-no-sni, traefik-coherence]
+    sensors: [version-livrables]           # aucun sensor relancé au gate : versions.json (sha256 des livrables + verdicts par sha256) — propriétaires : governance-security.md « Un contrôle, un propriétaire » — bloquant sur new-stack / infra-terraform
     prerequis_40:                          # prérequis de déploiement anticipés (§4.0)
       - repertoire_travail_defini          # variable [répertoire de travail] définie et non vide
     # l'accès Kestra n'est pas contrôlé ici : prérequis du déploiement (kestra-deployment Step 2)

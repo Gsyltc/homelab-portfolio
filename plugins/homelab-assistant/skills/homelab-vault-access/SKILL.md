@@ -1,6 +1,6 @@
 ---
 name: homelab-vault-access
-description: "Accès Vault du Homelab (AppRole) pour lire secrets et variables des stacks (montages services/ et env_variables/). Lecture seule sauf écriture encadrée des seules clés de version (VERSION ou VERSION_<NOM_DU_SERVICE>) (montage env_variables), uniquement sur demande explicite et validée par l'humain."
+description: "Accès Vault du Homelab (AppRole) pour lire secrets et variables des stacks (montages services/ et env_variables/). Lecture seule sauf deux écritures encadrées, uniquement sur acceptation humaine explicite : les clés de version (VERSION ou VERSION_<NOM_DU_SERVICE>, montage env_variables) et la création de clés manquantes d'une nouvelle stack (création seule, jamais d'écrasement)."
 ---
 
 # homelab-vault-access
@@ -134,7 +134,7 @@ curl -sS --fail-with-body -H "X-Vault-Token: $TOKEN" \
 (`sys/mounts` peut lui-même être refusé par une policy restrictive → 403 :
 passer directement aux chemins documentés ci-dessus.)
 
-## Étape 3 — Écriture encadrée des clés de version (SEUL cas d'écriture autorisé)
+## Étape 3 — Écriture encadrée des clés de version (première des deux écritures autorisées)
 
 > **Portée stricte.** Cette skill est en **lecture seule**, **sauf** pour écrire les **seules** clés
 > de version (`VERSION` ou `VERSION_<NOM_DU_SERVICE>`) du montage `env_variables/data/<service>`.
@@ -187,6 +187,53 @@ Garde-fous **non débordables** pour cette écriture :
   capability d'écriture sur ce chemin **précis**). Ne jamais contourner.
 - **Révocation** : révoquer le token en fin d'opération (voir § Règles de sécurité, point 5).
 
+## Étape 4 — Écriture encadrée des clés d'une nouvelle stack (création seule)
+
+> **Portée stricte.** Seconde et dernière écriture autorisée, **uniquement** sur « oui » explicite à la décision d'écriture des clés Vault du gate final ([`human-granular-validation`](../../../../homelab/common/stages/validation/human-granular-validation.md), [`file-deposit`](../../../../homelab/common/stages/validation/file-deposit.md) Step 3 bis), **pour la liste `vault` montrée à l'humain avec cette décision** : une liste modifiée après le « oui » **annule** l'accord. Elle **crée** des clés absentes ; elle ne **modifie** ni ne **supprime** jamais une clé existante. Décision : [ADR-0054](../../../../decisions/0054-ecriture-vault-creation-cles-nouvelle-stack.md).
+
+- **Validation avant tout appel.** La stack doit être celle traitée (verrou `active_step`) et correspondre à `^[a-z0-9][a-z0-9_-]*$` ; chaque nom de clé doit correspondre à `^[A-Za-z_][A-Za-z0-9_.-]{0,127}$`. Sinon, ne rien écrire.
+- **Chemins** : `services/data/<stack>` (secrets) et `env_variables/data/<stack>` (variables) de **la stack concernée seulement**, jamais une autre stack.
+- **Clés** : uniquement celles de la liste `vault` validée (`parametres.json`), par nom, selon leur `categorie` :
+  - `generable` : secret aléatoire créé par l'agent ;
+  - `variable` : variable non secrète dont la `valeur` est celle validée au Cadrage ;
+  - `humain` (ou catégorie absente, **défaut**) : **jamais écrite**, rapportée `à créer par l'humain`. Valeur choisie par l'humain, issue d'un tiers (client secret OIDC) ou dérivée de plusieurs autres.
+- **Création seule avec check-and-set (KV v2).** Lire `.data.metadata.version` et l'objet, n'ajouter que les clés **absentes**, puis écrire l'objet entier avec `"options": {"cas": <version>}` (`cas: 0` si l'objet n'existe pas). Un rejet CAS (écriture concurrente) : relire et recalculer, **jamais forcer**. Une clé déjà présente reste intacte (`existante, non modifiée`). Ne conserver en mémoire que les noms de clés quand c'est possible ; ne jamais afficher l'objet.
+- **Identité d'écriture dédiée (ADR-0054, option A).** L'Étape 4 s'authentifie avec un **AppRole d'écriture distinct** du rôle de lecture, via `VAULT_WRITE_APPROLE_ROLE_ID` et `VAULT_WRITE_APPROLE_SECRET_ID`, présents **uniquement** dans l'environnement de l'agent Tech Lead. Variables absentes : **STOP**, signaler « identifiants d'écriture absents » au propriétaire du workspace ; **ne jamais** replier sur le rôle de lecture ni chercher d'autres identifiants. Authentification **dédiée, sans repli** (ne pas reprendre la ligne de l'Étape 1, qui retombe sur les identifiants de lecture) :
+
+```bash
+VAULT_ADDR="${VAULT_ADDR:-https://vault.jeedom-gaston.ovh}"
+ROLE_ID="${VAULT_WRITE_APPROLE_ROLE_ID:?identifiants d'écriture absents}"
+SECRET_ID="${VAULT_WRITE_APPROLE_SECRET_ID:?identifiants d'écriture absents}"
+# puis POST /v1/auth/approle/login comme à l'Étape 1 ; token vérifié non vide ; révocation par le trap ci-dessous
+```
+- **Policy de ce rôle** : `read`, `create` **et** `update` sur `services/data/<stack>` et `env_variables/data/<stack>` (chemins nominatifs, **pas de joker**), ni `delete`, `destroy` ni `list`. `read` est requis pour le check-and-set (version et clés existantes) ; `update` pour ajouter une clé à un objet existant. Conséquence assumée : ce rôle, porté par le seul Tech Lead, peut lire les clés de la stack traitée.
+- **Génération et injection d'un secret** (valeur jamais dans `argv`, donc invisible de `ps`) :
+
+```bash
+set +x                                   # jamais de trace shell pendant l'opération
+cleanup() { unset SECRET_VALUE NEW_DATA CURRENT; curl -sS -X POST -H "X-Vault-Token: $TOKEN" \
+  "${VAULT_ADDR}/v1/auth/token/revoke-self" >/dev/null 2>&1; unset TOKEN; }
+trap cleanup EXIT                        # déclenché aussi en cas d'échec : variables effacées, token révoqué
+
+# 1. Test d'absence sur le NOM seul (aucune valeur lue ni affichée). Clé présente : statut « existante, non modifiée », rien n'est généré.
+if printf '%s' "$CURRENT" | K="$KEY_NAME" jq -e 'has(env.K)' >/dev/null; then echo "$KEY_NAME: existante, non modifiée"; continue; fi
+
+# 2. Génération (seulement après avoir constaté l'absence) : 32 octets aléatoires
+#    (openssl rand -base64 32 ; -hex 32 si la clé exige de l'hexadécimal)
+SECRET_VALUE=$(openssl rand -base64 32)
+
+# 3. Injection par l'ENVIRONNEMENT du processus jq (K, V), jamais par --arg / --argjson ni en argument de curl.
+#    `if has(...)` garde l'objet inchangé si la clé est apparue entre-temps : jamais d'écrasement.
+NEW_DATA=$(printf '%s' "$CURRENT" | K="$KEY_NAME" V="$SECRET_VALUE" jq -c 'if has(env.K) then . else . + {(env.K): env.V} end')
+printf '{"options":{"cas":%s},"data":%s}' "$CAS_VERSION" "$NEW_DATA" | curl -sS --fail-with-body -X POST \
+  -H "X-Vault-Token: $TOKEN" -H "Content-Type: application/json" --data @- \
+  "${VAULT_ADDR}/v1/services/data/${STACK}" >/dev/null
+```
+
+- **Valeurs non générables, jamais écrites** : valeur choisie par l'humain, issue d'un système tiers, dérivée de plusieurs autres.
+- **Trace** : nom de clé + statut (`écrite` | `existante, non modifiée` | `à créer par l'humain` | `échec`), jamais une valeur.
+- **403 en écriture** : signaler au propriétaire du workspace (capability `create` / `update` sur le chemin précis), ne jamais contourner.
+
 ## Règles de sécurité ABSOLUES
 
 1. **AUCUN secret ne doit être divulgué.** Jamais de valeur de secret,
@@ -213,9 +260,10 @@ unset TOKEN VALUE SECRET_ID ROLE_ID
 
 6. Si une donnée demandée n'existe pas dans Vault (404), le signaler tel quel
    — ne pas la deviner ni la remplacer par une valeur arbitraire.
-7. **Écriture = exception unique.** Les seules écritures autorisées sont les clés de version
+7. **Écritures = deux exceptions.** (a) Les clés de version
    (`VERSION` / `VERSION_<NOM_DU_SERVICE>`) du montage `env_variables/data/<service>`, après
-   acceptation humaine explicite. **Jamais** une écriture sur le montage `services/`, jamais sur
-   une autre clé qu'une clé de version, jamais sans cette acceptation. Toute autre demande
-   d'écriture est
-   refusée et signalée.
+   acceptation humaine explicite ; pour (a), jamais une écriture sur le montage `services/` ni
+   sur une autre clé qu'une clé de version. (b) La création de clés absentes d'une nouvelle stack
+   (Étape 4), sur « oui » explicite à la décision d'écriture des clés. Jamais sans acceptation,
+   jamais de modification ni de suppression d'une clé existante hors clé de version. Toute autre
+   demande d'écriture est refusée et signalée.

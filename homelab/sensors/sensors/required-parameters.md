@@ -65,7 +65,7 @@ Check déterministe exécuté **au gate `phase2-phase3`** (Cadrage → Productio
 | `traefik_network` | Requis si `cible` = `swarm`. Réseau listé dans [`network.md`](../../../plugins/homelab-assistant/skills/docker-composer/references/network.md). |
 | `valkey_enabled` | Booléen, requis si `cible` = `swarm`. |
 | `database_service` | Optionnel : `postgres`, `mysql`, `mariadb`, `mongodb`, `none`. |
-| `vault` | Requis : `secrets` et `variables`, listes (éventuellement vides) d'objets `{nom, besoin}`. `nom` : libre, celui attendu par l'application (lettre ou `_` en tête, puis lettres, chiffres, `_`, `.`, `-`, 128 car. max), unique dans sa liste. `besoin` : non vide. Une valeur n'y figure jamais. |
+| `vault` | Requis : `secrets` et `variables`, listes (éventuellement vides) d'objets `{nom, besoin, categorie?, valeur?}`. `nom` : libre, celui attendu par l'application (lettre ou `_` en tête, puis lettres, chiffres, `_`, `.`, `-`, 128 car. max), unique dans sa liste. `besoin` : non vide. `categorie` (optionnelle, défaut `humain`) : `generable` (secret aléatoire, `secrets` seulement), `variable` (variable non secrète à valeur validée, `variables` seulement), `humain` (créée par l'humain). `valeur` : **uniquement** pour `variable`, concrète (ni vide ni espace réservé), jamais pour un secret ; un nom évoquant un secret ne peut pas être `variable`, ni une valeur qui embarque un identifiant (`://user:pass@hote`) ou une chaîne de type clé / jeton (32 caractères ou plus sans séparateur). |
 | `mode_execution` | Requis : `gated` (défaut) ou `autonome` (voir [`autonomy-mode`](../../common/stages/production/autonomy-mode.md)). |
 
 Contrôles transverses :

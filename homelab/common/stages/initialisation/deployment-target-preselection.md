@@ -54,4 +54,4 @@ Imports: none.
 
 ## Learn
 
-Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : candidats-règles (préférences Docker / Proxmox par type de stack) tracés, remontés au gate léger.
+Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : candidats-règles (préférences Docker / Proxmox par type de stack) tracés, remontés **en fin de workflow**, dans un message séparé ([`closure`](../validation/closure.md)).
