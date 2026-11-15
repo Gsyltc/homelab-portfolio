@@ -1,6 +1,6 @@
 # Verification gates & Sensors Homelab — fiabilisation déterministe
 
-Ce répertoire contient les **manifestes déclaratifs** des mécanismes de fiabilisation déterministe du workflow Homelab, référencés par le triptyque [`homelab/common/`](../common/conductor.md) (source unique — voir [`protocols/governance-security.md`](../common/protocols/governance-security.md), clauses SG-1..6) et coordonnés par le **Tech Lead Homelab**. Vue narrative historique (stub de redirection) : [`docs/homelab-workflow.md`](../../docs/homelab-workflow.md).
+Ce répertoire contient les **manifestes déclaratifs** des mécanismes de fiabilisation déterministe du workflow Homelab, référencés par le triptyque [`homelab/common/`](../common/conductor.md) (source unique — voir [`protocols/governance-security.md`](../common/protocols/governance-security.md), clauses SG-1..6) et coordonnés par le **Tech Lead Homelab**.
 
 Deux mécanismes complémentaires, **tous deux advisory** :
 

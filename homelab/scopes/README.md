@@ -34,7 +34,6 @@ fois, sur le stage**, jamais redéclarée dans huit blocs de scope séparés.
 
 > **Source d'identité.** Ces fichiers sont la **source d'identité** des scopes. La matrice
 > ci-dessous et la vue lisible de [`../common/protocols/scopes-and-axes.md`](../common/protocols/scopes-and-axes.md)
-> (ainsi que le stub [`../../docs/homelab-workflow.md`](../../docs/homelab-workflow.md))
 > restent des **vues lisibles** ; en cas d'écart sur l'identité d'un scope (nom, depth, mots-clés,
 > vérification), **le fichier de scope fait foi**.
 
