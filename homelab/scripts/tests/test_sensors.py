@@ -738,5 +738,49 @@ class TestVersionsRecord(unittest.TestCase):
         self.assertEqual(data["livrables"]["config.tfvars"]["verdicts"]["terraform-no-sni"]["verdict"], "ecart")
 
 
+class TestGateScopeDir(unittest.TestCase):
+    DIR = ".a-valider/HOM-1/sync-in"
+
+    def setUp(self):
+        self.p = Project()
+
+    def tearDown(self):
+        self.p.cleanup()
+
+    def gate(self, *extra: str) -> str:
+        buf = io.StringIO()
+        with redirect_stdout(buf):
+            sensor.main(["--root", str(self.p.root), "gate", "phase3-phase4", "--scope", "new-stack", *extra])
+        return buf.getvalue()
+
+    def test_compose_named_after_stack_is_found_in_scope_dir(self):
+        self.p.write(self.DIR + "/sync-in.yml", "services: {}\n")
+        out = self.gate("--dir", self.DIR)
+        self.assertIn("livrable_compose_present : ✅", out)
+        self.assertIn("(périmètre : " + self.DIR + ")", out)
+
+    def test_other_stacks_and_project_files_are_ignored(self):
+        self.p.write(self.DIR + "/config.tfvars", 'a = "b"\n')
+        self.p.write("docker/archives/old.yml", "services: {}\n")
+        self.p.write("n8n.yml", "x: [\n")
+        out = self.gate("--dir", self.DIR)
+        self.assertIn("livrable_compose_present : ⚠️", out)  # le compose hors périmètre ne compte pas
+        self.assertNotIn("docker/archives", out)
+        self.assertNotIn("n8n.yml", out)
+
+    def test_version_livrables_only_looks_in_scope_dir(self):
+        self.p.write(".a-valider/HOM-2/autre/versions.json", "{")
+        self.p.write(self.DIR + "/sync-in.yml", "services: {}\n")
+        out = self.gate("--dir", self.DIR)
+        self.assertNotIn("HOM-2", out)
+        self.assertIn("version-livrables", out)
+
+    def test_bad_dir_rejected(self):
+        buf = io.StringIO()
+        with redirect_stdout(buf):
+            rc = sensor.main(["--root", str(self.p.root), "gate", "phase3-phase4", "--dir", "../x"])
+        self.assertEqual(rc, 2)
+
+
 if __name__ == "__main__":
     unittest.main()

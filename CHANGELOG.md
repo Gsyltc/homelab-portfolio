@@ -9,6 +9,9 @@ ce fichier en donne la lecture chronologique côté produit.
 ## [Non publié]
 
 ### Changed
+- **Gate limité à la stack en cours.** `sensor.py gate <frontière> --dir .a-valider/<id-tâche>/<stack>` n'examine que ce
+  répertoire (artefacts et sensors) au lieu de balayer tout `${WORK_DIRECTORY}` ; un compose nommé `<stack>.yml` y est
+  reconnu. Corrige les écarts hors périmètre (autres stacks, archives, fichiers non Homelab) et le faux `livrable_compose_present`.
 - **Script `homelab/scripts/versions.py`.** `record` génère `versions.json` depuis les YAML joints (`sensors_resultats[]`,
   `sensors[]`) en rattachant chaque verdict au livrable de même `sha256`. Le schéma de rapport reviewer gagne `sha256` et
   `origine` (optionnels) par sensor.

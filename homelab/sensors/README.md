@@ -4,7 +4,7 @@ Ce répertoire contient les **manifestes déclaratifs** des mécanismes de fiabi
 
 Deux mécanismes complémentaires, **tous deux advisory** :
 
-- **Verification gates** — contrôle automatique de **traçabilité** aux **frontières de phases**, en amont du gate humain ([`gates.md`](gates.md)).
+- **Verification gates** — contrôle automatique de **traçabilité** aux **frontières de phases**, en amont du gate humain ([`gates.md`](gates.md)). Option `--dir .a-valider/<id-tâche>/<stack>` : limite les artefacts et les sensors du gate à la stack en cours (sans elle, balayage de tout le projet).
 - **Sensors** — checks **déterministes** déclenchés soit **à l'écriture d'un artefact** (`fire_on: write`), soit **au gate de phase** (`fire_on: gate`) ([`sensors/`](sensors/)).
 
 ## Nature : manifeste déclaratif + exécutable Python
