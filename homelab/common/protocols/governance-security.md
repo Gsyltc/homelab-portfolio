@@ -54,11 +54,30 @@ Après tout commentaire censé déclencher un agent, l'auteur **lit `trigger_out
 - Une mention en texte clair, ou une simple réponse, n'enqueue aucun run : la chaîne A2A est alors rompue (compte-rendu réputé non rendu, le flux s'arrête).
 - Ni secret ni `${SNI}` dans le YAML (voir § « Aucun secret »).
 
-> **Pas d'accusé de réception, pour tous les agents.** Règle posée d'abord pour le Tech Lead, étendue aux spécialistes et reviewers (Spécialistes Docker, Terraform, Kestra, n8n, Home Assistant, Analyste QA, Architecte de sécurité). Quand le Tech Lead reçoit un retour d'un spécialiste ou d'un reviewer sur une sous-issue, il ne poste **aucun commentaire** si ce retour n'appelle ni **décision** ni **action** de sa part. Sont des décisions ou actions : une délégation ou un renvoi (mention + YAML), un changement de statut qui engage la suite, une demande à l'humain, une synthèse. Ne sont **pas** des raisons de commenter : « Reçu », « Pris en compte », la reformulation du retour, l'annonce qu'il attend la suite, la confirmation d'un état déjà visible (statut, pièce jointe). Le silence vaut réception : le statut de la sous-issue et la lecture de `trigger_outcomes` suffisent. Si la piste d'audit exige une trace (vérification d'un livrable, lien entre deux retours), elle est consignée **en un seul commentaire sur l'issue parente**, jamais en commentaire de réponse sur la sous-issue. Un commentaire qui mentionne un agent pour le seul fait de le remercier ou de lui confirmer la réception est interdit (il enfile un run inutile).
->
-> **Côté spécialiste / reviewer.** Un agent réveillé par un message qui ne porte **aucune nouvelle mission** (accusé de réception du Tech Lead, rappel, mission déjà traitée) **ne poste rien** : ni « mission déjà traitée », ni nouveau compte rendu, ni mention de retour. Il ne republie son compte rendu que si le Tech Lead le redemande explicitement, ou si `trigger_outcomes` du retour n'a pas enfilé de run (reprise unique, cf. [`stage-protocol.md`](stage-protocol.md)). Il ne relivre jamais un livrable déjà produit pour une raison de mention ([`producer-report.md`](producer-report.md)).
+### Pas d'accusé de réception (tous agents)
 
-> **Anti-wake parasite (règle générale, tous agents).** **Aucun agent ne se mentionne lui-même** avec un lien de mention actif `mention://agent/<uuid>` dans une consigne de délégation : un tel lien, posté dans son propre commentaire, enfile un run parasite de cet agent. L'**assigneur désigne l'agent de retour par sa fonction, en TEXTE CLAIR** (« rends compte au Tech Lead »), **sans lien actif vers lui-même**. La construction du lien de mention actif de retour revient **toujours à l'agent délégataire** en fin de tâche — UUID résolu via `multica agent list --output json`, jamais copié depuis la consigne de délégation ni codé en dur. C'est ce lien, posé par l'agent qui termine, qui enfile le run de reprise de l'assigneur.
+Règle posée pour le Tech Lead, étendue aux spécialistes et reviewers (Docker, Terraform, Kestra, n8n, Home Assistant, Analyste QA, Architecte de sécurité).
+
+**Côté Tech Lead** : sur le retour d'un spécialiste ou d'un reviewer pour une sous-issue, aucun commentaire si le retour n'appelle ni décision ni action.
+
+- Décisions ou actions : délégation ou renvoi (mention + YAML), changement de statut qui engage la suite, demande à l'humain, synthèse.
+- Pas des raisons de commenter : « Reçu », « Pris en compte », reformulation du retour, annonce d'attente, confirmation d'un état déjà visible (statut, pièce jointe).
+- Le silence vaut réception : le statut de la sous-issue et `trigger_outcomes` suffisent.
+- Trace exigée par la piste d'audit (vérification d'un livrable, lien entre deux retours) : un seul commentaire sur l'issue parente, jamais en réponse sur la sous-issue.
+- Mentionner un agent pour le remercier ou confirmer la réception est interdit (run inutile).
+
+**Côté spécialiste / reviewer** : un agent réveillé par un message sans nouvelle mission (accusé du Tech Lead, rappel, mission déjà traitée) ne poste rien.
+
+- Ni « mission déjà traitée », ni nouveau compte rendu, ni mention de retour.
+- Republication du compte rendu uniquement si le Tech Lead le redemande, ou si `trigger_outcomes` du retour n'a pas enfilé de run (reprise unique, cf. [`stage-protocol.md`](stage-protocol.md)).
+- Jamais de relivraison d'un livrable déjà produit pour une raison de mention ([`producer-report.md`](producer-report.md)).
+
+### Anti-wake parasite (tous agents)
+
+- Aucun agent ne se mentionne lui-même avec un lien actif `mention://agent/<uuid>` dans une consigne de délégation : ce lien, posté dans son propre commentaire, enfile un run parasite.
+- L'assigneur désigne l'agent de retour par sa fonction, en **texte clair** (« rends compte au Tech Lead »), sans lien actif vers lui-même.
+- Le lien de mention actif de retour est construit **toujours par l'agent délégataire** en fin de tâche : UUID résolu via `multica agent list --output json`, jamais copié depuis la consigne ni codé en dur.
+- Ce lien, posé par l'agent qui termine, enfile le run de reprise de l'assigneur.
 
 ### Schéma du message A2A (source unique)
 
@@ -109,12 +128,25 @@ Chaque sensor tourne **une fois par version** (`sha256`), chez son **propriétai
 - La QA **déclare** aussi `plaintext-secret` et `terraform-no-sni` (aucune omission, SG-2) : elle les **reprend** de l'auteur (`origine: repris`) si le `sha256` est identique, et les relance sinon.
 - Un verdict repris dont le `sha256` ne correspond pas à la version courante est **absent**, donc un écart (silence interdit).
 - Le Tech Lead ne relance aucun sensor pour « vérifier » une livraison : il lit le YAML et ne contrôle que le `sha256`.
-- Le Tech Lead **génère** `versions.json` à chaque version validée, par script et non à la main : il télécharge les YAML joints (`multica attachment download`) puis lance `python3 "$CORE_HOME/homelab/scripts/versions.py" record --dir ${WORK_DIRECTORY}/.a-valider/<id-tâche>/<stack> <retour.yaml>...`. Le script calcule le `sha256` des livrables, rattache à chacun les verdicts dont le `sha256` correspond (un verdict sans `sha256` ou d'une autre version est ignoré et signalé, jamais deviné) et écrit le fichier (répertoire de relecture : `sha256` des livrables + verdicts par `sha256`). Le gate de phase `phase3-phase4` **ne relance pas** les sensors : il lance seulement le sensor [`version-livrables`](../../sensors/sensors/version-livrables.md), qui vérifie que les fichiers ont le `sha256` validé et que chaque verdict requis existe pour ce `sha256`.
+- Le Tech Lead **génère** `versions.json` à chaque version validée, par script et non à la main :
+  - il télécharge les YAML joints (`multica attachment download`) ;
+  - il lance `python3 "$CORE_HOME/homelab/scripts/versions.py" record --dir ${WORK_DIRECTORY}/.a-valider/<id-tâche>/<stack> <retour.yaml>...` ;
+  - le script calcule le `sha256` des livrables et rattache à chacun les verdicts de même `sha256` (un verdict sans `sha256` ou d'une autre version est ignoré et signalé, jamais deviné) ;
+  - il écrit le fichier dans le répertoire de relecture : `sha256` des livrables + verdicts par `sha256`.
+- Le gate de phase `phase3-phase4` **ne relance pas** les sensors : il lance seulement le sensor [`version-livrables`](../../sensors/sensors/version-livrables.md), qui vérifie que les fichiers ont le `sha256` validé et que chaque verdict requis existe pour ce `sha256`.
 - Aucun contrôle n'est supprimé : SG-1..6 et le plancher SG-3 de la revue sécurité restent inchangés.
 
 ## Concurrence — un seul traitement par stack (lecture **par artefact**)
 
-Le verrou « un seul traitement par stack » se lit **par artefact / livrable** : un **même artefact** d'une stack n'a **qu'un seul traitement actif**, matérialisé par une clé de metadata d'issue `active_step` **par artefact** (rôle + périmètre, ex. `specialiste-docker:compose`, `specialiste-terraform:tfvars`), lue dès la Phase 0 ([`stages/initialisation/concurrency-lock-read.md`](../stages/initialisation/concurrency-lock-read.md)), posée à la délégation et **effacée** au retour contrôlé. Deux traitements **disjoints** (compose **vs** `.tfvars`) progressent **en parallèle** sur la même stack — typiquement via **deux sous-issues `--stage 1`** (chaque sous-issue suit le cycle `in_progress` → `in_review` → `done` ; la barrière de stage ne réveille le contrôle qualité central du Tech Lead qu'une fois **toutes** les sous-issues `done` — cf. [`stage-protocol.md` § Cycle de statut des sous-issues & barrière de stage](stage-protocol.md#cycle-de-statut-des-sous-issues--barrière-de-stage)) — car ils ne portent pas sur le même livrable. Deux demandes visant le **même artefact** sont **sérialisées** (la seconde attend un point stable : livrable contrôlé, `in_review`, ou clôture). **Aucun livrable concurrent divergent sur le même artefact.**
+Le verrou « un seul traitement par stack » se lit **par artefact / livrable** : un même artefact n'a **qu'un seul traitement actif**.
+
+- **Matérialisation** : clé de metadata d'issue `active_step` par artefact (rôle + périmètre, ex. `specialiste-docker:compose`, `specialiste-terraform:tfvars`).
+  - lue dès la Phase 0 ([`stages/initialisation/concurrency-lock-read.md`](../stages/initialisation/concurrency-lock-read.md)) ;
+  - posée à la délégation ;
+  - **effacée** au retour contrôlé.
+- **Artefacts disjoints** (compose **vs** `.tfvars`) : traitement **en parallèle** sur la même stack, typiquement via **deux sous-issues `--stage 1`**. Cycle de statut et barrière de stage : [`stage-protocol.md` § Cycle de statut des sous-issues & barrière de stage](stage-protocol.md#cycle-de-statut-des-sous-issues--barrière-de-stage).
+- **Même artefact** : demandes **sérialisées** ; la seconde attend un point stable (livrable contrôlé, `in_review`, ou clôture).
+- Aucun livrable concurrent divergent sur le même artefact.
 
 ## Contrôle sécurité systématique
 
@@ -144,7 +176,7 @@ Aucun scope, aucune règle apprise, aucun gate / sensor advisory ne peut affaibl
 3. **Validation humaine granulaire** — chaque choix validé / rejeté séparément.
 4. **Aucune action à impact** (dépôt de fichiers, flux Kestra, application n8n / Home Assistant) sans validation humaine explicite.
 5. **Aucun secret** (règle unique, ci-dessous) ; **Terraform ne déploie JAMAIS** ; **jamais `${SNI}`** en Terraform livré ; **un seul traitement par stack** (verrou lu **par artefact** : compose et `.tfvars`, livrables disjoints, peuvent être produits en parallèle ; jamais deux agents sur le même artefact).
-6. **Piste d'audit** sur l'issue ; **décision structurante tracée** en ADR ; contrôle sécurité minimal systématique.
+6. **Piste d'audit** sur l'issue ; **décision structurante tracée** ; contrôle sécurité minimal systématique.
 
 ### Aucun secret (source unique)
 
