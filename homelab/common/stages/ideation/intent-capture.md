@@ -12,7 +12,7 @@ review_class: none
 human_gate: none
 produces: [intention_capturee]
 consumes: [{artifact: demande_brute_consignee, required: true}, {artifact: detection_stack_existante_vs_nouvelle, required: false}]
-requires_stage: [database-preselection]
+requires_stage: [network-preselection]
 sensors: []
 scopes: [stack-update, new-stack, config-change, security-patch, infra-terraform]
 inputs: "Entrée brute consignée par labels-audit-init"

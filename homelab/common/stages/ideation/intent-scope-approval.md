@@ -10,9 +10,9 @@ summary_confirmation: required
 reviewer: null
 review_class: none
 human_gate: light
-produces: [intention_perimetre_approuves, scope_confirme, arbitrage_swarm_proxmox, label_cible_pose, fqdn_valide, auth_type_valide, database_service_valide]
-consumes: [{artifact: intention_capturee, required: true}, {artifact: scope_propose, required: true}, {artifact: axes_proposes, required: true}, {artifact: cibles_disponibles, required: true}, {artifact: auth_type_preselectionne, required: true}, {artifact: database_service_preselectionne, required: true}]
-requires_stage: [scope-detection, deployment-target-preselection, auth-preselection, database-preselection]
+produces: [intention_perimetre_approuves, scope_confirme, arbitrage_swarm_proxmox, label_cible_pose, fqdn_valide, auth_type_valide, database_service_valide, traefik_network_valide]
+consumes: [{artifact: intention_capturee, required: true}, {artifact: scope_propose, required: true}, {artifact: axes_proposes, required: true}, {artifact: cibles_disponibles, required: true}, {artifact: auth_type_preselectionne, required: true}, {artifact: database_service_preselectionne, required: true}, {artifact: traefik_network_preselectionne, required: true}]
+requires_stage: [scope-detection, deployment-target-preselection, auth-preselection, database-preselection, network-preselection]
 sensors: [initial-proposal]
 scopes: [stack-update, new-stack, config-change, security-patch, infra-terraform]
 inputs: "Intention capturée, scope + axes proposés"
@@ -40,10 +40,11 @@ C'est la **première sollicitation de l'humain** : tout ce qui précède s'exéc
 4. FQDN : <valeur complète, ex. sync-in.jeedom-gaston.ovh> — ce domaine te convient-il ?
 5. Authentification recommandée : <type> — <justification + lien doc> | à trancher : <options>
 6. Base de données recommandée : <postgres (mutualisé) | mariadb | … | none> — <justification + lien doc> | à trancher : <options>
+7. Réseau Traefik recommandé (si Docker Swarm) : <réseau, ex. traefik_frontend> — <justification>
 ```
 
 Point 3 : options issues de [`deployment-target-preselection`](../initialisation/deployment-target-preselection.md), seules les disponibles sont listées. Deux options → l'humain choisit. Une seule → elle est retenue, l'indiquer (ex. « Docker Swarm retenu, aucun script Proxmox trouvé — variantes testées : … »). Stack existante → cible actuelle. Ne jamais présumer le choix.
-Point 4 : valeur calculée selon la règle `${fqdn}` de [`required-parameters-collection`](../cadrage/required-parameters-collection.md), jamais un gabarit. Point 5 : résultat de [`auth-preselection`](../initialisation/auth-preselection.md). Point 6 : résultat de [`database-preselection`](../initialisation/database-preselection.md). Points 3 à 6 : stacks uniquement.
+Point 4 : valeur calculée selon la règle `${fqdn}` de [`required-parameters-collection`](../cadrage/required-parameters-collection.md), jamais un gabarit. Point 5 : résultat de [`auth-preselection`](../initialisation/auth-preselection.md). Point 6 : résultat de [`database-preselection`](../initialisation/database-preselection.md). Point 7 : résultat de [`network-preselection`](../initialisation/network-preselection.md). Points 3 à 7 : stacks uniquement.
 
 ### Step 2 — Gate léger (Keep / Modify / Redo)
 
@@ -55,7 +56,7 @@ Une fois la cible validée au point 3, poser sur l'issue (et sur ses sous-issues
 
 ## Sensors
 
-Outputs: intention + périmètre approuvés, scope confirmé, cible (`arbitrage_swarm_proxmox`), `${fqdn}`, `${auth_type}` et `${database_service}` validés (repris en Cadrage sans redemander). Imports: `initial-proposal` (gate — ✅ requis avant de poster la proposition ; bloquant sur `new-stack` / `infra-terraform`). Frontière **Idéation → Cadrage** : gate `artefacts-presents` (intention, scope confirmé) + approbation périmètre tracée — voir [`homelab/sensors/gates.md`](../../../sensors/gates.md).
+Outputs: intention + périmètre approuvés, scope confirmé, cible (`arbitrage_swarm_proxmox`), `${fqdn}`, `${auth_type}`, `${database_service}` et `${traefik_network}` validés (repris en Cadrage sans redemander). Imports: `initial-proposal` (gate — ✅ requis avant de poster la proposition ; bloquant sur `new-stack` / `infra-terraform`). Frontière **Idéation → Cadrage** : gate `artefacts-presents` (intention, scope confirmé) + approbation périmètre tracée — voir [`homelab/sensors/gates.md`](../../../sensors/gates.md).
 Imports: none.
 
 ## Learn

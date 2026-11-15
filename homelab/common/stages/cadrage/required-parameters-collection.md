@@ -11,7 +11,7 @@ reviewer: null
 review_class: none
 human_gate: granular
 produces: [parametres_requis_complets, auth_type_fige, mode_execution_choisi]
-consumes: [{artifact: cadrage_confirme, required: true}, {artifact: fqdn_valide, required: false}, {artifact: auth_type_valide, required: false}, {artifact: database_service_valide, required: false}]
+consumes: [{artifact: cadrage_confirme, required: true}, {artifact: fqdn_valide, required: false}, {artifact: auth_type_valide, required: false}, {artifact: database_service_valide, required: false}, {artifact: traefik_network_valide, required: false}]
 requires_stage: [intake-framing]
 sensors: [required-parameters]
 scopes: [stack-update, new-stack, config-change, security-patch, infra-terraform]
@@ -39,11 +39,11 @@ Le Tech Lead vérifie que tous les paramètres sont renseignés ; **il ne génè
 | Paramètres OIDC `${oidc_params}` | Déductible (si `${auth_type}` = `oidc`) | IdP, nom du client, redirect URI, scopes — voir Step 3. Sans objet pour les autres types. |
 | Stockage `${storage}` | Déductible | NFS du Homelab : serveur `truenas`, chemin `/mnt/datas/${ENVIRONMENT}/<services\|databases>/<stack_name>`. **Source unique** : [`template.yml`](../../../../plugins/homelab-assistant/skills/docker-composer/references/template.yml) (section `VOLUMES`) de la skill `docker-composer`. Ne jamais demander le serveur ni le chemin. |
 | Secrets et variables Vault `${vault}` | Déductible | **Noms uniquement, jamais de valeur.** Deux listes, `secrets` et `variables`, construites de la même façon selon les besoins de la stack, avec les noms attendus par l'application (sa documentation fait foi, aucun nom imposé par le workflow). Sources : éléments exigés par la documentation officielle, plus ceux induits par les paramètres retenus. Exemples : secrets → client secret si `oidc`, mot de passe si base dédiée, compte admin initial ; variables → URL publique (`${fqdn}`), hôte / nom de la base, issuer OIDC. Chaque entrée porte son `besoin` (pourquoi elle existe). Secrets → montage `services/<stack_name>` ; variables → `env_variables/<stack_name>` (layout : skill `homelab-vault-access`). Stack existante : lister les clés présentes (noms seuls). Liste vide si aucun besoin. |
-| Réseau Traefik `${traefik_network}` | Déductible | **Source unique** : liste et réseau par défaut définis dans la skill `docker-composer` ([`references/network.md`](../../../../plugins/homelab-assistant/skills/docker-composer/references/network.md)) ; défaut **à confirmer par l'humain**. |
+| Réseau Traefik `${traefik_network}` | Déductible | **Source unique** : liste et réseau par défaut définis dans la skill `docker-composer` ([`references/network.md`](../../../../plugins/homelab-assistant/skills/docker-composer/references/network.md)). Validé au gate léger ([`network-preselection`](../initialisation/network-preselection.md)), repris sans redemander. |
 | Activer Valkey `${valkey_enabled}` | Déductible | `true`, `false` — le Homelab possède **déjà** un Valkey/Redis mutualisé : ne jamais recréer ce service, s'y connecter (règle portée par la skill `docker-composer`). |
 | Service base de données `${database_service}` | Optionnel | `postgres`, `mysql`, `mariadb`, `mongodb`, `none` — validé au gate léger ([`database-preselection`](../initialisation/database-preselection.md)), repris sans redemander. |
 
-**Un seul message de confirmation** : le Tech Lead propose en bloc les valeurs par défaut déduites restantes (`${storage}`, `${traefik_network}`, `${valkey_enabled}`, `${vault}` et, si `oidc`, `${oidc_params}`) ainsi que le **mode d'exécution** de la Production (options et défaut : [`autonomy-mode`](../production/autonomy-mode.md)), et attend la confirmation ou correction de l'humain.
+**Un seul message de confirmation** : le Tech Lead propose en bloc les valeurs par défaut déduites restantes (`${storage}`, `${valkey_enabled}`, `${vault}` et, si `oidc`, `${oidc_params}`) ainsi que le **mode d'exécution** de la Production (options et défaut : [`autonomy-mode`](../production/autonomy-mode.md)), et attend la confirmation ou correction de l'humain.
 
 La création des clés Vault proposées reste une action humaine (agent Vault dédié à créer plus tard) : le message le signale.
 

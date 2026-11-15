@@ -30,6 +30,10 @@ ce fichier en donne la lecture chronologique côté produit.
   touchant un agent et par la CI `validate-agents`.
 
 ### Changed
+- **Réseau Traefik pré-sélectionné en Initialisation.** Nouveau stage `network-preselection` (après
+  `database-preselection`) : réseau choisi dans la liste de la skill `docker-composer` selon la nature de
+  l'application (défaut `traefik_frontend`). Proposé au point 7 du gate léger, contrôlé par `initial-proposal`
+  (section `reseau`), repris en Cadrage sans redemander.
 - **Pré-sélections obligatoires avant le gate léger.** `intent-scope-approval` exige (`required: true`) les quatre
   artefacts de pré-sélection ; ces stages couvrent désormais tous les scopes de stack.
 - **Séquence d'amorçage explicite jusqu'au gate léger.** Le conductor nomme chaque stage d'Initialisation et

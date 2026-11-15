@@ -2,7 +2,8 @@
 """Sensor `initial-proposal` — applique `homelab/sensors/sensors/initial-proposal.md`.
 
 Vérifie que `preselection.json`, alimenté par les stages de pré-sélection d'Initialisation
-(`deployment-target-preselection`, `auth-preselection`, `database-preselection`), est complet avant la proposition initiale (`intent-scope-approval`).
+(`deployment-target-preselection`, `auth-preselection`, `database-preselection`,
+`network-preselection`), est complet avant la proposition initiale (`intent-scope-approval`).
 Une section absente ou remplie par « non vérifié » / « à trancher » sans options est un écart.
 
 Parsing **statique** (SG-4). Aucune valeur de secret n'est lue ni affichée.
@@ -25,7 +26,20 @@ from sensorlib.context import Ctx, no_scope, res  # noqa: E402
 
 ID = "initial-proposal"
 
-SECTIONS = {"cibles", "auth", "database"}
+NETWORK_SRC = (Path(__file__).resolve().parents[3] / "plugins" / "homelab-assistant" / "skills"
+               / "docker-composer" / "references" / "network.md")
+
+
+def traefik_networks() -> set[str] | None:
+    """Réseaux Traefik de la skill docker-composer (source unique) ; None si illisible."""
+    try:
+        text = NETWORK_SRC.read_text(encoding="utf-8")
+    except OSError:
+        return None
+    nets = set(re.findall(r"^-\s+([a-z0-9_]+)\s*:", text, re.M))
+    return nets or None
+
+SECTIONS = {"cibles", "auth", "database", "reseau"}
 AUTH_TYPES = {"none", "local", "forwardauth", "oidc"}
 DATABASES = {"postgres", "mysql", "mariadb", "mongodb", "none"}
 TARGETS = {"docker-swarm", "proxmox"}
@@ -125,6 +139,11 @@ def check(p: dict) -> list[str]:
     _check_cibles(p.get("cibles"), gaps)
     _check_choice("auth", p.get("auth"), AUTH_TYPES, "auth-preselection", gaps)
     _check_choice("database", p.get("database"), DATABASES, "database-preselection", gaps)
+    nets = traefik_networks()
+    if nets is None:
+        gaps.append(f"reseau : liste des réseaux Traefik illisible ({NETWORK_SRC.name})")
+    else:
+        _check_choice("reseau", p.get("reseau"), nets, "network-preselection", gaps)
     return gaps
 
 
