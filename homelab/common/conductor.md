@@ -47,15 +47,15 @@ Ce principe est **outillé** par (détails dans [`protocols/scopes-and-axes.md`]
 
 ## Les 5 phases et leurs stages
 
-Le workflow structure le cycle en **cinq phases** (`Phase 0 - Initialisation → Phase 1 - Idéation → Phase 2 - Cadrage et Paramètres → Phase 3 - Production et Contrôle → Phase 4 - Validation et Déploiement`). Chaque phase se décompose en **stages** — une fiche par stage sous [`stages/<phase>/`](stages/), portant un front-matter conforme à [`protocols/stage-definition.md`](protocols/stage-definition.md).
+Le workflow structure le cycle en **cinq phases** (`Phase 0 - Initialisation → Phase 1 - Idéation → Phase 2 - Cadrage → Phase 3 - Production → Phase 4 - Validation`). Chaque phase se décompose en **stages** — une fiche par stage sous [`stages/<phase>/`](stages/), portant un front-matter conforme à [`protocols/stage-definition.md`](protocols/stage-definition.md).
 
 ```mermaid
 flowchart TD
     A[Demande humain ou agent] --> P0[PHASE 0 - INITIALISATION]
     P0 --> P1[PHASE 1 - IDEATION]
-    P1 --> P2[PHASE 2 - CADRAGE ET PARAMETRES]
-    P2 --> P3[PHASE 3 - PRODUCTION ET CONTROLE]
-    P3 --> P4[PHASE 4 - VALIDATION ET DEPLOIEMENT]
+    P1 --> P2[PHASE 2 - CADRAGE]
+    P2 --> P3[PHASE 3 - PRODUCTION]
+    P3 --> P4[PHASE 4 - VALIDATION]
     P0 -.->|bootstrap deterministe - detection stack + verrou + labels - sans gate humain| P0
     P1 -.->|gate humain leger - intention + perimetre + scope confirme| P1
     P2 -.->|gate advisory - doc officielle + parametres requis| P2
@@ -70,8 +70,6 @@ flowchart TD
 | **Phase 2** | Cadrage | Inception | [`n8n-absolute-rule`](stages/cadrage/n8n-absolute-rule.md) · [`domain-triage`](stages/cadrage/domain-triage.md) · [`intake-framing`](stages/cadrage/intake-framing.md) · [`required-parameters-collection`](stages/cadrage/required-parameters-collection.md) | Advisory (avant Production) |
 | **Phase 3** | Production | Construction | [`autonomy-mode`](stages/production/autonomy-mode.md) · [`terraform-configuration`](stages/production/terraform-configuration.md) · [`docker-compose-creation`](stages/production/docker-compose-creation.md) · [`quality-assurance`](stages/production/quality-assurance.md) ∥ [`security-delegation`](stages/production/security-delegation.md) (parallèle) · [`n8n-branch`](stages/production/n8n-branch.md) · [`home-assistant-branch`](stages/production/home-assistant-branch.md) · [`central-quality-control`](stages/production/central-quality-control.md) | Granulaire |
 | **Phase 4** | Validation | Operation | [`deployment-prereqs-check`](stages/validation/deployment-prereqs-check.md) · [`review-and-notification`](stages/validation/review-and-notification.md) · [`human-granular-validation`](stages/validation/human-granular-validation.md) · [`file-deposit`](stages/validation/file-deposit.md) · [`version-update-application`](stages/validation/version-update-application.md) · [`kestra-deployment`](stages/validation/kestra-deployment.md) · [`closure`](stages/validation/closure.md) | Explicite |
-
-> **Note** : Les libellés historiques (`Cadrage et Paramètres`, `Production et Contrôle`, `Validation et Déploiement`) restent valides comme alias. Les couches de règles `phase` sont nommées par le nom de phase (pas le numéro) et restent inchangées.
 
 > **Parcours `service-version-update`** : La mise à jour d'un service existant sur une nouvelle version suit un parcours ciblé en trois temps (analyse d'impact de version → écriture Vault `VERSION` → déploiement Kestra), gouverné par un **gate léger unique** (`human_gate: light`). Son identité et ses garde-fous vivent dans [`../scopes/service-version-update.md`](../scopes/service-version-update.md).
 

@@ -18,7 +18,7 @@ Avant TOUTE tâche liée au Homelab :
    - `${WORK_DIRECTORY}` non résolue : passe l'issue `blocked` et demande le chemin à l'humain.
 4. Propage `$CORE_HOME` dans chaque délégation (champ `core_home` du message A2A).
 5. Lis **AGENTS.md § « Homelab Flow » uniquement** (règle de routage, à appliquer en premier), pas AGENTS.md en entier.
-6. Suis `homelab/common/conductor.md` (source unique des instructions du coordinateur) : **séquence d'amorçage** et **checklist de tour du coordinateur**.
+6. Suis `homelab/common/conductor.md` (source unique des instructions du Tech Lead) : **séquence d'amorçage** et **checklist de tour du Tech Lead**.
    - Le QUOI de chaque étape vit dans `homelab/common/stages/`, les mécanismes transverses dans `homelab/common/protocols/`.
 
 La gouvernance A2A, la validation humaine granulaire, la piste d'audit, le français par défaut, l'absence de secrets et la règle préalable de documentation officielle y sont définis une seule fois : ne les répète pas, n'affaiblis aucune norme de gating.

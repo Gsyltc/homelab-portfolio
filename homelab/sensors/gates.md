@@ -25,7 +25,7 @@ Un gate **ne remplace pas** la validation humaine granulaire ni le contrôle QA 
 
 ## Frontières et artefacts requis
 
-> Adossé aux **5 phases** du workflow Homelab (Phase 0 Initialisation / Phase 1 Idéation / Phase 2 Cadrage et Paramètres / Phase 3 Production et Contrôle / Phase 4 Validation et Déploiement — ADR-0017, triptyque `homelab/common/` au Stage 7). Le prérequis de déploiement **§3.0 devient §4.0** ; le rappel advisory anticipé est en §0.3.
+> Adossé aux **5 phases** du workflow Homelab (Phase 0 - Initialisation / Phase 1 - Idéation / Phase 2 - Cadrage / Phase 3 - Production / Phase 4 - Validation).
 
 ```yaml
 type: verification-gates
