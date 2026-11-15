@@ -49,4 +49,7 @@ Sensor plaintext-secret — <fichier>   (source : homelab/sensors/sensors/plaint
 
 ## Garde-fou
 
-Advisory par défaut : signale un motif suspect **sans jamais divulguer la valeur**, ne bloque pas hors scope sécuritaire. **Bloquant sur `security-patch` / `new-stack`** (décision humaine ALI-204 + contrôle sécurité Analyste QA) : sur ces scopes, un motif détecté **arrête l'avancée** jusqu'à correction ou levée humaine explicite tracée. Même bloquant, le sensor **ne remplace pas** l'audit de sécurité de l'Analyste QA (niveau `renforcé`) ni la validation humaine (SG-3). **Parsing statique uniquement** (SG-4) : détection par motif, jamais de résolution / lecture de secret Vault.
+- **Advisory par défaut** : signale un motif suspect **sans jamais divulguer la valeur**, ne bloque pas hors scope sécuritaire.
+- **Bloquant sur `security-patch` / `new-stack`** (décision humaine ALI-204 + contrôle sécurité Analyste QA) : un motif détecté **arrête l'avancée** jusqu'à correction ou levée humaine explicite tracée.
+- Même bloquant, le sensor **ne remplace pas** l'audit de sécurité de l'Analyste QA (niveau `renforcé`) ni la validation humaine (SG-3).
+- **Parsing statique uniquement** (SG-4) : détection par motif, jamais de résolution ni de lecture de secret Vault.

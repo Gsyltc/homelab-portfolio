@@ -11,7 +11,11 @@ Deux mécanismes complémentaires, **tous deux advisory** :
 
 Chaque manifeste fixe le **contrat** (périmètre de déclenchement, règles, sortie). Un **dispatcher Python** l'exécute de façon déterministe, sur le modèle du workflow `core` ([ADR-0051](../../decisions/0051-sensors-homelab-executables-python-et-hooks.md), analogue de [ADR-0046](../../decisions/0046-sensors-executables-python-et-hooks-agnostiques.md) côté `core`). On garde la **forme déclarative** (le fond ne se redécide pas) **et** on l'exécute.
 
-> **Convention d'invocation.** Le harnais (`sensor.py`, manifestes, hook) vit dans ce dépôt — le **checkout `homelab-portfolio`** — **jamais** dans le dépôt du projet vérifié. Les commandes ci-dessous se lancent **depuis ce checkout**, en désignant le script par un **chemin ancré** sur sa racine (`$CORE_HOME` = racine du checkout), tandis que `--root <projet>` pointe le dépôt du projet à vérifier. Un chemin **relatif** (`homelab/scripts/sensor.py`) ne se résout que si le répertoire courant est déjà ce checkout ; lancé depuis le dossier du projet, il échoue en « script introuvable ».
+> **Convention d'invocation.**
+>
+> - Le harnais (`sensor.py`, manifestes, hook) vit dans le **checkout `homelab-portfolio`**, jamais dans le dépôt du projet vérifié.
+> - Les commandes ci-dessous se lancent **depuis ce checkout**, avec un **chemin ancré** sur `$CORE_HOME` (racine du checkout). `--root <projet>` pointe le dépôt à vérifier.
+> - Un chemin **relatif** (`homelab/scripts/sensor.py`) ne se résout que si le répertoire courant est ce checkout. Lancé depuis le dossier du projet, il échoue en « script introuvable ».
 
 | Commande | Rôle |
 | --- | --- |
@@ -27,7 +31,19 @@ Le code retour est **0** même en écart (advisory). `--strict` renvoie 1 en cas
 
 ### Sévérité conditionnelle par scope (ALI-204)
 
-`plaintext-secret` et `terraform-no-sni` portent un bloc `severity_overrides` : **bloquants sur les scopes `security-patch` / `new-stack`**, advisory ailleurs. `version-livrables` (versions des livrables au gate `phase3-phase4` et avant le dépôt ; son fichier `versions.json` est généré par `homelab/scripts/versions.py`), `required-parameters` (contrôle de `parametres.json` au gate `phase2-phase3`) et `initial-proposal` (contrôle de `preselection.json` avant la proposition initiale, gate `phase0-phase1`) sont **bloquants sur `new-stack` / `infra-terraform`**. Le dispatcher résout la sévérité effective via `--scope <scope>` (ou la variable `SENSORS_SCOPE`) ; sur ces scopes, un écart est signalé **BLOQUANT** (à corriger ou lever explicitement et à tracer), conformément à la décision humaine + contrôle sécurité de l'Analyste QA (SG-1). La sévérité ne passe **jamais** par le code retour du dispatcher (toujours 0) : elle est portée par le rapport et le workflow.
+**Sévérité des sensors** :
+
+- `plaintext-secret` et `terraform-no-sni` (bloc `severity_overrides`) : **bloquants sur `security-patch` / `new-stack`**, advisory ailleurs.
+- **Bloquants sur `new-stack` / `infra-terraform`** :
+  - `version-livrables` : versions des livrables au gate `phase3-phase4` et avant le dépôt ; `versions.json` est généré par `homelab/scripts/versions.py` ;
+  - `required-parameters` : contrôle de `parametres.json` au gate `phase2-phase3` ;
+  - `initial-proposal` : contrôle de `preselection.json` avant la proposition initiale, gate `phase0-phase1`.
+
+**Résolution** :
+
+- Le dispatcher résout la sévérité effective via `--scope <scope>` (ou la variable `SENSORS_SCOPE`).
+- Sur ces scopes, un écart est signalé **BLOQUANT** : à corriger, ou à lever explicitement et à tracer (décision humaine + contrôle sécurité de l'Analyste QA, SG-1).
+- La sévérité ne passe **jamais** par le code retour du dispatcher (toujours 0) : elle est portée par le rapport et le workflow.
 
 ### Hooks
 

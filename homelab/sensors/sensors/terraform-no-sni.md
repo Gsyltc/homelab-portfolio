@@ -43,4 +43,8 @@ Sensor terraform-no-sni — <fichier>   (source : homelab/sensors/sensors/terraf
 
 ## Garde-fou
 
-Advisory par défaut : signale l'usage de `${SNI}`, ne bloque pas hors scope sécuritaire. **Bloquant sur `security-patch` / `new-stack`** (décision humaine ALI-204 + contrôle sécurité Analyste QA) : sur ces scopes, un `${SNI}` détecté dans un livrable Terraform **arrête l'avancée** jusqu'à correction ou levée humaine explicite tracée. Même bloquant, le sensor **ne remplace pas** l'audit de l'Analyste QA (niveau `renforcé`, qui inclut « absence de `${SNI}` en Terraform ») ni la validation humaine (SG-3). L'interdiction **ne concerne que** les fichiers Terraform livrés : les espaces réservés du workflow (`${stack_name}`, etc.) restent autorisés. **Parsing statique uniquement** (SG-4).
+- **Advisory par défaut** : signale l'usage de `${SNI}`, ne bloque pas hors scope sécuritaire.
+- **Bloquant sur `security-patch` / `new-stack`** (décision humaine ALI-204 + contrôle sécurité Analyste QA) : un `${SNI}` détecté dans un livrable Terraform **arrête l'avancée** jusqu'à correction ou levée humaine explicite tracée.
+- Même bloquant, le sensor **ne remplace pas** l'audit de l'Analyste QA (niveau `renforcé`, qui inclut « absence de `${SNI}` en Terraform ») ni la validation humaine (SG-3).
+- L'interdiction **ne concerne que** les fichiers Terraform livrés : les espaces réservés du workflow (`${stack_name}`, etc.) restent autorisés.
+- **Parsing statique uniquement** (SG-4).
