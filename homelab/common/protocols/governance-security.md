@@ -46,7 +46,7 @@ Après tout commentaire censé déclencher un agent, l'auteur **lit `trigger_out
 | **Délégation / retour SANS gate humaine** (handoff A2A pur) | `[@Agent](mention://agent/<uuid>)` **actif** | **Aucune prose.** Réduit à la mention + le **nom du fichier YAML joint**. Ex. `[@Analyste QA](mention://agent/<uuid>) — compose à contrôler → delegation-qa-<stack>.yaml` |
 | **Gate humaine REQUISE** | mention de **l'humain** `[@Nom](mention://member/<user_id>)` | **Présentation Markdown DÉTAILLÉE** du contenu à décider **reprise en clair**, au format de [`output-format.md`](output-format.md) (une fiche par décision, proposition par défaut), close par l'action à effectuer. Elle **DOIT inclure les verdicts de sensors du stage** (section `## Sensors`, un sensor par puce — ou la ligne « Sensors de gate » du **Rapport de vérification**, [`../../sensors/gates.md`](../../sensors/gates.md)) — information de décision **obligatoire**, jamais réduite ni masquée. Le YAML joint est la source/audit, **jamais un substitut** à la présentation. |
 
-**Retour A2A (clôture de la boucle)**
+### Retour A2A (clôture de la boucle)
 
 - En fin de tâche, l'agent délégataire passe sa sous-issue en `in_review` et **pose lui-même** le lien de mention actif de retour `[@<Nom assigneur>](mention://agent/<uuid>)` + le **nom du fichier YAML de retour joint** : ce lien enqueue le run de reprise.
 - Cible du retour : le **Tech Lead** pour un spécialiste producteur, l'Analyste QA et l'Architecte de sécurité (le Tech Lead synthétise puis renvoie, [`reviewer.md`](reviewer.md)).
