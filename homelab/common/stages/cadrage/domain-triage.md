@@ -59,4 +59,4 @@ Upstream targets: intention_perimetre_approuves (`intent-scope-approval`).
 
 ## Learn
 
-Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : candidats-règles (motifs de désambiguïsation n8n vs Home Assistant, nommages récurrents) tracés, remontés à la validation humaine. Le triage ne fait **aucune analyse** ni modification — recherche d'existence et aiguillage uniquement ; la règle absolue n8n (déclencheur explicite) reste un **invariant** non levé par ce stage.
+Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : candidats-règles (motifs de désambiguïsation n8n vs Home Assistant, nommages récurrents) tracés, remontés **en fin de workflow**, dans un message séparé ([`closure`](../validation/closure.md)). Le triage ne fait **aucune analyse** ni modification — recherche d'existence et aiguillage uniquement ; la règle absolue n8n (déclencheur explicite) reste un **invariant** non levé par ce stage.

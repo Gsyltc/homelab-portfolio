@@ -42,4 +42,4 @@ Imports: none.
 
 ## Learn
 
-Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : candidats-règles (patterns d'auth par famille d'applications) tracés, remontés au gate léger. La règle d'auto-sélection est un **invariant** (non abaissable par une règle apprise — SEC-1).
+Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : candidats-règles (patterns d'auth par famille d'applications) tracés, remontés **en fin de workflow**, dans un message séparé ([`closure`](../validation/closure.md)). La règle d'auto-sélection est un **invariant** (non abaissable par une règle apprise — SEC-1).

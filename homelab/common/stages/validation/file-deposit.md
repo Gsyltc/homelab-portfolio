@@ -61,4 +61,4 @@ Imports: `version-livrables` (gate — lancé **avant le déplacement**, Step 1 
 
 ## Learn
 
-Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : candidats-règles (conventions de chemins de dépôt) tracés, remontés au gate explicite.
+Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : candidats-règles (conventions de chemins de dépôt) tracés, remontés **en fin de workflow**, dans un message séparé ([`closure`](closure.md)).

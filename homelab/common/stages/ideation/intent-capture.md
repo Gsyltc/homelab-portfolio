@@ -42,4 +42,4 @@ Imports: none.
 
 ## Learn
 
-Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : ouvrir le journal des candidats-règles d'Idéation ; remontée au gate léger (`intent-scope-approval`), jamais dans le run courant.
+Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : ouvrir le journal des candidats-règles d'Idéation ; remontée en fin de workflow ([`closure`](../validation/closure.md)), jamais dans le run courant.

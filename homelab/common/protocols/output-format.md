@@ -87,6 +87,7 @@ Les blocs de [`required-parameters-collection`](../stages/cadrage/required-param
 | Paramètres (`required-parameters-collection`) | cadrage | valider les informations |
 | Synthèse QA + sécurité (`security-delegation`) | production | arbitrer les écarts relevés |
 | Validation finale (`human-granular-validation` : livrables, dépôt, déploiement Kestra) | validation | valider les livrables, le dépôt et le déploiement |
+| Règles proposées (`closure` Step 2) | clôture | statuer sur les règles proposées |
 | Blocage (`blocked`) | phase courante | débloquer la situation |
 
 Exemple : `Sylvain, merci de valider les informations de la phase de cadrage pour la stack sync-in`.

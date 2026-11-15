@@ -9,6 +9,10 @@ ce fichier en donne la lecture chronologique côté produit.
 ## [Non publié]
 
 ### Changed
+- **Candidats-règles en fin de workflow, séparés de la validation du livrable.** Plus de remontée aux gates : les
+  candidats sont consignés au fil du workflow et présentés une seule fois, dans un message distinct, au Step 2 de
+  `closure` (une décision par règle, défaut proposé, notification courte). Modifs : `conductor`, `closure`, `homelab/rules/README.md`,
+  lignes « Learn » de tous les stages.
 - **Question Kestra intégrée au gate final.** `human-granular-validation` pose en un seul message la validation des
   livrables, les chemins de dépôt et le déploiement Kestra (trois décisions séparées ; défaut « non » confirmé pour Kestra ; « oui » exige
   que les clés Vault soient créées au préalable, vérifiées avant lancement ; sinon « non »). `file-deposit` et `kestra-deployment` n'ont plus de

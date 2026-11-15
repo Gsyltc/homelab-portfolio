@@ -61,4 +61,4 @@ Imports: none.
 
 ## Learn
 
-Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : ce stage **porte le gate humain léger** d'Idéation — le Tech Lead y remonte les candidats-règles capturés depuis `intent-capture`, formulés en règles courtes (couche + portée proposées). L'humain garde ✅ / rejette ❌ / reformule 💬 chaque candidat séparément ; persistance des apprentissages **confirmés** dans `homelab/rules/` (jamais dans le run courant — application au prochain workflow).
+Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : ce stage **porte le gate humain léger** d'Idéation — le Tech Lead **n'y remonte aucun** candidat-règle : ceux capturés depuis `intent-capture` sont consignés (`[candidat-règle]`) et remontés **en fin de workflow**, dans un message séparé ([`closure`](../validation/closure.md)), jamais mêlés à la validation de l'intention. Persistance des apprentissages **confirmés** dans `homelab/rules/` (jamais dans le run courant — application au prochain workflow).

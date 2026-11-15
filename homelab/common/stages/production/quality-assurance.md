@@ -64,4 +64,4 @@ Review artifact: `rapport-qa.md` porte la section `## Review` (revue adversarial
 
 ## Learn
 
-Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : candidats-règles (motifs de non-conformité récurrents compose ou Terraform, patterns de hardening, corrections QA répétées) tracés, remontés au **gate humain granulaire** ; toute règle touchant la sécurité repasse au contrôle sécurité (Architecte de sécurité Homelab, SEC-2/SEC-4).
+Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : candidats-règles (motifs de non-conformité récurrents compose ou Terraform, patterns de hardening, corrections QA répétées) tracés, remontés **en fin de workflow**, dans un message séparé ([`closure`](../validation/closure.md)); toute règle touchant la sécurité repasse au contrôle sécurité (Architecte de sécurité Homelab, SEC-2/SEC-4).

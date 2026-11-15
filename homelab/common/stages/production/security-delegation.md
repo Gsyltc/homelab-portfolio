@@ -71,4 +71,4 @@ Review artifact: `controle-securite.md` porte la section `## Review` (revue adve
 
 ## Learn
 
-Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : candidats-règles (motifs de posture récurrents, branchements de gravité) tracés, remontés au **gate humain granulaire** ; toute règle touchant la sécurité repasse au contrôle sécurité (Architecte de sécurité Homelab, SEC-2 / SEC-4).
+Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : candidats-règles (motifs de posture récurrents, branchements de gravité) tracés, remontés **en fin de workflow**, dans un message séparé ([`closure`](../validation/closure.md)); toute règle touchant la sécurité repasse au contrôle sécurité (Architecte de sécurité Homelab, SEC-2 / SEC-4).

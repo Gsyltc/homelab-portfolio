@@ -42,4 +42,4 @@ Imports: none.
 
 ## Learn
 
-Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : candidats-règles éventuels tracés, remontés au gate explicite.
+Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : candidats-règles éventuels tracés, remontés **en fin de workflow**, dans un message séparé ([`closure`](closure.md)).

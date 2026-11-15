@@ -19,7 +19,7 @@ Les règles capitalisent les **corrections humaines validées** afin qu'un agent
 ### Cycle de vie d'une règle
 
 1. **Capture** : pendant une étape, chaque correction / rejet / reformulation humaine sur un choix est un *candidat-règle* potentiel (tracé sur l'issue). L'Analyste QA (via ses `RENVOI`), les spécialistes et le Tech Lead Homelab génèrent des candidats quand un défaut de convention récurrent est signalé ou corrigé (ex. `_FILE` pour secrets, placement d'un healthcheck, réseau Traefik par défaut, `.tfvars` oublié).
-2. **Remontée** : au point de validation humaine, le Tech Lead Homelab propose les candidats formulés en règles courtes, avec couche et portée proposées.
+2. **Remontée** : **en fin de workflow, dans un message séparé** de la validation des livrables ([`closure`](../common/stages/validation/closure.md) Step 2), le Tech Lead Homelab propose les candidats formulés en règles courtes, avec couche et portée proposées.
 3. **Confirmation humaine** : l'humain garde ✅ / rejette ❌ / reformule 💬 chaque candidat séparément. Rien n'est écrit sans validation explicite.
 4. **Contrôle de conflit à l'admission** : précédence des couches + invariants non contournables + (pour toute règle `global`) contrôle sécurité systématique par l'**Architecte de sécurité Homelab**.
 5. **Écriture** : la règle acceptée est ajoutée au fichier de sa couche, avec un identifiant, la date et le lien vers l'issue d'origine.
@@ -27,7 +27,7 @@ Les règles capitalisent les **corrections humaines validées** afin qu'un agent
 
 ### Déclencheurs de capture
 
-La capture est **systématique** : à chaque validation granulaire, le Tech Lead Homelab propose les candidats-règles détectés dans la piste d'audit. L'écriture reste subordonnée à une validation humaine explicite (garde-fou).
+La capture est **systématique** pendant tout le workflow ; la **remontée** a lieu une seule fois, en fin de workflow : le Tech Lead Homelab propose alors les candidats-règles détectés dans la piste d'audit. L'écriture reste subordonnée à une validation humaine explicite (garde-fou).
 
 Déclencheurs principaux :
 

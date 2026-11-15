@@ -54,4 +54,4 @@ Review artifact: `controle-qualite-central.md` porte la section `## Review` (adv
 
 ## Learn
 
-Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : candidats-règles (motifs de renvoi récurrents) tracés, remontés au **gate humain granulaire**.
+Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : candidats-règles (motifs de renvoi récurrents) tracés, remontés **en fin de workflow**, dans un message séparé ([`closure`](../validation/closure.md)).

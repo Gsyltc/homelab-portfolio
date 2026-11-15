@@ -152,7 +152,7 @@ Ne jamais avancer sur un élément non validé. Ne jamais fusionner des choix en
 
 ### Tenue du journal d'observations (candidats-règles)
 
-Pendant un stage, chaque correction / rejet ❌ / reformulation 💬 humaine (ou correction récurrente de l'Analyste QA) sur un choix est consignée en commentaire sur l'issue comme **candidat-règle** potentiel (balise `[candidat-règle]`). Au point de validation, le Tech Lead remonte les candidats formulés en règles courtes (couche + portée proposées). **Aucune règle n'est écrite sans validation humaine explicite** ni sans le contrôle de conflit à l'admission ; une règle apprise s'applique au **prochain** workflow, jamais en cours de route. Détail : [`homelab/rules/`](../rules/README.md) et [`protocols/governance-security.md`](protocols/governance-security.md).
+Pendant un stage, chaque correction / rejet ❌ / reformulation 💬 humaine (ou correction récurrente de l'Analyste QA) sur un choix est consignée en commentaire sur l'issue comme **candidat-règle** potentiel (balise `[candidat-règle]`). **En fin de workflow, dans un message séparé de la validation des livrables** ([`stages/validation/closure.md`](stages/validation/closure.md) Step 2), le Tech Lead remonte les candidats formulés en règles courtes (couche + portée proposées). Aucun candidat n'est présenté à un gate de validation de livrable. **Aucune règle n'est écrite sans validation humaine explicite** ni sans le contrôle de conflit à l'admission ; une règle apprise s'applique au **prochain** workflow, jamais en cours de route. Détail : [`homelab/rules/`](../rules/README.md) et [`protocols/governance-security.md`](protocols/governance-security.md).
 
 ---
 

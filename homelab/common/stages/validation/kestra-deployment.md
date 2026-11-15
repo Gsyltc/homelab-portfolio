@@ -55,4 +55,4 @@ Imports: none.
 
 ## Learn
 
-Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : candidats-règles (patterns de déploiement Kestra) tracés, remontés au gate explicite.
+Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : candidats-règles (patterns de déploiement Kestra) tracés, remontés **en fin de workflow**, dans un message séparé ([`closure`](closure.md)).

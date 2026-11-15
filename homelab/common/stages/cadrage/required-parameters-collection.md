@@ -90,4 +90,4 @@ Imports: `required-parameters` (gate — **bloquant sur `new-stack` / `infra-ter
 
 ## Learn
 
-Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : candidats-règles (paramètres par défaut par stack, réseau Traefik conventionnel) tracés, remontés au gate granulaire. La règle d'auto-sélection d'authentification est un **invariant** (non abaissable — SEC-1).
+Boucle d'apprentissage maison (voir [`homelab/rules/`](../../../rules/README.md)) : candidats-règles (paramètres par défaut par stack, réseau Traefik conventionnel) tracés, remontés **en fin de workflow**, dans un message séparé ([`closure`](../validation/closure.md)). La règle d'auto-sélection d'authentification est un **invariant** (non abaissable — SEC-1).
