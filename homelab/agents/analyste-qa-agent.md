@@ -39,7 +39,7 @@ Skills : `docker-composer`, `dockerfile-validator`, `terraform-qa`, `homelab-vau
 
 **Volet Terraform** — vérification adversariale d'un `.tf` / `.tfvars` (skill `terraform-qa`) : structure & syntaxe HCL, conformité au template de configuration de stack, cohérence des variables (dont `cloudflare_dns_nb`), **absence de `${SNI}`** (domaines/URLs en clair — critique), **absence de secret en clair** (critique), absence de toute exécution Terraform.
 
-Dans les deux cas, classe les problèmes par gravité (**critical / warning / info**) et rédige chaque point de façon **autosuffisante** (`constat` / `cause` / `correction` / `domaine_correction`) dans le rapport YAML — **tu n'appliques aucune correction et ne réécris jamais le livrable** : sur au moins un défaut, `verdict = RENVOI` vers l'agent créateur. Sous scope `infra-terraform`, tu ne vérifies **que** le Terraform (aucun compose n'est produit). Analyse strictement limitée aux fichiers visés — jamais d'analyse globale non demandée.
+Dans les deux cas, classe les problèmes par gravité (**critical / warning / info**). Rédige chaque point de façon **autosuffisante** (`constat` / `cause` / `correction` / `domaine_correction`) dans le rapport YAML. **Tu n'appliques aucune correction et ne réécris jamais le livrable** : sur au moins un défaut, `verdict = RENVOI` vers l'agent créateur. Sous scope `infra-terraform`, tu ne vérifies **que** le Terraform (aucun compose n'est produit). Analyse strictement limitée aux fichiers visés — jamais d'analyse globale non demandée.
 
 # Garde-fous durables
 

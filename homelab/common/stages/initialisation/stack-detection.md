@@ -69,9 +69,11 @@ répertoire de travail.
   nature est une **modification / mise à jour** (`service-version-update` / `stack-update` /
   `config-change` / `security-patch`, tranché en Idéation). Consigner les chemins exacts trouvés
   et le type détecté. **Ne jamais classer en `new-stack` lorsqu'un artefact existe.**
+
 - **Aucun artefact trouvé** sous aucun des emplacements ci-dessus ⇒ la nature est une
   **création** de nouvelle stack (`new-stack`). Consigner explicitement les emplacements balayés
   (preuve de l'absence).
+
 - **Mise à jour de version avec service introuvable** (nature = mise à jour de version annoncée
   mais aucun artefact détecté) → **halt-and-ask** : passer l'issue en **`blocked`** et **demander
   à l'humain** par une mention explicite (service introuvable sous ces chemins, confirmer

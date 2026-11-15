@@ -48,7 +48,7 @@ Quand tous les livrables sont livrés (`in_review`), le Tech Lead délègue à l
 
 ### Step 2 — Jugement de posture et classification
 
-L'Architecte de sécurité Homelab juge la posture et **classe** les constats par gravité (**critique / majeur** vs **non critique / mineur**), chaque point rédigé de façon autosuffisante (`constat` / `cause` / `correction` / `domaine_correction`), puis **rend compte au Tech Lead** par mention valide (lien de retour construit par l'Architecte).
+L'Architecte de sécurité Homelab juge la posture et **classe** les constats par gravité (**critique / majeur** vs **non critique / mineur**). Chaque point est rédigé de façon autosuffisante (`constat` / `cause` / `correction` / `domaine_correction`). Il **rend compte au Tech Lead** par mention valide (lien de retour construit par l'Architecte).
 
 ### Step 3 — Synthèse avec la QA, puis branchement par gravité
 
@@ -68,6 +68,7 @@ Le Tech Lead **attend les deux rapports** (QA et sécurité), obligatoirement, p
   - **Redo** → retour en Production sur le livrable concerné, même boucle.
 
   La revue sécurité n'est **close** (`controle_securite_posture`) que lorsqu'il ne reste aucun constat critique / majeur. La [validation humaine granulaire](../validation/human-granular-validation.md) ne reçoit que des livrables dont la revue sécurité est close.
+
 - **Constats non critiques seulement, sans décision humaine.** Le Tech Lead délègue un seul lot de correctifs par livrable, puis revue partielle unique (QA et sécurité en parallèle). Les constats mineurs restants sont listés dans la validation humaine granulaire.
 
 Quel que soit le branchement, les **invariants non contournables** restent pleins (liste

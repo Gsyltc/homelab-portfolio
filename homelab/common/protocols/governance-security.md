@@ -1,6 +1,6 @@
 # Protocole — gouvernance A2A & sécurité (Homelab)
 
-Protocole transverse consolidant la gouvernance multi-agents, le contrôle sécurité systématique, la concurrence par stack (lecture par artefact), les invariants non contournables et les garde-fous du workflow Homelab, adaptés au moteur A2A Multica (mentions UUID, `trigger_outcomes`, statut d'issue, verrou metadata, piste d'audit sur l'issue).
+Protocole transverse du workflow Homelab : gouvernance multi-agents, contrôle sécurité systématique, concurrence par stack (lecture par artefact), invariants non contournables et garde-fous. Il est adapté au moteur A2A Multica (mentions UUID, `trigger_outcomes`, statut d'issue, verrou metadata, piste d'audit sur l'issue).
 
 Miroir Homelab de [`core/common/protocols/governance-security.md`](../../../core/common/protocols/governance-security.md). **Le Homelab n'a aucune notion de Loi 25, PCI DSS, GDPR/RGPD, LPRPDE** — ces normes ne s'appliquent pas ici ; le périmètre sécurité est la **sécurité de base d'un homelab** (secrets, exposition réseau, permissions, durcissement Docker/Swarm, Traefik).
 

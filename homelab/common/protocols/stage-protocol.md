@@ -92,9 +92,9 @@ Ce rapport par sensor est **repris en synthèse** dans `sensors_resultats` du me
 
 ### 5. Verification gate à la frontière de phase
 
-> ⛔ **Le rapport de gate ne se contourne pas.** Le Tech Lead **poste le « Rapport de vérification »** ([`homelab/sensors/gates.md`](../../sensors/gates.md)) *avant* la validation humaine, avec `python3 "$CORE_HOME/homelab/scripts/sensor.py" --root <projet> gate <frontière>` (lancé depuis le checkout `homelab-portfolio` — voir la convention d'invocation du temps 4). L'absence de rapport est un écart de piste d'audit.
+> ⛔ **Le rapport de gate ne se contourne pas.** Le Tech Lead **poste le « Rapport de vérification »** ([`homelab/sensors/gates.md`](../../sensors/gates.md)) *avant* la validation humaine. Commande : `python3 "$CORE_HOME/homelab/scripts/sensor.py" --root <projet> gate <frontière>`, lancée depuis le checkout `homelab-portfolio` (convention d'invocation du temps 4). L'absence de rapport est un écart de piste d'audit.
 
-- À la sortie de la phase, le Tech Lead exécute le gate de traçabilité et poste le **« Rapport de vérification »** structuré pour la frontière franchie — checks `artefacts-presents` / `liaison-tracabilite` / `absence-orphelin` **et** la ligne **par sensor de gate** déclaré à cette frontière (verdict `✅` / `⚠️` / `⛔` + fait ou motif), selon le format fixé par [`homelab/sensors/gates.md`](../../sensors/gates.md) § « Rapport de gate ».
+- À la sortie de la phase, le Tech Lead exécute le gate de traçabilité et poste le **« Rapport de vérification »** structuré pour la frontière franchie. Contenu : checks `artefacts-presents` / `liaison-tracabilite` / `absence-orphelin` **et** une ligne **par sensor de gate** déclaré à cette frontière (verdict `✅` / `⚠️` / `⛔` + fait ou motif). Format : [`homelab/sensors/gates.md`](../../sensors/gates.md) § « Rapport de gate ».
 - Un écart est signalé, jamais bloquant (advisory) — **sauf** l'exception bloquante par scope (`livrable_tfvars_present` sur `new-stack` / `infra-terraform`, cf. `gates.md`) ; `⛔ indisponible ≠ conforme` (SG-2). **Chaque sensor de gate déclaré figure dans le rapport** — aucune omission.
 
 ### 6. Validation humaine granulaire
@@ -104,7 +104,7 @@ Ce rapport par sensor est **repris en synthèse** dans `sensors_resultats` du me
 
 ## Cycle de statut des sous-issues & barrière de stage
 
-Quand un stage délègue son travail via des **sous-issues** (cas des stages de Production parallèles — Docker ∥ Terraform, deux sous-issues `--stage 1`), le statut de **chaque sous-issue spécialiste** suit un cycle en trois temps, et c'est l'atteinte de `done` sur **toutes** les sous-issues qui lève la **barrière de stage** vers l'aiguillage central.
+Quand un stage délègue son travail via des **sous-issues** (stages de Production parallèles : Docker ∥ Terraform, deux sous-issues `--stage 1`), le statut de **chaque sous-issue spécialiste** suit un cycle en trois temps. L'atteinte de `done` sur **toutes** les sous-issues lève la **barrière de stage** vers l'aiguillage central.
 
 1. **`in_progress`** : début du travail, à l'ouverture de la sous-issue (délégation A2A, temps 2).
 2. **`in_review`** : livrable produit et compte-rendu rendu (temps 3). Le livrable attend sa vérification QA.
@@ -122,7 +122,11 @@ Quand un stage délègue son travail via des **sous-issues** (cas des stages de 
 
 ## Contrôle sécurité — non contournable
 
-Dès qu'un stage **produit ou modifie une surface de sécurité** (compose, Terraform, hardening, exposition, Traefik, secrets), le contrôle sécurité s'applique selon la **règle normative unique** [`governance-security.md` § Contrôle sécurité systématique](governance-security.md#contrôle-sécurité-systématique) (répartition des rôles Analyste QA technique / Architecte de sécurité Homelab posture : même source et [`reviewer.md`](reviewer.md)). Point propre à l'exécution : l'autonomie (Production) ne le court-circuite ni ne le diffère jamais.
+Dès qu'un stage **produit ou modifie une surface de sécurité** (compose, Terraform, hardening, exposition, Traefik, secrets), le contrôle sécurité s'applique.
+
+- Règle normative unique : [`governance-security.md` § Contrôle sécurité systématique](governance-security.md#contrôle-sécurité-systématique).
+- Répartition des rôles (Analyste QA technique, Architecte de sécurité Homelab posture) : même source et [`reviewer.md`](reviewer.md).
+- Point propre à l'exécution : l'autonomie (Production) ne le court-circuite ni ne le diffère jamais.
 
 ## Halt-and-ask
 

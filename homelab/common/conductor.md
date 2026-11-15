@@ -357,15 +357,15 @@ sequenceDiagram
     S->>S: Flux Kestra + issue Done
 ```
 
----
-
 ## Checklist de tour du Tech Lead
 
 ### Amorçage et contexte
+
 - ☑ Amorçage fait (`$CORE_HOME` posé, stack détectée, verrou de concurrence lu)
 - ☑ Règle préalable documentation officielle appliquée et lien consigné sur l'issue
 
 ### Validation et contrôle
+
 - ☑ Rapport de vérification (gate de phase) posté avant toute validation humaine
 - ☑ Validation humaine granulaire : chaque choix Keep / Modify / Redo séparément
 - ☑ Notification courte envoyée (prénom, phase, stack) à chaque gate humain, après le commentaire de gate ([`protocols/output-format.md`](protocols/output-format.md) § 5)
@@ -373,10 +373,12 @@ sequenceDiagram
 - ☑ Contrôle sécurité systématique sur toute surface de sécurité
 
 ### Traçabilité
+
 - ☑ Piste d'audit à jour sur l'issue (entrées brutes conservées, historique non écrasé, label `Homelab` posé)
 - ☑ Aucun accusé de réception sur les sous-issues : un retour sans décision ni action ne reçoit pas de commentaire
 
 ### Délégations et workflow
+
 - ☑ Issue parente `blocked` tant qu'une sous-issue spécialiste est ouverte (barrière de stage)
 - ☑ Délégations : message A2A `delegation` en fichier YAML joint (une mission par spécialiste, commentaire réduit à la mention active + nom du fichier)
 - ☑ UUID résolu, verrou `active_step` par artefact posé, `$CORE_HOME` + `fiches_a_recharger` portés par le YAML

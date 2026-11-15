@@ -23,9 +23,11 @@ en **trois temps** :
    détection des breaking changes et des enjeux de configuration. Un enjeu détecté (breaking
    change, version non stable, migration de configuration) **bloque** le parcours : l'issue passe
    `blocked`, aucune suite n'est engagée sans arbitrage humain.
+
 2. **Écriture de la version dans Vault** — mise à jour de la/des seule(s) clé(s) de version (`VERSION` ou `VERSION_<NOM_DU_SERVICE>`) du montage
    `env_variables/data/<service>` via la skill `homelab-vault-access` (exception d'écriture
    étroite, voir ci-dessous).
+
 3. **Déploiement Kestra** — lancement du flux `configure_service` à partir du fichier Terraform du
    service (`terraform/swarm/<service>` pour Docker Swarm, `terraform/services/<service>` pour
    Proxmox).
@@ -46,13 +48,16 @@ flowchart TD
 
 - **Stack à un seul service, ou services partageant la même version** : clé unique `VERSION`
   (`${VERSION:-<défaut>}` dans le compose).
+
 - **Stack docker compose à plusieurs services avec des versions distinctes** : **une clé
   `VERSION_<NOM_DU_SERVICE>` par service** (nom en majuscules, ex. `VERSION_PROMETHEUS`,
   `VERSION_ALERTMANAGER`), référencée dans le compose par `${VERSION_<NOM_DU_SERVICE>:-<défaut>}`.
   Ce sont ces clés qui sont lues (Idéation) et écrites (Validation). Les anciens noms
   spécifiques (`DOCKER_<X>_IMAGE`…) ne sont plus utilisés.
+
 - Si certains services d'une stack partagent la même version, ils partagent `VERSION` ; seuls les
   services à version distincte reçoivent une clé `VERSION_<NOM_DU_SERVICE>`.
+
 - Une mise à jour ne cible que la/les clé(s) du ou des services concernés ; les autres clés de
   version sont préservées.
 

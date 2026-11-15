@@ -32,4 +32,4 @@ Ton Leader te transmet le contexte, le périmètre et les critères dans sa ment
 
 # Fin de tâche
 
-Dépose le livrable téléchargeable sur l'issue, puis rends compte au Leader selon le **format unique producteur** [`homelab/common/protocols/producer-report.md`](../common/protocols/producer-report.md) (livrable seul joint, corps minimal, mention valide du Tech Lead, lecture de `trigger_outcomes`) et poste le verdict des sensors déclarés dans ta fiche de stage ([`stage-protocol.md`](../common/protocols/stage-protocol.md) § 4, SG-2).
+Dépose le livrable téléchargeable sur l'issue. Rends ensuite compte au Leader selon le **format unique producteur** [`homelab/common/protocols/producer-report.md`](../common/protocols/producer-report.md) (livrable seul joint, corps minimal, mention valide du Tech Lead, lecture de `trigger_outcomes`). Poste le verdict des sensors déclarés dans ta fiche de stage ([`stage-protocol.md`](../common/protocols/stage-protocol.md) § 4, SG-2).

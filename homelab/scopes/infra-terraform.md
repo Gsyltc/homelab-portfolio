@@ -18,8 +18,10 @@ Axes par défaut : Depth `standard`, vérification `standard`.
 
 - **Terraform ne déploie JAMAIS** : `terraform init/apply/destroy` sont interdits au Spécialiste
   Terraform ; il ne produit que les fichiers, jamais l'exécution.
+
 - **Jamais `${SNI}`** dans un livrable Terraform (vérifié en Phase 2 et par le sensor dédié,
   Stage 4).
+
 - Aucun secret en clair dans les `.tfvars` livrés.
 
 **Escalade sécurité.** Si le travail Terraform touche l'authentification, l'exposition, les

@@ -36,7 +36,7 @@ Obtenir la validation explicite, choix par choix, avant toute action à impact.
 
 ### Step 1 — Soumettre la configuration complète
 
-Le Tech Lead soumet à l'humain la **configuration complète** (Docker + Terraform), fichiers téléchargeables à l'appui, et demande une **validation explicite**, **en un seul message** ([`output-format`](../../protocols/output-format.md)) qui porte **quatre groupes de décisions**, chacune validée séparément (Keep / Modify / Redo) :
+Le Tech Lead soumet à l'humain la **configuration complète** (Docker + Terraform), fichiers téléchargeables à l'appui, et demande une **validation explicite** en **un seul message** ([`output-format`](../../protocols/output-format.md)). Ce message porte **quatre groupes de décisions**, chacune validée séparément (Keep / Modify / Redo) :
 
 1. **Livrables** : une décision par fichier (compose, `.tfvars`), avec leurs points d'information.
 2. **Dépôt** : les chemins de destination proposés ([`file-deposit`](file-deposit.md) Step 1). **Proposition par défaut : les chemins conventionnels.**
@@ -59,7 +59,11 @@ Un « oui » aux livrables ou au dépôt ne vaut **jamais** « oui » à l'écri
 
 ### Step 2 — Modifications demandées → retour en Production
 
-Si l'humain **demande des modifications** (rejet total ou partiel) → le Tech Lead repasse l'issue en `in_progress`, poursuit le workflow en intégrant les modifications (nouvelle itération des stages de Production concernés + re-contrôle central), puis repasse en `in_review` une fois la nouvelle version prête.
+Si l'humain **demande des modifications** (rejet total ou partiel), le Tech Lead :
+
+1. repasse l'issue en `in_progress` ;
+2. intègre les modifications (nouvelle itération des stages de Production concernés + re-contrôle central) ;
+3. repasse l'issue en `in_review` une fois la nouvelle version prête.
 
 ### Step 3 — Validation → dépôt
 
