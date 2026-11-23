@@ -67,10 +67,11 @@ count: 1
 """)
 
 
-def evenement(nom: str, debut: datetime, fin: datetime, description: str = "") -> dict:
+def evenement(nom: str, debut: datetime, fin: datetime, description: str = "", location: str = "") -> dict:
     return {
         "summary": nom,
         "description": description,
+        "location": location,
         "start": {"dateTime": debut.isoformat()},
         "end": {"dateTime": fin.isoformat()},
     }
@@ -81,7 +82,8 @@ class TestCalendrierAgenda(unittest.TestCase):
         self.repas = [{"date": date(2026, 11, 12), "repas": "Dahl de lentilles"}]
         self.events = [
             evenement("Dahl de lentilles", datetime(2026, 11, 12, 19, 0), datetime(2026, 11, 12, 20, 0),
-                      "- 250g lentilles corail\n- 2 oignons\n- 200g riz basmati"),
+                      "- 250g lentilles corail\n- 2 oignons\n- 200g riz basmati",
+                      location="Companion XL — Recipebook FR, p. 42"),
             evenement("Dahl de lentilles", datetime(2026, 11, 13, 12, 0), datetime(2026, 11, 13, 13, 0)),
         ]
 
@@ -110,6 +112,16 @@ class TestCalendrierAgenda(unittest.TestCase):
         self.events[1]["description"] = "- reste du plat"
         ecarts = agenda.correler(self.repas, agenda.normaliser_evenements(self.events))
         self.assertTrue(any("ne doit pas porter de description" in e for e in ecarts))
+
+    def test_location_repas_absente(self) -> None:
+        self.events[0]["location"] = ""
+        ecarts = agenda.correler(self.repas, agenda.normaliser_evenements(self.events))
+        self.assertTrue(any("lien de la recette absent du champ « Lieu »" in e for e in ecarts))
+
+    def test_location_sur_creneau_lendemain_rejetee(self) -> None:
+        self.events[1]["location"] = "Companion XL — Recipebook FR, p. 42"
+        ecarts = agenda.correler(self.repas, agenda.normaliser_evenements(self.events))
+        self.assertTrue(any("ne doit pas porter de « Lieu »" in e for e in ecarts))
 
     def test_ancien_creneau_10h_rejete(self) -> None:
         self.events[1]["start"] = {"dateTime": datetime(2026, 11, 13, 10, 0).isoformat()}

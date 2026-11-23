@@ -3,7 +3,7 @@ id: repas-calendrier-agenda
 kind: deterministic
 command: "python3 plugins/medical-assistant/scripts/sensors/repas_calendrier_agenda.py --data-dir /nfs/workspace/datas/repas"
 default_severity: advisory
-description: "Vérifie que chaque repas retenu à venir existe dans le calendrier Home Assistant `calendar.repas` avec ses ingrédients consignés, et que le créneau du lendemain 12h–13h existe sans description."
+description: "Vérifie que chaque repas retenu à venir existe dans le calendrier Home Assistant `calendar.repas` avec ses ingrédients consignés et le lien de la recette dans le champ Lieu (`location`), et que le créneau du lendemain 12h–13h existe sans description ni Lieu."
 category: repas-agenda
 fire_on: gate
 matches: "/nfs/workspace/datas/repas/repas-retenus.md"
@@ -25,16 +25,18 @@ checks:
     existe: true                    # même jour, 19h00–20h00
     summary_porte_le_plat: true     # libellé du repas (comparaison normalisée)
     ingredients_consignes: true     # description = liste de puces « - ingrédient », sans ligne hors format
+    location_non_vide: true         # champ « Lieu » = lien / emplacement de la recette (jamais fabriqué)
   evenement_lendemain:
     existe: true                    # jour + 1, 12h00–13h00
     summary_porte_le_plat: true
     sans_description: true
+    sans_location: true             # aucun « Lieu » sur le créneau de 12h–13h
 ```
 
 ## Sortie (piste d'audit)
 
-Verdicts : `✅` conforme · `⚠️` écart (repas absent, ingrédients manquants ou hors format, créneau
-12h–13h absent ou renseigné) · `⛔` indisponible (variables `HOMEASSISTANT_URL` /
+Verdicts : `✅` conforme · `⚠️` écart (repas absent, ingrédients manquants ou hors format, `Lieu`
+du repas vide, créneau 12h–13h absent ou pourvu d'une description / d'un `Lieu`) · `⛔` indisponible (variables `HOMEASSISTANT_URL` /
 `HOMEASSISTANT_TOKEN` absentes, calendrier injoignable, fichiers de données illisibles).
 Source tracée : données `/nfs/workspace/datas/repas/` + calendrier HA.
 

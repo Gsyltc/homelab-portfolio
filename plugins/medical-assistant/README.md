@@ -50,7 +50,7 @@ officiel `skills-ref` — `scripts/validate_skills.sh` à la racine du dépôt,
 | `suivi-morphologie` | Clinicien — suivi de la composition corporelle (poids, IMC, IMG, IGC, tours, ratios, métabolisme de base), archivage horodaté et synthèse | — |
 | `sportif-dossiers` | Coach sportif — programmes d'entraînement adaptés, versionnage, planification sur 2 semaines, suivi des séances, export PDF | — |
 | `recherche-repas` | Planification nutritionnelle — registre extensible des appareils de cuisine et **format** des fichiers de données ; la diversification randomisée des sources et les règles métier sont portées par l'agent | `appareils/` (registre extensible : 1 fichier de référence par appareil, livres embarqués) |
-| `home-assistant-calendrier` | Intégration domotique — ajout des repas planifiés au **calendrier Home Assistant** via le serveur MCP de HA (repli REST documenté) : repas **19h–20h** avec ingrédients en puces + créneau du lendemain **12h–13h** sans description | — |
+| `home-assistant-calendrier` | Intégration domotique — écrit et relit les repas du **calendrier Home Assistant** via le serveur MCP de HA (repli REST documenté) : repas **19h–20h** avec ingrédients en puces et lien de la recette dans le champ **Lieu** (`location`), créneau du lendemain **12h–13h** sans description ni Lieu ; relecture des repas déjà présents sur la semaine lundi–dimanche | — |
 
 ## Sensors de clôture (Python)
 
@@ -59,7 +59,7 @@ Trois contrôles déterministes, lancés par l'agent chef cuisinier **à la clô
 
 | Sensor | Vérifie | Sévérité |
 |---|---|---|
-| `repas-calendrier-agenda` | Chaque repas retenu à venir existe dans `calendar.repas` : repas **19h–20h** avec ingrédients en puces + créneau du lendemain **12h–13h** sans description | advisory |
+| `repas-calendrier-agenda` | Chaque repas retenu à venir existe dans `calendar.repas` : repas **19h–20h** avec ingrédients en puces et `Lieu` non vide + créneau du lendemain **12h–13h** sans description ni `Lieu` | advisory |
 | `historique-repas-30j` | Aucune entrée de `repas-retenus.md` plus ancienne que 30 jours glissants | **bloquant** |
 | `fichiers-repas-conformes` | `repas-retenus.md`, `repas-exclus.md` et `ingredients-refuses.md` conformes (front matter, `count`, bornes, tableau, listes) | advisory |
 
