@@ -4,8 +4,9 @@
 Pour chaque repas retenu à venir (date ≥ date de référence, ou la date passée en `--jour`) :
 
 1. un évènement « repas » existe le jour du repas, **19h–20h**, dont le `summary` porte le nom
-   du plat et dont la `description` liste les **ingrédients en puces** (`- ingrédient`) ;
-2. l'évènement du lendemain existe, **12h–13h**, même `summary`, **sans description**.
+   du plat, dont la `description` liste les **ingrédients en puces** (`- ingrédient`) et dont le
+   champ `location` (« Lieu ») porte un **lien / emplacement de recette non vide** ;
+2. l'évènement du lendemain existe, **12h–13h**, même `summary`, **sans description ni `location`**.
 
 Advisory par défaut (code 0) ; `--strict` renvoie 1 en cas d'écart ou d'indisponibilité.
 Aucun secret n'est affiché : l'URL et le jeton Home Assistant ne sortent jamais du script.
@@ -99,6 +100,7 @@ def normaliser_evenements(bruts: list[dict]) -> list[dict]:
         evenements.append({
             "summary": str(ev.get("summary") or ""),
             "description": str(ev.get("description") or ""),
+            "location": str(ev.get("location") or ""),
             "debut": debut,
             "fin": fin or debut,
         })
@@ -134,13 +136,18 @@ def correler(repas: list[dict], evenements: list[dict]) -> list[str]:
                 ecarts.append(f"{jour_repas} « {plat} » : ingrédients non consignés (description sans puce « - »)")
             elif any(l.strip() and not l.strip().startswith("- ") for l in description.splitlines()):
                 ecarts.append(f"{jour_repas} « {plat} » : description non conforme (chaque ligne d'ingrédient doit commencer par « - »)")
+            if not (ev_repas[0]["location"] or "").strip():
+                ecarts.append(f"{jour_repas} « {plat} » : lien de la recette absent du champ « Lieu » (location) de l'évènement repas")
 
         lendemain = jour_repas + timedelta(days=1)
         ev_lendemain = [e for e in evenements if _creneau(e, lendemain, HEURE_LENDEMAIN_DEBUT, HEURE_LENDEMAIN_FIN) and _correspond(e, plat)]
         if not ev_lendemain:
             ecarts.append(f"{jour_repas} « {plat} » : aucun créneau du lendemain {lendemain} {HEURE_LENDEMAIN_DEBUT}h–{HEURE_LENDEMAIN_FIN}h")
-        elif (ev_lendemain[0]["description"] or "").strip():
-            ecarts.append(f"{jour_repas} « {plat} » : le créneau du lendemain ne doit pas porter de description")
+        else:
+            if (ev_lendemain[0]["description"] or "").strip():
+                ecarts.append(f"{jour_repas} « {plat} » : le créneau du lendemain ne doit pas porter de description")
+            if (ev_lendemain[0]["location"] or "").strip():
+                ecarts.append(f"{jour_repas} « {plat} » : le créneau du lendemain ne doit pas porter de « Lieu » (location)")
     return ecarts
 
 

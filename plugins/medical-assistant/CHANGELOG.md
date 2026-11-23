@@ -6,6 +6,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/) ; versionnage
 ## [Non publié]
 
 ### Changed
+- **Calendrier des repas — lien de la recette dans le champ « Lieu » et relecture de la semaine** (AUQU-182) :
+  - skill `home-assistant-calendrier` : `location` renseigné sur l'évènement repas **19h–20h** (URL ou référence exacte recopiée du référentiel, jamais de lien fabriqué), absent du créneau du lendemain **12h–13h** ; nouvelle section de lecture des repas déjà présents sur la semaine **lundi → dimanche** (`calendar.get_events` / repli REST, lecture seule) ;
+  - agent `chef-cuisinier-clinique-biboumed` : étapes 9 et 10 alignées — réponse finale en **tableau à 5 colonnes** « Liste des repas de la semaine » (repas déjà présents avec `Déjà acheté`, types de repas normalisés), sensors listés en puces après le tableau ;
+  - sensor `repas-calendrier-agenda` : vérifie un `location` non vide sur le repas et l'absence de `location` sur le créneau du lendemain ; manifeste, tests et README mis à jour.
 - **`sportif-dossiers` allégée** : `SKILL.md` réduit à l'essentiel (rôle, fichiers, versionnage, garde-fous) ; le détail est déporté dans `references/` chargées à la demande (`construction-programme`, `adaptation-sep`, `suivi-et-progression`, `revue-hebdomadaire`, `export-pdf`). Ajouts : collecte des informations manquantes (2-3 questions max + hypothèses), phase/critères de passage, RPE/RIR/tempo/régression, suivi RPE et douleur EVA, progression ~10 %/semaine, gêne vs signal d'alarme, adaptations SEP. Script PDF corrigé (imports). Agent `coach-sportif-clinique-biboumed` aligné (HOM-295).
 - `sportif-dossiers` : le coach a le **rôle de physiothérapeute** (bilans Berg, TUG, Ashworth, FSS/MFIS réalisés et consignés) ; `adaptation-sep.md` fusionné avec les règles de rééducation neurologique SEP (HOM-295).
 

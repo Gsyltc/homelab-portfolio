@@ -124,17 +124,39 @@ Tagge l'issue avec le label approprié de la clinique (ids via `multica label li
 ## 9. Création des évènements dans l'agenda
 
 - **Uniquement après** validation explicite du calendrier (`ok` à l'étape 8), crée les évènements correspondants dans l'agenda.
-- Utilise la skill `home-assistant-calendrier` : pour **chaque repas planifié et validé**, elle crée **deux évènements** (le repas 19h–20h avec la liste d'ingrédients en puces, et un créneau le lendemain 12h–13h sans description) dans le calendrier cible (`calendar.repas` par défaut). Respecte strictement son format de dates, ses règles de secret (URL et jeton HA jamais en clair) et ses codes de retour.
+- **Avant toute écriture**, relis le calendrier cible sur la semaine retenue (lundi 00h00 → dimanche 23h59) : pour chaque repas déjà présent (évènement 19h–20h), relève son nom (`summary`), son **jour réel** et le lien de la recette dans le champ **`Lieu`** (`location`). Ces repas existants ne sont **ni modifiés ni supprimés**, même si leur date a été décalée : ils seront ajoutés au tableau final avec `Déjà acheté`. Suis la section « Lecture des repas déjà présents » de la skill `home-assistant-calendrier`.
+- Utilise la skill `home-assistant-calendrier` : pour **chaque repas planifié et validé**, elle crée **deux évènements** (le repas 19h–20h avec la liste d'ingrédients en puces **et l'emplacement de la recette dans `Lieu`**, et un créneau le lendemain 12h–13h **sans description ni `Lieu`**) dans le calendrier cible (`calendar.repas` par défaut). Respecte strictement son format de dates, ses règles de secret (URL et jeton HA jamais en clair) et ses codes de retour.
+- Pour le champ `Lieu`, recopie l'**emplacement de la recette** tel qu'il figure dans la suggestion et `repas-retenus.md` : URL directe si elle existe, sinon la référence exacte (livre + page, chemin). **Ne fabrique jamais de lien, n'invente jamais d'URL.** Si aucun emplacement n'est connu, signale-le.
 - Si une variable d'environnement requise par la skill est absente, **STOP** : signale-le à l'humain sans deviner de valeur.
 - Dans le compte-rendu, ne cite que **le fait** (« repas “X” ajouté au calendrier le JJ/MM, + créneau du lendemain »), jamais l'URL ni le jeton.
 
 ## 10. Clôture
 
-- Récapitule les repas retenus (avec appareil et emplacement de la recette), les éventuels refus (définitifs/temporaires) et la liste d'ingrédients.
+- **Réponse finale — format imposé.** Commence par le tableau ci-dessous, sans texte préalable :
+
+  ```markdown
+  ### Liste des repas de la semaine
+
+  | Jour de la semaine (uniquement le repas du soir) | Nom de la recette | Lien de la recette | Ingrédients | Type de repas (Poissons, légumineuses, etc.) |
+  |---|---|---|---|---|
+  | Lundi 24/11/2026 | Dahl de lentilles corail | `https://…` | - 250g lentilles corail, - 2 oignons… | Légumineuses |
+  | Mercredi 26/11/2026 | Saumon vapeur et riz | `Companion XL — p. 42` | Déjà acheté | Poissons |
+  ```
+
+  > Les valeurs du tableau d'exemple sont des placeholders : **ne jamais fabriquer de lien**.
+
+- **Règles du tableau** :
+  - **Semaine** = lundi → dimanche de la semaine de l'étape 8 (celle qui commence au prochain lundi). Une ligne par **repas du soir** (19h–20h), triée du lundi au dimanche.
+  - **Source** = le calendrier Home Assistant relu à l'étape 9, et non le seul `repas-retenus.md` : un repas décalé apparaît au jour où il est réellement prévu.
+  - **Repas déjà présents** : ajoutés au tableau avec `Déjà acheté` dans la colonne **Ingrédients**, et le lien lu dans le champ **`Lieu`** (`location`). Ne pas les journaliser à nouveau, ne pas modifier leur évènement.
+  - **Repas créés cette session** : ingrédients = puces de la description ; lien = `location` écrit à l'étape 9 (URL si elle existe, sinon référence livre + page ou chemin).
+  - **Type de repas** : vocabulaire fermé `Poissons`, `Volailles`, `Légumineuses`, `Œufs`, `Viandes rouges`, `Autre`, déduit de la composition et des ingrédients. Si plusieurs catégories s'appliquent, priorité : **Légumineuses > Œufs > Poissons > Volailles > Viandes rouges**.
+  - Si le `Lieu` d'un repas est vide, écrire `Lien non renseigné` dans la colonne et le signaler à l'humain : ne jamais inventer de lien.
+- **Après le tableau**, dans cet ordre : alertes `⚠️` éventuelles, refus (définitifs/temporaires), puis **la liste des sensors sous forme de puces** (une puce par sensor, avec son verdict `✅` / `⚠️` / `⛔`).
 - Vérifie les **règles hebdomadaires** sur les 7 jours glissants planifiés : au moins **2 repas légumineuses** et au moins **1 repas aux œufs**. S'il en manque, propose un plat complémentaire pour combler.
 - Vérifie le **quota de viandes rouges** : sur les 30 derniers jours et les repas déjà planifiés, **2 repas maximum** contenant de la viande rouge. S'il est atteint, **n'en propose plus aucun** ; si l'humain a explicitement retenu un repas supplémentaire, rappelle l'écart dans l'alerte `⚠️` sans le remettre en cause.
-- **Lance les trois sensors Python de clôture** du plugin `medical-assistant` (dépôt `homelab-portfolio`, répertoire `plugins/medical-assistant/scripts/sensors/` ; si le dépôt n'est pas déjà disponible, récupère-le avec `multica repo checkout https://github.com/Gsyltc/homelab-portfolio`) et **rapporte leurs verdicts** dans le compte-rendu :
-  1. `repas_calendrier_agenda.py` — chaque repas retenu à venir figure bien dans le calendrier Home Assistant (`calendar.repas`) : évènement repas **19h–20h** avec les **ingrédients en puces**, et créneau du lendemain **12h–13h** sans description.
+- **Lance les trois sensors Python de clôture** du plugin `medical-assistant` (dépôt `homelab-portfolio`, répertoire `plugins/medical-assistant/scripts/sensors/` ; si le dépôt n'est pas déjà disponible, récupère-le avec `multica repo checkout https://github.com/Gsyltc/homelab-portfolio`) et **rapporte leurs verdicts** dans la liste à puces placée après le tableau :
+  1. `repas_calendrier_agenda.py` — chaque repas retenu à venir figure bien dans le calendrier Home Assistant (`calendar.repas`) : évènement repas **19h–20h** avec les **ingrédients en puces** et un **`Lieu` (`location`) non vide**, et créneau du lendemain **12h–13h** sans description ni `location`.
   2. `historique_repas_30j.py` — aucun repas de `repas-retenus.md` plus ancien que **30 jours** (**bloquant** : un échec interdit la clôture ; purge d'abord l'historique à l'étape 2, puis relance le sensor).
   3. `fichiers_repas_conformes.py` — `repas-retenus.md`, `repas-exclus.md` et `ingredients-refuses.md` à jour et conformes au format (front matter `type`/`updated`/`count`/`oldest`/`newest`, tableau à 4 colonnes, listes à puces sans doublon).
 - Commande type : `python3 plugins/medical-assistant/scripts/sensors/<script>.py --data-dir /nfs/workspace/datas/repas --date <AAAA-MM-JJ>` (`--format json` au besoin).
